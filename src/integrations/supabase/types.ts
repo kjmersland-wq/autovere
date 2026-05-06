@@ -101,6 +101,51 @@ export type Database = {
         }
         Relationships: []
       }
+      compare_insights: {
+        Row: {
+          car_a_name: string
+          car_a_slug: string
+          car_b_name: string
+          car_b_slug: string
+          contrasts: Json
+          created_at: string
+          id: string
+          pair_key: string
+          refreshed_at: string
+          source_count: number
+          summary: string
+          videos: Json
+        }
+        Insert: {
+          car_a_name: string
+          car_a_slug: string
+          car_b_name: string
+          car_b_slug: string
+          contrasts?: Json
+          created_at?: string
+          id?: string
+          pair_key: string
+          refreshed_at?: string
+          source_count?: number
+          summary: string
+          videos?: Json
+        }
+        Update: {
+          car_a_name?: string
+          car_a_slug?: string
+          car_b_name?: string
+          car_b_slug?: string
+          contrasts?: Json
+          created_at?: string
+          id?: string
+          pair_key?: string
+          refreshed_at?: string
+          source_count?: number
+          summary?: string
+          videos?: Json
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           country: string | null
