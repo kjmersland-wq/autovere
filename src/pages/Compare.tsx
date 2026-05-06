@@ -85,13 +85,26 @@ const Compare = () => {
 
       {/* Rows */}
       <section className="container pb-20">
-        <Row label="Driving feel" a={`${a.name}: ${a.summary}`} b={`${b.name}: ${b.summary}`} />
-        <Row label="Comfort" a={a.comfort} b={b.comfort} />
-        <Row label="Climate" a={a.climate} b={b.climate} />
-        <Row label="Practicality" a={a.practicality} b={b.practicality} />
-        <Row label="Ownership" a={a.ownership} b={b.ownership} />
+        <Row label="Driving feel" icon={CarIcon} a={a.summary} b={b.summary} />
+        <Row label="Comfort" icon={Heart} a={a.comfort} b={b.comfort} />
+        <Row label="Safety confidence" icon={ShieldCheck} a={`Strong real-world confidence; ${a.climate.toLowerCase()}`} b={`Strong real-world confidence; ${b.climate.toLowerCase()}`} />
+        <Row label="Winter behaviour" icon={Snowflake} a={a.climate} b={b.climate} />
+        <Row label="Family suitability" icon={Users} a={a.practicality} b={b.practicality} />
+        <Row label="Ownership stress" a={a.ownership} b={b.ownership} />
         <Row label="Personality fit" a={a.personality} b={b.personality} />
         <Row label="Lifestyle" a={a.lifestyle} b={b.lifestyle} />
+      </section>
+
+      {/* AI real-world feel cards */}
+      <section className="container pb-20">
+        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AI consensus</div>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">
+          What it actually feels like — by the numbers people don't print.
+        </h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <FeelCard car={a} />
+          <FeelCard car={b} />
+        </div>
       </section>
 
       {/* Verdict */}
