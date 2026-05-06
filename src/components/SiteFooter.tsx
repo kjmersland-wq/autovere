@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Sparkles } from "lucide-react";
+import { Sparkles, Shield } from "lucide-react";
 
 const COLS = [
   {
@@ -9,24 +9,26 @@ const COLS = [
       { to: "/collections", label: "Collections" },
       { to: "/personalities", label: "Personalities" },
       { to: "/watch", label: "Watch" },
-    ],
-  },
-  {
-    label: "Decide",
-    links: [
       { to: "/compare", label: "Compare" },
-      { to: "/learn", label: "Learn" },
-      { to: "/pricing", label: "Premium" },
-      { to: "/#advisor", label: "Talk to Lumen" },
     ],
   },
   {
     label: "Company",
     links: [
+      { to: "/learn", label: "Learn" },
+      { to: "/pricing", label: "Premium" },
+      { to: "/help", label: "Help center" },
       { to: "/contact", label: "Contact" },
-      { to: "/contact", label: "Help center" },
-      { to: "/contact", label: "Privacy" },
-      { to: "/contact", label: "Terms" },
+    ],
+  },
+  {
+    label: "Legal",
+    links: [
+      { to: "/legal/terms", label: "Terms of Service" },
+      { to: "/legal/privacy", label: "Privacy Policy" },
+      { to: "/legal/cookies", label: "Cookie Policy" },
+      { to: "/legal/refund", label: "Refund Policy" },
+      { to: "/legal/subscriptions", label: "Subscription Terms" },
     ],
   },
 ];
@@ -45,10 +47,17 @@ export const SiteFooter = () => (
             </div>
             AUTOVERE
           </Link>
-          <p className="text-sm text-muted-foreground leading-relaxed">
+          <p className="text-sm text-muted-foreground leading-relaxed mb-6">
             A calmer, more intelligent way to discover your next car. Built around
             transparency, responsible AI, and the people who drive what we make.
           </p>
+          <div className="inline-flex items-start gap-2.5 text-xs text-muted-foreground/80 leading-relaxed glass rounded-xl px-4 py-3 max-w-sm">
+            <Shield className="w-3.5 h-3.5 mt-0.5 shrink-0 text-primary/80" />
+            <span>
+              AUTOVERE recommendations are AI-assisted and based on public data and reviewer
+              consensus. Vehicle details vary by region — verify before purchase.
+            </span>
+          </div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-3 gap-10">
@@ -74,11 +83,14 @@ export const SiteFooter = () => (
         </div>
       </div>
 
-      <div className="pt-8 border-t border-border/30 flex flex-col md:flex-row gap-4 md:items-center md:justify-between text-xs text-muted-foreground">
-        <div>© {new Date().getFullYear()} AUTOVERE. The future of choosing a car.</div>
-        <div className="opacity-80">
-          Developed and operated by{" "}
-          <span className="text-foreground/90 font-medium">KM TECH LABS</span>, Kristiansand, Norway.
+      <div className="pt-8 border-t border-border/30 grid md:grid-cols-[1fr_auto] gap-6 text-xs text-muted-foreground">
+        <div className="space-y-1.5 leading-relaxed">
+          <div className="text-foreground/90 font-medium">KM TECH V/Kjell Mersland</div>
+          <div>Org.nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge</div>
+          <div className="opacity-80">© {new Date().getFullYear()} AUTOVERE. The future of choosing a car.</div>
+        </div>
+        <div className="md:text-right opacity-80 self-end">
+          Operated with care from Kristiansand, Norway.
         </div>
       </div>
     </div>
