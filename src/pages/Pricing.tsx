@@ -132,10 +132,27 @@ const Pricing = () => {
             <Sparkles className="w-3.5 h-3.5" /> Premium
           </div>
           <div className="flex items-baseline gap-2 mb-1">
-            <span className="text-5xl font-bold tracking-tighter text-gradient">$6.99</span>
-            <span className="text-muted-foreground">/ month</span>
+            <span className="text-5xl font-bold tracking-tighter text-gradient">
+              {interval === "month" ? "$6.99" : "$59"}
+            </span>
+            <span className="text-muted-foreground">/ {interval}</span>
           </div>
-          <div className="text-xs text-muted-foreground mb-2">or $59 / year — save 30%</div>
+          <div className="text-xs text-muted-foreground mb-4">
+            {interval === "month" ? "or $59 / year — save 30%" : "billed yearly"}
+          </div>
+          <div className="inline-flex p-1 rounded-full bg-secondary/40 border border-border/40 mb-6 self-start">
+            {(["month", "year"] as const).map((i) => (
+              <button
+                key={i}
+                onClick={() => setInterval(i)}
+                className={`px-4 py-1.5 rounded-full text-xs uppercase tracking-wider transition ${
+                  interval === i ? "bg-primary text-primary-foreground" : "text-muted-foreground"
+                }`}
+              >
+                {i === "month" ? "Monthly" : "Yearly"}
+              </button>
+            ))}
+          </div>
           <p className="text-muted-foreground mb-8 leading-relaxed">
             For people thinking long-term. Deeper analysis, smarter projections, fewer surprises.
           </p>
@@ -147,12 +164,38 @@ const Pricing = () => {
               </li>
             ))}
           </ul>
-          <Button size="lg" className="bg-gradient-primary hover:opacity-90 rounded-xl gap-2">
-            Coming soon — join the waitlist <ArrowRight className="w-4 h-4" />
-          </Button>
+          {isActive ? (
+            <div className="space-y-3">
+              <div className="text-sm text-accent font-medium text-center">
+                ✓ You're on Premium
+                {subscription?.cancel_at_period_end && " (cancels at period end)"}
+              </div>
+              <Button
+                size="lg"
+                variant="outline"
+                onClick={openPortal}
+                disabled={portalLoading}
+                className="w-full rounded-xl"
+              >
+                {portalLoading ? "Opening…" : "Manage subscription"}
+              </Button>
+            </div>
+          ) : (
+            <Button
+              size="lg"
+              onClick={handleSubscribe}
+              disabled={checkoutLoading}
+              className="bg-gradient-primary hover:opacity-90 rounded-xl gap-2"
+            >
+              {checkoutLoading ? "Opening checkout…" : (
+                <>{userId ? "Subscribe" : "Sign in & subscribe"} <ArrowRight className="w-4 h-4" /></>
+              )}
+            </Button>
+          )}
           <div className="text-[11px] text-muted-foreground mt-4 text-center">
             Cancel anytime. No upsells, no dark patterns.
           </div>
+
         </div>
       </div>
     </section>
