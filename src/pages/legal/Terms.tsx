@@ -73,7 +73,11 @@ export default function Terms() {
               <p>
                 Subscriptions renew automatically until cancelled. You can cancel at any time —
                 see the <Link to="/legal/subscriptions">Subscription Terms</Link> for details.
-                Payments are processed by our payment partner, who acts as merchant of record.
+              </p>
+              <p>
+                Our order process is conducted by our online reseller <strong>Paddle.com</strong>.
+                Paddle.com is the Merchant of Record for all our orders. Paddle provides all
+                customer service inquiries and handles returns.
               </p>
             </>
           ),
