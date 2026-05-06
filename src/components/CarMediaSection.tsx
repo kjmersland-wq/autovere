@@ -1,6 +1,7 @@
 import { ExternalLink, Globe, Settings2, FileText, KeyRound, MapPin, ShieldCheck, Sparkles } from "lucide-react";
 import type { CarMedia } from "@/data/media";
-import { VideoCard } from "@/components/VideoCard";
+import { LiveVideoCard } from "@/components/LiveVideoCard";
+import { useYouTubeSearch } from "@/hooks/use-youtube-search";
 
 const KIND_ICON = {
   site: Globe,
@@ -11,8 +12,9 @@ const KIND_ICON = {
 } as const;
 
 export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: string }) => {
-  const featured = media.videos.find((v) => v.category === "Featured") ?? media.videos[0];
-  const rest = media.videos.filter((v) => v.id !== featured.id);
+  const { videos, loading } = useYouTubeSearch(`${carName} review`, { max: 7, order: "relevance" });
+  const featured = videos[0];
+  const rest = videos.slice(1);
 
   return (
     <section className="container py-24 space-y-20">
@@ -23,7 +25,10 @@ export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: 
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">
             What the most trusted reviewers say.
           </h2>
-          <VideoCard video={featured} size="lg" />
+          {loading && (
+            <div className="aspect-[16/9] rounded-2xl bg-secondary/40 animate-pulse border border-border/40" />
+          )}
+          {featured && <LiveVideoCard video={featured} size="lg" badge="Most trusted" />}
         </div>
         <aside className="glass rounded-3xl p-8 lg:sticky lg:top-28">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent mb-4">
@@ -46,7 +51,7 @@ export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: 
         </aside>
       </div>
 
-      {/* Other videos */}
+      {/* Other videos — live */}
       {rest.length > 0 && (
         <div>
           <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">More expert reviews</div>
@@ -54,7 +59,7 @@ export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: 
             Different drivers, different lenses.
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {rest.map((v) => <VideoCard key={v.id} video={v} />)}
+            {rest.map((v) => <LiveVideoCard key={v.id} video={v} />)}
           </div>
         </div>
       )}

@@ -1,12 +1,45 @@
-import { Link } from "react-router-dom";
-import { ArrowRight, ExternalLink, ShieldCheck } from "lucide-react";
+import { ExternalLink, ShieldCheck } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
-import { VideoCard } from "@/components/VideoCard";
-import { CURATED_ROWS, TRUSTED_REVIEWERS } from "@/data/media";
+import { LiveVideoCard } from "@/components/LiveVideoCard";
+import { LiveVideoRow } from "@/components/LiveVideoRow";
+import { useYouTubeSearch } from "@/hooks/use-youtube-search";
+import { TRUSTED_REVIEWERS } from "@/data/media";
+
+const HERO_QUERY = "best new electric car review 2025";
+
+const ROWS: { query: string; title: string; subtitle: string; order?: "relevance" | "date" | "viewCount" }[] = [
+  {
+    query: "best electric car review 2025",
+    title: "Trending automotive reviews",
+    subtitle: "What the most trusted reviewers are publishing right now.",
+    order: "date",
+  },
+  {
+    query: "electric car winter cold weather range test",
+    title: "Winter driving reviews",
+    subtitle: "Real-world cold-weather tests from reviewers who live where it snows.",
+  },
+  {
+    query: "EV long distance road trip review",
+    title: "Long-distance test videos",
+    subtitle: "How these cars actually feel on a six-hour drive.",
+  },
+  {
+    query: "luxury electric car quiet cabin review",
+    title: "Quiet luxury, on camera",
+    subtitle: "Cabin reviews of the most refined EVs reviewers have driven.",
+  },
+  {
+    query: "family SUV electric car review",
+    title: "Family-ready EVs",
+    subtitle: "Space, safety, and how they handle real family life.",
+  },
+];
 
 const Watch = () => {
-  const hero = CURATED_ROWS[0]?.videos[0];
+  const { videos: heroVideos, loading: heroLoading } = useYouTubeSearch(HERO_QUERY, { max: 1, order: "relevance" });
+  const hero = heroVideos[0];
 
   return (
     <PageShell>
@@ -24,45 +57,27 @@ const Watch = () => {
             The reviews <span className="text-gradient">worth your time.</span>
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
-            A curated, intelligent stream of the most trusted automotive reviewers in the world.
-            No noise. No clickbait. Just the videos Lumen quietly recommends.
+            A curated, intelligent stream of the most trusted automotive reviewers in the world,
+            updated live from YouTube. No noise. No clickbait. Just the videos Lumen quietly recommends.
           </p>
         </div>
 
-        {hero && (
-          <div className="relative">
-            <VideoCard video={hero} size="lg" />
-          </div>
+        {heroLoading && (
+          <div className="aspect-[16/9] rounded-2xl bg-secondary/40 animate-pulse border border-border/40" />
         )}
+        {hero && <LiveVideoCard video={hero} size="lg" badge="Featured" />}
       </section>
 
-      {/* Curated rows */}
-      {CURATED_ROWS.map((row) => (
-        row.videos.length > 0 && (
-          <section key={row.title} className="container pb-20">
-            <div className="flex items-end justify-between mb-8 gap-6">
-              <div>
-                <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">{row.title}</h2>
-                <p className="text-muted-foreground text-sm md:text-base">{row.subtitle}</p>
-              </div>
-            </div>
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {row.videos.map((v) => (
-                <div key={v.id} className="space-y-3">
-                  <VideoCard video={v} />
-                  {v.carSlug && (
-                    <Link
-                      to={`/cars/${v.carSlug}`}
-                      className="text-xs text-accent inline-flex items-center gap-1 hover:gap-2 transition-all"
-                    >
-                      Read the Lumen review <ArrowRight className="w-3 h-3" />
-                    </Link>
-                  )}
-                </div>
-              ))}
-            </div>
-          </section>
-        )
+      {/* Curated live rows */}
+      {ROWS.map((row) => (
+        <LiveVideoRow
+          key={row.title}
+          query={row.query}
+          title={row.title}
+          subtitle={row.subtitle}
+          order={row.order}
+          max={6}
+        />
       ))}
 
       {/* Trusted reviewers */}
