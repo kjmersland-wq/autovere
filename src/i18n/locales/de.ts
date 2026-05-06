@@ -77,6 +77,33 @@ const de: Translation = {
     talk_to_autovere: "Mit AUTOVERE sprechen",
     ask_autovere: "AUTOVERE fragen",
   },
+  advisor: {
+    title: "AUTOVERE",
+    subtitle: "Ihr KI-Autoberater",
+    intro:
+      "Erzählen Sie mir von Ihrem Leben — wo Sie fahren, wer mit Ihnen fährt, was sich richtig anfühlt. Ich finde Autos, die wirklich zu Ihnen passen.",
+    placeholder: "Beschreiben Sie, was Sie suchen…",
+    thinking: "Denke sorgfältig nach…",
+    err_capacity: "AUTOVERE ist ausgelastet. Bitte versuchen Sie es gleich noch einmal.",
+    err_credits: "KI-Guthaben erforderlich, um fortzufahren.",
+    err_generic: "Etwas ist schiefgelaufen. Bitte erneut versuchen.",
+    err_connection: "Verbindung verloren. Bitte erneut versuchen.",
+    starters: [
+      "Ich möchte ein Familien-EV, das schneereiche Winter meistert",
+      "Etwas Sportliches, aber komfortabel für den Alltag",
+      "Zuverlässiges SUV unter 50 000 € für lange Reisen",
+      "Ein leises Stadtauto, das sich dennoch hochwertig anfühlt",
+    ],
+  },
+  legal: {
+    last_updated: "Zuletzt aktualisiert",
+    on_this_page: "Auf dieser Seite",
+    have_question: "Haben Sie Fragen zu diesem Dokument?",
+    contact_team: "Kontaktieren Sie unser Team",
+    every_message: "— jede Nachricht wird von einem echten Menschen gelesen.",
+    org_line: "Org.-Nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norwegen",
+    operator: "Boutique24Shop v/ K.Mersland",
+  },
   seo: {
     site_name: "AUTOVERE",
     default_title: "AUTOVERE — Eine ruhigere Art, Ihr nächstes Auto zu finden",

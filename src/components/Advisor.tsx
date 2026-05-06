@@ -1,22 +1,19 @@
 import { useState, useRef, useEffect } from "react";
 import ReactMarkdown from "react-markdown";
 import { Send, Sparkles, Loader2 } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 
 type Msg = { role: "user" | "assistant"; content: string };
 
-const STARTERS = [
-  "I want a family EV that handles snowy winters",
-  "Something sporty but comfortable for daily driving",
-  "Reliable SUV under $50k for long road trips",
-  "A quiet city car that still feels premium",
-];
-
 export const Advisor = ({ initialPrompt }: { initialPrompt?: string }) => {
+  const { t } = useTranslation();
   const [messages, setMessages] = useState<Msg[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const starters = (t("advisor.starters", { returnObjects: true }) as string[]) || [];
 
   useEffect(() => {
     scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
@@ -56,9 +53,9 @@ export const Advisor = ({ initialPrompt }: { initialPrompt?: string }) => {
       });
 
       if (!resp.ok || !resp.body) {
-        if (resp.status === 429) upsert("AutoVere is at capacity. Try again in a moment.");
-        else if (resp.status === 402) upsert("AI credits required to continue.");
-        else upsert("Something went wrong. Try again.");
+        if (resp.status === 429) upsert(t("advisor.err_capacity"));
+        else if (resp.status === 402) upsert(t("advisor.err_credits"));
+        else upsert(t("advisor.err_generic"));
         setLoading(false);
         return;
       }
@@ -91,7 +88,7 @@ export const Advisor = ({ initialPrompt }: { initialPrompt?: string }) => {
       }
     } catch (e) {
       console.error(e);
-      upsert("Connection lost. Try again.");
+      upsert(t("advisor.err_connection"));
     } finally {
       setLoading(false);
     }
@@ -107,20 +104,17 @@ export const Advisor = ({ initialPrompt }: { initialPrompt?: string }) => {
           </div>
         </div>
         <div>
-          <div className="font-semibold tracking-tight">AutoVere</div>
-          <div className="text-xs text-muted-foreground">Your AI car advisor</div>
+          <div className="font-semibold tracking-tight">{t("advisor.title")}</div>
+          <div className="text-xs text-muted-foreground">{t("advisor.subtitle")}</div>
         </div>
       </div>
 
       <div ref={scrollRef} className="flex-1 overflow-y-auto px-6 py-6 space-y-6">
         {messages.length === 0 && (
           <div className="space-y-6 animate-fade-up">
-            <p className="text-muted-foreground leading-relaxed">
-              Tell me about your life — where you drive, who's in the car, what feels right.
-              I'll find cars that actually fit you.
-            </p>
+            <p className="text-muted-foreground leading-relaxed">{t("advisor.intro")}</p>
             <div className="grid sm:grid-cols-2 gap-2">
-              {STARTERS.map((s) => (
+              {starters.map((s) => (
                 <button
                   key={s}
                   onClick={() => send(s)}
@@ -156,7 +150,7 @@ export const Advisor = ({ initialPrompt }: { initialPrompt?: string }) => {
         {loading && messages[messages.length - 1]?.role === "user" && (
           <div className="flex items-center gap-2 text-muted-foreground text-sm">
             <Loader2 className="w-4 h-4 animate-spin" />
-            Thinking carefully...
+            {t("advisor.thinking")}
           </div>
         )}
       </div>
@@ -168,7 +162,7 @@ export const Advisor = ({ initialPrompt }: { initialPrompt?: string }) => {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Describe what you're looking for..."
+          placeholder={t("advisor.placeholder")}
           className="flex-1 bg-secondary/50 border border-border/50 rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-primary/60 focus:bg-secondary transition-colors"
           disabled={loading}
         />
