@@ -1,11 +1,26 @@
-import { useState } from "react";
-import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart, Snowflake, Moon, Route, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Advisor } from "@/components/Advisor";
+import { CinematicSection } from "@/components/CinematicSection";
+import { Personality } from "@/components/Personality";
 import heroCar from "@/assets/hero-car.jpg";
 import carSnow from "@/assets/car-snow.jpg";
 import carSedan from "@/assets/car-sedan.jpg";
 import carFamily from "@/assets/car-family.jpg";
+import sceneNight from "@/assets/scene-night-drive.jpg";
+import sceneNordic from "@/assets/scene-nordic.jpg";
+import sceneRoad from "@/assets/scene-roadtrip.jpg";
+import sceneQuiet from "@/assets/scene-quiet.jpg";
+import sceneCity from "@/assets/scene-city.jpg";
+
+const COLLECTIONS = [
+  { id: "nordic", title: "Built for Nordic winters", desc: "Composed on snow. Quiet on ice. Heated where it matters.", image: carSnow, icon: Snowflake },
+  { id: "long", title: "Designed for long drives", desc: "Cars that turn six hours into a meditation, not a marathon.", image: sceneRoad, icon: Route },
+  { id: "quiet", title: "Quiet luxury", desc: "Presence without announcement. Craft over chrome.", image: sceneQuiet, icon: Moon },
+  { id: "underestimated", title: "Cars people underestimated", desc: "Outside the spotlight. Inside, more thought than you'd expect.", image: sceneCity, icon: Eye },
+];
+
 
 const SAMPLE_CARS = [
   {
@@ -55,11 +70,19 @@ const Index = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [seedPrompt, setSeedPrompt] = useState<string | undefined>();
   const [heroInput, setHeroInput] = useState("");
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const startWith = (text: string) => {
     setSeedPrompt(text + " #" + Date.now());
     setTimeout(() => document.getElementById("advisor")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   };
+
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
@@ -135,12 +158,23 @@ const Index = () => {
             </form>
           </div>
 
-          {/* Hero image */}
-          <div className="relative mt-20 max-w-6xl mx-auto">
+          {/* Hero image with parallax */}
+          <div className="relative mt-20 max-w-6xl mx-auto" style={{ transform: `translateY(${scrollY * 0.08}px)` }}>
             <div className="absolute inset-0 bg-gradient-glow blur-3xl opacity-40" />
-            <div className="relative rounded-3xl overflow-hidden shadow-elegant border border-border/50">
-              <img src={heroCar} alt="Premium electric car" width={1920} height={1280} className="w-full h-auto" />
+            <div className="relative rounded-3xl overflow-hidden shadow-elegant border border-border/50 group">
+              <img
+                src={heroCar}
+                alt="Premium electric car at night"
+                width={1920}
+                height={1280}
+                className="w-full h-auto transition-transform duration-[3000ms] group-hover:scale-105"
+                style={{ transform: `scale(${1 + scrollY * 0.0001})` }}
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+              <div className="absolute bottom-8 left-8 right-8 flex flex-wrap items-end justify-between gap-4 opacity-90">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">A Lumen story · Volume 01</div>
+                <div className="text-sm text-muted-foreground italic">"The right car doesn't shout. It fits."</div>
+              </div>
             </div>
           </div>
         </div>
@@ -262,7 +296,137 @@ const Index = () => {
         </div>
       </section>
 
+      {/* Cinematic 1 — Nordic */}
+      <CinematicSection
+        image={sceneNordic}
+        eyebrow="Cars for Nordic winters"
+        title={<>Composed when <span className="text-gradient">the road isn't.</span></>}
+        body="Quiet AWD. Heated everything. A cabin that feels like staying indoors at -15°. Lumen knows which cars actually deliver — and which only pretend."
+      />
+
+      {/* Curated collections */}
+      <section className="py-32 relative">
+        <div className="container">
+          <div className="max-w-2xl mb-14">
+            <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Curated collections</div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+              Discover by <span className="text-gradient">moment</span>, not by spec.
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Themes Lumen returns to often. Tap one and start a conversation from there.
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 gap-6">
+            {COLLECTIONS.map((c) => (
+              <button
+                key={c.id}
+                onClick={() => startWith(`Show me cars from your "${c.title}" collection.`)}
+                className="group relative overflow-hidden rounded-3xl text-left aspect-[16/10] border border-border/40 hover:border-primary/50 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow"
+              >
+                <img src={c.image} alt={c.title} loading="lazy" width={1280} height={800} className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-[2500ms] ease-out" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-background via-background/60 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                <div className="relative h-full flex flex-col justify-end p-8">
+                  <div className="w-11 h-11 rounded-xl glass flex items-center justify-center mb-4">
+                    <c.icon className="w-5 h-5 text-accent" />
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">{c.title}</h3>
+                  <p className="text-sm text-muted-foreground max-w-md mb-3">{c.desc}</p>
+                  <div className="text-xs text-accent flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    Explore with Lumen <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cinematic 2 — Long drives */}
+      <CinematicSection
+        image={sceneRoad}
+        eyebrow="Designed for long drives"
+        title={<>Six hours <span className="text-gradient">should feel like one.</span></>}
+        body="Seats that don't betray you at hour four. Range you stop thinking about. Sound systems worth the silence between songs. Lumen ranks for reality, not the spec sheet."
+        align="right"
+      />
+
+      {/* Driving personality */}
+      <section className="py-32 relative">
+        <div className="absolute inset-x-0 top-1/4 h-96 bg-gradient-glow blur-3xl opacity-30 pointer-events-none" />
+        <div className="container relative">
+          <div className="max-w-2xl mb-14">
+            <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Driving personality</div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
+              The car you choose <br />says <span className="text-gradient">who you are.</span>
+            </h2>
+            <p className="text-lg text-muted-foreground leading-relaxed">
+              Lumen builds a profile from how you talk about driving — not a quiz, just a conversation.
+              Recognize yourself in one of these?
+            </p>
+          </div>
+          <Personality onPick={startWith} />
+        </div>
+      </section>
+
+      {/* Cinematic 3 — Quiet luxury */}
+      <CinematicSection
+        image={sceneQuiet}
+        eyebrow="Quiet luxury"
+        title={<>Presence, <span className="text-gradient">without permission.</span></>}
+        body="The cars that don't need to announce themselves. Thoughtful interiors, considered details, no chrome theater. The badge matters less than the silence inside."
+      />
+
+      {/* Underestimated */}
+      <section className="py-32 relative">
+        <div className="container">
+          <div className="grid lg:grid-cols-[1fr_1.2fr] gap-12 items-center">
+            <div>
+              <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Cars people underestimated</div>
+              <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">
+                The ones <br />you'll <span className="text-gradient">be glad you tried.</span>
+              </h2>
+              <p className="text-lg text-muted-foreground leading-relaxed mb-8">
+                Not every great car arrives with a marketing budget. Lumen surfaces the quietly excellent —
+                cars that owners love more after a year, not less.
+              </p>
+              <button
+                onClick={() => startWith("Show me cars I probably haven't considered but would love.")}
+                className="inline-flex items-center gap-2 text-accent hover:gap-3 transition-all font-medium"
+              >
+                Surface my hidden matches <ArrowRight className="w-4 h-4" />
+              </button>
+            </div>
+            <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-border/40 group">
+              <img src={sceneCity} alt="Underestimated cars" loading="lazy" width={1920} height={1280} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2500ms]" />
+              <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-transparent" />
+              <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
+                <div>
+                  <div className="text-xs text-muted-foreground mb-1">Tonight in Tokyo</div>
+                  <div className="text-2xl font-semibold">A car you wouldn't expect to love.</div>
+                </div>
+                <div className="glass rounded-full p-3 group-hover:bg-primary/30 transition-colors">
+                  <ArrowRight className="w-4 h-4" />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Cinematic 4 — Night drive emotional */}
+      <CinematicSection
+        image={sceneNight}
+        eyebrow="Why we built Lumen"
+        title={<>Choosing a car <span className="text-gradient">should feel like this.</span></>}
+        body="Calm. Considered. Yours. Not 47 open tabs at 1am. Not spec sheets you'll forget by Tuesday. Just a quiet conversation, and a car that finally fits."
+        align="center"
+        height="h-[80vh]"
+      />
+
       {/* Help */}
+
       <section id="help" className="py-32 relative">
         <div className="container">
           <div className="max-w-3xl mx-auto">
