@@ -21,3 +21,11 @@ verify_jwt = false
 [functions.refresh-pulse]
 verify_jwt = false
 
+[functions.suggest-cars]
+verify_jwt = false
+
+[functions.admin-suggestions]
+verify_jwt = false
+
+
+
