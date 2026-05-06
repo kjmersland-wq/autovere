@@ -172,7 +172,7 @@ const CarDetail = () => {
       {/* Video reviews + AI consensus + official + trusted */}
       {(() => {
         const media = getMedia(car.slug);
-        return media ? <CarMediaSection media={media} carName={car.name} /> : null;
+        return media ? <CarMediaSection media={media} carName={car.name} carSlug={car.slug} /> : null;
       })()}
 
       {/* Compare suggestions */}
