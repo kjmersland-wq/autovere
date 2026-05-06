@@ -470,6 +470,42 @@ export const LEARN: LearnArticle[] = [
       "The premium feeling lives in the daily details: how the cabin sounds, how the seat supports you on hour three, how the car behaves in traffic.",
     ],
   },
+  {
+    slug: "how-comparisons-work",
+    title: "How Lumen comparisons actually work",
+    category: "Inside Lumen",
+    excerpt:
+      "Two cars side-by-side, with the dimensions that shape your daily life — not the ones that look good in a brochure.",
+    body: [
+      "Most comparison tools line up specs and let you decide. Lumen does the opposite — it interprets the specs through the lens of your life.",
+      "Cabin noise, ride quality, winter behaviour, software maturity, dealer experience and long-term ownership stress matter more than 0-100 times for most people.",
+      "Lumen weighs each dimension by how much it will actually shape your years with the car, then explains the tradeoff in a single calm paragraph.",
+    ],
+  },
+  {
+    slug: "how-personalization-works",
+    title: "How Lumen personalises without surveillance",
+    category: "Inside Lumen",
+    excerpt:
+      "Personalisation built on what you tell us — not on tracking, not on data resale, not on dealer leads.",
+    body: [
+      "Lumen learns from your conversation, your saved cars and your stated context. Nothing else.",
+      "We don't sell your preferences to dealers, and we don't share data with manufacturers to influence what you see.",
+      "The result: recommendations that feel personal because they are — not because we built a profile of you in the background.",
+    ],
+  },
+  {
+    slug: "what-matters-in-pricing",
+    title: "What actually matters in EV pricing",
+    category: "Ownership",
+    excerpt:
+      "Sticker price is the smallest part of the story. Here's the framework Lumen uses to estimate true cost.",
+    body: [
+      "Total cost of ownership is sticker price plus charging, insurance, maintenance, depreciation and the price of stress.",
+      "EVs typically win on charging and maintenance, lose on insurance, and vary wildly on depreciation. Software-mature brands tend to hold value better.",
+      "The 'comfort-to-price ratio' is the underrated metric — how premium does the car feel relative to what it costs you each year, not just on day one.",
+    ],
+  },
 ];
 
 export const getArticle = (slug: string) => LEARN.find((a) => a.slug === slug);
