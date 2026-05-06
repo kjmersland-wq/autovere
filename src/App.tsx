@@ -21,6 +21,7 @@ import Privacy from "./pages/legal/Privacy.tsx";
 import Cookies from "./pages/legal/Cookies.tsx";
 import Refund from "./pages/legal/Refund.tsx";
 import Subscriptions from "./pages/legal/Subscriptions.tsx";
+import Studio from "./pages/Studio.tsx";
 
 const queryClient = new QueryClient();
 
@@ -68,6 +69,7 @@ const App = () => (
           <Route path="/legal/cookies" element={<Cookies />} />
           <Route path="/legal/refund" element={<Refund />} />
           <Route path="/legal/subscriptions" element={<Subscriptions />} />
+          <Route path="/studio" element={<Studio />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -24,4 +24,8 @@ verify_jwt = false
 [functions.suggest-cars]
 verify_jwt = false
 
+[functions.admin-suggestions]
+verify_jwt = false
+
+
 
