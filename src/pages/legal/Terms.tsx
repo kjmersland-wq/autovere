@@ -12,6 +12,17 @@ export default function Terms() {
       seoDescription="The terms that govern your use of AUTOVERE — a calmer, intelligent way to discover your next car."
       sections={[
         {
+          id: "seller",
+          title: "Who you are contracting with",
+          body: (
+            <p>
+              AUTOVERE is operated by <strong>Boutique24Shop v/ K.Mersland</strong> ("we", "us",
+              "AUTOVERE"), based in Norway. By using AUTOVERE you enter into a binding agreement
+              with Boutique24Shop v/ K.Mersland.
+            </p>
+          ),
+        },
+        {
           id: "acceptance",
           title: "Acceptance of terms",
           body: (
@@ -62,7 +73,11 @@ export default function Terms() {
               <p>
                 Subscriptions renew automatically until cancelled. You can cancel at any time —
                 see the <Link to="/legal/subscriptions">Subscription Terms</Link> for details.
-                Payments are processed by our payment partner, who acts as merchant of record.
+              </p>
+              <p>
+                Our order process is conducted by our online reseller <strong>Paddle.com</strong>.
+                Paddle.com is the Merchant of Record for all our orders. Paddle provides all
+                customer service inquiries and handles returns.
               </p>
             </>
           ),
