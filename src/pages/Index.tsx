@@ -224,27 +224,38 @@ const Index = () => {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {SAMPLE_CARS.map((c) => (
-              <article key={c.name} className="glass rounded-2xl p-6 hover:-translate-y-2 transition-all duration-500 group cursor-pointer">
-                <div className="flex items-start justify-between mb-6">
-                  <div>
+              <article key={c.name} className="group relative glass rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-700 cursor-pointer hover:shadow-glow">
+                <div className="relative aspect-[16/11] overflow-hidden">
+                  <img
+                    src={c.image}
+                    alt={`${c.name} — ${c.fit}`}
+                    width={1280}
+                    height={800}
+                    loading="lazy"
+                    className="w-full h-full object-cover scale-105 group-hover:scale-115 transition-transform duration-[2200ms] ease-out"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+
+                  <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-full glass">
+                    <span className="w-1 h-1 rounded-full bg-accent animate-glow-pulse" />
+                    {c.tag}
+                  </div>
+                  <div className="absolute top-4 right-4 glass rounded-2xl px-3 py-2 text-right">
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Match</div>
+                    <div className="text-xl font-bold text-gradient leading-none">{c.score}</div>
+                  </div>
+
+                  <div className="absolute bottom-4 left-5 right-5">
                     <div className="text-xs text-muted-foreground mb-1">{c.type}</div>
                     <h3 className="text-2xl font-semibold tracking-tight">{c.name}</h3>
                   </div>
-                  <div className="text-right">
-                    <div className="text-xs text-muted-foreground">Match</div>
-                    <div className="text-2xl font-bold text-gradient">{c.score}</div>
-                  </div>
                 </div>
-                <div className="aspect-[16/10] rounded-xl bg-gradient-to-br from-secondary to-muted/50 mb-6 flex items-center justify-center relative overflow-hidden border border-border/30">
-                  <div className="absolute inset-0 bg-gradient-glow opacity-30" />
-                  <c.icon className="w-16 h-16 text-accent/60 relative z-10" />
+
+                <div className="p-6">
+                  <div className="font-medium mb-2 text-foreground">{c.fit}</div>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
                 </div>
-                <div className="inline-flex items-center gap-1.5 text-xs px-3 py-1 rounded-full bg-secondary/60 border border-border/50 mb-3">
-                  <span className="w-1 h-1 rounded-full bg-accent" />
-                  {c.tag}
-                </div>
-                <div className="font-medium mb-2 text-foreground">{c.fit}</div>
-                <p className="text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
               </article>
             ))}
           </div>
