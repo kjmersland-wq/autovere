@@ -56,7 +56,7 @@ export const Advisor = ({ initialPrompt }: { initialPrompt?: string }) => {
       });
 
       if (!resp.ok || !resp.body) {
-        if (resp.status === 429) upsert("Lumen is at capacity. Try again in a moment.");
+        if (resp.status === 429) upsert("AutoVere is at capacity. Try again in a moment.");
         else if (resp.status === 402) upsert("AI credits required to continue.");
         else upsert("Something went wrong. Try again.");
         setLoading(false);
@@ -107,7 +107,7 @@ export const Advisor = ({ initialPrompt }: { initialPrompt?: string }) => {
           </div>
         </div>
         <div>
-          <div className="font-semibold tracking-tight">Lumen</div>
+          <div className="font-semibold tracking-tight">AutoVere</div>
           <div className="text-xs text-muted-foreground">Your AI car advisor</div>
         </div>
       </div>

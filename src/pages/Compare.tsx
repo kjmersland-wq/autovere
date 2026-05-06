@@ -55,7 +55,7 @@ const FeelCard = ({ car }: { car: Car }) => {
 
 const NotFound = () => (
   <PageShell>
-    <SEO title="Comparison not found · Lumen" description="This comparison isn't ready yet." />
+    <SEO title="Comparison not found · AutoVere" description="This comparison isn't ready yet." />
     <div className="container py-32 text-center">
       <h1 className="text-4xl font-bold mb-4">We haven't framed that one yet.</h1>
       <Button asChild className="bg-gradient-primary"><Link to="/compare">Browse comparisons</Link></Button>
@@ -73,7 +73,7 @@ const Compare = () => {
   const b = getCar(bSlug);
   if (!a || !b) return <NotFound />;
 
-  const title = `${a.name} vs ${b.name} — honest comparison · Lumen`;
+  const title = `${a.name} vs ${b.name} — honest comparison · AutoVere`;
   const desc = `A real-world comparison of the ${a.name} and ${b.name}: feel, comfort, climate, lifestyle, and ownership — not a spec table.`;
 
   const jsonLd = {
@@ -112,13 +112,13 @@ const Compare = () => {
 
       {/* Intro */}
       <section className="container py-20 max-w-3xl">
-        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Lumen comparison</div>
+        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AutoVere comparison</div>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">
           {a.name} vs {b.name}: <span className="text-gradient">how they actually feel.</span>
         </h1>
         <p className="text-lg text-muted-foreground leading-relaxed">
           Spec tables hide the truth. Two cars with similar numbers can feel completely different to live with.
-          Here's how the {a.name} and the {b.name} compare across the dimensions Lumen weighs most: feel, comfort,
+          Here's how the {a.name} and the {b.name} compare across the dimensions AutoVere weighs most: feel, comfort,
           climate, lifestyle, and ownership.
         </p>
       </section>
@@ -168,10 +168,10 @@ const Compare = () => {
               Still on the fence?
             </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Tell Lumen about your life — climate, family, commute. It'll pick the one that actually fits.
+              Tell AutoVere about your life — climate, family, commute. It'll pick the one that actually fits.
             </p>
             <Button asChild size="lg" className="bg-gradient-primary rounded-xl gap-2">
-              <Link to="/#advisor">Ask Lumen <ArrowRight className="w-4 h-4" /></Link>
+              <Link to="/#advisor">Ask AutoVere <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
         </div>
@@ -193,7 +193,7 @@ export const CompareIndex = () => {
   return (
     <PageShell>
       <SEO
-        title="Car comparisons that go beyond spec sheets · Lumen"
+        title="Car comparisons that go beyond spec sheets · AutoVere"
         description="Real-world comparisons of premium EVs — driving feel, comfort, climate, lifestyle, and ownership. Honest, human, useful."
       />
       <section className="container pt-12 pb-20">

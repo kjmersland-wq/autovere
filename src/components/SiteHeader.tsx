@@ -20,7 +20,7 @@ export const SiteHeader = () => (
         <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow">
           <Sparkles className="w-4 h-4 text-primary-foreground" />
         </div>
-        Lumen
+        AutoVere
       </Link>
       <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
         {NAV.map((n) => (
@@ -36,7 +36,7 @@ export const SiteHeader = () => (
         ))}
       </nav>
       <Button asChild size="sm" className="bg-gradient-primary hover:opacity-90 rounded-xl">
-        <Link to="/#advisor">Try Lumen</Link>
+        <Link to="/#advisor">Try AutoVere</Link>
       </Button>
     </div>
   </header>

@@ -154,7 +154,7 @@ export default function Contact() {
           <TrustCard
             icon={<Sparkles className="w-5 h-5" />}
             title="Responsible AI"
-            body="Lumen, our advisor, is built to inform — not to manipulate. We don't use your conversations to train external models."
+            body="AutoVere, our advisor, is built to inform — not to manipulate. We don't use your conversations to train external models."
           />
           <TrustCard
             icon={<MessageCircle className="w-5 h-5" />}

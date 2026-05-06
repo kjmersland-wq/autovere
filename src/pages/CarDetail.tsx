@@ -12,10 +12,10 @@ import { SafetyOwnershipBlock } from "@/components/SafetyOwnershipBlock";
 
 const NotFound = () => (
   <PageShell>
-    <SEO title="Car not found · Lumen" description="This car isn't in the Lumen library yet." />
+    <SEO title="Car not found · AutoVere" description="This car isn't in the AutoVere library yet." />
     <div className="container py-32 text-center">
       <h1 className="text-4xl font-bold mb-4">We don't have that one yet.</h1>
-      <p className="text-muted-foreground mb-8">Browse the Lumen library instead.</p>
+      <p className="text-muted-foreground mb-8">Browse the AutoVere library instead.</p>
       <Button asChild className="bg-gradient-primary"><Link to="/cars">All cars</Link></Button>
     </div>
   </PageShell>
@@ -46,7 +46,7 @@ const CarDetail = () => {
   return (
     <PageShell>
       <SEO
-        title={`${car.name} review — ${car.fit} · Lumen`}
+        title={`${car.name} review — ${car.fit} · AutoVere`}
         description={car.summary.slice(0, 155)}
         image={car.hero}
         type="article"
@@ -66,7 +66,7 @@ const CarDetail = () => {
           <p className="text-xl md:text-2xl text-muted-foreground italic mt-4 max-w-2xl">"{car.tagline}"</p>
           <div className="flex flex-wrap gap-3 mt-8">
             <div className="glass rounded-2xl px-4 py-3">
-              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">Lumen match</div>
+              <div className="text-[10px] uppercase tracking-wider text-muted-foreground">AutoVere match</div>
               <div className="text-2xl font-bold text-gradient leading-none">{car.score}</div>
             </div>
             {car.range && (
@@ -94,7 +94,7 @@ const CarDetail = () => {
       {/* Summary + lifestyle */}
       <section className="container py-24 grid lg:grid-cols-[1.4fr_1fr] gap-16">
         <div>
-          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Lumen summary</div>
+          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AutoVere summary</div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">
             {car.fit}.
           </h2>
@@ -210,10 +210,10 @@ const CarDetail = () => {
               Is the {car.name} <span className="text-gradient">right for you?</span>
             </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Tell Lumen about your life and find out — honestly, in two minutes.
+              Tell AutoVere about your life and find out — honestly, in two minutes.
             </p>
             <Button asChild size="lg" className="bg-gradient-primary rounded-xl gap-2">
-              <Link to="/#advisor">Talk to Lumen <ArrowRight className="w-4 h-4" /></Link>
+              <Link to="/#advisor">Talk to AutoVere <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
         </div>
@@ -228,7 +228,7 @@ export default CarDetail;
 export const CarsIndex = () => (
   <PageShell>
     <SEO
-      title="All cars in the Lumen library"
+      title="All cars in the AutoVere library"
       description="Premium electric cars curated for personality, climate, and real-world life. Calm, honest reviews — no spec spam."
     />
     <section className="container pt-12 pb-20">

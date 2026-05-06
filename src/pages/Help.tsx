@@ -7,7 +7,7 @@ const TOPICS = [
   {
     icon: <Sparkles className="w-5 h-5" />,
     title: "Getting started",
-    body: "How to use Lumen, save cars to collections, and discover models that match your taste.",
+    body: "How to use AutoVere, save cars to collections, and discover models that match your taste.",
   },
   {
     icon: <CreditCard className="w-5 h-5" />,

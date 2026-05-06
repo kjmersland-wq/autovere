@@ -21,16 +21,16 @@ const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4);
 const SAMPLE_CARS = CARS.slice(0, 3);
 
 const FEATURES = [
-  { icon: Brain, title: "Understands you", desc: "Tell Lumen about your life. It listens for what actually matters — not just specs." },
+  { icon: Brain, title: "Understands you", desc: "Tell AutoVere about your life. It listens for what actually matters — not just specs." },
   { icon: Compass, title: "Lifestyle-first match", desc: "Recommendations based on climate, family, commute, and how you actually drive." },
   { icon: Scale, title: "Honest tradeoffs", desc: "No hype. Every match comes with the real strengths and the real compromises." },
   { icon: ShieldCheck, title: "Built to be trusted", desc: "We translate specifications into human meaning. So you choose with confidence." },
 ];
 
 const FAQS = [
-  { q: "How does Lumen actually work?", a: "You describe your life — where you drive, who's with you, what feels important. Lumen interprets the signals (climate, space, budget, personality) and matches you with a small, curated set of cars that genuinely fit. No endless filters, no overwhelm." },
-  { q: "Why only 2–3 recommendations?", a: "Choice paralysis is real. Showing you 47 cars doesn't help — it stresses you out. Lumen narrows it to the few that actually deserve your attention, then explains why." },
-  { q: "Can I trust the matches?", a: "Lumen is honest about tradeoffs. Every recommendation includes what's great and what isn't. We'd rather you walk away informed than excited about the wrong car." },
+  { q: "How does AutoVere actually work?", a: "You describe your life — where you drive, who's with you, what feels important. AutoVere interprets the signals (climate, space, budget, personality) and matches you with a small, curated set of cars that genuinely fit. No endless filters, no overwhelm." },
+  { q: "Why only 2–3 recommendations?", a: "Choice paralysis is real. Showing you 47 cars doesn't help — it stresses you out. AutoVere narrows it to the few that actually deserve your attention, then explains why." },
+  { q: "Can I trust the matches?", a: "AutoVere is honest about tradeoffs. Every recommendation includes what's great and what isn't. We'd rather you walk away informed than excited about the wrong car." },
   { q: "Does it work for my country?", a: "English first, with multilingual and regional support rolling out. Climate, currency, and availability awareness are part of the roadmap — designed in from day one." },
 ];
 
@@ -55,16 +55,16 @@ const Index = () => {
   const seoJsonLd = {
     "@context": "https://schema.org",
     "@type": "WebSite",
-    name: "Lumen",
+    name: "AutoVere",
     url: typeof window !== "undefined" ? window.location.origin : "",
-    description: "Lumen is an emotionally intelligent AI car advisor — calm, honest, and lifestyle-first.",
+    description: "AutoVere is an emotionally intelligent AI car advisor — calm, honest, and lifestyle-first.",
   };
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SEO
-        title="Lumen — The future of choosing a car"
-        description="Lumen is a calm, intelligent AI advisor that learns how you live and matches you to the few cars worth your attention."
+        title="AutoVere — The future of choosing a car"
+        description="AutoVere is a calm, intelligent AI advisor that learns how you live and matches you to the few cars worth your attention."
         jsonLd={seoJsonLd}
       />
       <SiteHeader />
@@ -89,7 +89,7 @@ const Index = () => {
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-              Lumen is a calm, intelligent advisor that learns how you live —
+              AutoVere is a calm, intelligent advisor that learns how you live —
               then guides you to the few cars worth your attention.
             </p>
 
@@ -134,7 +134,7 @@ const Index = () => {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
               <div className="absolute bottom-8 left-8 right-8 flex flex-wrap items-end justify-between gap-4 opacity-90">
-                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">A Lumen story · Volume 01</div>
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">A AutoVere story · Volume 01</div>
                 <div className="text-sm text-muted-foreground italic">"The right car doesn't shout. It fits."</div>
               </div>
             </div>
@@ -152,7 +152,7 @@ const Index = () => {
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
               Most car platforms throw 200 listings at you and call it choice.
-              Lumen does the opposite — it asks the right questions, then quietly does the thinking.
+              AutoVere does the opposite — it asks the right questions, then quietly does the thinking.
             </p>
           </div>
 
@@ -176,12 +176,12 @@ const Index = () => {
         <div className="container relative">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
             <div>
-              <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Meet Lumen</div>
+              <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Meet AutoVere</div>
               <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">
                 A conversation, <br />not a search box.
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed mb-6">
-                Tell Lumen about your daily drive, your climate, your family,
+                Tell AutoVere about your daily drive, your climate, your family,
                 what makes you smile behind the wheel. It listens — then recommends
                 with the kind of nuance you'd expect from a thoughtful friend who happens to know cars.
               </p>
@@ -214,7 +214,7 @@ const Index = () => {
               Curated, not catalogued.
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Sample matches Lumen surfaces — each chosen for a specific kind of life.
+              Sample matches AutoVere surfaces — each chosen for a specific kind of life.
             </p>
           </div>
 
@@ -223,7 +223,7 @@ const Index = () => {
           </div>
           <div className="mt-10">
             <Link to="/cars" className="inline-flex items-center gap-2 text-accent hover:gap-3 transition-all font-medium">
-              Browse the full Lumen library <ArrowRight className="w-4 h-4" />
+              Browse the full AutoVere library <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
@@ -234,7 +234,7 @@ const Index = () => {
         image={sceneNordic}
         eyebrow="Cars for Nordic winters"
         title={<>Composed when <span className="text-gradient">the road isn't.</span></>}
-        body="Quiet AWD. Heated everything. A cabin that feels like staying indoors at -15°. Lumen knows which cars actually deliver — and which only pretend."
+        body="Quiet AWD. Heated everything. A cabin that feels like staying indoors at -15°. AutoVere knows which cars actually deliver — and which only pretend."
       />
 
       {/* Curated collections */}
@@ -246,7 +246,7 @@ const Index = () => {
               Discover by <span className="text-gradient">moment</span>, not by spec.
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Themes Lumen returns to often. Tap one and start a conversation from there.
+              Themes AutoVere returns to often. Tap one and start a conversation from there.
             </p>
           </div>
 
@@ -281,7 +281,7 @@ const Index = () => {
         image={sceneRoad}
         eyebrow="Designed for long drives"
         title={<>Six hours <span className="text-gradient">should feel like one.</span></>}
-        body="Seats that don't betray you at hour four. Range you stop thinking about. Sound systems worth the silence between songs. Lumen ranks for reality, not the spec sheet."
+        body="Seats that don't betray you at hour four. Range you stop thinking about. Sound systems worth the silence between songs. AutoVere ranks for reality, not the spec sheet."
         align="right"
       />
 
@@ -295,7 +295,7 @@ const Index = () => {
               The car you choose <br />says <span className="text-gradient">who you are.</span>
             </h2>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              Lumen builds a profile from how you talk about driving — not a quiz, just a conversation.
+              AutoVere builds a profile from how you talk about driving — not a quiz, just a conversation.
               Recognize yourself in one of these?
             </p>
           </div>
@@ -321,7 +321,7 @@ const Index = () => {
                 The ones <br />you'll <span className="text-gradient">be glad you tried.</span>
               </h2>
               <p className="text-lg text-muted-foreground leading-relaxed mb-8">
-                Not every great car arrives with a marketing budget. Lumen surfaces the quietly excellent —
+                Not every great car arrives with a marketing budget. AutoVere surfaces the quietly excellent —
                 cars that owners love more after a year, not less.
               </p>
               <button
@@ -351,7 +351,7 @@ const Index = () => {
       {/* Cinematic 4 — Night drive emotional */}
       <CinematicSection
         image={sceneNight}
-        eyebrow="Why we built Lumen"
+        eyebrow="Why we built AutoVere"
         title={<>Choosing a car <span className="text-gradient">should feel like this.</span></>}
         body="Calm. Considered. Yours. Not 47 open tabs at 1am. Not spec sheets you'll forget by Tuesday. Just a quiet conversation, and a car that finally fits."
         align="center"
@@ -406,7 +406,7 @@ const Index = () => {
                 Skip the spec sheets. Start a conversation.
               </p>
               <Button size="lg" className="bg-gradient-primary hover:opacity-90 rounded-xl gap-2 h-14 px-8 text-base shadow-glow" onClick={() => document.getElementById("advisor")?.scrollIntoView({ behavior: "smooth" })}>
-                Talk to Lumen <ArrowRight className="w-4 h-4" />
+                Talk to AutoVere <ArrowRight className="w-4 h-4" />
               </Button>
             </div>
           </div>

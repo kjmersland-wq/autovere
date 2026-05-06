@@ -89,7 +89,7 @@ export const Personality = ({ onPick }: { onPick: (prompt: string) => void }) =>
           <p className="text-lg text-muted-foreground italic mb-6">"{active.tagline}"</p>
           <p className="text-base leading-relaxed mb-8 max-w-xl">{active.desc}</p>
 
-          <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3">Lumen often suggests</div>
+          <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3">AutoVere often suggests</div>
           <div className="flex flex-wrap gap-2 mb-8">
             {active.matches.map((m) => (
               <span key={m} className="px-3 py-1.5 rounded-full text-sm glass">{m}</span>

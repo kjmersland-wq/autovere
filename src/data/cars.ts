@@ -240,7 +240,7 @@ export const COLLECTIONS: Collection[] = [
     description: "Composed on snow. Quiet on ice. Heated where it matters.",
     image: carSnow,
     body:
-      "Winter doesn't care about marketing. These are the cars Lumen returns to when the temperature drops and the road disappears under snow — competent, calm, and comfortable in conditions where most cars become a chore.",
+      "Winter doesn't care about marketing. These are the cars AutoVere returns to when the temperature drops and the road disappears under snow — competent, calm, and comfortable in conditions where most cars become a chore.",
     cars: ["polestar-3", "volvo-ex90", "kia-ev9"],
   },
   {
@@ -258,7 +258,7 @@ export const COLLECTIONS: Collection[] = [
     description: "Six hours that should feel like one.",
     image: sceneRoad,
     body:
-      "Long drives expose every compromise. Seats betray you at hour four. Wind noise wears you down. These cars were engineered with the road trip in mind — and Lumen ranks them for the reality, not the brochure.",
+      "Long drives expose every compromise. Seats betray you at hour four. Wind noise wears you down. These cars were engineered with the road trip in mind — and AutoVere ranks them for the reality, not the brochure.",
     cars: ["mercedes-eqe", "volvo-ex90", "bmw-i5"],
   },
   {
@@ -285,7 +285,7 @@ export const COLLECTIONS: Collection[] = [
     description: "Composed in traffic. Confident in tight streets.",
     image: sceneCity,
     body:
-      "Cities punish bad cars. Visibility, footprint, low-speed refinement, and easy parking matter more than 0–100 times. These are Lumen's calmest urban companions.",
+      "Cities punish bad cars. Visibility, footprint, low-speed refinement, and easy parking matter more than 0–100 times. These are AutoVere's calmest urban companions.",
     cars: ["bmw-i5", "polestar-3"],
   },
 ];
@@ -388,24 +388,24 @@ export type LearnArticle = {
 export const LEARN: LearnArticle[] = [
   {
     slug: "how-the-ai-works",
-    title: "How the Lumen AI actually works",
-    category: "Inside Lumen",
+    title: "How the AutoVere AI actually works",
+    category: "Inside AutoVere",
     excerpt:
-      "Lumen is an emotionally intelligent advisor — not a filter. Here's how it interprets your life and turns it into a small, honest set of matches.",
+      "AutoVere is an emotionally intelligent advisor — not a filter. Here's how it interprets your life and turns it into a small, honest set of matches.",
     body: [
-      "Lumen starts from the premise that the right car is a personal answer to a personal question. So it doesn't ask you to filter; it asks you to describe.",
-      "When you tell Lumen about your climate, your family, your commute, or how driving makes you feel, it interprets those signals across hundreds of dimensions — not as keywords, but as meaning.",
+      "AutoVere starts from the premise that the right car is a personal answer to a personal question. So it doesn't ask you to filter; it asks you to describe.",
+      "When you tell AutoVere about your climate, your family, your commute, or how driving makes you feel, it interprets those signals across hundreds of dimensions — not as keywords, but as meaning.",
       "It then narrows the field to two or three cars worth your attention, and explains the tradeoffs honestly. The goal is clarity, not choice paralysis.",
     ],
   },
   {
     slug: "how-recommendations-work",
     title: "How recommendations work",
-    category: "Inside Lumen",
+    category: "Inside AutoVere",
     excerpt:
-      "Why Lumen shows you 2–3 cars instead of 47, and how it decides which ones deserve your attention.",
+      "Why AutoVere shows you 2–3 cars instead of 47, and how it decides which ones deserve your attention.",
     body: [
-      "Most platforms confuse choice with help. Lumen takes the opposite position: the more accurately it understands you, the fewer cars you should see.",
+      "Most platforms confuse choice with help. AutoVere takes the opposite position: the more accurately it understands you, the fewer cars you should see.",
       "Recommendations are weighted across personality fit, climate, lifestyle, ownership reality, and emotional resonance — not just specs.",
       "Every match comes with the genuine compromises, because trust is earned by being honest about what isn't perfect.",
     ],
@@ -431,7 +431,7 @@ export const LEARN: LearnArticle[] = [
     body: [
       "The SUV/crossover line moved years ago. Most modern 'SUVs' are unibody crossovers — better on-road, less true off-road capability.",
       "What actually matters: footprint (does it fit your street?), seating posture, ground clearance, and cabin volume.",
-      "Lumen ignores the marketing label and matches you on the dimensions you'll feel every day.",
+      "AutoVere ignores the marketing label and matches you on the dimensions you'll feel every day.",
     ],
   },
   {
@@ -455,7 +455,7 @@ export const LEARN: LearnArticle[] = [
     body: [
       "Specs are necessary but rarely sufficient. The dimensions that shape ownership are: ride quality, cabin noise, seat geometry, software maturity, and dealer experience.",
       "Compare cars on a typical day in your life — not on a spec sheet. The car you'll love is the one that fits the trips you actually take.",
-      "Lumen's comparisons start from lived experience and only use specs to confirm or qualify what you'd actually feel.",
+      "AutoVere's comparisons start from lived experience and only use specs to confirm or qualify what you'd actually feel.",
     ],
   },
   {
@@ -472,24 +472,24 @@ export const LEARN: LearnArticle[] = [
   },
   {
     slug: "how-comparisons-work",
-    title: "How Lumen comparisons actually work",
-    category: "Inside Lumen",
+    title: "How AutoVere comparisons actually work",
+    category: "Inside AutoVere",
     excerpt:
       "Two cars side-by-side, with the dimensions that shape your daily life — not the ones that look good in a brochure.",
     body: [
-      "Most comparison tools line up specs and let you decide. Lumen does the opposite — it interprets the specs through the lens of your life.",
+      "Most comparison tools line up specs and let you decide. AutoVere does the opposite — it interprets the specs through the lens of your life.",
       "Cabin noise, ride quality, winter behaviour, software maturity, dealer experience and long-term ownership stress matter more than 0-100 times for most people.",
-      "Lumen weighs each dimension by how much it will actually shape your years with the car, then explains the tradeoff in a single calm paragraph.",
+      "AutoVere weighs each dimension by how much it will actually shape your years with the car, then explains the tradeoff in a single calm paragraph.",
     ],
   },
   {
     slug: "how-personalization-works",
-    title: "How Lumen personalises without surveillance",
-    category: "Inside Lumen",
+    title: "How AutoVere personalises without surveillance",
+    category: "Inside AutoVere",
     excerpt:
       "Personalisation built on what you tell us — not on tracking, not on data resale, not on dealer leads.",
     body: [
-      "Lumen learns from your conversation, your saved cars and your stated context. Nothing else.",
+      "AutoVere learns from your conversation, your saved cars and your stated context. Nothing else.",
       "We don't sell your preferences to dealers, and we don't share data with manufacturers to influence what you see.",
       "The result: recommendations that feel personal because they are — not because we built a profile of you in the background.",
     ],
@@ -499,7 +499,7 @@ export const LEARN: LearnArticle[] = [
     title: "What actually matters in EV pricing",
     category: "Ownership",
     excerpt:
-      "Sticker price is the smallest part of the story. Here's the framework Lumen uses to estimate true cost.",
+      "Sticker price is the smallest part of the story. Here's the framework AutoVere uses to estimate true cost.",
     body: [
       "Total cost of ownership is sticker price plus charging, insurance, maintenance, depreciation and the price of stress.",
       "EVs typically win on charging and maintenance, lose on insurance, and vary wildly on depreciation. Software-mature brands tend to hold value better.",

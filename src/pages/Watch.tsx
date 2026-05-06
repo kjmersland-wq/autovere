@@ -44,7 +44,7 @@ const Watch = () => {
   return (
     <PageShell>
       <SEO
-        title="Watch — curated automotive video reviews · Lumen"
+        title="Watch — curated automotive video reviews · AutoVere"
         description="A premium, AI-curated stream of trusted automotive reviews — winter tests, long-distance drives, quiet luxury, and the most discussed EVs."
         type="website"
       />
@@ -52,13 +52,13 @@ const Watch = () => {
       {/* Hero */}
       <section className="container pt-12 pb-16">
         <div className="max-w-3xl mb-12">
-          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Lumen Watch</div>
+          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AutoVere Watch</div>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-[1.05]">
             The reviews <span className="text-gradient">worth your time.</span>
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed">
             A curated, intelligent stream of the most trusted automotive reviewers in the world,
-            updated live from YouTube. No noise. No clickbait. Just the videos Lumen quietly recommends.
+            updated live from YouTube. No noise. No clickbait. Just the videos AutoVere quietly recommends.
           </p>
         </div>
 
@@ -86,7 +86,7 @@ const Watch = () => {
           <ShieldCheck className="w-3.5 h-3.5" /> The most trusted reviewers
         </div>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-10">
-          The voices Lumen returns to.
+          The voices AutoVere returns to.
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {TRUSTED_REVIEWERS.map((r) => (

@@ -101,7 +101,7 @@ export default function Terms() {
           title: "Intellectual property",
           body: (
             <p>
-              AUTOVERE, the Lumen advisor, our editorial content and design are protected by
+              AUTOVERE, the AutoVere advisor, our editorial content and design are protected by
               intellectual property laws. Vehicle names, marks and imagery belong to their
               respective manufacturers and are used for editorial purposes.
             </p>

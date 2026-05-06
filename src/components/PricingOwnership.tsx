@@ -66,7 +66,7 @@ export const PricingOwnership = ({ car }: { car: Car }) => {
             </div>
 
             <div className="mt-6 pt-6 border-t border-border/40 text-[11px] text-muted-foreground leading-relaxed">
-              Lumen estimates use regional averages, not live dealer pricing. Final figures depend on country, options and incentives.
+              AutoVere estimates use regional averages, not live dealer pricing. Final figures depend on country, options and incentives.
             </div>
           </div>
         </div>
