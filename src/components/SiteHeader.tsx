@@ -3,8 +3,9 @@ import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 const NAV = [
+  { to: "/discover", label: "Discover" },
   { to: "/cars", label: "Cars" },
-  { to: "/collections", label: "Discover" },
+  { to: "/collections", label: "Collections" },
   { to: "/personalities", label: "Personalities" },
   { to: "/watch", label: "Watch" },
   { to: "/compare", label: "Compare" },
