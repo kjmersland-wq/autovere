@@ -13,6 +13,7 @@ import PersonalityDetail, { PersonalitiesIndex } from "./pages/Personality.tsx";
 import LearnArticle, { LearnIndex } from "./pages/Learn.tsx";
 import Watch from "./pages/Watch.tsx";
 import Pricing from "./pages/Pricing.tsx";
+import Contact from "./pages/Contact.tsx";
 
 const queryClient = new QueryClient();
 
