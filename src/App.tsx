@@ -24,6 +24,8 @@ import Cookies from "./pages/legal/Cookies.tsx";
 import Refund from "./pages/legal/Refund.tsx";
 import Subscriptions from "./pages/legal/Subscriptions.tsx";
 import Studio from "./pages/Studio.tsx";
+import Auth from "./pages/Auth.tsx";
+import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
 
 const queryClient = new QueryClient();
 
@@ -66,6 +68,7 @@ const AppRoutes = () => (
     <Route path="/legal/refund" element={<Refund />} />
     <Route path="/legal/subscriptions" element={<Subscriptions />} />
     <Route path="/studio" element={<Studio />} />
+    <Route path="/auth" element={<Auth />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
@@ -78,6 +81,7 @@ const App = () => (
       <BrowserRouter>
         <ScrollManager />
         <LangSync />
+        <PaymentTestModeBanner />
         <Routes>
           {/* Localized routes — same tree mounted under each language prefix */}
           <Route path="/en/*" element={<AppRoutes />} />
