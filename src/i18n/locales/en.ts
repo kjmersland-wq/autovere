@@ -75,6 +75,33 @@ const en = {
     talk_to_autovere: "Talk to AUTOVERE",
     ask_autovere: "Ask AUTOVERE",
   },
+  advisor: {
+    title: "AUTOVERE",
+    subtitle: "Your AI car advisor",
+    intro:
+      "Tell me about your life — where you drive, who's in the car, what feels right. I'll find cars that actually fit you.",
+    placeholder: "Describe what you're looking for…",
+    thinking: "Thinking carefully…",
+    err_capacity: "AUTOVERE is at capacity. Try again in a moment.",
+    err_credits: "AI credits required to continue.",
+    err_generic: "Something went wrong. Try again.",
+    err_connection: "Connection lost. Try again.",
+    starters: [
+      "I want a family EV that handles snowy winters",
+      "Something sporty but comfortable for daily driving",
+      "Reliable SUV under $50k for long road trips",
+      "A quiet city car that still feels premium",
+    ],
+  },
+  legal: {
+    last_updated: "Last updated",
+    on_this_page: "On this page",
+    have_question: "Have a question about this document?",
+    contact_team: "Contact our team",
+    every_message: "— every message is read by a real person.",
+    org_line: "Org.nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge",
+    operator: "Boutique24Shop v/ K.Mersland",
+  },
   seo: {
     site_name: "AUTOVERE",
     default_title: "AUTOVERE — A calmer way to discover your next car",
