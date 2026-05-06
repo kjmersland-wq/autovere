@@ -5,6 +5,8 @@ import { SEO } from "@/components/SEO";
 import { CarCard } from "@/components/CarCard";
 import { Button } from "@/components/ui/button";
 import { CARS, getCar } from "@/data/cars";
+import { getMedia } from "@/data/media";
+import { CarMediaSection } from "@/components/CarMediaSection";
 
 const NotFound = () => (
   <PageShell>
