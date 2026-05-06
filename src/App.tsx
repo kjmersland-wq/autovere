@@ -81,6 +81,7 @@ const App = () => (
       <BrowserRouter>
         <ScrollManager />
         <LangSync />
+        <PaymentTestModeBanner />
         <Routes>
           {/* Localized routes — same tree mounted under each language prefix */}
           <Route path="/en/*" element={<AppRoutes />} />
