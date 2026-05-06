@@ -77,6 +77,33 @@ const sv: Translation = {
     talk_to_autovere: "Tala med AUTOVERE",
     ask_autovere: "Fråga AUTOVERE",
   },
+  advisor: {
+    title: "AUTOVERE",
+    subtitle: "Din AI-bilrådgivare",
+    intro:
+      "Berätta om ditt liv — var du kör, vilka som åker med, vad som känns rätt. Jag hittar bilar som verkligen passar dig.",
+    placeholder: "Beskriv vad du letar efter…",
+    thinking: "Tänker noggrant…",
+    err_capacity: "AUTOVERE är fullbelagt. Försök igen om en stund.",
+    err_credits: "AI-krediter krävs för att fortsätta.",
+    err_generic: "Något gick fel. Försök igen.",
+    err_connection: "Anslutningen bröts. Försök igen.",
+    starters: [
+      "Jag vill ha en familje-EL som klarar snöiga vintrar",
+      "Något sportigt men bekvämt för daglig körning",
+      "Pålitlig SUV under 500 000 kr för långa resor",
+      "En tyst stadsbil som ändå känns premium",
+    ],
+  },
+  legal: {
+    last_updated: "Senast uppdaterad",
+    on_this_page: "På denna sida",
+    have_question: "Har du frågor om detta dokument?",
+    contact_team: "Kontakta vårt team",
+    every_message: "— varje meddelande läses av en riktig människa.",
+    org_line: "Org.nr 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge",
+    operator: "Boutique24Shop v/ K.Mersland",
+  },
   seo: {
     site_name: "AUTOVERE",
     default_title: "AUTOVERE — Ett lugnare sätt att hitta din nästa bil",

@@ -77,6 +77,33 @@ const fr: Translation = {
     talk_to_autovere: "Parler à AUTOVERE",
     ask_autovere: "Demander à AUTOVERE",
   },
+  advisor: {
+    title: "AUTOVERE",
+    subtitle: "Votre conseiller automobile IA",
+    intro:
+      "Parlez-moi de votre vie — où vous conduisez, qui vous accompagne, ce qui vous semble juste. Je trouverai des voitures qui vous correspondent vraiment.",
+    placeholder: "Décrivez ce que vous recherchez…",
+    thinking: "Réflexion attentive…",
+    err_capacity: "AUTOVERE est saturé. Réessayez dans un instant.",
+    err_credits: "Crédits IA requis pour continuer.",
+    err_generic: "Une erreur est survenue. Réessayez.",
+    err_connection: "Connexion perdue. Réessayez.",
+    starters: [
+      "Je veux un VE familial capable d'affronter les hivers neigeux",
+      "Quelque chose de sportif mais confortable au quotidien",
+      "SUV fiable à moins de 50 000 € pour les longs trajets",
+      "Une citadine silencieuse qui reste premium",
+    ],
+  },
+  legal: {
+    last_updated: "Dernière mise à jour",
+    on_this_page: "Sur cette page",
+    have_question: "Une question sur ce document ?",
+    contact_team: "Contactez notre équipe",
+    every_message: "— chaque message est lu par une vraie personne.",
+    org_line: "N° d'entreprise 934 044 029 · Møviklia 4, 4623 Kristiansand, Norvège",
+    operator: "Boutique24Shop v/ K.Mersland",
+  },
   seo: {
     site_name: "AUTOVERE",
     default_title: "AUTOVERE — Une façon plus sereine de choisir votre prochaine voiture",
