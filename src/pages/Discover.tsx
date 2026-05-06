@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowRight, Sparkles, Snowflake, Heart, Shield, Mountain, Moon } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
@@ -20,55 +21,36 @@ const THEMES = [
 ];
 
 const Discover = () => {
+  const { t } = useTranslation();
   const cards = THEMES
-    .map((t) => ({ ...t, c: COLLECTIONS.find((c) => c.slug === t.slug) }))
+    .map((th) => ({ ...th, c: COLLECTIONS.find((c) => c.slug === th.slug) }))
     .filter((x): x is typeof x & { c: NonNullable<typeof x.c> } => Boolean(x.c));
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    name: "Discover — AutoVere intelligence collections",
-    description: "Curated AutoVere collections by climate, lifestyle, ownership stress, and reviewer consensus.",
-    hasPart: cards.map((x) => ({
-      "@type": "CreativeWork",
-      name: x.c.title,
-      url: `https://autovere.com/collections/${x.c.slug}`,
-    })),
+    name: t("pages.discover.seo_title"),
+    description: t("pages.discover.seo_desc"),
+    hasPart: cards.map((x) => ({ "@type": "CreativeWork", name: x.c.title, url: `https://autovere.com/collections/${x.c.slug}` })),
   };
 
   return (
     <PageShell>
-      <SEO
-        title="Discover — AutoVere intelligence collections"
-        description="Curated AutoVere collections by climate, ownership stress, calm highway cruising, quiet luxury, and reviewer consensus."
-        jsonLd={jsonLd}
-      />
+      <SEO title={t("pages.discover.seo_title")} description={t("pages.discover.seo_desc")} jsonLd={jsonLd} />
 
       <section className="container pt-16 pb-12 max-w-3xl">
-        <div className="text-xs uppercase tracking-[0.3em] text-accent mb-5">Discover</div>
+        <div className="text-xs uppercase tracking-[0.3em] text-accent mb-5">{t("pages.discover.eyebrow")}</div>
         <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.02] mb-6">
-          Cars discovered through <span className="text-gradient">how you live.</span>
+          {t("pages.discover.h1_a")} <span className="text-gradient">{t("pages.discover.h1_b")}</span>
         </h1>
-        <p className="text-lg text-muted-foreground leading-relaxed">
-          AutoVere reads thousands of expert reviews, owner conversations, and safety reports — then quietly organises
-          the cars that genuinely fit a moment in your life. Pick a moment.
-        </p>
+        <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.discover.lead")}</p>
       </section>
 
       <section className="container pb-24">
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {cards.map(({ c, icon: Icon, hue }) => (
-            <Link
-              key={c.slug}
-              to={`/collections/${c.slug}`}
-              className="group relative overflow-hidden rounded-3xl border border-border/40 hover:border-primary/40 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow aspect-[4/5]"
-            >
-              <img
-                src={c.image}
-                alt={c.title}
-                loading="lazy"
-                className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-[2500ms]"
-              />
+            <Link key={c.slug} to={`/collections/${c.slug}`} className="group relative overflow-hidden rounded-3xl border border-border/40 hover:border-primary/40 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow aspect-[4/5]">
+              <img src={c.image} alt={c.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-[2500ms]" />
               <div className={`absolute inset-0 bg-gradient-to-tr ${hue}`} />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/10" />
               <div className="relative h-full flex flex-col justify-between p-7">
@@ -79,7 +61,7 @@ const Discover = () => {
                   <h2 className="text-2xl font-semibold tracking-tight mb-2 leading-snug">{c.title}</h2>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">{c.description}</p>
                   <div className="text-xs text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
-                    Open the collection <ArrowRight className="w-3 h-3" />
+                    {t("common.open_collection")} <ArrowRight className="w-3 h-3" />
                   </div>
                 </div>
               </div>
@@ -88,12 +70,8 @@ const Discover = () => {
         </div>
 
         <div className="mt-16 glass rounded-3xl p-8 md:p-12 max-w-3xl mx-auto text-center">
-          <div className="text-[11px] uppercase tracking-[0.3em] text-accent mb-3">AI transparency</div>
-          <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
-            AutoVere collections are AI-assisted and continuously refined from public expert reviews,
-            owner discussions, and safety data. We surface consensus, not opinion — and recommend you verify
-            details locally before buying.
-          </p>
+          <div className="text-[11px] uppercase tracking-[0.3em] text-accent mb-3">{t("pages.discover.transparency_eyebrow")}</div>
+          <p className="text-sm md:text-base text-muted-foreground leading-relaxed">{t("pages.discover.transparency")}</p>
         </div>
       </section>
 
