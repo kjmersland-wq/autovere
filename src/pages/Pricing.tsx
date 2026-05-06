@@ -30,7 +30,48 @@ const PREMIUM = [
   "Early access to new features",
 ];
 
-const Pricing = () => (
+const Pricing = () => {
+  const navigate = useNavigate();
+  const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
+  const { isActive, subscription, userId, refetch } = useSubscription();
+  const [interval, setInterval] = useState<"month" | "year">("month");
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    if (params.get("checkout") === "success") {
+      toast.success("Welcome to Premium! A confirmation email is on its way.");
+      refetch();
+    }
+  }, [refetch]);
+
+  const handleSubscribe = async () => {
+    const priceId = interval === "month" ? "premium_monthly" : "premium_yearly";
+    const { data: { user } } = await supabase.auth.getUser();
+    if (!user) {
+      toast.info("Please sign in to subscribe.");
+      navigate("/auth");
+      return;
+    }
+    await openCheckout({ priceId, customerEmail: user.email, userId: user.id });
+  };
+
+  const openPortal = async () => {
+    setPortalLoading(true);
+    try {
+      const { data, error } = await supabase.functions.invoke("customer-portal", {
+        body: { environment: subscription ? (await import("@/lib/paddle")).getPaddleEnvironment() : "sandbox" },
+      });
+      if (error || !data?.url) throw new Error("Could not open portal");
+      window.open(data.url, "_blank");
+    } catch (e) {
+      toast.error("Could not open the customer portal.");
+    } finally {
+      setPortalLoading(false);
+    }
+  };
+
+  return (
   <PageShell>
     <SEO
       title="AutoVere Premium — calm, intelligent automotive guidance"
