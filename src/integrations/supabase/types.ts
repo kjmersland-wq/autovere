@@ -56,6 +56,51 @@ export type Database = {
         }
         Relationships: []
       }
+      car_suggestions: {
+        Row: {
+          brand: string
+          confidence: number
+          created_at: string
+          fit_themes: Json
+          id: string
+          name: string
+          reviewed_at: string | null
+          reviewed_by: string | null
+          source_signature: string | null
+          status: string
+          type: string
+          why_it_fits: string
+        }
+        Insert: {
+          brand: string
+          confidence?: number
+          created_at?: string
+          fit_themes?: Json
+          id?: string
+          name: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_signature?: string | null
+          status?: string
+          type: string
+          why_it_fits: string
+        }
+        Update: {
+          brand?: string
+          confidence?: number
+          created_at?: string
+          fit_themes?: Json
+          id?: string
+          name?: string
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          source_signature?: string | null
+          status?: string
+          type?: string
+          why_it_fits?: string
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           country: string | null
@@ -128,15 +173,42 @@ export type Database = {
         }
         Relationships: []
       }
+      user_roles: {
+        Row: {
+          created_at: string
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "editor" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -263,6 +335,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "editor", "user"],
+    },
   },
 } as const
