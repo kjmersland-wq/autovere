@@ -5,6 +5,7 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { CARS, getCar } from "@/data/cars";
 import { useSafetyIntelligence } from "@/hooks/use-safety-intelligence";
+import { CompareIntelligenceSection } from "@/components/CompareIntelligenceSection";
 import type { Car } from "@/data/cars";
 
 const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string; icon?: typeof ShieldCheck }) => (
@@ -123,8 +124,17 @@ const Compare = () => {
         </p>
       </section>
 
-      {/* Rows */}
+      {/* AI comparison intelligence — FIRST (emotional understanding before tech) */}
+      <CompareIntelligenceSection
+        aSlug={a.slug}
+        bSlug={b.slug}
+        aName={a.name}
+        bName={b.name}
+      />
+
+      {/* Detailed dimension rows */}
       <section className="container pb-20">
+        <div className="text-[11px] uppercase tracking-[0.3em] text-accent mb-4">Detailed dimensions</div>
         <Row label="Driving feel" icon={CarIcon} a={a.summary} b={b.summary} />
         <Row label="Comfort" icon={Heart} a={a.comfort} b={b.comfort} />
         <Row label="Safety confidence" icon={ShieldCheck} a={`Strong real-world confidence; ${a.climate.toLowerCase()}`} b={`Strong real-world confidence; ${b.climate.toLowerCase()}`} />
