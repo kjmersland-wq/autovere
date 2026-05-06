@@ -1,8 +1,11 @@
 import { useState } from "react";
-import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, Snowflake, MapPin, Brain, ChevronDown, Zap, Heart, Gauge } from "lucide-react";
+import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Advisor } from "@/components/Advisor";
 import heroCar from "@/assets/hero-car.jpg";
+import carSnow from "@/assets/car-snow.jpg";
+import carSedan from "@/assets/car-sedan.jpg";
+import carFamily from "@/assets/car-family.jpg";
 
 const SAMPLE_CARS = [
   {
@@ -11,7 +14,7 @@ const SAMPLE_CARS = [
     fit: "Quiet confidence",
     desc: "Calm, refined, Scandinavian. Handles harsh winters with composure and feels effortless on long drives.",
     score: 96,
-    icon: Snowflake,
+    image: carSnow,
     tag: "Best for cold climates",
   },
   {
@@ -20,7 +23,7 @@ const SAMPLE_CARS = [
     fit: "Spirited & refined",
     desc: "Drives like a sports sedan but pampers like a flagship. Tech that feels considered, not flashy.",
     score: 93,
-    icon: Gauge,
+    image: carSedan,
     tag: "Best for daily drivers",
   },
   {
@@ -29,7 +32,7 @@ const SAMPLE_CARS = [
     fit: "Quietly capable",
     desc: "Spacious enough for the whole family. Safety-first, beautifully understated, made for road trips.",
     score: 95,
-    icon: Heart,
+    image: carFamily,
     tag: "Best for families",
   },
 ];
