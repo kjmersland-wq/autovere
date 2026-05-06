@@ -4,6 +4,7 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { COLLECTIONS } from "@/data/cars";
 import { EditorialPulseSection } from "@/components/EditorialPulseSection";
+import { ApprovedAdditionsSection } from "@/components/ApprovedAdditionsSection";
 
 const THEMES = [
   { slug: "winter-confidence", icon: Snowflake, hue: "from-sky-500/20 to-blue-500/5" },
@@ -96,6 +97,7 @@ const Discover = () => {
         </div>
       </section>
 
+      <ApprovedAdditionsSection />
       <EditorialPulseSection />
     </PageShell>
   );

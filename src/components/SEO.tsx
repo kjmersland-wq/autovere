@@ -1,4 +1,6 @@
 import { useEffect } from "react";
+import { SUPPORTED_LANGS, DEFAULT_LANG } from "@/i18n/config";
+import { detectLangFromPath } from "@/i18n/routing";
 
 type Props = {
   title: string;
@@ -8,6 +10,8 @@ type Props = {
   type?: "website" | "article";
   jsonLd?: Record<string, any> | Record<string, any>[];
 };
+
+const SITE = "https://autovere.com";
 
 const setMeta = (selector: string, attr: string, value: string) => {
   let el = document.head.querySelector<HTMLMetaElement>(selector);
@@ -20,14 +24,33 @@ const setMeta = (selector: string, attr: string, value: string) => {
   el.setAttribute(attr, value);
 };
 
-const setLink = (rel: string, href: string) => {
-  let el = document.head.querySelector<HTMLLinkElement>(`link[rel="${rel}"]`);
+const setLink = (rel: string, href: string, hreflang?: string) => {
+  const sel = hreflang
+    ? `link[rel="${rel}"][hreflang="${hreflang}"]`
+    : `link[rel="${rel}"]:not([hreflang])`;
+  let el = document.head.querySelector<HTMLLinkElement>(sel);
   if (!el) {
     el = document.createElement("link");
     el.rel = rel;
+    if (hreflang) el.setAttribute("hreflang", hreflang);
     document.head.appendChild(el);
   }
   el.href = href;
+};
+
+const stripLang = (path: string) => {
+  const seg = path.split("/").filter(Boolean)[0];
+  if (seg && (SUPPORTED_LANGS as readonly string[]).includes(seg)) {
+    const rest = "/" + path.split("/").slice(2).join("/");
+    return rest === "//" ? "/" : rest || "/";
+  }
+  return path;
+};
+
+const buildLocalized = (path: string, lang: string) => {
+  const clean = stripLang(path);
+  if (clean === "/") return lang === DEFAULT_LANG ? `${SITE}/` : `${SITE}/${lang}`;
+  return lang === DEFAULT_LANG ? `${SITE}${clean}` : `${SITE}/${lang}${clean}`;
 };
 
 export const SEO = ({ title, description, canonical, image, type = "website", jsonLd }: Props) => {
@@ -46,13 +69,20 @@ export const SEO = ({ title, description, canonical, image, type = "website", js
     setMeta('meta[name="twitter:description"]', "content", desc);
     if (image) setMeta('meta[name="twitter:image"]', "content", image);
 
-    const url = canonical || (typeof window !== "undefined" ? window.location.href : "");
-    if (url) {
-      setLink("canonical", url);
-      setMeta('meta[property="og:url"]', "content", url);
-    }
+    const path = typeof window !== "undefined" ? window.location.pathname : "/";
+    const lang = detectLangFromPath(path);
+    const canonicalUrl = canonical || buildLocalized(path, lang);
+    setLink("canonical", canonicalUrl);
+    setMeta('meta[property="og:url"]', "content", canonicalUrl);
+    setMeta('meta[property="og:locale"]', "content", lang);
 
-    // JSON-LD
+    // hreflang for all supported languages + x-default
+    document
+      .querySelectorAll('link[rel="alternate"][hreflang]')
+      .forEach((n) => n.remove());
+    SUPPORTED_LANGS.forEach((l) => setLink("alternate", buildLocalized(path, l), l));
+    setLink("alternate", buildLocalized(path, DEFAULT_LANG), "x-default");
+
     document.querySelectorAll('script[data-seo-jsonld="true"]').forEach((n) => n.remove());
     if (jsonLd) {
       const arr = Array.isArray(jsonLd) ? jsonLd : [jsonLd];

@@ -4,6 +4,8 @@ import { useEffect } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import "./i18n/config";
+import { LangSync } from "./i18n/LangSync";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import CarDetail, { CarsIndex } from "./pages/CarDetail.tsx";
@@ -40,6 +42,34 @@ const ScrollManager = () => {
   return null;
 };
 
+const AppRoutes = () => (
+  <Routes>
+    <Route path="/" element={<Index />} />
+    <Route path="/cars" element={<CarsIndex />} />
+    <Route path="/cars/:slug" element={<CarDetail />} />
+    <Route path="/compare" element={<CompareIndex />} />
+    <Route path="/compare/:slug" element={<Compare />} />
+    <Route path="/collections" element={<CollectionsIndex />} />
+    <Route path="/collections/:slug" element={<CollectionDetail />} />
+    <Route path="/personalities" element={<PersonalitiesIndex />} />
+    <Route path="/personalities/:slug" element={<PersonalityDetail />} />
+    <Route path="/learn" element={<LearnIndex />} />
+    <Route path="/learn/:slug" element={<LearnArticle />} />
+    <Route path="/watch" element={<Watch />} />
+    <Route path="/pricing" element={<Pricing />} />
+    <Route path="/contact" element={<Contact />} />
+    <Route path="/help" element={<Help />} />
+    <Route path="/discover" element={<Discover />} />
+    <Route path="/legal/terms" element={<Terms />} />
+    <Route path="/legal/privacy" element={<Privacy />} />
+    <Route path="/legal/cookies" element={<Cookies />} />
+    <Route path="/legal/refund" element={<Refund />} />
+    <Route path="/legal/subscriptions" element={<Subscriptions />} />
+    <Route path="/studio" element={<Studio />} />
+    <Route path="*" element={<NotFound />} />
+  </Routes>
+);
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -47,31 +77,15 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollManager />
+        <LangSync />
         <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/cars" element={<CarsIndex />} />
-          <Route path="/cars/:slug" element={<CarDetail />} />
-          <Route path="/compare" element={<CompareIndex />} />
-          <Route path="/compare/:slug" element={<Compare />} />
-          <Route path="/collections" element={<CollectionsIndex />} />
-          <Route path="/collections/:slug" element={<CollectionDetail />} />
-          <Route path="/personalities" element={<PersonalitiesIndex />} />
-          <Route path="/personalities/:slug" element={<PersonalityDetail />} />
-          <Route path="/learn" element={<LearnIndex />} />
-          <Route path="/learn/:slug" element={<LearnArticle />} />
-          <Route path="/watch" element={<Watch />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/help" element={<Help />} />
-          <Route path="/discover" element={<Discover />} />
-          <Route path="/legal/terms" element={<Terms />} />
-          <Route path="/legal/privacy" element={<Privacy />} />
-          <Route path="/legal/cookies" element={<Cookies />} />
-          <Route path="/legal/refund" element={<Refund />} />
-          <Route path="/legal/subscriptions" element={<Subscriptions />} />
-          <Route path="/studio" element={<Studio />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
+          {/* Localized routes — same tree mounted under each language prefix */}
+          <Route path="/en/*" element={<AppRoutes />} />
+          <Route path="/no/*" element={<AppRoutes />} />
+          <Route path="/de/*" element={<AppRoutes />} />
+          <Route path="/sv/*" element={<AppRoutes />} />
+          {/* Default (English) at root */}
+          <Route path="/*" element={<AppRoutes />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
