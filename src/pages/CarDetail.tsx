@@ -8,6 +8,7 @@ import { CARS, getCar } from "@/data/cars";
 import { getMedia } from "@/data/media";
 import { CarMediaSection } from "@/components/CarMediaSection";
 import { PricingOwnership } from "@/components/PricingOwnership";
+import { SafetyOwnershipBlock } from "@/components/SafetyOwnershipBlock";
 
 const NotFound = () => (
   <PageShell>
@@ -164,6 +165,9 @@ const CarDetail = () => {
 
       {/* Pricing & ownership */}
       <PricingOwnership car={car} />
+
+      {/* AI safety + ownership intelligence */}
+      <SafetyOwnershipBlock car={car} />
 
       {/* Video reviews + AI consensus + official + trusted */}
       {(() => {
