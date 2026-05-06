@@ -17,3 +17,7 @@ verify_jwt = false
 
 [functions.refresh-insights]
 verify_jwt = false
+
+[functions.refresh-pulse]
+verify_jwt = false
+

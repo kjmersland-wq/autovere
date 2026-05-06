@@ -3,6 +3,7 @@ import { ArrowRight, Sparkles, Snowflake, Heart, Shield, Mountain, Moon } from "
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { COLLECTIONS } from "@/data/cars";
+import { EditorialPulseSection } from "@/components/EditorialPulseSection";
 
 const THEMES = [
   { slug: "winter-confidence", icon: Snowflake, hue: "from-sky-500/20 to-blue-500/5" },
@@ -94,6 +95,8 @@ const Discover = () => {
           </p>
         </div>
       </section>
+
+      <EditorialPulseSection />
     </PageShell>
   );
 };

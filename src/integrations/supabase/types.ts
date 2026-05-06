@@ -92,6 +92,42 @@ export type Database = {
         }
         Relationships: []
       }
+      editorial_pulse: {
+        Row: {
+          body: string
+          created_at: string
+          dek: string
+          featured_slugs: Json
+          id: string
+          refreshed_at: string
+          status: string
+          theme: string
+          title: string
+        }
+        Insert: {
+          body: string
+          created_at?: string
+          dek: string
+          featured_slugs?: Json
+          id?: string
+          refreshed_at?: string
+          status?: string
+          theme: string
+          title: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          dek?: string
+          featured_slugs?: Json
+          id?: string
+          refreshed_at?: string
+          status?: string
+          theme?: string
+          title?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
