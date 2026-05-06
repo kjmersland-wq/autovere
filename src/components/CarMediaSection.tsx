@@ -1,7 +1,8 @@
-import { ExternalLink, Globe, Settings2, FileText, KeyRound, MapPin, ShieldCheck, Sparkles } from "lucide-react";
+import { ExternalLink, Globe, Settings2, FileText, KeyRound, MapPin, ShieldCheck, Sparkles, ThumbsUp, AlertCircle } from "lucide-react";
 import type { CarMedia } from "@/data/media";
 import { LiveVideoCard } from "@/components/LiveVideoCard";
 import { useYouTubeSearch } from "@/hooks/use-youtube-search";
+import { useVideoInsights } from "@/hooks/use-video-insights";
 
 const KIND_ICON = {
   site: Globe,
@@ -15,6 +16,7 @@ export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: 
   const { videos, loading } = useYouTubeSearch(`${carName} review`, { max: 7, order: "relevance" });
   const featured = videos[0];
   const rest = videos.slice(1);
+  const { insights, loading: insightsLoading } = useVideoInsights(carName, videos);
 
   return (
     <section className="container py-24 space-y-20">
@@ -30,23 +32,75 @@ export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: 
           )}
           {featured && <LiveVideoCard video={featured} size="lg" badge="Most trusted" />}
         </div>
-        <aside className="glass rounded-3xl p-8 lg:sticky lg:top-28">
-          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent mb-4">
-            <Sparkles className="w-3.5 h-3.5" /> AI reviewer consensus
+        <aside className="glass rounded-3xl p-8 lg:sticky lg:top-28 space-y-6">
+          <div>
+            <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent mb-4">
+              <Sparkles className="w-3.5 h-3.5" /> AI reviewer consensus
+            </div>
+            {insightsLoading && !insights && (
+              <div className="space-y-3">
+                <div className="h-4 w-3/4 rounded bg-secondary/40 animate-pulse" />
+                <div className="h-4 w-2/3 rounded bg-secondary/40 animate-pulse" />
+                <div className="h-4 w-5/6 rounded bg-secondary/40 animate-pulse" />
+              </div>
+            )}
+            {insights?.headline && (
+              <h3 className="text-xl font-semibold tracking-tight mb-4 leading-snug">
+                {insights.headline}
+              </h3>
+            )}
+            {insights?.feel && (
+              <p className="text-sm text-muted-foreground leading-relaxed mb-5 italic">
+                "{insights.feel}"
+              </p>
+            )}
           </div>
-          <h3 className="text-xl font-semibold tracking-tight mb-5 leading-snug">
-            What reviewers agree on about the {carName}
-          </h3>
-          <ul className="space-y-4">
-            {media.consensus.map((c) => (
-              <li key={c} className="flex items-start gap-3 text-sm leading-relaxed">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
-                <span>{c}</span>
-              </li>
-            ))}
-          </ul>
-          <div className="text-[11px] text-muted-foreground mt-6 leading-relaxed">
-            Synthesised from public expert reviews. Lumen surfaces consensus, not opinion.
+
+          {insights?.strengths && insights.strengths.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-accent mb-3">
+                <ThumbsUp className="w-3 h-3" /> Reviewers agree on
+              </div>
+              <ul className="space-y-3">
+                {insights.strengths.map((c) => (
+                  <li key={c} className="flex items-start gap-3 text-sm leading-relaxed">
+                    <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {insights?.criticisms && insights.criticisms.length > 0 && (
+            <div>
+              <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground mb-3">
+                <AlertCircle className="w-3 h-3" /> Honest reservations
+              </div>
+              <ul className="space-y-3">
+                {insights.criticisms.map((c) => (
+                  <li key={c} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
+                    <span className="w-1.5 h-1.5 rounded-full bg-muted-foreground/60 mt-2 shrink-0" />
+                    <span>{c}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          {!insightsLoading && !insights && media.consensus.length > 0 && (
+            <ul className="space-y-3">
+              {media.consensus.map((c) => (
+                <li key={c} className="flex items-start gap-3 text-sm leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-accent mt-2 shrink-0" />
+                  <span>{c}</span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <div className="text-[11px] text-muted-foreground leading-relaxed pt-2 border-t border-border/40">
+            Synthesised by Lumen AI from public expert reviews. We surface consensus, not opinion.
           </div>
         </aside>
       </div>

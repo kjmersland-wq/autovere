@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { CARS, getCar } from "@/data/cars";
 import { getMedia } from "@/data/media";
 import { CarMediaSection } from "@/components/CarMediaSection";
+import { PricingOwnership } from "@/components/PricingOwnership";
 
 const NotFound = () => (
   <PageShell>
@@ -160,6 +161,9 @@ const CarDetail = () => {
           </ul>
         </div>
       </section>
+
+      {/* Pricing & ownership */}
+      <PricingOwnership car={car} />
 
       {/* Video reviews + AI consensus + official + trusted */}
       {(() => {

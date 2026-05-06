@@ -9,6 +9,7 @@ const NAV = [
   { to: "/watch", label: "Watch" },
   { to: "/compare", label: "Compare" },
   { to: "/learn", label: "Learn" },
+  { to: "/pricing", label: "Premium" },
 ];
 
 export const SiteHeader = () => (
