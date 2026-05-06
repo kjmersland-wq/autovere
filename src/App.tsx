@@ -14,6 +14,12 @@ import LearnArticle, { LearnIndex } from "./pages/Learn.tsx";
 import Watch from "./pages/Watch.tsx";
 import Pricing from "./pages/Pricing.tsx";
 import Contact from "./pages/Contact.tsx";
+import Help from "./pages/Help.tsx";
+import Terms from "./pages/legal/Terms.tsx";
+import Privacy from "./pages/legal/Privacy.tsx";
+import Cookies from "./pages/legal/Cookies.tsx";
+import Refund from "./pages/legal/Refund.tsx";
+import Subscriptions from "./pages/legal/Subscriptions.tsx";
 
 const queryClient = new QueryClient();
 
