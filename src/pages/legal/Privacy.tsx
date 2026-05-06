@@ -36,8 +36,23 @@ export default function Privacy() {
                 conversations, used to improve the product.
               </p>
               <p>
-                <strong>Billing data</strong> — handled by our payment processor; we receive only
-                limited transaction metadata, never full card details.
+                <strong>Billing data</strong> — when you subscribe, our payment provider{" "}
+                <strong>Paddle.com Market Limited</strong> ("Paddle") acts as Merchant of Record
+                and processes your payment. Paddle collects information needed to complete the
+                transaction (such as name, billing address, country, email, payment method
+                details, IP address, and tax identifiers where applicable). We never see or
+                store your full card details. We receive limited transaction metadata from
+                Paddle — subscription status, plan, billing period, last four digits of the
+                card, and country — used to provide and support your subscription. See{" "}
+                <a
+                  href="https://www.paddle.com/legal/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Paddle's Privacy Policy
+                </a>{" "}
+                for how Paddle handles your data.
               </p>
               <p>
                 <strong>Messages you send us</strong> — anything you write in the contact form.
