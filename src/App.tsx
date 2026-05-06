@@ -11,6 +11,7 @@ import Compare, { CompareIndex } from "./pages/Compare.tsx";
 import CollectionDetail, { CollectionsIndex } from "./pages/Collection.tsx";
 import PersonalityDetail, { PersonalitiesIndex } from "./pages/Personality.tsx";
 import LearnArticle, { LearnIndex } from "./pages/Learn.tsx";
+import Watch from "./pages/Watch.tsx";
 
 const queryClient = new QueryClient();
 
