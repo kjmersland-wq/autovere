@@ -16,8 +16,8 @@ export default function Privacy() {
           title: "Who we are",
           body: (
             <p>
-              AUTOVERE is operated by <strong>KM TECH V/Kjell Mersland</strong>, Org.nr.
-              934 044 029, Møviklia 4, 4623 Kristiansand, Norway. We are the data controller for
+              AUTOVERE is operated by <strong>Boutique24Shop v/ K.Mersland</strong>,
+              based in Norway. We are the data controller for
               the personal data described below.
             </p>
           ),
