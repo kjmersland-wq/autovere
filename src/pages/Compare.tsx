@@ -1,5 +1,6 @@
 import { Link, useParams } from "react-router-dom";
 import { ArrowRight, ShieldCheck, Heart, Snowflake, Car as CarIcon, Users, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
@@ -21,12 +22,13 @@ const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string;
 );
 
 const FeelCard = ({ car }: { car: Car }) => {
+  const { t } = useTranslation();
   const { data, loading } = useSafetyIntelligence(car.name, car.type, car.lifestyle);
   return (
     <div className="glass rounded-3xl p-7 space-y-5">
       <div>
         <div className="text-[11px] uppercase tracking-[0.25em] text-accent mb-2 flex items-center gap-2">
-          <Sparkles className="w-3 h-3" /> Real-world feel · {car.name}
+          <Sparkles className="w-3 h-3" /> {t("pages.compare.real_world_feel")} · {car.name}
         </div>
         {loading || !data ? (
           <div className="space-y-2">
@@ -54,20 +56,22 @@ const FeelCard = ({ car }: { car: Car }) => {
   );
 };
 
-
-const NotFound = () => (
-  <PageShell>
-    <SEO title="Comparison not found · AutoVere" description="This comparison isn't ready yet." />
-    <div className="container py-32 text-center">
-      <h1 className="text-4xl font-bold mb-4">We haven't framed that one yet.</h1>
-      <Button asChild className="bg-gradient-primary"><Link to="/compare">Browse comparisons</Link></Button>
-    </div>
-  </PageShell>
-);
+const NotFound = () => {
+  const { t } = useTranslation();
+  return (
+    <PageShell>
+      <SEO title={t("pages.compare.not_found_seo_title")} description={t("pages.compare.not_found_seo_desc")} />
+      <div className="container py-32 text-center">
+        <h1 className="text-4xl font-bold mb-4">{t("pages.compare.not_found_h1")}</h1>
+        <Button asChild className="bg-gradient-primary"><Link to="/compare">{t("pages.compare.browse")}</Link></Button>
+      </div>
+    </PageShell>
+  );
+};
 
 const Compare = () => {
+  const { t } = useTranslation();
   const { slug = "" } = useParams();
-  // pattern: a-vs-b where slugs may contain hyphens. Use " -vs- " split fallback.
   const parts = slug.split("-vs-");
   if (parts.length !== 2) return <NotFound />;
   const [aSlug, bSlug] = parts;
@@ -75,8 +79,8 @@ const Compare = () => {
   const b = getCar(bSlug);
   if (!a || !b) return <NotFound />;
 
-  const title = `${a.name} vs ${b.name} — honest comparison · AutoVere`;
-  const desc = `A real-world comparison of the ${a.name} and ${b.name}: feel, comfort, climate, lifestyle, and ownership — not a spec table.`;
+  const title = `${a.name} vs ${b.name} — AUTOVERE`;
+  const desc = `${a.name} vs ${b.name}`;
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -90,7 +94,6 @@ const Compare = () => {
     <PageShell>
       <SEO title={title} description={desc} type="article" jsonLd={jsonLd} />
 
-      {/* Split hero */}
       <section className="relative">
         <div className="grid md:grid-cols-2">
           {[a, b].map((c, i) => (
@@ -112,63 +115,48 @@ const Compare = () => {
         </div>
       </section>
 
-      {/* Intro */}
       <section className="container py-20 max-w-3xl">
-        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AutoVere comparison</div>
+        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.compare.eyebrow")}</div>
         <h1 className="text-4xl md:text-5xl font-bold tracking-tight mb-6 leading-tight">
-          {a.name} vs {b.name}: <span className="text-gradient">how they actually feel.</span>
+          {a.name} vs {b.name}: <span className="text-gradient">{t("pages.compare.title_b")}</span>
         </h1>
         <p className="text-lg text-muted-foreground leading-relaxed">
-          Spec tables hide the truth. Two cars with similar numbers can feel completely different to live with.
-          Here's how the {a.name} and the {b.name} compare across the dimensions AutoVere weighs most: feel, comfort,
-          climate, lifestyle, and ownership.
+          {t("pages.compare.lead", { a: a.name, b: b.name })}
         </p>
       </section>
 
-      {/* AI comparison intelligence — FIRST (emotional understanding before tech) */}
-      <CompareIntelligenceSection
-        aSlug={a.slug}
-        bSlug={b.slug}
-        aName={a.name}
-        bName={b.name}
-      />
+      <CompareIntelligenceSection aSlug={a.slug} bSlug={b.slug} aName={a.name} bName={b.name} />
 
-      {/* Detailed dimension rows */}
       <section className="container pb-20">
-        <div className="text-[11px] uppercase tracking-[0.3em] text-accent mb-4">Detailed dimensions</div>
-        <Row label="Driving feel" icon={CarIcon} a={a.summary} b={b.summary} />
-        <Row label="Comfort" icon={Heart} a={a.comfort} b={b.comfort} />
-        <Row label="Safety confidence" icon={ShieldCheck} a={`Strong real-world confidence; ${a.climate.toLowerCase()}`} b={`Strong real-world confidence; ${b.climate.toLowerCase()}`} />
-        <Row label="Winter behaviour" icon={Snowflake} a={a.climate} b={b.climate} />
-        <Row label="Family suitability" icon={Users} a={a.practicality} b={b.practicality} />
-        <Row label="Ownership stress" a={a.ownership} b={b.ownership} />
-        <Row label="Personality fit" a={a.personality} b={b.personality} />
-        <Row label="Lifestyle" a={a.lifestyle} b={b.lifestyle} />
+        <div className="text-[11px] uppercase tracking-[0.3em] text-accent mb-4">{t("pages.compare.detailed")}</div>
+        <Row label={t("pages.compare.driving_feel")} icon={CarIcon} a={a.summary} b={b.summary} />
+        <Row label={t("pages.compare.comfort")} icon={Heart} a={a.comfort} b={b.comfort} />
+        <Row label={t("pages.compare.safety")} icon={ShieldCheck} a={`${t("pages.compare.strong_confidence")} ${a.climate.toLowerCase()}`} b={`${t("pages.compare.strong_confidence")} ${b.climate.toLowerCase()}`} />
+        <Row label={t("pages.compare.winter")} icon={Snowflake} a={a.climate} b={b.climate} />
+        <Row label={t("pages.compare.family")} icon={Users} a={a.practicality} b={b.practicality} />
+        <Row label={t("pages.compare.ownership_stress")} a={a.ownership} b={b.ownership} />
+        <Row label={t("pages.compare.personality_fit")} a={a.personality} b={b.personality} />
+        <Row label={t("pages.compare.lifestyle")} a={a.lifestyle} b={b.lifestyle} />
       </section>
 
-      {/* AI real-world feel cards */}
       <section className="container pb-20">
-        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AI consensus</div>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">
-          What it actually feels like — by the numbers people don't print.
-        </h2>
+        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.compare.ai_consensus")}</div>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">{t("pages.compare.ai_consensus_h")}</h2>
         <div className="grid md:grid-cols-2 gap-6">
           <FeelCard car={a} />
           <FeelCard car={b} />
         </div>
       </section>
 
-      {/* Region-aware continuation: dealers, test drives, official */}
       <CompareNextStepsSection a={a} b={b} />
 
-      {/* Verdict */}
       <section className="container pb-24 grid md:grid-cols-2 gap-6">
         {[a, b].map((c) => (
           <div key={c.slug} className="glass rounded-3xl p-8">
-            <div className="text-xs uppercase tracking-wider text-accent mb-2">Choose the {c.name} if</div>
+            <div className="text-xs uppercase tracking-wider text-accent mb-2">{t("pages.compare.choose_if", { name: c.name })}</div>
             <p className="text-lg leading-relaxed mb-4">{c.lifestyle}</p>
             <Button asChild variant="outline" className="rounded-xl">
-              <Link to={`/cars/${c.slug}`}>Read the full {c.name} review <ArrowRight className="w-4 h-4 ml-2" /></Link>
+              <Link to={`/cars/${c.slug}`}>{t("pages.compare.read_full_review", { name: c.name })} <ArrowRight className="w-4 h-4 ml-2" /></Link>
             </Button>
           </div>
         ))}
@@ -178,14 +166,10 @@ const Compare = () => {
         <div className="relative glass rounded-3xl p-12 text-center overflow-hidden">
           <div className="absolute inset-0 bg-gradient-glow opacity-40" />
           <div className="relative">
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-4">
-              Still on the fence?
-            </h2>
-            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">
-              Tell AutoVere about your life — climate, family, commute. It'll pick the one that actually fits.
-            </p>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-4">{t("pages.compare.still_fence")}</h2>
+            <p className="text-muted-foreground mb-8 max-w-xl mx-auto">{t("pages.compare.still_fence_lead")}</p>
             <Button asChild size="lg" className="bg-gradient-primary rounded-xl gap-2">
-              <Link to="/#advisor">Ask AutoVere <ArrowRight className="w-4 h-4" /></Link>
+              <Link to="/#advisor">{t("common.ask_autovere")} <ArrowRight className="w-4 h-4" /></Link>
             </Button>
           </div>
         </div>
@@ -196,8 +180,8 @@ const Compare = () => {
 
 export default Compare;
 
-// Compare index — suggested matchups
 export const CompareIndex = () => {
+  const { t } = useTranslation();
   const pairs: Array<[typeof CARS[number], typeof CARS[number]]> = [];
   CARS.forEach((c) => c.comparesWellWith.forEach((s) => {
     const o = getCar(s);
@@ -206,19 +190,14 @@ export const CompareIndex = () => {
 
   return (
     <PageShell>
-      <SEO
-        title="Car comparisons that go beyond spec sheets · AutoVere"
-        description="Real-world comparisons of premium EVs — driving feel, comfort, climate, lifestyle, and ownership. Honest, human, useful."
-      />
+      <SEO title={t("pages.compare.index_seo_title")} description={t("pages.compare.index_seo_desc")} />
       <section className="container pt-12 pb-20">
         <div className="max-w-2xl mb-14">
-          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Compare</div>
+          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.compare.index_eyebrow")}</div>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tighter mb-6">
-            Comparisons that <span className="text-gradient">tell the truth.</span>
+            {t("pages.compare.index_h1_a")} <span className="text-gradient">{t("pages.compare.index_h1_b")}</span>
           </h1>
-          <p className="text-lg text-muted-foreground leading-relaxed">
-            We don't compare numbers. We compare the lived experience of owning the car.
-          </p>
+          <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.compare.index_lead")}</p>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
           {pairs.map(([x, y]) => (
@@ -233,7 +212,7 @@ export const CompareIndex = () => {
               </div>
               <div className="p-6 flex items-center justify-between">
                 <div>
-                  <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">Comparison</div>
+                  <div className="text-xs uppercase tracking-wider text-muted-foreground mb-1">{t("pages.compare.comparison_label")}</div>
                   <div className="text-xl font-semibold">{x.name} vs {y.name}</div>
                 </div>
                 <ArrowRight className="w-5 h-5 text-accent group-hover:translate-x-1 transition-transform" />
