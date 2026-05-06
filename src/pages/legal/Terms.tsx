@@ -12,6 +12,17 @@ export default function Terms() {
       seoDescription="The terms that govern your use of AUTOVERE — a calmer, intelligent way to discover your next car."
       sections={[
         {
+          id: "seller",
+          title: "Who you are contracting with",
+          body: (
+            <p>
+              AUTOVERE is operated by <strong>Boutique24Shop v/ K.Mersland</strong> ("we", "us",
+              "AUTOVERE"), based in Norway. By using AUTOVERE you enter into a binding agreement
+              with Boutique24Shop v/ K.Mersland.
+            </p>
+          ),
+        },
+        {
           id: "acceptance",
           title: "Acceptance of terms",
           body: (
