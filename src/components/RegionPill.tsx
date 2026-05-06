@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Globe, Check } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useRegion } from "@/hooks/use-region";
 import { listRegions } from "@/lib/region";
 import {
@@ -12,15 +13,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 
 export const RegionPill = () => {
+  const { t } = useTranslation();
   const { region, setRegion } = useRegion();
   const [open, setOpen] = useState(false);
   const regions = listRegions();
+
 
   return (
     <DropdownMenu open={open} onOpenChange={setOpen}>
       <DropdownMenuTrigger asChild>
         <button
-          aria-label={`Region: ${region.name}`}
+          aria-label={`${t("region.aria")}: ${region.name}`}
           className="hidden sm:inline-flex items-center gap-2 rounded-xl px-3 py-1.5 text-xs uppercase tracking-wider text-muted-foreground hover:text-foreground border border-border/50 hover:border-border transition-colors"
         >
           <Globe className="w-3.5 h-3.5" />
@@ -29,7 +32,7 @@ export const RegionPill = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-56 glass border-border/50">
         <DropdownMenuLabel className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">
-          Tailor experience to
+          {t("region.label")}
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <div className="max-h-80 overflow-y-auto">
