@@ -1,56 +1,24 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart, Snowflake, Moon, Route, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Advisor } from "@/components/Advisor";
 import { CinematicSection } from "@/components/CinematicSection";
 import { Personality } from "@/components/Personality";
+import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import { CarCard } from "@/components/CarCard";
+import { CARS, COLLECTIONS as DATA_COLLECTIONS } from "@/data/cars";
 import heroCar from "@/assets/hero-car.jpg";
-import carSnow from "@/assets/car-snow.jpg";
-import carSedan from "@/assets/car-sedan.jpg";
-import carFamily from "@/assets/car-family.jpg";
 import sceneNight from "@/assets/scene-night-drive.jpg";
 import sceneNordic from "@/assets/scene-nordic.jpg";
 import sceneRoad from "@/assets/scene-roadtrip.jpg";
 import sceneQuiet from "@/assets/scene-quiet.jpg";
 import sceneCity from "@/assets/scene-city.jpg";
 
-const COLLECTIONS = [
-  { id: "nordic", title: "Built for Nordic winters", desc: "Composed on snow. Quiet on ice. Heated where it matters.", image: carSnow, icon: Snowflake },
-  { id: "long", title: "Designed for long drives", desc: "Cars that turn six hours into a meditation, not a marathon.", image: sceneRoad, icon: Route },
-  { id: "quiet", title: "Quiet luxury", desc: "Presence without announcement. Craft over chrome.", image: sceneQuiet, icon: Moon },
-  { id: "underestimated", title: "Cars people underestimated", desc: "Outside the spotlight. Inside, more thought than you'd expect.", image: sceneCity, icon: Eye },
-];
-
-
-const SAMPLE_CARS = [
-  {
-    name: "Polestar 3",
-    type: "Electric SUV",
-    fit: "Quiet confidence",
-    desc: "Calm, refined, Scandinavian. Handles harsh winters with composure and feels effortless on long drives.",
-    score: 96,
-    image: carSnow,
-    tag: "Best for cold climates",
-  },
-  {
-    name: "BMW i5",
-    type: "Executive EV",
-    fit: "Spirited & refined",
-    desc: "Drives like a sports sedan but pampers like a flagship. Tech that feels considered, not flashy.",
-    score: 93,
-    image: carSedan,
-    tag: "Best for daily drivers",
-  },
-  {
-    name: "Volvo EX90",
-    type: "Family SUV",
-    fit: "Quietly capable",
-    desc: "Spacious enough for the whole family. Safety-first, beautifully understated, made for road trips.",
-    score: 95,
-    image: carFamily,
-    tag: "Best for families",
-  },
-];
+const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4);
+const SAMPLE_CARS = CARS.slice(0, 3);
 
 const FEATURES = [
   { icon: Brain, title: "Understands you", desc: "Tell Lumen about your life. It listens for what actually matters — not just specs." },
@@ -84,28 +52,22 @@ const Index = () => {
   };
 
 
+  const seoJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Lumen",
+    url: typeof window !== "undefined" ? window.location.origin : "",
+    description: "Lumen is an emotionally intelligent AI car advisor — calm, honest, and lifestyle-first.",
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Nav */}
-      <header className="fixed top-0 inset-x-0 z-50 glass border-b border-border/30">
-        <div className="container flex items-center justify-between py-4">
-          <a href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow">
-              <Sparkles className="w-4 h-4 text-primary-foreground" />
-            </div>
-            Lumen
-          </a>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#advisor" className="hover:text-foreground transition-colors">Advisor</a>
-            <a href="#cars" className="hover:text-foreground transition-colors">Discover</a>
-            <a href="#how" className="hover:text-foreground transition-colors">How it works</a>
-            <a href="#help" className="hover:text-foreground transition-colors">Help</a>
-          </nav>
-          <Button size="sm" className="bg-gradient-primary hover:opacity-90 rounded-xl" onClick={() => document.getElementById("advisor")?.scrollIntoView({ behavior: "smooth" })}>
-            Try Lumen
-          </Button>
-        </div>
-      </header>
+      <SEO
+        title="Lumen — The future of choosing a car"
+        description="Lumen is a calm, intelligent AI advisor that learns how you live and matches you to the few cars worth your attention."
+        jsonLd={seoJsonLd}
+      />
+      <SiteHeader />
 
       {/* Hero */}
       <section className="relative pt-40 pb-32 bg-hero overflow-hidden">
@@ -257,41 +219,12 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SAMPLE_CARS.map((c) => (
-              <article key={c.name} className="group relative glass rounded-3xl overflow-hidden hover:-translate-y-2 transition-all duration-700 cursor-pointer hover:shadow-glow">
-                <div className="relative aspect-[16/11] overflow-hidden">
-                  <img
-                    src={c.image}
-                    alt={`${c.name} — ${c.fit}`}
-                    width={1280}
-                    height={800}
-                    loading="lazy"
-                    className="w-full h-full object-cover scale-105 group-hover:scale-115 transition-transform duration-[2200ms] ease-out"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
-                  <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-
-                  <div className="absolute top-4 left-4 inline-flex items-center gap-1.5 text-[11px] font-medium px-3 py-1.5 rounded-full glass">
-                    <span className="w-1 h-1 rounded-full bg-accent animate-glow-pulse" />
-                    {c.tag}
-                  </div>
-                  <div className="absolute top-4 right-4 glass rounded-2xl px-3 py-2 text-right">
-                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider">Match</div>
-                    <div className="text-xl font-bold text-gradient leading-none">{c.score}</div>
-                  </div>
-
-                  <div className="absolute bottom-4 left-5 right-5">
-                    <div className="text-xs text-muted-foreground mb-1">{c.type}</div>
-                    <h3 className="text-2xl font-semibold tracking-tight">{c.name}</h3>
-                  </div>
-                </div>
-
-                <div className="p-6">
-                  <div className="font-medium mb-2 text-foreground">{c.fit}</div>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{c.desc}</p>
-                </div>
-              </article>
-            ))}
+            {SAMPLE_CARS.map((c) => <CarCard key={c.slug} car={c} />)}
+          </div>
+          <div className="mt-10">
+            <Link to="/cars" className="inline-flex items-center gap-2 text-accent hover:gap-3 transition-all font-medium">
+              Browse the full Lumen library <ArrowRight className="w-4 h-4" />
+            </Link>
           </div>
         </div>
       </section>
@@ -318,27 +251,27 @@ const Index = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {COLLECTIONS.map((c) => (
-              <button
-                key={c.id}
-                onClick={() => startWith(`Show me cars from your "${c.title}" collection.`)}
-                className="group relative overflow-hidden rounded-3xl text-left aspect-[16/10] border border-border/40 hover:border-primary/50 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow"
+            {HOME_COLLECTIONS.map((c) => (
+              <Link
+                key={c.slug}
+                to={`/collections/${c.slug}`}
+                className="group relative overflow-hidden rounded-3xl text-left aspect-[16/10] border border-border/40 hover:border-primary/50 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow block"
               >
                 <img src={c.image} alt={c.title} loading="lazy" width={1280} height={800} className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-[2500ms] ease-out" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-background via-background/60 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="relative h-full flex flex-col justify-end p-8">
-                  <div className="w-11 h-11 rounded-xl glass flex items-center justify-center mb-4">
-                    <c.icon className="w-5 h-5 text-accent" />
-                  </div>
                   <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">{c.title}</h3>
-                  <p className="text-sm text-muted-foreground max-w-md mb-3">{c.desc}</p>
-                  <div className="text-xs text-accent flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-                    Explore with Lumen <ArrowRight className="w-3 h-3" />
+                  <p className="text-sm text-muted-foreground max-w-md mb-3">{c.description}</p>
+                  <div className="text-xs text-accent flex items-center gap-1 opacity-80 group-hover:opacity-100 group-hover:gap-2 transition-all">
+                    Open the collection <ArrowRight className="w-3 h-3" />
                   </div>
                 </div>
-              </button>
+              </Link>
             ))}
+          </div>
+          <div className="mt-8">
+            <Link to="/collections" className="text-accent hover:underline text-sm font-medium">All collections →</Link>
           </div>
         </div>
       </section>
@@ -480,17 +413,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="border-t border-border/30 py-10">
-        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-gradient-primary flex items-center justify-center">
-              <Sparkles className="w-3 h-3 text-primary-foreground" />
-            </div>
-            Lumen — The future of choosing a car.
-          </div>
-          <div>© {new Date().getFullYear()} Lumen Advisor</div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };
