@@ -2,6 +2,7 @@ import { Link, NavLink, useLocation } from "react-router-dom";
 import { Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
+import { RegionPill } from "@/components/RegionPill";
 import { detectLangFromPath, localizePath } from "@/i18n/routing";
 
 const NAV = [
@@ -44,6 +45,7 @@ export const SiteHeader = () => {
           ))}
         </nav>
         <div className="flex items-center gap-3">
+          <RegionPill />
           <LanguageSwitcher />
           <Button asChild size="sm" className="bg-gradient-primary hover:opacity-90 rounded-xl">
             <Link to={`${L("/")}#advisor`}>Try AutoVere</Link>
