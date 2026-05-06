@@ -12,11 +12,11 @@ const KIND_ICON = {
   dealers: MapPin,
 } as const;
 
-export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: string }) => {
+export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; carName: string; carSlug?: string }) => {
   const { videos, loading } = useYouTubeSearch(`${carName} review`, { max: 7, order: "relevance" });
   const featured = videos[0];
   const rest = videos.slice(1);
-  const { insights, loading: insightsLoading } = useVideoInsights(carName, videos);
+  const { insights, loading: insightsLoading } = useVideoInsights(carName, videos, carSlug);
 
   return (
     <section className="container py-24 space-y-20">

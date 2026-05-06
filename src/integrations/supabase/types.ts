@@ -14,6 +14,48 @@ export type Database = {
   }
   public: {
     Tables: {
+      car_insights: {
+        Row: {
+          car_name: string
+          car_slug: string
+          created_at: string
+          criticisms: Json
+          feel: string | null
+          headline: string | null
+          id: string
+          refreshed_at: string
+          source_count: number
+          source_signature: string | null
+          strengths: Json
+        }
+        Insert: {
+          car_name: string
+          car_slug: string
+          created_at?: string
+          criticisms?: Json
+          feel?: string | null
+          headline?: string | null
+          id?: string
+          refreshed_at?: string
+          source_count?: number
+          source_signature?: string | null
+          strengths?: Json
+        }
+        Update: {
+          car_name?: string
+          car_slug?: string
+          created_at?: string
+          criticisms?: Json
+          feel?: string | null
+          headline?: string | null
+          id?: string
+          refreshed_at?: string
+          source_count?: number
+          source_signature?: string | null
+          strengths?: Json
+        }
+        Relationships: []
+      }
       contact_messages: {
         Row: {
           country: string | null

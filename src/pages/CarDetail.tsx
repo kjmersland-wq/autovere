@@ -30,18 +30,32 @@ const CarDetail = () => {
     .map((s) => getCar(s))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Car",
-    name: car.name,
-    brand: { "@type": "Brand", name: car.brand },
-    vehicleConfiguration: car.type,
-    numberOfDoors: 5,
-    seatingCapacity: car.seats,
-    fuelType: "Electric",
-    description: car.summary,
-    image: car.hero,
-  };
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://autovere.com";
+  const carUrl = `${origin}/cars/${car.slug}`;
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Car",
+      name: car.name,
+      brand: { "@type": "Brand", name: car.brand },
+      vehicleConfiguration: car.type,
+      numberOfDoors: 5,
+      seatingCapacity: car.seats,
+      fuelType: "Electric",
+      description: car.summary,
+      image: car.hero,
+      url: carUrl,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: "Home", item: origin },
+        { "@type": "ListItem", position: 2, name: "Cars", item: `${origin}/cars` },
+        { "@type": "ListItem", position: 3, name: car.name, item: carUrl },
+      ],
+    },
+  ];
 
   return (
     <PageShell>
@@ -172,7 +186,7 @@ const CarDetail = () => {
       {/* Video reviews + AI consensus + official + trusted */}
       {(() => {
         const media = getMedia(car.slug);
-        return media ? <CarMediaSection media={media} carName={car.name} /> : null;
+        return media ? <CarMediaSection media={media} carName={car.name} carSlug={car.slug} /> : null;
       })()}
 
       {/* Compare suggestions */}

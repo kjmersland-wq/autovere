@@ -52,13 +52,32 @@ const Index = () => {
   };
 
 
-  const seoJsonLd = {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: "AutoVere",
-    url: typeof window !== "undefined" ? window.location.origin : "",
-    description: "AutoVere is an emotionally intelligent AI car advisor — calm, honest, and lifestyle-first.",
-  };
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://autovere.com";
+  const seoJsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      name: "AutoVere",
+      url: origin,
+      description:
+        "AutoVere is an emotionally intelligent AI car advisor — calm, honest, and lifestyle-first.",
+      potentialAction: {
+        "@type": "SearchAction",
+        target: `${origin}/cars?q={query}`,
+        "query-input": "required name=query",
+      },
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      name: "AutoVere",
+      url: origin,
+      logo: `${origin}/favicon.ico`,
+      description:
+        "Calm, intelligent AI automotive advisor synthesising expert reviews, owner discussions and safety data.",
+      sameAs: ["https://autovere.com"],
+    },
+  ];
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">

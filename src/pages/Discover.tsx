@@ -1,0 +1,101 @@
+import { Link } from "react-router-dom";
+import { ArrowRight, Sparkles, Snowflake, Heart, Shield, Mountain, Moon } from "lucide-react";
+import { PageShell } from "@/components/PageShell";
+import { SEO } from "@/components/SEO";
+import { COLLECTIONS } from "@/data/cars";
+
+const THEMES = [
+  { slug: "winter-confidence", icon: Snowflake, hue: "from-sky-500/20 to-blue-500/5" },
+  { slug: "nordic-winters", icon: Mountain, hue: "from-indigo-500/20 to-cyan-500/5" },
+  { slug: "quiet-luxury", icon: Sparkles, hue: "from-amber-500/15 to-rose-500/5" },
+  { slug: "long-distance-comfort", icon: Heart, hue: "from-rose-500/15 to-orange-500/5" },
+  { slug: "calm-highway-cruisers", icon: Moon, hue: "from-violet-500/20 to-indigo-500/5" },
+  { slug: "lowest-ownership-stress", icon: Shield, hue: "from-emerald-500/20 to-teal-500/5" },
+  { slug: "reviewers-unexpectedly-loved", icon: Sparkles, hue: "from-fuchsia-500/15 to-purple-500/5" },
+  { slug: "best-family-evs", icon: Heart, hue: "from-orange-500/15 to-amber-500/5" },
+  { slug: "underestimated", icon: Sparkles, hue: "from-teal-500/15 to-cyan-500/5" },
+  { slug: "city-life", icon: Sparkles, hue: "from-slate-500/20 to-zinc-500/5" },
+];
+
+const Discover = () => {
+  const cards = THEMES
+    .map((t) => ({ ...t, c: COLLECTIONS.find((c) => c.slug === t.slug) }))
+    .filter((x): x is typeof x & { c: NonNullable<typeof x.c> } => Boolean(x.c));
+
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    name: "Discover — AutoVere intelligence collections",
+    description: "Curated AutoVere collections by climate, lifestyle, ownership stress, and reviewer consensus.",
+    hasPart: cards.map((x) => ({
+      "@type": "CreativeWork",
+      name: x.c.title,
+      url: `https://autovere.com/collections/${x.c.slug}`,
+    })),
+  };
+
+  return (
+    <PageShell>
+      <SEO
+        title="Discover — AutoVere intelligence collections"
+        description="Curated AutoVere collections by climate, ownership stress, calm highway cruising, quiet luxury, and reviewer consensus."
+        jsonLd={jsonLd}
+      />
+
+      <section className="container pt-16 pb-12 max-w-3xl">
+        <div className="text-xs uppercase tracking-[0.3em] text-accent mb-5">Discover</div>
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.02] mb-6">
+          Cars discovered through <span className="text-gradient">how you live.</span>
+        </h1>
+        <p className="text-lg text-muted-foreground leading-relaxed">
+          AutoVere reads thousands of expert reviews, owner conversations, and safety reports — then quietly organises
+          the cars that genuinely fit a moment in your life. Pick a moment.
+        </p>
+      </section>
+
+      <section className="container pb-24">
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
+          {cards.map(({ c, icon: Icon, hue }) => (
+            <Link
+              key={c.slug}
+              to={`/collections/${c.slug}`}
+              className="group relative overflow-hidden rounded-3xl border border-border/40 hover:border-primary/40 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow aspect-[4/5]"
+            >
+              <img
+                src={c.image}
+                alt={c.title}
+                loading="lazy"
+                className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-[2500ms]"
+              />
+              <div className={`absolute inset-0 bg-gradient-to-tr ${hue}`} />
+              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/10" />
+              <div className="relative h-full flex flex-col justify-between p-7">
+                <div className="w-11 h-11 rounded-2xl glass flex items-center justify-center">
+                  <Icon className="w-5 h-5 text-accent" />
+                </div>
+                <div>
+                  <h2 className="text-2xl font-semibold tracking-tight mb-2 leading-snug">{c.title}</h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">{c.description}</p>
+                  <div className="text-xs text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
+                    Open the collection <ArrowRight className="w-3 h-3" />
+                  </div>
+                </div>
+              </div>
+            </Link>
+          ))}
+        </div>
+
+        <div className="mt-16 glass rounded-3xl p-8 md:p-12 max-w-3xl mx-auto text-center">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-accent mb-3">AI transparency</div>
+          <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
+            AutoVere collections are AI-assisted and continuously refined from public expert reviews,
+            owner discussions, and safety data. We surface consensus, not opinion — and recommend you verify
+            details locally before buying.
+          </p>
+        </div>
+      </section>
+    </PageShell>
+  );
+};
+
+export default Discover;

@@ -15,6 +15,7 @@ import Watch from "./pages/Watch.tsx";
 import Pricing from "./pages/Pricing.tsx";
 import Contact from "./pages/Contact.tsx";
 import Help from "./pages/Help.tsx";
+import Discover from "./pages/Discover.tsx";
 import Terms from "./pages/legal/Terms.tsx";
 import Privacy from "./pages/legal/Privacy.tsx";
 import Cookies from "./pages/legal/Cookies.tsx";
@@ -61,6 +62,7 @@ const App = () => (
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/help" element={<Help />} />
+          <Route path="/discover" element={<Discover />} />
           <Route path="/legal/terms" element={<Terms />} />
           <Route path="/legal/privacy" element={<Privacy />} />
           <Route path="/legal/cookies" element={<Cookies />} />

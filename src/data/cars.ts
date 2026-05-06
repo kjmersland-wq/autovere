@@ -288,6 +288,42 @@ export const COLLECTIONS: Collection[] = [
       "Cities punish bad cars. Visibility, footprint, low-speed refinement, and easy parking matter more than 0–100 times. These are AutoVere's calmest urban companions.",
     cars: ["bmw-i5", "polestar-3"],
   },
+  {
+    slug: "lowest-ownership-stress",
+    title: "Lowest ownership stress",
+    description: "Cars owners stop thinking about — in the best way.",
+    image: sceneNight,
+    body:
+      "The best ownership experience is the one you forget you're having. These cars combine reliable software, predictable service, and durable interiors — the kind that age into a relationship instead of out of one.",
+    cars: ["polestar-3", "volvo-ex90", "kia-ev9"],
+  },
+  {
+    slug: "reviewers-unexpectedly-loved",
+    title: "Cars reviewers unexpectedly loved",
+    description: "Quiet surprises that earned their respect.",
+    image: sceneRoad,
+    body:
+      "Some cars walk into a review with low expectations and walk out with a quiet kind of admiration. These are the ones reviewers kept coming back to — not because of headlines, but because of how the cars behave when no one is watching.",
+    cars: ["kia-ev9", "polestar-3", "bmw-i5"],
+  },
+  {
+    slug: "calm-highway-cruisers",
+    title: "Calm highway cruisers",
+    description: "Hours dissolve. The car simply continues.",
+    image: sceneRoad,
+    body:
+      "Highway driving rewards refinement: stable steering at speed, hushed cabins, suspensions that swallow imperfections, seats that still feel honest after four hours. These are the cars AutoVere reaches for when the route is long and the day is already heavy.",
+    cars: ["mercedes-eqe", "bmw-i5", "volvo-ex90"],
+  },
+  {
+    slug: "winter-confidence",
+    title: "Winter confidence",
+    description: "AWD, heat pumps, and the temperament of a Nordic engineer.",
+    image: carSnow,
+    body:
+      "Winter rewards quiet competence over horsepower. Heat pumps, pre-conditioning, surefooted AWD, and cabins that hold warmth at -15°C. AutoVere's most reassuring picks when the forecast turns serious.",
+    cars: ["polestar-3", "volvo-ex90", "kia-ev9"],
+  },
 ];
 
 export const getCollection = (slug: string) =>

@@ -9,7 +9,11 @@ export type VideoInsights = {
   headline: string;
 };
 
-export function useVideoInsights(carName: string | undefined, videos: LiveVideo[]) {
+export function useVideoInsights(
+  carName: string | undefined,
+  videos: LiveVideo[],
+  carSlug?: string,
+) {
   const [insights, setInsights] = useState<VideoInsights | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,6 +28,7 @@ export function useVideoInsights(carName: string | undefined, videos: LiveVideo[
       .invoke("video-insights", {
         body: {
           carName,
+          carSlug,
           videos: videos.slice(0, 10).map((v) => ({
             title: v.title,
             channel: v.channel,
@@ -50,7 +55,7 @@ export function useVideoInsights(carName: string | undefined, videos: LiveVideo[
     return () => {
       cancelled = true;
     };
-  }, [carName, videos.length, videos[0]?.id]);
+  }, [carName, carSlug, videos.length, videos[0]?.id]);
 
   return { insights, loading, error };
 }
