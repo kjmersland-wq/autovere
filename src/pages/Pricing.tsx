@@ -257,6 +257,7 @@ const Pricing = () => {
       </div>
     </section>
   </PageShell>
-);
+  );
+};
 
 export default Pricing;
