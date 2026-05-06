@@ -5,6 +5,8 @@ import { SEO } from "@/components/SEO";
 import { CarCard } from "@/components/CarCard";
 import { Button } from "@/components/ui/button";
 import { CARS, getCar } from "@/data/cars";
+import { getMedia } from "@/data/media";
+import { CarMediaSection } from "@/components/CarMediaSection";
 
 const NotFound = () => (
   <PageShell>
@@ -158,6 +160,12 @@ const CarDetail = () => {
           </ul>
         </div>
       </section>
+
+      {/* Video reviews + AI consensus + official + trusted */}
+      {(() => {
+        const media = getMedia(car.slug);
+        return media ? <CarMediaSection media={media} carName={car.name} /> : null;
+      })()}
 
       {/* Compare suggestions */}
       {related.length > 0 && (
