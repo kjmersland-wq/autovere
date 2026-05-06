@@ -13,6 +13,7 @@ import PersonalityDetail, { PersonalitiesIndex } from "./pages/Personality.tsx";
 import LearnArticle, { LearnIndex } from "./pages/Learn.tsx";
 import Watch from "./pages/Watch.tsx";
 import Pricing from "./pages/Pricing.tsx";
+import Contact from "./pages/Contact.tsx";
 
 const queryClient = new QueryClient();
 
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/learn/:slug" element={<LearnArticle />} />
           <Route path="/watch" element={<Watch />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/contact" element={<Contact />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
