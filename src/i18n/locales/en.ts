@@ -86,7 +86,8 @@ const en = {
     default_description:
       "AI-assisted automotive guidance with editorial depth. Discover, compare and understand cars with AUTOVERE.",
   },
-} as const;
+};
 
+type DeepString<T> = { [K in keyof T]: T[K] extends string ? string : DeepString<T[K]> };
+export type Translation = DeepString<typeof en>;
 export default en;
-export type Translation = typeof en;
