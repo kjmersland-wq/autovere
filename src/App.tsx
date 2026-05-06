@@ -68,6 +68,7 @@ const AppRoutes = () => (
     <Route path="/legal/refund" element={<Refund />} />
     <Route path="/legal/subscriptions" element={<Subscriptions />} />
     <Route path="/studio" element={<Studio />} />
+    <Route path="/auth" element={<Auth />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
