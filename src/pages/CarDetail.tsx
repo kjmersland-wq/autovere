@@ -161,6 +161,12 @@ const CarDetail = () => {
         </div>
       </section>
 
+      {/* Video reviews + AI consensus + official + trusted */}
+      {(() => {
+        const media = getMedia(car.slug);
+        return media ? <CarMediaSection media={media} carName={car.name} /> : null;
+      })()}
+
       {/* Compare suggestions */}
       {related.length > 0 && (
         <section className="container pb-24">
