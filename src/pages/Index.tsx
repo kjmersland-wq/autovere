@@ -158,12 +158,23 @@ const Index = () => {
             </form>
           </div>
 
-          {/* Hero image */}
-          <div className="relative mt-20 max-w-6xl mx-auto">
+          {/* Hero image with parallax */}
+          <div className="relative mt-20 max-w-6xl mx-auto" style={{ transform: `translateY(${scrollY * 0.08}px)` }}>
             <div className="absolute inset-0 bg-gradient-glow blur-3xl opacity-40" />
-            <div className="relative rounded-3xl overflow-hidden shadow-elegant border border-border/50">
-              <img src={heroCar} alt="Premium electric car" width={1920} height={1280} className="w-full h-auto" />
+            <div className="relative rounded-3xl overflow-hidden shadow-elegant border border-border/50 group">
+              <img
+                src={heroCar}
+                alt="Premium electric car at night"
+                width={1920}
+                height={1280}
+                className="w-full h-auto transition-transform duration-[3000ms] group-hover:scale-105"
+                style={{ transform: `scale(${1 + scrollY * 0.0001})` }}
+              />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
+              <div className="absolute bottom-8 left-8 right-8 flex flex-wrap items-end justify-between gap-4 opacity-90">
+                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">A Lumen story · Volume 01</div>
+                <div className="text-sm text-muted-foreground italic">"The right car doesn't shout. It fits."</div>
+              </div>
             </div>
           </div>
         </div>
