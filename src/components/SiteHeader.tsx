@@ -10,6 +10,7 @@ const NAV = [
   { to: "/compare", label: "Compare" },
   { to: "/learn", label: "Learn" },
   { to: "/pricing", label: "Premium" },
+  { to: "/contact", label: "Contact" },
 ];
 
 export const SiteHeader = () => (
