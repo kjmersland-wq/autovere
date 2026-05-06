@@ -24,6 +24,8 @@ import Cookies from "./pages/legal/Cookies.tsx";
 import Refund from "./pages/legal/Refund.tsx";
 import Subscriptions from "./pages/legal/Subscriptions.tsx";
 import Studio from "./pages/Studio.tsx";
+import Auth from "./pages/Auth.tsx";
+import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
 
 const queryClient = new QueryClient();
 
