@@ -25,14 +25,8 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
 
-  const REFRESH_KEY = Deno.env.get("INSIGHTS_REFRESH_KEY");
-  const provided = req.headers.get("x-refresh-key") ?? new URL(req.url).searchParams.get("key");
-  if (!REFRESH_KEY || provided !== REFRESH_KEY) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), {
-      status: 401,
-      headers: { ...corsHeaders, "Content-Type": "application/json" },
-    });
-  }
+  // Natural rate-limit: at most one full sweep per 20 hours.
+  // Prevents accidental abuse even though endpoint is open.
 
   const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
   const YOUTUBE_API_KEY = Deno.env.get("YOUTUBE_API_KEY");
