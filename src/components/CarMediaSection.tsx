@@ -100,7 +100,7 @@ export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: 
           )}
 
           <div className="text-[11px] text-muted-foreground leading-relaxed pt-2 border-t border-border/40">
-            Synthesised by Lumen AI from public expert reviews. We surface consensus, not opinion.
+            Synthesised by AutoVere AI from public expert reviews. We surface consensus, not opinion.
           </div>
         </aside>
       </div>
@@ -174,7 +174,7 @@ export const CarMediaSection = ({ media, carName }: { media: CarMedia; carName: 
             ))}
           </ul>
           <div className="text-[11px] text-muted-foreground mt-6 leading-relaxed">
-            Lumen does not own these resources. Links open on the publisher's site.
+            AutoVere does not own these resources. Links open on the publisher's site.
           </div>
         </div>
       </div>

@@ -8,7 +8,7 @@ import { COLLECTIONS, getCollection, getCar } from "@/data/cars";
 
 const NotFound = () => (
   <PageShell>
-    <SEO title="Collection not found · Lumen" description="This collection isn't ready yet." />
+    <SEO title="Collection not found · AutoVere" description="This collection isn't ready yet." />
     <div className="container py-32 text-center">
       <h1 className="text-4xl font-bold mb-4">We haven't curated that one yet.</h1>
       <Button asChild className="bg-gradient-primary"><Link to="/collections">All collections</Link></Button>
@@ -25,7 +25,7 @@ const CollectionDetail = () => {
   return (
     <PageShell>
       <SEO
-        title={`${c.title} · Lumen`}
+        title={`${c.title} · AutoVere`}
         description={`${c.description} ${c.body.slice(0, 100)}`}
         image={c.image}
         type="article"
@@ -34,7 +34,7 @@ const CollectionDetail = () => {
         <img src={c.image} alt={c.title} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
         <div className="container relative z-10 h-full flex flex-col justify-end pb-16 max-w-3xl">
-          <div className="text-xs uppercase tracking-[0.3em] text-accent mb-4">A Lumen collection</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-accent mb-4">A AutoVere collection</div>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter leading-[1.05]">{c.title}</h1>
           <p className="text-lg md:text-xl text-muted-foreground mt-6">{c.description}</p>
         </div>
@@ -43,7 +43,7 @@ const CollectionDetail = () => {
         <p className="text-lg text-muted-foreground leading-relaxed">{c.body}</p>
       </section>
       <section className="container pb-24">
-        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Lumen picks</div>
+        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AutoVere picks</div>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-10">The cars in this collection</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cars.map((car) => <CarCard key={car.slug} car={car} />)}
@@ -58,7 +58,7 @@ export default CollectionDetail;
 export const CollectionsIndex = () => (
   <PageShell>
     <SEO
-      title="Discover cars by moment, not by spec · Lumen"
+      title="Discover cars by moment, not by spec · AutoVere"
       description="Editorial collections of cars curated by lifestyle: Nordic winters, quiet luxury, long-distance comfort, family EVs, and more."
     />
     <section className="container pt-12 pb-20">

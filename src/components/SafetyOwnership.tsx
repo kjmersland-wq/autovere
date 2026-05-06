@@ -122,7 +122,7 @@ export const SafetyConfidence = ({ data, loading }: { data: SafetyIntelligence |
               ))}
             </div>
             <p className="text-[11px] text-muted-foreground mt-4 leading-relaxed">
-              Lumen synthesises public safety testing and reviewer consensus. We never copy or fabricate.
+              AutoVere synthesises public safety testing and reviewer consensus. We never copy or fabricate.
             </p>
           </div>
         </div>

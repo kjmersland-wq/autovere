@@ -17,7 +17,7 @@ const ICONS: Record<string, any> = {
 
 const NotFound = () => (
   <PageShell>
-    <SEO title="Personality not found · Lumen" description="This personality isn't in the framework yet." />
+    <SEO title="Personality not found · AutoVere" description="This personality isn't in the framework yet." />
     <div className="container py-32 text-center">
       <h1 className="text-4xl font-bold mb-4">Not part of the framework yet.</h1>
       <Button asChild className="bg-gradient-primary"><Link to="/personalities">All personalities</Link></Button>
@@ -35,7 +35,7 @@ const PersonalityDetail = () => {
   return (
     <PageShell>
       <SEO
-        title={`${p.name} — driving personality · Lumen`}
+        title={`${p.name} — driving personality · AutoVere`}
         description={`${p.tagline} ${p.description}`}
         type="article"
       />
@@ -75,7 +75,7 @@ const PersonalityDetail = () => {
       <section className="container pb-24">
         <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Matches</div>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-10">
-          Cars Lumen often suggests for a {p.name}
+          Cars AutoVere often suggests for a {p.name}
         </h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           {cars.map((c) => <CarCard key={c.slug} car={c} />)}
@@ -90,7 +90,7 @@ export default PersonalityDetail;
 export const PersonalitiesIndex = () => (
   <PageShell>
     <SEO
-      title="Driving personalities — find which one is yours · Lumen"
+      title="Driving personalities — find which one is yours · AutoVere"
       description="Six driving personalities — Calm Explorer, Quiet Executive, Nordic Adventurer and more. Find the one that fits and the cars that match."
     />
     <section className="container pt-12 pb-20">
@@ -100,7 +100,7 @@ export const PersonalitiesIndex = () => (
           The car you choose <br />says <span className="text-gradient">who you are.</span>
         </h1>
         <p className="text-lg text-muted-foreground leading-relaxed">
-          Six personalities. Recognise yourself in one — and let Lumen match you to the cars that fit.
+          Six personalities. Recognise yourself in one — and let AutoVere match you to the cars that fit.
         </p>
       </div>
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">

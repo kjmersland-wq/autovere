@@ -11,7 +11,7 @@ const FREE = [
   "Curated YouTube reviews",
   "AI reviewer consensus per car",
   "Honest comparisons",
-  "Lumen Learn library",
+  "AutoVere Learn library",
 ];
 
 const PREMIUM = [
@@ -28,17 +28,17 @@ const PREMIUM = [
 const Pricing = () => (
   <PageShell>
     <SEO
-      title="Lumen Premium — calm, intelligent automotive guidance"
-      description="Most of Lumen is free, forever. Premium adds long-term ownership analysis, resale predictions, and personalised garage planning — for less than a coffee a month."
+      title="AutoVere Premium — calm, intelligent automotive guidance"
+      description="Most of AutoVere is free, forever. Premium adds long-term ownership analysis, resale predictions, and personalised garage planning — for less than a coffee a month."
       type="website"
     />
 
     {/* Hero */}
     <section className="container pt-16 pb-12">
       <div className="max-w-3xl">
-        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Lumen Premium</div>
+        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AutoVere Premium</div>
         <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-[1.05]">
-          Most of Lumen is <span className="text-gradient">free, forever.</span>
+          Most of AutoVere is <span className="text-gradient">free, forever.</span>
         </h1>
         <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
           We believe choosing a car shouldn't sit behind a paywall. Premium is for people who want to go
@@ -71,7 +71,7 @@ const Pricing = () => (
             ))}
           </ul>
           <Button asChild variant="outline" className="rounded-xl border-border/60 hover:bg-secondary/40">
-            <Link to="/#advisor">Start with Lumen <ArrowRight className="w-4 h-4 ml-1" /></Link>
+            <Link to="/#advisor">Start with AutoVere <ArrowRight className="w-4 h-4 ml-1" /></Link>
           </Button>
         </div>
 
@@ -152,8 +152,8 @@ const Pricing = () => (
             a: "We commit publicly: free stays generous. Premium adds depth, it doesn't remove what's already free.",
           },
           {
-            q: "Is Lumen affiliated with car brands?",
-            a: "No. Lumen does not take payment from manufacturers to influence rankings. Recommendations are based on fit, not commissions.",
+            q: "Is AutoVere affiliated with car brands?",
+            a: "No. AutoVere does not take payment from manufacturers to influence rankings. Recommendations are based on fit, not commissions.",
           },
           {
             q: "Can I cancel anytime?",
