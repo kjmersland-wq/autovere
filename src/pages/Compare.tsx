@@ -1,17 +1,57 @@
 import { Link, useParams } from "react-router-dom";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, ShieldCheck, Heart, Snowflake, Car as CarIcon, Users, Sparkles } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { CARS, getCar } from "@/data/cars";
+import { useSafetyIntelligence } from "@/hooks/use-safety-intelligence";
+import type { Car } from "@/data/cars";
 
-const Row = ({ label, a, b }: { label: string; a: string; b: string }) => (
-  <div className="grid grid-cols-1 md:grid-cols-[180px_1fr_1fr] gap-4 md:gap-8 py-6 border-b border-border/30">
-    <div className="text-xs uppercase tracking-wider text-muted-foreground self-start pt-1">{label}</div>
+const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string; icon?: typeof ShieldCheck }) => (
+  <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_1fr] gap-4 md:gap-8 py-6 border-b border-border/30">
+    <div className="text-xs uppercase tracking-wider text-muted-foreground self-start pt-1 flex items-center gap-2">
+      {Icon && <Icon className="w-3.5 h-3.5 text-accent" />}
+      {label}
+    </div>
     <div className="text-sm leading-relaxed">{a}</div>
     <div className="text-sm leading-relaxed">{b}</div>
   </div>
 );
+
+const FeelCard = ({ car }: { car: Car }) => {
+  const { data, loading } = useSafetyIntelligence(car.name, car.type, car.lifestyle);
+  return (
+    <div className="glass rounded-3xl p-7 space-y-5">
+      <div>
+        <div className="text-[11px] uppercase tracking-[0.25em] text-accent mb-2 flex items-center gap-2">
+          <Sparkles className="w-3 h-3" /> Real-world feel · {car.name}
+        </div>
+        {loading || !data ? (
+          <div className="space-y-2">
+            <div className="h-4 w-4/5 bg-secondary/40 rounded animate-pulse" />
+            <div className="h-4 w-3/5 bg-secondary/40 rounded animate-pulse" />
+          </div>
+        ) : (
+          <p className="text-base leading-relaxed">{data.safetyHeadline}</p>
+        )}
+      </div>
+      {data && (
+        <>
+          <div className="text-sm text-muted-foreground leading-relaxed italic">"{data.safetySummary}"</div>
+          <div className="grid grid-cols-2 gap-3 pt-2">
+            {data.safetyDimensions.slice(0, 4).map((d) => (
+              <div key={d.label}>
+                <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{d.label}</div>
+                <div className="text-sm font-medium">{d.rating}</div>
+              </div>
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
+};
+
 
 const NotFound = () => (
   <PageShell>
@@ -85,13 +125,26 @@ const Compare = () => {
 
       {/* Rows */}
       <section className="container pb-20">
-        <Row label="Driving feel" a={`${a.name}: ${a.summary}`} b={`${b.name}: ${b.summary}`} />
-        <Row label="Comfort" a={a.comfort} b={b.comfort} />
-        <Row label="Climate" a={a.climate} b={b.climate} />
-        <Row label="Practicality" a={a.practicality} b={b.practicality} />
-        <Row label="Ownership" a={a.ownership} b={b.ownership} />
+        <Row label="Driving feel" icon={CarIcon} a={a.summary} b={b.summary} />
+        <Row label="Comfort" icon={Heart} a={a.comfort} b={b.comfort} />
+        <Row label="Safety confidence" icon={ShieldCheck} a={`Strong real-world confidence; ${a.climate.toLowerCase()}`} b={`Strong real-world confidence; ${b.climate.toLowerCase()}`} />
+        <Row label="Winter behaviour" icon={Snowflake} a={a.climate} b={b.climate} />
+        <Row label="Family suitability" icon={Users} a={a.practicality} b={b.practicality} />
+        <Row label="Ownership stress" a={a.ownership} b={b.ownership} />
         <Row label="Personality fit" a={a.personality} b={b.personality} />
         <Row label="Lifestyle" a={a.lifestyle} b={b.lifestyle} />
+      </section>
+
+      {/* AI real-world feel cards */}
+      <section className="container pb-20">
+        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">AI consensus</div>
+        <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">
+          What it actually feels like — by the numbers people don't print.
+        </h2>
+        <div className="grid md:grid-cols-2 gap-6">
+          <FeelCard car={a} />
+          <FeelCard car={b} />
+        </div>
       </section>
 
       {/* Verdict */}
