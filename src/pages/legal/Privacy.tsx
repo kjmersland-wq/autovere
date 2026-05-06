@@ -36,8 +36,23 @@ export default function Privacy() {
                 conversations, used to improve the product.
               </p>
               <p>
-                <strong>Billing data</strong> — handled by our payment processor; we receive only
-                limited transaction metadata, never full card details.
+                <strong>Billing data</strong> — when you subscribe, our payment provider{" "}
+                <strong>Paddle.com Market Limited</strong> ("Paddle") acts as Merchant of Record
+                and processes your payment. Paddle collects information needed to complete the
+                transaction (such as name, billing address, country, email, payment method
+                details, IP address, and tax identifiers where applicable). We never see or
+                store your full card details. We receive limited transaction metadata from
+                Paddle — subscription status, plan, billing period, last four digits of the
+                card, and country — used to provide and support your subscription. See{" "}
+                <a
+                  href="https://www.paddle.com/legal/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Paddle's Privacy Policy
+                </a>{" "}
+                for how Paddle handles your data.
               </p>
               <p>
                 <strong>Messages you send us</strong> — anything you write in the contact form.
@@ -71,11 +86,32 @@ export default function Privacy() {
           id: "sharing",
           title: "Who we share with",
           body: (
-            <p>
-              Carefully selected processors that help us run AUTOVERE — hosting, analytics,
-              email delivery, payments and AI inference. Each is bound by data-processing
-              agreements and may only use your data on our instructions.
-            </p>
+            <>
+              <p>
+                Carefully selected processors that help us run AUTOVERE — hosting, analytics,
+                email delivery and AI inference. Each is bound by data-processing agreements
+                and may only use your data on our instructions.
+              </p>
+              <p>
+                <strong>Paddle.com Market Limited</strong> — our Merchant of Record for all
+                paid subscriptions. Paddle receives data necessary to process your payment,
+                manage your subscription, calculate and remit sales tax/VAT, prevent fraud,
+                and issue invoices. Paddle acts as an independent data controller for this
+                processing. See{" "}
+                <a
+                  href="https://www.paddle.com/legal/privacy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline"
+                >
+                  Paddle's Privacy Policy
+                </a>.
+              </p>
+              <p>
+                <strong>Authorities and professional advisers</strong> — where required by law
+                or to protect our legal rights.
+              </p>
+            </>
           ),
         },
         {
