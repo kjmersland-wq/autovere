@@ -3,7 +3,7 @@ import { Sparkles } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { RegionPill } from "@/components/RegionPill";
+
 import { detectLangFromPath, localizePath } from "@/i18n/routing";
 
 export const SiteHeader = () => {
@@ -47,7 +47,6 @@ export const SiteHeader = () => {
           ))}
         </nav>
         <div className="flex items-center gap-3">
-          <RegionPill />
           <LanguageSwitcher />
           <Button asChild size="sm" className="bg-gradient-primary hover:opacity-90 rounded-xl">
             <Link to={`${L("/")}#advisor`}>{t("nav.cta")}</Link>

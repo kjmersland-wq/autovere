@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
@@ -10,6 +11,7 @@ import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -33,38 +35,38 @@ const Auth = () => {
     const { error } = await fn;
     setLoading(false);
     if (error) return toast.error(error.message);
-    toast.success(mode === "signin" ? "Welcome back." : "Account created.");
+    toast.success(mode === "signin" ? t("pages.auth.welcome_toast") : t("pages.auth.created_toast"));
     navigate("/pricing");
   };
 
   return (
     <PageShell>
-      <SEO title="Sign in — AutoVere" description="Sign in to your AutoVere account." type="website" />
+      <SEO title={t("pages.auth.seo_title")} description={t("pages.auth.seo_desc")} type="website" />
       <section className="container max-w-md py-24">
         <h1 className="text-4xl font-bold tracking-tighter mb-2">
-          {mode === "signin" ? "Welcome back." : "Create your account."}
+          {mode === "signin" ? t("pages.auth.welcome_back") : t("pages.auth.create_account")}
         </h1>
         <p className="text-muted-foreground mb-8">
-          {mode === "signin" ? "Sign in to manage your AutoVere Premium." : "Start with AutoVere Premium."}
+          {mode === "signin" ? t("pages.auth.lead_signin") : t("pages.auth.lead_signup")}
         </p>
         <form onSubmit={onSubmit} className="space-y-4">
           <div>
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email">{t("pages.auth.email")}</Label>
             <Input id="email" type="email" required value={email} onChange={(e) => setEmail(e.target.value)} />
           </div>
           <div>
-            <Label htmlFor="password">Password</Label>
+            <Label htmlFor="password">{t("pages.auth.password")}</Label>
             <Input id="password" type="password" required minLength={8} value={password} onChange={(e) => setPassword(e.target.value)} />
           </div>
           <Button type="submit" disabled={loading} className="w-full bg-gradient-primary">
-            {loading ? "…" : mode === "signin" ? "Sign in" : "Create account"}
+            {loading ? "…" : mode === "signin" ? t("pages.auth.sign_in") : t("pages.auth.create")}
           </Button>
         </form>
         <button
           onClick={() => setMode(mode === "signin" ? "signup" : "signin")}
           className="text-sm text-muted-foreground mt-6 underline"
         >
-          {mode === "signin" ? "Need an account? Sign up" : "Have an account? Sign in"}
+          {mode === "signin" ? t("pages.auth.need_account") : t("pages.auth.have_account")}
         </button>
       </section>
     </PageShell>
