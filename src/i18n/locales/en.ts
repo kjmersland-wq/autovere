@@ -530,6 +530,12 @@ const en = {
   },
 };
 
-type DeepString<T> = { [K in keyof T]: T[K] extends string ? string : T[K] extends readonly string[] ? string[] : DeepString<T[K]> };
-export type Translation = DeepString<typeof en>;
+type DeepPartialString<T> = {
+  [K in keyof T]?: T[K] extends string
+    ? string
+    : T[K] extends readonly string[]
+    ? string[]
+    : DeepPartialString<T[K]>;
+};
+export type Translation = DeepPartialString<typeof en>;
 export default en;
