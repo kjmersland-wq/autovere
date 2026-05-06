@@ -70,11 +70,19 @@ const Index = () => {
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [seedPrompt, setSeedPrompt] = useState<string | undefined>();
   const [heroInput, setHeroInput] = useState("");
+  const [scrollY, setScrollY] = useState(0);
+
+  useEffect(() => {
+    const onScroll = () => setScrollY(window.scrollY);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const startWith = (text: string) => {
     setSeedPrompt(text + " #" + Date.now());
     setTimeout(() => document.getElementById("advisor")?.scrollIntoView({ behavior: "smooth", block: "start" }), 50);
   };
+
 
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
