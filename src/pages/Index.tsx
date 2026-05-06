@@ -52,28 +52,22 @@ const Index = () => {
   };
 
 
+  const seoJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: "Lumen",
+    url: typeof window !== "undefined" ? window.location.origin : "",
+    description: "Lumen is an emotionally intelligent AI car advisor — calm, honest, and lifestyle-first.",
+  };
+
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
-      {/* Nav */}
-      <header className="fixed top-0 inset-x-0 z-50 glass border-b border-border/30">
-        <div className="container flex items-center justify-between py-4">
-          <a href="/" className="flex items-center gap-2 font-semibold tracking-tight">
-            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow">
-              <Sparkles className="w-4 h-4 text-primary-foreground" />
-            </div>
-            Lumen
-          </a>
-          <nav className="hidden md:flex items-center gap-8 text-sm text-muted-foreground">
-            <a href="#advisor" className="hover:text-foreground transition-colors">Advisor</a>
-            <a href="#cars" className="hover:text-foreground transition-colors">Discover</a>
-            <a href="#how" className="hover:text-foreground transition-colors">How it works</a>
-            <a href="#help" className="hover:text-foreground transition-colors">Help</a>
-          </nav>
-          <Button size="sm" className="bg-gradient-primary hover:opacity-90 rounded-xl" onClick={() => document.getElementById("advisor")?.scrollIntoView({ behavior: "smooth" })}>
-            Try Lumen
-          </Button>
-        </div>
-      </header>
+      <SEO
+        title="Lumen — The future of choosing a car"
+        description="Lumen is a calm, intelligent AI advisor that learns how you live and matches you to the few cars worth your attention."
+        jsonLd={seoJsonLd}
+      />
+      <SiteHeader />
 
       {/* Hero */}
       <section className="relative pt-40 pb-32 bg-hero overflow-hidden">
@@ -419,17 +413,7 @@ const Index = () => {
         </div>
       </section>
 
-      <footer className="border-t border-border/30 py-10">
-        <div className="container flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <div className="w-6 h-6 rounded-md bg-gradient-primary flex items-center justify-center">
-              <Sparkles className="w-3 h-3 text-primary-foreground" />
-            </div>
-            Lumen — The future of choosing a car.
-          </div>
-          <div>© {new Date().getFullYear()} Lumen Advisor</div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 };
