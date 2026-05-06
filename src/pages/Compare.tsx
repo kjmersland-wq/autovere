@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CARS, getCar } from "@/data/cars";
 import { useSafetyIntelligence } from "@/hooks/use-safety-intelligence";
 import { CompareIntelligenceSection } from "@/components/CompareIntelligenceSection";
+import { CompareNextStepsSection } from "@/components/CompareNextStepsSection";
 import type { Car } from "@/data/cars";
 
 const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string; icon?: typeof ShieldCheck }) => (
@@ -156,6 +157,9 @@ const Compare = () => {
           <FeelCard car={b} />
         </div>
       </section>
+
+      {/* Region-aware continuation: dealers, test drives, official */}
+      <CompareNextStepsSection a={a} b={b} />
 
       {/* Verdict */}
       <section className="container pb-24 grid md:grid-cols-2 gap-6">

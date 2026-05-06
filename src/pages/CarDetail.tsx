@@ -9,6 +9,7 @@ import { getMedia } from "@/data/media";
 import { CarMediaSection } from "@/components/CarMediaSection";
 import { PricingOwnership } from "@/components/PricingOwnership";
 import { SafetyOwnershipBlock } from "@/components/SafetyOwnershipBlock";
+import { ContinueExploringSection } from "@/components/ContinueExploringSection";
 
 const NotFound = () => (
   <PageShell>
@@ -188,6 +189,9 @@ const CarDetail = () => {
         const media = getMedia(car.slug);
         return media ? <CarMediaSection media={media} carName={car.name} carSlug={car.slug} /> : null;
       })()}
+
+      {/* Region-aware continuation + dealer ecosystem */}
+      <ContinueExploringSection car={car} />
 
       {/* Compare suggestions */}
       {related.length > 0 && (
