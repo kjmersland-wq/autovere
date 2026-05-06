@@ -1,56 +1,24 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart, Snowflake, Moon, Route, Eye } from "lucide-react";
+import { Link } from "react-router-dom";
+import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Advisor } from "@/components/Advisor";
 import { CinematicSection } from "@/components/CinematicSection";
 import { Personality } from "@/components/Personality";
+import { SEO } from "@/components/SEO";
+import { SiteHeader } from "@/components/SiteHeader";
+import { SiteFooter } from "@/components/SiteFooter";
+import { CarCard } from "@/components/CarCard";
+import { CARS, COLLECTIONS as DATA_COLLECTIONS } from "@/data/cars";
 import heroCar from "@/assets/hero-car.jpg";
-import carSnow from "@/assets/car-snow.jpg";
-import carSedan from "@/assets/car-sedan.jpg";
-import carFamily from "@/assets/car-family.jpg";
 import sceneNight from "@/assets/scene-night-drive.jpg";
 import sceneNordic from "@/assets/scene-nordic.jpg";
 import sceneRoad from "@/assets/scene-roadtrip.jpg";
 import sceneQuiet from "@/assets/scene-quiet.jpg";
 import sceneCity from "@/assets/scene-city.jpg";
 
-const COLLECTIONS = [
-  { id: "nordic", title: "Built for Nordic winters", desc: "Composed on snow. Quiet on ice. Heated where it matters.", image: carSnow, icon: Snowflake },
-  { id: "long", title: "Designed for long drives", desc: "Cars that turn six hours into a meditation, not a marathon.", image: sceneRoad, icon: Route },
-  { id: "quiet", title: "Quiet luxury", desc: "Presence without announcement. Craft over chrome.", image: sceneQuiet, icon: Moon },
-  { id: "underestimated", title: "Cars people underestimated", desc: "Outside the spotlight. Inside, more thought than you'd expect.", image: sceneCity, icon: Eye },
-];
-
-
-const SAMPLE_CARS = [
-  {
-    name: "Polestar 3",
-    type: "Electric SUV",
-    fit: "Quiet confidence",
-    desc: "Calm, refined, Scandinavian. Handles harsh winters with composure and feels effortless on long drives.",
-    score: 96,
-    image: carSnow,
-    tag: "Best for cold climates",
-  },
-  {
-    name: "BMW i5",
-    type: "Executive EV",
-    fit: "Spirited & refined",
-    desc: "Drives like a sports sedan but pampers like a flagship. Tech that feels considered, not flashy.",
-    score: 93,
-    image: carSedan,
-    tag: "Best for daily drivers",
-  },
-  {
-    name: "Volvo EX90",
-    type: "Family SUV",
-    fit: "Quietly capable",
-    desc: "Spacious enough for the whole family. Safety-first, beautifully understated, made for road trips.",
-    score: 95,
-    image: carFamily,
-    tag: "Best for families",
-  },
-];
+const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4);
+const SAMPLE_CARS = CARS.slice(0, 3);
 
 const FEATURES = [
   { icon: Brain, title: "Understands you", desc: "Tell Lumen about your life. It listens for what actually matters — not just specs." },
