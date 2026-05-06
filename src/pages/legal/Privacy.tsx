@@ -37,13 +37,47 @@ export default function Privacy() {
               </p>
               <p>
                 <strong>Billing data</strong> — when you subscribe, our payment provider{" "}
-                <strong>Paddle.com Market Limited</strong> ("Paddle") acts as Merchant of Record
-                and processes your payment. Paddle collects information needed to complete the
-                transaction (such as name, billing address, country, email, payment method
-                details, IP address, and tax identifiers where applicable). We never see or
-                store your full card details. We receive limited transaction metadata from
-                Paddle — subscription status, plan, billing period, last four digits of the
-                card, and country — used to provide and support your subscription. See{" "}
+                <strong>Paddle.com Market Limited</strong> ("Paddle") acts as Merchant of
+                Record. Paddle hosts the checkout, processes your payment, calculates and
+                remits sales tax/VAT, prevents fraud, and issues invoices. We never see or
+                store your full card details.
+              </p>
+              <p className="!mb-2">
+                <strong>Data collected and processed by Paddle (not by us):</strong>
+              </p>
+              <ul className="list-disc pl-6 space-y-1 mb-4">
+                <li>Full name and email address</li>
+                <li>Billing address (street, city, postal code, state/region, country)</li>
+                <li>Payment method details (full card number, expiry, CVC, or PayPal/Apple Pay/Google Pay token)</li>
+                <li>Bank or card-issuer information used for authorisation and 3-D Secure</li>
+                <li>IP address and approximate geolocation (used for fraud scoring and tax determination)</li>
+                <li>Device and browser fingerprint (user-agent, language, timezone)</li>
+                <li>Tax/VAT identification number (for business customers, where provided)</li>
+                <li>Business name and tax country (for B2B invoicing)</li>
+                <li>Currency and converted amount</li>
+                <li>Transaction history, refunds, chargebacks and dispute records</li>
+                <li>Communications with Paddle's customer support</li>
+              </ul>
+              <p className="!mb-2">
+                <strong>Data we receive back from Paddle and store on your account:</strong>
+              </p>
+              <ul className="list-disc pl-6 space-y-1 mb-4">
+                <li>Paddle customer ID and Paddle subscription ID (internal identifiers)</li>
+                <li>Product ID and price ID of the plan you purchased (e.g. <code>premium_monthly</code>)</li>
+                <li>Subscription status (<code>trialing</code>, <code>active</code>, <code>past_due</code>, <code>paused</code>, <code>canceled</code>)</li>
+                <li>Current billing period start and end dates</li>
+                <li>Whether the subscription is scheduled to cancel at period end</li>
+                <li>Environment flag (<code>sandbox</code> or <code>live</code>)</li>
+                <li>Country code of the billing address (for tax compliance and localised pricing)</li>
+                <li>Currency and amount of each transaction</li>
+                <li>Last four digits and brand of the card used (e.g. "Visa •••• 4242")</li>
+                <li>Transaction timestamps (created, paid, refunded)</li>
+                <li>Invoice and receipt URLs hosted by Paddle</li>
+              </ul>
+              <p>
+                We use this data to provision your subscription, gate Premium features, send
+                renewal and receipt notifications, handle support requests, and meet our
+                accounting and tax obligations. See{" "}
                 <a
                   href="https://www.paddle.com/legal/privacy"
                   target="_blank"
@@ -52,7 +86,7 @@ export default function Privacy() {
                 >
                   Paddle's Privacy Policy
                 </a>{" "}
-                for how Paddle handles your data.
+                for how Paddle handles the data it collects.
               </p>
               <p>
                 <strong>Messages you send us</strong> — anything you write in the contact form.
