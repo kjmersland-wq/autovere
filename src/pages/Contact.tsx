@@ -8,6 +8,8 @@ import { Label } from "@/components/ui/label";
 import { supabase } from "@/integrations/supabase/client";
 import { Sparkles, Shield, Lock, MessageCircle, Loader2, Check } from "lucide-react";
 import { toast } from "sonner";
+import { SmartEmailField } from "@/components/SmartEmailField";
+import { rememberEmail, checkEmail } from "@/lib/email-suggest";
 
 const initial = {
   name: "",
@@ -32,6 +34,11 @@ export default function Contact() {
       toast.error("Please fill in name, email, subject and message.");
       return;
     }
+    const emailCheck = checkEmail(form.email);
+    if (!emailCheck.valid) {
+      toast.error(emailCheck.error || "Please enter a valid email address.");
+      return;
+    }
     setLoading(true);
     const { data, error } = await supabase.functions.invoke("contact-submit", { body: form });
     setLoading(false);
@@ -39,6 +46,7 @@ export default function Contact() {
       toast.error(data?.error || "Could not send your message. Please try again.");
       return;
     }
+    rememberEmail(form.email);
     setDone(true);
     setForm(initial);
   };
@@ -97,9 +105,12 @@ export default function Contact() {
                 <Field label="Your name">
                   <Input value={form.name} onChange={set("name")} placeholder="Alex Morgan" required maxLength={120} />
                 </Field>
-                <Field label="Email">
-                  <Input type="email" value={form.email} onChange={set("email")} placeholder="you@example.com" required maxLength={254} />
-                </Field>
+                <SmartEmailField
+                  label="Email"
+                  value={form.email}
+                  onChange={(v) => setForm((f) => ({ ...f, email: v }))}
+                  required
+                />
               </div>
               <Field label="Subject">
                 <Input value={form.subject} onChange={set("subject")} placeholder="How can we help?" required maxLength={200} />
