@@ -1,0 +1,173 @@
+import { Link } from "react-router-dom";
+import { Check, Sparkles, Heart, ArrowRight, ShieldCheck, Infinity as InfinityIcon } from "lucide-react";
+import { PageShell } from "@/components/PageShell";
+import { SEO } from "@/components/SEO";
+import { Button } from "@/components/ui/button";
+
+const FREE = [
+  "AI car matching, every time",
+  "Driving Personality system",
+  "Cinematic discovery & collections",
+  "Curated YouTube reviews",
+  "AI reviewer consensus per car",
+  "Honest comparisons",
+  "Lumen Learn library",
+];
+
+const PREMIUM = [
+  "Deep ownership analysis (5-year cost projection)",
+  "Climate-specific reliability insights",
+  "Resale value predictions",
+  "Personalised garage planning",
+  "Saved recommendations & history",
+  "Premium AI reports (PDF)",
+  "Country-aware pricing intelligence",
+  "Early access to new features",
+];
+
+const Pricing = () => (
+  <PageShell>
+    <SEO
+      title="Lumen Premium — calm, intelligent automotive guidance"
+      description="Most of Lumen is free, forever. Premium adds long-term ownership analysis, resale predictions, and personalised garage planning — for less than a coffee a month."
+      type="website"
+    />
+
+    {/* Hero */}
+    <section className="container pt-16 pb-12">
+      <div className="max-w-3xl">
+        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Lumen Premium</div>
+        <h1 className="text-5xl md:text-7xl font-bold tracking-tighter mb-6 leading-[1.05]">
+          Most of Lumen is <span className="text-gradient">free, forever.</span>
+        </h1>
+        <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl">
+          We believe choosing a car shouldn't sit behind a paywall. Premium is for people who want to go
+          deeper — five years out, not five minutes out.
+        </p>
+      </div>
+    </section>
+
+    {/* Pricing cards */}
+    <section className="container pb-20">
+      <div className="grid lg:grid-cols-2 gap-6 items-stretch">
+        {/* Free */}
+        <div className="glass rounded-3xl p-10 flex flex-col">
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
+            <Heart className="w-3.5 h-3.5" /> Free
+          </div>
+          <div className="flex items-baseline gap-2 mb-2">
+            <span className="text-5xl font-bold tracking-tighter">$0</span>
+            <span className="text-muted-foreground">/ forever</span>
+          </div>
+          <p className="text-muted-foreground mb-8 leading-relaxed">
+            Everything you need to find the right car for your life — calmly.
+          </p>
+          <ul className="space-y-3 mb-10 flex-1">
+            {FREE.map((f) => (
+              <li key={f} className="flex items-start gap-3 text-sm">
+                <Check className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+          <Button asChild variant="outline" className="rounded-xl border-border/60 hover:bg-secondary/40">
+            <Link to="/#advisor">Start with Lumen <ArrowRight className="w-4 h-4 ml-1" /></Link>
+          </Button>
+        </div>
+
+        {/* Premium */}
+        <div className="relative rounded-3xl p-10 flex flex-col overflow-hidden bg-gradient-glow border border-primary/30 shadow-glow">
+          <div className="absolute top-6 right-6">
+            <span className="text-[10px] font-medium px-3 py-1 rounded-full glass uppercase tracking-wider">
+              Recommended
+            </span>
+          </div>
+          <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent mb-4">
+            <Sparkles className="w-3.5 h-3.5" /> Premium
+          </div>
+          <div className="flex items-baseline gap-2 mb-1">
+            <span className="text-5xl font-bold tracking-tighter text-gradient">$6.99</span>
+            <span className="text-muted-foreground">/ month</span>
+          </div>
+          <div className="text-xs text-muted-foreground mb-2">or $59 / year — save 30%</div>
+          <p className="text-muted-foreground mb-8 leading-relaxed">
+            For people thinking long-term. Deeper analysis, smarter projections, fewer surprises.
+          </p>
+          <ul className="space-y-3 mb-10 flex-1">
+            {PREMIUM.map((f) => (
+              <li key={f} className="flex items-start gap-3 text-sm">
+                <Check className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+          <Button size="lg" className="bg-gradient-primary hover:opacity-90 rounded-xl gap-2">
+            Coming soon — join the waitlist <ArrowRight className="w-4 h-4" />
+          </Button>
+          <div className="text-[11px] text-muted-foreground mt-4 text-center">
+            Cancel anytime. No upsells, no dark patterns.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {/* Calm reassurance */}
+    <section className="container pb-24">
+      <div className="grid md:grid-cols-3 gap-6">
+        <div className="glass rounded-3xl p-8">
+          <ShieldCheck className="w-6 h-6 text-accent mb-4" />
+          <h3 className="text-lg font-semibold tracking-tight mb-2">No data resold</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            We don't sell your preferences to dealers. Your conversations stay yours.
+          </p>
+        </div>
+        <div className="glass rounded-3xl p-8">
+          <Heart className="w-6 h-6 text-accent mb-4" />
+          <h3 className="text-lg font-semibold tracking-tight mb-2">Free stays generous</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            We won't quietly move free features behind the paywall. That's a promise.
+          </p>
+        </div>
+        <div className="glass rounded-3xl p-8">
+          <InfinityIcon className="w-6 h-6 text-accent mb-4" />
+          <h3 className="text-lg font-semibold tracking-tight mb-2">Built to last</h3>
+          <p className="text-sm text-muted-foreground leading-relaxed">
+            Subscriptions fund a calm, ad-free product — not investor pressure to sell you a car.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    {/* FAQ */}
+    <section className="container pb-32 max-w-3xl">
+      <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-10">Honest answers.</h2>
+      <div className="space-y-6">
+        {[
+          {
+            q: "Do I need Premium to find a car?",
+            a: "No. The full AI advisor, personality matching, comparisons and curated reviews are free. Premium is for the long-term ownership view.",
+          },
+          {
+            q: "Will free features get worse over time?",
+            a: "We commit publicly: free stays generous. Premium adds depth, it doesn't remove what's already free.",
+          },
+          {
+            q: "Is Lumen affiliated with car brands?",
+            a: "No. Lumen does not take payment from manufacturers to influence rankings. Recommendations are based on fit, not commissions.",
+          },
+          {
+            q: "Can I cancel anytime?",
+            a: "Yes — instantly, no friction, no retention emails.",
+          },
+        ].map((f) => (
+          <div key={f.q} className="glass rounded-2xl p-6">
+            <div className="font-semibold mb-2">{f.q}</div>
+            <div className="text-sm text-muted-foreground leading-relaxed">{f.a}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </PageShell>
+);
+
+export default Pricing;
