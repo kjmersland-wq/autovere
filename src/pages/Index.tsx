@@ -1,11 +1,26 @@
-import { useState } from "react";
-import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart, Snowflake, Moon, Route, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Advisor } from "@/components/Advisor";
+import { CinematicSection } from "@/components/CinematicSection";
+import { Personality } from "@/components/Personality";
 import heroCar from "@/assets/hero-car.jpg";
 import carSnow from "@/assets/car-snow.jpg";
 import carSedan from "@/assets/car-sedan.jpg";
 import carFamily from "@/assets/car-family.jpg";
+import sceneNight from "@/assets/scene-night-drive.jpg";
+import sceneNordic from "@/assets/scene-nordic.jpg";
+import sceneRoad from "@/assets/scene-roadtrip.jpg";
+import sceneQuiet from "@/assets/scene-quiet.jpg";
+import sceneCity from "@/assets/scene-city.jpg";
+
+const COLLECTIONS = [
+  { id: "nordic", title: "Built for Nordic winters", desc: "Composed on snow. Quiet on ice. Heated where it matters.", image: carSnow, icon: Snowflake },
+  { id: "long", title: "Designed for long drives", desc: "Cars that turn six hours into a meditation, not a marathon.", image: sceneRoad, icon: Route },
+  { id: "quiet", title: "Quiet luxury", desc: "Presence without announcement. Craft over chrome.", image: sceneQuiet, icon: Moon },
+  { id: "underestimated", title: "Cars people underestimated", desc: "Outside the spotlight. Inside, more thought than you'd expect.", image: sceneCity, icon: Eye },
+];
+
 
 const SAMPLE_CARS = [
   {
