@@ -80,7 +80,7 @@ export const LegalPage = ({ eyebrow, title, intro, updated, sections, seoTitle, 
         </div>
 
         <div className="text-xs text-muted-foreground/80 leading-relaxed border-t border-border/30 pt-8">
-          <div className="text-foreground/90 font-medium mb-1">KM TECH V/Kjell Mersland</div>
+          <div className="text-foreground/90 font-medium mb-1">Boutique24Shop v/ K.Mersland</div>
           Org.nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge
         </div>
       </article>
