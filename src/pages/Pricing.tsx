@@ -6,14 +6,14 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
 
 const Pricing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
+  const { openCheckout, loading: checkoutLoading } = useStripeCheckout();
   const { isActive, subscription, userId, refetch } = useSubscription();
   const [interval, setInterval] = useState<"month" | "year">("month");
   const [portalLoading, setPortalLoading] = useState(false);
@@ -43,9 +43,7 @@ const Pricing = () => {
   const openPortal = async () => {
     setPortalLoading(true);
     try {
-      const { data, error } = await supabase.functions.invoke("customer-portal", {
-        body: { environment: subscription ? (await import("@/lib/paddle")).getPaddleEnvironment() : "sandbox" },
-      });
+      const { data, error } = await supabase.functions.invoke("stripe-customer-portal");
       if (error || !data?.url) throw new Error("Could not open portal");
       window.open(data.url, "_blank");
     } catch (e) {

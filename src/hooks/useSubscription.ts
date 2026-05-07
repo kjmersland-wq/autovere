@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { getPaddleEnvironment } from "@/lib/paddle";
+import { getStripeEnvironment } from "@/lib/stripe";
 
 export type Subscription = {
   id: string;
@@ -17,7 +17,7 @@ export function useSubscription() {
   const [userId, setUserId] = useState<string | null>(null);
 
   const fetchSub = async (uid: string) => {
-    const env = getPaddleEnvironment();
+    const env = getStripeEnvironment();
     const { data } = await supabase
       .from("subscriptions")
       .select("id,status,price_id,product_id,current_period_end,cancel_at_period_end")
