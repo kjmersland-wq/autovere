@@ -30,11 +30,12 @@ verify_jwt = false
 [functions.compare-intelligence]
 verify_jwt = false
 
-
-
-
-[functions.payments-webhook]
+[functions.stripe-webhook]
 verify_jwt = false
 
-[functions.get-paddle-price]
-verify_jwt = false
+[functions.create-checkout-session]
+verify_jwt = true
+
+[functions.stripe-customer-portal]
+verify_jwt = true
+
