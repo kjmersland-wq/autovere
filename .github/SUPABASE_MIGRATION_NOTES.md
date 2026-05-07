@@ -133,3 +133,17 @@ The problem statement mentions these environment variables are configured in Ver
 - ✅ All integrations use environment variables
 - ✅ Auth flows are fully compatible
 - ✅ Payment flows are fully compatible
+
+---
+
+## Code Review Findings
+
+⚠️ **CRITICAL**: The `VITE_SUPABASE_PUBLISHABLE_KEY` in `.env` still contains the old project's anon key (JWT contains 'ref': 'rclkavwkjwkfjuiwsmuh'). 
+
+**This MUST be updated before deployment** or authentication will fail.
+
+To fix:
+1. Go to https://supabase.com/dashboard/project/tyvbeklusafsdqczdabq/settings/api
+2. Copy the "anon public" key
+3. Update `.env` file locally
+4. Update Vercel environment variable `VITE_SUPABASE_PUBLISHABLE_KEY`
