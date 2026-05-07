@@ -86,6 +86,10 @@ const App = () => (
           <Route path="/no/*" element={<AppRoutes />} />
           <Route path="/de/*" element={<AppRoutes />} />
           <Route path="/sv/*" element={<AppRoutes />} />
+          <Route path="/fr/*" element={<AppRoutes />} />
+          <Route path="/pl/*" element={<AppRoutes />} />
+          <Route path="/it/*" element={<AppRoutes />} />
+          <Route path="/es/*" element={<AppRoutes />} />
           {/* Default (English) at root */}
           <Route path="/*" element={<AppRoutes />} />
         </Routes>
