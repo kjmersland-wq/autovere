@@ -1,5 +1,5 @@
 import { useState } from "react";
-<parameter name="supabase">import { supabase } from "@/integrations/supabase/client";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 export function useStripeCheckout() {
