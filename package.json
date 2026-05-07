@@ -8,6 +8,8 @@
     "build": "npm run generate-sitemap && vite build",
     "build:dev": "vite build --mode development",
     "generate-sitemap": "tsx scripts/generate-sitemap.ts",
+    "validate-translations": "tsx scripts/validate-translations.ts",
+    "audit-routes": "tsx scripts/audit-routes.ts",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
