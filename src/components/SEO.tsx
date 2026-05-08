@@ -18,6 +18,9 @@ const OG_LOCALE_BY_LANG: Record<(typeof SUPPORTED_LANGS)[number], string> = {
   de: "de_DE",
   sv: "sv_SE",
   fr: "fr_FR",
+  pl: "pl_PL",
+  it: "it_IT",
+  es: "es_ES",
 };
 
 const setMeta = (selector: string, attr: string, value: string) => {
