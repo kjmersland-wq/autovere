@@ -450,7 +450,7 @@ const it: Translation = {
       validation_required: "Compila nome, email, oggetto e messaggio.",
       validation_email: "Inserisci un indirizzo email valido.",
       send_error: "Impossibile inviare il tuo messaggio. Riprova.",
-      trust_t1: "Privacy by design",
+      trust_t1: "Riservatezza sin dall'inizio",
       trust_b1:
         "Raccogliamo solo ciò che è necessario per risponderti. Nessun pixel di tracciamento nei messaggi, nessuna rivendita a terzi, mai.",
       trust_t2: "IA responsabile",
