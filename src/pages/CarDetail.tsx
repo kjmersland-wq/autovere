@@ -11,9 +11,12 @@ import { CarMediaSection } from "@/components/CarMediaSection";
 import { PricingOwnership } from "@/components/PricingOwnership";
 import { SafetyOwnershipBlock } from "@/components/SafetyOwnershipBlock";
 import { ContinueExploringSection } from "@/components/ContinueExploringSection";
+import { getUiCopy, resolveLang } from "@/i18n/localized-content";
 
 const NotFound = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const ui = getUiCopy(lang);
   return (
     <PageShell>
       <SEO title={t("pages.car.not_found_seo_title")} description={t("pages.car.not_found_seo_desc")} />
@@ -42,6 +45,7 @@ const CarDetail = () => {
     {
       "@context": "https://schema.org",
       "@type": "Car",
+      inLanguage: lang,
       name: car.name,
       brand: { "@type": "Brand", name: car.brand },
       vehicleConfiguration: car.type,
@@ -55,9 +59,10 @@ const CarDetail = () => {
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
+      inLanguage: lang,
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: origin },
-        { "@type": "ListItem", position: 2, name: "Cars", item: `${origin}/cars` },
+        { "@type": "ListItem", position: 1, name: ui.schema.home, item: origin },
+        { "@type": "ListItem", position: 2, name: ui.schema.cars, item: `${origin}/cars` },
         { "@type": "ListItem", position: 3, name: car.name, item: carUrl },
       ],
     },

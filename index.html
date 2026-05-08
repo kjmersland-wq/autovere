@@ -19,6 +19,16 @@
     <meta name="twitter:title" content="AutoVere — Calm AI car advisor for your real life" />
     <meta name="twitter:description" content="AutoVere is a calm, intelligent AI advisor that learns how you live and guides you to the few cars worth your attention." />
     <meta name="twitter:image" content="https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/e1c820c6-e6a8-4015-a8c7-40468a8166e2/id-preview-9ecd2523--459de486-34a2-4735-af69-cb2807235813.lovable.app-1778058584735.png" />
+    <script>
+      (function () {
+        var supported = ["en", "no", "de", "sv", "fr", "pl", "it", "es"];
+        var seg = location.pathname.split("/").filter(Boolean)[0];
+        var stored = null;
+        try { stored = localStorage.getItem("autovere.lang"); } catch (_) {}
+        var lang = supported.indexOf(seg) >= 0 ? seg : supported.indexOf(stored) >= 0 ? stored : "en";
+        document.documentElement.lang = lang;
+      })();
+    </script>
   </head>
 
   <body>

@@ -1045,6 +1045,8 @@ export const OWNERSHIP_COPY: Record<Exclude<Lang, "en">, Record<string, Ownershi
 export const getRegionLabel = (lang: string, code: string) =>
   REGION_NAMES[resolveLang(lang)][code] || REGION_NAMES.en[code] || code;
 
+export const getUiCopy = (lang: string) => UI_COPY[resolveLang(lang)];
+
 export const getOwnershipText = (
   lang: string,
   climate: string,

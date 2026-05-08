@@ -6,6 +6,7 @@ import { SEO } from "@/components/SEO";
 import { COLLECTIONS } from "@/data/cars";
 import { EditorialPulseSection } from "@/components/EditorialPulseSection";
 import { ApprovedAdditionsSection } from "@/components/ApprovedAdditionsSection";
+import { resolveLang } from "@/i18n/localized-content";
 
 const THEMES = [
   { slug: "winter-confidence", icon: Snowflake, hue: "from-sky-500/20 to-blue-500/5" },
@@ -21,7 +22,8 @@ const THEMES = [
 ];
 
 const Discover = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const cards = THEMES
     .map((th) => ({ ...th, c: COLLECTIONS.find((c) => c.slug === th.slug) }))
     .filter((x): x is typeof x & { c: NonNullable<typeof x.c> } => Boolean(x.c));
@@ -29,6 +31,7 @@ const Discover = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
+    inLanguage: lang,
     name: t("pages.discover.seo_title"),
     description: t("pages.discover.seo_desc"),
     hasPart: cards.map((x) => ({ "@type": "CreativeWork", name: x.c.title, url: `https://autovere.com/collections/${x.c.slug}` })),

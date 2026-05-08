@@ -1,6 +1,8 @@
 // Region-aware automotive intelligence
 // Detects user region from browser locale + timezone, returns localized links/insights.
 
+import { getOwnershipText, getRegionLabel, interpolate } from "@/i18n/localized-content";
+
 export type RegionCode = "NO" | "SE" | "DE" | "GB" | "US" | "CA" | "FR" | "NL" | "DK" | "FI" | "IT" | "ES" | "AU" | "EU" | "GLOBAL";
 
 export type Region = {
@@ -68,6 +70,10 @@ export function setRegion(code: RegionCode) {
 
 export function listRegions(): Region[] {
   return [REGIONS.NO, REGIONS.SE, REGIONS.DK, REGIONS.FI, REGIONS.DE, REGIONS.GB, REGIONS.FR, REGIONS.NL, REGIONS.IT, REGIONS.ES, REGIONS.US, REGIONS.CA, REGIONS.AU];
+}
+
+export function getRegionDisplayName(region: Region, lang: string) {
+  return getRegionLabel(lang, region.code);
 }
 
 // ---- Manufacturer ecosystem links (region-aware) ----
@@ -145,7 +151,24 @@ export function brandLinks(brand: string, region: Region, modelSlug: string) {
 
 export type OwnershipInsight = { icon: "snow" | "highway" | "city" | "charge" | "incentive" | "comfort"; title: string; body: string };
 
-export function regionalOwnership(region: Region, brand: string): OwnershipInsight[] {
+export function regionalOwnership(region: Region, brand: string, lang = "en"): OwnershipInsight[] {
+  const localized = getOwnershipText(lang, region.climate);
+  if (localized?.length) {
+    const regionLabel = getRegionDisplayName(region, lang);
+    const iconMap: Record<string, OwnershipInsight["icon"][]> = {
+      "nordic-winter": ["snow", "comfort", "charge"],
+      continental: ["highway", "charge", "incentive"],
+      oceanic: ["city", "charge", "incentive"],
+      mediterranean: ["comfort", "charge", "incentive"],
+      "north-american": ["highway", "charge", "incentive"],
+      temperate: ["comfort", "charge", "incentive"],
+    };
+    return localized.map((entry, index) => ({
+      icon: iconMap[region.climate]?.[index] ?? "comfort",
+      title: interpolate(entry.title, { region: regionLabel, standard: region.chargingStandard, brand }),
+      body: interpolate(entry.body, { region: regionLabel, standard: region.chargingStandard, brand }),
+    }));
+  }
   const climate = region.climate;
   const insights: OwnershipInsight[] = [];
 

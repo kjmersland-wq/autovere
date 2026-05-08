@@ -17,12 +17,14 @@ import sceneNordic from "@/assets/scene-nordic.jpg";
 import sceneRoad from "@/assets/scene-roadtrip.jpg";
 import sceneQuiet from "@/assets/scene-quiet.jpg";
 import sceneCity from "@/assets/scene-city.jpg";
+import { resolveLang } from "@/i18n/localized-content";
 
 const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4);
 const SAMPLE_CARS = CARS.slice(0, 3);
 
 const Index = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [seedPrompt, setSeedPrompt] = useState<string | undefined>();
   const [heroInput, setHeroInput] = useState("");
@@ -64,17 +66,19 @@ const Index = () => {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      inLanguage: lang,
       name: "AUTOVERE",
       url: origin,
       potentialAction: {
         "@type": "SearchAction",
-        target: `${origin}/cars?q={query}`,
+        target: `${origin}${lang === "en" ? "" : `/${lang}`}/cars?q={query}`,
         "query-input": "required name=query",
       },
     },
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      inLanguage: lang,
       name: "AUTOVERE",
       url: origin,
       logo: `${origin}/favicon.ico`,

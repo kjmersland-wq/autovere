@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { Wind, Crown, Building2, Mountain, Flame } from "lucide-react";
+import { useTranslation } from "react-i18next";
+import { getUiCopy, interpolate } from "@/i18n/localized-content";
 
 const PROFILES = [
   {
@@ -50,6 +52,8 @@ const PROFILES = [
 ];
 
 export const Personality = ({ onPick }: { onPick: (prompt: string) => void }) => {
+  const { i18n } = useTranslation();
+  const ui = getUiCopy(i18n.language).personalityChooser;
   const [active, setActive] = useState(PROFILES[0]);
 
   return (
@@ -84,12 +88,12 @@ export const Personality = ({ onPick }: { onPick: (prompt: string) => void }) =>
       <div className="relative glass rounded-3xl p-8 md:p-12 overflow-hidden min-h-[420px]">
         <div className={`absolute -inset-20 bg-gradient-radial blur-3xl opacity-60 bg-gradient-to-br ${active.vibe} transition-all duration-700`} />
         <div className="relative z-10 animate-fade-up" key={active.id}>
-          <div className="text-xs uppercase tracking-[0.3em] text-accent mb-4">Driving personality</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-accent mb-4">{ui.eyebrow}</div>
           <h3 className="text-4xl md:text-5xl font-bold tracking-tighter mb-3">{active.name}</h3>
           <p className="text-lg text-muted-foreground italic mb-6">"{active.tagline}"</p>
           <p className="text-base leading-relaxed mb-8 max-w-xl">{active.desc}</p>
 
-          <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3">AutoVere often suggests</div>
+          <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3">{ui.suggested}</div>
           <div className="flex flex-wrap gap-2 mb-8">
             {active.matches.map((m) => (
               <span key={m} className="px-3 py-1.5 rounded-full text-sm glass">{m}</span>
@@ -97,10 +101,10 @@ export const Personality = ({ onPick }: { onPick: (prompt: string) => void }) =>
           </div>
 
           <button
-            onClick={() => onPick(`I think I'm a ${active.name}. ${active.desc} What 3 cars should I look at?`)}
+            onClick={() => onPick(interpolate(ui.prompt, { name: active.name, description: active.desc }))}
             className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-primary text-primary-foreground font-medium hover:opacity-90 transition-all hover:gap-3 shadow-glow"
           >
-            That's me — show my matches →
+            {ui.cta}
           </button>
         </div>
       </div>

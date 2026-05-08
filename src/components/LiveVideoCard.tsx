@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { Play, ExternalLink } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { LiveVideo } from "@/hooks/use-youtube-search";
+import { getUiCopy } from "@/i18n/localized-content";
 
 export const LiveVideoCard = ({
   video,
@@ -11,9 +13,11 @@ export const LiveVideoCard = ({
   size?: "sm" | "md" | "lg";
   badge?: string;
 }) => {
+  const { i18n } = useTranslation();
+  const ui = getUiCopy(i18n.language).liveVideo;
   const [open, setOpen] = useState(false);
   const views = video.viewCount
-    ? Intl.NumberFormat("en", { notation: "compact" }).format(parseInt(video.viewCount, 10))
+    ? Intl.NumberFormat(i18n.language || "en", { notation: "compact" }).format(parseInt(video.viewCount, 10))
     : "";
 
   return (
@@ -50,7 +54,7 @@ export const LiveVideoCard = ({
         <div className="absolute bottom-4 left-4 right-4">
           <div className="text-xs text-muted-foreground mb-1 truncate">
             {video.channel}
-            {views && ` · ${views} views`}
+            {views && ` · ${views} ${ui.views}`}
           </div>
           <div
             className={`font-semibold tracking-tight leading-snug line-clamp-2 ${
@@ -83,7 +87,7 @@ export const LiveVideoCard = ({
             onClick={() => setOpen(false)}
             className="absolute top-6 right-6 glass rounded-full px-4 py-2 text-sm flex items-center gap-2 hover:bg-secondary/60 transition-colors"
           >
-            Close
+            {ui.close}
           </button>
           <a
             href={`https://www.youtube.com/watch?v=${video.id}`}
@@ -91,7 +95,7 @@ export const LiveVideoCard = ({
             rel="noreferrer noopener"
             className="absolute bottom-6 right-6 glass rounded-full px-4 py-2 text-sm flex items-center gap-2 hover:bg-secondary/60 transition-colors"
           >
-            Watch on YouTube <ExternalLink className="w-3.5 h-3.5" />
+            {ui.watchOnYouTube} <ExternalLink className="w-3.5 h-3.5" />
           </a>
         </div>
       )}

@@ -9,6 +9,7 @@ import { useSafetyIntelligence } from "@/hooks/use-safety-intelligence";
 import { CompareIntelligenceSection } from "@/components/CompareIntelligenceSection";
 import { CompareNextStepsSection } from "@/components/CompareNextStepsSection";
 import type { Car } from "@/data/cars";
+import { resolveLang } from "@/i18n/localized-content";
 
 const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string; icon?: typeof ShieldCheck }) => (
   <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_1fr] gap-4 md:gap-8 py-6 border-b border-border/30">
@@ -22,7 +23,8 @@ const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string;
 );
 
 const FeelCard = ({ car }: { car: Car }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const { data, loading } = useSafetyIntelligence(car.name, car.type, car.lifestyle);
   return (
     <div className="glass rounded-3xl p-7 space-y-5">
@@ -85,6 +87,7 @@ const Compare = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
+    inLanguage: lang,
     headline: `${a.name} vs ${b.name}`,
     description: desc,
     about: [a.name, b.name],

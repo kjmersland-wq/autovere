@@ -1,5 +1,7 @@
+import { useTranslation } from "react-i18next";
 import { useYouTubeSearch } from "@/hooks/use-youtube-search";
 import { LiveVideoCard } from "@/components/LiveVideoCard";
+import { getUiCopy } from "@/i18n/localized-content";
 
 export const LiveVideoRow = ({
   query,
@@ -16,6 +18,8 @@ export const LiveVideoRow = ({
   order?: "relevance" | "date" | "viewCount";
   badge?: string;
 }) => {
+  const { i18n } = useTranslation();
+  const ui = getUiCopy(i18n.language).liveVideo;
   const { videos, loading, error } = useYouTubeSearch(query, { max, order });
 
   return (
@@ -40,12 +44,12 @@ export const LiveVideoRow = ({
 
       {error && (
         <div className="text-sm text-muted-foreground glass rounded-2xl p-6">
-          Couldn't load fresh reviews right now. {error}
+          {ui.loadError} {error}
         </div>
       )}
 
       {!loading && !error && videos.length === 0 && (
-        <div className="text-sm text-muted-foreground">No reviews found for this search.</div>
+        <div className="text-sm text-muted-foreground">{ui.noReviews}</div>
       )}
 
       {!loading && videos.length > 0 && (

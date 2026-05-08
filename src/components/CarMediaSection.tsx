@@ -1,8 +1,10 @@
 import { ExternalLink, Globe, Settings2, FileText, KeyRound, MapPin, ShieldCheck, Sparkles, ThumbsUp, AlertCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { CarMedia } from "@/data/media";
 import { LiveVideoCard } from "@/components/LiveVideoCard";
 import { useYouTubeSearch } from "@/hooks/use-youtube-search";
 import { useVideoInsights } from "@/hooks/use-video-insights";
+import { getUiCopy, interpolate } from "@/i18n/localized-content";
 
 const KIND_ICON = {
   site: Globe,
@@ -13,6 +15,8 @@ const KIND_ICON = {
 } as const;
 
 export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; carName: string; carSlug?: string }) => {
+  const { i18n } = useTranslation();
+  const ui = getUiCopy(i18n.language).carMedia;
   const { videos, loading } = useYouTubeSearch(`${carName} review`, { max: 7, order: "relevance" });
   const featured = videos[0];
   const rest = videos.slice(1);
@@ -23,19 +27,19 @@ export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; 
       {/* Featured review + AI consensus */}
       <div className="grid lg:grid-cols-[1.5fr_1fr] gap-10 items-start">
         <div>
-          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Featured video review</div>
+          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{ui.featuredEyebrow}</div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">
-            What the most trusted reviewers say.
+            {ui.featuredTitle}
           </h2>
           {loading && (
             <div className="aspect-[16/9] rounded-2xl bg-secondary/40 animate-pulse border border-border/40" />
           )}
-          {featured && <LiveVideoCard video={featured} size="lg" badge="Most trusted" />}
+          {featured && <LiveVideoCard video={featured} size="lg" badge={ui.featuredBadge} />}
         </div>
         <aside className="glass rounded-3xl p-8 lg:sticky lg:top-28 space-y-6">
           <div>
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent mb-4">
-              <Sparkles className="w-3.5 h-3.5" /> AI reviewer consensus
+              <Sparkles className="w-3.5 h-3.5" /> {ui.consensusEyebrow}
             </div>
             {insightsLoading && !insights && (
               <div className="space-y-3">
@@ -59,7 +63,7 @@ export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; 
           {insights?.strengths && insights.strengths.length > 0 && (
             <div>
               <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-accent mb-3">
-                <ThumbsUp className="w-3 h-3" /> Reviewers agree on
+                <ThumbsUp className="w-3 h-3" /> {ui.strengthsLabel}
               </div>
               <ul className="space-y-3">
                 {insights.strengths.map((c) => (
@@ -75,7 +79,7 @@ export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; 
           {insights?.criticisms && insights.criticisms.length > 0 && (
             <div>
               <div className="flex items-center gap-2 text-[11px] uppercase tracking-wider text-muted-foreground mb-3">
-                <AlertCircle className="w-3 h-3" /> Honest reservations
+                <AlertCircle className="w-3 h-3" /> {ui.reservationsLabel}
               </div>
               <ul className="space-y-3">
                 {insights.criticisms.map((c) => (
@@ -100,7 +104,7 @@ export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; 
           )}
 
           <div className="text-[11px] text-muted-foreground leading-relaxed pt-2 border-t border-border/40">
-            Synthesised by AutoVere AI from public expert reviews. We surface consensus, not opinion.
+            {ui.aiDisclaimer}
           </div>
         </aside>
       </div>
@@ -108,9 +112,9 @@ export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; 
       {/* Other videos — live */}
       {rest.length > 0 && (
         <div>
-          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">More expert reviews</div>
+          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{ui.moreReviewsEyebrow}</div>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">
-            Different drivers, different lenses.
+            {ui.moreReviewsTitle}
           </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {rest.map((v) => <LiveVideoCard key={v.id} video={v} />)}
@@ -122,9 +126,9 @@ export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; 
       <div className="grid lg:grid-cols-2 gap-6">
         <div className="glass rounded-3xl p-8">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent mb-4">
-            <Globe className="w-3.5 h-3.5" /> Official manufacturer resources
+            <Globe className="w-3.5 h-3.5" /> {ui.officialEyebrow}
           </div>
-          <h3 className="text-2xl font-semibold tracking-tight mb-6">Explore the {carName} directly.</h3>
+          <h3 className="text-2xl font-semibold tracking-tight mb-6">{interpolate(ui.officialTitle, { name: carName })}</h3>
           <ul className="space-y-2">
             {media.official.map((o) => {
               const Icon = KIND_ICON[o.kind] ?? Globe;
@@ -152,9 +156,9 @@ export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; 
 
         <div className="glass rounded-3xl p-8">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent mb-4">
-            <ShieldCheck className="w-3.5 h-3.5" /> Trusted external sources
+            <ShieldCheck className="w-3.5 h-3.5" /> {ui.trustedEyebrow}
           </div>
-          <h3 className="text-2xl font-semibold tracking-tight mb-6">Independent verification.</h3>
+          <h3 className="text-2xl font-semibold tracking-tight mb-6">{ui.trustedTitle}</h3>
           <ul className="space-y-2">
             {media.trusted.map((t) => (
               <li key={t.href}>
@@ -174,7 +178,7 @@ export const CarMediaSection = ({ media, carName, carSlug }: { media: CarMedia; 
             ))}
           </ul>
           <div className="text-[11px] text-muted-foreground mt-6 leading-relaxed">
-            AutoVere does not own these resources. Links open on the publisher's site.
+            {ui.trustedDisclaimer}
           </div>
         </div>
       </div>

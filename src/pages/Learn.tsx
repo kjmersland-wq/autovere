@@ -5,9 +5,11 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { LEARN, getArticle } from "@/data/cars";
+import { resolveLang } from "@/i18n/localized-content";
 
 const NotFound = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   return (
     <PageShell>
       <SEO title={t("pages.learn.not_found_seo_title")} description={t("pages.learn.not_found_seo_desc")} />
@@ -28,6 +30,7 @@ const LearnArticle = () => {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
+    inLanguage: lang,
     headline: a.title,
     description: a.excerpt,
     articleSection: a.category,

@@ -24,7 +24,10 @@ export const LanguageSwitcher = () => {
     return pathname;
   })();
 
-  const switchTo = (lang: Lang) => {
+const switchTo = (lang: Lang) => {
+    try {
+      localStorage.setItem("autovere.lang", lang);
+    } catch {}
     const next = localizePath(stripped, lang);
     navigate(next + search + hash);
   };
