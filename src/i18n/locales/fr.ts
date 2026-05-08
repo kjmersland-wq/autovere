@@ -126,6 +126,7 @@ const fr: Translation = {
       popular_1: "VE familial",
       popular_2: "sportive du week-end",
       popular_3: "citadine",
+      hero_image_alt: "Voiture électrique premium la nuit",
       hero_caption_a: "Une histoire AUTOVERE · Volume 01",
       hero_caption_b: "« La bonne voiture ne crie pas. Elle vous va. »",
       how_eyebrow: "Comment ça marche",
@@ -191,6 +192,7 @@ const fr: Translation = {
       under_lead:
         "Toutes les belles voitures n’ont pas un budget marketing. AUTOVERE met en avant les excellentes silencieuses — celles que les propriétaires aiment davantage après un an, pas moins.",
       under_cta: "Afficher mes pépites cachées",
+      under_image_alt: "Voitures sous-estimées",
       under_card_eyebrow: "Ce soir à Tokyo",
       under_card_title: "Une voiture qu’on n’imaginait pas aimer.",
       cinematic_night_eyebrow: "Pourquoi nous avons créé AUTOVERE",

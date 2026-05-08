@@ -126,6 +126,7 @@ const no: Translation = {
       popular_1: "familieelbil",
       popular_2: "helge-sportsbil",
       popular_3: "bypendler",
+      hero_image_alt: "Premium elbil om natten",
       hero_caption_a: "En AUTOVERE-historie · Volum 01",
       hero_caption_b: "«Den rette bilen roper ikke. Den passer.»",
       how_eyebrow: "Slik fungerer det",
@@ -191,6 +192,7 @@ const no: Translation = {
       under_lead:
         "Ikke alle store biler kommer med markedsføringsbudsjett. AUTOVERE løfter frem de stille fremragende — biler eierne elsker mer etter ett år, ikke mindre.",
       under_cta: "Vis mine skjulte matcher",
+      under_image_alt: "Undervurderte biler",
       under_card_eyebrow: "I kveld i Tokyo",
       under_card_title: "En bil du ikke ville ventet å elske.",
       cinematic_night_eyebrow: "Hvorfor vi laget AUTOVERE",

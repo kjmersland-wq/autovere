@@ -12,6 +12,13 @@ type Props = {
 };
 
 const SITE = "https://autovere.com";
+const OG_LOCALE_BY_LANG: Record<(typeof SUPPORTED_LANGS)[number], string> = {
+  en: "en_US",
+  no: "nb_NO",
+  de: "de_DE",
+  sv: "sv_SE",
+  fr: "fr_FR",
+};
 
 const setMeta = (selector: string, attr: string, value: string) => {
   let el = document.head.querySelector<HTMLMetaElement>(selector);
@@ -74,7 +81,7 @@ export const SEO = ({ title, description, canonical, image, type = "website", js
     const canonicalUrl = canonical || buildLocalized(path, lang);
     setLink("canonical", canonicalUrl);
     setMeta('meta[property="og:url"]', "content", canonicalUrl);
-    setMeta('meta[property="og:locale"]', "content", lang);
+    setMeta('meta[property="og:locale"]', "content", OG_LOCALE_BY_LANG[lang]);
 
     // hreflang for all supported languages + x-default
     document

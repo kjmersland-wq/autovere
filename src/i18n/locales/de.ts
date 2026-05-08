@@ -126,6 +126,7 @@ const de: Translation = {
       popular_1: "Familien-EV",
       popular_2: "Wochenend-Sportwagen",
       popular_3: "Stadtpendler",
+      hero_image_alt: "Premium-Elektroauto bei Nacht",
       hero_caption_a: "Eine AUTOVERE-Geschichte · Band 01",
       hero_caption_b: "„Das richtige Auto schreit nicht. Es passt.“",
       how_eyebrow: "So funktioniert es",
@@ -191,6 +192,7 @@ const de: Translation = {
       under_lead:
         "Nicht jedes großartige Auto kommt mit einem Marketingbudget. AUTOVERE hebt die leise Exzellenten hervor — Autos, die Besitzer nach einem Jahr mehr lieben, nicht weniger.",
       under_cta: "Meine versteckten Treffer zeigen",
+      under_image_alt: "Unterschätzte Autos",
       under_card_eyebrow: "Heute Abend in Tokio",
       under_card_title: "Ein Auto, das Sie nicht erwartet hätten zu lieben.",
       cinematic_night_eyebrow: "Warum wir AUTOVERE gebaut haben",

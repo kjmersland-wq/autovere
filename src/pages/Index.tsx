@@ -145,7 +145,7 @@ const Index = () => {
             <div className="relative rounded-3xl overflow-hidden shadow-elegant border border-border/50 group">
               <img
                 src={heroCar}
-                alt="Premium electric car at night"
+                alt={t("pages.index.hero_image_alt")}
                 width={1920}
                 height={1280}
                 className="w-full h-auto transition-transform duration-[3000ms] group-hover:scale-105"
@@ -323,7 +323,7 @@ const Index = () => {
               </button>
             </div>
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-border/40 group">
-              <img src={sceneCity} alt="Underestimated cars" loading="lazy" width={1920} height={1280} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2500ms]" />
+              <img src={sceneCity} alt={t("pages.index.under_image_alt")} loading="lazy" width={1920} height={1280} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2500ms]" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
                 <div>

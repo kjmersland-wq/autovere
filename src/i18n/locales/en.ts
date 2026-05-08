@@ -124,6 +124,7 @@ const en = {
       popular_1: "family EV",
       popular_2: "weekend sports car",
       popular_3: "city commuter",
+      hero_image_alt: "Premium electric car at night",
       hero_caption_a: "An AUTOVERE story · Volume 01",
       hero_caption_b: "“The right car doesn't shout. It fits.”",
       how_eyebrow: "How it works",
@@ -188,6 +189,7 @@ const en = {
       under_lead:
         "Not every great car arrives with a marketing budget. AUTOVERE surfaces the quietly excellent — cars that owners love more after a year, not less.",
       under_cta: "Surface my hidden matches",
+      under_image_alt: "Underestimated cars",
       under_card_eyebrow: "Tonight in Tokyo",
       under_card_title: "A car you wouldn't expect to love.",
       cinematic_night_eyebrow: "Why we built AUTOVERE",
