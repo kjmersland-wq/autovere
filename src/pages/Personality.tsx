@@ -6,6 +6,7 @@ import { SEO } from "@/components/SEO";
 import { CarCard } from "@/components/CarCard";
 import { Button } from "@/components/ui/button";
 import { PERSONALITIES, getPersonality, getCar } from "@/data/cars";
+import { resolveLang } from "@/i18n/localized-content";
 
 const ICONS: Record<string, any> = {
   "calm-explorer": Wind,
@@ -30,12 +31,13 @@ const NotFound = () => {
 };
 
 const PersonalityDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const { slug = "" } = useParams();
-  const p = getPersonality(slug);
+  const p = getPersonality(slug, lang);
   if (!p) return <NotFound />;
   const Icon = ICONS[p.slug] ?? Wind;
-  const cars = p.matches.map(getCar).filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const cars = p.matches.map((carSlug) => getCar(carSlug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
 
   return (
     <PageShell>
@@ -93,7 +95,9 @@ const PersonalityDetail = () => {
 export default PersonalityDetail;
 
 export const PersonalitiesIndex = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const personalities = PERSONALITIES.map((personality) => getPersonality(personality.slug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
   return (
     <PageShell>
       <SEO title={t("pages.personality.index_seo_title")} description={t("pages.personality.index_seo_desc")} />
@@ -106,7 +110,7 @@ export const PersonalitiesIndex = () => {
           <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.personality.index_lead")}</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {PERSONALITIES.map((p) => {
+          {personalities.map((p) => {
             const Icon = ICONS[p.slug] ?? Wind;
             return (
               <Link

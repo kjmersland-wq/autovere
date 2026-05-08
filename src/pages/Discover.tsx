@@ -24,8 +24,12 @@ const THEMES = [
 const Discover = () => {
   const { t, i18n } = useTranslation();
   const lang = resolveLang(i18n.language);
+  const collections = COLLECTIONS.map((collection) => ({
+    ...collection,
+    c: getCollection(collection.slug, lang),
+  })).filter((x): x is typeof x & { c: NonNullable<typeof x.c> } => Boolean(x.c));
   const cards = THEMES
-    .map((th) => ({ ...th, c: COLLECTIONS.find((c) => c.slug === th.slug) }))
+    .map((th) => ({ ...th, c: collections.find((x) => x.slug === th.slug)?.c }))
     .filter((x): x is typeof x & { c: NonNullable<typeof x.c> } => Boolean(x.c));
 
   const jsonLd = {

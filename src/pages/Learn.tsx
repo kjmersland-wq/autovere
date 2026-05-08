@@ -22,9 +22,10 @@ const NotFound = () => {
 };
 
 const LearnArticle = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const { slug = "" } = useParams();
-  const a = getArticle(slug);
+  const a = getArticle(slug, lang);
   if (!a) return <NotFound />;
 
   const jsonLd = {
@@ -64,8 +65,10 @@ const LearnArticle = () => {
 export default LearnArticle;
 
 export const LearnIndex = () => {
-  const { t } = useTranslation();
-  const categories = Array.from(new Set(LEARN.map((a) => a.category)));
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const articles = LEARN.map((article) => getArticle(article.slug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const categories = Array.from(new Set(articles.map((a) => a.category)));
   return (
     <PageShell>
       <SEO title={t("pages.learn.index_seo_title")} description={t("pages.learn.index_seo_desc")} />
@@ -82,7 +85,7 @@ export const LearnIndex = () => {
           <div key={cat} className="mb-16">
             <div className="text-xs uppercase tracking-[0.3em] text-accent mb-6">{cat}</div>
             <div className="grid md:grid-cols-2 gap-6">
-              {LEARN.filter((a) => a.category === cat).map((a) => (
+              {articles.filter((a) => a.category === cat).map((a) => (
                 <Link
                   key={a.slug}
                   to={`/learn/${a.slug}`}

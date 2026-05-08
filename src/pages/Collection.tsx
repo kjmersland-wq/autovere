@@ -6,6 +6,7 @@ import { SEO } from "@/components/SEO";
 import { CarCard } from "@/components/CarCard";
 import { Button } from "@/components/ui/button";
 import { COLLECTIONS, getCollection, getCar } from "@/data/cars";
+import { resolveLang } from "@/i18n/localized-content";
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -21,11 +22,12 @@ const NotFound = () => {
 };
 
 const CollectionDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const { slug = "" } = useParams();
-  const c = getCollection(slug);
+  const c = getCollection(slug, lang);
   if (!c) return <NotFound />;
-  const cars = c.cars.map(getCar).filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const cars = c.cars.map((carSlug) => getCar(carSlug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
 
   return (
     <PageShell>
@@ -61,7 +63,9 @@ const CollectionDetail = () => {
 export default CollectionDetail;
 
 export const CollectionsIndex = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const collections = COLLECTIONS.map((collection) => getCollection(collection.slug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
   return (
     <PageShell>
       <SEO title={t("pages.collection.index_seo_title")} description={t("pages.collection.index_seo_desc")} />
@@ -74,7 +78,7 @@ export const CollectionsIndex = () => {
           <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.collection.index_lead")}</p>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
-          {COLLECTIONS.map((c) => (
+          {collections.map((c) => (
             <Link
               key={c.slug}
               to={`/collections/${c.slug}`}
