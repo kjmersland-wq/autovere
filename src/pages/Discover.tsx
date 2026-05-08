@@ -3,7 +3,7 @@ import { useTranslation } from "react-i18next";
 import { ArrowRight, Sparkles, Snowflake, Heart, Shield, Mountain, Moon } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
-import { COLLECTIONS } from "@/data/cars";
+import { COLLECTIONS, getCollection } from "@/data/cars";
 import { EditorialPulseSection } from "@/components/EditorialPulseSection";
 import { ApprovedAdditionsSection } from "@/components/ApprovedAdditionsSection";
 import { resolveLang } from "@/i18n/localized-content";

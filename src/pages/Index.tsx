@@ -10,7 +10,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CarCard } from "@/components/CarCard";
 import { LLink } from "@/i18n/routing";
-import { CARS, COLLECTIONS as DATA_COLLECTIONS } from "@/data/cars";
+import { CARS, COLLECTIONS as DATA_COLLECTIONS, getCar, getCollection } from "@/data/cars";
 import heroCar from "@/assets/hero-car.jpg";
 import sceneNight from "@/assets/scene-night-drive.jpg";
 import sceneNordic from "@/assets/scene-nordic.jpg";
@@ -19,12 +19,15 @@ import sceneQuiet from "@/assets/scene-quiet.jpg";
 import sceneCity from "@/assets/scene-city.jpg";
 import { resolveLang } from "@/i18n/localized-content";
 
-const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4);
-const SAMPLE_CARS = CARS.slice(0, 3);
-
 const Index = () => {
   const { t, i18n } = useTranslation();
   const lang = resolveLang(i18n.language);
+  const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4)
+    .map((collection) => getCollection(collection.slug, lang))
+    .filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const SAMPLE_CARS = CARS.slice(0, 3)
+    .map((car) => getCar(car.slug, lang))
+    .filter((x): x is NonNullable<typeof x> => Boolean(x));
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [seedPrompt, setSeedPrompt] = useState<string | undefined>();
   const [heroInput, setHeroInput] = useState("");

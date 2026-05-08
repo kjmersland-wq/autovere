@@ -5,7 +5,8 @@ import { SEO } from "@/components/SEO";
 import { LiveVideoCard } from "@/components/LiveVideoCard";
 import { LiveVideoRow } from "@/components/LiveVideoRow";
 import { useYouTubeSearch } from "@/hooks/use-youtube-search";
-import { TRUSTED_REVIEWERS } from "@/data/media";
+import { getTrustedReviewers } from "@/data/media";
+import { resolveLang } from "@/i18n/localized-content";
 
 const HERO_QUERY = "best new electric car review 2025";
 
@@ -18,7 +19,9 @@ const ROW_DEFS = [
 ];
 
 const Watch = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const trustedReviewers = getTrustedReviewers(lang);
   const { videos: heroVideos, loading: heroLoading } = useYouTubeSearch(HERO_QUERY, { max: 1, order: "relevance" });
   const hero = heroVideos[0];
 
@@ -58,7 +61,7 @@ const Watch = () => {
         </div>
         <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-10">{t("pages.watch.trusted_h")}</h2>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {TRUSTED_REVIEWERS.map((r) => (
+          {trustedReviewers.map((r) => (
             <a
               key={r.handle}
               href={r.url}

@@ -14,9 +14,7 @@ import { ContinueExploringSection } from "@/components/ContinueExploringSection"
 import { getUiCopy, resolveLang } from "@/i18n/localized-content";
 
 const NotFound = () => {
-  const { t, i18n } = useTranslation();
-  const lang = resolveLang(i18n.language);
-  const ui = getUiCopy(lang);
+  const { t } = useTranslation();
   return (
     <PageShell>
       <SEO title={t("pages.car.not_found_seo_title")} description={t("pages.car.not_found_seo_desc")} />
@@ -30,13 +28,15 @@ const NotFound = () => {
 };
 
 const CarDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const ui = getUiCopy(lang);
   const { slug = "" } = useParams();
-  const car = getCar(slug);
+  const car = getCar(slug, lang);
   if (!car) return <NotFound />;
 
   const related = car.comparesWellWith
-    .map((s) => getCar(s))
+    .map((s) => getCar(s, lang))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
   const origin = typeof window !== "undefined" ? window.location.origin : "https://autovere.com";
@@ -184,7 +184,7 @@ const CarDetail = () => {
       <SafetyOwnershipBlock car={car} />
 
       {(() => {
-        const media = getMedia(car.slug);
+        const media = getMedia(car.slug, lang);
         return media ? <CarMediaSection media={media} carName={car.name} carSlug={car.slug} /> : null;
       })()}
 
@@ -236,7 +236,9 @@ const CarDetail = () => {
 export default CarDetail;
 
 export const CarsIndex = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const cars = CARS.map((car) => getCar(car.slug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
   return (
     <PageShell>
       <SEO title={t("pages.car.index_seo_title")} description={t("pages.car.index_seo_desc")} />
@@ -249,7 +251,7 @@ export const CarsIndex = () => {
           <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.car.index_lead")}</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {CARS.map((c) => <CarCard key={c.slug} car={c} />)}
+          {cars.map((c) => <CarCard key={c.slug} car={c} />)}
         </div>
       </section>
     </PageShell>

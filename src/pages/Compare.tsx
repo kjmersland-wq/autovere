@@ -24,7 +24,6 @@ const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string;
 
 const FeelCard = ({ car }: { car: Car }) => {
   const { t, i18n } = useTranslation();
-  const lang = resolveLang(i18n.language);
   const { data, loading } = useSafetyIntelligence(car.name, car.type, car.lifestyle);
   return (
     <div className="glass rounded-3xl p-7 space-y-5">
@@ -72,13 +71,14 @@ const NotFound = () => {
 };
 
 const Compare = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const { slug = "" } = useParams();
   const parts = slug.split("-vs-");
   if (parts.length !== 2) return <NotFound />;
   const [aSlug, bSlug] = parts;
-  const a = getCar(aSlug);
-  const b = getCar(bSlug);
+  const a = getCar(aSlug, lang);
+  const b = getCar(bSlug, lang);
   if (!a || !b) return <NotFound />;
 
   const title = `${a.name} vs ${b.name} — AUTOVERE`;
@@ -184,11 +184,14 @@ const Compare = () => {
 export default Compare;
 
 export const CompareIndex = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const pairs: Array<[typeof CARS[number], typeof CARS[number]]> = [];
   CARS.forEach((c) => c.comparesWellWith.forEach((s) => {
-    const o = getCar(s);
-    if (o && !pairs.some(([x, y]) => (x.slug === o.slug && y.slug === c.slug))) pairs.push([c, o]);
+    const source = getCar(c.slug, lang);
+    const o = getCar(s, lang);
+    if (!source) return;
+    if (o && !pairs.some(([x, y]) => (x.slug === o.slug && y.slug === source.slug))) pairs.push([source, o]);
   }));
 
   return (

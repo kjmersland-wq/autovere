@@ -2,17 +2,18 @@ import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { useLatestPulse } from "@/hooks/use-latest-pulse";
-import { CARS } from "@/data/cars";
+import { getCars } from "@/data/cars";
 import { getUiCopy } from "@/i18n/localized-content";
 
 export const EditorialPulseSection = () => {
   const { i18n } = useTranslation();
+  const cars = getCars(i18n.language);
   const ui = getUiCopy(i18n.language).editorialPulse;
   const { pulse, loading } = useLatestPulse();
   if (loading || !pulse) return null;
 
   const featured = pulse.featured_slugs
-    .map((s) => CARS.find((c) => c.slug === s))
+    .map((s) => cars.find((c) => c.slug === s))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
   const date = new Date(pulse.refreshed_at).toLocaleDateString(i18n.language || "en-GB", {
