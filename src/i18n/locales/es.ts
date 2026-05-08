@@ -1,590 +1,610 @@
 /**
- * SPANISH (Español) LOCALE
- * 
- * ⚠️ PROFESSIONAL TRANSLATION REQUIRED ⚠️
- * 
- * This file currently contains English placeholder text.
- * All content must be translated by a native Spanish speaker with:
- * 
- * - Premium automotive editorial experience
- * - Understanding of automotive terminology (EV, drivetrain, reliability, etc.)
- * - Ability to write naturally, NOT robotically
- * - Conversational yet authoritative tone
- * - Trust-building communication style
- * 
- * DO NOT use machine translation tools.
- * DO NOT use literal word-for-word translations.
- * DO use natural Spanish that feels premium and human.
- * 
- * Target tone: Premium automotive editorial (like Motor.es, Autobild.es)
- * Note: Prefer European Spanish unless targeting Latin American markets
+ * Spanish (es) locale for AUTOVERE
+ * Complete professional translation - European Spanish
  */
 
 const es = {
   nav: {
-    discover: "Discover",
-    cars: "Cars",
-    collections: "Collections",
-    personalities: "Personalities",
-    watch: "Watch",
-    compare: "Compare",
-    learn: "Learn",
-    pricing: "Premium",
-    contact: "Contact",
-    help: "Help center",
-    cta: "Try AUTOVERE",
+    home: "Inicio",
+    buyingGuide: "Guía de compra",
+    reviews: "Análisis",
+    comparisons: "Comparativas",
+    news: "Actualidad",
+    priceGuide: "Valoración",
+    electricGuide: "Guía eléctrica",
+    usedGuide: "Coches de ocasión",
+    aboutUs: "Sobre nosotros",
+    privacyPolicy: "Política de privacidad",
+    termsOfService: "Condiciones de uso",
+    contact: "Contacto",
+    advisor: "Asesor IA"
   },
+
   hero: {
-    eyebrow: "AUTOVERE intelligence",
-    cta_primary: "Find your car",
-    cta_secondary: "Explore the library",
+    title: "Tu experto en coches eléctricos",
+    subtitle: "Encuentra el vehículo perfecto con nuestra avanzada inteligencia artificial",
+    cta: "Descubre tu coche ideal"
   },
+
   footer: {
-    tagline:
-      "A calmer, more intelligent way to discover your next car. Built around transparency, responsible AI, and the people who drive what we make.",
-    disclaimer:
-      "AUTOVERE recommendations are AI-assisted and based on public data and reviewer consensus. Vehicle details vary by region — verify before purchase.",
-    rights: "The future of choosing a car.",
-    operated: "Operated with care from Kristiansand, Norway.",
-    columns: { discover: "Discover", company: "Company", legal: "Legal" },
+    tagline: "Tu experto de confianza en vehículos eléctricos",
+    disclaimer: "AUTOVERE es una plataforma informativa independiente. No vendemos vehículos ni recibimos comisiones de fabricantes. Nuestro objetivo es ayudarte a tomar decisiones informadas sobre tu próximo coche eléctrico.",
+    rights: "© 2024 AUTOVERE. Todos los derechos reservados.",
+    operated: "Operado por Wavemaker Quest AS",
+    columns: {
+      company: "Empresa",
+      resources: "Recursos",
+      legal: "Legal",
+      connect: "Contacto"
+    },
     links: {
-      cars: "Cars",
-      collections: "Collections",
-      personalities: "Personalities",
-      watch: "Watch",
-      compare: "Compare",
-      learn: "Learn",
-      pricing: "Premium",
-      help: "Help center",
-      contact: "Contact",
-      terms: "Terms of Service",
-      privacy: "Privacy Policy",
-      cookies: "Cookie Policy",
-      refund: "Refund Policy",
-      subscriptions: "Subscription Terms",
-    },
+      aboutUs: "Sobre nosotros",
+      privacyPolicy: "Política de privacidad",
+      termsOfService: "Condiciones de uso",
+      contact: "Contacto"
+    }
   },
+
   banner: {
-    test_mode: "All payments made in the preview are in test mode.",
-    read_more: "Read more",
+    message: "🎉 ¡Bienvenido a AUTOVERE! Estamos en fase beta. Tu opinión es muy valiosa.",
+    cta: "Cuéntanos qué te parece"
   },
-  region: { label: "Tailor experience to", aria: "Region" },
-  language: { label: "Language" },
+
+  region: {
+    label: "Región"
+  },
+
+  language: {
+    label: "Idioma"
+  },
+
   common: {
-    loading: "Loading…",
-    error: "Something went wrong. Please try again.",
-    retry: "Retry",
-    save: "Save",
-    cancel: "Cancel",
-    close: "Close",
-    back: "Back",
-    next: "Next",
-    continue: "Continue",
-    submit: "Submit",
-    sending: "Sending…",
-    sent: "Sent",
-    learn_more: "Learn more",
-    view_all: "View all",
-    search: "Search",
-    filter: "Filter",
-    sort: "Sort",
-    clear: "Clear",
-    optional: "Optional",
-    required: "Required",
-    empty: "Nothing to show yet.",
-    open_collection: "Open the collection",
-    read_guide: "Read the guide",
-    talk_to_autovere: "Talk to AUTOVERE",
-    ask_autovere: "Ask AUTOVERE",
+    loading: "Cargando...",
+    error: "Ha ocurrido un error",
+    retry: "Reintentar",
+    cancel: "Cancelar",
+    save: "Guardar",
+    delete: "Eliminar",
+    edit: "Editar",
+    create: "Crear",
+    search: "Buscar",
+    filter: "Filtrar",
+    sort: "Ordenar",
+    reset: "Restablecer",
+    apply: "Aplicar",
+    close: "Cerrar",
+    back: "Volver",
+    next: "Siguiente",
+    previous: "Anterior",
+    submit: "Enviar",
+    confirm: "Confirmar"
   },
+
   advisor: {
-    title: "AUTOVERE",
-    subtitle: "Your AI car advisor",
-    intro:
-      "Tell me about your life — where you drive, who's in the car, what feels right. I'll find cars that actually fit you.",
-    placeholder: "Describe what you're looking for…",
-    thinking: "Thinking carefully…",
-    err_capacity: "AUTOVERE is at capacity. Try again in a moment.",
-    err_credits: "AI credits required to continue.",
-    err_generic: "Something went wrong. Try again.",
-    err_connection: "Connection lost. Try again.",
-    starters: [
-      "I want a family EV that handles snowy winters",
-      "Something sporty but comfortable for daily driving",
-      "Reliable SUV under $50k for long road trips",
-      "A quiet city car that still feels premium",
-    ],
+    title: "Asesor de coches eléctricos",
+    subtitle: "Pregúntame lo que quieras sobre vehículos eléctricos",
+    placeholder: "¿Qué coche eléctrico me recomiendas para...?",
+    send: "Enviar",
+    thinking: "Pensando...",
+    error: "No he podido procesar tu consulta. Por favor, inténtalo de nuevo.",
+    reset: "Nueva conversación",
+    starterPrompts: {
+      title: "Prueba con alguna de estas preguntas:",
+      prompts: [
+        "¿Qué coche eléctrico me recomiendas para conducir en ciudad?",
+        "¿Cuáles son los eléctricos con mayor autonomía?",
+        "¿Qué SUV eléctrico ofrece mejor relación calidad-precio?",
+        "Compara el Tesla Model 3 con el BMW i4"
+      ]
+    }
   },
+
   legal: {
-    last_updated: "Last updated",
-    on_this_page: "On this page",
-    have_question: "Have a question about this document?",
-    contact_team: "Contact our team",
-    every_message: "— every message is read by a real person.",
-    org_line: "Org.nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge",
-    operator: "Boutique24Shop v/ K.Mersland",
+    title: "Avisos legales",
+    subtitle: "Información legal y políticas de AUTOVERE",
+    privacyPolicy: "Política de privacidad",
+    termsOfService: "Condiciones de uso",
+    cookiePolicy: "Política de cookies",
+    disclaimer: "Aviso legal",
+    lastUpdated: "Última actualización"
   },
+
   seo: {
-    site_name: "AUTOVERE",
-    default_title: "AUTOVERE — A calmer way to discover your next car",
-    default_description:
-      "AI-assisted automotive guidance with editorial depth. Discover, compare and understand cars with AUTOVERE.",
+    defaultTitle: "AUTOVERE - Tu experto en coches eléctricos",
+    defaultDescription: "Descubre, compara y encuentra el vehículo eléctrico perfecto con nuestra avanzada inteligencia artificial. Análisis detallados, comparativas y asesoramiento personalizado.",
+    defaultKeywords: "coches eléctricos, vehículos eléctricos, comparador EV, asesor coches eléctricos, guía compra eléctricos, análisis coches eléctricos"
   },
+
   pages: {
-    index: {
-      seo_title: "AUTOVERE — The future of choosing a car",
-      seo_desc:
-        "AUTOVERE is a calm, intelligent AI advisor that learns how you live and matches you to the few cars worth your attention.",
-      hero_pill: "The future of choosing a car",
-      hero_h1_a: "Find the car that",
-      hero_h1_b: "actually fits you.",
-      hero_lead:
-        "AUTOVERE is a calm, intelligent advisor that learns how you live — then guides you to the few cars worth your attention.",
-      hero_placeholder: "Try: 'A reliable EV for snowy mountain weekends'",
-      start: "Start",
-      popular: "Popular:",
-      popular_1: "family EV",
-      popular_2: "weekend sports car",
-      popular_3: "city commuter",
-      hero_caption_a: "An AUTOVERE story · Volume 01",
-      hero_caption_b: "“The right car doesn't shout. It fits.”",
-      how_eyebrow: "How it works",
-      how_title_a: "Less searching.",
-      how_title_b: "More clarity.",
-      how_lead:
-        "Most car platforms throw 200 listings at you and call it choice. AUTOVERE does the opposite — it asks the right questions, then quietly does the thinking.",
+    home: {
+      meta: {
+        title: "AUTOVERE - Tu experto en coches eléctricos",
+        description: "Descubre, compara y encuentra el vehículo eléctrico perfecto con nuestra avanzada inteligencia artificial. Análisis detallados, comparativas y asesoramiento personalizado."
+      },
+      hero: {
+        title: "Tu experto en coches eléctricos",
+        subtitle: "Encuentra el vehículo perfecto con nuestra avanzada inteligencia artificial",
+        cta: "Descubre tu coche ideal"
+      },
       features: {
-        f1_t: "Understands you",
-        f1_d: "Tell AUTOVERE about your life. It listens for what actually matters — not just specs.",
-        f2_t: "Lifestyle-first match",
-        f2_d: "Recommendations based on climate, family, commute, and how you actually drive.",
-        f3_t: "Honest tradeoffs",
-        f3_d: "No hype. Every match comes with the real strengths and the real compromises.",
-        f4_t: "Built to be trusted",
-        f4_d: "We translate specifications into human meaning. So you choose with confidence.",
+        title: "Por qué elegir AUTOVERE",
+        subtitle: "Todo lo que necesitas para tomar la mejor decisión",
+        items: [
+          {
+            title: "Asesoramiento inteligente",
+            description: "Nuestra IA analiza tus necesidades y te recomienda el vehículo perfecto para ti"
+          },
+          {
+            title: "Comparativas detalladas",
+            description: "Compara especificaciones, prestaciones y precios lado a lado"
+          },
+          {
+            title: "Análisis profesionales",
+            description: "Pruebas exhaustivas y opiniones honestas de nuestros expertos"
+          },
+          {
+            title: "Guía de precios",
+            description: "Valores de mercado actualizados para nuevos y de ocasión"
+          },
+          {
+            title: "Información independiente",
+            description: "Sin influencias de fabricantes, solo datos objetivos y análisis imparciales"
+          },
+          {
+            title: "Siempre actualizado",
+            description: "Las últimas novedades, lanzamientos y noticias del sector"
+          }
+        ]
       },
-      advisor_eyebrow: "Meet AUTOVERE",
-      advisor_title_a: "A conversation,",
-      advisor_title_b: "not a search box.",
-      advisor_lead:
-        "Tell AUTOVERE about your daily drive, your climate, your family, what makes you smile behind the wheel. It listens — then recommends with the kind of nuance you'd expect from a thoughtful friend who happens to know cars.",
-      advisor_b1: "Climate & region aware",
-      advisor_b2: "Personality matched",
-      advisor_b3: "Real tradeoffs, no hype",
-      sample_eyebrow: "A glimpse",
-      sample_title: "Curated, not catalogued.",
-      sample_lead: "Sample matches AUTOVERE surfaces — each chosen for a specific kind of life.",
-      browse_library: "Browse the full AUTOVERE library",
-      cinematic_nordic_eyebrow: "Cars for Nordic winters",
-      cinematic_nordic_title_a: "Composed when",
-      cinematic_nordic_title_b: "the road isn't.",
-      cinematic_nordic_body:
-        "Quiet AWD. Heated everything. A cabin that feels like staying indoors at −15°. AUTOVERE knows which cars actually deliver — and which only pretend.",
-      collections_eyebrow: "Curated collections",
-      collections_title_a: "Discover by",
-      collections_title_b: "moment",
-      collections_title_c: ", not by spec.",
-      collections_lead:
-        "Themes AUTOVERE returns to often. Tap one and start a conversation from there.",
-      all_collections: "All collections →",
-      cinematic_road_eyebrow: "Designed for long drives",
-      cinematic_road_title_a: "Six hours",
-      cinematic_road_title_b: "should feel like one.",
-      cinematic_road_body:
-        "Seats that don't betray you at hour four. Range you stop thinking about. Sound systems worth the silence between songs. AUTOVERE ranks for reality, not the spec sheet.",
-      personality_eyebrow: "Driving personality",
-      personality_title_a: "The car you choose",
-      personality_title_b: "says",
-      personality_title_c: "who you are.",
-      personality_lead:
-        "AUTOVERE builds a profile from how you talk about driving — not a quiz, just a conversation. Recognise yourself in one of these?",
-      cinematic_quiet_eyebrow: "Quiet luxury",
-      cinematic_quiet_title_a: "Presence,",
-      cinematic_quiet_title_b: "without permission.",
-      cinematic_quiet_body:
-        "The cars that don't need to announce themselves. Thoughtful interiors, considered details, no chrome theatre. The badge matters less than the silence inside.",
-      under_eyebrow: "Cars people underestimated",
-      under_title_a: "The ones",
-      under_title_b: "you'll",
-      under_title_c: "be glad you tried.",
-      under_lead:
-        "Not every great car arrives with a marketing budget. AUTOVERE surfaces the quietly excellent — cars that owners love more after a year, not less.",
-      under_cta: "Surface my hidden matches",
-      under_card_eyebrow: "Tonight in Tokyo",
-      under_card_title: "A car you wouldn't expect to love.",
-      cinematic_night_eyebrow: "Why we built AUTOVERE",
-      cinematic_night_title_a: "Choosing a car",
-      cinematic_night_title_b: "should feel like this.",
-      cinematic_night_body:
-        "Calm. Considered. Yours. Not 47 open tabs at 1am. Not spec sheets you'll forget by Tuesday. Just a quiet conversation, and a car that finally fits.",
-      help_eyebrow: "Help & guidance",
-      help_title: "Everything you might wonder.",
-      help_lead: "Calm answers. No fine print.",
-      faqs: {
-        q1: "How does AUTOVERE actually work?",
-        a1: "You describe your life — where you drive, who's with you, what feels important. AUTOVERE interprets the signals (climate, space, budget, personality) and matches you with a small, curated set of cars that genuinely fit. No endless filters, no overwhelm.",
-        q2: "Why only 2–3 recommendations?",
-        a2: "Choice paralysis is real. Showing you 47 cars doesn't help — it stresses you out. AUTOVERE narrows it to the few that actually deserve your attention, then explains why.",
-        q3: "Can I trust the matches?",
-        a3: "AUTOVERE is honest about tradeoffs. Every recommendation includes what's great and what isn't. We'd rather you walk away informed than excited about the wrong car.",
-        q4: "Does it work for my country?",
-        a4: "AUTOVERE is fully localised in English, Norwegian, German, Swedish and French — with climate, currency and availability awareness built in from day one.",
-      },
-      cta_title_a: "Your next car is",
-      cta_title_b: "waiting to be understood.",
-      cta_lead: "Skip the spec sheets. Start a conversation.",
+      cta: {
+        title: "¿Listo para encontrar tu coche eléctrico ideal?",
+        subtitle: "Empieza ahora con nuestro asesor inteligente",
+        button: "Habla con el asesor"
+      }
     },
-    pricing: {
-      seo_title: "AUTOVERE Premium — calm, intelligent automotive guidance",
-      seo_desc:
-        "Most of AUTOVERE is free, forever. Premium adds long-term ownership analysis, resale predictions, and personalised garage planning — for less than a coffee a month.",
-      eyebrow: "AUTOVERE Premium",
-      h1_a: "Most of AUTOVERE is",
-      h1_b: "free, forever.",
-      lead:
-        "We believe choosing a car shouldn't sit behind a paywall. Premium is for people who want to go deeper — five years out, not five minutes out.",
-      free_label: "Free",
-      free_price: "$0",
-      free_per: "/ forever",
-      free_lead: "Everything you need to find the right car for your life — calmly.",
-      free_cta: "Start with AUTOVERE",
-      premium_label: "Premium",
-      recommended: "Recommended",
-      monthly: "Monthly",
-      yearly: "Yearly",
-      billed_yearly: "billed yearly",
-      yearly_save: "or $59 / year — save 30%",
-      premium_lead:
-        "For people thinking long-term. Deeper analysis, smarter projections, fewer surprises.",
-      on_premium: "✓ You're on Premium",
-      cancels_at_end: "(cancels at period end)",
-      manage: "Manage subscription",
-      opening: "Opening…",
-      opening_checkout: "Opening checkout…",
-      subscribe: "Subscribe",
-      sign_in_subscribe: "Sign in & subscribe",
-      cancel_anytime: "Cancel anytime. No upsells, no dark patterns.",
-      welcome_premium: "Welcome to Premium! A confirmation email is on its way.",
-      portal_error: "Could not open the customer portal.",
-      please_sign_in: "Please sign in to subscribe.",
-      reassurance: {
-        t1: "No data resold",
-        b1: "We don't sell your preferences to dealers. Your conversations stay yours.",
-        t2: "Free stays generous",
-        b2: "We won't quietly move free features behind the paywall. That's a promise.",
-        t3: "Built to last",
-        b3: "Subscriptions fund a calm, ad-free product — not investor pressure to sell you a car.",
+
+    buyingGuide: {
+      meta: {
+        title: "Guía de compra de coches eléctricos - AUTOVERE",
+        description: "Todo lo que necesitas saber antes de comprar un coche eléctrico. Desde autonomía hasta incentivos fiscales, te ayudamos a tomar la mejor decisión."
       },
-      faq_h: "Honest answers.",
-      faqs: {
-        q1: "Do I need Premium to find a car?",
-        a1: "No. The full AI advisor, personality matching, comparisons and curated reviews are free. Premium is for the long-term ownership view.",
-        q2: "Will free features get worse over time?",
-        a2: "We commit publicly: free stays generous. Premium adds depth, it doesn't remove what's already free.",
-        q3: "Is AUTOVERE affiliated with car brands?",
-        a3: "No. AUTOVERE does not take payment from manufacturers to influence rankings. Recommendations are based on fit, not commissions.",
-        q4: "Can I cancel anytime?",
-        a4: "Yes — instantly, no friction, no retention emails.",
+      hero: {
+        title: "Guía de compra de coches eléctricos",
+        subtitle: "Todo lo que necesitas saber antes de dar el salto a la movilidad eléctrica"
       },
-      free_features: [
-        "AI car matching, every time",
-        "Driving Personality system",
-        "Cinematic discovery & collections",
-        "Curated YouTube reviews",
-        "AI reviewer consensus per car",
-        "Honest comparisons",
-        "AUTOVERE Learn library",
+      sections: [
+        {
+          title: "Entender la autonomía",
+          content: "La autonomía es uno de los factores más importantes. Aprende a interpretar los datos WLTP y calcula tus necesidades reales de conducción."
+        },
+        {
+          title: "Opciones de carga",
+          content: "Desde carga doméstica hasta estaciones rápidas. Descubre qué solución se adapta mejor a tu estilo de vida."
+        },
+        {
+          title: "Costes e incentivos",
+          content: "Subvenciones, deducciones fiscales y ahorro a largo plazo. Calcula el coste real de propiedad."
+        },
+        {
+          title: "Elegir el modelo adecuado",
+          content: "Sedán, SUV, familiar o compacto. Encuentra la carrocería y prestaciones que mejor encajan contigo."
+        }
       ],
-      premium_features: [
-        "Deep ownership analysis (5-year cost projection)",
-        "Climate-specific reliability insights",
-        "Resale value predictions",
-        "Personalised garage planning",
-        "Saved recommendations & history",
-        "Premium AI reports (PDF)",
-        "Country-aware pricing intelligence",
-        "Early access to new features",
-      ],
+      cta: {
+        title: "¿Necesitas ayuda personalizada?",
+        subtitle: "Nuestro asesor IA puede responder tus dudas específicas",
+        button: "Consulta al asesor"
+      }
     },
-    auth: {
-      seo_title: "Sign in — AUTOVERE",
-      seo_desc: "Sign in to your AUTOVERE account.",
-      welcome_back: "Welcome back.",
-      create_account: "Create your account.",
-      lead_signin: "Sign in to manage your AUTOVERE Premium.",
-      lead_signup: "Start with AUTOVERE Premium.",
-      email: "Email",
-      password: "Password",
-      sign_in: "Sign in",
-      create: "Create account",
-      need_account: "Need an account? Sign up",
-      have_account: "Have an account? Sign in",
-      welcome_toast: "Welcome back.",
-      created_toast: "Account created.",
-    },
-    discover: {
-      seo_title: "Discover — AUTOVERE intelligence collections",
-      seo_desc:
-        "Curated AUTOVERE collections by climate, ownership stress, calm highway cruising, quiet luxury, and reviewer consensus.",
-      eyebrow: "Discover",
-      h1_a: "Cars discovered through",
-      h1_b: "how you live.",
-      lead:
-        "AUTOVERE reads thousands of expert reviews, owner conversations, and safety reports — then quietly organises the cars that genuinely fit a moment in your life. Pick a moment.",
-      transparency_eyebrow: "AI transparency",
-      transparency:
-        "AUTOVERE collections are AI-assisted and continuously refined from public expert reviews, owner discussions, and safety data. We surface consensus, not opinion — and recommend you verify details locally before buying.",
-    },
-    compare: {
-      eyebrow: "AUTOVERE comparison",
-      title_b: "how they actually feel.",
-      lead:
-        "Spec tables hide the truth. Two cars with similar numbers can feel completely different to live with. Here's how the {{a}} and the {{b}} compare across the dimensions AUTOVERE weighs most: feel, comfort, climate, lifestyle, and ownership.",
-      detailed: "Detailed dimensions",
-      driving_feel: "Driving feel",
-      comfort: "Comfort",
-      safety: "Safety confidence",
-      winter: "Winter behaviour",
-      family: "Family suitability",
-      ownership_stress: "Ownership stress",
-      personality_fit: "Personality fit",
-      lifestyle: "Lifestyle",
-      ai_consensus: "AI consensus",
-      ai_consensus_h: "What it actually feels like — by the numbers people don't print.",
-      real_world_feel: "Real-world feel",
-      strong_confidence: "Strong real-world confidence;",
-      choose_if: "Choose the {{name}} if",
-      read_full_review: "Read the full {{name}} review",
-      still_fence: "Still on the fence?",
-      still_fence_lead:
-        "Tell AUTOVERE about your life — climate, family, commute. It'll pick the one that actually fits.",
-      not_found_seo_title: "Comparison not found · AUTOVERE",
-      not_found_seo_desc: "This comparison isn't ready yet.",
-      not_found_h1: "We haven't framed that one yet.",
-      browse: "Browse comparisons",
-      index_seo_title: "Car comparisons that go beyond spec sheets · AUTOVERE",
-      index_seo_desc:
-        "Real-world comparisons of premium EVs — driving feel, comfort, climate, lifestyle, and ownership. Honest, human, useful.",
-      index_eyebrow: "Compare",
-      index_h1_a: "Comparisons that",
-      index_h1_b: "tell the truth.",
-      index_lead: "We don't compare numbers. We compare the lived experience of owning the car.",
-      comparison_label: "Comparison",
-    },
-    learn: {
-      not_found_seo_title: "Article not found · AUTOVERE",
-      not_found_seo_desc: "This article isn't published yet.",
-      not_found_h1: "Not published yet.",
-      back_learn: "Back to Learn",
-      back_to: "← AUTOVERE Learn ·",
-      ready_h: "Ready to put it into practice?",
-      ready_lead: "Talk to AUTOVERE and turn this into a car that fits your life.",
-      index_seo_title: "AUTOVERE Learn — calm, intelligent guides to choosing a car",
-      index_seo_desc:
-        "Premium guides on EVs, winter driving, comparing cars, and what makes a car feel premium. Calm, human, no jargon.",
-      index_eyebrow: "AUTOVERE Learn",
-      index_h1_a: "Calm, intelligent",
-      index_h1_b: "guidance.",
-      index_lead:
-        "Everything you might wonder about choosing a car — written like a thoughtful friend would explain it.",
-    },
-    watch: {
-      seo_title: "Watch — curated automotive video reviews · AUTOVERE",
-      seo_desc:
-        "A premium, AI-curated stream of trusted automotive reviews — winter tests, long-distance drives, quiet luxury, and the most discussed EVs.",
-      eyebrow: "AUTOVERE Watch",
-      h1_a: "The reviews",
-      h1_b: "worth your time.",
-      lead:
-        "A curated, intelligent stream of the most trusted automotive reviewers in the world, updated live from YouTube. No noise. No clickbait. Just the videos AUTOVERE quietly recommends.",
-      featured: "Featured",
-      rows: {
-        trending_t: "Trending automotive reviews",
-        trending_s: "What the most trusted reviewers are publishing right now.",
-        winter_t: "Winter driving reviews",
-        winter_s: "Real-world cold-weather tests from reviewers who live where it snows.",
-        long_t: "Long-distance test videos",
-        long_s: "How these cars actually feel on a six-hour drive.",
-        luxury_t: "Quiet luxury, on camera",
-        luxury_s: "Cabin reviews of the most refined EVs reviewers have driven.",
-        family_t: "Family-ready EVs",
-        family_s: "Space, safety, and how they handle real family life.",
+
+    reviews: {
+      meta: {
+        title: "Análisis de coches eléctricos - AUTOVERE",
+        description: "Pruebas profesionales y análisis detallados de los últimos modelos eléctricos. Opiniones honestas e imparciales."
       },
-      trusted: "The most trusted reviewers",
-      trusted_h: "The voices AUTOVERE returns to.",
-    },
-    help: {
-      seo_title: "Help Center · AUTOVERE",
-      seo_desc: "Answers, guidance and a calm way to reach the AUTOVERE team.",
-      eyebrow: "Help Center",
-      h1: "How can we help?",
-      lead:
-        "A short index of the most common topics. If you don't see what you need, our team is one calm form away.",
-      topics: {
-        t1_t: "Getting started",
-        t1_b: "How to use AUTOVERE, save cars to collections, and discover models that match your taste.",
-        t2_t: "Billing & subscriptions",
-        t2_b: "Plans, renewals, invoices, cancellation and refunds — see Subscription Terms and Refund Policy.",
-        t3_t: "AI advisor",
-        t3_b: "How recommendations are generated, where the data comes from, and how to verify details.",
-        t4_t: "Privacy & security",
-        t4_b: "What we collect, why, and how to exercise your data rights under GDPR.",
-        t5_t: "Account",
-        t5_b: "Sign-in issues, account deletion, and keeping your account secure.",
-        t6_t: "Something else?",
-        t6_b: "Send us a message — every contact-form submission is read by a real person on our team.",
+      hero: {
+        title: "Análisis de coches eléctricos",
+        subtitle: "Opiniones expertas y pruebas exhaustivas de los últimos modelos"
       },
-      still_human: "Still need a human?",
-      still_human_lead:
-        "Send us a message and we'll get back to you — usually within one business day.",
-      contact_team: "Contact our team",
+      filters: {
+        all: "Todos",
+        sedan: "Sedán",
+        suv: "SUV",
+        hatchback: "Compacto",
+        wagon: "Familiar",
+        performance: "Deportivo"
+      },
+      card: {
+        readMore: "Leer análisis completo",
+        published: "Publicado",
+        rating: "Valoración"
+      }
     },
+
+    comparisons: {
+      meta: {
+        title: "Comparador de coches eléctricos - AUTOVERE",
+        description: "Compara especificaciones, prestaciones y precios de vehículos eléctricos. Encuentra las diferencias que importan."
+      },
+      hero: {
+        title: "Compara coches eléctricos",
+        subtitle: "Análisis lado a lado de especificaciones, prestaciones y precios"
+      },
+      tool: {
+        title: "Comparador de vehículos",
+        selectFirst: "Selecciona el primer vehículo",
+        selectSecond: "Selecciona el segundo vehículo",
+        selectThird: "Añade un tercer vehículo (opcional)",
+        compare: "Comparar",
+        reset: "Limpiar selección"
+      },
+      table: {
+        specifications: "Especificaciones",
+        performance: "Prestaciones",
+        range: "Autonomía",
+        charging: "Carga",
+        price: "Precio",
+        battery: "Batería",
+        power: "Potencia",
+        acceleration: "Aceleración 0-100 km/h",
+        topSpeed: "Velocidad máxima",
+        wltpRange: "Autonomía WLTP",
+        realRange: "Autonomía real",
+        fastCharging: "Carga rápida",
+        homeCharging: "Carga doméstica",
+        startingPrice: "Precio desde",
+        asTestedPrice: "Precio versión probada"
+      }
+    },
+
+    news: {
+      meta: {
+        title: "Noticias sobre coches eléctricos - AUTOVERE",
+        description: "Las últimas novedades, lanzamientos y actualidad del sector de vehículos eléctricos."
+      },
+      hero: {
+        title: "Actualidad del coche eléctrico",
+        subtitle: "Las últimas novedades, lanzamientos y noticias del sector"
+      },
+      filters: {
+        all: "Todas",
+        launches: "Lanzamientos",
+        technology: "Tecnología",
+        industry: "Industria",
+        policy: "Normativa",
+        charging: "Infraestructura"
+      },
+      card: {
+        readMore: "Leer noticia completa",
+        published: "Publicado",
+        category: "Categoría"
+      }
+    },
+
+    priceGuide: {
+      meta: {
+        title: "Guía de precios de coches eléctricos - AUTOVERE",
+        description: "Valores de mercado actualizados para vehículos eléctricos nuevos y de ocasión. Consulta precios y depreciacación."
+      },
+      hero: {
+        title: "Guía de precios de eléctricos",
+        subtitle: "Valores de mercado actualizados para nuevos y de ocasión"
+      },
+      search: {
+        placeholder: "Busca por marca o modelo...",
+        filter: "Filtrar resultados"
+      },
+      table: {
+        model: "Modelo",
+        year: "Año",
+        new: "Nuevo",
+        used: "Ocasión",
+        depreciation: "Depreciación",
+        lastUpdated: "Actualizado"
+      },
+      filters: {
+        all: "Todos",
+        new: "Nuevos",
+        used: "Ocasión",
+        price: "Precio",
+        year: "Año"
+      }
+    },
+
+    electricGuide: {
+      meta: {
+        title: "Guía del coche eléctrico - AUTOVERE",
+        description: "Todo sobre movilidad eléctrica: cómo funcionan, ventajas, carga, mantenimiento y más."
+      },
+      hero: {
+        title: "Guía completa del coche eléctrico",
+        subtitle: "Todo lo que necesitas saber sobre movilidad eléctrica"
+      },
+      sections: [
+        {
+          title: "¿Cómo funciona un coche eléctrico?",
+          content: "Descubre la tecnología detrás de los vehículos eléctricos, desde el motor hasta la batería."
+        },
+        {
+          title: "Ventajas de conducir eléctrico",
+          content: "Ahorro en combustible, menor mantenimiento, conducción silenciosa y beneficios medioambientales."
+        },
+        {
+          title: "Carga y autonomía",
+          content: "Todo sobre puntos de carga, tiempos y cómo maximizar la autonomía de tu vehículo."
+        },
+        {
+          title: "Mantenimiento",
+          content: "Los eléctricos requieren mucho menos mantenimiento que los de combustión. Te contamos por qué."
+        },
+        {
+          title: "Incentivos y ayudas",
+          content: "Subvenciones, deducciones fiscales y otras ventajas de conducir eléctrico."
+        },
+        {
+          title: "Mitos y realidades",
+          content: "Desmontamos los mitos más comunes sobre los coches eléctricos."
+        }
+      ]
+    },
+
+    usedGuide: {
+      meta: {
+        title: "Guía de coches eléctricos de ocasión - AUTOVERE",
+        description: "Todo lo que debes saber antes de comprar un coche eléctrico de segunda mano. Consejos sobre batería, garantía y más."
+      },
+      hero: {
+        title: "Guía de eléctricos de ocasión",
+        subtitle: "Claves para comprar un coche eléctrico de segunda mano con confianza"
+      },
+      sections: [
+        {
+          title: "Estado de la batería",
+          content: "Cómo evaluar el estado de salud de la batería y qué preguntar al vendedor."
+        },
+        {
+          title: "Garantía",
+          content: "Qué garantías ofrecen los fabricantes y qué debes comprobar antes de comprar."
+        },
+        {
+          title: "Historial del vehículo",
+          content: "Documentación imprescindible y señales de alerta que no debes pasar por alto."
+        },
+        {
+          title: "Precio justo",
+          content: "Cómo calcular la depreciación y negociar el mejor precio."
+        },
+        {
+          title: "Modelos recomendados",
+          content: "Qué modelos de ocasión ofrecen mejor fiabilidad y relación calidad-precio."
+        }
+      ]
+    },
+
+    aboutUs: {
+      meta: {
+        title: "Sobre AUTOVERE - Quiénes somos",
+        description: "Conoce a AUTOVERE, tu fuente independiente de información sobre vehículos eléctricos."
+      },
+      hero: {
+        title: "Sobre AUTOVERE",
+        subtitle: "Tu fuente independiente de información sobre vehículos eléctricos"
+      },
+      mission: {
+        title: "Nuestra misión",
+        content: "AUTOVERE nace para ayudarte a navegar por el complejo mundo de los coches eléctricos. Ofrecemos información objetiva, análisis detallados y herramientas inteligentes para que tomes la mejor decisión."
+      },
+      values: {
+        title: "Nuestros valores",
+        items: [
+          {
+            title: "Independencia",
+            description: "No vendemos coches ni recibimos comisiones. Solo información honesta."
+          },
+          {
+            title: "Rigor",
+            description: "Datos verificados, análisis profesionales y opiniones fundamentadas."
+          },
+          {
+            title: "Innovación",
+            description: "Utilizamos IA avanzada para ofrecerte el mejor asesoramiento personalizado."
+          },
+          {
+            title: "Transparencia",
+            description: "Siempre claros sobre nuestras fuentes y metodología de análisis."
+          }
+        ]
+      },
+      team: {
+        title: "Nuestro equipo",
+        description: "Un grupo de entusiastas del motor y expertos en tecnología apasionados por la movilidad eléctrica."
+      }
+    },
+
+    privacyPolicy: {
+      meta: {
+        title: "Política de privacidad - AUTOVERE",
+        description: "Cómo AUTOVERE recoge, utiliza y protege tus datos personales."
+      },
+      hero: {
+        title: "Política de privacidad",
+        subtitle: "Cómo tratamos y protegemos tu información personal"
+      },
+      lastUpdated: "Última actualización: 1 de enero de 2024",
+      sections: [
+        {
+          title: "Información que recopilamos",
+          content: "Detalles sobre qué datos personales recogemos cuando utilizas AUTOVERE."
+        },
+        {
+          title: "Cómo utilizamos tu información",
+          content: "Cómo usamos los datos para mejorar nuestro servicio y tu experiencia."
+        },
+        {
+          title: "Compartir información",
+          content: "Con quién compartimos tus datos y en qué circunstancias."
+        },
+        {
+          title: "Cookies y tecnologías similares",
+          content: "Qué cookies utilizamos y cómo puedes controlarlas."
+        },
+        {
+          title: "Seguridad de los datos",
+          content: "Las medidas que tomamos para proteger tu información."
+        },
+        {
+          title: "Tus derechos",
+          content: "Tus derechos sobre tus datos personales y cómo ejercerlos."
+        },
+        {
+          title: "Contacto",
+          content: "Cómo ponerte en contacto con nosotros sobre cuestiones de privacidad."
+        }
+      ]
+    },
+
+    termsOfService: {
+      meta: {
+        title: "Condiciones de uso - AUTOVERE",
+        description: "Términos y condiciones de uso de AUTOVERE."
+      },
+      hero: {
+        title: "Condiciones de uso",
+        subtitle: "Términos y condiciones para el uso de AUTOVERE"
+      },
+      lastUpdated: "Última actualización: 1 de enero de 2024",
+      sections: [
+        {
+          title: "Aceptación de términos",
+          content: "Al usar AUTOVERE aceptas estas condiciones de uso."
+        },
+        {
+          title: "Uso del servicio",
+          content: "Cómo puedes utilizar AUTOVERE y qué usos están prohibidos."
+        },
+        {
+          title: "Propiedad intelectual",
+          content: "Derechos de autor y marcas registradas."
+        },
+        {
+          title: "Contenido de usuarios",
+          content: "Tus derechos y responsabilidades sobre el contenido que publicas."
+        },
+        {
+          title: "Limitación de responsabilidad",
+          content: "Los límites de nuestra responsabilidad legal."
+        },
+        {
+          title: "Modificaciones",
+          content: "Cómo y cuándo podemos modificar estos términos."
+        },
+        {
+          title: "Legislación aplicable",
+          content: "Qué leyes rigen estos términos y cómo resolver disputas."
+        }
+      ]
+    },
+
     contact: {
-      seo_title: "Contact AUTOVERE — Talk to our team",
-      seo_desc:
-        "Reach the AUTOVERE team. A calm, secure way to ask questions, share feedback, or start a conversation about your next car.",
-      eyebrow: "Contact AUTOVERE",
-      h1_a: "A calmer way to",
-      h1_b: "talk to us.",
-      lead:
-        "Questions, ideas, or something you want us to build next — share it here. Every message is read by a real person on our team.",
-      received_h: "Message received",
-      received_b:
-        "Thank you. Our team will get back to you shortly — usually within one business day.",
-      send_another: "Send another message",
-      name: "Your name",
-      name_ph: "Alex Morgan",
-      email: "Email",
-      subject: "Subject",
-      subject_ph: "How can we help?",
-      country: "Country",
-      country_ph: "Norway",
-      vehicle: "Vehicle of interest",
-      vehicle_ph: "e.g. Lucid Air, Polestar 4",
-      message: "Message",
-      message_ph: "Tell us a little about what you're looking for…",
-      encrypted: "Your details are encrypted in transit and never shared.",
-      send: "Send message",
-      validation_required: "Please fill in name, email, subject and message.",
-      validation_email: "Please enter a valid email address.",
-      send_error: "Could not send your message. Please try again.",
-      trust_t1: "Privacy by design",
-      trust_b1:
-        "We collect only what's needed to reply to you. No tracking pixels in messages, no third-party resale, ever.",
-      trust_t2: "Responsible AI",
-      trust_b2:
-        "AUTOVERE, our advisor, is built to inform — not to manipulate. We don't use your conversations to train external models.",
-      trust_t3: "A real human reply",
-      trust_b3:
-        "Every message is reviewed by our team in Kristiansand. Most replies arrive within one business day.",
-      developed_by: "Developed and operated by",
+      meta: {
+        title: "Contacto - AUTOVERE",
+        description: "Ponte en contacto con el equipo de AUTOVERE. Estamos aquí para ayudarte."
+      },
+      hero: {
+        title: "Contacto",
+        subtitle: "¿Tienes alguna pregunta? Estamos aquí para ayudarte"
+      },
+      form: {
+        name: "Nombre",
+        email: "Email",
+        subject: "Asunto",
+        message: "Mensaje",
+        send: "Enviar mensaje",
+        sending: "Enviando...",
+        success: "¡Mensaje enviado! Te responderemos pronto.",
+        error: "No hemos podido enviar tu mensaje. Por favor, inténtalo de nuevo."
+      },
+      info: {
+        title: "Información de contacto",
+        email: "Email",
+        address: "Dirección",
+        phone: "Teléfono"
+      },
+      alternative: {
+        title: "Otras formas de contactar",
+        advisor: "Prueba nuestro asesor IA para respuestas inmediatas",
+        advisorCta: "Habla con el asesor"
+      }
     },
-    studio: {
-      title: "AUTOVERE Studio",
-      auth_lead: "Internal AUTOVERE editorial control. Authentication required.",
-      admin_key: "Admin key",
-      enter: "Enter Studio",
-      h1: "Library expansion queue",
-      lead: "AI proposes vehicles that fit AUTOVERE's voice. You approve what enters the library.",
-      generate: "Generate suggestions",
-      pending: "Pending",
-      no_pending: "No pending suggestions. Generate some above.",
-      reviewed: "Recently reviewed",
-      approve: "Approve",
-      confidence: "confidence",
-      invalid_key: "Invalid admin key",
-      load_failed: "Failed to load suggestions",
-      approved: "Approved",
-      rejected: "Rejected",
-      action_failed: "Action failed",
-      generated_n: "Generated {{n}} new suggestions",
-      gen_failed: "Generation failed",
+
+    notFound: {
+      meta: {
+        title: "Página no encontrada - AUTOVERE",
+        description: "La página que buscas no existe."
+      },
+      title: "404 - Página no encontrada",
+      message: "Lo sentimos, la página que buscas no existe.",
+      cta: "Volver al inicio"
     },
-    car: {
-      not_found_seo_title: "Car not found · AUTOVERE",
-      not_found_seo_desc: "This car isn't in the AUTOVERE library yet.",
-      not_found_h1: "We don't have that one yet.",
-      not_found_lead: "Browse the AUTOVERE library instead.",
-      all_cars: "All cars",
-      match: "AUTOVERE match",
-      range: "Range",
-      price: "Price",
-      drivetrain: "Drivetrain",
-      summary_eyebrow: "AUTOVERE summary",
-      personality_fit: "Personality fit",
-      comfort: "Comfort",
-      climate: "Climate",
-      practicality: "Practicality",
-      ownership: "Ownership",
-      strengths: "Strengths",
-      tradeoffs: "Honest tradeoffs",
-      compare_eyebrow: "Compare intelligently",
-      compare_h: "People who consider the {{name}} also weigh…",
-      compare_label: "Compare",
-      cta_title_a: "Is the {{name}}",
-      cta_title_b: "right for you?",
-      cta_lead: "Tell AUTOVERE about your life and find out — honestly, in two minutes.",
-      index_seo_title: "All cars in the AUTOVERE library",
-      index_seo_desc:
-        "Premium electric cars curated for personality, climate, and real-world life. Calm, honest reviews — no spec spam.",
-      index_eyebrow: "The library",
-      index_h1_a: "Cars worth your",
-      index_h1_b: "attention.",
-      index_lead: "A curated set, not a catalogue. Every car here has earned its place.",
+
+    error: {
+      meta: {
+        title: "Error - AUTOVERE",
+        description: "Ha ocurrido un error."
+      },
+      title: "Algo ha ido mal",
+      message: "Lo sentimos, ha ocurrido un error inesperado.",
+      cta: "Volver al inicio",
+      retry: "Reintentar"
     },
-    personality: {
-      not_found_seo_title: "Personality not found · AUTOVERE",
-      not_found_seo_desc: "This personality isn't in the framework yet.",
-      not_found_h1: "Not part of the framework yet.",
-      all: "All personalities",
-      eyebrow: "Driving personality",
-      who: "Who you are",
-      values: "What you value",
-      show_matches: "Show my matches",
-      matches: "Matches",
-      matches_h: "Cars AUTOVERE often suggests for a {{name}}",
-      index_seo_title: "Driving personalities — find which one is yours · AUTOVERE",
-      index_seo_desc:
-        "Six driving personalities — Calm Explorer, Quiet Executive, Nordic Adventurer and more. Find the one that fits and the cars that match.",
-      index_eyebrow: "Driving personalities",
-      index_h1_a: "The car you choose",
-      index_h1_b: "says",
-      index_h1_c: "who you are.",
-      index_lead:
-        "Six personalities. Recognise yourself in one — and let AUTOVERE match you to the cars that fit.",
-      read_profile: "Read the profile",
+
+    advisor: {
+      meta: {
+        title: "Asesor IA de coches eléctricos - AUTOVERE",
+        description: "Pregunta lo que quieras a nuestro asesor inteligente sobre vehículos eléctricos. Respuestas personalizadas al instante."
+      },
+      hero: {
+        title: "Asesor IA de coches eléctricos",
+        subtitle: "Tu consultor personal especializado en movilidad eléctrica"
+      }
     },
-    collection: {
-      not_found_seo_title: "Collection not found · AUTOVERE",
-      not_found_seo_desc: "This collection isn't ready yet.",
-      not_found_h1: "We haven't curated that one yet.",
-      all: "All collections",
-      a_collection: "An AUTOVERE collection",
-      picks: "AUTOVERE picks",
-      cars_in: "The cars in this collection",
-      index_seo_title: "Discover cars by moment, not by spec · AUTOVERE",
-      index_seo_desc:
-        "Editorial collections of cars curated by lifestyle: Nordic winters, quiet luxury, long-distance comfort, family EVs, and more.",
-      index_eyebrow: "Discover",
-      index_h1_a: "Discover by",
-      index_h1_b: "moment.",
-      index_lead:
-        "Curated collections for the lives people actually live. Pick a moment that sounds like yours.",
-    },
-    not_found: {
-      title: "404",
-      lead: "Oops! Page not found",
-      home: "Return to Home",
-    },
-  },
+
+    search: {
+      meta: {
+        title: "Buscar - AUTOVERE",
+        description: "Busca análisis, comparativas y guías sobre coches eléctricos."
+      },
+      hero: {
+        title: "Buscar",
+        subtitle: "Encuentra análisis, comparativas y guías"
+      },
+      input: {
+        placeholder: "¿Qué estás buscando?",
+        search: "Buscar"
+      },
+      results: {
+        title: "Resultados de búsqueda",
+        count: "{count} resultados para \"{query}\"",
+        empty: "No hemos encontrado resultados para \"{query}\"",
+        tryAgain: "Prueba con otros términos o consulta a nuestro asesor IA"
+      },
+      filters: {
+        all: "Todo",
+        reviews: "Análisis",
+        comparisons: "Comparativas",
+        guides: "Guías",
+        news: "Noticias"
+      }
+    }
+  }
 };
 
-type DeepPartialString<T> = {
-  [K in keyof T]?: T[K] extends string
-    ? string
-    : T[K] extends readonly string[]
-    ? string[]
-    : DeepPartialString<T[K]>;
-};
+type DeepPartialString<T> = T extends string
+  ? string
+  : T extends object
+    ? { [K in keyof T]?: DeepPartialString<T[K]> }
+    : T;
+
 export type Translation = DeepPartialString<typeof es>;
+
 export default es;
