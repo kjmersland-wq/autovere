@@ -19,6 +19,7 @@ export const ContinueExploringSection = ({ car }: Props) => {
   const { region } = useRegion();
   const ui = getUiCopy(i18n.language).continueExploring;
   const regionLabel = getRegionDisplayName(region, i18n.language);
+  const ownershipTitleParts = ui.ownershipTitle.split("{{emphasis}}");
   // model slug heuristic: take last token of slug e.g. "polestar-3" → "3"
   const modelSlug = car.slug.split("-").slice(1).join("-") || car.slug;
   const links = brandLinks(car.brand, region, modelSlug);
@@ -80,7 +81,7 @@ export const ContinueExploringSection = ({ car }: Props) => {
       <div className="mt-16">
          <div className="text-sm text-accent font-medium tracking-wide uppercase mb-2">{interpolate(ui.ownershipEyebrow, { region: regionLabel })}</div>
          <h3 className="text-2xl md:text-3xl font-bold tracking-tight mb-8">
-           {ui.ownershipTitle.split(ui.whereYouLive)[0]}<span className="text-gradient">{ui.whereYouLive}</span>{ui.ownershipTitle.split(ui.whereYouLive)[1] ?? ""}
+           {ownershipTitleParts[0]}<span className="text-gradient">{ui.whereYouLive}</span>{ownershipTitleParts[1] ?? ""}
          </h3>
         <div className="grid md:grid-cols-3 gap-5">
           {insights.map((ins) => (

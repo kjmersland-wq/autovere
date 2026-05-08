@@ -204,7 +204,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
       warrantyBody: "Battery, drivetrain and bodywork coverage details for {{region}}.",
       open: "Open",
       ownershipEyebrow: "Owning it in {{region}}",
-      ownershipTitle: "What this car feels like where you live.",
+      ownershipTitle: "What this car feels like {{emphasis}}.",
       whereYouLive: "where you live",
     },
     editorialPulse: {
@@ -286,7 +286,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
       warrantyBody: "Detaljer om dekning for batteri, drivlinje og karosseri i {{region}}.",
       open: "Åpne",
       ownershipEyebrow: "Å eie den i {{region}}",
-      ownershipTitle: "Slik føles denne bilen der du bor.",
+      ownershipTitle: "Slik føles denne bilen {{emphasis}}.",
       whereYouLive: "der du bor",
     },
     editorialPulse: {
@@ -368,7 +368,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
       warrantyBody: "Details zu Batterie-, Antriebs- und Karosserieabdeckung in {{region}}.",
       open: "Öffnen",
       ownershipEyebrow: "Besitz in {{region}}",
-      ownershipTitle: "So fühlt sich dieses Auto dort an, wo Sie leben.",
+      ownershipTitle: "So fühlt sich dieses Auto {{emphasis}} an.",
       whereYouLive: "wo Sie leben",
     },
     editorialPulse: {
@@ -450,7 +450,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
       warrantyBody: "Detaljer om batteri-, drivline- och karosskydd i {{region}}.",
       open: "Öppna",
       ownershipEyebrow: "Att äga den i {{region}}",
-      ownershipTitle: "Så känns den här bilen där du bor.",
+      ownershipTitle: "Så känns den här bilen {{emphasis}}.",
       whereYouLive: "där du bor",
     },
     editorialPulse: {
@@ -532,7 +532,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
       warrantyBody: "Détails de couverture batterie, chaîne de traction et carrosserie en {{region}}.",
       open: "Ouvrir",
       ownershipEyebrow: "La posséder en {{region}}",
-      ownershipTitle: "Ce que cette voiture donne là où vous vivez.",
+      ownershipTitle: "Ce que cette voiture donne {{emphasis}}.",
       whereYouLive: "là où vous vivez",
     },
     editorialPulse: {
@@ -614,7 +614,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
       warrantyBody: "Szczegóły ochrony baterii, układu napędowego i nadwozia w {{region}}.",
       open: "Otwórz",
       ownershipEyebrow: "Posiadanie w {{region}}",
-      ownershipTitle: "Jak ten samochód sprawdza się tam, gdzie mieszkasz.",
+      ownershipTitle: "Jak ten samochód sprawdza się {{emphasis}}.",
       whereYouLive: "tam, gdzie mieszkasz",
     },
     editorialPulse: {
@@ -696,7 +696,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
       warrantyBody: "Dettagli sulla copertura di batteria, catena cinematica e carrozzeria in {{region}}.",
       open: "Apri",
       ownershipEyebrow: "Possederla in {{region}}",
-      ownershipTitle: "Come si sente quest'auto dove vivi.",
+      ownershipTitle: "Come si sente quest'auto {{emphasis}}.",
       whereYouLive: "dove vivi",
     },
     editorialPulse: {
@@ -778,7 +778,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
       warrantyBody: "Detalles de cobertura de batería, cadena cinemática y carrocería en {{region}}.",
       open: "Abrir",
       ownershipEyebrow: "Tenerlo en {{region}}",
-      ownershipTitle: "Cómo se siente este coche donde vives.",
+      ownershipTitle: "Cómo se siente este coche {{emphasis}}.",
       whereYouLive: "donde vives",
     },
     editorialPulse: {
@@ -1050,5 +1050,7 @@ export const getUiCopy = (lang: string) => UI_COPY[resolveLang(lang)];
 export const getOwnershipText = (
   lang: string,
   climate: string,
-): OwnershipText[] | undefined =>
-  resolveLang(lang) === "en" ? undefined : OWNERSHIP_COPY[resolveLang(lang) as Exclude<Lang, "en">]?.[climate];
+): OwnershipText[] | undefined => {
+  const resolved = resolveLang(lang);
+  return resolved === "en" ? undefined : OWNERSHIP_COPY[resolved as Exclude<Lang, "en">]?.[climate];
+};

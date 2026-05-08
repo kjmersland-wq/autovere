@@ -21,8 +21,10 @@ export const LangSync = () => {
         return null;
       }
     })();
-    if (!hasExplicitLang && stored && stored !== DEFAULT_LANG) {
-      const next = localizePath(pathname, stored) + search + hash;
+    const storedIsSupported = Boolean(stored && (SUPPORTED_LANGS as readonly string[]).includes(stored));
+    const storedLang = storedIsSupported ? (stored as Lang) : null;
+    if (!hasExplicitLang && storedLang && storedLang !== DEFAULT_LANG) {
+      const next = localizePath(pathname, storedLang) + search + hash;
       if (next !== pathname + search + hash) {
         navigate(next, { replace: true });
         return;
