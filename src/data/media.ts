@@ -1,4 +1,5 @@
 import { CARS } from "@/data/cars";
+import { DEFAULT_LANG } from "@/i18n/config";
 import {
   CURATED_ROW_TEXT,
   MEDIA_TEXT,
@@ -168,13 +169,13 @@ const resolveMediaEntry = (meta: CarMediaMeta, lang: string): CarMedia => {
     })),
     trusted: meta.trusted.map((item, index) => ({
       ...item,
-      label:
+        label:
         resolveLocalizedList(
           localized.trusted,
           resolvedLang,
           `media.${meta.carSlug}.trusted`,
         )[index] ??
-        resolveLocalizedList(localized.trusted, "en", `media.${meta.carSlug}.trusted.en`)[
+        resolveLocalizedList(localized.trusted, DEFAULT_LANG, `media.${meta.carSlug}.trusted.${DEFAULT_LANG}`)[
           index
         ] ??
         item.org,

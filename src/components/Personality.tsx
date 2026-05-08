@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Wind, Crown, Building2, Mountain, Flame, Snowflake } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { getCar, getPersonalities } from "@/data/cars";
@@ -39,6 +39,10 @@ export const Personality = ({ onPick }: { onPick: (prompt: string) => void }) =>
   }));
   const [activeId, setActiveId] = useState(profiles[0]?.id ?? "");
   const active = profiles.find((profile) => profile.id === activeId) ?? profiles[0];
+
+  useEffect(() => {
+    setActiveId(profiles[0]?.id ?? "");
+  }, [i18n.language]);
 
   if (!active) return null;
 
