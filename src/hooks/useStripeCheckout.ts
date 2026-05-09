@@ -3,6 +3,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
 import { useTranslation } from 'react-i18next';
 import { getStripeJs, getStripePublishableKeyMode, validateStripeClientEnv } from '@/lib/stripe';
+import { trackAnalyticsEvent } from '@/lib/analytics';
 
 type CheckoutServerError = {
   error?: {
@@ -62,6 +63,7 @@ export function useStripeCheckout() {
     setErrorMessage(null);
     try {
       console.info('Stripe checkout button clicked', options);
+      trackAnalyticsEvent('checkout_started', { interval: options.interval, locale: options.locale });
 
       const clientEnv = validateStripeClientEnv();
       if (!clientEnv.valid) {

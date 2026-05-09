@@ -584,6 +584,14 @@ const de: Translation = {
       redirect_auto: "Weiterleitung in {{count}}s…",
     },
   },
+  premium: {
+    lock: {
+      eyebrow: "Premium-Zugang",
+      title: "Erweiterte AUTOVERE-Intelligenz freischalten",
+      body: "Diese Funktion ist Teil von Premium und umfasst erweiterte KI-Einblicke, Besitzanalyse und Premium-Berichte.",
+      cta: "Premium freischalten",
+    },
+  },
 };
 
 export default de;

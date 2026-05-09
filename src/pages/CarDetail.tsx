@@ -11,6 +11,7 @@ import { CarMediaSection } from "@/components/CarMediaSection";
 import { PricingOwnership } from "@/components/PricingOwnership";
 import { SafetyOwnershipBlock } from "@/components/SafetyOwnershipBlock";
 import { ContinueExploringSection } from "@/components/ContinueExploringSection";
+import { RequirePremium } from "@/components/RequirePremium";
 import { getUiCopy, resolveLang } from "@/i18n/localized-content";
 import { LLink } from "@/i18n/routing";
 
@@ -181,7 +182,9 @@ const CarDetail = () => {
         </div>
       </section>
 
-      <PricingOwnership car={car} />
+      <RequirePremium fallbackHeightClassName="min-h-[340px]">
+        <PricingOwnership car={car} />
+      </RequirePremium>
       <SafetyOwnershipBlock car={car} />
 
       {(() => {

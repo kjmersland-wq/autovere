@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { getSubscriptionStatus, hasActiveSubscription } from '@/lib/subscription';
 
 export type Subscription = {
   id: string;
   subscription_status: string | null;
+  plan_type: string | null;
   billing_interval: 'month' | 'year' | null;
   current_period_end: string | null;
   stripe_subscription_id: string | null;
@@ -19,7 +21,7 @@ export function useSubscription() {
     const { data } = await supabase
       .from('subscriptions')
       .select(
-        'id,subscription_status,billing_interval,current_period_end,stripe_subscription_id,stripe_customer_id'
+        'id,subscription_status,plan_type,billing_interval,current_period_end,stripe_subscription_id,stripe_customer_id'
       )
       .eq('user_id', uid)
       .order('updated_at', { ascending: false })
@@ -59,14 +61,15 @@ export function useSubscription() {
     };
   }, []);
 
-  const subscriptionStatus = subscription?.subscription_status ?? '';
-  const periodEnd = subscription?.current_period_end ? new Date(subscription.current_period_end) : null;
-  const now = new Date();
+  const subscriptionStatus = getSubscriptionStatus(subscription);
+  const isActive = hasActiveSubscription(subscription);
 
-  const isActive =
-    !!subscription &&
-    ((['active', 'trialing', 'past_due'].includes(subscriptionStatus) && (!periodEnd || periodEnd > now)) ||
-      (subscriptionStatus === 'canceled' && !!periodEnd && periodEnd > now));
-
-  return { subscription, isActive, loading, userId, refetch: () => userId && fetchSub(userId) };
+  return {
+    subscription,
+    subscriptionStatus,
+    isActive,
+    loading,
+    userId,
+    refetch: () => userId && fetchSub(userId),
+  };
 }

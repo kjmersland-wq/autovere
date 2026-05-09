@@ -8,6 +8,8 @@ import { CARS, getCar } from "@/data/cars";
 import { useSafetyIntelligence } from "@/hooks/use-safety-intelligence";
 import { CompareIntelligenceSection } from "@/components/CompareIntelligenceSection";
 import { CompareNextStepsSection } from "@/components/CompareNextStepsSection";
+import { RequirePremium } from "@/components/RequirePremium";
+import { usePremium } from "@/hooks/usePremium";
 import type { Car } from "@/data/cars";
 import { resolveLang } from "@/i18n/localized-content";
 import { LLink } from "@/i18n/routing";
@@ -25,7 +27,8 @@ const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string;
 
 const FeelCard = ({ car }: { car: Car }) => {
   const { t, i18n } = useTranslation();
-  const { data, loading } = useSafetyIntelligence(car.name, car.type, car.lifestyle);
+  const { isPremium } = usePremium();
+  const { data, loading } = useSafetyIntelligence(car.name, car.type, car.lifestyle, isPremium);
   return (
     <div className="glass rounded-3xl p-7 space-y-5">
       <div>
@@ -143,14 +146,16 @@ const Compare = () => {
         <Row label={t("pages.compare.lifestyle")} a={a.lifestyle} b={b.lifestyle} />
       </section>
 
-      <section className="container pb-20">
-        <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.compare.ai_consensus")}</div>
-        <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">{t("pages.compare.ai_consensus_h")}</h2>
-        <div className="grid md:grid-cols-2 gap-6">
-          <FeelCard car={a} />
-          <FeelCard car={b} />
-        </div>
-      </section>
+      <RequirePremium fallbackHeightClassName="min-h-[280px]">
+        <section className="container pb-20">
+          <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.compare.ai_consensus")}</div>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-8">{t("pages.compare.ai_consensus_h")}</h2>
+          <div className="grid md:grid-cols-2 gap-6">
+            <FeelCard car={a} />
+            <FeelCard car={b} />
+          </div>
+        </section>
+      </RequirePremium>
 
       <CompareNextStepsSection a={a} b={b} />
 

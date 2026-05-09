@@ -13,6 +13,7 @@ import { detectLangFromPath, localizePath } from '@/i18n/routing';
 import { LLink } from '@/i18n/routing';
 import { formatEurFromCents } from '@/lib/currency';
 import { BILLING_PLANS } from '@/lib/pricing';
+import { trackAnalyticsEvent } from '@/lib/analytics';
 
 const Pricing = () => {
   const { t } = useTranslation();
@@ -32,17 +33,24 @@ const Pricing = () => {
   const intervalLabel = interval === 'month' ? t('pages.pricing.monthly') : t('pages.pricing.yearly');
 
   useEffect(() => {
+    trackAnalyticsEvent('pricing_view', { locale: lang });
+  }, [lang]);
+
+  useEffect(() => {
     const params = new URLSearchParams(window.location.search);
     const checkout = params.get('checkout');
 
     if (checkout === 'success') {
       toast.success(t('pages.pricing.welcome_premium'));
       refetch();
+      trackAnalyticsEvent('checkout_completed', { locale: lang });
+      trackAnalyticsEvent('premium_activated', { locale: lang });
       return;
     }
 
     if (checkout === 'canceled') {
       toast.info(t('pages.pricing.cancel_anytime'));
+      trackAnalyticsEvent('subscription_cancelled', { locale: lang });
       return;
     }
 
@@ -54,7 +62,7 @@ const Pricing = () => {
     if (params.get('portal') === 'returned') {
       refetch();
     }
-  }, [refetch, t]);
+  }, [refetch, t, lang]);
 
   const handleSubscribe = async () => {
     const {

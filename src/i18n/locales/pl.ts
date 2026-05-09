@@ -581,6 +581,14 @@ const pl: Translation = {
       redirect_auto: "Przekierowanie za {{count}}s…",
     },
   },
+  premium: {
+    lock: {
+      eyebrow: "Dostęp Premium",
+      title: "Odblokuj zaawansowaną inteligencję AUTOVERE",
+      body: "Ta funkcja jest częścią Premium i obejmuje zaawansowane analizy AI, analizę kosztów posiadania oraz raporty premium.",
+      cta: "Odblokuj Premium",
+    },
+  },
 };
 
 export default pl;

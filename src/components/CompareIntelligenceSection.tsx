@@ -1,5 +1,9 @@
 import { Play, Sparkles, Users, Clock, ShieldCheck } from "lucide-react";
 import { useCompareIntelligence } from "@/hooks/use-compare-intelligence";
+import { usePremium } from "@/hooks/usePremium";
+import { useTranslation } from "react-i18next";
+import { Button } from "@/components/ui/button";
+import { LLink } from "@/i18n/routing";
 
 const formatViews = (v?: string) => {
   if (!v) return "";
@@ -18,7 +22,28 @@ type Props = {
 };
 
 export const CompareIntelligenceSection = ({ aSlug, bSlug, aName, bName }: Props) => {
-  const { data, loading } = useCompareIntelligence(aSlug, bSlug, aName, bName);
+  const { t } = useTranslation();
+  const { isPremium } = usePremium();
+  const { data, loading, errorCode } = useCompareIntelligence(aSlug, bSlug, aName, bName, isPremium);
+
+  if (!isPremium || errorCode === "premium_required") {
+    return (
+      <section className="container pb-24">
+        <div className="glass rounded-3xl p-10 text-center">
+          <div className="text-[11px] uppercase tracking-[0.3em] text-accent mb-4 flex items-center justify-center gap-2">
+            <Sparkles className="w-3 h-3" /> {t("premium.lock.eyebrow")}
+          </div>
+          <h3 className="text-2xl md:text-3xl font-semibold mb-4">{t("premium.lock.title")}</h3>
+          <p className="text-muted-foreground">{t("premium.lock.body")}</p>
+          <div className="mt-6">
+            <Button asChild className="bg-gradient-primary hover:opacity-90 rounded-xl">
+              <LLink to="/pricing">{t("premium.lock.cta")}</LLink>
+            </Button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="container pb-24">

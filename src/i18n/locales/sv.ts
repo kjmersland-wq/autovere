@@ -583,6 +583,14 @@ const sv: Translation = {
       redirect_auto: "Tar dig dit om {{count}}s…",
     },
   },
+  premium: {
+    lock: {
+      eyebrow: "Premium-åtkomst",
+      title: "Lås upp avancerad AUTOVERE-intelligens",
+      body: "Den här funktionen ingår i Premium och innehåller avancerade AI-insikter, ägaranalys och premiumrapporter.",
+      cta: "Lås upp Premium",
+    },
+  },
 };
 
 export default sv;

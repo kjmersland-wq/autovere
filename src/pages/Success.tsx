@@ -6,6 +6,7 @@ import { PageShell } from '@/components/PageShell';
 import { SEO } from '@/components/SEO';
 import { Button } from '@/components/ui/button';
 import { LLink, detectLangFromPath, localizePath } from '@/i18n/routing';
+import { trackAnalyticsEvent } from '@/lib/analytics';
 
 const REDIRECT_SECONDS = 5;
 const PREMIUM_FEATURE_COUNT = 8;
@@ -18,6 +19,11 @@ const Success = () => {
   const [countdown, setCountdown] = useState(REDIRECT_SECONDS);
 
   const homePath = localizePath('/', lang);
+
+  useEffect(() => {
+    trackAnalyticsEvent('checkout_completed', { locale: lang });
+    trackAnalyticsEvent('premium_activated', { locale: lang });
+  }, [lang]);
 
   useEffect(() => {
     if (countdown <= 0) {

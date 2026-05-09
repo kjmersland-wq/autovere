@@ -582,6 +582,14 @@ const no: Translation = {
       redirect_auto: "Tar deg dit om {{count}}s…",
     },
   },
+  premium: {
+    lock: {
+      eyebrow: "Premium-tilgang",
+      title: "Lås opp avansert AUTOVERE-intelligens",
+      body: "Denne funksjonen er en del av Premium og inkluderer avansert AI-innsikt, eierskapsanalyse og premiumrapporter.",
+      cta: "Lås opp Premium",
+    },
+  },
 };
 
 export default no;

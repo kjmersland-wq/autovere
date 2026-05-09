@@ -21,13 +21,18 @@ export type SafetyIntelligence = {
   sources: string[];
 };
 
-export function useSafetyIntelligence(carName: string | undefined, carType?: string, context?: string) {
+export function useSafetyIntelligence(
+  carName: string | undefined,
+  carType?: string,
+  context?: string,
+  enabled = true
+) {
   const [data, setData] = useState<SafetyIntelligence | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!carName) return;
+    if (!carName || !enabled) return;
     let cancelled = false;
     setLoading(true);
     setError(null);
@@ -49,7 +54,7 @@ export function useSafetyIntelligence(carName: string | undefined, carType?: str
     return () => {
       cancelled = true;
     };
-  }, [carName, carType, context]);
+  }, [carName, carType, context, enabled]);
 
   return { data, loading, error };
 }

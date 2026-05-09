@@ -7,6 +7,25 @@ const supabase = createClient(
   Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 );
 
+const isPremiumStatus = (status: string, periodEndIso: string | null) => {
+  const periodEnd = periodEndIso ? new Date(periodEndIso).getTime() : null;
+  const now = Date.now();
+  if (['active', 'trialing', 'past_due'].includes(status)) {
+    return !periodEnd || periodEnd > now;
+  }
+  if (status === 'canceled') {
+    return !!periodEnd && periodEnd > now;
+  }
+  return false;
+};
+
+const toPlanType = (billingInterval: 'month' | 'year' | null, premium: boolean) => {
+  if (!premium) return 'free';
+  if (billingInterval === 'month') return 'premium_monthly';
+  if (billingInterval === 'year') return 'premium_yearly';
+  return 'premium';
+};
+
 const pickUserId = async (
   subscription: Stripe.Subscription,
   customerId: string
@@ -48,22 +67,41 @@ const upsertFromSubscription = async (subscription: Stripe.Subscription) => {
 
   const price = subscription.items.data[0]?.price;
   const billingInterval = getBillingInterval(subscription);
+  const status = subscription.status;
+  const currentPeriodEnd = toIso(subscription.current_period_end);
+  const premium = isPremiumStatus(status, currentPeriodEnd);
+  const planType = toPlanType(billingInterval, premium);
 
   await supabase.from('subscriptions').upsert(
     {
       user_id: userId,
       stripe_customer_id: customerId,
       stripe_subscription_id: subscription.id,
-      subscription_status: subscription.status,
-      status: subscription.status,
-      current_period_end: toIso(subscription.current_period_end),
+      subscription_status: status,
+      status,
+      current_period_end: currentPeriodEnd,
       billing_interval: billingInterval,
       price_id: price?.id ?? 'unknown_price',
       product_id: typeof price?.product === 'string' ? price.product : (price?.product?.id ?? 'unknown_product'),
+      plan_type: planType,
       environment: stripeEnvironment(),
       updated_at: new Date().toISOString(),
     },
     { onConflict: 'stripe_subscription_id' }
+  );
+
+  await supabase.from('profiles').upsert(
+    {
+      id: userId,
+      is_premium: premium,
+      subscription_status: status,
+      stripe_customer_id: customerId,
+      stripe_subscription_id: subscription.id,
+      current_period_end: currentPeriodEnd,
+      plan_type: planType,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: 'id' }
   );
 };
 
@@ -75,15 +113,33 @@ const handleCheckoutCompleted = async (session: Stripe.Checkout.Session) => {
 };
 
 const handleSubscriptionDeleted = async (subscription: Stripe.Subscription) => {
+  const customerId = typeof subscription.customer === 'string' ? subscription.customer : subscription.customer.id;
+  const userId = await pickUserId(subscription, customerId);
+  const currentPeriodEnd = toIso(subscription.current_period_end);
+  const premium = isPremiumStatus('canceled', currentPeriodEnd);
   await supabase
     .from('subscriptions')
     .update({
       subscription_status: 'canceled',
       status: 'canceled',
-      current_period_end: toIso(subscription.current_period_end),
+      current_period_end: currentPeriodEnd,
+      plan_type: toPlanType(getBillingInterval(subscription), premium),
       updated_at: new Date().toISOString(),
     })
     .eq('stripe_subscription_id', subscription.id);
+
+  if (userId) {
+    await supabase
+      .from('profiles')
+      .update({
+        is_premium: premium,
+        subscription_status: 'canceled',
+        current_period_end: currentPeriodEnd,
+        plan_type: toPlanType(getBillingInterval(subscription), premium),
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', userId);
+  }
 };
 
 const handlePaymentFailed = async (invoice: Stripe.Invoice) => {
@@ -115,6 +171,7 @@ Deno.serve(async (req) => {
   if (req.method !== 'POST') {
     return new Response('Method not allowed', { status: 405 });
   }
+  const requestId = crypto.randomUUID();
 
   try {
     const signature = req.headers.get('stripe-signature');
@@ -123,9 +180,15 @@ Deno.serve(async (req) => {
     const body = await req.text();
     const stripe = getStripe();
     const event = await stripe.webhooks.constructEventAsync(body, signature, getWebhookSecret());
+    console.info('stripe-webhook event received', {
+      requestId,
+      eventId: event.id,
+      eventType: event.type,
+    });
 
     const shouldProcess = await markEventProcessed(event);
     if (!shouldProcess) {
+      console.info('stripe-webhook duplicate skipped', { requestId, eventId: event.id, eventType: event.type });
       return new Response(JSON.stringify({ received: true, idempotent: true }), {
         status: 200,
         headers: { 'Content-Type': 'application/json' },
@@ -135,26 +198,38 @@ Deno.serve(async (req) => {
     switch (event.type) {
       case 'checkout.session.completed':
         await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session);
+        console.info('analytics_event', { requestId, name: 'checkout_completed', eventId: event.id });
+        console.info('analytics_event', { requestId, name: 'premium_activated', eventId: event.id });
+        break;
+      case 'customer.subscription.created':
+        await upsertFromSubscription(event.data.object as Stripe.Subscription);
         break;
       case 'customer.subscription.updated':
         await upsertFromSubscription(event.data.object as Stripe.Subscription);
         break;
       case 'customer.subscription.deleted':
         await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
+        console.info('analytics_event', { requestId, name: 'subscription_cancelled', eventId: event.id });
         break;
       case 'invoice.payment_failed':
         await handlePaymentFailed(event.data.object as Stripe.Invoice);
         break;
       default:
+        console.info('stripe-webhook ignored event', { requestId, eventId: event.id, eventType: event.type });
         break;
     }
 
+    console.info('stripe-webhook event processed', {
+      requestId,
+      eventId: event.id,
+      eventType: event.type,
+    });
     return new Response(JSON.stringify({ received: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
   } catch (error) {
-    console.error('stripe-webhook failed to process event', error);
+    console.error('stripe-webhook failed to process event', { requestId, error });
     return new Response('Failed to process webhook event', { status: 400 });
   }
 });

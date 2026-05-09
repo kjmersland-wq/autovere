@@ -584,6 +584,14 @@ const fr: Translation = {
       redirect_auto: "Redirection dans {{count}}s…",
     },
   },
+  premium: {
+    lock: {
+      eyebrow: "Accès Premium",
+      title: "Débloquez l'intelligence AUTOVERE avancée",
+      body: "Cette fonctionnalité fait partie de Premium et inclut des insights IA avancés, une analyse de possession et des rapports premium.",
+      cta: "Débloquer Premium",
+    },
+  },
 };
 
 export default fr;

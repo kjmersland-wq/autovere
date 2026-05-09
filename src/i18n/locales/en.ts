@@ -579,6 +579,14 @@ const en = {
       redirect_auto: "Taking you there in {{count}}s…",
     },
   },
+  premium: {
+    lock: {
+      eyebrow: "Premium access",
+      title: "Unlock advanced AUTOVERE intelligence",
+      body: "This feature is part of Premium and includes advanced AI insights, ownership analysis, and premium reports.",
+      cta: "Unlock Premium",
+    },
+  },
 };
 
 type DeepPartialString<T> = {

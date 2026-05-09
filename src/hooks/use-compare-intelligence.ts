@@ -27,50 +27,53 @@ export const useCompareIntelligence = (
   bSlug: string,
   aName: string,
   bName: string,
+  enabled = true,
 ) => {
   const [data, setData] = useState<CompareInsight | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [errorCode, setErrorCode] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!aSlug || !bSlug) return;
+    if (!enabled || !aSlug || !bSlug) return;
     let active = true;
     setLoading(true);
+    setErrorCode(null);
+
     (async () => {
-      try {
-        const { data: res, error } = await supabase.functions.invoke(
-          "compare-intelligence",
-          {
-            body: null,
-            // pass via query string — supabase-js .invoke supports it via headers? no — use fetch fallback
-          },
-        );
-        // supabase.functions.invoke does not pass query params; use raw fetch instead
-        if (!res || error) throw new Error("invoke failed");
-      } catch {
-        // fallback raw fetch
+      const { data: res, error } = await supabase.functions.invoke("compare-intelligence", {
+        body: {
+          a: aSlug,
+          b: bSlug,
+          aName,
+          bName,
+        },
+      });
+
+      if (!active) return;
+
+      if (error) {
+        setData(null);
+        const payload = (error as { context?: { json?: () => Promise<unknown> } })?.context;
+        if (payload?.json) {
+          try {
+            const json = (await payload.json()) as { error?: { code?: string } };
+            setErrorCode(json?.error?.code ?? "unknown");
+          } catch {
+            setErrorCode("unknown");
+          }
+        } else {
+          setErrorCode("unknown");
+        }
+      } else {
+        setData((res as { insight?: CompareInsight })?.insight ?? null);
       }
-      try {
-        const params = new URLSearchParams({ a: aSlug, b: bSlug, aName, bName });
-        const res = await fetch(
-          `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/compare-intelligence?${params}`,
-          {
-            headers: {
-              Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-            },
-          },
-        );
-        const json = await res.json();
-        if (active && json?.insight) setData(json.insight);
-      } catch {
-        /* swallow */
-      } finally {
-        if (active) setLoading(false);
-      }
+      setLoading(false);
     })();
+
     return () => {
       active = false;
     };
-  }, [aSlug, bSlug, aName, bName]);
+  }, [enabled, aSlug, bSlug, aName, bName]);
 
-  return { data, loading };
+  return { data, loading, errorCode };
 };
