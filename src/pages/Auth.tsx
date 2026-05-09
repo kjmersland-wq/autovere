@@ -14,7 +14,13 @@ import type { Lang } from '@/i18n/config';
 const getSafeNextPath = (search: string, lang: Lang): string => {
   const params = new URLSearchParams(search);
   const next = params.get('next');
-  if (!next || !next.startsWith('/') || next.startsWith('//')) {
+  if (
+    !next ||
+    !next.startsWith('/') ||
+    next.startsWith('//') ||
+    next.includes('://') ||
+    next.includes('\\')
+  ) {
     return localizePath('/pricing', lang);
   }
   return localizePath(next, lang);

@@ -153,7 +153,8 @@ Deno.serve(async (req) => {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
     });
-  } catch {
-    return new Response('Webhook error', { status: 400 });
+  } catch (error) {
+    console.error('stripe-webhook failed to process event', error);
+    return new Response('Failed to process webhook event', { status: 400 });
   }
 });

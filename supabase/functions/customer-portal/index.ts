@@ -67,7 +67,8 @@ Deno.serve(async (req) => {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-  } catch {
+  } catch (error) {
+    console.error('customer-portal failed', error);
     return new Response(JSON.stringify({ error: 'Unable to open billing portal. Please try again.' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },

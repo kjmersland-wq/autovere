@@ -22,7 +22,8 @@ export function useStripeCheckout() {
 
       if (error || !data?.url) throw new Error('checkout_failed');
       window.location.assign(data.url as string);
-    } catch {
+    } catch (error) {
+      console.error('Stripe checkout launch failed', error);
       toast.error('Could not open checkout. Please try again.');
     } finally {
       setLoading(false);

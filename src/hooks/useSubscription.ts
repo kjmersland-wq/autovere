@@ -59,14 +59,14 @@ export function useSubscription() {
     };
   }, []);
 
-  const status = subscription?.subscription_status ?? '';
+  const subscriptionStatus = subscription?.subscription_status ?? '';
   const periodEnd = subscription?.current_period_end ? new Date(subscription.current_period_end) : null;
   const now = new Date();
 
   const isActive =
     !!subscription &&
-    ((['active', 'trialing', 'past_due'].includes(status) && (!periodEnd || periodEnd > now)) ||
-      (status === 'canceled' && !!periodEnd && periodEnd > now));
+    ((['active', 'trialing', 'past_due'].includes(subscriptionStatus) && (!periodEnd || periodEnd > now)) ||
+      (subscriptionStatus === 'canceled' && !!periodEnd && periodEnd > now));
 
   return { subscription, isActive, loading, userId, refetch: () => userId && fetchSub(userId) };
 }

@@ -88,7 +88,8 @@ Deno.serve(async (req) => {
       status: 200,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-  } catch {
+  } catch (error) {
+    console.error('create-stripe-checkout failed', error);
     return new Response(JSON.stringify({ error: 'Unable to start checkout. Please try again.' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
