@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Check, Sparkles, Heart, ArrowRight, ShieldCheck, Infinity as InfinityIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -6,14 +6,19 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
+import { detectLegacyPaymentRuntime, logPaymentDiagnostic } from "@/lib/payments";
+import { LLink, localizePath, useLang } from "@/i18n/routing";
 import { toast } from "sonner";
 
 const Pricing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
+  const lang = useLang();
+  const pricingPath = localizePath("/pricing", lang);
+  const authPath = localizePath("/auth", lang);
+  const { openCheckout, loading: checkoutLoading } = useStripeCheckout();
   const { isActive, subscription, userId, refetch } = useSubscription();
   const [interval, setInterval] = useState<"month" | "year">("month");
   const [portalLoading, setPortalLoading] = useState(false);
@@ -22,31 +27,44 @@ const Pricing = () => {
   const PREMIUM = t("pages.pricing.premium_features", { returnObjects: true }) as string[];
 
   useEffect(() => {
+    detectLegacyPaymentRuntime();
+    logPaymentDiagnostic("pricing-provider-active", {
+      checkoutEndpoint: "create-stripe-checkout",
+      pricingPath,
+    });
     const params = new URLSearchParams(window.location.search);
     if (params.get("checkout") === "success") {
       toast.success(t("pages.pricing.welcome_premium"));
       refetch();
     }
-  }, [refetch, t]);
+  }, [pricingPath, refetch, t]);
 
   const handleSubscribe = async () => {
     const priceId = interval === "month" ? "premium_monthly" : "premium_yearly";
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       toast.info(t("pages.pricing.please_sign_in"));
-      navigate("/auth");
+      navigate(`${authPath}?next=${encodeURIComponent(pricingPath)}`);
       return;
     }
-    await openCheckout({ priceId, customerEmail: user.email, userId: user.id });
+    await openCheckout({
+      priceId,
+      successPath: `${pricingPath}?checkout=success`,
+      cancelPath: pricingPath,
+    });
   };
 
   const openPortal = async () => {
     setPortalLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("customer-portal", {
-        body: { environment: subscription ? (await import("@/lib/paddle")).getPaddleEnvironment() : "sandbox" },
+        body: { returnPath: pricingPath },
       });
       if (error || !data?.url) throw new Error("Could not open portal");
+      logPaymentDiagnostic("portal-redirect", {
+        endpoint: "customer-portal",
+        redirectUrl: data.url,
+      });
       window.open(data.url, "_blank");
     } catch (e) {
       toast.error(t("pages.pricing.portal_error"));
@@ -89,7 +107,7 @@ const Pricing = () => {
             ))}
           </ul>
           <Button asChild variant="outline" className="rounded-xl border-border/60 hover:bg-secondary/40">
-            <Link to="/#advisor">{t("pages.pricing.free_cta")} <ArrowRight className="w-4 h-4 ml-1" /></Link>
+            <LLink to="/#advisor">{t("pages.pricing.free_cta")} <ArrowRight className="w-4 h-4 ml-1" /></LLink>
           </Button>
         </div>
 

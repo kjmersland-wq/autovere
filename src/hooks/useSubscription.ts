@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { getPaddleEnvironment } from "@/lib/paddle";
+import { detectLegacyPaymentRuntime, getClientBillingMode, logPaymentDiagnostic } from "@/lib/payments";
 
 export type Subscription = {
   id: string;
@@ -17,7 +17,7 @@ export function useSubscription() {
   const [userId, setUserId] = useState<string | null>(null);
 
   const fetchSub = async (uid: string) => {
-    const env = getPaddleEnvironment();
+    const env = getClientBillingMode();
     const { data } = await supabase
       .from("subscriptions")
       .select("id,status,price_id,product_id,current_period_end,cancel_at_period_end")
@@ -32,6 +32,8 @@ export function useSubscription() {
 
   useEffect(() => {
     let channel: ReturnType<typeof supabase.channel> | null = null;
+    detectLegacyPaymentRuntime();
+    logPaymentDiagnostic("subscription-provider-active", { environment: getClientBillingMode() });
     supabase.auth.getUser().then(({ data }) => {
       const uid = data.user?.id ?? null;
       setUserId(uid);
