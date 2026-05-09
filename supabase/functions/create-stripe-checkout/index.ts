@@ -104,7 +104,7 @@ Deno.serve(async (req) => {
       requestId,
       error: String(error),
     });
-    return new Response(JSON.stringify({ error: String(error) }), {
+    return new Response(JSON.stringify({ error: 'Checkout session creation failed', requestId }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       status: 400,
     });
