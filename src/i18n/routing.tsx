@@ -1,6 +1,6 @@
 import { Link, LinkProps, useLocation, useParams } from "react-router-dom";
 import { forwardRef } from "react";
-import { SUPPORTED_LANGS, type Lang, DEFAULT_LANG } from "@/i18n/config";
+import { SUPPORTED_LANGS, type Lang, DEFAULT_LANG } from "@/i18n/locales";
 
 export const detectLangFromPath = (pathname: string): Lang => {
   const seg = pathname.split("/").filter(Boolean)[0];

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { initializePaddle, getPaddlePriceId } from "@/lib/paddle";
 import { toast } from "sonner";
+import { detectLangFromPath, localizePath } from "@/i18n/routing";
 
 export function usePaddleCheckout() {
   const [loading, setLoading] = useState(false);
@@ -22,7 +23,9 @@ export function usePaddleCheckout() {
         customData: options.userId ? { userId: options.userId } : undefined,
         settings: {
           displayMode: "overlay",
-          successUrl: options.successUrl || `${window.location.origin}/pricing?checkout=success`,
+          successUrl:
+            options.successUrl ||
+            `${window.location.origin}${localizePath("/pricing", detectLangFromPath(window.location.pathname))}?checkout=success`,
           allowLogout: false,
           variant: "one-page",
         },

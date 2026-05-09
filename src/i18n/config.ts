@@ -5,18 +5,13 @@ import no from "./locales/no";
 import de from "./locales/de";
 import sv from "./locales/sv";
 import fr from "./locales/fr";
+import pl from "./locales/pl";
+import it from "./locales/it";
+import es from "./locales/es";
+import { SUPPORTED_LANGS, type Lang, DEFAULT_LANG, LANG_LABELS } from "./locales";
 
-export const SUPPORTED_LANGS = ["en", "no", "de", "sv", "fr"] as const;
-export type Lang = (typeof SUPPORTED_LANGS)[number];
-export const DEFAULT_LANG: Lang = "en";
-
-export const LANG_LABELS: Record<Lang, string> = {
-  en: "English",
-  no: "Norsk",
-  de: "Deutsch",
-  sv: "Svenska",
-  fr: "Français",
-};
+export { SUPPORTED_LANGS, DEFAULT_LANG, LANG_LABELS };
+export type { Lang };
 
 i18n.use(initReactI18next).init({
   resources: {
@@ -25,6 +20,9 @@ i18n.use(initReactI18next).init({
     de: { translation: de },
     sv: { translation: sv },
     fr: { translation: fr },
+    pl: { translation: pl },
+    it: { translation: it },
+    es: { translation: es },
   },
   lng: DEFAULT_LANG,
   fallbackLng: DEFAULT_LANG,
