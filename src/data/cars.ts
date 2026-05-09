@@ -6,6 +6,18 @@ import sceneNordic from "@/assets/scene-nordic.jpg";
 import sceneRoad from "@/assets/scene-roadtrip.jpg";
 import sceneQuiet from "@/assets/scene-quiet.jpg";
 import sceneCity from "@/assets/scene-city.jpg";
+import {
+  CAR_TEXT,
+  COLLECTION_TEXT,
+  LEARN_CATEGORY_TEXT,
+  LEARN_TEXT,
+  PERSONALITY_TEXT,
+} from "@/data/catalog-content";
+import {
+  resolveCatalogLang,
+  resolveLocalizedList,
+  resolveLocalizedString,
+} from "@/data/localized";
 
 export type Car = {
   slug: string;
@@ -31,198 +43,163 @@ export type Car = {
   seats?: number;
   startingPrice?: string;
   drivetrain?: string;
-  comparesWellWith: string[]; // other slugs
+  comparesWellWith: string[];
 };
 
-export const CARS: Car[] = [
+type CarMeta = {
+  slug: string;
+  brand: string;
+  score: number;
+  hero: string;
+  gallery: string[];
+  seats?: number;
+  comparesWellWith: string[];
+};
+
+const CAR_META: CarMeta[] = [
   {
     slug: "polestar-3",
-    name: "Polestar 3",
     brand: "Polestar",
-    type: "Electric SUV",
-    tagline: "Calm, refined, Scandinavian.",
-    fit: "Quiet confidence",
     score: 96,
-    tag: "Best for cold climates",
     hero: carSnow,
     gallery: [carSnow, sceneNordic, sceneQuiet],
-    summary:
-      "The Polestar 3 doesn't try to impress you — it tries to settle you. Its design is minimalist Scandinavian craft, and on cold roads it feels uncannily composed. This is a car for people who choose quietness as a luxury.",
-    personality: "Calm Explorer · Quiet Executive",
-    comfort: "Long-distance posture, cabin sealed against road noise, suspension tuned for composure over sport.",
-    climate: "Excellent in winter — AWD, heat pump, pre-conditioning, and cabin warmth that holds at -15°.",
-    practicality: "Spacious for two adults plus gear; family-capable but not minivan-roomy.",
-    ownership: "Direct-to-customer service, modest annual costs, software updates that improve the car over time.",
-    strengths: [
-      "Genuinely quiet at highway speeds",
-      "Composed AWD on snow and ice",
-      "Interior that feels handmade",
-      "Restraint instead of screen overload",
-    ],
-    tradeoffs: [
-      "Range is good, not class-leading",
-      "Rear visibility is sculpted, not generous",
-      "Service network still maturing in some regions",
-    ],
-    lifestyle:
-      "Built for a person who drives to think. Long winter weekends, mountain cabins, the kind of commute you don't dread.",
-    range: "560 km WLTP",
     seats: 5,
-    startingPrice: "from €78,000",
-    drivetrain: "Dual-motor AWD",
     comparesWellWith: ["volvo-ex90", "bmw-i5"],
   },
   {
     slug: "bmw-i5",
-    name: "BMW i5",
     brand: "BMW",
-    type: "Executive EV Sedan",
-    tagline: "Drives like a sport sedan, pampers like a flagship.",
-    fit: "Spirited & refined",
     score: 93,
-    tag: "Best for daily drivers",
     hero: carSedan,
     gallery: [carSedan, sceneNight, sceneCity],
-    summary:
-      "The i5 is what happens when an executive sedan stops apologising for being electric. It steers like a 5 Series should, but its silence reframes every commute as something close to meditation.",
-    personality: "Quiet Executive · Performance Romantic",
-    comfort: "Ergonomically obsessive seats, supple ride, cabin acoustics that absorb the city.",
-    climate: "Strong all-rounder; rear-bias variants prefer dry tarmac, AWD model handles wet and snow with confidence.",
-    practicality: "Saloon space, generous boot, but lower step-in than an SUV.",
-    ownership: "Premium servicing, strong residuals, software ecosystem that keeps maturing.",
-    strengths: [
-      "Steering feel that still rewards",
-      "Quiet, unhurried highway character",
-      "Tech that feels considered, not flashy",
-      "Comfortable across long distances",
-    ],
-    tradeoffs: [
-      "Premium pricing for premium feel",
-      "Curved display polarises",
-      "Rear headroom slightly compromised by roofline",
-    ],
-    lifestyle:
-      "For someone who drives a lot, alone, and treats the commute as personal time. Confident in the city, calm on the motorway.",
-    range: "505 km WLTP",
     seats: 5,
-    startingPrice: "from €72,000",
-    drivetrain: "RWD or AWD",
     comparesWellWith: ["mercedes-eqe", "polestar-3"],
   },
   {
     slug: "volvo-ex90",
-    name: "Volvo EX90",
     brand: "Volvo",
-    type: "Family Electric SUV",
-    tagline: "Quietly capable. Family-first, beautifully understated.",
-    fit: "Quietly capable",
     score: 95,
-    tag: "Best for families",
     hero: carFamily,
     gallery: [carFamily, sceneRoad, sceneNordic],
-    summary:
-      "The EX90 is what families ask for when they stop pretending they want a sports car. It's spacious, safe, calm, and quietly luxurious — the antidote to the over-styled three-row SUV.",
-    personality: "Calm Explorer · Weekend Escapist",
-    comfort: "Three real rows, quiet cabin, materials that age gracefully.",
-    climate: "Designed in Sweden — winter is its native habitat. Pre-conditioning, AWD, heated everything.",
-    practicality: "Genuine 7-seater capability, big boot, easy car-seat geometry.",
-    ownership: "Volvo dealer comfort, predictable maintenance, strong safety reputation.",
-    strengths: [
-      "Spacious without feeling oversized",
-      "Genuine winter competence",
-      "Calm, uncluttered interior",
-      "Class-leading safety architecture",
-    ],
-    tradeoffs: [
-      "Software has matured slowly",
-      "Not the sportiest steering",
-      "Charging speeds are good, not exceptional",
-    ],
-    lifestyle:
-      "Built for families who'd rather feel calm than impressive. Long road trips, school runs, and ski weekends without compromise.",
-    range: "600 km WLTP",
     seats: 7,
-    startingPrice: "from €85,000",
-    drivetrain: "Dual-motor AWD",
     comparesWellWith: ["kia-ev9", "polestar-3"],
   },
   {
     slug: "mercedes-eqe",
-    name: "Mercedes EQE",
     brand: "Mercedes-Benz",
-    type: "Executive EV Sedan",
-    tagline: "Quiet luxury, the German way.",
-    fit: "Refined & insulated",
     score: 91,
-    tag: "Quiet luxury",
     hero: sceneQuiet,
     gallery: [sceneQuiet, sceneNight, carSedan],
-    summary:
-      "The EQE is a serene, sound-isolated sanctuary on wheels — closer in spirit to an S-Class than a sport sedan. It rewards passengers as much as drivers.",
-    personality: "Quiet Executive · Calm Explorer",
-    comfort: "Air suspension, near-silent cabin, seats engineered for hours, not minutes.",
-    climate: "Comfortable in any weather; AWD variants competent in snow.",
-    practicality: "Sedan boot, generous rear legroom, lower roofline than an SUV.",
-    ownership: "Dense Mercedes service network, strong long-distance support.",
-    strengths: [
-      "Cabin quietness in a class of its own",
-      "Long-distance composure",
-      "Ride quality on air suspension",
-      "Brand prestige and resale support",
-    ],
-    tradeoffs: [
-      "Hyperscreen is overwhelming for some",
-      "Steering feel is calmer than communicative",
-      "Styling is divisive",
-    ],
-    lifestyle:
-      "For people who value silence over speed. Executives, long-distance commuters, anyone who treats driving as decompression.",
-    range: "590 km WLTP",
     seats: 5,
-    startingPrice: "from €74,000",
-    drivetrain: "RWD or AWD",
     comparesWellWith: ["bmw-i5"],
   },
   {
     slug: "kia-ev9",
-    name: "Kia EV9",
     brand: "Kia",
-    type: "Family Electric SUV",
-    tagline: "Three rows, real presence, surprising calm.",
-    fit: "Spacious & honest",
     score: 92,
-    tag: "Best family value",
     hero: sceneRoad,
     gallery: [sceneRoad, carFamily, sceneCity],
-    summary:
-      "The EV9 is the family SUV many people didn't realise they wanted. It's huge inside, charges fast, and feels considered in a way Kia's competitors are still catching up to.",
-    personality: "Weekend Escapist · Calm Explorer",
-    comfort: "Lounge-like rear seats, flat floor, quiet cabin for the price.",
-    climate: "Capable AWD, winter-ready trims, fast charging that thrives on cold-weather road trips.",
-    practicality: "Best-in-class interior space, real 6 or 7-seat usability.",
-    ownership: "Strong warranty, increasingly mature dealer network, predictable cost of ownership.",
-    strengths: [
-      "Genuinely spacious three-row cabin",
-      "Fast 800V charging",
-      "Honest, calm design language",
-      "Aggressive value for the package",
-    ],
-    tradeoffs: [
-      "Not the most refined steering",
-      "Range with full load drops noticeably",
-      "Brand perception still evolving in premium segment",
-    ],
-    lifestyle:
-      "For families who want EX90-style space without EX90 pricing. Road trips, sports clubs, full-load weekend escapes.",
-    range: "563 km WLTP",
     seats: 7,
-    startingPrice: "from €72,000",
-    drivetrain: "RWD or AWD",
     comparesWellWith: ["volvo-ex90"],
   },
 ];
 
-export const getCar = (slug: string) => CARS.find((c) => c.slug === slug);
+const resolveCar = (meta: CarMeta, lang: string): Car => {
+  const resolvedLang = resolveCatalogLang(lang);
+  const text = CAR_TEXT[meta.slug];
+  const personalityNames = text.personalitySlugs
+    .map((personalitySlug) => {
+      const personality = PERSONALITY_TEXT[personalitySlug];
+      if (!personality) return personalitySlug;
+      return resolveLocalizedString(
+        personality.name,
+        resolvedLang,
+        `personality.${personalitySlug}.name`,
+      );
+    })
+    .join(" · ");
+
+  return {
+    ...meta,
+    name: resolveLocalizedString(text.name, resolvedLang, `car.${meta.slug}.name`),
+    type: resolveLocalizedString(text.type, resolvedLang, `car.${meta.slug}.type`),
+    tagline: resolveLocalizedString(
+      text.tagline,
+      resolvedLang,
+      `car.${meta.slug}.tagline`,
+    ),
+    fit: resolveLocalizedString(text.fit, resolvedLang, `car.${meta.slug}.fit`),
+    tag: resolveLocalizedString(text.tag, resolvedLang, `car.${meta.slug}.tag`),
+    summary: resolveLocalizedString(
+      text.summary,
+      resolvedLang,
+      `car.${meta.slug}.summary`,
+    ),
+    personality: personalityNames,
+    comfort: resolveLocalizedString(
+      text.comfort,
+      resolvedLang,
+      `car.${meta.slug}.comfort`,
+    ),
+    climate: resolveLocalizedString(
+      text.climate,
+      resolvedLang,
+      `car.${meta.slug}.climate`,
+    ),
+    practicality: resolveLocalizedString(
+      text.practicality,
+      resolvedLang,
+      `car.${meta.slug}.practicality`,
+    ),
+    ownership: resolveLocalizedString(
+      text.ownership,
+      resolvedLang,
+      `car.${meta.slug}.ownership`,
+    ),
+    strengths: resolveLocalizedList(
+      text.strengths,
+      resolvedLang,
+      `car.${meta.slug}.strengths`,
+    ),
+    tradeoffs: resolveLocalizedList(
+      text.tradeoffs,
+      resolvedLang,
+      `car.${meta.slug}.tradeoffs`,
+    ),
+    lifestyle: resolveLocalizedString(
+      text.lifestyle,
+      resolvedLang,
+      `car.${meta.slug}.lifestyle`,
+    ),
+    range: text.range
+      ? resolveLocalizedString(text.range, resolvedLang, `car.${meta.slug}.range`)
+      : undefined,
+    startingPrice: text.startingPrice
+      ? resolveLocalizedString(
+          text.startingPrice,
+          resolvedLang,
+          `car.${meta.slug}.startingPrice`,
+        )
+      : undefined,
+    drivetrain: text.drivetrain
+      ? resolveLocalizedString(
+          text.drivetrain,
+          resolvedLang,
+          `car.${meta.slug}.drivetrain`,
+        )
+      : undefined,
+  };
+};
+
+export const getCars = (lang: string = "en"): Car[] =>
+  CAR_META.map((meta) => resolveCar(meta, lang));
+
+export const CARS: Car[] = getCars();
+
+export const getCar = (slug: string, lang: string = "en") => {
+  const meta = CAR_META.find((car) => car.slug === slug);
+  return meta ? resolveCar(meta, lang) : undefined;
+};
 
 export type Collection = {
   slug: string;
@@ -230,104 +207,60 @@ export type Collection = {
   description: string;
   image: string;
   body: string;
-  cars: string[]; // slugs
+  cars: string[];
 };
 
-export const COLLECTIONS: Collection[] = [
-  {
-    slug: "nordic-winters",
-    title: "Best cars for Nordic winters",
-    description: "Composed on snow. Quiet on ice. Heated where it matters.",
-    image: carSnow,
-    body:
-      "Winter doesn't care about marketing. These are the cars AutoVere returns to when the temperature drops and the road disappears under snow — competent, calm, and comfortable in conditions where most cars become a chore.",
-    cars: ["polestar-3", "volvo-ex90", "kia-ev9"],
-  },
-  {
-    slug: "quiet-luxury",
-    title: "Quiet luxury EVs",
-    description: "Presence without announcement. Craft over chrome.",
-    image: sceneQuiet,
-    body:
-      "Luxury used to shout. The new generation whispers. These cars choose silence, restraint, and material honesty over chrome and badge theatre — they reward you every time you sit inside.",
-    cars: ["mercedes-eqe", "polestar-3", "bmw-i5"],
-  },
-  {
-    slug: "long-distance-comfort",
-    title: "Built for long-distance comfort",
-    description: "Six hours that should feel like one.",
-    image: sceneRoad,
-    body:
-      "Long drives expose every compromise. Seats betray you at hour four. Wind noise wears you down. These cars were engineered with the road trip in mind — and AutoVere ranks them for the reality, not the brochure.",
-    cars: ["mercedes-eqe", "volvo-ex90", "bmw-i5"],
-  },
-  {
-    slug: "underestimated",
-    title: "Cars people underestimated",
-    description: "Outside the spotlight. Inside, more thought than you'd expect.",
-    image: sceneCity,
-    body:
-      "Not every great car arrives with a marketing budget. These are the ones owners love more after a year, not less — quietly excellent, often overlooked, almost always the right answer.",
-    cars: ["kia-ev9", "polestar-3"],
-  },
-  {
-    slug: "best-family-evs",
-    title: "Best family EVs",
-    description: "Space, safety, and calm — without compromise.",
-    image: carFamily,
-    body:
-      "A family car is a quiet contract: safety, space, reliability, and a cabin that survives years of school runs and road trips. These EVs deliver on all of it, without losing what makes a great car feel great to drive.",
-    cars: ["volvo-ex90", "kia-ev9", "polestar-3"],
-  },
-  {
-    slug: "city-life",
-    title: "Cars built for city life",
-    description: "Composed in traffic. Confident in tight streets.",
-    image: sceneCity,
-    body:
-      "Cities punish bad cars. Visibility, footprint, low-speed refinement, and easy parking matter more than 0–100 times. These are AutoVere's calmest urban companions.",
-    cars: ["bmw-i5", "polestar-3"],
-  },
-  {
-    slug: "lowest-ownership-stress",
-    title: "Lowest ownership stress",
-    description: "Cars owners stop thinking about — in the best way.",
-    image: sceneNight,
-    body:
-      "The best ownership experience is the one you forget you're having. These cars combine reliable software, predictable service, and durable interiors — the kind that age into a relationship instead of out of one.",
-    cars: ["polestar-3", "volvo-ex90", "kia-ev9"],
-  },
-  {
-    slug: "reviewers-unexpectedly-loved",
-    title: "Cars reviewers unexpectedly loved",
-    description: "Quiet surprises that earned their respect.",
-    image: sceneRoad,
-    body:
-      "Some cars walk into a review with low expectations and walk out with a quiet kind of admiration. These are the ones reviewers kept coming back to — not because of headlines, but because of how the cars behave when no one is watching.",
-    cars: ["kia-ev9", "polestar-3", "bmw-i5"],
-  },
-  {
-    slug: "calm-highway-cruisers",
-    title: "Calm highway cruisers",
-    description: "Hours dissolve. The car simply continues.",
-    image: sceneRoad,
-    body:
-      "Highway driving rewards refinement: stable steering at speed, hushed cabins, suspensions that swallow imperfections, seats that still feel honest after four hours. These are the cars AutoVere reaches for when the route is long and the day is already heavy.",
-    cars: ["mercedes-eqe", "bmw-i5", "volvo-ex90"],
-  },
-  {
-    slug: "winter-confidence",
-    title: "Winter confidence",
-    description: "AWD, heat pumps, and the temperament of a Nordic engineer.",
-    image: carSnow,
-    body:
-      "Winter rewards quiet competence over horsepower. Heat pumps, pre-conditioning, surefooted AWD, and cabins that hold warmth at -15°C. AutoVere's most reassuring picks when the forecast turns serious.",
-    cars: ["polestar-3", "volvo-ex90", "kia-ev9"],
-  },
+type CollectionMeta = {
+  slug: string;
+  image: string;
+  cars: string[];
+};
+
+const COLLECTION_META: CollectionMeta[] = [
+  { slug: "nordic-winters", image: carSnow, cars: ["polestar-3", "volvo-ex90", "kia-ev9"] },
+  { slug: "quiet-luxury", image: sceneQuiet, cars: ["mercedes-eqe", "polestar-3", "bmw-i5"] },
+  { slug: "long-distance-comfort", image: sceneRoad, cars: ["mercedes-eqe", "volvo-ex90", "bmw-i5"] },
+  { slug: "underestimated", image: sceneCity, cars: ["kia-ev9", "polestar-3"] },
+  { slug: "best-family-evs", image: carFamily, cars: ["volvo-ex90", "kia-ev9", "polestar-3"] },
+  { slug: "city-life", image: sceneCity, cars: ["bmw-i5", "polestar-3"] },
+  { slug: "lowest-ownership-stress", image: sceneNight, cars: ["polestar-3", "volvo-ex90", "kia-ev9"] },
+  { slug: "reviewers-unexpectedly-loved", image: sceneRoad, cars: ["kia-ev9", "polestar-3", "bmw-i5"] },
+  { slug: "calm-highway-cruisers", image: sceneRoad, cars: ["mercedes-eqe", "bmw-i5", "volvo-ex90"] },
+  { slug: "winter-confidence", image: carSnow, cars: ["polestar-3", "volvo-ex90", "kia-ev9"] },
 ];
 
-export const getCollection = (slug: string) =>
-  COLLECTIONS.find((c) => c.slug === slug);
+const resolveCollection = (meta: CollectionMeta, lang: string): Collection => {
+  const resolvedLang = resolveCatalogLang(lang);
+  const text = COLLECTION_TEXT[meta.slug];
+  return {
+    ...meta,
+    title: resolveLocalizedString(
+      text.title,
+      resolvedLang,
+      `collection.${meta.slug}.title`,
+    ),
+    description: resolveLocalizedString(
+      text.description,
+      resolvedLang,
+      `collection.${meta.slug}.description`,
+    ),
+    body: resolveLocalizedString(
+      text.body,
+      resolvedLang,
+      `collection.${meta.slug}.body`,
+    ),
+  };
+};
+
+export const getCollections = (lang: string = "en"): Collection[] =>
+  COLLECTION_META.map((meta) => resolveCollection(meta, lang));
+
+export const COLLECTIONS: Collection[] = getCollections();
+
+export const getCollection = (slug: string, lang: string = "en") => {
+  const meta = COLLECTION_META.find((collection) => collection.slug === slug);
+  return meta ? resolveCollection(meta, lang) : undefined;
+};
 
 export type Personality = {
   slug: string;
@@ -336,82 +269,68 @@ export type Personality = {
   description: string;
   whoYouAre: string;
   whatYouValue: string[];
-  matches: string[]; // slugs
+  matches: string[];
   prompt: string;
 };
 
-export const PERSONALITIES: Personality[] = [
-  {
-    slug: "calm-explorer",
-    name: "Calm Explorer",
-    tagline: "Long horizons, quiet thoughts.",
-    description:
-      "You drive to clear your head. You'd rather glide than race. Comfort beats horsepower, every time.",
-    whoYouAre:
-      "You think of driving as time, not performance. The right car is the one that lets the world go quiet around you and gives you back a clearer head at the other end.",
-    whatYouValue: ["Cabin silence", "Composed ride", "Honest design", "Range that disappears as a worry"],
-    matches: ["polestar-3", "volvo-ex90", "mercedes-eqe"],
-    prompt: "I'm a Calm Explorer — long drives, quiet head, comfort over speed. What 3 cars should I look at?",
-  },
-  {
-    slug: "quiet-executive",
-    name: "Quiet Executive",
-    tagline: "Refinement without announcement.",
-    description: "You want presence, not attention. Tech that disappears into craft.",
-    whoYouAre:
-      "Your car is part of your professional life. It needs to look composed, sound composed, and respect every minute of your day.",
-    whatYouValue: ["Insulation", "Material honesty", "Predictable luxury", "Service density"],
-    matches: ["bmw-i5", "mercedes-eqe", "polestar-3"],
-    prompt: "I'm a Quiet Executive — long highway commutes, restrained luxury, calm tech. Recommend 3 cars.",
-  },
-  {
-    slug: "weekend-escapist",
-    name: "Weekend Escapist",
-    tagline: "Monday city. Saturday wild.",
-    description: "Capable when it matters. Quiet when it doesn't.",
-    whoYouAre:
-      "You commute through the week and disappear on the weekend. The right car has to do both without resentment.",
-    whatYouValue: ["AWD competence", "Space for gear", "Long range", "Calm city manners"],
-    matches: ["volvo-ex90", "kia-ev9", "polestar-3"],
-    prompt: "I'm a Weekend Escapist — city weekdays, mountains and trips on weekends. Recommend 3 cars.",
-  },
-  {
-    slug: "urban-minimalist",
-    name: "Urban Minimalist",
-    tagline: "Less, but better. Every day.",
-    description: "Tight streets, premium feel, zero compromise.",
-    whoYouAre:
-      "You live in a city. Your car needs to be small enough to disappear into traffic and refined enough to make the drive feel intentional.",
-    whatYouValue: ["Compact footprint", "Premium cabin", "Easy parking", "Quiet design"],
-    matches: ["bmw-i5", "polestar-3"],
-    prompt: "I'm an Urban Minimalist — city driving, compact, premium feel. Recommend 3 cars.",
-  },
-  {
-    slug: "performance-romantic",
-    name: "Performance Romantic",
-    tagline: "It should make you smile.",
-    description: "Specs are the language, but feeling is the point.",
-    whoYouAre:
-      "You want a car you'll talk about in 20 years. Numbers matter, but feel matters more.",
-    whatYouValue: ["Steering feel", "Acceleration response", "Sound (or its absence)", "Design that ages well"],
-    matches: ["bmw-i5", "polestar-3"],
-    prompt: "I'm a Performance Romantic — I want a car that makes me smile every time I drive it. Recommend 3.",
-  },
-  {
-    slug: "nordic-adventurer",
-    name: "Nordic Adventurer",
-    tagline: "At home where the road ends.",
-    description: "Cold weather, long distances, and the trips most cars never see.",
-    whoYouAre:
-      "You live where winter is real. The car has to start, hold heat, hold the road, and not feel like a compromise the rest of the year.",
-    whatYouValue: ["AWD", "Heat pump", "Range in cold", "Cabin warmth that holds"],
-    matches: ["volvo-ex90", "polestar-3", "kia-ev9"],
-    prompt: "I'm a Nordic Adventurer — winter driving, long cold trips. Recommend 3 cars.",
-  },
+type PersonalityMeta = { slug: string; matches: string[] };
+
+const PERSONALITY_META: PersonalityMeta[] = [
+  { slug: "calm-explorer", matches: ["polestar-3", "volvo-ex90", "mercedes-eqe"] },
+  { slug: "quiet-executive", matches: ["bmw-i5", "mercedes-eqe", "polestar-3"] },
+  { slug: "weekend-escapist", matches: ["volvo-ex90", "kia-ev9", "polestar-3"] },
+  { slug: "urban-minimalist", matches: ["bmw-i5", "polestar-3"] },
+  { slug: "performance-romantic", matches: ["bmw-i5", "polestar-3"] },
+  { slug: "nordic-adventurer", matches: ["volvo-ex90", "polestar-3", "kia-ev9"] },
 ];
 
-export const getPersonality = (slug: string) =>
-  PERSONALITIES.find((p) => p.slug === slug);
+const resolvePersonality = (meta: PersonalityMeta, lang: string): Personality => {
+  const resolvedLang = resolveCatalogLang(lang);
+  const text = PERSONALITY_TEXT[meta.slug];
+  return {
+    ...meta,
+    name: resolveLocalizedString(
+      text.name,
+      resolvedLang,
+      `personality.${meta.slug}.name`,
+    ),
+    tagline: resolveLocalizedString(
+      text.tagline,
+      resolvedLang,
+      `personality.${meta.slug}.tagline`,
+    ),
+    description: resolveLocalizedString(
+      text.description,
+      resolvedLang,
+      `personality.${meta.slug}.description`,
+    ),
+    whoYouAre: resolveLocalizedString(
+      text.whoYouAre,
+      resolvedLang,
+      `personality.${meta.slug}.whoYouAre`,
+    ),
+    whatYouValue: resolveLocalizedList(
+      text.whatYouValue,
+      resolvedLang,
+      `personality.${meta.slug}.whatYouValue`,
+    ),
+    prompt: resolveLocalizedString(
+      text.prompt,
+      resolvedLang,
+      `personality.${meta.slug}.prompt`,
+    ),
+  };
+};
+
+export const getPersonalities = (lang: string = "en"): Personality[] =>
+  PERSONALITY_META.map((meta) => resolvePersonality(meta, lang));
+
+export const PERSONALITIES: Personality[] = getPersonalities();
+
+export const getPersonality = (slug: string, lang: string = "en") => {
+  const meta = PERSONALITY_META.find((personality) => personality.slug === slug);
+  return meta ? resolvePersonality(meta, lang) : undefined;
+};
 
 export type LearnArticle = {
   slug: string;
@@ -421,127 +340,47 @@ export type LearnArticle = {
   category: string;
 };
 
-export const LEARN: LearnArticle[] = [
-  {
-    slug: "how-the-ai-works",
-    title: "How the AutoVere AI actually works",
-    category: "Inside AutoVere",
-    excerpt:
-      "AutoVere is an emotionally intelligent advisor — not a filter. Here's how it interprets your life and turns it into a small, honest set of matches.",
-    body: [
-      "AutoVere starts from the premise that the right car is a personal answer to a personal question. So it doesn't ask you to filter; it asks you to describe.",
-      "When you tell AutoVere about your climate, your family, your commute, or how driving makes you feel, it interprets those signals across hundreds of dimensions — not as keywords, but as meaning.",
-      "It then narrows the field to two or three cars worth your attention, and explains the tradeoffs honestly. The goal is clarity, not choice paralysis.",
-    ],
-  },
-  {
-    slug: "how-recommendations-work",
-    title: "How recommendations work",
-    category: "Inside AutoVere",
-    excerpt:
-      "Why AutoVere shows you 2–3 cars instead of 47, and how it decides which ones deserve your attention.",
-    body: [
-      "Most platforms confuse choice with help. AutoVere takes the opposite position: the more accurately it understands you, the fewer cars you should see.",
-      "Recommendations are weighted across personality fit, climate, lifestyle, ownership reality, and emotional resonance — not just specs.",
-      "Every match comes with the genuine compromises, because trust is earned by being honest about what isn't perfect.",
-    ],
-  },
-  {
-    slug: "ev-explained-simply",
-    title: "EVs, explained simply",
-    category: "Understand the basics",
-    excerpt:
-      "Range, charging, battery health, and the things that actually matter day-to-day — without the jargon.",
-    body: [
-      "An EV is, mostly, a quieter car with a different fueling habit. The hard parts are charging logistics, cold-weather range, and battery longevity — and they're easier to understand than the industry pretends.",
-      "Range numbers are a moving target. Real-world range depends on temperature, speed, terrain, and how you drive. A car rated at 500 km might give you 380 in winter.",
-      "Charging is a daily-life question, not a road-trip question. If you can charge at home, most concerns disappear. If you can't, the math changes.",
-    ],
-  },
-  {
-    slug: "suv-vs-crossover",
-    title: "SUV vs crossover — does it actually matter?",
-    category: "Understand the basics",
-    excerpt:
-      "The labels are blurry. What matters is footprint, space, and how the car feels in the city versus the open road.",
-    body: [
-      "The SUV/crossover line moved years ago. Most modern 'SUVs' are unibody crossovers — better on-road, less true off-road capability.",
-      "What actually matters: footprint (does it fit your street?), seating posture, ground clearance, and cabin volume.",
-      "AutoVere ignores the marketing label and matches you on the dimensions you'll feel every day.",
-    ],
-  },
-  {
-    slug: "winter-driving",
-    title: "What matters in winter driving",
-    category: "Driving knowledge",
-    excerpt:
-      "AWD is overrated. Tyres, heat pumps, and pre-conditioning are underrated. Here's what to look for.",
-    body: [
-      "Winter tires beat AWD almost every time. AWD helps you go; only tyres help you stop and turn.",
-      "For EVs, a heat pump dramatically improves cold-weather range. Pre-conditioning while plugged in is the underrated daily-life feature.",
-      "Cabin warmth that holds matters more than peak heating power. So does seat heating that warms quickly.",
-    ],
-  },
-  {
-    slug: "compare-cars-intelligently",
-    title: "How to compare cars intelligently",
-    category: "Driving knowledge",
-    excerpt:
-      "Spec sheets lie by omission. Here's how to compare cars on the dimensions that actually shape ownership.",
-    body: [
-      "Specs are necessary but rarely sufficient. The dimensions that shape ownership are: ride quality, cabin noise, seat geometry, software maturity, and dealer experience.",
-      "Compare cars on a typical day in your life — not on a spec sheet. The car you'll love is the one that fits the trips you actually take.",
-      "AutoVere's comparisons start from lived experience and only use specs to confirm or qualify what you'd actually feel.",
-    ],
-  },
-  {
-    slug: "what-makes-a-car-feel-premium",
-    title: "What makes a car feel premium",
-    category: "Driving knowledge",
-    excerpt:
-      "It isn't badges or screens. It's silence, materials, and the small details you notice on day 100.",
-    body: [
-      "Premium isn't a price point — it's a feeling of restraint. Quiet doors, materials that age, switches with weight, surfaces that don't squeak.",
-      "Software is part of premium now. A car that updates and improves feels more luxurious than one frozen at delivery.",
-      "The premium feeling lives in the daily details: how the cabin sounds, how the seat supports you on hour three, how the car behaves in traffic.",
-    ],
-  },
-  {
-    slug: "how-comparisons-work",
-    title: "How AutoVere comparisons actually work",
-    category: "Inside AutoVere",
-    excerpt:
-      "Two cars side-by-side, with the dimensions that shape your daily life — not the ones that look good in a brochure.",
-    body: [
-      "Most comparison tools line up specs and let you decide. AutoVere does the opposite — it interprets the specs through the lens of your life.",
-      "Cabin noise, ride quality, winter behaviour, software maturity, dealer experience and long-term ownership stress matter more than 0-100 times for most people.",
-      "AutoVere weighs each dimension by how much it will actually shape your years with the car, then explains the tradeoff in a single calm paragraph.",
-    ],
-  },
-  {
-    slug: "how-personalization-works",
-    title: "How AutoVere personalises without surveillance",
-    category: "Inside AutoVere",
-    excerpt:
-      "Personalisation built on what you tell us — not on tracking, not on data resale, not on dealer leads.",
-    body: [
-      "AutoVere learns from your conversation, your saved cars and your stated context. Nothing else.",
-      "We don't sell your preferences to dealers, and we don't share data with manufacturers to influence what you see.",
-      "The result: recommendations that feel personal because they are — not because we built a profile of you in the background.",
-    ],
-  },
-  {
-    slug: "what-matters-in-pricing",
-    title: "What actually matters in EV pricing",
-    category: "Ownership",
-    excerpt:
-      "Sticker price is the smallest part of the story. Here's the framework AutoVere uses to estimate true cost.",
-    body: [
-      "Total cost of ownership is sticker price plus charging, insurance, maintenance, depreciation and the price of stress.",
-      "EVs typically win on charging and maintenance, lose on insurance, and vary wildly on depreciation. Software-mature brands tend to hold value better.",
-      "The 'comfort-to-price ratio' is the underrated metric — how premium does the car feel relative to what it costs you each year, not just on day one.",
-    ],
-  },
+type LearnMeta = { slug: string };
+
+const LEARN_META: LearnMeta[] = [
+  { slug: "how-the-ai-works" },
+  { slug: "how-recommendations-work" },
+  { slug: "ev-explained-simply" },
+  { slug: "suv-vs-crossover" },
+  { slug: "winter-driving" },
+  { slug: "compare-cars-intelligently" },
+  { slug: "what-makes-a-car-feel-premium" },
+  { slug: "how-comparisons-work" },
+  { slug: "how-personalization-works" },
+  { slug: "what-matters-in-pricing" },
 ];
 
-export const getArticle = (slug: string) => LEARN.find((a) => a.slug === slug);
+const resolveLearnArticle = (meta: LearnMeta, lang: string): LearnArticle => {
+  const resolvedLang = resolveCatalogLang(lang);
+  const text = LEARN_TEXT[meta.slug];
+  return {
+    slug: meta.slug,
+    title: resolveLocalizedString(text.title, resolvedLang, `learn.${meta.slug}.title`),
+    excerpt: resolveLocalizedString(
+      text.excerpt,
+      resolvedLang,
+      `learn.${meta.slug}.excerpt`,
+    ),
+    body: resolveLocalizedList(text.body, resolvedLang, `learn.${meta.slug}.body`),
+    category: resolveLocalizedString(
+      LEARN_CATEGORY_TEXT[text.categoryKey],
+      resolvedLang,
+      `learn-category.${text.categoryKey}`,
+    ),
+  };
+};
+
+export const getLearnArticles = (lang: string = "en"): LearnArticle[] =>
+  LEARN_META.map((meta) => resolveLearnArticle(meta, lang));
+
+export const LEARN: LearnArticle[] = getLearnArticles();
+
+export const getArticle = (slug: string, lang: string = "en") => {
+  const meta = LEARN_META.find((article) => article.slug === slug);
+  return meta ? resolveLearnArticle(meta, lang) : undefined;
+};

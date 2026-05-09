@@ -1,14 +1,15 @@
-import { useEffect, useState } from "react";
-import { supabase } from "@/integrations/supabase/client";
-import { getPaddleEnvironment } from "@/lib/paddle";
+import { useEffect, useState } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+import { getSubscriptionStatus, hasActiveSubscription } from '@/lib/subscription';
 
 export type Subscription = {
   id: string;
-  status: string;
-  price_id: string;
-  product_id: string;
+  subscription_status: string | null;
+  plan_type: string | null;
+  billing_interval: 'month' | 'year' | null;
   current_period_end: string | null;
-  cancel_at_period_end: boolean;
+  stripe_subscription_id: string | null;
+  stripe_customer_id: string | null;
 };
 
 export function useSubscription() {
@@ -17,42 +18,58 @@ export function useSubscription() {
   const [userId, setUserId] = useState<string | null>(null);
 
   const fetchSub = async (uid: string) => {
-    const env = getPaddleEnvironment();
     const { data } = await supabase
-      .from("subscriptions")
-      .select("id,status,price_id,product_id,current_period_end,cancel_at_period_end")
-      .eq("user_id", uid)
-      .eq("environment", env)
-      .order("created_at", { ascending: false })
+      .from('subscriptions')
+      .select(
+        'id,subscription_status,plan_type,billing_interval,current_period_end,stripe_subscription_id,stripe_customer_id'
+      )
+      .eq('user_id', uid)
+      .order('updated_at', { ascending: false })
       .limit(1)
       .maybeSingle();
+
     setSubscription((data as Subscription) ?? null);
     setLoading(false);
   };
 
   useEffect(() => {
     let channel: ReturnType<typeof supabase.channel> | null = null;
+
     supabase.auth.getUser().then(({ data }) => {
       const uid = data.user?.id ?? null;
       setUserId(uid);
-      if (!uid) { setLoading(false); return; }
+
+      if (!uid) {
+        setLoading(false);
+        return;
+      }
+
       fetchSub(uid);
+
       channel = supabase
         .channel(`subs-${uid}`)
-        .on("postgres_changes",
-          { event: "*", schema: "public", table: "subscriptions", filter: `user_id=eq.${uid}` },
-          () => fetchSub(uid))
+        .on(
+          'postgres_changes',
+          { event: '*', schema: 'public', table: 'subscriptions', filter: `user_id=eq.${uid}` },
+          () => fetchSub(uid)
+        )
         .subscribe();
     });
-    return () => { if (channel) supabase.removeChannel(channel); };
+
+    return () => {
+      if (channel) supabase.removeChannel(channel);
+    };
   }, []);
 
-  const isActive = !!subscription && (
-    (["active", "trialing", "past_due"].includes(subscription.status) &&
-      (!subscription.current_period_end || new Date(subscription.current_period_end) > new Date())) ||
-    (subscription.status === "canceled" && subscription.current_period_end &&
-      new Date(subscription.current_period_end) > new Date())
-  );
+  const subscriptionStatus = getSubscriptionStatus(subscription);
+  const isActive = hasActiveSubscription(subscription);
 
-  return { subscription, isActive: !!isActive, loading, userId, refetch: () => userId && fetchSub(userId) };
+  return {
+    subscription,
+    subscriptionStatus,
+    isActive,
+    loading,
+    userId,
+    refetch: () => userId && fetchSub(userId),
+  };
 }

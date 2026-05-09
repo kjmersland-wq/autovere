@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ArrowRight } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
@@ -6,6 +6,8 @@ import { SEO } from "@/components/SEO";
 import { CarCard } from "@/components/CarCard";
 import { Button } from "@/components/ui/button";
 import { COLLECTIONS, getCollection, getCar } from "@/data/cars";
+import { resolveLang } from "@/i18n/localized-content";
+import { LLink } from "@/i18n/routing";
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -14,18 +16,19 @@ const NotFound = () => {
       <SEO title={t("pages.collection.not_found_seo_title")} description={t("pages.collection.not_found_seo_desc")} />
       <div className="container py-32 text-center">
         <h1 className="text-4xl font-bold mb-4">{t("pages.collection.not_found_h1")}</h1>
-        <Button asChild className="bg-gradient-primary"><Link to="/collections">{t("pages.collection.all")}</Link></Button>
+        <Button asChild className="bg-gradient-primary"><LLink to="/collections">{t("pages.collection.all")}</LLink></Button>
       </div>
     </PageShell>
   );
 };
 
 const CollectionDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
   const { slug = "" } = useParams();
-  const c = getCollection(slug);
+  const c = getCollection(slug, lang);
   if (!c) return <NotFound />;
-  const cars = c.cars.map(getCar).filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const cars = c.cars.map((carSlug) => getCar(carSlug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
 
   return (
     <PageShell>
@@ -61,7 +64,9 @@ const CollectionDetail = () => {
 export default CollectionDetail;
 
 export const CollectionsIndex = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const collections = COLLECTIONS.map((collection) => getCollection(collection.slug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
   return (
     <PageShell>
       <SEO title={t("pages.collection.index_seo_title")} description={t("pages.collection.index_seo_desc")} />
@@ -74,8 +79,8 @@ export const CollectionsIndex = () => {
           <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.collection.index_lead")}</p>
         </div>
         <div className="grid md:grid-cols-2 gap-6">
-          {COLLECTIONS.map((c) => (
-            <Link
+          {collections.map((c) => (
+            <LLink
               key={c.slug}
               to={`/collections/${c.slug}`}
               className="group relative overflow-hidden rounded-3xl aspect-[16/10] border border-border/40 hover:border-primary/50 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow"
@@ -89,7 +94,7 @@ export const CollectionsIndex = () => {
                   {t("common.open_collection")} <ArrowRight className="w-3 h-3" />
                 </div>
               </div>
-            </Link>
+            </LLink>
           ))}
         </div>
       </section>

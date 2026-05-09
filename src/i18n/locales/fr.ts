@@ -126,6 +126,7 @@ const fr: Translation = {
       popular_1: "VE familial",
       popular_2: "sportive du week-end",
       popular_3: "citadine",
+      hero_image_alt: "Voiture électrique premium la nuit",
       hero_caption_a: "Une histoire AUTOVERE · Volume 01",
       hero_caption_b: "« La bonne voiture ne crie pas. Elle vous va. »",
       how_eyebrow: "Comment ça marche",
@@ -191,6 +192,7 @@ const fr: Translation = {
       under_lead:
         "Toutes les belles voitures n’ont pas un budget marketing. AUTOVERE met en avant les excellentes silencieuses — celles que les propriétaires aiment davantage après un an, pas moins.",
       under_cta: "Afficher mes pépites cachées",
+      under_image_alt: "Voitures sous-estimées",
       under_card_eyebrow: "Ce soir à Tokyo",
       under_card_title: "Une voiture qu’on n’imaginait pas aimer.",
       cinematic_night_eyebrow: "Pourquoi nous avons créé AUTOVERE",
@@ -234,7 +236,7 @@ const fr: Translation = {
       monthly: "Mensuel",
       yearly: "Annuel",
       billed_yearly: "facturé annuellement",
-      yearly_save: "ou 59 $ / an — économisez 30 %",
+      yearly_save: "ou 59 € / an — économisez 30 %",
       premium_lead:
         "Pour celles et ceux qui pensent long terme. Analyse plus profonde, prévisions plus fines, moins de surprises.",
       on_premium: "✓ Vous avez Premium",
@@ -248,6 +250,18 @@ const fr: Translation = {
       welcome_premium: "Bienvenue dans Premium ! Un e-mail de confirmation arrive.",
       portal_error: "Impossible d’ouvrir le portail client.",
       please_sign_in: "Veuillez vous connecter pour vous abonner.",
+      checkout_errors: {
+        missing_publishable_key: "Le checkout est indisponible car la clé publique Stripe est manquante.",
+        auth_required: "Reconnectez-vous puis réessayez le checkout.",
+        env_mismatch: "Erreur de configuration entre les clés Stripe de test et de production. Contactez le support.",
+        price_missing: "Le prix d'abonnement Stripe est manquant ou invalide.",
+        price_inactive: "Cette formule n'est pas disponible pour le moment.",
+        currency_mismatch: "La facturation est mal configurée avec un prix Stripe qui n'utilise pas l'EUR.",
+        temporarily_unavailable: "Le checkout est temporairement indisponible. Réessayez dans un instant.",
+        invalid_response: "Le checkout n'a pas pu démarrer car Stripe a renvoyé une réponse invalide.",
+        redirect_failed: "Impossible de vous rediriger vers Stripe Checkout. Réessayez.",
+        generic: "Impossible d'ouvrir le checkout. Réessayez.",
+      },
       reassurance: {
         t1: "Aucune donnée revendue",
         b1: "Nous ne vendons pas vos préférences aux concessionnaires. Vos conversations restent les vôtres.",
@@ -558,6 +572,24 @@ const fr: Translation = {
       title: "404",
       lead: "Oups ! Page introuvable",
       home: "Retour à l’accueil",
+    },
+    success: {
+      seo_title: "Bienvenue dans Premium · AUTOVERE",
+      seo_desc: "Votre abonnement AUTOVERE Premium est maintenant actif.",
+      heading_a: "Vous êtes maintenant",
+      heading_b: "Premium",
+      lead: "Votre abonnement est actif et tout est déverrouillé. Un e-mail de confirmation est en route.",
+      features_heading: "Ce que vous venez de débloquer",
+      redirect_cta: "Aller sur AUTOVERE",
+      redirect_auto: "Redirection dans {{count}}s…",
+    },
+  },
+  premium: {
+    lock: {
+      eyebrow: "Accès Premium",
+      title: "Débloquez l'intelligence AUTOVERE avancée",
+      body: "Cette fonctionnalité fait partie de Premium et inclut des insights IA avancés, une analyse de possession et des rapports premium.",
+      cta: "Débloquer Premium",
     },
   },
 };

@@ -126,6 +126,7 @@ const no: Translation = {
       popular_1: "familieelbil",
       popular_2: "helge-sportsbil",
       popular_3: "bypendler",
+      hero_image_alt: "Premium elbil om natten",
       hero_caption_a: "En AUTOVERE-historie · Volum 01",
       hero_caption_b: "«Den rette bilen roper ikke. Den passer.»",
       how_eyebrow: "Slik fungerer det",
@@ -191,6 +192,7 @@ const no: Translation = {
       under_lead:
         "Ikke alle store biler kommer med markedsføringsbudsjett. AUTOVERE løfter frem de stille fremragende — biler eierne elsker mer etter ett år, ikke mindre.",
       under_cta: "Vis mine skjulte matcher",
+      under_image_alt: "Undervurderte biler",
       under_card_eyebrow: "I kveld i Tokyo",
       under_card_title: "En bil du ikke ville ventet å elske.",
       cinematic_night_eyebrow: "Hvorfor vi laget AUTOVERE",
@@ -225,7 +227,7 @@ const no: Translation = {
       lead:
         "Vi mener bilvalg ikke skal stå bak en betalingsmur. Premium er for de som vil gå dypere — fem år frem, ikke fem minutter frem.",
       free_label: "Gratis",
-      free_price: "0 kr",
+      free_price: "0 €",
       free_per: "/ for alltid",
       free_lead: "Alt du trenger for å finne riktig bil for livet ditt — i ro.",
       free_cta: "Start med AUTOVERE",
@@ -234,7 +236,7 @@ const no: Translation = {
       monthly: "Månedlig",
       yearly: "Årlig",
       billed_yearly: "fakturert årlig",
-      yearly_save: "eller $59 / år — spar 30 %",
+      yearly_save: "eller 59 € / år — spar 30 %",
       premium_lead:
         "For deg som tenker langsiktig. Dypere analyse, smartere prognoser, færre overraskelser.",
       on_premium: "✓ Du har Premium",
@@ -248,6 +250,18 @@ const no: Translation = {
       welcome_premium: "Velkommen til Premium! En bekreftelses-e-post er på vei.",
       portal_error: "Kunne ikke åpne kundeportalen.",
       please_sign_in: "Logg inn for å abonnere.",
+      checkout_errors: {
+        missing_publishable_key: "Checkout er utilgjengelig fordi Stripe-publiseringsnøkkelen mangler.",
+        auth_required: "Logg inn på nytt og prøv checkout igjen.",
+        env_mismatch: "Feil i betalingsoppsettet mellom Stripe test- og live-nøkler. Kontakt support.",
+        price_missing: "Stripe-abonnementsprisen mangler eller er ugyldig.",
+        price_inactive: "Dette abonnementet er ikke tilgjengelig akkurat nå.",
+        currency_mismatch: "Betaling er feilkonfigurert med en Stripe-pris som ikke er i EUR.",
+        temporarily_unavailable: "Checkout er midlertidig utilgjengelig. Prøv igjen om litt.",
+        invalid_response: "Checkout kunne ikke starte fordi Stripe returnerte et ugyldig svar.",
+        redirect_failed: "Vi kunne ikke sende deg videre til Stripe Checkout. Prøv igjen.",
+        generic: "Checkout kunne ikke åpnes. Prøv igjen.",
+      },
       reassurance: {
         t1: "Ingen data videresolgt",
         b1: "Vi selger ikke preferansene dine til forhandlere. Samtalene dine forblir dine.",
@@ -556,6 +570,24 @@ const no: Translation = {
       title: "404",
       lead: "Ups! Siden finnes ikke",
       home: "Tilbake til forsiden",
+    },
+    success: {
+      seo_title: "Velkommen til Premium · AUTOVERE",
+      seo_desc: "Ditt AUTOVERE Premium-abonnement er nå aktivt.",
+      heading_a: "Du er nå",
+      heading_b: "Premium",
+      lead: "Abonnementet ditt er aktivt og alt er tilgjengelig. En bekreftelsesmail er på vei.",
+      features_heading: "Hva du nettopp låste opp",
+      redirect_cta: "Gå til AUTOVERE",
+      redirect_auto: "Tar deg dit om {{count}}s…",
+    },
+  },
+  premium: {
+    lock: {
+      eyebrow: "Premium-tilgang",
+      title: "Lås opp avansert AUTOVERE-intelligens",
+      body: "Denne funksjonen er en del av Premium og inkluderer avansert AI-innsikt, eierskapsanalyse og premiumrapporter.",
+      cta: "Lås opp Premium",
     },
   },
 };

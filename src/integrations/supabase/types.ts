@@ -218,49 +218,103 @@ export type Database = {
         }
         Relationships: []
       }
+      profiles: {
+        Row: {
+          created_at: string
+          current_period_end: string | null
+          id: string
+          is_premium: boolean
+          plan_type: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
+          subscription_status: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          current_period_end?: string | null
+          id: string
+          is_premium?: boolean
+          plan_type?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          current_period_end?: string | null
+          id?: string
+          is_premium?: boolean
+          plan_type?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
+          subscription_status?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
+          billing_interval: string | null
           cancel_at_period_end: boolean | null
           created_at: string | null
           current_period_end: string | null
           current_period_start: string | null
           environment: string
           id: string
-          paddle_customer_id: string
-          paddle_subscription_id: string
+          last_payment_error: string | null
+          paddle_customer_id: string | null
+          paddle_subscription_id: string | null
+          plan_type: string | null
           price_id: string
           product_id: string
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
           status: string
+          subscription_status: string | null
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          billing_interval?: string | null
           cancel_at_period_end?: boolean | null
           created_at?: string | null
           current_period_end?: string | null
           current_period_start?: string | null
           environment?: string
           id?: string
-          paddle_customer_id: string
-          paddle_subscription_id: string
+          last_payment_error?: string | null
+          paddle_customer_id?: string | null
+          paddle_subscription_id?: string | null
+          plan_type?: string | null
           price_id: string
           product_id: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           status?: string
+          subscription_status?: string | null
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          billing_interval?: string | null
           cancel_at_period_end?: boolean | null
           created_at?: string | null
           current_period_end?: string | null
           current_period_start?: string | null
           environment?: string
           id?: string
-          paddle_customer_id?: string
-          paddle_subscription_id?: string
+          last_payment_error?: string | null
+          paddle_customer_id?: string | null
+          paddle_subscription_id?: string | null
+          plan_type?: string | null
           price_id?: string
           product_id?: string
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           status?: string
+          subscription_status?: string | null
           updated_at?: string | null
           user_id?: string
         }

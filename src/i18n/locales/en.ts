@@ -89,7 +89,7 @@ const en = {
     starters: [
       "I want a family EV that handles snowy winters",
       "Something sporty but comfortable for daily driving",
-      "Reliable SUV under $50k for long road trips",
+      "Reliable SUV under €50k for long road trips",
       "A quiet city car that still feels premium",
     ],
   },
@@ -124,6 +124,7 @@ const en = {
       popular_1: "family EV",
       popular_2: "weekend sports car",
       popular_3: "city commuter",
+      hero_image_alt: "Premium electric car at night",
       hero_caption_a: "An AUTOVERE story · Volume 01",
       hero_caption_b: "“The right car doesn't shout. It fits.”",
       how_eyebrow: "How it works",
@@ -188,6 +189,7 @@ const en = {
       under_lead:
         "Not every great car arrives with a marketing budget. AUTOVERE surfaces the quietly excellent — cars that owners love more after a year, not less.",
       under_cta: "Surface my hidden matches",
+      under_image_alt: "Underestimated cars",
       under_card_eyebrow: "Tonight in Tokyo",
       under_card_title: "A car you wouldn't expect to love.",
       cinematic_night_eyebrow: "Why we built AUTOVERE",
@@ -222,7 +224,7 @@ const en = {
       lead:
         "We believe choosing a car shouldn't sit behind a paywall. Premium is for people who want to go deeper — five years out, not five minutes out.",
       free_label: "Free",
-      free_price: "$0",
+      free_price: "0 €",
       free_per: "/ forever",
       free_lead: "Everything you need to find the right car for your life — calmly.",
       free_cta: "Start with AUTOVERE",
@@ -231,7 +233,7 @@ const en = {
       monthly: "Monthly",
       yearly: "Yearly",
       billed_yearly: "billed yearly",
-      yearly_save: "or $59 / year — save 30%",
+      yearly_save: "or 59 € / year — save 30%",
       premium_lead:
         "For people thinking long-term. Deeper analysis, smarter projections, fewer surprises.",
       on_premium: "✓ You're on Premium",
@@ -245,6 +247,18 @@ const en = {
       welcome_premium: "Welcome to Premium! A confirmation email is on its way.",
       portal_error: "Could not open the customer portal.",
       please_sign_in: "Please sign in to subscribe.",
+      checkout_errors: {
+        missing_publishable_key: "Checkout is unavailable because the Stripe publishable key is missing.",
+        auth_required: "Please sign in again, then retry checkout.",
+        env_mismatch: "Billing configuration mismatch between Stripe test and live keys. Please contact support.",
+        price_missing: "The Stripe subscription price is missing or invalid.",
+        price_inactive: "This subscription plan is currently unavailable.",
+        currency_mismatch: "Billing is misconfigured with a non-EUR Stripe price.",
+        temporarily_unavailable: "Checkout is temporarily unavailable. Please try again in a moment.",
+        invalid_response: "Checkout could not start because Stripe returned an invalid response.",
+        redirect_failed: "We could not redirect you to Stripe Checkout. Please try again.",
+        generic: "Checkout could not be opened. Please try again.",
+      },
       reassurance: {
         t1: "No data resold",
         b1: "We don't sell your preferences to dealers. Your conversations stay yours.",
@@ -553,6 +567,24 @@ const en = {
       title: "404",
       lead: "Oops! Page not found",
       home: "Return to Home",
+    },
+    success: {
+      seo_title: "Welcome to Premium · AUTOVERE",
+      seo_desc: "Your AUTOVERE Premium subscription is now active.",
+      heading_a: "You're now",
+      heading_b: "Premium",
+      lead: "Your subscription is active and everything is unlocked. A confirmation email is on its way.",
+      features_heading: "What you just unlocked",
+      redirect_cta: "Go to AUTOVERE",
+      redirect_auto: "Taking you there in {{count}}s…",
+    },
+  },
+  premium: {
+    lock: {
+      eyebrow: "Premium access",
+      title: "Unlock advanced AUTOVERE intelligence",
+      body: "This feature is part of Premium and includes advanced AI insights, ownership analysis, and premium reports.",
+      cta: "Unlock Premium",
     },
   },
 };

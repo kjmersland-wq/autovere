@@ -1,0 +1,22 @@
+{
+  "name": "AUTOVERE",
+  "short_name": "AUTOVERE",
+  "description": "Premium futuristic automotive AI advisor.",
+  "background_color": "#0b1020",
+  "theme_color": "#0b1020",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512-dark.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

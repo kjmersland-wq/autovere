@@ -1,12 +1,17 @@
 import { ArrowRight, ExternalLink, MapPin, CalendarCheck, Zap, BadgePercent } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useRegion } from "@/hooks/use-region";
-import { brandLinks } from "@/lib/region";
+import { brandLinks, getRegionDisplayName } from "@/lib/region";
 import type { Car } from "@/data/cars";
+import { getUiCopy, interpolate } from "@/i18n/localized-content";
 
 type Props = { a: Car; b: Car };
 
 export const CompareNextStepsSection = ({ a, b }: Props) => {
+  const { i18n } = useTranslation();
   const { region } = useRegion();
+  const ui = getUiCopy(i18n.language).compareNext;
+  const regionLabel = getRegionDisplayName(region, i18n.language);
 
   const cars = [a, b].map((c) => {
     const modelSlug = c.slug.split("-").slice(1).join("-") || c.slug;
@@ -18,17 +23,17 @@ export const CompareNextStepsSection = ({ a, b }: Props) => {
     <section className="container pb-24" aria-labelledby="compare-next-steps">
       <div className="flex items-end justify-between flex-wrap gap-4 mb-3">
         <div>
-          <div className="text-sm text-accent font-medium tracking-wide uppercase">Continue with confidence</div>
+          <div className="text-sm text-accent font-medium tracking-wide uppercase">{ui.eyebrow}</div>
           <h2 id="compare-next-steps" className="text-3xl md:text-4xl font-bold tracking-tight mt-2">
-            Your <span className="text-gradient">next calm step</span>.
+            {ui.title}
           </h2>
         </div>
         <div className="text-xs uppercase tracking-[0.25em] text-muted-foreground">
-          Tailored for <span className="text-foreground font-medium">{region.flag} {region.name}</span>
+          {interpolate(ui.tailoredFor, { region: regionLabel })} <span className="text-foreground font-medium">{region.flag} {regionLabel}</span>
         </div>
       </div>
       <p className="text-muted-foreground max-w-2xl mb-10">
-        No pressure, no funnels. Just the right doors to walk through when you're ready.
+        {ui.lead}
       </p>
 
       <div className="grid md:grid-cols-2 gap-6">
@@ -40,11 +45,11 @@ export const CompareNextStepsSection = ({ a, b }: Props) => {
               <div className="text-2xl font-bold tracking-tight mb-1">{car.name}</div>
               <div className="text-sm text-muted-foreground mb-6">{car.fit}</div>
               <ul className="space-y-2.5">
-                <Step href={links.testDrive} icon={CalendarCheck} label="Book a calm test drive" />
-                <Step href={links.dealerLocator} icon={MapPin} label={`Find ${car.brand} near ${region.name}`} />
-                <Step href={links.official} icon={ExternalLink} label="Official manufacturer page" />
-                {links.charging && <Step href={links.charging} icon={Zap} label={`${region.chargingStandard} charging compatibility`} />}
-                <Step href={`https://www.google.com/search?q=${encodeURIComponent(`${car.brand} ${car.name} incentives ${region.name}`)}`} icon={BadgePercent} label={`Local incentives in ${region.name}`} />
+                <Step href={links.testDrive} icon={CalendarCheck} label={ui.stepTestDrive} />
+                <Step href={links.dealerLocator} icon={MapPin} label={interpolate(ui.stepDealer, { brand: car.brand, region: regionLabel })} />
+                <Step href={links.official} icon={ExternalLink} label={ui.stepOfficial} />
+                {links.charging && <Step href={links.charging} icon={Zap} label={interpolate(ui.stepCharging, { standard: region.chargingStandard })} />}
+                <Step href={`https://www.google.com/search?q=${encodeURIComponent(`${car.brand} ${car.name} incentives ${region.name}`)}`} icon={BadgePercent} label={interpolate(ui.stepIncentives, { region: regionLabel })} />
               </ul>
             </div>
           </div>

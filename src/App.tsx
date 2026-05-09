@@ -25,7 +25,9 @@ import Refund from "./pages/legal/Refund.tsx";
 import Subscriptions from "./pages/legal/Subscriptions.tsx";
 import Studio from "./pages/Studio.tsx";
 import Auth from "./pages/Auth.tsx";
+import Success from "./pages/Success.tsx";
 import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
+import { validateStripeClientEnv } from "./lib/stripe";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +43,14 @@ const ScrollManager = () => {
     }
     window.scrollTo(0, 0);
   }, [pathname, hash]);
+  return null;
+};
+
+const StripeStartupValidation = () => {
+  useEffect(() => {
+    validateStripeClientEnv();
+  }, []);
+
   return null;
 };
 
@@ -69,6 +79,7 @@ const AppRoutes = () => (
     <Route path="/legal/subscriptions" element={<Subscriptions />} />
     <Route path="/studio" element={<Studio />} />
     <Route path="/auth" element={<Auth />} />
+    <Route path="/success" element={<Success />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
@@ -80,6 +91,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollManager />
+        <StripeStartupValidation />
         <LangSync />
         <PaymentTestModeBanner />
         <Routes>
@@ -88,6 +100,10 @@ const App = () => (
           <Route path="/no/*" element={<AppRoutes />} />
           <Route path="/de/*" element={<AppRoutes />} />
           <Route path="/sv/*" element={<AppRoutes />} />
+          <Route path="/fr/*" element={<AppRoutes />} />
+          <Route path="/pl/*" element={<AppRoutes />} />
+          <Route path="/it/*" element={<AppRoutes />} />
+          <Route path="/es/*" element={<AppRoutes />} />
           {/* Default (English) at root */}
           <Route path="/*" element={<AppRoutes />} />
         </Routes>

@@ -1,3 +1,5 @@
+import { PremiumAuthError, premiumJsonError, requirePremiumUser } from "../_shared/premium.ts";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers":
@@ -28,22 +30,30 @@ Tone rules — these are absolute:
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const requestId = crypto.randomUUID();
 
   try {
+    if (req.method !== "POST") {
+      return premiumJsonError(405, "invalid_request", "Method not allowed.", requestId, undefined, corsHeaders);
+    }
+    const auth = await requirePremiumUser(req, requestId);
+    console.info("safety-intelligence premium request", { requestId: auth.requestId, userId: auth.userId });
+
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return premiumJsonError(
+        500,
+        "provider_not_configured",
+        "LOVABLE_API_KEY not configured",
+        requestId,
+        undefined,
+        corsHeaders,
+      );
     }
 
     const body = (await req.json()) as ReqBody;
     if (!body?.carName) {
-      return new Response(JSON.stringify({ error: "Missing carName" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return premiumJsonError(400, "invalid_request", "Missing carName", requestId, undefined, corsHeaders);
     }
 
     const cacheKey = `${body.carName}|${body.carType ?? ""}`;
@@ -210,11 +220,27 @@ Use the extract_intelligence tool. All strings must be calm, human, never dramat
 
     cache.set(cacheKey, { at: Date.now(), data: parsed });
 
+    console.info("safety-intelligence success", {
+      requestId: auth.requestId,
+      userId: auth.userId,
+      carName: body.carName,
+      cached: false,
+    });
+
     return new Response(JSON.stringify({ ...(parsed as object), cached: false }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
+    if (e instanceof PremiumAuthError) {
+      console.error("safety-intelligence premium auth failed", {
+        requestId,
+        code: e.code,
+        details: e.details,
+      });
+      return premiumJsonError(e.status, e.code, e.message, requestId, e.details, corsHeaders);
+    }
+    console.error("safety-intelligence failed", { requestId, error: e });
+    return new Response(JSON.stringify({ error: (e as Error).message, requestId }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { PremiumAuthError, premiumJsonError, requirePremiumUser } from "../_shared/premium.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -21,28 +22,44 @@ const sigOf = (videos: ReqBody["videos"]) =>
 
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const requestId = crypto.randomUUID();
 
   try {
+    if (req.method !== "POST") {
+      return premiumJsonError(405, "invalid_request", "Method not allowed.", requestId, undefined, corsHeaders);
+    }
+    const auth = await requirePremiumUser(req, requestId);
+    console.info("video-insights premium request", { requestId: auth.requestId, userId: auth.userId });
+
     const apiKey = Deno.env.get("LOVABLE_API_KEY");
     if (!apiKey) {
-      return new Response(JSON.stringify({ error: "LOVABLE_API_KEY not configured" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return premiumJsonError(
+        500,
+        "provider_not_configured",
+        "LOVABLE_API_KEY not configured",
+        requestId,
+        undefined,
+        corsHeaders,
+      );
     }
 
     const body = (await req.json()) as ReqBody;
     if (!body?.carName || !Array.isArray(body.videos) || body.videos.length === 0) {
-      return new Response(JSON.stringify({ error: "Missing carName or videos" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return premiumJsonError(
+        400,
+        "invalid_request",
+        "Missing carName or videos",
+        requestId,
+        undefined,
+        corsHeaders,
+      );
     }
 
     const signature = sigOf(body.videos);
     const cacheKey = `${body.carName}|${signature}`;
     const hot = memCache.get(cacheKey);
     if (hot && Date.now() - hot.at < TTL_MS) {
+      console.info("video-insights cache hit", { requestId: auth.requestId, userId: auth.userId, cache: "memory" });
       return new Response(JSON.stringify({ ...(hot.data as object), cached: "memory" }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
@@ -72,6 +89,7 @@ Deno.serve(async (req) => {
           criticisms: row.criticisms ?? [],
         };
         memCache.set(cacheKey, { at: Date.now(), data: payload });
+        console.info("video-insights cache hit", { requestId: auth.requestId, userId: auth.userId, cache: "db" });
         return new Response(JSON.stringify({ ...payload, cached: "db" }), {
           headers: { ...corsHeaders, "Content-Type": "application/json" },
         });
@@ -175,11 +193,27 @@ Only the JSON, no prose.`;
       );
     }
 
+    console.info("video-insights success", {
+      requestId: auth.requestId,
+      userId: auth.userId,
+      carName: body.carName,
+      sourceCount: body.videos.length,
+    });
+
     return new Response(JSON.stringify({ ...payload, cached: "fresh" }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
+    if (e instanceof PremiumAuthError) {
+      console.error("video-insights premium auth failed", {
+        requestId,
+        code: e.code,
+        details: e.details,
+      });
+      return premiumJsonError(e.status, e.code, e.message, requestId, e.details, corsHeaders);
+    }
+    console.error("video-insights failed", { requestId, error: e });
+    return new Response(JSON.stringify({ error: (e as Error).message, requestId }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

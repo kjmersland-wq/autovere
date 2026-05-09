@@ -13,13 +13,14 @@ export function useVideoInsights(
   carName: string | undefined,
   videos: LiveVideo[],
   carSlug?: string,
+  enabled = true,
 ) {
   const [insights, setInsights] = useState<VideoInsights | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    if (!carName || videos.length === 0) return;
+    if (!enabled || !carName || videos.length === 0) return;
     let cancelled = false;
     setLoading(true);
     setError(null);
@@ -55,7 +56,7 @@ export function useVideoInsights(
     return () => {
       cancelled = true;
     };
-  }, [carName, carSlug, videos.length, videos[0]?.id]);
+  }, [enabled, carName, carSlug, videos.length, videos[0]?.id]);
 
   return { insights, loading, error };
 }

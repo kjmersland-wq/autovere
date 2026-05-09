@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ArrowRight, Check, X, Sparkles, MapPin, Heart, Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
@@ -11,6 +11,9 @@ import { CarMediaSection } from "@/components/CarMediaSection";
 import { PricingOwnership } from "@/components/PricingOwnership";
 import { SafetyOwnershipBlock } from "@/components/SafetyOwnershipBlock";
 import { ContinueExploringSection } from "@/components/ContinueExploringSection";
+import { RequirePremium } from "@/components/RequirePremium";
+import { getUiCopy, resolveLang } from "@/i18n/localized-content";
+import { LLink } from "@/i18n/routing";
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -20,20 +23,22 @@ const NotFound = () => {
       <div className="container py-32 text-center">
         <h1 className="text-4xl font-bold mb-4">{t("pages.car.not_found_h1")}</h1>
         <p className="text-muted-foreground mb-8">{t("pages.car.not_found_lead")}</p>
-        <Button asChild className="bg-gradient-primary"><Link to="/cars">{t("pages.car.all_cars")}</Link></Button>
+        <Button asChild className="bg-gradient-primary"><LLink to="/cars">{t("pages.car.all_cars")}</LLink></Button>
       </div>
     </PageShell>
   );
 };
 
 const CarDetail = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const ui = getUiCopy(lang);
   const { slug = "" } = useParams();
-  const car = getCar(slug);
+  const car = getCar(slug, lang);
   if (!car) return <NotFound />;
 
   const related = car.comparesWellWith
-    .map((s) => getCar(s))
+    .map((s) => getCar(s, lang))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
   const origin = typeof window !== "undefined" ? window.location.origin : "https://autovere.com";
@@ -42,6 +47,7 @@ const CarDetail = () => {
     {
       "@context": "https://schema.org",
       "@type": "Car",
+      inLanguage: lang,
       name: car.name,
       brand: { "@type": "Brand", name: car.brand },
       vehicleConfiguration: car.type,
@@ -55,9 +61,10 @@ const CarDetail = () => {
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
+      inLanguage: lang,
       itemListElement: [
-        { "@type": "ListItem", position: 1, name: "Home", item: origin },
-        { "@type": "ListItem", position: 2, name: "Cars", item: `${origin}/cars` },
+        { "@type": "ListItem", position: 1, name: ui.schema.home, item: origin },
+        { "@type": "ListItem", position: 2, name: ui.schema.cars, item: `${origin}/cars` },
         { "@type": "ListItem", position: 3, name: car.name, item: carUrl },
       ],
     },
@@ -175,11 +182,13 @@ const CarDetail = () => {
         </div>
       </section>
 
-      <PricingOwnership car={car} />
+      <RequirePremium fallbackHeightClassName="min-h-[340px]">
+        <PricingOwnership car={car} />
+      </RequirePremium>
       <SafetyOwnershipBlock car={car} />
 
       {(() => {
-        const media = getMedia(car.slug);
+        const media = getMedia(car.slug, lang);
         return media ? <CarMediaSection media={media} carName={car.name} carSlug={car.slug} /> : null;
       })()}
 
@@ -193,18 +202,18 @@ const CarDetail = () => {
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {related.map((r) => (
-              <Link
-                key={r.slug}
-                to={`/compare/${car.slug}-vs-${r.slug}`}
-                className="group glass rounded-3xl p-8 hover:-translate-y-1 hover:shadow-glow transition-all duration-500 flex items-center justify-between gap-6"
-              >
+               <LLink
+                 key={r.slug}
+                 to={`/compare/${car.slug}-vs-${r.slug}`}
+                 className="group glass rounded-3xl p-8 hover:-translate-y-1 hover:shadow-glow transition-all duration-500 flex items-center justify-between gap-6"
+               >
                 <div>
                   <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">{t("pages.car.compare_label")}</div>
                   <div className="text-xl font-semibold mb-1">{car.name} vs {r.name}</div>
                   <div className="text-sm text-muted-foreground">{r.fit} · {r.type}</div>
                 </div>
                 <ArrowRight className="w-5 h-5 text-accent group-hover:translate-x-1 transition-transform" />
-              </Link>
+               </LLink>
             ))}
           </div>
         </section>
@@ -219,7 +228,7 @@ const CarDetail = () => {
             </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">{t("pages.car.cta_lead")}</p>
             <Button asChild size="lg" className="bg-gradient-primary rounded-xl gap-2">
-              <Link to="/#advisor">{t("common.talk_to_autovere")} <ArrowRight className="w-4 h-4" /></Link>
+               <LLink to="/#advisor">{t("common.talk_to_autovere")} <ArrowRight className="w-4 h-4" /></LLink>
             </Button>
           </div>
         </div>
@@ -231,7 +240,9 @@ const CarDetail = () => {
 export default CarDetail;
 
 export const CarsIndex = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const cars = CARS.map((car) => getCar(car.slug, lang)).filter((x): x is NonNullable<typeof x> => Boolean(x));
   return (
     <PageShell>
       <SEO title={t("pages.car.index_seo_title")} description={t("pages.car.index_seo_desc")} />
@@ -244,7 +255,7 @@ export const CarsIndex = () => {
           <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.car.index_lead")}</p>
         </div>
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {CARS.map((c) => <CarCard key={c.slug} car={c} />)}
+          {cars.map((c) => <CarCard key={c.slug} car={c} />)}
         </div>
       </section>
     </PageShell>

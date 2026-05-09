@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { PremiumAuthError, premiumJsonError, requirePremiumUser } from "../_shared/premium.ts";
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -6,8 +7,6 @@ const corsHeaders = {
     "authorization, x-client-info, apikey, content-type",
 };
 
-// Curated trusted reviewer channel signals — name fragments matched against channelTitle.
-// Higher score = more trusted.
 const TRUSTED: Array<{ pattern: RegExp; score: number }> = [
   { pattern: /carwow/i, score: 5 },
   { pattern: /top\s*gear/i, score: 5 },
@@ -29,13 +28,11 @@ const TRUSTED: Array<{ pattern: RegExp; score: number }> = [
   { pattern: /everyday\s*driver/i, score: 3 },
 ];
 
-// Hard-block obvious low-quality patterns
 const BANNED = /reaction|tier\s*list|insane|shocking|destroyed|exposed|💥|🔥{2,}/i;
 
 const trustScore = (channel: string, title: string): number => {
   const base = TRUSTED.find((t) => t.pattern.test(channel))?.score ?? 0;
   if (BANNED.test(title)) return -10;
-  // Comparison-specific boost
   const compBoost = /\bvs\.?\b|\bvs\b|comparison|head[\s-]?to[\s-]?head/i.test(title) ? 2 : 0;
   return base + compBoost;
 };
@@ -55,39 +52,67 @@ Synthesise honest comparison consensus from reviewer video titles and descriptio
 Tone: Scandinavian, human, observational, never sensational.
 Never invent specifications. Speak about feel, character, ownership, mood.`;
 
+type CompareRequestBody = {
+  a?: string;
+  b?: string;
+  aName?: string;
+  bName?: string;
+};
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
+  const requestId = crypto.randomUUID();
 
   try {
-    const url = new URL(req.url);
-    const aSlug = url.searchParams.get("a")?.trim();
-    const bSlug = url.searchParams.get("b")?.trim();
-    const aName = url.searchParams.get("aName")?.trim();
-    const bName = url.searchParams.get("bName")?.trim();
-    if (!aSlug || !bSlug || !aName || !bName) {
-      return new Response(JSON.stringify({ error: "Missing a/b/aName/bName" }), {
-        status: 400,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+    if (req.method !== "POST") {
+      return premiumJsonError(405, "invalid_request", "Method not allowed.", requestId, undefined, corsHeaders);
     }
 
-    // Stable pair key (alphabetised so a-vs-b == b-vs-a)
+    const auth = await requirePremiumUser(req, requestId);
+    const body = (await req.json()) as CompareRequestBody;
+    const aSlug = body.a?.trim();
+    const bSlug = body.b?.trim();
+    const aName = body.aName?.trim();
+    const bName = body.bName?.trim();
+
+    if (!aSlug || !bSlug || !aName || !bName) {
+      return premiumJsonError(
+        400,
+        "invalid_request",
+        "Missing required comparison payload.",
+        requestId,
+        "Required: a, b, aName, bName",
+        corsHeaders,
+      );
+    }
+
     const [k1, k2] = [aSlug, bSlug].sort();
     const pairKey = `${k1}__${k2}`;
+
+    console.info("compare-intelligence request", {
+      requestId: auth.requestId,
+      userId: auth.userId,
+      pairKey,
+      aName,
+      bName,
+    });
 
     const SUPABASE_URL = Deno.env.get("SUPABASE_URL")!;
     const SERVICE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!;
     const YT = Deno.env.get("YOUTUBE_API_KEY");
     const LOVABLE = Deno.env.get("LOVABLE_API_KEY");
     if (!YT || !LOVABLE) {
-      return new Response(JSON.stringify({ error: "Missing keys" }), {
-        status: 500,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return premiumJsonError(
+        500,
+        "provider_not_configured",
+        "Missing provider configuration.",
+        requestId,
+        "YOUTUBE_API_KEY or LOVABLE_API_KEY is not configured",
+        corsHeaders,
+      );
     }
     const db = createClient(SUPABASE_URL, SERVICE_KEY);
 
-    // 14-day cache
     const { data: existing } = await db
       .from("compare_insights")
       .select("*")
@@ -97,12 +122,11 @@ Deno.serve(async (req) => {
       existing &&
       Date.now() - new Date(existing.refreshed_at).getTime() < 1000 * 60 * 60 * 24 * 14
     ) {
-      return new Response(JSON.stringify({ insight: existing, cached: true }), {
+      return new Response(JSON.stringify({ insight: existing, cached: true, requestId }), {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    // 1. Search YouTube for comparison content
     const q = `${aName} vs ${bName} review comparison`;
     const searchParams = new URLSearchParams({
       key: YT,
@@ -117,10 +141,7 @@ Deno.serve(async (req) => {
     });
     const ytRes = await fetch(`https://www.googleapis.com/youtube/v3/search?${searchParams}`);
     if (!ytRes.ok) {
-      return new Response(JSON.stringify({ error: "YouTube failed" }), {
-        status: 502,
-        headers: { ...corsHeaders, "Content-Type": "application/json" },
-      });
+      return premiumJsonError(502, "youtube_failed", "YouTube API failed.", requestId, undefined, corsHeaders);
     }
     const ytJson = await ytRes.json();
     const items = (ytJson.items ?? []) as Array<{
@@ -134,7 +155,6 @@ Deno.serve(async (req) => {
       };
     }>;
 
-    // 2. Score & filter
     const scored = items
       .map((i) => ({
         id: i.id.videoId,
@@ -142,14 +162,12 @@ Deno.serve(async (req) => {
         description: i.snippet.description ?? "",
         channel: i.snippet.channelTitle,
         publishedAt: i.snippet.publishedAt,
-        thumbnail:
-          i.snippet.thumbnails.high?.url ?? i.snippet.thumbnails.medium?.url ?? "",
+        thumbnail: i.snippet.thumbnails.high?.url ?? i.snippet.thumbnails.medium?.url ?? "",
         trust: trustScore(i.snippet.channelTitle, i.snippet.title),
       }))
       .filter(
         (v) =>
           v.trust > -10 &&
-          // Must mention BOTH cars (loose check) or be from a trusted source
           (v.trust >= 3 ||
             (new RegExp(aName.split(" ")[0], "i").test(v.title) &&
               new RegExp(bName.split(" ")[0], "i").test(v.title))),
@@ -157,7 +175,6 @@ Deno.serve(async (req) => {
       .sort((a, b) => b.trust - a.trust)
       .slice(0, 8);
 
-    // 3. Fetch durations for the curated set
     if (scored.length > 0) {
       const ids = scored.map((s) => s.id).join(",");
       const dRes = await fetch(
@@ -181,7 +198,6 @@ Deno.serve(async (req) => {
 
     const curatedVideos = scored.slice(0, 6);
 
-    // 4. AI consensus
     const reviewBlock = scored
       .slice(0, 12)
       .map((v, i) => `${i + 1}. [${v.channel}] ${v.title} — ${v.description.slice(0, 240)}`)
@@ -238,7 +254,7 @@ Only the JSON.`;
             .slice(0, 6);
         }
       } catch {
-        /* keep defaults */
+        // keep defaults
       }
     }
 
@@ -257,11 +273,27 @@ Only the JSON.`;
 
     await db.from("compare_insights").upsert(record, { onConflict: "pair_key" });
 
-    return new Response(JSON.stringify({ insight: record, cached: false }), {
+    console.info("compare-intelligence success", {
+      requestId: auth.requestId,
+      userId: auth.userId,
+      pairKey,
+      sourceCount: scored.length,
+    });
+
+    return new Response(JSON.stringify({ insight: record, cached: false, requestId }), {
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ error: (e as Error).message }), {
+    if (e instanceof PremiumAuthError) {
+      console.error("compare-intelligence premium auth failed", {
+        requestId,
+        code: e.code,
+        details: e.details,
+      });
+      return premiumJsonError(e.status, e.code, e.message, requestId, e.details, corsHeaders);
+    }
+    console.error("compare-intelligence failed", { requestId, error: e });
+    return new Response(JSON.stringify({ error: (e as Error).message, requestId }), {
       status: 500,
       headers: { ...corsHeaders, "Content-Type": "application/json" },
     });

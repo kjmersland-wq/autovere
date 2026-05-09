@@ -10,19 +10,24 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CarCard } from "@/components/CarCard";
 import { LLink } from "@/i18n/routing";
-import { CARS, COLLECTIONS as DATA_COLLECTIONS } from "@/data/cars";
+import { CARS, COLLECTIONS as DATA_COLLECTIONS, getCar, getCollection } from "@/data/cars";
 import heroCar from "@/assets/hero-car.jpg";
 import sceneNight from "@/assets/scene-night-drive.jpg";
 import sceneNordic from "@/assets/scene-nordic.jpg";
 import sceneRoad from "@/assets/scene-roadtrip.jpg";
 import sceneQuiet from "@/assets/scene-quiet.jpg";
 import sceneCity from "@/assets/scene-city.jpg";
-
-const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4);
-const SAMPLE_CARS = CARS.slice(0, 3);
+import { resolveLang } from "@/i18n/localized-content";
 
 const Index = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const lang = resolveLang(i18n.language);
+  const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4)
+    .map((collection) => getCollection(collection.slug, lang))
+    .filter((x): x is NonNullable<typeof x> => Boolean(x));
+  const SAMPLE_CARS = CARS.slice(0, 3)
+    .map((car) => getCar(car.slug, lang))
+    .filter((x): x is NonNullable<typeof x> => Boolean(x));
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [seedPrompt, setSeedPrompt] = useState<string | undefined>();
   const [heroInput, setHeroInput] = useState("");
@@ -64,17 +69,19 @@ const Index = () => {
     {
       "@context": "https://schema.org",
       "@type": "WebSite",
+      inLanguage: lang,
       name: "AUTOVERE",
       url: origin,
       potentialAction: {
         "@type": "SearchAction",
-        target: `${origin}/cars?q={query}`,
+        target: `${origin}${lang === "en" ? "" : `/${lang}`}/cars?q={query}`,
         "query-input": "required name=query",
       },
     },
     {
       "@context": "https://schema.org",
       "@type": "Organization",
+      inLanguage: lang,
       name: "AUTOVERE",
       url: origin,
       logo: `${origin}/favicon.ico`,
@@ -145,7 +152,7 @@ const Index = () => {
             <div className="relative rounded-3xl overflow-hidden shadow-elegant border border-border/50 group">
               <img
                 src={heroCar}
-                alt="Premium electric car at night"
+                alt={t("pages.index.hero_image_alt")}
                 width={1920}
                 height={1280}
                 className="w-full h-auto transition-transform duration-[3000ms] group-hover:scale-105"
@@ -323,7 +330,7 @@ const Index = () => {
               </button>
             </div>
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-border/40 group">
-              <img src={sceneCity} alt="Underestimated cars" loading="lazy" width={1920} height={1280} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2500ms]" />
+              <img src={sceneCity} alt={t("pages.index.under_image_alt")} loading="lazy" width={1920} height={1280} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2500ms]" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
                 <div>

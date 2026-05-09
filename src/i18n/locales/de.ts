@@ -126,6 +126,7 @@ const de: Translation = {
       popular_1: "Familien-EV",
       popular_2: "Wochenend-Sportwagen",
       popular_3: "Stadtpendler",
+      hero_image_alt: "Premium-Elektroauto bei Nacht",
       hero_caption_a: "Eine AUTOVERE-Geschichte · Band 01",
       hero_caption_b: "„Das richtige Auto schreit nicht. Es passt.“",
       how_eyebrow: "So funktioniert es",
@@ -191,6 +192,7 @@ const de: Translation = {
       under_lead:
         "Nicht jedes großartige Auto kommt mit einem Marketingbudget. AUTOVERE hebt die leise Exzellenten hervor — Autos, die Besitzer nach einem Jahr mehr lieben, nicht weniger.",
       under_cta: "Meine versteckten Treffer zeigen",
+      under_image_alt: "Unterschätzte Autos",
       under_card_eyebrow: "Heute Abend in Tokio",
       under_card_title: "Ein Auto, das Sie nicht erwartet hätten zu lieben.",
       cinematic_night_eyebrow: "Warum wir AUTOVERE gebaut haben",
@@ -234,7 +236,7 @@ const de: Translation = {
       monthly: "Monatlich",
       yearly: "Jährlich",
       billed_yearly: "jährlich abgerechnet",
-      yearly_save: "oder 59 $ / Jahr — 30 % sparen",
+      yearly_save: "oder 59 € / Jahr — 30 % sparen",
       premium_lead:
         "Für Menschen, die langfristig denken. Tiefere Analyse, klügere Prognosen, weniger Überraschungen.",
       on_premium: "✓ Sie haben Premium",
@@ -248,6 +250,18 @@ const de: Translation = {
       welcome_premium: "Willkommen bei Premium! Eine Bestätigungs-E-Mail ist unterwegs.",
       portal_error: "Kundenportal konnte nicht geöffnet werden.",
       please_sign_in: "Bitte anmelden, um zu abonnieren.",
+      checkout_errors: {
+        missing_publishable_key: "Checkout ist nicht verfügbar, weil der Stripe-Publishable-Key fehlt.",
+        auth_required: "Bitte melden Sie sich erneut an und versuchen Sie den Checkout noch einmal.",
+        env_mismatch: "Fehler in der Zahlungs-Konfiguration zwischen Stripe-Test- und Live-Schlüsseln. Bitte Support kontaktieren.",
+        price_missing: "Der Stripe-Abopreis fehlt oder ist ungültig.",
+        price_inactive: "Dieser Tarif ist derzeit nicht verfügbar.",
+        currency_mismatch: "Die Abrechnung ist mit einem Stripe-Preis konfiguriert, der nicht EUR verwendet.",
+        temporarily_unavailable: "Checkout ist vorübergehend nicht verfügbar. Bitte versuchen Sie es gleich noch einmal.",
+        invalid_response: "Checkout konnte nicht gestartet werden, weil Stripe eine ungültige Antwort zurückgegeben hat.",
+        redirect_failed: "Weiterleitung zu Stripe Checkout fehlgeschlagen. Bitte versuchen Sie es erneut.",
+        generic: "Checkout konnte nicht geöffnet werden. Bitte versuchen Sie es erneut.",
+      },
       reassurance: {
         t1: "Keine Daten weiterverkauft",
         b1: "Wir verkaufen Ihre Vorlieben nicht an Händler. Ihre Gespräche bleiben Ihre.",
@@ -558,6 +572,24 @@ const de: Translation = {
       title: "404",
       lead: "Hoppla! Seite nicht gefunden",
       home: "Zur Startseite",
+    },
+    success: {
+      seo_title: "Willkommen bei Premium · AUTOVERE",
+      seo_desc: "Dein AUTOVERE Premium-Abonnement ist jetzt aktiv.",
+      heading_a: "Du bist jetzt",
+      heading_b: "Premium",
+      lead: "Dein Abonnement ist aktiv und alles ist freigeschaltet. Eine Bestätigungs-E-Mail ist unterwegs.",
+      features_heading: "Was du gerade freigeschaltet hast",
+      redirect_cta: "Zu AUTOVERE",
+      redirect_auto: "Weiterleitung in {{count}}s…",
+    },
+  },
+  premium: {
+    lock: {
+      eyebrow: "Premium-Zugang",
+      title: "Erweiterte AUTOVERE-Intelligenz freischalten",
+      body: "Diese Funktion ist Teil von Premium und umfasst erweiterte KI-Einblicke, Besitzanalyse und Premium-Berichte.",
+      cta: "Premium freischalten",
     },
   },
 };

@@ -1,8 +1,8 @@
-import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Sparkles, Shield, CreditCard, Bot, MessageCircle, Lock } from "lucide-react";
+import { LLink } from "@/i18n/routing";
 
 export default function Help() {
   const { t } = useTranslation();
@@ -36,13 +36,13 @@ export default function Help() {
 
       <section className="container pb-24 grid md:grid-cols-2 lg:grid-cols-3 gap-5">
         {TOPICS.map((tt) => (
-          <Link key={tt.title} to="/contact" className="glass rounded-2xl p-7 group hover:border-primary/40 transition-all hover:-translate-y-0.5">
+          <LLink key={tt.title} to="/contact" className="glass rounded-2xl p-7 group hover:border-primary/40 transition-all hover:-translate-y-0.5">
             <div className="w-10 h-10 rounded-xl bg-gradient-primary/20 border border-primary/20 flex items-center justify-center mb-5 text-primary">
               {tt.icon}
             </div>
             <div className="font-semibold mb-2">{tt.title}</div>
             <p className="text-sm text-muted-foreground leading-relaxed">{tt.body}</p>
-          </Link>
+          </LLink>
         ))}
       </section>
 
@@ -50,9 +50,9 @@ export default function Help() {
         <div className="glass rounded-3xl p-10 md:p-14 text-center max-w-3xl mx-auto">
           <h2 className="text-3xl md:text-4xl font-semibold tracking-tight mb-4">{t("pages.help.still_human")}</h2>
           <p className="text-muted-foreground mb-8 max-w-lg mx-auto">{t("pages.help.still_human_lead")}</p>
-          <Link to="/contact" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90 transition-opacity text-sm font-medium">
+          <LLink to="/contact" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-gradient-primary text-primary-foreground shadow-glow hover:opacity-90 transition-opacity text-sm font-medium">
             {t("pages.help.contact_team")} <Sparkles className="w-4 h-4" />
-          </Link>
+          </LLink>
         </div>
       </section>
     </PageShell>

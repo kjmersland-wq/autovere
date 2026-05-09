@@ -1,17 +1,22 @@
 import { Link } from "react-router-dom";
 import { ArrowUpRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { useLatestPulse } from "@/hooks/use-latest-pulse";
-import { CARS } from "@/data/cars";
+import { getCars } from "@/data/cars";
+import { getUiCopy } from "@/i18n/localized-content";
 
 export const EditorialPulseSection = () => {
+  const { i18n } = useTranslation();
+  const cars = getCars(i18n.language);
+  const ui = getUiCopy(i18n.language).editorialPulse;
   const { pulse, loading } = useLatestPulse();
   if (loading || !pulse) return null;
 
   const featured = pulse.featured_slugs
-    .map((s) => CARS.find((c) => c.slug === s))
+    .map((s) => cars.find((c) => c.slug === s))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
-  const date = new Date(pulse.refreshed_at).toLocaleDateString("en-GB", {
+  const date = new Date(pulse.refreshed_at).toLocaleDateString(i18n.language || "en-GB", {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -22,7 +27,7 @@ export const EditorialPulseSection = () => {
       <div className="container max-w-5xl py-20 md:py-28">
         <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-accent mb-8">
           <span className="h-px w-10 bg-accent/40" />
-          The AutoVere Pulse
+          {ui.title}
           <span className="text-muted-foreground/60 normal-case tracking-normal text-[11px]">
             · {date}
           </span>
@@ -46,7 +51,7 @@ export const EditorialPulseSection = () => {
         {featured.length > 0 && (
           <div className="mt-14 pt-8 border-t border-border/40">
             <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-5">
-              Featured this week
+               {ui.featured}
             </div>
             <div className="grid sm:grid-cols-3 gap-3">
               {featured.map((car) => (
@@ -67,8 +72,7 @@ export const EditorialPulseSection = () => {
         )}
 
         <div className="mt-10 text-xs text-muted-foreground/70 max-w-xl leading-relaxed">
-          Written weekly by AutoVere's editorial intelligence — calm reflections grounded in
-          verified reviewer consensus, never hype.
+          {ui.footer}
         </div>
       </div>
     </section>
