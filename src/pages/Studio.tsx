@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Check, X, Loader2, Lock, Sparkles, RefreshCw } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
+import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
 
@@ -100,6 +101,7 @@ const Studio = () => {
   if (!adminKey) {
     return (
       <PageShell>
+        <SEO title={t("pages.studio.title")} description={t("pages.studio.auth_lead")} noindex />
         <section className="container max-w-md py-32">
           <div className="glass rounded-3xl p-10">
             <Lock className="w-6 h-6 text-accent mb-5" />
@@ -127,6 +129,7 @@ const Studio = () => {
 
   return (
     <PageShell>
+      <SEO title={t("pages.studio.title")} description={t("pages.studio.lead")} noindex />
       <section className="container max-w-5xl py-16">
         <div className="flex items-end justify-between mb-12 flex-wrap gap-4">
           <div>

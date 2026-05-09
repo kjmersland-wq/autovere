@@ -67,7 +67,7 @@ const Auth = () => {
 
   return (
     <PageShell>
-      <SEO title={t('pages.auth.seo_title')} description={t('pages.auth.seo_desc')} type="website" />
+      <SEO title={t('pages.auth.seo_title')} description={t('pages.auth.seo_desc')} type="website" noindex />
       <section className="container max-w-md py-24">
         <h1 className="text-4xl font-bold tracking-tighter mb-2">
           {mode === 'signin' ? t('pages.auth.welcome_back') : t('pages.auth.create_account')}

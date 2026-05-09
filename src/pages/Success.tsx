@@ -48,6 +48,7 @@ const Success = () => {
         title={t('pages.success.seo_title')}
         description={t('pages.success.seo_desc')}
         type="website"
+        noindex
       />
 
       <section className="container pt-24 pb-32 flex flex-col items-center text-center">
