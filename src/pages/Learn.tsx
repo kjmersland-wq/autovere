@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ArrowRight, BookOpen } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
@@ -6,6 +6,7 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { LEARN, getArticle } from "@/data/cars";
 import { resolveLang } from "@/i18n/localized-content";
+import { LLink } from "@/i18n/routing";
 
 const NotFound = () => {
   const { t, i18n } = useTranslation();
@@ -15,7 +16,7 @@ const NotFound = () => {
       <SEO title={t("pages.learn.not_found_seo_title")} description={t("pages.learn.not_found_seo_desc")} />
       <div className="container py-32 text-center">
         <h1 className="text-4xl font-bold mb-4">{t("pages.learn.not_found_h1")}</h1>
-        <Button asChild className="bg-gradient-primary"><Link to="/learn">{t("pages.learn.back_learn")}</Link></Button>
+        <Button asChild className="bg-gradient-primary"><LLink to="/learn">{t("pages.learn.back_learn")}</LLink></Button>
       </div>
     </PageShell>
   );
@@ -41,9 +42,9 @@ const LearnArticle = () => {
     <PageShell>
       <SEO title={`${a.title} · AUTOVERE`} description={a.excerpt} type="article" jsonLd={jsonLd} />
       <article className="container max-w-3xl pt-16 pb-24">
-        <Link to="/learn" className="text-xs uppercase tracking-wider text-accent mb-6 inline-block">
+        <LLink to="/learn" className="text-xs uppercase tracking-wider text-accent mb-6 inline-block">
           {t("pages.learn.back_to")} {a.category}
-        </Link>
+        </LLink>
         <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.05] mb-6">{a.title}</h1>
         <p className="text-xl text-muted-foreground leading-relaxed mb-12">{a.excerpt}</p>
         <div className="space-y-6 text-lg leading-relaxed">
@@ -54,7 +55,7 @@ const LearnArticle = () => {
           <h2 className="text-2xl font-bold tracking-tight mb-3">{t("pages.learn.ready_h")}</h2>
           <p className="text-muted-foreground mb-6">{t("pages.learn.ready_lead")}</p>
           <Button asChild className="bg-gradient-primary rounded-xl gap-2">
-            <Link to="/#advisor">{t("common.talk_to_autovere")} <ArrowRight className="w-4 h-4" /></Link>
+            <LLink to="/#advisor">{t("common.talk_to_autovere")} <ArrowRight className="w-4 h-4" /></LLink>
           </Button>
         </div>
       </article>
@@ -86,7 +87,7 @@ export const LearnIndex = () => {
             <div className="text-xs uppercase tracking-[0.3em] text-accent mb-6">{cat}</div>
             <div className="grid md:grid-cols-2 gap-6">
               {articles.filter((a) => a.category === cat).map((a) => (
-                <Link
+                <LLink
                   key={a.slug}
                   to={`/learn/${a.slug}`}
                   className="group glass rounded-3xl p-8 hover:-translate-y-1 hover:shadow-glow transition-all duration-500 block"
@@ -97,7 +98,7 @@ export const LearnIndex = () => {
                   <div className="text-xs text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
                     {t("common.read_guide")} <ArrowRight className="w-3 h-3" />
                   </div>
-                </Link>
+                </LLink>
               ))}
             </div>
           </div>

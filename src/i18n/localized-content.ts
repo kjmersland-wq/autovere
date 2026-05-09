@@ -143,7 +143,7 @@ type OwnershipText = { title: string; body: string };
 
 export const UI_COPY: Record<Lang, UiCopy> = {
   en: {
-    carCardMatch: "Match",
+    carCardMatch: "Treff",
     carCardExplore: "Explore {{name}}",
     carMedia: {
       featuredEyebrow: "Featured video review",
@@ -229,7 +229,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
     schema: { home: "Home", cars: "Cars" },
   },
   no: {
-    carCardMatch: "Match",
+    carCardMatch: "Treffer",
     carCardExplore: "Utforsk {{name}}",
     carMedia: {
       featuredEyebrow: "Utvalgt videotest",
@@ -311,7 +311,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
     schema: { home: "Hjem", cars: "Biler" },
   },
   de: {
-    carCardMatch: "Match",
+    carCardMatch: "Matchning",
     carCardExplore: "{{name}} entdecken",
     carMedia: {
       featuredEyebrow: "Ausgewählter Videotest",
@@ -393,7 +393,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
     schema: { home: "Startseite", cars: "Autos" },
   },
   sv: {
-    carCardMatch: "Match",
+    carCardMatch: "Correspondance",
     carCardExplore: "Utforska {{name}}",
     carMedia: {
       featuredEyebrow: "Utvald videorecension",
@@ -475,7 +475,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
     schema: { home: "Hem", cars: "Bilar" },
   },
   fr: {
-    carCardMatch: "Match",
+    carCardMatch: "Dopasowanie",
     carCardExplore: "Découvrir {{name}}",
     carMedia: {
       featuredEyebrow: "Vidéo d'essai à la une",
@@ -557,7 +557,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
     schema: { home: "Accueil", cars: "Voitures" },
   },
   pl: {
-    carCardMatch: "Match",
+    carCardMatch: "Abbinamento",
     carCardExplore: "Poznaj {{name}}",
     carMedia: {
       featuredEyebrow: "Polecana wideorecenzja",
@@ -639,7 +639,7 @@ export const UI_COPY: Record<Lang, UiCopy> = {
     schema: { home: "Strona główna", cars: "Samochody" },
   },
   it: {
-    carCardMatch: "Match",
+    carCardMatch: "Coincidencia",
     carCardExplore: "Scopri {{name}}",
     carMedia: {
       featuredEyebrow: "Videorecensione in evidenza",

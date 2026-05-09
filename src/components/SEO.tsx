@@ -34,6 +34,16 @@ const setMeta = (selector: string, attr: string, value: string) => {
   el.setAttribute(attr, value);
 };
 
+const setMultiMetaByProperty = (property: string, values: string[]) => {
+  document.head.querySelectorAll(`meta[property="${property}"]`).forEach((n) => n.remove());
+  values.forEach((value) => {
+    const el = document.createElement("meta");
+    el.setAttribute("property", property);
+    el.setAttribute("content", value);
+    document.head.appendChild(el);
+  });
+};
+
 const setLink = (rel: string, href: string, hreflang?: string) => {
   const sel = hreflang
     ? `link[rel="${rel}"][hreflang="${hreflang}"]`
@@ -85,6 +95,11 @@ export const SEO = ({ title, description, canonical, image, type = "website", js
     setLink("canonical", canonicalUrl);
     setMeta('meta[property="og:url"]', "content", canonicalUrl);
     setMeta('meta[property="og:locale"]', "content", OG_LOCALE_BY_LANG[lang]);
+    setMeta('meta[name="language"]', "content", lang);
+    setMultiMetaByProperty(
+      "og:locale:alternate",
+      SUPPORTED_LANGS.filter((l) => l !== lang).map((l) => OG_LOCALE_BY_LANG[l]),
+    );
 
     // hreflang for all supported languages + x-default
     document

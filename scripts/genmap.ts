@@ -6,10 +6,15 @@ const DEFAULT = 'en';
 
 const paths = [
   '/', '/cars', '/collections', '/personalities', '/learn', '/watch',
-  '/pricing', '/contact', '/help', '/discover',
+  '/pricing', '/contact', '/help', '/discover', '/auth',
   '/legal/terms','/legal/privacy','/legal/cookies','/legal/refund','/legal/subscriptions',
 ];
 CARS.forEach(c => paths.push('/cars/' + c.slug));
+CARS.forEach((c) => c.comparesWellWith.forEach((other) => {
+  const candidate = `/compare/${c.slug}-vs-${other}`;
+  const inverse = `/compare/${other}-vs-${c.slug}`;
+  if (!paths.includes(candidate) && !paths.includes(inverse)) paths.push(candidate);
+}));
 COLLECTIONS.forEach(c => paths.push('/collections/' + c.slug));
 PERSONALITIES.forEach(p => paths.push('/personalities/' + p.slug));
 LEARN.forEach(a => paths.push('/learn/' + a.slug));

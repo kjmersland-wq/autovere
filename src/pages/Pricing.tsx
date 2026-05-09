@@ -1,4 +1,4 @@
-import { Link, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { Check, Sparkles, Heart, ArrowRight, ShieldCheck, Infinity as InfinityIcon } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -9,10 +9,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
+import { detectLangFromPath, localizePath } from "@/i18n/routing";
+import { LLink } from "@/i18n/routing";
 
 const Pricing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const { pathname } = useLocation();
+  const lang = detectLangFromPath(pathname);
   const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
   const { isActive, subscription, userId, refetch } = useSubscription();
   const [interval, setInterval] = useState<"month" | "year">("month");
@@ -34,7 +38,7 @@ const Pricing = () => {
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       toast.info(t("pages.pricing.please_sign_in"));
-      navigate("/auth");
+      navigate(localizePath("/auth", lang));
       return;
     }
     await openCheckout({ priceId, customerEmail: user.email, userId: user.id });
@@ -89,7 +93,7 @@ const Pricing = () => {
             ))}
           </ul>
           <Button asChild variant="outline" className="rounded-xl border-border/60 hover:bg-secondary/40">
-            <Link to="/#advisor">{t("pages.pricing.free_cta")} <ArrowRight className="w-4 h-4 ml-1" /></Link>
+            <LLink to="/#advisor">{t("pages.pricing.free_cta")} <ArrowRight className="w-4 h-4 ml-1" /></LLink>
           </Button>
         </div>
 

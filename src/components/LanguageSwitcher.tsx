@@ -6,12 +6,14 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useTranslation } from "react-i18next";
 import { SUPPORTED_LANGS, LANG_LABELS, type Lang } from "@/i18n/config";
 import { detectLangFromPath, localizePath } from "@/i18n/routing";
 
 export const LanguageSwitcher = () => {
   const navigate = useNavigate();
   const { pathname, search, hash } = useLocation();
+  const { t } = useTranslation();
   const current = detectLangFromPath(pathname);
 
   // Strip current lang to get the canonical inner path
@@ -24,7 +26,7 @@ export const LanguageSwitcher = () => {
     return pathname;
   })();
 
-const switchTo = (lang: Lang) => {
+  const switchTo = (lang: Lang) => {
     try {
       localStorage.setItem("autovere.lang", lang);
     } catch {}
@@ -34,8 +36,12 @@ const switchTo = (lang: Lang) => {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-md">
+      <DropdownMenuTrigger
+        aria-label={`${t("language.label")}: ${LANG_LABELS[current]}`}
+        className="inline-flex items-center gap-1.5 text-xs uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors px-2 py-1.5 rounded-md"
+      >
         <Globe className="w-3.5 h-3.5" />
+        <span className="sr-only">{t("language.label")}</span>
         {current.toUpperCase()}
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="min-w-[140px]">

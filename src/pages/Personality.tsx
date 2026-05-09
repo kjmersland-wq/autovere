@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ArrowRight, Wind, Crown, Building2, Mountain, Flame, Snowflake } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
@@ -7,6 +7,7 @@ import { CarCard } from "@/components/CarCard";
 import { Button } from "@/components/ui/button";
 import { PERSONALITIES, getPersonality, getCar } from "@/data/cars";
 import { resolveLang } from "@/i18n/localized-content";
+import { LLink } from "@/i18n/routing";
 
 const ICONS: Record<string, any> = {
   "calm-explorer": Wind,
@@ -24,7 +25,7 @@ const NotFound = () => {
       <SEO title={t("pages.personality.not_found_seo_title")} description={t("pages.personality.not_found_seo_desc")} />
       <div className="container py-32 text-center">
         <h1 className="text-4xl font-bold mb-4">{t("pages.personality.not_found_h1")}</h1>
-        <Button asChild className="bg-gradient-primary"><Link to="/personalities">{t("pages.personality.all")}</Link></Button>
+        <Button asChild className="bg-gradient-primary"><LLink to="/personalities">{t("pages.personality.all")}</LLink></Button>
       </div>
     </PageShell>
   );
@@ -75,7 +76,7 @@ const PersonalityDetail = () => {
         </div>
 
         <Button asChild size="lg" className="bg-gradient-primary rounded-xl gap-2">
-          <Link to={`/#advisor`}>{t("pages.personality.show_matches")} <ArrowRight className="w-4 h-4" /></Link>
+          <LLink to={`/#advisor`}>{t("pages.personality.show_matches")} <ArrowRight className="w-4 h-4" /></LLink>
         </Button>
       </section>
 
@@ -113,7 +114,7 @@ export const PersonalitiesIndex = () => {
           {personalities.map((p) => {
             const Icon = ICONS[p.slug] ?? Wind;
             return (
-              <Link
+              <LLink
                 key={p.slug}
                 to={`/personalities/${p.slug}`}
                 className="group glass rounded-3xl p-8 hover:-translate-y-1 hover:shadow-glow transition-all duration-500 block"
@@ -127,7 +128,7 @@ export const PersonalitiesIndex = () => {
                 <div className="text-xs text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
                   {t("pages.personality.read_profile")} <ArrowRight className="w-3 h-3" />
                 </div>
-              </Link>
+              </LLink>
             );
           })}
         </div>

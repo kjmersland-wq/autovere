@@ -1,4 +1,4 @@
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { ArrowRight, Check, X, Sparkles, MapPin, Heart, Zap } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
@@ -12,6 +12,7 @@ import { PricingOwnership } from "@/components/PricingOwnership";
 import { SafetyOwnershipBlock } from "@/components/SafetyOwnershipBlock";
 import { ContinueExploringSection } from "@/components/ContinueExploringSection";
 import { getUiCopy, resolveLang } from "@/i18n/localized-content";
+import { LLink } from "@/i18n/routing";
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -21,7 +22,7 @@ const NotFound = () => {
       <div className="container py-32 text-center">
         <h1 className="text-4xl font-bold mb-4">{t("pages.car.not_found_h1")}</h1>
         <p className="text-muted-foreground mb-8">{t("pages.car.not_found_lead")}</p>
-        <Button asChild className="bg-gradient-primary"><Link to="/cars">{t("pages.car.all_cars")}</Link></Button>
+        <Button asChild className="bg-gradient-primary"><LLink to="/cars">{t("pages.car.all_cars")}</LLink></Button>
       </div>
     </PageShell>
   );
@@ -198,18 +199,18 @@ const CarDetail = () => {
           </h2>
           <div className="grid md:grid-cols-2 gap-6">
             {related.map((r) => (
-              <Link
-                key={r.slug}
-                to={`/compare/${car.slug}-vs-${r.slug}`}
-                className="group glass rounded-3xl p-8 hover:-translate-y-1 hover:shadow-glow transition-all duration-500 flex items-center justify-between gap-6"
-              >
+               <LLink
+                 key={r.slug}
+                 to={`/compare/${car.slug}-vs-${r.slug}`}
+                 className="group glass rounded-3xl p-8 hover:-translate-y-1 hover:shadow-glow transition-all duration-500 flex items-center justify-between gap-6"
+               >
                 <div>
                   <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">{t("pages.car.compare_label")}</div>
                   <div className="text-xl font-semibold mb-1">{car.name} vs {r.name}</div>
                   <div className="text-sm text-muted-foreground">{r.fit} · {r.type}</div>
                 </div>
                 <ArrowRight className="w-5 h-5 text-accent group-hover:translate-x-1 transition-transform" />
-              </Link>
+               </LLink>
             ))}
           </div>
         </section>
@@ -224,7 +225,7 @@ const CarDetail = () => {
             </h2>
             <p className="text-muted-foreground mb-8 max-w-xl mx-auto">{t("pages.car.cta_lead")}</p>
             <Button asChild size="lg" className="bg-gradient-primary rounded-xl gap-2">
-              <Link to="/#advisor">{t("common.talk_to_autovere")} <ArrowRight className="w-4 h-4" /></Link>
+               <LLink to="/#advisor">{t("common.talk_to_autovere")} <ArrowRight className="w-4 h-4" /></LLink>
             </Button>
           </div>
         </div>
