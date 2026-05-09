@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Sparkles, Check, ArrowRight } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { PageShell } from '@/components/PageShell';
@@ -13,6 +13,7 @@ const PREMIUM_FEATURE_COUNT = 8;
 const Success = () => {
   const { t } = useTranslation();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
   const lang = detectLangFromPath(pathname);
   const [countdown, setCountdown] = useState(REDIRECT_SECONDS);
 
@@ -20,12 +21,12 @@ const Success = () => {
 
   useEffect(() => {
     if (countdown <= 0) {
-      window.location.assign(homePath);
+      navigate(homePath, { replace: true });
       return;
     }
     const timer = setTimeout(() => setCountdown((c) => c - 1), 1000);
     return () => clearTimeout(timer);
-  }, [countdown, homePath]);
+  }, [countdown, homePath, navigate]);
 
   const premiumFeatures = t('pages.pricing.premium_features', {
     returnObjects: true,
