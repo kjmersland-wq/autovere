@@ -17,17 +17,11 @@ type SubscriptionRow = {
   stripe_customer_id: string | null;
 };
 
-const getAuthClient = (authHeader: string) =>
-  createClient(
-    Deno.env.get('SUPABASE_URL')!,
-    Deno.env.get('SUPABASE_ANON_KEY')!,
-    { global: { headers: { Authorization: authHeader } } },
-  );
-
-const getServiceClient = () =>
+const getServiceClient = (authHeader?: string) =>
   createClient(
     Deno.env.get('SUPABASE_URL')!,
     Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!,
+    authHeader ? { global: { headers: { Authorization: authHeader } } } : undefined,
   );
 
 Deno.serve(async (req) => {
@@ -40,7 +34,7 @@ Deno.serve(async (req) => {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) throw new Error('Not authenticated');
 
-    const authClient = getAuthClient(authHeader);
+    const authClient = getServiceClient(authHeader);
     const serviceClient = getServiceClient();
     const stripe = getStripeClient();
 
