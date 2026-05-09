@@ -18,7 +18,8 @@ const readInvokeErrorPayload = async (error: unknown): Promise<CheckoutServerErr
   try {
     const payload = await context.json();
     return (payload ?? null) as CheckoutServerError | null;
-  } catch {
+  } catch (parseError) {
+    console.warn('Failed to parse checkout error payload', parseError);
     return null;
   }
 };
