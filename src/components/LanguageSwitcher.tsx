@@ -6,7 +6,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SUPPORTED_LANGS, LANG_LABELS, type Lang } from "@/i18n/config";
+import { SUPPORTED_LANGS, LANG_LABELS, type Lang } from "@/i18n/locales";
 import { detectLangFromPath, localizePath } from "@/i18n/routing";
 
 export const LanguageSwitcher = () => {

@@ -1,8 +1,9 @@
 import { CARS, COLLECTIONS, PERSONALITIES, LEARN } from '../src/data/cars.ts';
+import { SUPPORTED_LANGS, DEFAULT_LANG } from '../src/i18n/locales.ts';
+import { writeFileSync } from "node:fs";
 
 const base = 'https://autovere.com';
-const langs = ['en', 'no', 'de', 'sv'] as const;
-const DEFAULT = 'en';
+const langs = [...SUPPORTED_LANGS];
 
 const paths = [
   '/', '/cars', '/collections', '/personalities', '/learn', '/watch',
@@ -15,8 +16,8 @@ PERSONALITIES.forEach(p => paths.push('/personalities/' + p.slug));
 LEARN.forEach(a => paths.push('/learn/' + a.slug));
 
 const localize = (path: string, lang: string) => {
-  if (path === '/') return lang === DEFAULT ? `${base}/` : `${base}/${lang}`;
-  return lang === DEFAULT ? `${base}${path}` : `${base}/${lang}${path}`;
+  if (path === '/') return lang === DEFAULT_LANG ? `${base}/` : `${base}/${lang}`;
+  return lang === DEFAULT_LANG ? `${base}${path}` : `${base}/${lang}${path}`;
 };
 
 const today = new Date().toISOString().slice(0, 10);
@@ -28,7 +29,7 @@ for (const path of paths) {
     const alternates = langs
       .map(l => `    <xhtml:link rel="alternate" hreflang="${l}" href="${localize(path, l)}"/>`)
       .join('\n');
-    const xDefault = `    <xhtml:link rel="alternate" hreflang="x-default" href="${localize(path, DEFAULT)}"/>`;
+    const xDefault = `    <xhtml:link rel="alternate" hreflang="x-default" href="${localize(path, DEFAULT_LANG)}"/>`;
     entries.push(
       `  <url>\n    <loc>${loc}</loc>\n    <lastmod>${today}</lastmod>\n    <changefreq>weekly</changefreq>\n${alternates}\n${xDefault}\n  </url>`
     );
@@ -41,5 +42,5 @@ const xml =
   entries.join('\n') +
   '\n</urlset>\n';
 
-await Bun.write('public/sitemap.xml', xml);
+writeFileSync('public/sitemap.xml', xml, 'utf-8');
 console.log('wrote', entries.length, 'urls across', langs.length, 'languages');

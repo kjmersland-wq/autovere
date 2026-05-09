@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { SUPPORTED_LANGS, DEFAULT_LANG } from "@/i18n/config";
+import { SUPPORTED_LANGS, DEFAULT_LANG } from "@/i18n/locales";
 import { detectLangFromPath } from "@/i18n/routing";
 
 type Props = {

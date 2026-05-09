@@ -26,6 +26,7 @@ import Subscriptions from "./pages/legal/Subscriptions.tsx";
 import Studio from "./pages/Studio.tsx";
 import Auth from "./pages/Auth.tsx";
 import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
+import { SUPPORTED_LANGS, DEFAULT_LANG } from "./i18n/locales";
 
 const queryClient = new QueryClient();
 
@@ -84,10 +85,9 @@ const App = () => (
         <PaymentTestModeBanner />
         <Routes>
           {/* Localized routes — same tree mounted under each language prefix */}
-          <Route path="/en/*" element={<AppRoutes />} />
-          <Route path="/no/*" element={<AppRoutes />} />
-          <Route path="/de/*" element={<AppRoutes />} />
-          <Route path="/sv/*" element={<AppRoutes />} />
+          {SUPPORTED_LANGS.filter((lang) => lang !== DEFAULT_LANG).map((lang) => (
+            <Route key={lang} path={`/${lang}/*`} element={<AppRoutes />} />
+          ))}
           {/* Default (English) at root */}
           <Route path="/*" element={<AppRoutes />} />
         </Routes>
