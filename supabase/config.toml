@@ -30,11 +30,5 @@ verify_jwt = false
 [functions.compare-intelligence]
 verify_jwt = false
 
-
-
-
-[functions.payments-webhook]
-verify_jwt = false
-
-[functions.get-paddle-price]
+[functions.stripe-webhook]
 verify_jwt = false
