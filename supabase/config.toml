@@ -38,3 +38,9 @@ verify_jwt = false
 
 [functions.get-paddle-price]
 verify_jwt = false
+
+[functions.create-stripe-checkout]
+verify_jwt = true
+
+[functions.stripe-webhook]
+verify_jwt = false

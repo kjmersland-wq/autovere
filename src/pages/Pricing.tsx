@@ -6,14 +6,17 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
+import { localizePath, useLang } from "@/i18n/routing";
+import { getStripePublishableKey } from "@/lib/stripe";
 
 const Pricing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
+  const lang = useLang();
+  const { openCheckout, loading: checkoutLoading } = useStripeCheckout();
   const { isActive, subscription, userId, refetch } = useSubscription();
   const [interval, setInterval] = useState<"month" | "year">("month");
   const [portalLoading, setPortalLoading] = useState(false);
@@ -27,29 +30,76 @@ const Pricing = () => {
       toast.success(t("pages.pricing.welcome_premium"));
       refetch();
     }
+    if (params.get("checkout") === "cancelled") {
+      toast.info(t("pages.pricing.checkout_cancelled"));
+    }
+    if (params.get("portal") === "return") {
+      toast.success(t("pages.pricing.portal_returned"));
+      refetch();
+    }
   }, [refetch, t]);
+
+  const getLocalizedCheckoutError = (code: string, fallbackMessage: string) => {
+    const map: Record<string, string> = {
+      auth_required: "pages.pricing.checkout_error_auth",
+      invalid_payload: "pages.pricing.checkout_error_payload",
+      unsupported_price: "pages.pricing.checkout_error_price",
+      invalid_price: "pages.pricing.checkout_error_price",
+      invalid_currency: "pages.pricing.checkout_error_currency",
+      stripe_mode_mismatch: "pages.pricing.checkout_error_mode",
+      checkout_url_missing: "pages.pricing.checkout_error_url",
+      checkout_request_failed: "pages.pricing.checkout_error_request",
+      checkout_unexpected_error: "pages.pricing.checkout_error_request",
+      checkout_session_failed: "pages.pricing.checkout_error_request",
+    };
+    const key = map[code];
+    return key ? t(key) : fallbackMessage;
+  };
 
   const handleSubscribe = async () => {
     const priceId = interval === "month" ? "premium_monthly" : "premium_yearly";
+    console.info("[pricing] checkout_click", { interval, priceId, lang });
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       toast.info(t("pages.pricing.please_sign_in"));
-      navigate("/auth");
+      navigate(`${localizePath("/auth", lang)}?next=${encodeURIComponent(localizePath("/pricing", lang))}`);
       return;
     }
-    await openCheckout({ priceId, customerEmail: user.email, userId: user.id });
+
+    const result = await openCheckout({
+      priceId,
+      locale: lang,
+      successPath: "/success",
+      cancelPath: "/pricing",
+    });
+
+    if (!result.ok) {
+      const message = getLocalizedCheckoutError(result.code, result.message);
+      console.error("[pricing] checkout_failed", {
+        code: result.code,
+        message: result.message,
+        details: result.details,
+      });
+      toast.error(message);
+    }
   };
 
   const openPortal = async () => {
     setPortalLoading(true);
     try {
+      console.info("[pricing] portal_open_click", { lang });
       const { data, error } = await supabase.functions.invoke("customer-portal", {
-        body: { environment: subscription ? (await import("@/lib/paddle")).getPaddleEnvironment() : "sandbox" },
+        body: { locale: lang, publishableKey: getStripePublishableKey() },
       });
-      if (error || !data?.url) throw new Error("Could not open portal");
+      console.info("[pricing] portal_response", { error, data });
+      if (error || !data?.url) {
+        throw new Error(data?.error?.message || error?.message || "Could not open portal");
+      }
       window.open(data.url, "_blank");
     } catch (e) {
-      toast.error(t("pages.pricing.portal_error"));
+      console.error("[pricing] portal_open_failed", e);
+      const message = e instanceof Error ? e.message : t("pages.pricing.portal_error");
+      toast.error(message || t("pages.pricing.portal_error"));
     } finally {
       setPortalLoading(false);
     }
@@ -89,7 +139,7 @@ const Pricing = () => {
             ))}
           </ul>
           <Button asChild variant="outline" className="rounded-xl border-border/60 hover:bg-secondary/40">
-            <Link to="/#advisor">{t("pages.pricing.free_cta")} <ArrowRight className="w-4 h-4 ml-1" /></Link>
+            <Link to={localizePath("/#advisor", lang)}>{t("pages.pricing.free_cta")} <ArrowRight className="w-4 h-4 ml-1" /></Link>
           </Button>
         </div>
 
@@ -104,7 +154,7 @@ const Pricing = () => {
           </div>
           <div className="flex items-baseline gap-2 mb-1">
             <span className="text-5xl font-bold tracking-tighter text-gradient">
-              {interval === "month" ? "$6.99" : "$59"}
+              {interval === "month" ? "€6.99" : "€59"}
             </span>
             <span className="text-muted-foreground">/ {interval}</span>
           </div>
