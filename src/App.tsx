@@ -26,6 +26,7 @@ import Subscriptions from "./pages/legal/Subscriptions.tsx";
 import Studio from "./pages/Studio.tsx";
 import Auth from "./pages/Auth.tsx";
 import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
+import { validateStripeClientEnv } from "./lib/stripe";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,14 @@ const ScrollManager = () => {
     }
     window.scrollTo(0, 0);
   }, [pathname, hash]);
+  return null;
+};
+
+const StripeStartupValidation = () => {
+  useEffect(() => {
+    validateStripeClientEnv();
+  }, []);
+
   return null;
 };
 
@@ -80,6 +89,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollManager />
+        <StripeStartupValidation />
         <LangSync />
         <PaymentTestModeBanner />
         <Routes>

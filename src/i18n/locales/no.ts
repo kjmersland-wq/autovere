@@ -250,6 +250,18 @@ const no: Translation = {
       welcome_premium: "Velkommen til Premium! En bekreftelses-e-post er på vei.",
       portal_error: "Kunne ikke åpne kundeportalen.",
       please_sign_in: "Logg inn for å abonnere.",
+      checkout_errors: {
+        missing_publishable_key: "Checkout er utilgjengelig fordi Stripe-publiseringsnøkkelen mangler.",
+        auth_required: "Logg inn på nytt og prøv checkout igjen.",
+        env_mismatch: "Feil i betalingsoppsettet mellom Stripe test- og live-nøkler. Kontakt support.",
+        price_missing: "Stripe-abonnementsprisen mangler eller er ugyldig.",
+        price_inactive: "Dette abonnementet er ikke tilgjengelig akkurat nå.",
+        currency_mismatch: "Betaling er feilkonfigurert med en Stripe-pris som ikke er i EUR.",
+        temporarily_unavailable: "Checkout er midlertidig utilgjengelig. Prøv igjen om litt.",
+        invalid_response: "Checkout kunne ikke starte fordi Stripe returnerte et ugyldig svar.",
+        redirect_failed: "Vi kunne ikke sende deg videre til Stripe Checkout. Prøv igjen.",
+        generic: "Checkout kunne ikke åpnes. Prøv igjen.",
+      },
       reassurance: {
         t1: "Ingen data videresolgt",
         b1: "Vi selger ikke preferansene dine til forhandlere. Samtalene dine forblir dine.",

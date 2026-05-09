@@ -250,6 +250,18 @@ const fr: Translation = {
       welcome_premium: "Bienvenue dans Premium ! Un e-mail de confirmation arrive.",
       portal_error: "Impossible d’ouvrir le portail client.",
       please_sign_in: "Veuillez vous connecter pour vous abonner.",
+      checkout_errors: {
+        missing_publishable_key: "Le checkout est indisponible car la clé publique Stripe est manquante.",
+        auth_required: "Reconnectez-vous puis réessayez le checkout.",
+        env_mismatch: "Erreur de configuration entre les clés Stripe de test et de production. Contactez le support.",
+        price_missing: "Le prix d'abonnement Stripe est manquant ou invalide.",
+        price_inactive: "Cette formule n'est pas disponible pour le moment.",
+        currency_mismatch: "La facturation est mal configurée avec un prix Stripe qui n'utilise pas l'EUR.",
+        temporarily_unavailable: "Le checkout est temporairement indisponible. Réessayez dans un instant.",
+        invalid_response: "Le checkout n'a pas pu démarrer car Stripe a renvoyé une réponse invalide.",
+        redirect_failed: "Impossible de vous rediriger vers Stripe Checkout. Réessayez.",
+        generic: "Impossible d'ouvrir le checkout. Réessayez.",
+      },
       reassurance: {
         t1: "Aucune donnée revendue",
         b1: "Nous ne vendons pas vos préférences aux concessionnaires. Vos conversations restent les vôtres.",

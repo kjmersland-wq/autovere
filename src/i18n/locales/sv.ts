@@ -250,6 +250,18 @@ const sv: Translation = {
       welcome_premium: "Välkommen till Premium! Ett bekräftelsemejl är på väg.",
       portal_error: "Kunde inte öppna kundportalen.",
       please_sign_in: "Logga in för att prenumerera.",
+      checkout_errors: {
+        missing_publishable_key: "Checkout är inte tillgänglig eftersom Stripe-nyckeln för publicering saknas.",
+        auth_required: "Logga in igen och försök sedan med checkout.",
+        env_mismatch: "Fel i betalningskonfigurationen mellan Stripe test- och live-nycklar. Kontakta support.",
+        price_missing: "Stripe-priset för abonnemanget saknas eller är ogiltigt.",
+        price_inactive: "Detta abonnemang är inte tillgängligt just nu.",
+        currency_mismatch: "Betalningen är felkonfigurerad med ett Stripe-pris som inte använder EUR.",
+        temporarily_unavailable: "Checkout är tillfälligt inte tillgänglig. Försök igen om en stund.",
+        invalid_response: "Checkout kunde inte startas eftersom Stripe returnerade ett ogiltigt svar.",
+        redirect_failed: "Vi kunde inte skicka dig vidare till Stripe Checkout. Försök igen.",
+        generic: "Checkout kunde inte öppnas. Försök igen.",
+      },
       reassurance: {
         t1: "Inga data säljs vidare",
         b1: "Vi säljer inte dina preferenser till återförsäljare. Dina samtal förblir dina.",

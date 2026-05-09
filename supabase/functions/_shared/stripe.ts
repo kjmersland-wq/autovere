@@ -4,11 +4,40 @@ export type AppLocale = 'en' | 'no' | 'de' | 'sv' | 'fr' | 'pl' | 'it' | 'es';
 
 const SUPPORTED_LOCALES: AppLocale[] = ['en', 'no', 'de', 'sv', 'fr', 'pl', 'it', 'es'];
 export const STRIPE_BILLING_CURRENCY = 'eur' as const;
+export const STRIPE_PRICE_ENV_KEYS = {
+  month: ['STRIPE_PRICE_ID_MONTHLY', 'STRIPE_PRICE_MONTHLY'],
+  year: ['STRIPE_PRICE_ID_YEARLY', 'STRIPE_PRICE_YEARLY'],
+} as const;
 
 const getEnv = (key: string): string => {
   const value = Deno.env.get(key);
   if (!value) throw new Error(`${key} is not configured`);
   return value;
+};
+
+const getFirstEnv = (keys: readonly string[]): string => {
+  for (const key of keys) {
+    const value = Deno.env.get(key);
+    if (value) return value;
+  }
+  throw new Error(`${keys.join(' or ')} is not configured`);
+};
+
+export const validateStripeServerEnv = () => {
+  const missing: string[] = [];
+
+  if (!Deno.env.get('STRIPE_SECRET_KEY')) missing.push('STRIPE_SECRET_KEY');
+  if (!STRIPE_PRICE_ENV_KEYS.month.some((key) => Deno.env.get(key))) {
+    missing.push(STRIPE_PRICE_ENV_KEYS.month.join(' or '));
+  }
+  if (!STRIPE_PRICE_ENV_KEYS.year.some((key) => Deno.env.get(key))) {
+    missing.push(STRIPE_PRICE_ENV_KEYS.year.join(' or '));
+  }
+
+  return {
+    valid: missing.length === 0,
+    missing,
+  };
 };
 
 export const getStripe = () => {
@@ -52,11 +81,7 @@ export const toStripeLocale = (locale: AppLocale): Stripe.Checkout.SessionCreate
 };
 
 export const getStripePriceId = (interval: 'month' | 'year'): string => {
-  const envKeyByInterval: Record<'month' | 'year', string> = {
-    month: 'STRIPE_PRICE_MONTHLY',
-    year: 'STRIPE_PRICE_YEARLY',
-  };
-  return getEnv(envKeyByInterval[interval]);
+  return getFirstEnv(STRIPE_PRICE_ENV_KEYS[interval]);
 };
 
 export const toIso = (unixSeconds?: number | null): string | null => {

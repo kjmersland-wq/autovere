@@ -7,6 +7,7 @@ import {
   sanitizeInternalPath,
   sanitizeLocale,
   STRIPE_BILLING_CURRENCY,
+  validateStripeServerEnv,
   toStripeLocale,
 } from '../_shared/stripe.ts';
 
@@ -55,6 +56,11 @@ const fail = (
   message: string,
   details?: string
 ) => json(status, { error: { code, message, details, requestId } });
+
+const startupEnvStatus = validateStripeServerEnv();
+if (!startupEnvStatus.valid) {
+  console.error('Stripe checkout startup env validation failed', startupEnvStatus);
+}
 
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
@@ -134,6 +140,16 @@ Deno.serve(async (req) => {
       return fail(requestId, 500, 'stripe_not_configured', 'Stripe price IDs are not configured.');
     }
 
+    console.info('create-stripe-checkout request received', {
+      requestId,
+      userId: user.id,
+      interval: chosenInterval,
+      locale: selectedLocale,
+      returnPath,
+      expectedMode,
+      priceId,
+    });
+
     let stripe: ReturnType<typeof getStripe>;
     try {
       stripe = getStripe();
@@ -193,6 +209,11 @@ Deno.serve(async (req) => {
         );
       }
       if (price.currency !== STRIPE_BILLING_CURRENCY) {
+        console.error('create-stripe-checkout price currency mismatch', {
+          requestId,
+          priceId,
+          currency: price.currency,
+        });
         return fail(
           requestId,
           400,
@@ -201,6 +222,13 @@ Deno.serve(async (req) => {
           `priceId=${priceId}, currency=${price.currency}`
         );
       }
+      console.info('create-stripe-checkout validated stripe price', {
+        requestId,
+        priceId,
+        active: price.active,
+        currency: price.currency,
+        livemode: price.livemode,
+      });
     } catch (error) {
       const stripeError = error as { code?: string; message?: string; requestId?: string };
       if (stripeError?.code === 'resource_missing') {
@@ -283,7 +311,7 @@ Deno.serve(async (req) => {
       mode: secretMode,
     });
 
-    return json(200, { url: session.url, requestId });
+    return json(200, { url: session.url, sessionId: session.id, requestId });
   } catch (error) {
     console.error('create-stripe-checkout unexpected failure', { requestId, error });
     return fail(requestId, 500, 'unexpected_error', 'Unable to start checkout. Please try again.');

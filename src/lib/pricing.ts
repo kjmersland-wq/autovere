@@ -4,14 +4,14 @@ export type BillingInterval = 'month' | 'year';
 
 export const BILLING_PLANS: Record<
   BillingInterval,
-  { amountCents: number; stripeEnvVar: string }
+  { amountCents: number; stripeEnvVars: string[] }
 > = {
   month: {
     amountCents: 699,
-    stripeEnvVar: 'STRIPE_PRICE_MONTHLY',
+    stripeEnvVars: ['STRIPE_PRICE_ID_MONTHLY', 'STRIPE_PRICE_MONTHLY'],
   },
   year: {
     amountCents: 5900,
-    stripeEnvVar: 'STRIPE_PRICE_YEARLY',
+    stripeEnvVars: ['STRIPE_PRICE_ID_YEARLY', 'STRIPE_PRICE_YEARLY'],
   },
 };

@@ -249,6 +249,18 @@ const es: Translation = {
       welcome_premium: "¡Bienvenido a Premium! Un correo de confirmación está en camino.",
       portal_error: "No se pudo abrir el portal del cliente.",
       please_sign_in: "Inicia sesión para suscribirte.",
+      checkout_errors: {
+        missing_publishable_key: "El checkout no está disponible porque falta la clave pública de Stripe.",
+        auth_required: "Vuelve a iniciar sesión y prueba el checkout de nuevo.",
+        env_mismatch: "Hay un error de configuración entre las claves de prueba y producción de Stripe. Contacta con soporte.",
+        price_missing: "El precio de suscripción de Stripe falta o no es válido.",
+        price_inactive: "Este plan no está disponible en este momento.",
+        currency_mismatch: "La facturación está mal configurada con un precio de Stripe que no usa EUR.",
+        temporarily_unavailable: "El checkout no está disponible temporalmente. Vuelve a intentarlo en un momento.",
+        invalid_response: "No se pudo iniciar el checkout porque Stripe devolvió una respuesta no válida.",
+        redirect_failed: "No pudimos redirigirte a Stripe Checkout. Vuelve a intentarlo.",
+        generic: "No se pudo abrir el checkout. Vuelve a intentarlo.",
+      },
       reassurance: {
         t1: "Sin reventa de datos",
         b1: "No vendemos tus preferencias a los concesionarios. Tus conversaciones se quedan contigo.",

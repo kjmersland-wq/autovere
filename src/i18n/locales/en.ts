@@ -247,6 +247,18 @@ const en = {
       welcome_premium: "Welcome to Premium! A confirmation email is on its way.",
       portal_error: "Could not open the customer portal.",
       please_sign_in: "Please sign in to subscribe.",
+      checkout_errors: {
+        missing_publishable_key: "Checkout is unavailable because the Stripe publishable key is missing.",
+        auth_required: "Please sign in again, then retry checkout.",
+        env_mismatch: "Billing configuration mismatch between Stripe test and live keys. Please contact support.",
+        price_missing: "The Stripe subscription price is missing or invalid.",
+        price_inactive: "This subscription plan is currently unavailable.",
+        currency_mismatch: "Billing is misconfigured with a non-EUR Stripe price.",
+        temporarily_unavailable: "Checkout is temporarily unavailable. Please try again in a moment.",
+        invalid_response: "Checkout could not start because Stripe returned an invalid response.",
+        redirect_failed: "We could not redirect you to Stripe Checkout. Please try again.",
+        generic: "Checkout could not be opened. Please try again.",
+      },
       reassurance: {
         t1: "No data resold",
         b1: "We don't sell your preferences to dealers. Your conversations stay yours.",

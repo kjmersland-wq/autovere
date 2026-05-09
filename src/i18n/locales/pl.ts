@@ -249,6 +249,18 @@ const pl: Translation = {
       welcome_premium: "Witamy w Premium! E-mail potwierdzający jest w drodze.",
       portal_error: "Nie można otworzyć portalu klienta.",
       please_sign_in: "Zaloguj się, aby subskrybować.",
+      checkout_errors: {
+        missing_publishable_key: "Checkout jest niedostępny, ponieważ brakuje publicznego klucza Stripe.",
+        auth_required: "Zaloguj się ponownie i spróbuj jeszcze raz.",
+        env_mismatch: "Błąd konfiguracji płatności między kluczami testowymi i produkcyjnymi Stripe. Skontaktuj się z pomocą.",
+        price_missing: "Cena subskrypcji Stripe jest brakująca lub nieprawidłowa.",
+        price_inactive: "Ten plan jest obecnie niedostępny.",
+        currency_mismatch: "Płatności są błędnie skonfigurowane z ceną Stripe, która nie używa EUR.",
+        temporarily_unavailable: "Checkout jest chwilowo niedostępny. Spróbuj ponownie za moment.",
+        invalid_response: "Nie udało się uruchomić checkoutu, ponieważ Stripe zwrócił nieprawidłową odpowiedź.",
+        redirect_failed: "Nie udało się przekierować do Stripe Checkout. Spróbuj ponownie.",
+        generic: "Nie udało się otworzyć checkoutu. Spróbuj ponownie.",
+      },
       reassurance: {
         t1: "Brak odsprzedaży danych",
         b1: "Nie sprzedajemy Twoich preferencji dealerom. Twoje rozmowy pozostają Twoje.",

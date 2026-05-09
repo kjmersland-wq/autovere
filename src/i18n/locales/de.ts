@@ -250,6 +250,18 @@ const de: Translation = {
       welcome_premium: "Willkommen bei Premium! Eine Bestätigungs-E-Mail ist unterwegs.",
       portal_error: "Kundenportal konnte nicht geöffnet werden.",
       please_sign_in: "Bitte anmelden, um zu abonnieren.",
+      checkout_errors: {
+        missing_publishable_key: "Checkout ist nicht verfügbar, weil der Stripe-Publishable-Key fehlt.",
+        auth_required: "Bitte melden Sie sich erneut an und versuchen Sie den Checkout noch einmal.",
+        env_mismatch: "Fehler in der Zahlungs-Konfiguration zwischen Stripe-Test- und Live-Schlüsseln. Bitte Support kontaktieren.",
+        price_missing: "Der Stripe-Abopreis fehlt oder ist ungültig.",
+        price_inactive: "Dieser Tarif ist derzeit nicht verfügbar.",
+        currency_mismatch: "Die Abrechnung ist mit einem Stripe-Preis konfiguriert, der nicht EUR verwendet.",
+        temporarily_unavailable: "Checkout ist vorübergehend nicht verfügbar. Bitte versuchen Sie es gleich noch einmal.",
+        invalid_response: "Checkout konnte nicht gestartet werden, weil Stripe eine ungültige Antwort zurückgegeben hat.",
+        redirect_failed: "Weiterleitung zu Stripe Checkout fehlgeschlagen. Bitte versuchen Sie es erneut.",
+        generic: "Checkout konnte nicht geöffnet werden. Bitte versuchen Sie es erneut.",
+      },
       reassurance: {
         t1: "Keine Daten weiterverkauft",
         b1: "Wir verkaufen Ihre Vorlieben nicht an Händler. Ihre Gespräche bleiben Ihre.",

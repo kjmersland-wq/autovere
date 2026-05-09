@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { toast } from 'sonner';
-import { getStripePublishableKeyMode } from '@/lib/stripe';
+import { useTranslation } from 'react-i18next';
+import { getStripeJs, getStripePublishableKeyMode, validateStripeClientEnv } from '@/lib/stripe';
 
 type CheckoutServerError = {
   error?: {
@@ -10,6 +11,12 @@ type CheckoutServerError = {
     details?: string;
     requestId?: string;
   };
+};
+
+type CheckoutResponse = {
+  url?: string;
+  sessionId?: string;
+  requestId?: string;
 };
 
 const readInvokeErrorPayload = async (error: unknown): Promise<CheckoutServerError | null> => {
@@ -24,17 +31,25 @@ const readInvokeErrorPayload = async (error: unknown): Promise<CheckoutServerErr
   }
 };
 
-const toUserMessage = (code?: string, fallback?: string) => {
-  if (code === 'unauthenticated') return 'Please sign in again, then retry checkout.';
-  if (code === 'stripe_env_mismatch') return 'Billing configuration mismatch (test/live). Please contact support.';
-  if (code === 'stripe_price_missing') return 'Stripe plan is not configured correctly. Please contact support.';
-  if (code === 'stripe_price_inactive') return 'This subscription plan is currently unavailable.';
-  if (code === 'stripe_currency_mismatch') return 'Billing is configured with a non-EUR Stripe price. Please contact support.';
-  if (code === 'stripe_not_configured') return 'Billing is temporarily unavailable. Please try again later.';
-  return fallback || 'Could not open checkout. Please try again.';
+const toUserMessage = (
+  translate: (key: string, defaultValue?: string) => string,
+  code?: string,
+  fallback?: string
+) => {
+  if (code === 'unauthenticated') return translate('pages.pricing.checkout_errors.auth_required');
+  if (code === 'stripe_env_mismatch') return translate('pages.pricing.checkout_errors.env_mismatch');
+  if (code === 'stripe_price_missing') return translate('pages.pricing.checkout_errors.price_missing');
+  if (code === 'stripe_price_inactive') return translate('pages.pricing.checkout_errors.price_inactive');
+  if (code === 'stripe_currency_mismatch') return translate('pages.pricing.checkout_errors.currency_mismatch');
+  if (code === 'stripe_not_configured') return translate('pages.pricing.checkout_errors.temporarily_unavailable');
+  if (code === 'checkout_session_failed' || code === 'stripe_request_failed') {
+    return translate('pages.pricing.checkout_errors.temporarily_unavailable');
+  }
+  return fallback || translate('pages.pricing.checkout_errors.generic');
 };
 
 export function useStripeCheckout() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
@@ -46,6 +61,15 @@ export function useStripeCheckout() {
     setLoading(true);
     setErrorMessage(null);
     try {
+      console.info('Stripe checkout button clicked', options);
+
+      const clientEnv = validateStripeClientEnv();
+      if (!clientEnv.valid) {
+        const message = t('pages.pricing.checkout_errors.missing_publishable_key');
+        console.error('Stripe checkout blocked by missing client env', clientEnv);
+        throw new Error(message);
+      }
+
       const expectedMode = getStripePublishableKeyMode();
       const { data, error } = await supabase.functions.invoke('create-stripe-checkout', {
         body: {
@@ -56,25 +80,59 @@ export function useStripeCheckout() {
         },
       });
 
+      const response = (data ?? {}) as CheckoutResponse;
+      console.info('Stripe checkout API response received', {
+        requestId: response.requestId,
+        hasUrl: Boolean(response.url),
+        hasSessionId: Boolean(response.sessionId),
+      });
+
       if (error) {
         const payload = await readInvokeErrorPayload(error);
         const code = payload?.error?.code;
         const details = payload?.error?.details;
         const requestId = payload?.error?.requestId;
-        const message = toUserMessage(code, payload?.error?.message);
+        const message = toUserMessage((key, defaultValue) => t(key, defaultValue), code, payload?.error?.message);
         throw new Error(
           `${message}${requestId ? ` (request: ${requestId})` : ''}${details ? ` — ${details}` : ''}`
         );
       }
 
-      if (!data?.url) {
-        throw new Error('Checkout URL was not returned by the server.');
+      if (!response.url || !response.sessionId) {
+        console.error('Stripe checkout API returned invalid payload', response);
+        throw new Error(t('pages.pricing.checkout_errors.invalid_response'));
       }
 
-      window.location.assign(data.url as string);
+      const stripe = await getStripeJs();
+      if (!stripe) {
+        throw new Error(t('pages.pricing.checkout_errors.missing_publishable_key'));
+      }
+
+      const redirectResult = await stripe.redirectToCheckout({ sessionId: response.sessionId });
+      if (redirectResult.error) {
+        console.error('Stripe redirectToCheckout failed', {
+          requestId: response.requestId,
+          sessionId: response.sessionId,
+          error: redirectResult.error,
+        });
+        if (response.url) {
+          console.info('Falling back to direct Stripe checkout URL redirect', {
+            requestId: response.requestId,
+            url: response.url,
+          });
+          window.location.assign(response.url);
+          return;
+        }
+        throw new Error(t('pages.pricing.checkout_errors.redirect_failed'));
+      }
+
+      console.info('Stripe redirectToCheckout initiated', {
+        requestId: response.requestId,
+        sessionId: response.sessionId,
+      });
     } catch (error) {
       console.error('Stripe checkout launch failed', error);
-      const message = error instanceof Error ? error.message : 'Could not open checkout. Please try again.';
+      const message = error instanceof Error ? error.message : t('pages.pricing.checkout_errors.generic');
       setErrorMessage(message);
       toast.error(message);
     } finally {
