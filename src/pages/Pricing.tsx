@@ -6,14 +6,16 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
-import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { toast } from "sonner";
+import { useLang } from "@/i18n/routing";
 
 const Pricing = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const { openCheckout, loading: checkoutLoading } = usePaddleCheckout();
+  const lang = useLang();
+  const { openCheckout, loading: checkoutLoading } = useStripeCheckout();
   const { isActive, subscription, userId, refetch } = useSubscription();
   const [interval, setInterval] = useState<"month" | "year">("month");
   const [portalLoading, setPortalLoading] = useState(false);
@@ -30,21 +32,20 @@ const Pricing = () => {
   }, [refetch, t]);
 
   const handleSubscribe = async () => {
-    const priceId = interval === "month" ? "premium_monthly" : "premium_yearly";
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) {
       toast.info(t("pages.pricing.please_sign_in"));
       navigate("/auth");
       return;
     }
-    await openCheckout({ priceId, customerEmail: user.email, userId: user.id });
+    await openCheckout({ interval, locale: lang });
   };
 
   const openPortal = async () => {
     setPortalLoading(true);
     try {
       const { data, error } = await supabase.functions.invoke("customer-portal", {
-        body: { environment: subscription ? (await import("@/lib/paddle")).getPaddleEnvironment() : "sandbox" },
+        body: { returnUrl: window.location.href },
       });
       if (error || !data?.url) throw new Error("Could not open portal");
       window.open(data.url, "_blank");

@@ -1,5 +1,5 @@
+import Stripe from 'npm:stripe@16';
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { getPaddleClient, type PaddleEnv } from '../_shared/paddle.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
@@ -14,36 +14,40 @@ Deno.serve(async (req) => {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_ANON_KEY')!,
-      { global: { headers: { Authorization: authHeader } } }
+      { global: { headers: { Authorization: authHeader } } },
     );
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Not authenticated');
 
-    const { environment } = await req.json();
-    const env = (environment || 'sandbox') as PaddleEnv;
+    const body = await req.json().catch(() => ({}));
+    const returnUrl = body.returnUrl ?? req.headers.get('origin') ?? '';
 
     const { data: sub } = await supabase
       .from('subscriptions')
-      .select('paddle_subscription_id, paddle_customer_id')
+      .select('stripe_customer_id')
       .eq('user_id', user.id)
-      .eq('environment', env)
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle();
 
-    if (!sub) throw new Error('No subscription found');
+    if (!sub?.stripe_customer_id) throw new Error('No subscription found');
 
-    const paddle = getPaddleClient(env);
-    const session = await paddle.customerPortalSessions.create(
-      sub.paddle_customer_id as string,
-      [sub.paddle_subscription_id as string]
-    );
+    const stripe = new Stripe(Deno.env.get('STRIPE_SECRET_KEY')!, {
+      apiVersion: '2024-06-20',
+    });
 
-    return new Response(JSON.stringify({ url: session.urls.general.overview }), {
+    const session = await stripe.billingPortal.sessions.create({
+      customer: sub.stripe_customer_id,
+      return_url: returnUrl || 'https://autovere.com/pricing',
+    });
+
+    return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (e) {
-    return new Response(JSON.stringify({ error: String(e) }), {
+    const msg = e instanceof Error ? e.message : 'Request failed';
+    const safeMsg = msg === 'Not authenticated' || msg === 'No subscription found' ? msg : 'Request failed';
+    return new Response(JSON.stringify({ error: safeMsg }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
