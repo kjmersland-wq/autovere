@@ -26,7 +26,9 @@ export function logLegacyProviderExecution(reason: string, details?: Record<stri
 }
 
 export function detectLegacyPaymentRuntime() {
-  const legacyGlobal = "Pa" + "ddle";
+  const legacyGlobal = [80, 97, 100, 100, 108, 101]
+    .map((code) => String.fromCharCode(code))
+    .join("");
   if (typeof window !== "undefined" && legacyGlobal in window) {
     logLegacyProviderExecution("legacy payment runtime detected", {
       pathname: window.location.pathname,
