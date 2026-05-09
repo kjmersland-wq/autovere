@@ -17,7 +17,7 @@ const Pricing = () => {
   const navigate = useNavigate();
   const { pathname, search } = useLocation();
   const lang = detectLangFromPath(pathname);
-  const { openCheckout, loading: checkoutLoading } = useStripeCheckout();
+  const { openCheckout, loading: checkoutLoading, errorMessage: checkoutError } = useStripeCheckout();
   const { isActive, subscription, userId, refetch } = useSubscription();
   const [interval, setInterval] = useState<'month' | 'year'>('month');
   const [portalLoading, setPortalLoading] = useState(false);
@@ -173,15 +173,23 @@ const Pricing = () => {
                 </Button>
               </div>
             ) : (
-              <Button size="lg" onClick={handleSubscribe} disabled={checkoutLoading} className="bg-gradient-primary hover:opacity-90 rounded-xl gap-2">
-                {checkoutLoading ? (
-                  t('pages.pricing.opening_checkout')
-                ) : (
-                  <>
-                    {userId ? t('pages.pricing.subscribe') : t('pages.pricing.sign_in_subscribe')} <ArrowRight className="w-4 h-4" />
-                  </>
-                )}
-              </Button>
+              <div className="space-y-3">
+                <Button
+                  size="lg"
+                  onClick={handleSubscribe}
+                  disabled={checkoutLoading}
+                  className="bg-gradient-primary hover:opacity-90 rounded-xl gap-2 w-full"
+                >
+                  {checkoutLoading ? (
+                    t('pages.pricing.opening_checkout')
+                  ) : (
+                    <>
+                      {userId ? t('pages.pricing.subscribe') : t('pages.pricing.sign_in_subscribe')} <ArrowRight className="w-4 h-4" />
+                    </>
+                  )}
+                </Button>
+                {checkoutError ? <p className="text-xs text-destructive text-center">{checkoutError}</p> : null}
+              </div>
             )}
             <div className="text-[11px] text-muted-foreground mt-4 text-center">{t('pages.pricing.cancel_anytime')}</div>
           </div>
