@@ -66,7 +66,7 @@ Deno.serve(async (req) => {
     });
   } catch (error) {
     console.error('[payments] create portal failed', error);
-    return new Response(JSON.stringify({ error: String(error) }), {
+    return new Response(JSON.stringify({ error: 'Unable to create customer portal session' }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
