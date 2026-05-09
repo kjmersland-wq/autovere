@@ -29,6 +29,7 @@ const toUserMessage = (code?: string, fallback?: string) => {
   if (code === 'stripe_env_mismatch') return 'Billing configuration mismatch (test/live). Please contact support.';
   if (code === 'stripe_price_missing') return 'Stripe plan is not configured correctly. Please contact support.';
   if (code === 'stripe_price_inactive') return 'This subscription plan is currently unavailable.';
+  if (code === 'stripe_currency_mismatch') return 'Billing is configured with a non-EUR Stripe price. Please contact support.';
   if (code === 'stripe_not_configured') return 'Billing is temporarily unavailable. Please try again later.';
   return fallback || 'Could not open checkout. Please try again.';
 };

@@ -235,7 +235,7 @@ const es: Translation = {
       monthly: "Mensual",
       yearly: "Anual",
       billed_yearly: "facturado anualmente",
-      yearly_save: "o 59 $ / año — ahorra un 30%",
+      yearly_save: "o 59 € / año — ahorra un 30%",
       premium_lead:
         "Para personas que piensan a largo plazo. Análisis más profundo, proyecciones más inteligentes, menos sorpresas.",
       on_premium: "✓ Estás en Premium",

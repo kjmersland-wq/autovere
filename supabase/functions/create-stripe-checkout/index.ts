@@ -6,6 +6,7 @@ import {
   localizePath,
   sanitizeInternalPath,
   sanitizeLocale,
+  STRIPE_BILLING_CURRENCY,
   toStripeLocale,
 } from '../_shared/stripe.ts';
 
@@ -30,6 +31,7 @@ type ApiErrorCode =
   | 'stripe_env_mismatch'
   | 'stripe_price_missing'
   | 'stripe_price_inactive'
+  | 'stripe_currency_mismatch'
   | 'stripe_request_failed'
   | 'checkout_session_failed'
   | 'unexpected_error';
@@ -188,6 +190,15 @@ Deno.serve(async (req) => {
           'stripe_price_inactive',
           'Configured Stripe price is inactive.',
           `priceId=${priceId}`
+        );
+      }
+      if (price.currency !== STRIPE_BILLING_CURRENCY) {
+        return fail(
+          requestId,
+          400,
+          'stripe_currency_mismatch',
+          'Configured Stripe price must use EUR.',
+          `priceId=${priceId}, currency=${price.currency}`
         );
       }
     } catch (error) {

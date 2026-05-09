@@ -11,6 +11,8 @@ import { useSubscription } from '@/hooks/useSubscription';
 import { toast } from 'sonner';
 import { detectLangFromPath, localizePath } from '@/i18n/routing';
 import { LLink } from '@/i18n/routing';
+import { formatEurFromCents } from '@/lib/currency';
+import { BILLING_PLANS } from '@/lib/pricing';
 
 const Pricing = () => {
   const { t } = useTranslation();
@@ -24,6 +26,10 @@ const Pricing = () => {
 
   const FREE = t('pages.pricing.free_features', { returnObjects: true }) as string[];
   const PREMIUM = t('pages.pricing.premium_features', { returnObjects: true }) as string[];
+  const monthlyPrice = formatEurFromCents(BILLING_PLANS.month.amountCents, lang);
+  const yearlyPrice = formatEurFromCents(BILLING_PLANS.year.amountCents, lang);
+  const freePrice = formatEurFromCents(0, lang);
+  const intervalLabel = interval === 'month' ? t('pages.pricing.monthly') : t('pages.pricing.yearly');
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -104,10 +110,10 @@ const Pricing = () => {
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-muted-foreground mb-4">
               <Heart className="w-3.5 h-3.5" /> {t('pages.pricing.free_label')}
             </div>
-            <div className="flex items-baseline gap-2 mb-2">
-              <span className="text-5xl font-bold tracking-tighter">{t('pages.pricing.free_price')}</span>
-              <span className="text-muted-foreground">{t('pages.pricing.free_per')}</span>
-            </div>
+              <div className="flex items-baseline gap-2 mb-2">
+                <span className="text-5xl font-bold tracking-tighter">{freePrice}</span>
+                <span className="text-muted-foreground">{t('pages.pricing.free_per')}</span>
+              </div>
             <p className="text-muted-foreground mb-8 leading-relaxed">{t('pages.pricing.free_lead')}</p>
             <ul className="space-y-3 mb-10 flex-1">
               {FREE.map((f) => (
@@ -134,8 +140,8 @@ const Pricing = () => {
               <Sparkles className="w-3.5 h-3.5" /> {t('pages.pricing.premium_label')}
             </div>
             <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-5xl font-bold tracking-tighter text-gradient">{interval === 'month' ? '$6.99' : '$59'}</span>
-              <span className="text-muted-foreground">/ {interval}</span>
+              <span className="text-5xl font-bold tracking-tighter text-gradient">{interval === 'month' ? monthlyPrice : yearlyPrice}</span>
+              <span className="text-muted-foreground">/ {intervalLabel}</span>
             </div>
             <div className="text-xs text-muted-foreground mb-4">
               {interval === 'month' ? t('pages.pricing.yearly_save') : t('pages.pricing.billed_yearly')}

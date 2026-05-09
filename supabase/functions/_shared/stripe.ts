@@ -3,6 +3,7 @@ import Stripe from 'npm:stripe@16.9.0';
 export type AppLocale = 'en' | 'no' | 'de' | 'sv' | 'fr' | 'pl' | 'it' | 'es';
 
 const SUPPORTED_LOCALES: AppLocale[] = ['en', 'no', 'de', 'sv', 'fr', 'pl', 'it', 'es'];
+export const STRIPE_BILLING_CURRENCY = 'eur' as const;
 
 const getEnv = (key: string): string => {
   const value = Deno.env.get(key);
@@ -51,8 +52,11 @@ export const toStripeLocale = (locale: AppLocale): Stripe.Checkout.SessionCreate
 };
 
 export const getStripePriceId = (interval: 'month' | 'year'): string => {
-  if (interval === 'month') return getEnv('STRIPE_PRICE_MONTHLY');
-  return getEnv('STRIPE_PRICE_YEARLY');
+  const envKeyByInterval: Record<'month' | 'year', string> = {
+    month: 'STRIPE_PRICE_MONTHLY',
+    year: 'STRIPE_PRICE_YEARLY',
+  };
+  return getEnv(envKeyByInterval[interval]);
 };
 
 export const toIso = (unixSeconds?: number | null): string | null => {

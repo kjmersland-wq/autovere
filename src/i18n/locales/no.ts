@@ -227,7 +227,7 @@ const no: Translation = {
       lead:
         "Vi mener bilvalg ikke skal stå bak en betalingsmur. Premium er for de som vil gå dypere — fem år frem, ikke fem minutter frem.",
       free_label: "Gratis",
-      free_price: "0 kr",
+      free_price: "0 €",
       free_per: "/ for alltid",
       free_lead: "Alt du trenger for å finne riktig bil for livet ditt — i ro.",
       free_cta: "Start med AUTOVERE",
@@ -236,7 +236,7 @@ const no: Translation = {
       monthly: "Månedlig",
       yearly: "Årlig",
       billed_yearly: "fakturert årlig",
-      yearly_save: "eller $59 / år — spar 30 %",
+      yearly_save: "eller 59 € / år — spar 30 %",
       premium_lead:
         "For deg som tenker langsiktig. Dypere analyse, smartere prognoser, færre overraskelser.",
       on_premium: "✓ Du har Premium",

@@ -16,19 +16,19 @@ export type Region = {
 };
 
 const REGIONS: Record<RegionCode, Region> = {
-  NO: { code: "NO", name: "Norway", language: "no", currency: "NOK", chargingStandard: "CCS", climate: "nordic-winter", flag: "🇳🇴" },
-  SE: { code: "SE", name: "Sweden", language: "sv", currency: "SEK", chargingStandard: "CCS", climate: "nordic-winter", flag: "🇸🇪" },
-  DK: { code: "DK", name: "Denmark", language: "da", currency: "DKK", chargingStandard: "CCS", climate: "nordic-winter", flag: "🇩🇰" },
+  NO: { code: "NO", name: "Norway", language: "no", currency: "EUR", chargingStandard: "CCS", climate: "nordic-winter", flag: "🇳🇴" },
+  SE: { code: "SE", name: "Sweden", language: "sv", currency: "EUR", chargingStandard: "CCS", climate: "nordic-winter", flag: "🇸🇪" },
+  DK: { code: "DK", name: "Denmark", language: "da", currency: "EUR", chargingStandard: "CCS", climate: "nordic-winter", flag: "🇩🇰" },
   FI: { code: "FI", name: "Finland", language: "fi", currency: "EUR", chargingStandard: "CCS", climate: "nordic-winter", flag: "🇫🇮" },
   DE: { code: "DE", name: "Germany", language: "de", currency: "EUR", chargingStandard: "CCS", climate: "continental", flag: "🇩🇪" },
-  GB: { code: "GB", name: "United Kingdom", language: "en", currency: "GBP", chargingStandard: "CCS", climate: "oceanic", flag: "🇬🇧" },
+  GB: { code: "GB", name: "United Kingdom", language: "en", currency: "EUR", chargingStandard: "CCS", climate: "oceanic", flag: "🇬🇧" },
   FR: { code: "FR", name: "France", language: "fr", currency: "EUR", chargingStandard: "CCS", climate: "temperate", flag: "🇫🇷" },
   NL: { code: "NL", name: "Netherlands", language: "nl", currency: "EUR", chargingStandard: "CCS", climate: "oceanic", flag: "🇳🇱" },
   IT: { code: "IT", name: "Italy", language: "it", currency: "EUR", chargingStandard: "CCS", climate: "mediterranean", flag: "🇮🇹" },
   ES: { code: "ES", name: "Spain", language: "es", currency: "EUR", chargingStandard: "CCS", climate: "mediterranean", flag: "🇪🇸" },
-  US: { code: "US", name: "United States", language: "en", currency: "USD", chargingStandard: "CCS/NACS", climate: "north-american", flag: "🇺🇸" },
-  CA: { code: "CA", name: "Canada", language: "en", currency: "CAD", chargingStandard: "CCS/NACS", climate: "north-american", flag: "🇨🇦" },
-  AU: { code: "AU", name: "Australia", language: "en", currency: "AUD", chargingStandard: "CCS", climate: "temperate", flag: "🇦🇺" },
+  US: { code: "US", name: "United States", language: "en", currency: "EUR", chargingStandard: "CCS/NACS", climate: "north-american", flag: "🇺🇸" },
+  CA: { code: "CA", name: "Canada", language: "en", currency: "EUR", chargingStandard: "CCS/NACS", climate: "north-american", flag: "🇨🇦" },
+  AU: { code: "AU", name: "Australia", language: "en", currency: "EUR", chargingStandard: "CCS", climate: "temperate", flag: "🇦🇺" },
   EU: { code: "EU", name: "Europe", language: "en", currency: "EUR", chargingStandard: "CCS", climate: "temperate", flag: "🇪🇺" },
   GLOBAL: { code: "GLOBAL", name: "Global", language: "en", currency: "EUR", chargingStandard: "CCS", climate: "temperate", flag: "🌍" },
 };
@@ -182,7 +182,7 @@ export function regionalOwnership(region: Region, brand: string, lang = "en"): O
     insights.push(
       { icon: "highway", title: "Long-distance highway travel", body: `Designed for the open road. Steady 110 km/h cruising and Supercharger-class fast charging make cross-state trips effortless.` },
       { icon: "charge", title: `${region.chargingStandard} compatibility`, body: `Adapter-ready for the growing NACS ecosystem — Tesla Superchargers + Electrify America cover most corridors in ${region.name}.` },
-      { icon: "incentive", title: "Federal & state incentives", body: "Up to $7,500 federal credit on qualifying EVs, with additional state and utility rebates depending on ZIP code." },
+      { icon: "incentive", title: "Federal & state incentives", body: "Up to €7,500 equivalent incentive support on qualifying EVs, with additional state and utility rebates depending on ZIP code." },
     );
   } else if (climate === "continental") {
     insights.push(

@@ -89,7 +89,7 @@ const en = {
     starters: [
       "I want a family EV that handles snowy winters",
       "Something sporty but comfortable for daily driving",
-      "Reliable SUV under $50k for long road trips",
+      "Reliable SUV under €50k for long road trips",
       "A quiet city car that still feels premium",
     ],
   },
@@ -224,7 +224,7 @@ const en = {
       lead:
         "We believe choosing a car shouldn't sit behind a paywall. Premium is for people who want to go deeper — five years out, not five minutes out.",
       free_label: "Free",
-      free_price: "$0",
+      free_price: "0 €",
       free_per: "/ forever",
       free_lead: "Everything you need to find the right car for your life — calmly.",
       free_cta: "Start with AUTOVERE",
@@ -233,7 +233,7 @@ const en = {
       monthly: "Monthly",
       yearly: "Yearly",
       billed_yearly: "billed yearly",
-      yearly_save: "or $59 / year — save 30%",
+      yearly_save: "or 59 € / year — save 30%",
       premium_lead:
         "For people thinking long-term. Deeper analysis, smarter projections, fewer surprises.",
       on_premium: "✓ You're on Premium",
