@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { PageShell } from "@/components/PageShell";
@@ -7,21 +7,29 @@ import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { localizePath, useLang } from "@/i18n/routing";
 import { toast } from "sonner";
 
 const Auth = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { t } = useTranslation();
+  const lang = useLang();
   const [mode, setMode] = useState<"signin" | "signup">("signin");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const defaultNextPath = localizePath("/pricing", lang);
+  const requestedNextPath = new URLSearchParams(location.search).get("next");
+  const nextPath = requestedNextPath && requestedNextPath.startsWith("/") && !requestedNextPath.startsWith("//")
+    ? requestedNextPath
+    : defaultNextPath;
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
-      if (data.session) navigate("/pricing", { replace: true });
+      if (data.session) navigate(nextPath, { replace: true });
     });
-  }, [navigate]);
+  }, [navigate, nextPath]);
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,13 +38,13 @@ const Auth = () => {
       ? supabase.auth.signInWithPassword({ email, password })
       : supabase.auth.signUp({
           email, password,
-          options: { emailRedirectTo: `${window.location.origin}/pricing` },
+          options: { emailRedirectTo: `${window.location.origin}${nextPath}` },
         });
     const { error } = await fn;
     setLoading(false);
     if (error) return toast.error(error.message);
     toast.success(mode === "signin" ? t("pages.auth.welcome_toast") : t("pages.auth.created_toast"));
-    navigate("/pricing");
+    navigate(nextPath);
   };
 
   return (

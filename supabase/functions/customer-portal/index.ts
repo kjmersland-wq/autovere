@@ -1,49 +1,72 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { getPaddleClient, type PaddleEnv } from '../_shared/paddle.ts';
+import { getStripeMode, getStripeSiteUrl, stripeApiJson } from '../_shared/stripe.ts';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
+type PortalSessionResponse = { url: string };
+
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+
   try {
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) throw new Error('Not authenticated');
+
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL')!,
       Deno.env.get('SUPABASE_ANON_KEY')!,
-      { global: { headers: { Authorization: authHeader } } }
+      { global: { headers: { Authorization: authHeader } } },
     );
+
     const { data: { user } } = await supabase.auth.getUser();
     if (!user) throw new Error('Not authenticated');
 
-    const { environment } = await req.json();
-    const env = (environment || 'sandbox') as PaddleEnv;
+    const { returnPath } = await req.json().catch(() => ({ returnPath: '/pricing' }));
+    const normalizedReturnPath = typeof returnPath === 'string' && returnPath.startsWith('/') ? returnPath : '/pricing';
 
-    const { data: sub } = await supabase
+    const { data: subscription } = await supabase
       .from('subscriptions')
-      .select('paddle_subscription_id, paddle_customer_id')
+      .select('stripe_customer_id')
       .eq('user_id', user.id)
-      .eq('environment', env)
+      .eq('environment', getStripeMode())
       .order('created_at', { ascending: false })
       .limit(1)
       .maybeSingle();
 
-    if (!sub) throw new Error('No subscription found');
+    if (!subscription?.stripe_customer_id) throw new Error('No Stripe customer found');
 
-    const paddle = getPaddleClient(env);
-    const session = await paddle.customerPortalSessions.create(
-      sub.paddle_customer_id as string,
-      [sub.paddle_subscription_id as string]
-    );
+    console.info('[payments] create portal session', {
+      provider: 'stripe',
+      endpoint: 'customer-portal',
+      mode: getStripeMode(),
+      returnPath: normalizedReturnPath,
+      userId: user.id,
+    });
 
-    return new Response(JSON.stringify({ url: session.urls.general.overview }), {
+    const form = new URLSearchParams();
+    form.set('customer', subscription.stripe_customer_id);
+    form.set('return_url', `${getStripeSiteUrl()}${normalizedReturnPath}`);
+
+    const session = await stripeApiJson<PortalSessionResponse>('/billing_portal/sessions', {
+      method: 'POST',
+      body: form,
+    });
+
+    console.info('[payments] portal redirect ready', {
+      provider: 'stripe',
+      endpoint: 'customer-portal',
+      redirectUrl: session.url,
+    });
+
+    return new Response(JSON.stringify({ url: session.url }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
-  } catch (e) {
-    return new Response(JSON.stringify({ error: String(e) }), {
+  } catch (error) {
+    console.error('[payments] create portal failed', error);
+    return new Response(JSON.stringify({ error: String(error) }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
