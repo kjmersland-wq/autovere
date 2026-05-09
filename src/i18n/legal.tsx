@@ -677,6 +677,9 @@ const fr = (): Record<LegalDocKey, LegalDocContent> => ({
 
 const REGISTRY: Record<Lang, () => Record<LegalDocKey, LegalDocContent>> = {
   en, no, de, sv, fr,
+  pl: fr,
+  it: fr,
+  es: fr,
 };
 
 export function getLegalDoc(lang: Lang, key: LegalDocKey): LegalDocContent {

@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
-import { getPaddleEnvironment } from "@/lib/paddle";
+import { getStripeEnvironment } from "@/lib/stripe";
 
 export type Subscription = {
   id: string;
   status: string;
-  price_id: string;
-  product_id: string;
+  price_id: string | null;
+  product_id: string | null;
+  billing_interval?: string | null;
   current_period_end: string | null;
   cancel_at_period_end: boolean;
 };
@@ -17,10 +18,10 @@ export function useSubscription() {
   const [userId, setUserId] = useState<string | null>(null);
 
   const fetchSub = async (uid: string) => {
-    const env = getPaddleEnvironment();
+    const env = getStripeEnvironment();
     const { data } = await supabase
       .from("subscriptions")
-      .select("id,status,price_id,product_id,current_period_end,cancel_at_period_end")
+      .select("id,status,price_id,product_id,billing_interval,current_period_end,cancel_at_period_end")
       .eq("user_id", uid)
       .eq("environment", env)
       .order("created_at", { ascending: false })

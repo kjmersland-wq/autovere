@@ -220,49 +220,79 @@ export type Database = {
       }
       subscriptions: {
         Row: {
+          billing_interval: string | null
           cancel_at_period_end: boolean | null
           created_at: string | null
           current_period_end: string | null
           current_period_start: string | null
           environment: string
           id: string
-          paddle_customer_id: string
-          paddle_subscription_id: string
-          price_id: string
-          product_id: string
+          paddle_customer_id: string | null
+          paddle_subscription_id: string | null
+          price_id: string | null
+          product_id: string | null
+          stripe_customer_id: string | null
+          stripe_subscription_id: string | null
           status: string
           updated_at: string | null
           user_id: string
         }
         Insert: {
+          billing_interval?: string | null
           cancel_at_period_end?: boolean | null
           created_at?: string | null
           current_period_end?: string | null
           current_period_start?: string | null
           environment?: string
           id?: string
-          paddle_customer_id: string
-          paddle_subscription_id: string
-          price_id: string
-          product_id: string
+          paddle_customer_id?: string | null
+          paddle_subscription_id?: string | null
+          price_id?: string | null
+          product_id?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           status?: string
           updated_at?: string | null
           user_id: string
         }
         Update: {
+          billing_interval?: string | null
           cancel_at_period_end?: boolean | null
           created_at?: string | null
           current_period_end?: string | null
           current_period_start?: string | null
           environment?: string
           id?: string
-          paddle_customer_id?: string
-          paddle_subscription_id?: string
-          price_id?: string
-          product_id?: string
+          paddle_customer_id?: string | null
+          paddle_subscription_id?: string | null
+          price_id?: string | null
+          product_id?: string | null
+          stripe_customer_id?: string | null
+          stripe_subscription_id?: string | null
           status?: string
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      stripe_webhook_events: {
+        Row: {
+          event_id: string
+          event_type: string
+          payload: Json | null
+          received_at: string
+        }
+        Insert: {
+          event_id: string
+          event_type: string
+          payload?: Json | null
+          received_at?: string
+        }
+        Update: {
+          event_id?: string
+          event_type?: string
+          payload?: Json | null
+          received_at?: string
         }
         Relationships: []
       }
