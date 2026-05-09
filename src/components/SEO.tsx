@@ -12,6 +12,7 @@ type Props = {
 };
 
 const SITE = "https://autovere.com";
+const DEFAULT_OG_IMAGE = `${SITE}/og-autovere-1200x630.jpg`;
 const OG_LOCALE_BY_LANG: Record<(typeof SUPPORTED_LANGS)[number], string> = {
   en: "en_US",
   no: "nb_NO",
@@ -82,12 +83,14 @@ export const SEO = ({ title, description, canonical, image, type = "website", js
     setMeta('meta[property="og:title"]', "content", title);
     setMeta('meta[property="og:description"]', "content", desc);
     setMeta('meta[property="og:type"]', "content", type);
-    if (image) setMeta('meta[property="og:image"]', "content", image);
+    const socialImage = image || DEFAULT_OG_IMAGE;
+    setMeta('meta[property="og:image"]', "content", socialImage);
+    setMeta('meta[property="og:image:alt"]', "content", "AUTOVERE — AI-Powered Car Intelligence");
 
     setMeta('meta[name="twitter:card"]', "content", "summary_large_image");
     setMeta('meta[name="twitter:title"]', "content", title);
     setMeta('meta[name="twitter:description"]', "content", desc);
-    if (image) setMeta('meta[name="twitter:image"]', "content", image);
+    setMeta('meta[name="twitter:image"]', "content", socialImage);
 
     const path = typeof window !== "undefined" ? window.location.pathname : "/";
     const lang = detectLangFromPath(path);
