@@ -570,6 +570,16 @@ const it: Translation = {
       lead: "Ops! Pagina non trovata",
       home: "Torna alla Home",
     },
+    success: {
+      seo_title: "Benvenuto nel Premium · AUTOVERE",
+      seo_desc: "Il tuo abbonamento AUTOVERE Premium è ora attivo.",
+      heading_a: "Sei ora",
+      heading_b: "Premium",
+      lead: "Il tuo abbonamento è attivo e tutto è sbloccato. Un'e-mail di conferma è in arrivo.",
+      features_heading: "Cosa hai appena sbloccato",
+      redirect_cta: "Vai su AUTOVERE",
+      redirect_auto: "Reindirizzamento in {{count}}s…",
+    },
   },
 };
 

@@ -573,6 +573,16 @@ const fr: Translation = {
       lead: "Oups ! Page introuvable",
       home: "Retour à l’accueil",
     },
+    success: {
+      seo_title: "Bienvenue dans Premium · AUTOVERE",
+      seo_desc: "Votre abonnement AUTOVERE Premium est maintenant actif.",
+      heading_a: "Vous êtes maintenant",
+      heading_b: "Premium",
+      lead: "Votre abonnement est actif et tout est déverrouillé. Un e-mail de confirmation est en route.",
+      features_heading: "Ce que vous venez de débloquer",
+      redirect_cta: "Aller sur AUTOVERE",
+      redirect_auto: "Redirection dans {{count}}s…",
+    },
   },
 };
 

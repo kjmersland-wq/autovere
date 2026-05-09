@@ -572,6 +572,16 @@ const sv: Translation = {
       lead: "Hoppsan! Sidan hittades inte",
       home: "Tillbaka till start",
     },
+    success: {
+      seo_title: "Välkommen till Premium · AUTOVERE",
+      seo_desc: "Ditt AUTOVERE Premium-abonnemang är nu aktivt.",
+      heading_a: "Du är nu",
+      heading_b: "Premium",
+      lead: "Ditt abonnemang är aktivt och allt är upplåst. Ett bekräftelsemail är på väg.",
+      features_heading: "Vad du just låste upp",
+      redirect_cta: "Gå till AUTOVERE",
+      redirect_auto: "Tar dig dit om {{count}}s…",
+    },
   },
 };
 

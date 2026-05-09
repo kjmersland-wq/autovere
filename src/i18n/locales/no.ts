@@ -571,6 +571,16 @@ const no: Translation = {
       lead: "Ups! Siden finnes ikke",
       home: "Tilbake til forsiden",
     },
+    success: {
+      seo_title: "Velkommen til Premium · AUTOVERE",
+      seo_desc: "Ditt AUTOVERE Premium-abonnement er nå aktivt.",
+      heading_a: "Du er nå",
+      heading_b: "Premium",
+      lead: "Abonnementet ditt er aktivt og alt er tilgjengelig. En bekreftelsesmail er på vei.",
+      features_heading: "Hva du nettopp låste opp",
+      redirect_cta: "Gå til AUTOVERE",
+      redirect_auto: "Tar deg dit om {{count}}s…",
+    },
   },
 };
 

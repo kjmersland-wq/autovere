@@ -273,7 +273,7 @@ Deno.serve(async (req) => {
             locale: selectedLocale,
           },
         },
-        success_url: `${appBaseUrl}${localizedReturnPath}?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+        success_url: `${appBaseUrl}${localizePath('/success', selectedLocale)}?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${appBaseUrl}${localizedReturnPath}?checkout=canceled`,
       });
     } catch (error) {

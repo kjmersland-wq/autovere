@@ -568,6 +568,16 @@ const en = {
       lead: "Oops! Page not found",
       home: "Return to Home",
     },
+    success: {
+      seo_title: "Welcome to Premium · AUTOVERE",
+      seo_desc: "Your AUTOVERE Premium subscription is now active.",
+      heading_a: "You're now",
+      heading_b: "Premium",
+      lead: "Your subscription is active and everything is unlocked. A confirmation email is on its way.",
+      features_heading: "What you just unlocked",
+      redirect_cta: "Go to AUTOVERE",
+      redirect_auto: "Taking you there in {{count}}s…",
+    },
   },
 };
 

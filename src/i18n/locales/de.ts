@@ -573,6 +573,16 @@ const de: Translation = {
       lead: "Hoppla! Seite nicht gefunden",
       home: "Zur Startseite",
     },
+    success: {
+      seo_title: "Willkommen bei Premium · AUTOVERE",
+      seo_desc: "Dein AUTOVERE Premium-Abonnement ist jetzt aktiv.",
+      heading_a: "Du bist jetzt",
+      heading_b: "Premium",
+      lead: "Dein Abonnement ist aktiv und alles ist freigeschaltet. Eine Bestätigungs-E-Mail ist unterwegs.",
+      features_heading: "Was du gerade freigeschaltet hast",
+      redirect_cta: "Zu AUTOVERE",
+      redirect_auto: "Weiterleitung in {{count}}s…",
+    },
   },
 };
 

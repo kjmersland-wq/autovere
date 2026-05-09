@@ -25,6 +25,7 @@ import Refund from "./pages/legal/Refund.tsx";
 import Subscriptions from "./pages/legal/Subscriptions.tsx";
 import Studio from "./pages/Studio.tsx";
 import Auth from "./pages/Auth.tsx";
+import Success from "./pages/Success.tsx";
 import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
 import { validateStripeClientEnv } from "./lib/stripe";
 
@@ -78,6 +79,7 @@ const AppRoutes = () => (
     <Route path="/legal/subscriptions" element={<Subscriptions />} />
     <Route path="/studio" element={<Studio />} />
     <Route path="/auth" element={<Auth />} />
+    <Route path="/success" element={<Success />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

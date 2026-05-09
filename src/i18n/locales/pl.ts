@@ -570,6 +570,16 @@ const pl: Translation = {
       lead: "Ups! Nie znaleziono strony",
       home: "Wróć na stronę główną",
     },
+    success: {
+      seo_title: "Witaj w Premium · AUTOVERE",
+      seo_desc: "Twoja subskrypcja AUTOVERE Premium jest teraz aktywna.",
+      heading_a: "Masz teraz",
+      heading_b: "Premium",
+      lead: "Twoja subskrypcja jest aktywna i wszystko jest odblokowane. E-mail z potwierdzeniem jest już w drodze.",
+      features_heading: "Co właśnie odblokowałeś",
+      redirect_cta: "Przejdź do AUTOVERE",
+      redirect_auto: "Przekierowanie za {{count}}s…",
+    },
   },
 };
 
