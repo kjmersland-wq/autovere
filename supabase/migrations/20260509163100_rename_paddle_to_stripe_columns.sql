@@ -1,4 +1,4 @@
--- Rename legacy Paddle column names to provider-agnostic Stripe equivalents.
+-- Rename legacy Paddle column names to their Stripe equivalents.
 -- This is a non-destructive rename; existing rows are preserved.
 
 alter table public.subscriptions

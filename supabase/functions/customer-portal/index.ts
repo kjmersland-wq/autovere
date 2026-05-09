@@ -36,9 +36,10 @@ Deno.serve(async (req) => {
       apiVersion: '2024-06-20',
     });
 
+    const appUrl = Deno.env.get('APP_URL') ?? 'https://autovere.com';
     const session = await stripe.billingPortal.sessions.create({
       customer: sub.stripe_customer_id,
-      return_url: returnUrl || 'https://autovere.com/pricing',
+      return_url: returnUrl || `${appUrl}/pricing`,
     });
 
     return new Response(JSON.stringify({ url: session.url }), {
