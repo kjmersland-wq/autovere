@@ -17,16 +17,12 @@ async function handleCheckoutCompleted(session: Stripe.Checkout.Session, env: st
   const userId = session.metadata?.userId;
   if (!userId) { console.error('No userId in session metadata'); return; }
   const subscriptionId = session.subscription as string;
-  const customerId = session.customer as string;
-  if (!subscriptionId || !customerId) return;
-  await getSupabase().from('subscriptions').upsert({
-    user_id: userId,
-    stripe_subscription_id: subscriptionId,
-    stripe_customer_id: customerId,
-    status: 'active',
-    environment: env,
-    updated_at: new Date().toISOString(),
-  }, { onConflict: 'stripe_subscription_id' });
+  if (!subscriptionId) return;
+  // Retrieve the full subscription so we have price_id / product_id (required NOT NULL columns).
+  // This also means handleSubscriptionUpsert handles all the field mapping in one place.
+  const stripe = getStripeClient();
+  const subscription = await stripe.subscriptions.retrieve(subscriptionId);
+  await handleSubscriptionUpsert(subscription, env);
 }
 
 async function handleSubscriptionUpsert(subscription: Stripe.Subscription, env: string) {

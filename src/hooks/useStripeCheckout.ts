@@ -23,10 +23,19 @@ export function useStripeCheckout() {
           cancelUrl: options.cancelUrl || `${window.location.origin}/pricing`,
         },
       });
-      if (error || !data?.url) throw new Error("Could not create checkout session");
+      if (error) {
+        // Extract the real server-side error message from the edge function response
+        try {
+          const body = await error.context?.json?.();
+          console.error("[create-checkout] edge function error:", body);
+        } catch {
+          console.error("[create-checkout] error:", error.message);
+        }
+        throw error;
+      }
+      if (!data?.url) throw new Error("[create-checkout] no URL in response");
       window.location.href = data.url;
     } catch (e) {
-      console.error(e);
       toast.error("Could not open checkout. Please try again.");
     } finally {
       setLoading(false);
