@@ -127,7 +127,7 @@ const pl: Translation = {
       popular_2: "weekendowe auto sportowe",
       popular_3: "miejski dojazd",
       hero_caption_a: "Historia AUTOVERE · Tom 01",
-      hero_caption_b: "„Właściwy samochód nie krzyczy. Po prostu pasuje."",
+      hero_caption_b: "„Właściwy samochód nie krzyczy. Po prostu pasuje.”",
       how_eyebrow: "Jak to działa",
       how_title_a: "Mniej szukania.",
       how_title_b: "Więcej jasności.",
