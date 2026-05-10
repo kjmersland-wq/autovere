@@ -1,5 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
-import { verifyWebhook, EventName, type PaddleEnv } from '../_shared/paddle.ts';
+import Stripe from 'npm:stripe@14';
+import { verifyWebhook, getStripeEnvironment } from '../_shared/stripe.ts';
 
 let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {
@@ -12,84 +13,74 @@ function getSupabase() {
   return _supabase;
 }
 
-async function handleSubscriptionCreated(data: any, env: PaddleEnv) {
-  const { id, customerId, items, status, currentBillingPeriod, customData } = data;
-  const userId = customData?.userId;
-  if (!userId) {
-    console.error('No userId in customData');
-    return;
-  }
-  const item = items[0];
-  const priceId = item.price.importMeta?.externalId;
-  const productId = item.product.importMeta?.externalId;
-  if (!priceId || !productId) {
-    console.warn('Skipping: missing importMeta.externalId', { rawPriceId: item.price.id });
-    return;
-  }
+async function handleCheckoutCompleted(session: Stripe.Checkout.Session, env: string) {
+  const userId = session.metadata?.userId;
+  if (!userId) { console.error('No userId in session metadata'); return; }
+  const subscriptionId = session.subscription as string;
+  const customerId = session.customer as string;
+  if (!subscriptionId || !customerId) return;
   await getSupabase().from('subscriptions').upsert({
     user_id: userId,
-    paddle_subscription_id: id,
-    paddle_customer_id: customerId,
-    product_id: productId,
-    price_id: priceId,
-    status,
-    current_period_start: currentBillingPeriod?.startsAt,
-    current_period_end: currentBillingPeriod?.endsAt,
+    stripe_subscription_id: subscriptionId,
+    stripe_customer_id: customerId,
+    status: 'active',
     environment: env,
     updated_at: new Date().toISOString(),
-  }, { onConflict: 'paddle_subscription_id' });
+  }, { onConflict: 'stripe_subscription_id' });
 }
 
-async function handleSubscriptionUpdated(data: any, env: PaddleEnv) {
-  const { id, status, currentBillingPeriod, scheduledChange, items } = data;
-  const item = items?.[0];
-  const update: Record<string, unknown> = {
-    status,
-    current_period_start: currentBillingPeriod?.startsAt,
-    current_period_end: currentBillingPeriod?.endsAt,
-    cancel_at_period_end: scheduledChange?.action === 'cancel',
+async function handleSubscriptionUpsert(subscription: Stripe.Subscription, env: string) {
+  const userId = subscription.metadata?.userId;
+  if (!userId) { console.error('No userId in subscription metadata'); return; }
+  const item = subscription.items.data[0];
+  const priceId = item?.price?.id ?? '';
+  const product = item?.price?.product;
+  const productId = typeof product === 'string' ? product : (product as Stripe.Product)?.id ?? '';
+  const customerId = typeof subscription.customer === 'string'
+    ? subscription.customer
+    : (subscription.customer as Stripe.Customer)?.id ?? '';
+  await getSupabase().from('subscriptions').upsert({
+    user_id: userId,
+    stripe_subscription_id: subscription.id,
+    stripe_customer_id: customerId,
+    product_id: productId,
+    price_id: priceId,
+    status: subscription.status,
+    current_period_start: new Date(subscription.current_period_start * 1000).toISOString(),
+    current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
+    cancel_at_period_end: subscription.cancel_at_period_end,
+    environment: env,
     updated_at: new Date().toISOString(),
-  };
-  // Reflect plan changes (monthly <-> yearly) so feature gating stays accurate.
-  if (item?.price?.importMeta?.externalId) update.price_id = item.price.importMeta.externalId;
-  if (item?.product?.importMeta?.externalId) update.product_id = item.product.importMeta.externalId;
-  await getSupabase().from('subscriptions')
-    .update(update)
-    .eq('paddle_subscription_id', id)
-    .eq('environment', env);
+  }, { onConflict: 'stripe_subscription_id' });
 }
 
-async function handleSubscriptionCanceled(data: any, env: PaddleEnv) {
+async function handleSubscriptionDeleted(subscription: Stripe.Subscription, env: string) {
   await getSupabase().from('subscriptions')
     .update({
       status: 'canceled',
-      current_period_end: data.currentBillingPeriod?.endsAt,
+      current_period_end: new Date(subscription.current_period_end * 1000).toISOString(),
       updated_at: new Date().toISOString(),
     })
-    .eq('paddle_subscription_id', data.id)
+    .eq('stripe_subscription_id', subscription.id)
     .eq('environment', env);
-}
-
-async function handleWebhook(req: Request, env: PaddleEnv) {
-  const event = await verifyWebhook(req, env);
-  switch (event.eventType) {
-    case EventName.SubscriptionCreated:
-      await handleSubscriptionCreated(event.data, env); break;
-    case EventName.SubscriptionUpdated:
-      await handleSubscriptionUpdated(event.data, env); break;
-    case EventName.SubscriptionCanceled:
-      await handleSubscriptionCanceled(event.data, env); break;
-    default:
-      console.log('Unhandled event:', event.eventType);
-  }
 }
 
 Deno.serve(async (req) => {
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 });
-  const url = new URL(req.url);
-  const env = (url.searchParams.get('env') || 'sandbox') as PaddleEnv;
+  const env = getStripeEnvironment();
   try {
-    await handleWebhook(req, env);
+    const event = await verifyWebhook(req);
+    switch (event.type) {
+      case 'checkout.session.completed':
+        await handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session, env); break;
+      case 'customer.subscription.created':
+      case 'customer.subscription.updated':
+        await handleSubscriptionUpsert(event.data.object as Stripe.Subscription, env); break;
+      case 'customer.subscription.deleted':
+        await handleSubscriptionDeleted(event.data.object as Stripe.Subscription, env); break;
+      default:
+        console.log('Unhandled event:', event.type);
+    }
     return new Response(JSON.stringify({ received: true }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },

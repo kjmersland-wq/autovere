@@ -36,5 +36,5 @@ verify_jwt = false
 [functions.payments-webhook]
 verify_jwt = false
 
-[functions.get-paddle-price]
+[functions.create-checkout]
 verify_jwt = false

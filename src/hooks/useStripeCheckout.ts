@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { initializePaddle, getPaddlePriceId } from "@/lib/paddle";
+import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
-export function usePaddleCheckout() {
+export function useStripeCheckout() {
   const [loading, setLoading] = useState(false);
 
   const openCheckout = async (options: {
@@ -10,23 +10,21 @@ export function usePaddleCheckout() {
     customerEmail?: string;
     userId?: string;
     successUrl?: string;
+    cancelUrl?: string;
   }) => {
     setLoading(true);
     try {
-      await initializePaddle();
-      const paddlePriceId = await getPaddlePriceId(options.priceId);
-
-      window.Paddle.Checkout.open({
-        items: [{ priceId: paddlePriceId, quantity: 1 }],
-        customer: options.customerEmail ? { email: options.customerEmail } : undefined,
-        customData: options.userId ? { userId: options.userId } : undefined,
-        settings: {
-          displayMode: "overlay",
+      const { data, error } = await supabase.functions.invoke("create-checkout", {
+        body: {
+          priceId: options.priceId,
+          customerEmail: options.customerEmail,
+          userId: options.userId,
           successUrl: options.successUrl || `${window.location.origin}/pricing?checkout=success`,
-          allowLogout: false,
-          variant: "one-page",
+          cancelUrl: options.cancelUrl || `${window.location.origin}/pricing`,
         },
       });
+      if (error || !data?.url) throw new Error("Could not create checkout session");
+      window.location.href = data.url;
     } catch (e) {
       console.error(e);
       toast.error("Could not open checkout. Please try again.");
