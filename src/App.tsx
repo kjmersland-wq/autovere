@@ -31,6 +31,9 @@ import EVCharging from "./pages/ev/EVCharging.tsx";
 import EVRoutePlanner from "./pages/ev/EVRoutePlanner.tsx";
 import EVCalculator from "./pages/ev/EVCalculator.tsx";
 import EVGuides from "./pages/ev/EVGuides.tsx";
+import EVReviews from "./pages/ev/EVReviews.tsx";
+import EVModelDetail, { EVModelsIndex } from "./pages/ev/EVModelDetail.tsx";
+import EVNetworkDetail, { EVNetworksIndex } from "./pages/ev/EVNetworkDetail.tsx";
 
 const queryClient = new QueryClient();
 
@@ -79,6 +82,11 @@ const AppRoutes = () => (
     <Route path="/ev/route-planner" element={<EVRoutePlanner />} />
     <Route path="/ev/calculator" element={<EVCalculator />} />
     <Route path="/ev/guides" element={<EVGuides />} />
+    <Route path="/ev/reviews" element={<EVReviews />} />
+    <Route path="/ev/models" element={<EVModelsIndex />} />
+    <Route path="/ev/models/:slug" element={<EVModelDetail />} />
+    <Route path="/ev/networks" element={<EVNetworksIndex />} />
+    <Route path="/ev/networks/:slug" element={<EVNetworkDetail />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );

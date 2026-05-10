@@ -1,0 +1,188 @@
+export interface ChargingNetwork {
+  slug: string;
+  name: string;
+  shortName: string;
+  tagline: string;
+  founded: number;
+  headquarters: string;
+  stationsEurope: number;
+  pointsEurope: number;
+  maxKw: number;
+  connectors: string[];
+  pricingModel: "per-kWh" | "per-minute" | "subscription" | "mixed";
+  pricing: { description: string; homeCountry?: string; typical: string };
+  coverageStrength: string[];
+  coverageWeak: string[];
+  pros: string[];
+  cons: string[];
+  compatible: string[];
+  bestFor: string;
+  summary: string;
+  accentColor: string;
+  speeds: { label: string; kw: number; typical: string }[];
+  membershipRequired: boolean;
+  appRequired: boolean;
+}
+
+export const CHARGING_NETWORKS: ChargingNetwork[] = [
+  {
+    slug: "ionity",
+    name: "Ionity",
+    shortName: "Ionity",
+    tagline: "Europe's premium high-power charging backbone. 350 kW. Built for speed.",
+    founded: 2017,
+    headquarters: "Munich, Germany",
+    stationsEurope: 700,
+    pointsEurope: 4200,
+    maxKw: 350,
+    connectors: ["CCS"],
+    pricingModel: "per-kWh",
+    pricing: {
+      description: "Pay-as-you-go: ~€0.79/kWh. Ionity Passport subscription: €17.99/month for €0.35/kWh.",
+      typical: "€0.35–0.79/kWh",
+    },
+    coverageStrength: ["Germany", "France", "Norway", "Sweden", "Austria", "UK", "Spain"],
+    coverageWeak: ["Eastern Europe", "Southern Italy", "Finland"],
+    pros: ["350 kW maximum — fastest in Europe", "Reliable, premium hardware", "Good motorway placement", "CCS standard — near-universal compatibility", "Passport subscription offers good value for frequent travellers"],
+    cons: ["Pay-as-you-go rate is expensive (€0.79/kWh)", "CCS only — no AC option", "Fewer stations than legacy networks", "Membership required for best pricing", "Station density lower in eastern/southern Europe"],
+    compatible: ["All CCS vehicles", "Tesla (with adapter)", "Most EVs sold in Europe after 2020"],
+    bestFor: "Motorway road trips across western Europe, especially with Passport subscription.",
+    summary: "Ionity was built to do one thing: deliver maximum charging speed at motorway locations across Europe. Founded by BMW, Ford, Hyundai, Mercedes and Volkswagen Group, it's now the reference point for high-power charging. At 350 kW peak (most stations deliver 150–250 kW to most vehicles), it's the fastest public charging available in Europe. The pay-as-you-go rate is punishing — €0.79/kWh in 2024 — but the €17.99/month Passport drops this to €0.35/kWh, competitive with mid-range public pricing.",
+    accentColor: "text-blue-400",
+    speeds: [
+      { label: "Peak", kw: 350, typical: "For 800V vehicles (Porsche, Audi, Hyundai, Kia)" },
+      { label: "Most vehicles", kw: 150, typical: "Standard 400V EVs (Tesla, BMW, Volvo)" },
+      { label: "Minimum", kw: 50, typical: "All vehicles guaranteed minimum" },
+    ],
+    membershipRequired: false,
+    appRequired: false,
+  },
+  {
+    slug: "tesla-supercharger",
+    name: "Tesla Supercharger",
+    shortName: "Supercharger",
+    tagline: "The network that made long-distance EV travel feel normal. Now open to all.",
+    founded: 2012,
+    headquarters: "Austin, Texas, USA",
+    stationsEurope: 1200,
+    pointsEurope: 14000,
+    maxKw: 250,
+    connectors: ["NACS", "CCS (via Magic Dock)"],
+    pricingModel: "per-kWh",
+    pricing: {
+      description: "Tesla owners: ~€0.34/kWh. Non-Tesla: €0.40–0.65/kWh depending on vehicle and country.",
+      typical: "€0.34–0.65/kWh",
+    },
+    coverageStrength: ["Norway", "Sweden", "Germany", "France", "Netherlands", "UK", "Spain", "Italy"],
+    coverageWeak: ["Eastern Europe (expanding)"],
+    pros: ["Largest network in Europe by station count", "Excellent reliability track record", "Urban and motorway placement balanced", "Multiple connectors per station", "Tesla V3 250 kW widely available"],
+    cons: ["Non-Tesla pricing premium", "250 kW peak (below Ionity's 350 kW)", "Some older V2 stalls share power", "Adapter required for non-Tesla on some stalls", "App dependency"],
+    compatible: ["Tesla vehicles (native)", "All CCS vehicles (open access 2023–)", "Vehicles with NACS adapter"],
+    bestFor: "Tesla drivers everywhere. Non-Tesla drivers in regions with limited Ionity coverage.",
+    summary: "Tesla's Supercharger network is the benchmark others are measured against. Reliability is exceptional — charger uptime consistently exceeds 99% — and placement reflects 12 years of route-planning data. Since opening to non-Tesla vehicles in 2023 (EU-first), it's become a genuine Europe-wide option. Non-Tesla pricing varies by country and is typically 15–30% above Tesla owner rates, but the network density justifies it. V3 Superchargers at 250 kW are the standard — V4 at 350 kW is rolling out across Europe.",
+    accentColor: "text-red-400",
+    speeds: [
+      { label: "V4 (rolling out)", kw: 350, typical: "Available at select European V4 stations" },
+      { label: "V3 (standard)", kw: 250, typical: "Most urban and motorway Supercharger locations" },
+      { label: "V2 (legacy)", kw: 150, typical: "Older installations — shared between two stalls" },
+    ],
+    membershipRequired: false,
+    appRequired: true,
+  },
+  {
+    slug: "fastned",
+    name: "Fastned",
+    shortName: "Fastned",
+    tagline: "Green energy, premium hardware, fair pricing. The network with a clear conscience.",
+    founded: 2012,
+    headquarters: "Amsterdam, Netherlands",
+    stationsEurope: 350,
+    pointsEurope: 1800,
+    maxKw: 300,
+    connectors: ["CCS", "CHAdeMO", "Type 2"],
+    pricingModel: "per-kWh",
+    pricing: {
+      description: "Standard: €0.79/kWh. Freedom subscription: €11.99/month for €0.39/kWh.",
+      typical: "€0.39–0.79/kWh",
+    },
+    coverageStrength: ["Netherlands", "Germany", "UK", "Belgium", "France"],
+    coverageWeak: ["Scandinavia", "Southern Europe", "Eastern Europe"],
+    pros: ["100% renewable energy", "Premium station design and facilities", "Multi-connector standard (CCS + CHAdeMO + Type 2)", "300 kW capable hardware", "Freedom subscription good value"],
+    cons: ["Limited network size vs Tesla and Ionity", "Pay-as-you-go expensive", "Coverage patchy outside core markets", "CHAdeMO declining relevance", "Station design prioritises aesthetics over density"],
+    compatible: ["CCS vehicles", "CHAdeMO vehicles (Nissan Leaf, older Mitsubishi)", "Type 2 AC charging", "Tesla (with adapter)"],
+    bestFor: "Netherlands and Germany road trips. CHAdeMO vehicle owners. Environmentally-motivated drivers.",
+    summary: "Fastned built something unusual: a charging network with a genuine identity. 100% renewable energy is the headline commitment — no carbon offsets, actual wind and solar. Stations are architecturally considered, canopy-covered, and feature genuine facilities including toilets and WiFi at most locations. The 300 kW hardware supports 800V vehicles. Coverage beyond the Netherlands, Germany and UK is limited, but within those markets, station quality consistently exceeds rivals.",
+    accentColor: "text-yellow-400",
+    speeds: [
+      { label: "Maximum", kw: 300, typical: "For 800V vehicles on latest hardware" },
+      { label: "Standard", kw: 200, typical: "Most 400V EVs" },
+      { label: "AC charging", kw: 43, typical: "Type 2 AC option at stations" },
+    ],
+    membershipRequired: false,
+    appRequired: false,
+  },
+  {
+    slug: "recharge",
+    name: "Recharge (Circle K + Eviny)",
+    shortName: "Recharge",
+    tagline: "Scandinavia's local charging backbone. Dense, accessible, practical.",
+    founded: 2018,
+    headquarters: "Bergen, Norway",
+    stationsEurope: 400,
+    pointsEurope: 2800,
+    maxKw: 150,
+    connectors: ["CCS", "Type 2"],
+    pricingModel: "per-kWh",
+    pricing: {
+      description: "Pay-as-you-go: NOK 6.90–9.90/kWh (Norway). Varies by country and speed.",
+      typical: "€0.38–0.62/kWh equiv.",
+    },
+    coverageStrength: ["Norway", "Sweden", "Denmark", "Finland"],
+    coverageWeak: ["Outside Scandinavia"],
+    pros: ["Best coverage in rural Norway and Sweden", "Collocated with Circle K fuel stations", "150 kW DC widely available", "Transparent pricing", "Trusted local brand"],
+    cons: ["Limited outside Scandinavia", "150 kW max — below class leaders", "Pricing less competitive than Ionity Passport", "App quality behind rivals", "Station density uneven outside urban areas"],
+    compatible: ["CCS vehicles", "Type 2 AC", "Most European EVs"],
+    bestFor: "Drivers based in Scandinavia, especially Norway. Essential for rural coverage.",
+    summary: "Recharge is the Scandinavian driver's default network — not because it's fastest or cheapest, but because it's there. In rural Norway and Sweden, it often provides the only public fast charging within 50 km. The partnership with Circle K means stations typically have cafes, food, clean facilities and reliable access. 150 kW maximum lags behind Ionity and Tesla, but for regular Scandinavian driving — shorter distances, strong home charging infrastructure — it's entirely adequate.",
+    accentColor: "text-emerald-400",
+    speeds: [
+      { label: "Maximum", kw: 150, typical: "Available at most newer Recharge stations" },
+      { label: "Standard", kw: 75, typical: "Older installations in rural locations" },
+      { label: "AC", kw: 22, typical: "Type 2 AC at some locations" },
+    ],
+    membershipRequired: false,
+    appRequired: false,
+  },
+  {
+    slug: "allego",
+    name: "Allego",
+    shortName: "Allego",
+    tagline: "Pan-European coverage with a focus on accessibility and interoperability.",
+    founded: 2013,
+    headquarters: "Arnhem, Netherlands",
+    stationsEurope: 600,
+    pointsEurope: 5500,
+    maxKw: 175,
+    connectors: ["CCS", "CHAdeMO", "Type 2"],
+    pricingModel: "per-kWh",
+    pricing: {
+      description: "RFID card or contactless. ~€0.59/kWh DC, €0.39/kWh AC. Varies by location.",
+      typical: "€0.39–0.59/kWh",
+    },
+    coverageStrength: ["Netherlands", "Belgium", "Germany", "France", "Poland"],
+    coverageWeak: ["Scandinavia", "UK", "Southern Europe"],
+    pros: ["Widest country coverage in Europe", "High interoperability — most roaming apps work", "CHAdeMO support for older EVs", "Urban and retail placement", "Reasonable AC pricing"],
+    cons: ["175 kW max DC below class leaders", "Station quality inconsistent", "UI less polished than Tesla/Ionity", "Less visible in premium locations", "Reliability reports variable"],
+    compatible: ["CCS", "CHAdeMO", "Type 2", "Most RFID and roaming apps", "Plugsurfing, CHARG.E, etc."],
+    bestFor: "Drivers needing broad European coverage, especially in BeNeLux and Central Europe.",
+    summary: "Allego's strength is breadth. With stations across 25+ European countries and broad roaming app compatibility, it's the network most drivers encounter unexpectedly — at retail parks, airports, hotels. 175 kW DC maximum is the ceiling, and consistency varies more than premium networks. Where Allego wins is interoperability: it works with almost every charging app and RFID card in Europe, making it the fallback option that actually works.",
+    accentColor: "text-violet-400",
+    speeds: [
+      { label: "Maximum DC", kw: 175, typical: "Available at HPC-designated stations" },
+      { label: "Standard DC", kw: 100, typical: "Most Allego DC stations" },
+      { label: "AC", kw: 22, typical: "Type 2 AC widely available" },
+    ],
+    membershipRequired: false,
+    appRequired: false,
+  },
+];

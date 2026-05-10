@@ -1,8 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
-import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermometer, Globe, TrendingUp, Star } from "lucide-react";
+import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermometer, Globe, TrendingUp, Star, Play, Car } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
+import { EV_MODELS } from "@/data/ev-models";
+import { CHARGING_NETWORKS } from "@/data/charging-networks";
 
 const MODULES = [
   {
@@ -40,6 +42,24 @@ const MODULES = [
     color: "from-amber-500/20 to-orange-500/10",
     border: "border-amber-500/20",
     iconColor: "text-amber-400",
+  },
+  {
+    to: "/ev/models",
+    icon: Car,
+    label: "Model Guides",
+    desc: "Deep-dive pages on every major EV: real range, charging data, winter performance and pricing by country.",
+    color: "from-rose-500/20 to-pink-500/10",
+    border: "border-rose-500/20",
+    iconColor: "text-rose-400",
+  },
+  {
+    to: "/ev/reviews",
+    icon: Play,
+    label: "Video Reviews",
+    desc: "Curated YouTube reviews with consensus scores, real-world data and reviewer analysis.",
+    color: "from-indigo-500/20 to-blue-500/10",
+    border: "border-indigo-500/20",
+    iconColor: "text-indigo-400",
   },
 ];
 
