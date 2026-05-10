@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermometer, Globe, TrendingUp, Star, Play, Car } from "lucide-react";
+import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermometer, Globe, TrendingUp, Star, Play, Car, BarChart2, Brain, Flag } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
@@ -60,6 +60,33 @@ const MODULES = [
     color: "from-indigo-500/20 to-blue-500/10",
     border: "border-indigo-500/20",
     iconColor: "text-indigo-400",
+  },
+  {
+    to: "/ev/compare",
+    icon: BarChart2,
+    label: "EV Comparison",
+    desc: "Compare up to 3 EVs side by side — real range, charging speed, comfort, costs and expert verdicts.",
+    color: "from-violet-500/20 to-fuchsia-500/10",
+    border: "border-violet-500/20",
+    iconColor: "text-violet-400",
+  },
+  {
+    to: "/ev/advisor",
+    icon: Brain,
+    label: "Buying Advisor",
+    desc: "7 questions. Personalised EV recommendations matched to your budget, climate and lifestyle.",
+    color: "from-teal-500/20 to-emerald-500/10",
+    border: "border-teal-500/20",
+    iconColor: "text-teal-400",
+  },
+  {
+    to: "/ev/markets",
+    icon: Flag,
+    label: "Market Intelligence",
+    desc: "Incentives, charging costs and EV economics for 8 European countries — from Norway to Italy.",
+    color: "from-sky-500/20 to-blue-500/10",
+    border: "border-sky-500/20",
+    iconColor: "text-sky-400",
   },
 ];
 
@@ -132,7 +159,7 @@ export default function EVHub() {
           <p className="text-xs uppercase tracking-[0.25em] text-accent mb-3">Tools</p>
           <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Everything you need, in one place.</h2>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {MODULES.map((m) => (
             <Link
               key={m.to}

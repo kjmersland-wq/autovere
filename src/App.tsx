@@ -1,41 +1,82 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, lazy, Suspense } from "react";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./i18n/config";
 import { LangSync } from "./i18n/LangSync";
+import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
+
+// Eagerly loaded — critical path
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
-import CarDetail, { CarsIndex } from "./pages/CarDetail.tsx";
-import Compare, { CompareIndex } from "./pages/Compare.tsx";
-import CollectionDetail, { CollectionsIndex } from "./pages/Collection.tsx";
-import PersonalityDetail, { PersonalitiesIndex } from "./pages/Personality.tsx";
-import LearnArticle, { LearnIndex } from "./pages/Learn.tsx";
-import Watch from "./pages/Watch.tsx";
-import Pricing from "./pages/Pricing.tsx";
-import Contact from "./pages/Contact.tsx";
-import Help from "./pages/Help.tsx";
-import Discover from "./pages/Discover.tsx";
-import Terms from "./pages/legal/Terms.tsx";
-import Privacy from "./pages/legal/Privacy.tsx";
-import Cookies from "./pages/legal/Cookies.tsx";
-import Refund from "./pages/legal/Refund.tsx";
-import Subscriptions from "./pages/legal/Subscriptions.tsx";
-import Studio from "./pages/Studio.tsx";
 import Auth from "./pages/Auth.tsx";
-import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
-import EVHub from "./pages/ev/EVHub.tsx";
-import EVCharging from "./pages/ev/EVCharging.tsx";
-import EVRoutePlanner from "./pages/ev/EVRoutePlanner.tsx";
-import EVCalculator from "./pages/ev/EVCalculator.tsx";
-import EVGuides from "./pages/ev/EVGuides.tsx";
-import EVReviews from "./pages/ev/EVReviews.tsx";
-import EVModelDetail, { EVModelsIndex } from "./pages/ev/EVModelDetail.tsx";
-import EVNetworkDetail, { EVNetworksIndex } from "./pages/ev/EVNetworkDetail.tsx";
+
+// Lazy-loaded page chunks — EV ecosystem
+const EVHub = lazy(() => import("./pages/ev/EVHub.tsx"));
+const EVCharging = lazy(() => import("./pages/ev/EVCharging.tsx"));
+const EVRoutePlanner = lazy(() => import("./pages/ev/EVRoutePlanner.tsx"));
+const EVCalculator = lazy(() => import("./pages/ev/EVCalculator.tsx"));
+const EVGuides = lazy(() => import("./pages/ev/EVGuides.tsx"));
+const EVReviews = lazy(() => import("./pages/ev/EVReviews.tsx"));
+const EVModelDetail = lazy(() => import("./pages/ev/EVModelDetail.tsx"));
+const EVCompare = lazy(() => import("./pages/ev/EVCompare.tsx"));
+const EVAdvisor = lazy(() => import("./pages/ev/EVAdvisor.tsx"));
+const EVMarkets = lazy(() => import("./pages/ev/EVMarkets.tsx"));
+const EVNetworkDetail = lazy(() => import("./pages/ev/EVNetworkDetail.tsx"));
+
+// Lazy-loaded page chunks — core pages
+const CarDetail = lazy(() => import("./pages/CarDetail.tsx"));
+const Compare = lazy(() => import("./pages/Compare.tsx"));
+const CollectionDetail = lazy(() => import("./pages/Collection.tsx"));
+const PersonalityDetail = lazy(() => import("./pages/Personality.tsx"));
+const LearnArticle = lazy(() => import("./pages/Learn.tsx"));
+const Watch = lazy(() => import("./pages/Watch.tsx"));
+const Pricing = lazy(() => import("./pages/Pricing.tsx"));
+const Contact = lazy(() => import("./pages/Contact.tsx"));
+const Help = lazy(() => import("./pages/Help.tsx"));
+const Discover = lazy(() => import("./pages/Discover.tsx"));
+const Studio = lazy(() => import("./pages/Studio.tsx"));
+const Terms = lazy(() => import("./pages/legal/Terms.tsx"));
+const Privacy = lazy(() => import("./pages/legal/Privacy.tsx"));
+const Cookies = lazy(() => import("./pages/legal/Cookies.tsx"));
+const Refund = lazy(() => import("./pages/legal/Refund.tsx"));
+const Subscriptions = lazy(() => import("./pages/legal/Subscriptions.tsx"));
+
+// Named exports from files with multiple exports — resolved at module level
+import type { FC } from "react";
+
+// These files export named components alongside defaults — import the whole module lazily
+const EVModelsIndexLazy = lazy(() =>
+  import("./pages/ev/EVModelDetail.tsx").then((m) => ({ default: m.EVModelsIndex }))
+);
+const EVNetworksIndexLazy = lazy(() =>
+  import("./pages/ev/EVNetworkDetail.tsx").then((m) => ({ default: m.EVNetworksIndex }))
+);
+const CarsIndex = lazy(() =>
+  import("./pages/CarDetail.tsx").then((m) => ({ default: m.CarsIndex as FC }))
+);
+const CompareIndex = lazy(() =>
+  import("./pages/Compare.tsx").then((m) => ({ default: m.CompareIndex as FC }))
+);
+const CollectionsIndex = lazy(() =>
+  import("./pages/Collection.tsx").then((m) => ({ default: m.CollectionsIndex as FC }))
+);
+const PersonalitiesIndex = lazy(() =>
+  import("./pages/Personality.tsx").then((m) => ({ default: m.PersonalitiesIndex as FC }))
+);
+const LearnIndex = lazy(() =>
+  import("./pages/Learn.tsx").then((m) => ({ default: m.LearnIndex as FC }))
+);
 
 const queryClient = new QueryClient();
+
+const PageLoader = () => (
+  <div className="min-h-screen bg-background flex items-center justify-center">
+    <div className="w-8 h-8 rounded-full border-2 border-accent border-t-transparent animate-spin" />
+  </div>
+);
 
 const ScrollManager = () => {
   const { pathname, hash } = useLocation();
@@ -53,42 +94,48 @@ const ScrollManager = () => {
 };
 
 const AppRoutes = () => (
-  <Routes>
-    <Route path="/" element={<Index />} />
-    <Route path="/cars" element={<CarsIndex />} />
-    <Route path="/cars/:slug" element={<CarDetail />} />
-    <Route path="/compare" element={<CompareIndex />} />
-    <Route path="/compare/:slug" element={<Compare />} />
-    <Route path="/collections" element={<CollectionsIndex />} />
-    <Route path="/collections/:slug" element={<CollectionDetail />} />
-    <Route path="/personalities" element={<PersonalitiesIndex />} />
-    <Route path="/personalities/:slug" element={<PersonalityDetail />} />
-    <Route path="/learn" element={<LearnIndex />} />
-    <Route path="/learn/:slug" element={<LearnArticle />} />
-    <Route path="/watch" element={<Watch />} />
-    <Route path="/pricing" element={<Pricing />} />
-    <Route path="/contact" element={<Contact />} />
-    <Route path="/help" element={<Help />} />
-    <Route path="/discover" element={<Discover />} />
-    <Route path="/legal/terms" element={<Terms />} />
-    <Route path="/legal/privacy" element={<Privacy />} />
-    <Route path="/legal/cookies" element={<Cookies />} />
-    <Route path="/legal/refund" element={<Refund />} />
-    <Route path="/legal/subscriptions" element={<Subscriptions />} />
-    <Route path="/studio" element={<Studio />} />
-    <Route path="/auth" element={<Auth />} />
-    <Route path="/ev" element={<EVHub />} />
-    <Route path="/ev/charging" element={<EVCharging />} />
-    <Route path="/ev/route-planner" element={<EVRoutePlanner />} />
-    <Route path="/ev/calculator" element={<EVCalculator />} />
-    <Route path="/ev/guides" element={<EVGuides />} />
-    <Route path="/ev/reviews" element={<EVReviews />} />
-    <Route path="/ev/models" element={<EVModelsIndex />} />
-    <Route path="/ev/models/:slug" element={<EVModelDetail />} />
-    <Route path="/ev/networks" element={<EVNetworksIndex />} />
-    <Route path="/ev/networks/:slug" element={<EVNetworkDetail />} />
-    <Route path="*" element={<NotFound />} />
-  </Routes>
+  <Suspense fallback={<PageLoader />}>
+    <Routes>
+      <Route path="/" element={<Index />} />
+      <Route path="/cars" element={<CarsIndex />} />
+      <Route path="/cars/:slug" element={<CarDetail />} />
+      <Route path="/compare" element={<CompareIndex />} />
+      <Route path="/compare/:slug" element={<Compare />} />
+      <Route path="/collections" element={<CollectionsIndex />} />
+      <Route path="/collections/:slug" element={<CollectionDetail />} />
+      <Route path="/personalities" element={<PersonalitiesIndex />} />
+      <Route path="/personalities/:slug" element={<PersonalityDetail />} />
+      <Route path="/learn" element={<LearnIndex />} />
+      <Route path="/learn/:slug" element={<LearnArticle />} />
+      <Route path="/watch" element={<Watch />} />
+      <Route path="/pricing" element={<Pricing />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/help" element={<Help />} />
+      <Route path="/discover" element={<Discover />} />
+      <Route path="/legal/terms" element={<Terms />} />
+      <Route path="/legal/privacy" element={<Privacy />} />
+      <Route path="/legal/cookies" element={<Cookies />} />
+      <Route path="/legal/refund" element={<Refund />} />
+      <Route path="/legal/subscriptions" element={<Subscriptions />} />
+      <Route path="/studio" element={<Studio />} />
+      <Route path="/auth" element={<Auth />} />
+      {/* EV ecosystem */}
+      <Route path="/ev" element={<EVHub />} />
+      <Route path="/ev/charging" element={<EVCharging />} />
+      <Route path="/ev/route-planner" element={<EVRoutePlanner />} />
+      <Route path="/ev/calculator" element={<EVCalculator />} />
+      <Route path="/ev/guides" element={<EVGuides />} />
+      <Route path="/ev/reviews" element={<EVReviews />} />
+      <Route path="/ev/models" element={<EVModelsIndexLazy />} />
+      <Route path="/ev/models/:slug" element={<EVModelDetail />} />
+      <Route path="/ev/networks" element={<EVNetworksIndexLazy />} />
+      <Route path="/ev/networks/:slug" element={<EVNetworkDetail />} />
+      <Route path="/ev/compare" element={<EVCompare />} />
+      <Route path="/ev/advisor" element={<EVAdvisor />} />
+      <Route path="/ev/markets" element={<EVMarkets />} />
+      <Route path="*" element={<NotFound />} />
+    </Routes>
+  </Suspense>
 );
 
 const App = () => (
