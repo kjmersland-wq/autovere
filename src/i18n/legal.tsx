@@ -20,12 +20,12 @@ const UPDATED_DE = "6. Mai 2026";
 const UPDATED_SV = "6 maj 2026";
 const UPDATED_FR = "6 mai 2026";
 
-const PADDLE_MOR = {
-  en: "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.",
-  no: "Vår bestillingsprosess gjennomføres av vår nettforhandler Paddle.com. Paddle.com er Merchant of Record for alle våre bestillinger. Paddle håndterer alle kundeservicehenvendelser og returer.",
-  de: "Unser Bestellprozess wird von unserem Online-Reseller Paddle.com abgewickelt. Paddle.com ist Merchant of Record für alle unsere Bestellungen. Paddle bearbeitet alle Kundenanfragen und Retouren.",
-  sv: "Vår beställningsprocess hanteras av vår onlineåterförsäljare Paddle.com. Paddle.com är Merchant of Record för alla våra beställningar. Paddle hanterar alla kundtjänstärenden och returer.",
-  fr: "Notre processus de commande est géré par notre revendeur en ligne Paddle.com. Paddle.com est le Merchant of Record pour toutes nos commandes. Paddle gère toutes les demandes de service client et les retours.",
+const PAYMENT_MOR = {
+  en: "Our order process is conducted by our online reseller Stripe.com. Stripe.com is the Merchant of Record for all our orders. Stripe provides all customer service inquiries and handles returns.",
+  no: "Vår bestillingsprosess gjennomføres av vår nettforhandler Stripe.com. Stripe.com er Merchant of Record for alle våre bestillinger. Stripe håndterer alle kundeservicehenvendelser og returer.",
+  de: "Unser Bestellprozess wird von unserem Online-Reseller Stripe.com abgewickelt. Stripe.com ist Merchant of Record für alle unsere Bestellungen. Stripe bearbeitet alle Kundenanfragen und Retouren.",
+  sv: "Vår beställningsprocess hanteras av vår onlineåterförsäljare Stripe.com. Stripe.com är Merchant of Record för alla våra beställningar. Stripe hanterar alla kundtjänstärenden och returer.",
+  fr: "Notre processus de commande est géré par notre revendeur en ligne Stripe.com. Stripe.com est le Merchant of Record pour toutes nos commandes. Stripe gère toutes les demandes de service client et les retours.",
 };
 
 // =============== EN ==================
@@ -44,7 +44,7 @@ const en = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "acceptance", title: "Acceptance of terms", body: <p>By using AUTOVERE you agree to these terms. If you do not agree, please do not use the service. We may update these terms from time to time; we will note the date at the top whenever we do.</p> },
       { id: "service", title: "What AUTOVERE is", body: <><p>AUTOVERE is an intelligent automotive discovery platform. We help people explore, compare and understand vehicles using curated content, public data, official manufacturer resources and AI-assisted insights.</p><p>AUTOVERE is <strong>not</strong> a dealership or marketplace. We do not sell vehicles and we are not party to any purchase you make from a third party.</p></> },
       { id: "accounts", title: "Accounts and eligibility", body: <p>You must be at least 16 years old to use AUTOVERE. You are responsible for keeping your account credentials safe and for activity that takes place under your account.</p> },
-      { id: "subscriptions", title: "Subscriptions and billing", body: <><p>Some AUTOVERE features are available through a paid subscription. Pricing, billing cycles and renewal terms are presented on the <Link to="/pricing">Pricing page</Link> and at checkout.</p><p>Subscriptions renew automatically until cancelled. You can cancel at any time — see the <Link to="/legal/subscriptions">Subscription Terms</Link> for details.</p><p>{PADDLE_MOR.en}</p></> },
+      { id: "subscriptions", title: "Subscriptions and billing", body: <><p>Some AUTOVERE features are available through a paid subscription. Pricing, billing cycles and renewal terms are presented on the <Link to="/pricing">Pricing page</Link> and at checkout.</p><p>Subscriptions renew automatically until cancelled. You can cancel at any time — see the <Link to="/legal/subscriptions">Subscription Terms</Link> for details.</p><p>{PAYMENT_MOR.en}</p></> },
       { id: "ai", title: "AI-assisted recommendations", body: <><p>AUTOVERE uses AI to help you compare and understand vehicles. Recommendations are generated from public sources, manufacturer information, reviewer consensus and model analysis.</p><p>AI insights are intended as guidance, not professional advice. Vehicle data, specifications and availability vary by region. Always verify final details directly with the manufacturer or seller before purchase.</p></> },
       { id: "acceptable-use", title: "Acceptable use", body: <p>Don't use AUTOVERE to break the law, infringe others' rights, scrape or resell our content at scale, attempt to disrupt the service, or misuse our AI features. We may suspend access if these terms are violated.</p> },
       { id: "ip", title: "Intellectual property", body: <p>AUTOVERE, the AutoVere advisor, our editorial content and design are protected by intellectual property laws. Vehicle names, marks and imagery belong to their respective manufacturers and are used for editorial purposes.</p> },
@@ -65,8 +65,8 @@ const en = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "what", title: "What we collect", body: <>
         <p><strong>Account data</strong> — name, email and authentication identifiers when you create an account.</p>
         <p><strong>Usage data</strong> — pages viewed, searches, comparisons and advisor conversations, used to improve the product.</p>
-        <p><strong>Billing data</strong> — when you subscribe, our payment provider <strong>Paddle.com Market Limited</strong> ("Paddle") acts as Merchant of Record. Paddle hosts the checkout, processes your payment, calculates and remits sales tax/VAT, prevents fraud, and issues invoices. We never see or store your full card details.</p>
-        <p className="!mb-2"><strong>Data collected and processed by Paddle (not by us):</strong></p>
+        <p><strong>Billing data</strong> — when you subscribe, our payment provider <strong>Stripe.com Market Limited</strong> ("Stripe") acts as Merchant of Record. Stripe hosts the checkout, processes your payment, calculates and remits sales tax/VAT, prevents fraud, and issues invoices. We never see or store your full card details.</p>
+        <p className="!mb-2"><strong>Data collected and processed by Stripe (not by us):</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
           <li>Full name and email address</li>
           <li>Billing address (street, city, postal code, state/region, country)</li>
@@ -78,11 +78,11 @@ const en = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Business name and tax country (for B2B invoicing)</li>
           <li>Currency and converted amount</li>
           <li>Transaction history, refunds, chargebacks and dispute records</li>
-          <li>Communications with Paddle's customer support</li>
+          <li>Communications with Stripe's customer support</li>
         </ul>
-        <p className="!mb-2"><strong>Data we receive back from Paddle and store on your account:</strong></p>
+        <p className="!mb-2"><strong>Data we receive back from Stripe and store on your account:</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
-          <li>Paddle customer ID and Paddle subscription ID (internal identifiers)</li>
+          <li>Stripe customer ID and Stripe subscription ID (internal identifiers)</li>
           <li>Product ID and price ID of the plan you purchased (e.g. <code>premium_monthly</code>)</li>
           <li>Subscription status (<code>trialing</code>, <code>active</code>, <code>past_due</code>, <code>paused</code>, <code>canceled</code>)</li>
           <li>Current billing period start and end dates</li>
@@ -92,16 +92,16 @@ const en = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Currency and amount of each transaction</li>
           <li>Last four digits and brand of the card used (e.g. "Visa •••• 4242")</li>
           <li>Transaction timestamps (created, paid, refunded)</li>
-          <li>Invoice and receipt URLs hosted by Paddle</li>
+          <li>Invoice and receipt URLs hosted by Stripe</li>
         </ul>
-        <p>We use this data to provision your subscription, gate Premium features, send renewal and receipt notifications, handle support requests, and meet our accounting and tax obligations. See <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Paddle's Privacy Policy</a> for how Paddle handles the data it collects.</p>
+        <p>We use this data to provision your subscription, gate Premium features, send renewal and receipt notifications, handle support requests, and meet our accounting and tax obligations. See <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Stripe's Privacy Policy</a> for how Stripe handles the data it collects.</p>
         <p><strong>Messages you send us</strong> — anything you write in the contact form.</p>
       </> },
       { id: "why", title: "Why we use it", body: <p>To provide the service, personalise recommendations, prevent abuse, comply with legal obligations, and respond to you when you reach out. We do not sell personal data, ever.</p> },
       { id: "ai", title: "AI and your data", body: <p>Conversations with our AI advisor are processed through trusted AI providers to generate responses. We do not use your private conversations to train external models. Anonymised, aggregated patterns may be used to improve our own product.</p> },
       { id: "sharing", title: "Who we share with", body: <>
         <p>Carefully selected processors that help us run AUTOVERE — hosting, analytics, email delivery and AI inference. Each is bound by data-processing agreements and may only use your data on our instructions.</p>
-        <p><strong>Paddle.com Market Limited</strong> — our Merchant of Record for all paid subscriptions. Paddle receives data necessary to process your payment, manage your subscription, calculate and remit sales tax/VAT, prevent fraud, and issue invoices. Paddle acts as an independent data controller for this processing. See <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Paddle's Privacy Policy</a>.</p>
+        <p><strong>Stripe.com Market Limited</strong> — our Merchant of Record for all paid subscriptions. Stripe receives data necessary to process your payment, manage your subscription, calculate and remit sales tax/VAT, prevent fraud, and issue invoices. Stripe acts as an independent data controller for this processing. See <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Stripe's Privacy Policy</a>.</p>
         <p><strong>Authorities and professional advisers</strong> — where required by law or to protect our legal rights.</p>
       </> },
       { id: "retention", title: "How long we keep it", body: <p>We keep personal data only as long as needed for the purposes above, or as required by law. Contact-form messages are retained for up to 24 months.</p> },
@@ -173,7 +173,7 @@ const no = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "acceptance", title: "Aksept av vilkår", body: <p>Ved å bruke AUTOVERE godtar du disse vilkårene. Hvis du ikke godtar dem, vennligst ikke bruk tjenesten. Vi kan oppdatere vilkårene fra tid til annen; vi noterer datoen øverst hver gang vi gjør det.</p> },
       { id: "service", title: "Hva AUTOVERE er", body: <><p>AUTOVERE er en intelligent plattform for biloppdagelse. Vi hjelper folk å utforske, sammenligne og forstå biler ved hjelp av kuratert innhold, offentlige data, offisielle produsentressurser og AI-assistert innsikt.</p><p>AUTOVERE er <strong>ikke</strong> en forhandler eller markedsplass. Vi selger ikke biler og er ikke part i kjøp du gjør fra en tredjepart.</p></> },
       { id: "accounts", title: "Konto og berettigelse", body: <p>Du må være minst 16 år for å bruke AUTOVERE. Du er ansvarlig for å holde påloggingsinformasjonen din sikker og for aktivitet som skjer på kontoen din.</p> },
-      { id: "subscriptions", title: "Abonnement og fakturering", body: <><p>Noen AUTOVERE-funksjoner krever betalt abonnement. Priser, faktureringssykluser og fornyelsesvilkår vises på <Link to="/pricing">prissiden</Link> og i kassen.</p><p>Abonnementer fornyes automatisk inntil de kanselleres. Du kan kansellere når som helst — se <Link to="/legal/subscriptions">abonnementsvilkårene</Link> for detaljer.</p><p>{PADDLE_MOR.no}</p></> },
+      { id: "subscriptions", title: "Abonnement og fakturering", body: <><p>Noen AUTOVERE-funksjoner krever betalt abonnement. Priser, faktureringssykluser og fornyelsesvilkår vises på <Link to="/pricing">prissiden</Link> og i kassen.</p><p>Abonnementer fornyes automatisk inntil de kanselleres. Du kan kansellere når som helst — se <Link to="/legal/subscriptions">abonnementsvilkårene</Link> for detaljer.</p><p>{PAYMENT_MOR.no}</p></> },
       { id: "ai", title: "AI-assisterte anbefalinger", body: <><p>AUTOVERE bruker AI for å hjelpe deg å sammenligne og forstå biler. Anbefalinger genereres fra offentlige kilder, produsentinformasjon, anmelderkonsensus og modellanalyse.</p><p>AI-innsikt er ment som veiledning, ikke profesjonell rådgivning. Bildata, spesifikasjoner og tilgjengelighet varierer mellom regioner. Verifiser alltid endelige detaljer direkte med produsent eller selger før kjøp.</p></> },
       { id: "acceptable-use", title: "Akseptabel bruk", body: <p>Ikke bruk AUTOVERE til å bryte loven, krenke andres rettigheter, skrape eller videreselge innholdet vårt i stor skala, forsøke å forstyrre tjenesten eller misbruke våre AI-funksjoner. Vi kan suspendere tilgang ved brudd på disse vilkårene.</p> },
       { id: "ip", title: "Immaterielle rettigheter", body: <p>AUTOVERE, AutoVere-rådgiveren, vårt redaksjonelle innhold og design er beskyttet av immaterialrettslige lover. Bilnavn, varemerker og bilder tilhører sine respektive produsenter og brukes til redaksjonelle formål.</p> },
@@ -194,8 +194,8 @@ const no = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "what", title: "Hva vi samler inn", body: <>
         <p><strong>Kontodata</strong> — navn, e-post og autentiseringsidentifikatorer når du oppretter en konto.</p>
         <p><strong>Bruksdata</strong> — sider du har sett, søk, sammenligninger og rådgiversamtaler, brukt til å forbedre produktet.</p>
-        <p><strong>Faktureringsdata</strong> — når du abonnerer, opptrer vår betalingsleverandør <strong>Paddle.com Market Limited</strong> ("Paddle") som Merchant of Record. Paddle drifter kassen, behandler betalingen, beregner og innbetaler moms/VAT, forhindrer svindel og utsteder fakturaer. Vi ser eller lagrer aldri dine fullstendige kortdata.</p>
-        <p className="!mb-2"><strong>Data Paddle samler inn og behandler (ikke vi):</strong></p>
+        <p><strong>Faktureringsdata</strong> — når du abonnerer, opptrer vår betalingsleverandør <strong>Stripe.com Market Limited</strong> ("Stripe") som Merchant of Record. Stripe drifter kassen, behandler betalingen, beregner og innbetaler moms/VAT, forhindrer svindel og utsteder fakturaer. Vi ser eller lagrer aldri dine fullstendige kortdata.</p>
+        <p className="!mb-2"><strong>Data Stripe samler inn og behandler (ikke vi):</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
           <li>Fullt navn og e-postadresse</li>
           <li>Faktureringsadresse (gate, by, postnummer, fylke/region, land)</li>
@@ -207,11 +207,11 @@ const no = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Firmanavn og skatteland (for B2B-fakturering)</li>
           <li>Valuta og konvertert beløp</li>
           <li>Transaksjonshistorikk, refusjoner, tilbakeføringer og tvistesaker</li>
-          <li>Kommunikasjon med Paddles kundestøtte</li>
+          <li>Kommunikasjon med Stripes kundestøtte</li>
         </ul>
-        <p className="!mb-2"><strong>Data vi mottar tilbake fra Paddle og lagrer på din konto:</strong></p>
+        <p className="!mb-2"><strong>Data vi mottar tilbake fra Stripe og lagrer på din konto:</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
-          <li>Paddle kunde-ID og Paddle abonnement-ID (interne identifikatorer)</li>
+          <li>Stripe kunde-ID og Stripe abonnement-ID (interne identifikatorer)</li>
           <li>Produkt-ID og pris-ID for planen du kjøpte (f.eks. <code>premium_monthly</code>)</li>
           <li>Abonnementsstatus (<code>trialing</code>, <code>active</code>, <code>past_due</code>, <code>paused</code>, <code>canceled</code>)</li>
           <li>Gjeldende faktureringsperiodes start- og sluttdato</li>
@@ -221,16 +221,16 @@ const no = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Valuta og beløp for hver transaksjon</li>
           <li>Siste fire sifre og merke på kortet brukt (f.eks. "Visa •••• 4242")</li>
           <li>Transaksjonstidsstempler (opprettet, betalt, refundert)</li>
-          <li>Faktura- og kvitterings-URL-er hostet av Paddle</li>
+          <li>Faktura- og kvitterings-URL-er hostet av Stripe</li>
         </ul>
-        <p>Vi bruker disse dataene for å klargjøre abonnementet ditt, gi tilgang til Premium-funksjoner, sende fornyelses- og kvitteringsvarsler, håndtere supporthenvendelser og oppfylle våre regnskaps- og skatteforpliktelser. Se <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Paddles personvernerklæring</a> for hvordan Paddle behandler dataene de samler inn.</p>
+        <p>Vi bruker disse dataene for å klargjøre abonnementet ditt, gi tilgang til Premium-funksjoner, sende fornyelses- og kvitteringsvarsler, håndtere supporthenvendelser og oppfylle våre regnskaps- og skatteforpliktelser. Se <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Stripes personvernerklæring</a> for hvordan Stripe behandler dataene de samler inn.</p>
         <p><strong>Meldinger du sender oss</strong> — alt du skriver i kontaktskjemaet.</p>
       </> },
       { id: "why", title: "Hvorfor vi bruker det", body: <p>For å levere tjenesten, personalisere anbefalinger, forhindre misbruk, oppfylle juridiske forpliktelser og svare deg når du tar kontakt. Vi selger aldri personopplysninger.</p> },
       { id: "ai", title: "AI og dine data", body: <p>Samtaler med vår AI-rådgiver behandles gjennom betrodde AI-leverandører for å generere svar. Vi bruker ikke dine private samtaler til å trene eksterne modeller. Anonymiserte, aggregerte mønstre kan brukes til å forbedre vårt eget produkt.</p> },
       { id: "sharing", title: "Hvem vi deler med", body: <>
         <p>Nøye utvalgte databehandlere som hjelper oss å drive AUTOVERE — hosting, analyse, e-postlevering og AI-inferens. Hver er bundet av databehandleravtaler og kan kun bruke dataene dine etter våre instrukser.</p>
-        <p><strong>Paddle.com Market Limited</strong> — vår Merchant of Record for alle betalte abonnementer. Paddle mottar data nødvendig for å behandle betalingen din, administrere abonnementet, beregne og innbetale moms/VAT, forhindre svindel og utstede fakturaer. Paddle opptrer som selvstendig behandlingsansvarlig for denne behandlingen. Se <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Paddles personvernerklæring</a>.</p>
+        <p><strong>Stripe.com Market Limited</strong> — vår Merchant of Record for alle betalte abonnementer. Stripe mottar data nødvendig for å behandle betalingen din, administrere abonnementet, beregne og innbetale moms/VAT, forhindre svindel og utstede fakturaer. Stripe opptrer som selvstendig behandlingsansvarlig for denne behandlingen. Se <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Stripes personvernerklæring</a>.</p>
         <p><strong>Myndigheter og profesjonelle rådgivere</strong> — der det kreves av lov eller for å beskytte våre juridiske rettigheter.</p>
       </> },
       { id: "retention", title: "Hvor lenge vi oppbevarer", body: <p>Vi oppbevarer personopplysninger kun så lenge det er nødvendig for formålene over, eller som loven krever. Meldinger fra kontaktskjemaet oppbevares i opptil 24 måneder.</p> },
@@ -302,7 +302,7 @@ const de = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "acceptance", title: "Annahme der Bedingungen", body: <p>Mit der Nutzung von AUTOVERE stimmen Sie diesen Bedingungen zu. Wenn Sie nicht zustimmen, nutzen Sie den Dienst bitte nicht. Wir können diese Bedingungen von Zeit zu Zeit aktualisieren; das Datum oben wird entsprechend angepasst.</p> },
       { id: "service", title: "Was AUTOVERE ist", body: <><p>AUTOVERE ist eine intelligente Plattform zur Fahrzeugentdeckung. Wir helfen Menschen, Fahrzeuge mithilfe kuratierter Inhalte, öffentlicher Daten, offizieller Herstellerinformationen und KI-gestützter Einblicke zu erkunden, zu vergleichen und zu verstehen.</p><p>AUTOVERE ist <strong>kein</strong> Händler oder Marktplatz. Wir verkaufen keine Fahrzeuge und sind nicht Vertragspartei eines Kaufs bei Dritten.</p></> },
       { id: "accounts", title: "Konten und Berechtigung", body: <p>Sie müssen mindestens 16 Jahre alt sein, um AUTOVERE zu nutzen. Sie sind verantwortlich für die Sicherheit Ihrer Zugangsdaten und für Aktivitäten unter Ihrem Konto.</p> },
-      { id: "subscriptions", title: "Abonnements und Abrechnung", body: <><p>Einige AUTOVERE-Funktionen sind über ein kostenpflichtiges Abonnement verfügbar. Preise, Abrechnungszyklen und Verlängerungsbedingungen werden auf der <Link to="/pricing">Preisseite</Link> und an der Kasse angezeigt.</p><p>Abonnements verlängern sich automatisch, bis sie gekündigt werden. Sie können jederzeit kündigen — Details siehe <Link to="/legal/subscriptions">Abonnementbedingungen</Link>.</p><p>{PADDLE_MOR.de}</p></> },
+      { id: "subscriptions", title: "Abonnements und Abrechnung", body: <><p>Einige AUTOVERE-Funktionen sind über ein kostenpflichtiges Abonnement verfügbar. Preise, Abrechnungszyklen und Verlängerungsbedingungen werden auf der <Link to="/pricing">Preisseite</Link> und an der Kasse angezeigt.</p><p>Abonnements verlängern sich automatisch, bis sie gekündigt werden. Sie können jederzeit kündigen — Details siehe <Link to="/legal/subscriptions">Abonnementbedingungen</Link>.</p><p>{PAYMENT_MOR.de}</p></> },
       { id: "ai", title: "KI-gestützte Empfehlungen", body: <><p>AUTOVERE nutzt KI, um Ihnen beim Vergleich und Verständnis von Fahrzeugen zu helfen. Empfehlungen werden aus öffentlichen Quellen, Herstellerinformationen, Rezensentenkonsens und Modellanalysen generiert.</p><p>KI-Einblicke dienen als Orientierung, nicht als professionelle Beratung. Fahrzeugdaten, Spezifikationen und Verfügbarkeit variieren regional. Überprüfen Sie endgültige Details immer direkt beim Hersteller oder Verkäufer vor dem Kauf.</p></> },
       { id: "acceptable-use", title: "Akzeptable Nutzung", body: <p>Nutzen Sie AUTOVERE nicht, um gegen Gesetze zu verstoßen, Rechte Dritter zu verletzen, unsere Inhalte in großem Umfang zu scrapen oder weiterzuverkaufen, den Dienst zu stören oder unsere KI-Funktionen zu missbrauchen. Wir können den Zugang sperren, wenn diese Bedingungen verletzt werden.</p> },
       { id: "ip", title: "Geistiges Eigentum", body: <p>AUTOVERE, der AutoVere-Berater, unsere redaktionellen Inhalte und unser Design sind durch Gesetze zum geistigen Eigentum geschützt. Fahrzeugnamen, Marken und Bilder gehören den jeweiligen Herstellern und werden zu redaktionellen Zwecken verwendet.</p> },
@@ -323,8 +323,8 @@ const de = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "what", title: "Was wir erheben", body: <>
         <p><strong>Kontodaten</strong> — Name, E-Mail und Authentifizierungskennungen bei der Kontoerstellung.</p>
         <p><strong>Nutzungsdaten</strong> — aufgerufene Seiten, Suchen, Vergleiche und Berater-Konversationen, zur Produktverbesserung verwendet.</p>
-        <p><strong>Abrechnungsdaten</strong> — bei einem Abonnement fungiert unser Zahlungsanbieter <strong>Paddle.com Market Limited</strong> ("Paddle") als Merchant of Record. Paddle hostet die Kasse, verarbeitet Zahlungen, berechnet und führt Umsatzsteuer/MwSt. ab, verhindert Betrug und stellt Rechnungen aus. Wir sehen oder speichern niemals Ihre vollständigen Kartendaten.</p>
-        <p className="!mb-2"><strong>Von Paddle (nicht von uns) erhobene und verarbeitete Daten:</strong></p>
+        <p><strong>Abrechnungsdaten</strong> — bei einem Abonnement fungiert unser Zahlungsanbieter <strong>Stripe.com Market Limited</strong> ("Stripe") als Merchant of Record. Stripe hostet die Kasse, verarbeitet Zahlungen, berechnet und führt Umsatzsteuer/MwSt. ab, verhindert Betrug und stellt Rechnungen aus. Wir sehen oder speichern niemals Ihre vollständigen Kartendaten.</p>
+        <p className="!mb-2"><strong>Von Stripe (nicht von uns) erhobene und verarbeitete Daten:</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
           <li>Vollständiger Name und E-Mail-Adresse</li>
           <li>Rechnungsadresse (Straße, Stadt, PLZ, Bundesland/Region, Land)</li>
@@ -336,11 +336,11 @@ const de = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Firmenname und Steuerland (für B2B-Rechnungen)</li>
           <li>Währung und umgerechneter Betrag</li>
           <li>Transaktionshistorie, Erstattungen, Chargebacks und Streitfälle</li>
-          <li>Kommunikation mit Paddles Kundenservice</li>
+          <li>Kommunikation mit Stripes Kundenservice</li>
         </ul>
-        <p className="!mb-2"><strong>Daten, die wir von Paddle zurückerhalten und in Ihrem Konto speichern:</strong></p>
+        <p className="!mb-2"><strong>Daten, die wir von Stripe zurückerhalten und in Ihrem Konto speichern:</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
-          <li>Paddle-Kunden-ID und Paddle-Abonnement-ID (interne Kennungen)</li>
+          <li>Stripe-Kunden-ID und Stripe-Abonnement-ID (interne Kennungen)</li>
           <li>Produkt-ID und Preis-ID des gekauften Plans (z. B. <code>premium_monthly</code>)</li>
           <li>Abonnementstatus (<code>trialing</code>, <code>active</code>, <code>past_due</code>, <code>paused</code>, <code>canceled</code>)</li>
           <li>Aktuelles Abrechnungszeitraum-Start- und Enddatum</li>
@@ -350,16 +350,16 @@ const de = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Währung und Betrag jeder Transaktion</li>
           <li>Letzte vier Stellen und Marke der verwendeten Karte (z. B. "Visa •••• 4242")</li>
           <li>Transaktionszeitstempel (erstellt, bezahlt, erstattet)</li>
-          <li>Von Paddle gehostete Rechnungs- und Beleg-URLs</li>
+          <li>Von Stripe gehostete Rechnungs- und Beleg-URLs</li>
         </ul>
-        <p>Wir verwenden diese Daten zur Bereitstellung Ihres Abonnements, zur Freischaltung von Premium-Funktionen, zum Versand von Verlängerungs- und Belegbenachrichtigungen, zur Bearbeitung von Supportanfragen und zur Erfüllung unserer Buchhaltungs- und Steuerpflichten. Siehe <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Paddles Datenschutzerklärung</a> für die Verarbeitung durch Paddle.</p>
+        <p>Wir verwenden diese Daten zur Bereitstellung Ihres Abonnements, zur Freischaltung von Premium-Funktionen, zum Versand von Verlängerungs- und Belegbenachrichtigungen, zur Bearbeitung von Supportanfragen und zur Erfüllung unserer Buchhaltungs- und Steuerpflichten. Siehe <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Stripes Datenschutzerklärung</a> für die Verarbeitung durch Stripe.</p>
         <p><strong>Nachrichten, die Sie uns senden</strong> — alles, was Sie im Kontaktformular schreiben.</p>
       </> },
       { id: "why", title: "Warum wir es nutzen", body: <p>Um den Dienst bereitzustellen, Empfehlungen zu personalisieren, Missbrauch zu verhindern, gesetzliche Pflichten zu erfüllen und auf Sie zu antworten. Wir verkaufen niemals personenbezogene Daten.</p> },
       { id: "ai", title: "KI und Ihre Daten", body: <p>Konversationen mit unserem KI-Berater werden über vertrauenswürdige KI-Anbieter verarbeitet, um Antworten zu generieren. Wir nutzen Ihre privaten Konversationen nicht, um externe Modelle zu trainieren. Anonymisierte, aggregierte Muster können zur Verbesserung unseres eigenen Produkts genutzt werden.</p> },
       { id: "sharing", title: "Mit wem wir teilen", body: <>
         <p>Sorgfältig ausgewählte Auftragsverarbeiter, die uns beim Betrieb von AUTOVERE helfen — Hosting, Analyse, E-Mail-Zustellung und KI-Inferenz. Jeder ist durch Auftragsverarbeitungsverträge gebunden und darf Ihre Daten nur nach unseren Anweisungen verwenden.</p>
-        <p><strong>Paddle.com Market Limited</strong> — unser Merchant of Record für alle bezahlten Abonnements. Paddle erhält die zur Zahlungsabwicklung, Abonnementverwaltung, Steuerberechnung und -abführung, Betrugsprävention und Rechnungsstellung notwendigen Daten. Paddle handelt für diese Verarbeitung als unabhängiger Verantwortlicher. Siehe <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Paddles Datenschutzerklärung</a>.</p>
+        <p><strong>Stripe.com Market Limited</strong> — unser Merchant of Record für alle bezahlten Abonnements. Stripe erhält die zur Zahlungsabwicklung, Abonnementverwaltung, Steuerberechnung und -abführung, Betrugsprävention und Rechnungsstellung notwendigen Daten. Stripe handelt für diese Verarbeitung als unabhängiger Verantwortlicher. Siehe <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Stripes Datenschutzerklärung</a>.</p>
         <p><strong>Behörden und Berater</strong> — wo gesetzlich erforderlich oder zum Schutz unserer Rechte.</p>
       </> },
       { id: "retention", title: "Wie lange wir speichern", body: <p>Wir speichern personenbezogene Daten nur so lange, wie für die obigen Zwecke nötig oder gesetzlich vorgeschrieben. Nachrichten aus dem Kontaktformular werden bis zu 24 Monate aufbewahrt.</p> },
@@ -431,7 +431,7 @@ const sv = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "acceptance", title: "Godkännande av villkoren", body: <p>Genom att använda AUTOVERE godkänner du dessa villkor. Om du inte godkänner dem, vänligen använd inte tjänsten. Vi kan uppdatera villkoren då och då; vi noterar datum högst upp varje gång.</p> },
       { id: "service", title: "Vad AUTOVERE är", body: <><p>AUTOVERE är en intelligent plattform för bilupptäckt. Vi hjälper människor att utforska, jämföra och förstå fordon med hjälp av kuraterat innehåll, offentlig data, officiella tillverkarresurser och AI-assisterade insikter.</p><p>AUTOVERE är <strong>ingen</strong> återförsäljare eller marknadsplats. Vi säljer inga fordon och är inte part i köp du gör från tredje part.</p></> },
       { id: "accounts", title: "Konton och behörighet", body: <p>Du måste vara minst 16 år för att använda AUTOVERE. Du ansvarar för att hålla dina inloggningsuppgifter säkra och för aktivitet på ditt konto.</p> },
-      { id: "subscriptions", title: "Prenumerationer och fakturering", body: <><p>Vissa AUTOVERE-funktioner kräver betald prenumeration. Priser, faktureringscykler och förnyelsevillkor visas på <Link to="/pricing">prissidan</Link> och i kassan.</p><p>Prenumerationer förnyas automatiskt tills de sägs upp. Du kan säga upp när som helst — se <Link to="/legal/subscriptions">prenumerationsvillkoren</Link> för detaljer.</p><p>{PADDLE_MOR.sv}</p></> },
+      { id: "subscriptions", title: "Prenumerationer och fakturering", body: <><p>Vissa AUTOVERE-funktioner kräver betald prenumeration. Priser, faktureringscykler och förnyelsevillkor visas på <Link to="/pricing">prissidan</Link> och i kassan.</p><p>Prenumerationer förnyas automatiskt tills de sägs upp. Du kan säga upp när som helst — se <Link to="/legal/subscriptions">prenumerationsvillkoren</Link> för detaljer.</p><p>{PAYMENT_MOR.sv}</p></> },
       { id: "ai", title: "AI-assisterade rekommendationer", body: <><p>AUTOVERE använder AI för att hjälpa dig jämföra och förstå fordon. Rekommendationer genereras från offentliga källor, tillverkarinformation, recensentkonsensus och modellanalys.</p><p>AI-insikter är vägledning, inte professionell rådgivning. Fordonsdata, specifikationer och tillgänglighet varierar regionalt. Verifiera alltid slutgiltiga detaljer direkt med tillverkare eller säljare före köp.</p></> },
       { id: "acceptable-use", title: "Acceptabel användning", body: <p>Använd inte AUTOVERE för att bryta mot lagen, kränka andras rättigheter, skrapa eller återförsälja vårt innehåll i stor skala, störa tjänsten eller missbruka våra AI-funktioner. Vi kan stänga av åtkomst vid brott mot dessa villkor.</p> },
       { id: "ip", title: "Immateriella rättigheter", body: <p>AUTOVERE, AutoVere-rådgivaren, vårt redaktionella innehåll och design skyddas av immaterialrättsliga lagar. Bilnamn, märken och bilder tillhör respektive tillverkare och används i redaktionellt syfte.</p> },
@@ -452,8 +452,8 @@ const sv = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "what", title: "Vad vi samlar in", body: <>
         <p><strong>Kontodata</strong> — namn, e-post och autentiseringsidentifierare när du skapar konto.</p>
         <p><strong>Användningsdata</strong> — sidor som visats, sökningar, jämförelser och rådgivarsamtal, för att förbättra produkten.</p>
-        <p><strong>Faktureringsdata</strong> — när du prenumererar agerar vår betalleverantör <strong>Paddle.com Market Limited</strong> ("Paddle") som Merchant of Record. Paddle driver kassan, behandlar betalningar, beräknar och betalar in moms/VAT, förhindrar bedrägerier och utfärdar fakturor. Vi ser eller lagrar aldrig dina fullständiga kortuppgifter.</p>
-        <p className="!mb-2"><strong>Data som samlas in och behandlas av Paddle (inte oss):</strong></p>
+        <p><strong>Faktureringsdata</strong> — när du prenumererar agerar vår betalleverantör <strong>Stripe.com Market Limited</strong> ("Stripe") som Merchant of Record. Stripe driver kassan, behandlar betalningar, beräknar och betalar in moms/VAT, förhindrar bedrägerier och utfärdar fakturor. Vi ser eller lagrar aldrig dina fullständiga kortuppgifter.</p>
+        <p className="!mb-2"><strong>Data som samlas in och behandlas av Stripe (inte oss):</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
           <li>Fullständigt namn och e-postadress</li>
           <li>Faktureringsadress (gata, ort, postnummer, region, land)</li>
@@ -465,11 +465,11 @@ const sv = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Företagsnamn och skatteland (för B2B-fakturering)</li>
           <li>Valuta och konverterat belopp</li>
           <li>Transaktionshistorik, återbetalningar, chargebacks och tvistefall</li>
-          <li>Kommunikation med Paddles kundtjänst</li>
+          <li>Kommunikation med Stripes kundtjänst</li>
         </ul>
-        <p className="!mb-2"><strong>Data vi får tillbaka från Paddle och lagrar på ditt konto:</strong></p>
+        <p className="!mb-2"><strong>Data vi får tillbaka från Stripe och lagrar på ditt konto:</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
-          <li>Paddle-kund-ID och Paddle-prenumerations-ID (interna identifierare)</li>
+          <li>Stripe-kund-ID och Stripe-prenumerations-ID (interna identifierare)</li>
           <li>Produkt-ID och pris-ID för köpt plan (t.ex. <code>premium_monthly</code>)</li>
           <li>Prenumerationsstatus (<code>trialing</code>, <code>active</code>, <code>past_due</code>, <code>paused</code>, <code>canceled</code>)</li>
           <li>Aktuell faktureringsperiods start- och slutdatum</li>
@@ -479,16 +479,16 @@ const sv = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Valuta och belopp för varje transaktion</li>
           <li>Sista fyra siffror och märke på använt kort (t.ex. "Visa •••• 4242")</li>
           <li>Transaktionstidsstämplar (skapad, betald, återbetald)</li>
-          <li>Faktura- och kvitto-URL:er hostade av Paddle</li>
+          <li>Faktura- och kvitto-URL:er hostade av Stripe</li>
         </ul>
-        <p>Vi använder dessa data för att tillhandahålla din prenumeration, ge åtkomst till Premium-funktioner, skicka förnyelse- och kvittoaviseringar, hantera supportförfrågningar och uppfylla våra bokförings- och skatteskyldigheter. Se <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Paddles integritetspolicy</a> för hur Paddle hanterar de data de samlar in.</p>
+        <p>Vi använder dessa data för att tillhandahålla din prenumeration, ge åtkomst till Premium-funktioner, skicka förnyelse- och kvittoaviseringar, hantera supportförfrågningar och uppfylla våra bokförings- och skatteskyldigheter. Se <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Stripes integritetspolicy</a> för hur Stripe hanterar de data de samlar in.</p>
         <p><strong>Meddelanden du skickar oss</strong> — allt du skriver i kontaktformuläret.</p>
       </> },
       { id: "why", title: "Varför vi använder det", body: <p>För att tillhandahålla tjänsten, personalisera rekommendationer, förhindra missbruk, uppfylla rättsliga skyldigheter och svara dig när du hör av dig. Vi säljer aldrig personuppgifter.</p> },
       { id: "ai", title: "AI och dina data", body: <p>Konversationer med vår AI-rådgivare behandlas via betrodda AI-leverantörer för att generera svar. Vi använder inte dina privata samtal för att träna externa modeller. Anonymiserade, aggregerade mönster kan användas för att förbättra vår egen produkt.</p> },
       { id: "sharing", title: "Vilka vi delar med", body: <>
         <p>Noggrant utvalda databehandlare som hjälper oss driva AUTOVERE — hosting, analys, e-postleverans och AI-inferens. Var och en är bunden av personuppgiftsbiträdesavtal och får endast använda dina data efter våra instruktioner.</p>
-        <p><strong>Paddle.com Market Limited</strong> — vår Merchant of Record för alla betalda prenumerationer. Paddle får data som krävs för att behandla betalningen, hantera prenumerationen, beräkna och betala moms/VAT, förhindra bedrägerier och utfärda fakturor. Paddle agerar som självständigt personuppgiftsansvarig för denna behandling. Se <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Paddles integritetspolicy</a>.</p>
+        <p><strong>Stripe.com Market Limited</strong> — vår Merchant of Record för alla betalda prenumerationer. Stripe får data som krävs för att behandla betalningen, hantera prenumerationen, beräkna och betala moms/VAT, förhindra bedrägerier och utfärda fakturor. Stripe agerar som självständigt personuppgiftsansvarig för denna behandling. Se <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">Stripes integritetspolicy</a>.</p>
         <p><strong>Myndigheter och rådgivare</strong> — där det krävs enligt lag eller för att skydda våra rättigheter.</p>
       </> },
       { id: "retention", title: "Hur länge vi sparar", body: <p>Vi sparar personuppgifter endast så länge som behövs för ovanstående syften, eller enligt lag. Meddelanden från kontaktformuläret sparas i upp till 24 månader.</p> },
@@ -560,7 +560,7 @@ const fr = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "acceptance", title: "Acceptation des conditions", body: <p>En utilisant AUTOVERE, vous acceptez ces conditions. Si vous ne les acceptez pas, n'utilisez pas le service. Nous pouvons mettre à jour ces conditions ; nous indiquerons la date en haut à chaque modification.</p> },
       { id: "service", title: "Ce qu'est AUTOVERE", body: <><p>AUTOVERE est une plateforme intelligente de découverte automobile. Nous aidons les gens à explorer, comparer et comprendre les véhicules grâce à du contenu organisé, des données publiques, des ressources officielles des constructeurs et des informations assistées par IA.</p><p>AUTOVERE n'est <strong>pas</strong> un concessionnaire ni une place de marché. Nous ne vendons pas de véhicules et ne sommes pas partie à un achat effectué auprès d'un tiers.</p></> },
       { id: "accounts", title: "Comptes et éligibilité", body: <p>Vous devez avoir au moins 16 ans pour utiliser AUTOVERE. Vous êtes responsable de la sécurité de vos identifiants et de l'activité sur votre compte.</p> },
-      { id: "subscriptions", title: "Abonnements et facturation", body: <><p>Certaines fonctionnalités d'AUTOVERE nécessitent un abonnement payant. Les tarifs, cycles de facturation et conditions de renouvellement sont présentés sur la <Link to="/pricing">page Tarifs</Link> et au moment du paiement.</p><p>Les abonnements se renouvellent automatiquement jusqu'à annulation. Vous pouvez annuler à tout moment — voir les <Link to="/legal/subscriptions">Conditions d'abonnement</Link> pour les détails.</p><p>{PADDLE_MOR.fr}</p></> },
+      { id: "subscriptions", title: "Abonnements et facturation", body: <><p>Certaines fonctionnalités d'AUTOVERE nécessitent un abonnement payant. Les tarifs, cycles de facturation et conditions de renouvellement sont présentés sur la <Link to="/pricing">page Tarifs</Link> et au moment du paiement.</p><p>Les abonnements se renouvellent automatiquement jusqu'à annulation. Vous pouvez annuler à tout moment — voir les <Link to="/legal/subscriptions">Conditions d'abonnement</Link> pour les détails.</p><p>{PAYMENT_MOR.fr}</p></> },
       { id: "ai", title: "Recommandations assistées par IA", body: <><p>AUTOVERE utilise l'IA pour vous aider à comparer et comprendre les véhicules. Les recommandations sont générées à partir de sources publiques, d'informations constructeurs, du consensus des testeurs et de l'analyse des modèles.</p><p>Les insights IA sont à titre indicatif, pas un conseil professionnel. Les données, spécifications et disponibilités varient selon les régions. Vérifiez toujours les détails finaux directement auprès du constructeur ou du vendeur avant l'achat.</p></> },
       { id: "acceptable-use", title: "Utilisation acceptable", body: <p>N'utilisez pas AUTOVERE pour enfreindre la loi, violer les droits d'autrui, scraper ou revendre notre contenu à grande échelle, perturber le service ou abuser de nos fonctionnalités IA. Nous pouvons suspendre l'accès en cas de violation.</p> },
       { id: "ip", title: "Propriété intellectuelle", body: <p>AUTOVERE, le conseiller AutoVere, notre contenu éditorial et notre design sont protégés par les lois sur la propriété intellectuelle. Les noms, marques et images de véhicules appartiennent à leurs constructeurs respectifs et sont utilisés à des fins éditoriales.</p> },
@@ -581,8 +581,8 @@ const fr = (): Record<LegalDocKey, LegalDocContent> => ({
       { id: "what", title: "Ce que nous collectons", body: <>
         <p><strong>Données de compte</strong> — nom, e-mail et identifiants d'authentification lors de la création de compte.</p>
         <p><strong>Données d'usage</strong> — pages vues, recherches, comparaisons et conversations avec le conseiller, utilisées pour améliorer le produit.</p>
-        <p><strong>Données de facturation</strong> — lorsque vous vous abonnez, notre prestataire de paiement <strong>Paddle.com Market Limited</strong> ("Paddle") agit en tant que Merchant of Record. Paddle héberge le paiement, traite votre paiement, calcule et reverse la TVA, prévient la fraude et émet les factures. Nous ne voyons ni ne stockons jamais vos coordonnées bancaires complètes.</p>
-        <p className="!mb-2"><strong>Données collectées et traitées par Paddle (pas par nous) :</strong></p>
+        <p><strong>Données de facturation</strong> — lorsque vous vous abonnez, notre prestataire de paiement <strong>Stripe.com Market Limited</strong> ("Stripe") agit en tant que Merchant of Record. Stripe héberge le paiement, traite votre paiement, calcule et reverse la TVA, prévient la fraude et émet les factures. Nous ne voyons ni ne stockons jamais vos coordonnées bancaires complètes.</p>
+        <p className="!mb-2"><strong>Données collectées et traitées par Stripe (pas par nous) :</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
           <li>Nom complet et adresse e-mail</li>
           <li>Adresse de facturation (rue, ville, code postal, région, pays)</li>
@@ -594,11 +594,11 @@ const fr = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Raison sociale et pays fiscal (pour la facturation B2B)</li>
           <li>Devise et montant converti</li>
           <li>Historique des transactions, remboursements, chargebacks et litiges</li>
-          <li>Communications avec le support client de Paddle</li>
+          <li>Communications avec le support client de Stripe</li>
         </ul>
-        <p className="!mb-2"><strong>Données que nous recevons de Paddle et stockons sur votre compte :</strong></p>
+        <p className="!mb-2"><strong>Données que nous recevons de Stripe et stockons sur votre compte :</strong></p>
         <ul className="list-disc pl-6 space-y-1 mb-4">
-          <li>ID client Paddle et ID d'abonnement Paddle (identifiants internes)</li>
+          <li>ID client Stripe et ID d'abonnement Stripe (identifiants internes)</li>
           <li>ID de produit et ID de prix de l'offre achetée (par ex. <code>premium_monthly</code>)</li>
           <li>Statut d'abonnement (<code>trialing</code>, <code>active</code>, <code>past_due</code>, <code>paused</code>, <code>canceled</code>)</li>
           <li>Dates de début et de fin de la période de facturation actuelle</li>
@@ -608,16 +608,16 @@ const fr = (): Record<LegalDocKey, LegalDocContent> => ({
           <li>Devise et montant de chaque transaction</li>
           <li>Quatre derniers chiffres et marque de la carte utilisée (par ex. "Visa •••• 4242")</li>
           <li>Horodatages des transactions (créée, payée, remboursée)</li>
-          <li>URL de factures et reçus hébergées par Paddle</li>
+          <li>URL de factures et reçus hébergées par Stripe</li>
         </ul>
-        <p>Nous utilisons ces données pour activer votre abonnement, déverrouiller les fonctionnalités Premium, envoyer des notifications de renouvellement et de reçus, gérer le support et respecter nos obligations comptables et fiscales. Voir <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">la politique de confidentialité de Paddle</a> pour le traitement par Paddle.</p>
+        <p>Nous utilisons ces données pour activer votre abonnement, déverrouiller les fonctionnalités Premium, envoyer des notifications de renouvellement et de reçus, gérer le support et respecter nos obligations comptables et fiscales. Voir <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">la politique de confidentialité de Stripe</a> pour le traitement par Stripe.</p>
         <p><strong>Messages que vous nous envoyez</strong> — tout ce que vous écrivez dans le formulaire de contact.</p>
       </> },
       { id: "why", title: "Pourquoi nous l'utilisons", body: <p>Pour fournir le service, personnaliser les recommandations, prévenir les abus, respecter les obligations légales et vous répondre. Nous ne vendons jamais de données personnelles.</p> },
       { id: "ai", title: "L'IA et vos données", body: <p>Les conversations avec notre conseiller IA sont traitées via des fournisseurs d'IA de confiance pour générer des réponses. Nous n'utilisons pas vos conversations privées pour entraîner des modèles externes. Des modèles anonymisés et agrégés peuvent servir à améliorer notre propre produit.</p> },
       { id: "sharing", title: "Avec qui nous partageons", body: <>
         <p>Des sous-traitants soigneusement sélectionnés qui nous aident à exploiter AUTOVERE — hébergement, analyse, livraison d'e-mails et inférence IA. Chacun est lié par un accord de traitement et ne peut utiliser vos données que selon nos instructions.</p>
-        <p><strong>Paddle.com Market Limited</strong> — notre Merchant of Record pour tous les abonnements payants. Paddle reçoit les données nécessaires au traitement du paiement, à la gestion de l'abonnement, au calcul et au reversement de la TVA, à la prévention de la fraude et à l'émission de factures. Paddle agit en tant que responsable de traitement indépendant pour ce traitement. Voir <a href="https://www.paddle.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">la politique de confidentialité de Paddle</a>.</p>
+        <p><strong>Stripe.com Market Limited</strong> — notre Merchant of Record pour tous les abonnements payants. Stripe reçoit les données nécessaires au traitement du paiement, à la gestion de l'abonnement, au calcul et au reversement de la TVA, à la prévention de la fraude et à l'émission de factures. Stripe agit en tant que responsable de traitement indépendant pour ce traitement. Voir <a href="https://www.stripe.com/legal/privacy" target="_blank" rel="noopener noreferrer" className="underline">la politique de confidentialité de Stripe</a>.</p>
         <p><strong>Autorités et conseillers</strong> — lorsque la loi l'exige ou pour protéger nos droits.</p>
       </> },
       { id: "retention", title: "Combien de temps nous conservons", body: <p>Nous conservons les données personnelles uniquement le temps nécessaire aux finalités ci-dessus, ou comme l'exige la loi. Les messages du formulaire de contact sont conservés jusqu'à 24 mois.</p> },
