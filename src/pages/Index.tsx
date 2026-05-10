@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart } from "lucide-react";
+import { ArrowRight, Sparkles, Compass, Scale, ShieldCheck, MapPin, Brain, ChevronDown, Zap, Heart, Rss } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { Advisor } from "@/components/Advisor";
@@ -9,8 +9,10 @@ import { SEO } from "@/components/SEO";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CarCard } from "@/components/CarCard";
+import { ArticleCard } from "@/components/ArticleCard";
 import { LLink } from "@/i18n/routing";
 import { CARS, COLLECTIONS as DATA_COLLECTIONS } from "@/data/cars";
+import { ARTICLES } from "@/data/articles";
 import heroCar from "@/assets/hero-car.jpg";
 import sceneNight from "@/assets/scene-night-drive.jpg";
 import sceneNordic from "@/assets/scene-nordic.jpg";
@@ -20,6 +22,9 @@ import sceneCity from "@/assets/scene-city.jpg";
 
 const HOME_COLLECTIONS = DATA_COLLECTIONS.slice(0, 4);
 const SAMPLE_CARS = CARS.slice(0, 3);
+const LATEST_ARTICLES = [...ARTICLES]
+  .sort((a, b) => b.publishedAt.localeCompare(a.publishedAt))
+  .slice(0, 3);
 
 const Index = () => {
   const { t } = useTranslation();
@@ -230,6 +235,34 @@ const Index = () => {
             <LLink to="/cars" className="inline-flex items-center gap-2 text-accent hover:gap-3 transition-all font-medium">
               {t("pages.index.browse_library")} <ArrowRight className="w-4 h-4" />
             </LLink>
+          </div>
+        </div>
+      </section>
+
+      {/* EV Intelligence */}
+      <section className="py-20 relative bg-card/20">
+        <div className="container">
+          <div className="flex items-end justify-between mb-10 gap-4">
+            <div>
+              <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-emerald-400 mb-3">
+                <Rss className="w-3.5 h-3.5" />
+                EV Intelligence
+              </div>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight">
+                The signal, not the noise.
+              </h2>
+            </div>
+            <LLink
+              to="/ev/news"
+              className="text-sm text-accent hover:underline flex items-center gap-1 flex-shrink-0"
+            >
+              All articles <ArrowRight className="w-3.5 h-3.5" />
+            </LLink>
+          </div>
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {LATEST_ARTICLES.map((article) => (
+              <ArticleCard key={article.slug} article={article} showWhyItMatters />
+            ))}
           </div>
         </div>
       </section>

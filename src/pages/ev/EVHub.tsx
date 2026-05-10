@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermometer, Globe, TrendingUp, Star, Play, Car, BarChart2, Brain, Flag, Database } from "lucide-react";
+import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermometer, Globe, TrendingUp, Star, Play, Car, BarChart2, Brain, Flag, Database, Rss } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
@@ -96,6 +96,15 @@ const MODULES = [
     color: "from-slate-500/20 to-zinc-500/10",
     border: "border-slate-500/20",
     iconColor: "text-slate-400",
+  },
+  {
+    to: "/ev/news",
+    icon: Rss,
+    label: "EV Intelligence",
+    desc: "Expert analysis on charging infrastructure, battery technology, European market shifts and ownership economics.",
+    color: "from-emerald-500/20 to-teal-500/10",
+    border: "border-emerald-500/20",
+    iconColor: "text-emerald-400",
   },
 ];
 

@@ -25,6 +25,8 @@ const EVCompare = lazy(() => import("./pages/ev/EVCompare.tsx"));
 const EVAdvisor = lazy(() => import("./pages/ev/EVAdvisor.tsx"));
 const EVMarkets = lazy(() => import("./pages/ev/EVMarkets.tsx"));
 const EVDatabase = lazy(() => import("./pages/ev/EVDatabase.tsx"));
+const EVNews = lazy(() => import("./pages/ev/EVNews.tsx"));
+const EVArticle = lazy(() => import("./pages/ev/EVArticle.tsx"));
 const EVNetworkDetail = lazy(() => import("./pages/ev/EVNetworkDetail.tsx"));
 
 // Lazy-loaded page chunks — core pages
@@ -135,6 +137,8 @@ const AppRoutes = () => (
       <Route path="/ev/advisor" element={<EVAdvisor />} />
       <Route path="/ev/markets" element={<EVMarkets />} />
       <Route path="/ev/database" element={<EVDatabase />} />
+      <Route path="/ev/news" element={<EVNews />} />
+      <Route path="/ev/news/:slug" element={<EVArticle />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
   </Suspense>
