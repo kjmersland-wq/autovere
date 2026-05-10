@@ -234,7 +234,7 @@ const sv: Translation = {
       monthly: "Månadsvis",
       yearly: "Årligen",
       billed_yearly: "faktureras årligen",
-      yearly_save: "eller 59 $ / år — spara 30 %",
+      yearly_save: "eller €59 / år — spara 30 %",
       premium_lead:
         "För dig som tänker långsiktigt. Djupare analys, smartare prognoser, färre överraskningar.",
       on_premium: "✓ Du har Premium",

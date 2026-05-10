@@ -224,7 +224,7 @@ const es: Translation = {
       lead:
         "Creemos que elegir un coche no debería estar detrás de un muro de pago. Premium es para las personas que quieren ir más profundo — cinco años adelante, no cinco minutos.",
       free_label: "Gratuito",
-      free_price: "$0",
+      free_price: "€0",
       free_per: "/ para siempre",
       free_lead: "Todo lo que necesitas para encontrar el coche adecuado para tu vida — tranquilamente.",
       free_cta: "Empieza con AUTOVERE",
@@ -233,7 +233,7 @@ const es: Translation = {
       monthly: "Mensual",
       yearly: "Anual",
       billed_yearly: "facturado anualmente",
-      yearly_save: "o $59 / año — ahorra un 30%",
+      yearly_save: "o €59 / año — ahorra un 30%",
       premium_lead:
         "Para personas que piensan a largo plazo. Análisis más profundo, proyecciones más inteligentes, menos sorpresas.",
       on_premium: "✓ Estás en Premium",
