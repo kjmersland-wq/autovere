@@ -1,13 +1,10 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { getStripeClient, getStripeEnvironment } from '../_shared/stripe.ts';
-
-const corsHeaders = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
+import { corsHeaders, handleCors } from '../_shared/cors.ts';
 
 Deno.serve(async (req) => {
-  if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders });
+  const preflight = handleCors(req);
+  if (preflight) return preflight;
   try {
     console.log('[create-checkout] step=start method=' + req.method);
 
