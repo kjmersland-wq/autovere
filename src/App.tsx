@@ -26,6 +26,11 @@ import Subscriptions from "./pages/legal/Subscriptions.tsx";
 import Studio from "./pages/Studio.tsx";
 import Auth from "./pages/Auth.tsx";
 import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
+import EVHub from "./pages/ev/EVHub.tsx";
+import EVCharging from "./pages/ev/EVCharging.tsx";
+import EVRoutePlanner from "./pages/ev/EVRoutePlanner.tsx";
+import EVCalculator from "./pages/ev/EVCalculator.tsx";
+import EVGuides from "./pages/ev/EVGuides.tsx";
 
 const queryClient = new QueryClient();
 
@@ -69,6 +74,11 @@ const AppRoutes = () => (
     <Route path="/legal/subscriptions" element={<Subscriptions />} />
     <Route path="/studio" element={<Studio />} />
     <Route path="/auth" element={<Auth />} />
+    <Route path="/ev" element={<EVHub />} />
+    <Route path="/ev/charging" element={<EVCharging />} />
+    <Route path="/ev/route-planner" element={<EVRoutePlanner />} />
+    <Route path="/ev/calculator" element={<EVCalculator />} />
+    <Route path="/ev/guides" element={<EVGuides />} />
     <Route path="*" element={<NotFound />} />
   </Routes>
 );
