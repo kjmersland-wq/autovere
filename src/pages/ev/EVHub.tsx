@@ -1,5 +1,5 @@
 import { Link, useLocation } from "react-router-dom";
-import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermometer, Globe, TrendingUp, Star, Play, Car, BarChart2, Brain, Flag } from "lucide-react";
+import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermometer, Globe, TrendingUp, Star, Play, Car, BarChart2, Brain, Flag, Database } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
@@ -87,6 +87,15 @@ const MODULES = [
     color: "from-sky-500/20 to-blue-500/10",
     border: "border-sky-500/20",
     iconColor: "text-sky-400",
+  },
+  {
+    to: "/ev/database",
+    icon: Database,
+    label: "Vehicle Database",
+    desc: "EV, hybrid and ICE vehicles compared — 5-year TCO, depreciation, brake wear and ownership cost.",
+    color: "from-slate-500/20 to-zinc-500/10",
+    border: "border-slate-500/20",
+    iconColor: "text-slate-400",
   },
 ];
 

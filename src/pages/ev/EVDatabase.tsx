@@ -1,0 +1,369 @@
+import { useState, useMemo } from "react";
+import { Link, useLocation } from "react-router-dom";
+import { Zap, ChevronLeft, SlidersHorizontal, ArrowUpDown, TrendingDown, TrendingUp, BarChart2, ChevronRight } from "lucide-react";
+import { PageShell } from "@/components/PageShell";
+import { SEO } from "@/components/SEO";
+import { localizePath, detectLangFromPath } from "@/i18n/routing";
+import { VEHICLES, TYPE_LABELS, TYPE_COLORS, type Vehicle, type VehicleType } from "@/data/vehicles";
+import { VehicleSearch } from "@/components/VehicleSearch";
+
+type SortKey = "priceFrom" | "tco.fiveYearTcoEur" | "tco.depreciationPct5yr" | "specs.realWorldRangeKm" | "specs.zeroTo100";
+
+const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+  { value: "priceFrom", label: "Starting price" },
+  { value: "tco.fiveYearTcoEur", label: "5-year TCO" },
+  { value: "tco.depreciationPct5yr", label: "Depreciation" },
+  { value: "specs.realWorldRangeKm", label: "Range / Fuel economy" },
+  { value: "specs.zeroTo100", label: "0–100 km/h" },
+];
+
+function getSortValue(v: Vehicle, key: SortKey): number {
+  if (key === "priceFrom") return v.priceFrom;
+  if (key === "tco.fiveYearTcoEur") return v.tco.fiveYearTcoEur;
+  if (key === "tco.depreciationPct5yr") return v.tco.depreciationPct5yr;
+  if (key === "specs.realWorldRangeKm") return v.specs.realWorldRangeKm ?? v.specs.totalRangeKm ?? 0;
+  if (key === "specs.zeroTo100") return v.specs.zeroTo100;
+  return 0;
+}
+
+function BrakeWearBadge({ wear }: { wear: Vehicle["tco"]["brakeWear"] }) {
+  const map = {
+    "very-low": { label: "Very Low", color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20" },
+    low: { label: "Low", color: "text-cyan-400 bg-cyan-400/10 border-cyan-400/20" },
+    moderate: { label: "Moderate", color: "text-amber-400 bg-amber-400/10 border-amber-400/20" },
+    high: { label: "High", color: "text-red-400 bg-red-400/10 border-red-400/20" },
+  };
+  const d = map[wear];
+  return (
+    <span className={`text-[9px] px-1.5 py-0.5 rounded-full border font-medium uppercase tracking-wide ${d.color}`}>
+      {d.label}
+    </span>
+  );
+}
+
+function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => string }) {
+  const target = vehicle.evPageSlug ? L(`/ev/models/${vehicle.evPageSlug}`) : null;
+
+  return (
+    <div className="glass rounded-2xl border border-border/40 hover:border-border/70 transition-all duration-200 hover:-translate-y-0.5 group overflow-hidden">
+      {/* Header */}
+      <div className="p-5 pb-4">
+        <div className="flex items-start justify-between gap-3 mb-3">
+          <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className={`text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-full border font-medium ${TYPE_COLORS[vehicle.type]}`}>
+                {TYPE_LABELS[vehicle.type]}
+              </span>
+              <span className="text-[9px] text-muted-foreground uppercase tracking-wider">{vehicle.body}</span>
+            </div>
+            <h3 className="font-semibold text-sm">{vehicle.name}</h3>
+          </div>
+          <div className="text-right flex-shrink-0">
+            <div className="text-base font-bold text-gradient">€{vehicle.priceFrom.toLocaleString()}</div>
+            <div className="text-[9px] text-muted-foreground">from</div>
+          </div>
+        </div>
+        <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{vehicle.tagline}</p>
+      </div>
+
+      {/* Specs grid */}
+      <div className="grid grid-cols-3 gap-px bg-border/20">
+        {vehicle.type === "ev" ? (
+          <>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-emerald-400">{vehicle.specs.realWorldRangeKm}</div>
+              <div className="text-[9px] text-muted-foreground uppercase">Real km</div>
+            </div>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-cyan-400">{vehicle.specs.winterRangeKm}</div>
+              <div className="text-[9px] text-muted-foreground uppercase">Winter km</div>
+            </div>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-violet-400">{vehicle.specs.maxDCKw}</div>
+              <div className="text-[9px] text-muted-foreground uppercase">kW DC</div>
+            </div>
+          </>
+        ) : vehicle.type === "phev" ? (
+          <>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-cyan-400">{vehicle.specs.electricRangeKm}</div>
+              <div className="text-[9px] text-muted-foreground uppercase">EV km</div>
+            </div>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-foreground">{vehicle.specs.totalRangeKm}</div>
+              <div className="text-[9px] text-muted-foreground uppercase">Total km</div>
+            </div>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-amber-400">{vehicle.specs.co2gkm}</div>
+              <div className="text-[9px] text-muted-foreground uppercase">g/km CO₂</div>
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-amber-400">{vehicle.specs.fuelConsumptionL100km}</div>
+              <div className="text-[9px] text-muted-foreground uppercase">L/100km</div>
+            </div>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-foreground">{vehicle.specs.co2gkm}</div>
+              <div className="text-[9px] text-muted-foreground uppercase">g/km CO₂</div>
+            </div>
+            <div className="bg-card/50 p-3 text-center">
+              <div className="text-sm font-bold text-foreground">{vehicle.specs.zeroTo100}s</div>
+              <div className="text-[9px] text-muted-foreground uppercase">0–100</div>
+            </div>
+          </>
+        )}
+      </div>
+
+      {/* TCO summary */}
+      <div className="p-5 pt-4 space-y-2.5">
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-muted-foreground">5-year TCO</span>
+          <span className="font-semibold">€{vehicle.tco.fiveYearTcoEur.toLocaleString()}</span>
+        </div>
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-muted-foreground">Annual fuel/charging</span>
+          <span className="font-semibold">€{vehicle.tco.annualFuelOrChargingEur.toLocaleString()}</span>
+        </div>
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-muted-foreground">Brake wear</span>
+          <BrakeWearBadge wear={vehicle.tco.brakeWear} />
+        </div>
+        <div className="flex items-center justify-between text-xs">
+          <span className="text-muted-foreground">3-year depreciation</span>
+          <span className={`font-semibold ${vehicle.tco.depreciationPct3yr <= 30 ? "text-emerald-400" : vehicle.tco.depreciationPct3yr <= 38 ? "text-amber-400" : "text-red-400"}`}>
+            {vehicle.tco.depreciationPct3yr}%
+          </span>
+        </div>
+      </div>
+
+      {/* Actions */}
+      <div className="px-5 pb-5 flex items-center gap-3">
+        {target ? (
+          <Link
+            to={target}
+            className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline font-medium"
+          >
+            Full deep-dive <ChevronRight className="w-3 h-3" />
+          </Link>
+        ) : (
+          <span className="text-xs text-muted-foreground">Overview only</span>
+        )}
+        <Link
+          to={L("/ev/compare")}
+          className="ml-auto inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
+        >
+          <BarChart2 className="w-3 h-3" /> Compare
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
+  return (
+    <div className="overflow-x-auto">
+      <table className="w-full min-w-[700px] text-xs">
+        <thead>
+          <tr className="border-b border-border/30">
+            {["Vehicle", "Type", "Price from", "Annual fuel/charge", "Annual service", "5-yr TCO", "Depreciation 3yr", "Brake wear"].map((h) => (
+              <th key={h} className="text-left text-muted-foreground font-normal py-3 px-3 first:pl-0 last:pr-0">{h}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-border/20">
+          {vehicles.map((v) => (
+            <tr key={v.slug} className="hover:bg-card/20 transition-colors">
+              <td className="py-3 px-3 pl-0 font-medium">{v.name}</td>
+              <td className="py-3 px-3">
+                <span className={`text-[9px] uppercase px-1.5 py-0.5 rounded-full border font-medium tracking-wide ${TYPE_COLORS[v.type]}`}>
+                  {TYPE_LABELS[v.type]}
+                </span>
+              </td>
+              <td className="py-3 px-3">€{v.priceFrom.toLocaleString()}</td>
+              <td className="py-3 px-3">€{v.tco.annualFuelOrChargingEur.toLocaleString()}</td>
+              <td className="py-3 px-3">€{v.tco.annualServiceEur.toLocaleString()}</td>
+              <td className="py-3 px-3 font-semibold">€{v.tco.fiveYearTcoEur.toLocaleString()}</td>
+              <td className="py-3 px-3">
+                <span className={v.tco.depreciationPct3yr <= 30 ? "text-emerald-400" : v.tco.depreciationPct3yr <= 38 ? "text-amber-400" : "text-red-400"}>
+                  {v.tco.depreciationPct3yr}%
+                </span>
+              </td>
+              <td className="py-3 px-3 pr-0"><BrakeWearBadge wear={v.tco.brakeWear} /></td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+export default function EVDatabase() {
+  const { pathname } = useLocation();
+  const lang = detectLangFromPath(pathname);
+  const L = (p: string) => localizePath(p, lang);
+
+  const [typeFilter, setTypeFilter] = useState<VehicleType | "all">("all");
+  const [sortKey, setSortKey] = useState<SortKey>("priceFrom");
+  const [sortAsc, setSortAsc] = useState(true);
+  const [view, setView] = useState<"grid" | "table">("grid");
+
+  const filtered = useMemo(() => {
+    const base = typeFilter === "all" ? VEHICLES : VEHICLES.filter((v) => v.type === typeFilter);
+    return [...base].sort((a, b) => {
+      const av = getSortValue(a, sortKey);
+      const bv = getSortValue(b, sortKey);
+      return sortAsc ? av - bv : bv - av;
+    });
+  }, [typeFilter, sortKey, sortAsc]);
+
+  const typeGroups: { value: VehicleType | "all"; label: string; count: number }[] = [
+    { value: "all", label: "All vehicles", count: VEHICLES.length },
+    { value: "ev", label: "Electric", count: VEHICLES.filter((v) => v.type === "ev").length },
+    { value: "phev", label: "Plug-in Hybrid", count: VEHICLES.filter((v) => v.type === "phev").length },
+    { value: "mild-hybrid", label: "Mild Hybrid", count: VEHICLES.filter((v) => v.type === "mild-hybrid").length },
+    { value: "diesel", label: "Diesel", count: VEHICLES.filter((v) => v.type === "diesel").length },
+  ];
+
+  return (
+    <PageShell>
+      <SEO
+        title="Vehicle Database — EV, Hybrid & ICE Comparison | AUTOVERE"
+        description="Compare EVs, plug-in hybrids and diesel estates side by side. Real-world range, 5-year total cost of ownership, brake wear, depreciation and ownership analysis."
+      />
+
+      <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-950/40 via-transparent to-violet-950/20 pointer-events-none" />
+        <div className="container relative">
+          <Link to={L("/ev")} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-6 transition-colors">
+            <ChevronLeft className="w-3.5 h-3.5" /> EV Hub
+          </Link>
+          <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-accent mb-5">
+            <Zap className="w-3.5 h-3.5" /> EV Hub › Vehicle Database
+          </div>
+          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-3xl">
+            European vehicle database. <span className="text-gradient">EV, hybrid, ICE.</span>
+          </h1>
+          <p className="text-muted-foreground max-w-xl text-lg mb-8">
+            Real-world range, 5-year ownership costs, depreciation, brake wear and honest analysis — for every major vehicle in the European market.
+          </p>
+          <VehicleSearch placeholder="Search vehicles — BMW iX3, diesel estate, winter EV..." className="max-w-md" />
+        </div>
+      </section>
+
+      {/* Stats bar */}
+      <section className="border-y border-border/40 bg-card/30">
+        <div className="container py-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
+            {[
+              { value: `${VEHICLES.length}`, label: "Vehicles in database", icon: TrendingUp },
+              { value: `${VEHICLES.filter((v) => v.type === "ev").length}`, label: "Electric models", icon: Zap },
+              { value: "€17k", label: "Lowest 5-year TCO", icon: TrendingDown },
+              { value: "€42k", label: "Highest 5-year TCO", icon: TrendingUp },
+            ].map((s) => (
+              <div key={s.label} className="text-center">
+                <div className="text-2xl font-bold text-gradient mb-1">{s.value}</div>
+                <div className="text-xs text-muted-foreground">{s.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      <section className="container py-12">
+        {/* Filters */}
+        <div className="flex flex-wrap items-center gap-3 mb-8">
+          {/* Type filter */}
+          <div className="flex flex-wrap gap-2">
+            {typeGroups.map((g) => (
+              <button
+                key={g.value}
+                onClick={() => setTypeFilter(g.value)}
+                className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${
+                  typeFilter === g.value
+                    ? "bg-primary text-primary-foreground border-primary"
+                    : "glass border-border/40 text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                {g.label} <span className="opacity-60 ml-1">{g.count}</span>
+              </button>
+            ))}
+          </div>
+
+          <div className="ml-auto flex items-center gap-2">
+            {/* Sort */}
+            <div className="flex items-center gap-1.5 glass rounded-xl border border-border/40 px-3 py-1.5">
+              <SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground" />
+              <select
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value as SortKey)}
+                className="text-xs bg-transparent outline-none text-muted-foreground"
+              >
+                {SORT_OPTIONS.map((o) => (
+                  <option key={o.value} value={o.value}>{o.label}</option>
+                ))}
+              </select>
+              <button
+                onClick={() => setSortAsc(!sortAsc)}
+                className="text-muted-foreground hover:text-foreground transition-colors"
+              >
+                <ArrowUpDown className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* View toggle */}
+            <div className="flex glass rounded-xl border border-border/40 overflow-hidden">
+              {(["grid", "table"] as const).map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setView(v)}
+                  className={`px-3 py-1.5 text-xs transition-colors ${view === v ? "bg-primary/20 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+                >
+                  {v === "grid" ? "Cards" : "Table"}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        <div className="text-xs text-muted-foreground mb-6">
+          {filtered.length} vehicle{filtered.length !== 1 ? "s" : ""} · sorted by {SORT_OPTIONS.find((o) => o.value === sortKey)?.label} ({sortAsc ? "low–high" : "high–low"})
+        </div>
+
+        {view === "grid" ? (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+            {filtered.map((v) => (
+              <VehicleCard key={v.slug} vehicle={v} L={L} />
+            ))}
+          </div>
+        ) : (
+          <div className="glass rounded-2xl border border-border/40 p-6">
+            <TCOTable vehicles={filtered} />
+          </div>
+        )}
+      </section>
+
+      {/* TCO explainer */}
+      <section className="container pb-24">
+        <div className="glass rounded-3xl border border-border/40 p-8 md:p-12">
+          <h2 className="text-xl font-bold tracking-tight mb-2">How we calculate 5-year TCO</h2>
+          <p className="text-muted-foreground text-sm mb-6 max-w-2xl">Total Cost of Ownership includes all predictable running costs over 5 years, excluding insurance and road tax (which vary significantly by driver profile and country).</p>
+          <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
+            {[
+              { label: "Fuel / Charging", desc: "Based on 20,000 km/year. EVs use average home + public mix. ICE uses European average fuel price." },
+              { label: "Service costs", desc: "Manufacturer-recommended intervals. EVs have fewer service items — no oil, brake fluid, timing chains." },
+              { label: "Tyre replacement", desc: "Based on realistic wear rates. Heavier EVs and performance vehicles consume tyres faster." },
+              { label: "Brake wear", desc: "EVs with strong regenerative braking use friction brakes minimally. ICE brakes wear at conventional rates." },
+            ].map((item) => (
+              <div key={item.label} className="bg-card/40 rounded-xl p-4">
+                <div className="text-xs font-semibold mb-1.5">{item.label}</div>
+                <p className="text-[11px] text-muted-foreground leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+    </PageShell>
+  );
+}

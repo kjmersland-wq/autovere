@@ -5,6 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { detectLangFromPath, localizePath } from "@/i18n/routing";
+import { VehicleSearch } from "@/components/VehicleSearch";
 
 export const SiteHeader = () => {
   const { pathname } = useLocation();
@@ -69,6 +70,7 @@ export const SiteHeader = () => {
 
           {/* Right side */}
           <div className="flex items-center gap-3">
+            <VehicleSearch compact className="hidden md:inline-flex" />
             <LanguageSwitcher />
             <Button asChild size="sm" className="hidden sm:flex bg-gradient-primary hover:opacity-90 rounded-xl">
               <Link to={`${L("/")}#advisor`}>{t("nav.cta")}</Link>
