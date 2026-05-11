@@ -10,6 +10,7 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
 import { CarCard } from "@/components/CarCard";
 import { HomepageIntelligence } from "@/components/HomepageIntelligence";
+import { SignalFeedCompact } from "@/components/SignalFeed";
 import { LLink } from "@/i18n/routing";
 import { CARS, COLLECTIONS as DATA_COLLECTIONS } from "@/data/cars";
 import heroCar from "@/assets/hero-car.jpg";
@@ -218,19 +219,26 @@ const Index = () => {
 
       <section id="cars" className="py-32 relative">
         <div className="container">
-          <div className="max-w-2xl mb-16">
-            <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.index.sample_eyebrow")}</div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t("pages.index.sample_title")}</h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.index.sample_lead")}</p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {SAMPLE_CARS.map((c) => <CarCard key={c.slug} car={c} />)}
-          </div>
-          <div className="mt-10">
-            <LLink to="/cars" className="inline-flex items-center gap-2 text-accent hover:gap-3 transition-all font-medium">
-              {t("pages.index.browse_library")} <ArrowRight className="w-4 h-4" />
-            </LLink>
+          <div className="grid lg:grid-cols-[1fr_320px] gap-12 items-start">
+            <div>
+              <div className="max-w-2xl mb-16">
+                <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.index.sample_eyebrow")}</div>
+                <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">{t("pages.index.sample_title")}</h2>
+                <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.index.sample_lead")}</p>
+              </div>
+              <div className="grid md:grid-cols-2 gap-6">
+                {SAMPLE_CARS.map((c) => <CarCard key={c.slug} car={c} />)}
+              </div>
+              <div className="mt-10">
+                <LLink to="/cars" className="inline-flex items-center gap-2 text-accent hover:gap-3 transition-all font-medium">
+                  {t("pages.index.browse_library")} <ArrowRight className="w-4 h-4" />
+                </LLink>
+              </div>
+            </div>
+            {/* Live signals sidebar */}
+            <div className="hidden lg:block pt-2">
+              <SignalFeedCompact limit={6} />
+            </div>
           </div>
         </div>
       </section>

@@ -6,6 +6,11 @@ import { EV_MODELS } from "@/data/ev-models";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import NotFound from "@/pages/NotFound";
 import { useState } from "react";
+import { VehicleIntelligenceCard } from "@/components/VehicleIntelligenceCard";
+import { SaveButton } from "@/components/SaveButton";
+import { SignalFeedCompact } from "@/components/SignalFeed";
+import { getVehicleIntelligence } from "@/data/vehicle-intelligence";
+import { getSignalsForVehicle } from "@/data/automotive-signals";
 
 const fmt = (n: number) => n.toLocaleString();
 
@@ -100,6 +105,8 @@ export default function EVModelDetail() {
   if (!model) return <NotFound />;
 
   const alternatives = EV_MODELS.filter((m) => model.alternatives.includes(m.slug));
+  const intelligence = getVehicleIntelligence(model.slug);
+  const vehicleSignals = getSignalsForVehicle(model.slug);
 
   return (
     <PageShell>
@@ -118,7 +125,10 @@ export default function EVModelDetail() {
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-accent mb-4">
             {model.brand} · {model.category} · {model.year}
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">{model.name}</h1>
+          <div className="flex items-start gap-4 mb-4">
+            <h1 className="text-4xl md:text-6xl font-bold tracking-tight flex-1">{model.name}</h1>
+            <SaveButton type="vehicle" slug={model.slug} className="mt-2 flex-shrink-0" />
+          </div>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed mb-8">{model.tagline}</p>
 
           {/* Key stats bar */}
@@ -302,6 +312,22 @@ export default function EVModelDetail() {
                     </Link>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {/* AI Intelligence Scoring */}
+            {intelligence && <VehicleIntelligenceCard intelligence={intelligence} />}
+
+            {/* Live signals for this vehicle */}
+            {vehicleSignals.length > 0 && (
+              <div className="glass rounded-2xl border border-border/40 p-5">
+                <div className="text-xs uppercase tracking-wider text-accent font-medium mb-3">Latest signals</div>
+                {vehicleSignals.map((s) => (
+                  <div key={s.id} className="py-2.5 border-b border-border/20 last:border-0">
+                    <div className="text-xs font-medium leading-snug mb-0.5">{s.title}</div>
+                    <div className="text-[10px] text-muted-foreground">{s.source} · {new Date(s.publishedAt).toLocaleDateString("en-GB", { day: "numeric", month: "short" })}</div>
+                  </div>
+                ))}
               </div>
             )}
           </div>
