@@ -3,8 +3,6 @@ import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermomet
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
-import { EV_MODELS } from "@/data/ev-models";
-import { CHARGING_NETWORKS } from "@/data/charging-networks";
 
 const MODULES = [
   {
@@ -105,6 +103,24 @@ const MODULES = [
     color: "from-emerald-500/20 to-teal-500/10",
     border: "border-emerald-500/20",
     iconColor: "text-emerald-400",
+  },
+];
+
+const MODULE_GROUPS = [
+  {
+    title: "Plan & charge",
+    description: "Core tools for route confidence, charging clarity and cost planning.",
+    items: ["/ev/charging", "/ev/route-planner", "/ev/calculator", "/ev/networks"],
+  },
+  {
+    title: "Research & compare",
+    description: "Editorial model guidance before you shortlist or sign.",
+    items: ["/ev/models", "/ev/compare", "/ev/reviews", "/ev/guides"],
+  },
+  {
+    title: "Market intelligence",
+    description: "Signals, markets and decision support around the EV ownership landscape.",
+    items: ["/ev/news", "/ev/markets", "/ev/advisor", "/ev/database"],
   },
 ];
 
@@ -211,24 +227,44 @@ export default function EVHub() {
       <section className="container py-24">
         <div className="text-center mb-16">
           <p className="text-xs uppercase tracking-[0.25em] text-accent mb-3">Tools</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Everything you need, in one place.</h2>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Everything you need, in one place.</h2>
+          <p className="max-w-2xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed">
+            The EV layer is structured around three calm workflows: planning the journey, understanding the product,
+            and tracking the market context behind ownership decisions.
+          </p>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MODULES.map((m) => (
-            <Link
-              key={m.to}
-              to={L(m.to)}
-              className={`group glass rounded-3xl p-7 border ${m.border} bg-gradient-to-br ${m.color} hover:-translate-y-1 transition-all duration-300`}
-            >
-              <div className={`w-10 h-10 rounded-xl bg-card flex items-center justify-center mb-5 ${m.iconColor}`}>
-                <m.icon className="w-5 h-5" />
+        <div className="space-y-14">
+          {MODULE_GROUPS.map((group) => (
+            <div key={group.title}>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+                <div className="max-w-xl">
+                  <p className="text-[11px] uppercase tracking-[0.25em] text-accent mb-2">{group.title}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{group.description}</p>
+                </div>
               </div>
-              <h3 className="font-semibold text-lg mb-2">{m.label}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{m.desc}</p>
-              <span className={`inline-flex items-center gap-1 text-xs font-medium ${m.iconColor}`}>
-                Explore <ChevronRight className="w-3.5 h-3.5" />
-              </span>
-            </Link>
+              <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
+                {group.items.map((path) => {
+                  const m = MODULES.find((module) => module.to === path);
+                  if (!m) return null;
+                  return (
+                    <Link
+                      key={m.to}
+                      to={L(m.to)}
+                      className={`group glass rounded-3xl p-7 border ${m.border} bg-gradient-to-br ${m.color} hover:-translate-y-1 transition-all duration-300`}
+                    >
+                      <div className={`w-10 h-10 rounded-xl bg-card flex items-center justify-center mb-5 ${m.iconColor}`}>
+                        <m.icon className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-semibold text-lg mb-2">{m.label}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{m.desc}</p>
+                      <span className={`inline-flex items-center gap-1 text-xs font-medium ${m.iconColor}`}>
+                        Explore <ChevronRight className="w-3.5 h-3.5" />
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
       </section>
