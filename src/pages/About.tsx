@@ -72,7 +72,7 @@ export default function About() {
   return (
     <PageShell>
       <SEO
-        title="About AUTOVERE | KM TECH LABS · Kristiansand, Norway"
+        title="About AUTOVERE - KM TECH LABS, Kristiansand, Norway"
         description="AUTOVERE is a premium European automotive intelligence platform, developed and operated by KM TECH LABS in Kristiansand, Norway. Editorial independence, transparent AI and real-world EV data."
         image="https://autovere.com/og-autovere-1200x630.jpg"
       />

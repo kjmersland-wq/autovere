@@ -260,7 +260,7 @@ export default function EVCharging() {
     if (!filtered.some((station) => station.id === selectedId)) {
       setSelectedId(filtered[0].id);
     }
-  }, [filtered, selectedId]);
+  }, [filtered]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const selectedStation = filtered.find((station) => station.id === selectedId) ?? filtered[0];
   const providerCount = new Set(filtered.map((station) => station.provider)).size;

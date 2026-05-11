@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -7,7 +7,7 @@ import { EVSubNav } from "@/components/EVSubNav";
 
 export const PageShell = ({ children }: { children: ReactNode }) => {
   const { pathname } = useLocation();
-  const normalizedPath = stripLocalizedPath(pathname);
+  const normalizedPath = useMemo(() => stripLocalizedPath(pathname), [pathname]);
   const showEvSubNav = normalizedPath === "/ev" || normalizedPath.startsWith("/ev/");
 
   return (

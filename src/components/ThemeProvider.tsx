@@ -39,6 +39,17 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
+  // Keep theme in sync when user changes OS color-scheme preference AND has no stored override.
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: light)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (localStorage.getItem(STORAGE_KEY)) return; // user has explicit preference — don't override
+      setThemeState(e.matches ? "light" : "dark");
+    };
+    mq.addEventListener("change", handleChange);
+    return () => mq.removeEventListener("change", handleChange);
+  }, []);
+
   const setTheme = (t: Theme) => setThemeState(t);
   const toggle = () => setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
 
