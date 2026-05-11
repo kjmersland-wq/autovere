@@ -231,6 +231,7 @@ export default function EVDatabase() {
       <SEO
         title="Vehicle Database — EV, Hybrid & ICE Comparison | AUTOVERE"
         description="Compare EVs, plug-in hybrids and diesel estates side by side. Real-world range, 5-year total cost of ownership, brake wear, depreciation and ownership analysis."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">

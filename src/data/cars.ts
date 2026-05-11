@@ -6,6 +6,7 @@ import sceneNordic from "@/assets/scene-nordic.jpg";
 import sceneRoad from "@/assets/scene-roadtrip.jpg";
 import sceneQuiet from "@/assets/scene-quiet.jpg";
 import sceneCity from "@/assets/scene-city.jpg";
+import heroCar from "@/assets/hero-car.jpg";
 
 export type Car = {
   slug: string;
@@ -238,7 +239,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "nordic-winters",
     title: "Best cars for Nordic winters",
     description: "Composed on snow. Quiet on ice. Heated where it matters.",
-    image: carSnow,
+    image: sceneNordic,
     body:
       "Winter doesn't care about marketing. These are the cars AutoVere returns to when the temperature drops and the road disappears under snow — competent, calm, and comfortable in conditions where most cars become a chore.",
     cars: ["polestar-3", "volvo-ex90", "kia-ev9"],
@@ -265,7 +266,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "underestimated",
     title: "Cars people underestimated",
     description: "Outside the spotlight. Inside, more thought than you'd expect.",
-    image: sceneCity,
+    image: heroCar,
     body:
       "Not every great car arrives with a marketing budget. These are the ones owners love more after a year, not less — quietly excellent, often overlooked, almost always the right answer.",
     cars: ["kia-ev9", "polestar-3"],
@@ -301,7 +302,7 @@ export const COLLECTIONS: Collection[] = [
     slug: "reviewers-unexpectedly-loved",
     title: "Cars reviewers unexpectedly loved",
     description: "Quiet surprises that earned their respect.",
-    image: sceneRoad,
+    image: carSedan,
     body:
       "Some cars walk into a review with low expectations and walk out with a quiet kind of admiration. These are the ones reviewers kept coming back to — not because of headlines, but because of how the cars behave when no one is watching.",
     cars: ["kia-ev9", "polestar-3", "bmw-i5"],

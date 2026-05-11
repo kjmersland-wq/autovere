@@ -40,7 +40,7 @@ const en = (): Record<LegalDocKey, LegalDocContent> => ({
     seoDescription:
       "The terms that govern your use of AUTOVERE — a calmer, intelligent way to discover your next car.",
     sections: [
-      { id: "seller", title: "Who you are contracting with", body: <p>AUTOVERE is operated by <strong>Boutique24Shop v/ K.Mersland</strong> ("we", "us", "AUTOVERE"), based in Norway. By using AUTOVERE you enter into a binding agreement with Boutique24Shop v/ K.Mersland.</p> },
+      { id: "seller", title: "Who you are contracting with", body: <p>AUTOVERE is operated by <strong>KM TECH LABS</strong> ("we", "us", "AUTOVERE"), based in Norway. By using AUTOVERE you enter into a binding agreement with KM TECH LABS.</p> },
       { id: "acceptance", title: "Acceptance of terms", body: <p>By using AUTOVERE you agree to these terms. If you do not agree, please do not use the service. We may update these terms from time to time; we will note the date at the top whenever we do.</p> },
       { id: "service", title: "What AUTOVERE is", body: <><p>AUTOVERE is an intelligent automotive discovery platform. We help people explore, compare and understand vehicles using curated content, public data, official manufacturer resources and AI-assisted insights.</p><p>AUTOVERE is <strong>not</strong> a dealership or marketplace. We do not sell vehicles and we are not party to any purchase you make from a third party.</p></> },
       { id: "accounts", title: "Accounts and eligibility", body: <p>You must be at least 16 years old to use AUTOVERE. You are responsible for keeping your account credentials safe and for activity that takes place under your account.</p> },
@@ -61,7 +61,7 @@ const en = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Privacy Policy · AUTOVERE",
     seoDescription: "How AUTOVERE collects, uses and protects your personal data. Privacy by design, in plain language.",
     sections: [
-      { id: "who", title: "Who we are", body: <p>AUTOVERE is operated by <strong>Boutique24Shop v/ K.Mersland</strong>, based in Norway. We are the data controller for the personal data described below.</p> },
+      { id: "who", title: "Who we are", body: <p>AUTOVERE is operated by <strong>KM TECH LABS</strong>, based in Norway. We are the data controller for the personal data described below.</p> },
       { id: "what", title: "What we collect", body: <>
         <p><strong>Account data</strong> — name, email and authentication identifiers when you create an account.</p>
         <p><strong>Usage data</strong> — pages viewed, searches, comparisons and advisor conversations, used to improve the product.</p>
@@ -163,7 +163,7 @@ const no = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Vilkår for tjenesten · AUTOVERE",
     seoDescription: "Vilkårene som styrer din bruk av AUTOVERE — en roligere, intelligent måte å finne din neste bil på.",
     sections: [
-      { id: "seller", title: "Hvem du inngår avtale med", body: <p>AUTOVERE drives av <strong>Boutique24Shop v/ K.Mersland</strong> ("vi", "oss", "AUTOVERE"), basert i Norge. Ved å bruke AUTOVERE inngår du en bindende avtale med Boutique24Shop v/ K.Mersland.</p> },
+      { id: "seller", title: "Hvem du inngår avtale med", body: <p>AUTOVERE drives av <strong>KM TECH LABS</strong> ("vi", "oss", "AUTOVERE"), basert i Norge. Ved å bruke AUTOVERE inngår du en bindende avtale med KM TECH LABS.</p> },
       { id: "acceptance", title: "Aksept av vilkår", body: <p>Ved å bruke AUTOVERE godtar du disse vilkårene. Hvis du ikke godtar dem, vennligst ikke bruk tjenesten. Vi kan oppdatere vilkårene fra tid til annen; vi noterer datoen øverst hver gang vi gjør det.</p> },
       { id: "service", title: "Hva AUTOVERE er", body: <><p>AUTOVERE er en intelligent plattform for biloppdagelse. Vi hjelper folk å utforske, sammenligne og forstå biler ved hjelp av kuratert innhold, offentlige data, offisielle produsentressurser og AI-assistert innsikt.</p><p>AUTOVERE er <strong>ikke</strong> en forhandler eller markedsplass. Vi selger ikke biler og er ikke part i kjøp du gjør fra en tredjepart.</p></> },
       { id: "accounts", title: "Konto og berettigelse", body: <p>Du må være minst 16 år for å bruke AUTOVERE. Du er ansvarlig for å holde påloggingsinformasjonen din sikker og for aktivitet som skjer på kontoen din.</p> },
@@ -184,7 +184,7 @@ const no = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Personvernerklæring · AUTOVERE",
     seoDescription: "Hvordan AUTOVERE samler inn, bruker og beskytter dine personopplysninger. Personvern fra start, i klart språk.",
     sections: [
-      { id: "who", title: "Hvem vi er", body: <p>AUTOVERE drives av <strong>Boutique24Shop v/ K.Mersland</strong>, basert i Norge. Vi er behandlingsansvarlig for personopplysningene beskrevet nedenfor.</p> },
+      { id: "who", title: "Hvem vi er", body: <p>AUTOVERE drives av <strong>KM TECH LABS</strong>, basert i Norge. Vi er behandlingsansvarlig for personopplysningene beskrevet nedenfor.</p> },
       { id: "what", title: "Hva vi samler inn", body: <>
         <p><strong>Kontodata</strong> — navn, e-post og autentiseringsidentifikatorer når du oppretter en konto.</p>
         <p><strong>Bruksdata</strong> — sider du har sett, søk, sammenligninger og rådgiversamtaler, brukt til å forbedre produktet.</p>
@@ -286,7 +286,7 @@ const de = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Nutzungsbedingungen · AUTOVERE",
     seoDescription: "Die Bedingungen, die Ihre Nutzung von AUTOVERE regeln — eine ruhigere, intelligente Art, Ihr nächstes Auto zu finden.",
     sections: [
-      { id: "seller", title: "Mit wem Sie einen Vertrag schließen", body: <p>AUTOVERE wird betrieben von <strong>Boutique24Shop v/ K.Mersland</strong> ("wir", "uns", "AUTOVERE") mit Sitz in Norwegen. Mit der Nutzung von AUTOVERE schließen Sie eine verbindliche Vereinbarung mit Boutique24Shop v/ K.Mersland.</p> },
+      { id: "seller", title: "Mit wem Sie einen Vertrag schließen", body: <p>AUTOVERE wird betrieben von <strong>KM TECH LABS</strong> ("wir", "uns", "AUTOVERE") mit Sitz in Norwegen. Mit der Nutzung von AUTOVERE schließen Sie eine verbindliche Vereinbarung mit KM TECH LABS.</p> },
       { id: "acceptance", title: "Annahme der Bedingungen", body: <p>Mit der Nutzung von AUTOVERE stimmen Sie diesen Bedingungen zu. Wenn Sie nicht zustimmen, nutzen Sie den Dienst bitte nicht. Wir können diese Bedingungen von Zeit zu Zeit aktualisieren; das Datum oben wird entsprechend angepasst.</p> },
       { id: "service", title: "Was AUTOVERE ist", body: <><p>AUTOVERE ist eine intelligente Plattform zur Fahrzeugentdeckung. Wir helfen Menschen, Fahrzeuge mithilfe kuratierter Inhalte, öffentlicher Daten, offizieller Herstellerinformationen und KI-gestützter Einblicke zu erkunden, zu vergleichen und zu verstehen.</p><p>AUTOVERE ist <strong>kein</strong> Händler oder Marktplatz. Wir verkaufen keine Fahrzeuge und sind nicht Vertragspartei eines Kaufs bei Dritten.</p></> },
       { id: "accounts", title: "Konten und Berechtigung", body: <p>Sie müssen mindestens 16 Jahre alt sein, um AUTOVERE zu nutzen. Sie sind verantwortlich für die Sicherheit Ihrer Zugangsdaten und für Aktivitäten unter Ihrem Konto.</p> },
@@ -307,7 +307,7 @@ const de = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Datenschutzerklärung · AUTOVERE",
     seoDescription: "Wie AUTOVERE Ihre personenbezogenen Daten erhebt, verwendet und schützt. Datenschutz von Anfang an, in klarer Sprache.",
     sections: [
-      { id: "who", title: "Wer wir sind", body: <p>AUTOVERE wird betrieben von <strong>Boutique24Shop v/ K.Mersland</strong> mit Sitz in Norwegen. Wir sind der Verantwortliche für die unten beschriebenen personenbezogenen Daten.</p> },
+      { id: "who", title: "Wer wir sind", body: <p>AUTOVERE wird betrieben von <strong>KM TECH LABS</strong> mit Sitz in Norwegen. Wir sind der Verantwortliche für die unten beschriebenen personenbezogenen Daten.</p> },
       { id: "what", title: "Was wir erheben", body: <>
         <p><strong>Kontodaten</strong> — Name, E-Mail und Authentifizierungskennungen bei der Kontoerstellung.</p>
         <p><strong>Nutzungsdaten</strong> — aufgerufene Seiten, Suchen, Vergleiche und Berater-Konversationen, zur Produktverbesserung verwendet.</p>
@@ -409,7 +409,7 @@ const sv = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Användarvillkor · AUTOVERE",
     seoDescription: "Villkoren som styr din användning av AUTOVERE — ett lugnare, intelligent sätt att hitta din nästa bil.",
     sections: [
-      { id: "seller", title: "Vem du ingår avtal med", body: <p>AUTOVERE drivs av <strong>Boutique24Shop v/ K.Mersland</strong> ("vi", "oss", "AUTOVERE") med säte i Norge. Genom att använda AUTOVERE ingår du ett bindande avtal med Boutique24Shop v/ K.Mersland.</p> },
+      { id: "seller", title: "Vem du ingår avtal med", body: <p>AUTOVERE drivs av <strong>KM TECH LABS</strong> ("vi", "oss", "AUTOVERE") med säte i Norge. Genom att använda AUTOVERE ingår du ett bindande avtal med KM TECH LABS.</p> },
       { id: "acceptance", title: "Godkännande av villkoren", body: <p>Genom att använda AUTOVERE godkänner du dessa villkor. Om du inte godkänner dem, vänligen använd inte tjänsten. Vi kan uppdatera villkoren då och då; vi noterar datum högst upp varje gång.</p> },
       { id: "service", title: "Vad AUTOVERE är", body: <><p>AUTOVERE är en intelligent plattform för bilupptäckt. Vi hjälper människor att utforska, jämföra och förstå fordon med hjälp av kuraterat innehåll, offentlig data, officiella tillverkarresurser och AI-assisterade insikter.</p><p>AUTOVERE är <strong>ingen</strong> återförsäljare eller marknadsplats. Vi säljer inga fordon och är inte part i köp du gör från tredje part.</p></> },
       { id: "accounts", title: "Konton och behörighet", body: <p>Du måste vara minst 16 år för att använda AUTOVERE. Du ansvarar för att hålla dina inloggningsuppgifter säkra och för aktivitet på ditt konto.</p> },
@@ -430,7 +430,7 @@ const sv = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Integritetspolicy · AUTOVERE",
     seoDescription: "Hur AUTOVERE samlar in, använder och skyddar dina personuppgifter. Integritet by design, i klarspråk.",
     sections: [
-      { id: "who", title: "Vilka vi är", body: <p>AUTOVERE drivs av <strong>Boutique24Shop v/ K.Mersland</strong>, baserat i Norge. Vi är personuppgiftsansvariga för de personuppgifter som beskrivs nedan.</p> },
+      { id: "who", title: "Vilka vi är", body: <p>AUTOVERE drivs av <strong>KM TECH LABS</strong>, baserat i Norge. Vi är personuppgiftsansvariga för de personuppgifter som beskrivs nedan.</p> },
       { id: "what", title: "Vad vi samlar in", body: <>
         <p><strong>Kontodata</strong> — namn, e-post och autentiseringsidentifierare när du skapar konto.</p>
         <p><strong>Användningsdata</strong> — sidor som visats, sökningar, jämförelser och rådgivarsamtal, för att förbättra produkten.</p>
@@ -532,7 +532,7 @@ const fr = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Conditions d'utilisation · AUTOVERE",
     seoDescription: "Les conditions qui régissent votre utilisation d'AUTOVERE — une façon plus sereine et intelligente de découvrir votre prochaine voiture.",
     sections: [
-      { id: "seller", title: "Avec qui vous contractez", body: <p>AUTOVERE est exploité par <strong>Boutique24Shop v/ K.Mersland</strong> ("nous", "AUTOVERE"), basé en Norvège. En utilisant AUTOVERE, vous concluez un accord contraignant avec Boutique24Shop v/ K.Mersland.</p> },
+      { id: "seller", title: "Avec qui vous contractez", body: <p>AUTOVERE est exploité par <strong>KM TECH LABS</strong> ("nous", "AUTOVERE"), basé en Norvège. En utilisant AUTOVERE, vous concluez un accord contraignant avec KM TECH LABS.</p> },
       { id: "acceptance", title: "Acceptation des conditions", body: <p>En utilisant AUTOVERE, vous acceptez ces conditions. Si vous ne les acceptez pas, n'utilisez pas le service. Nous pouvons mettre à jour ces conditions ; nous indiquerons la date en haut à chaque modification.</p> },
       { id: "service", title: "Ce qu'est AUTOVERE", body: <><p>AUTOVERE est une plateforme intelligente de découverte automobile. Nous aidons les gens à explorer, comparer et comprendre les véhicules grâce à du contenu organisé, des données publiques, des ressources officielles des constructeurs et des informations assistées par IA.</p><p>AUTOVERE n'est <strong>pas</strong> un concessionnaire ni une place de marché. Nous ne vendons pas de véhicules et ne sommes pas partie à un achat effectué auprès d'un tiers.</p></> },
       { id: "accounts", title: "Comptes et éligibilité", body: <p>Vous devez avoir au moins 16 ans pour utiliser AUTOVERE. Vous êtes responsable de la sécurité de vos identifiants et de l'activité sur votre compte.</p> },
@@ -553,7 +553,7 @@ const fr = (): Record<LegalDocKey, LegalDocContent> => ({
     seoTitle: "Politique de confidentialité · AUTOVERE",
     seoDescription: "Comment AUTOVERE collecte, utilise et protège vos données personnelles. Confidentialité dès la conception, en langage clair.",
     sections: [
-      { id: "who", title: "Qui nous sommes", body: <p>AUTOVERE est exploité par <strong>Boutique24Shop v/ K.Mersland</strong>, basé en Norvège. Nous sommes le responsable de traitement des données personnelles décrites ci-dessous.</p> },
+      { id: "who", title: "Qui nous sommes", body: <p>AUTOVERE est exploité par <strong>KM TECH LABS</strong>, basé en Norvège. Nous sommes le responsable de traitement des données personnelles décrites ci-dessous.</p> },
       { id: "what", title: "Ce que nous collectons", body: <>
         <p><strong>Données de compte</strong> — nom, e-mail et identifiants d'authentification lors de la création de compte.</p>
         <p><strong>Données d'usage</strong> — pages vues, recherches, comparaisons et conversations avec le conseiller, utilisées pour améliorer le produit.</p>

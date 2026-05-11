@@ -3,8 +3,6 @@ import { Zap, Map, Route, Calculator, BookOpen, ChevronRight, Battery, Thermomet
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
-import { EV_MODELS } from "@/data/ev-models";
-import { CHARGING_NETWORKS } from "@/data/charging-networks";
 
 const MODULES = [
   {
@@ -108,6 +106,24 @@ const MODULES = [
   },
 ];
 
+const MODULE_GROUPS = [
+  {
+    title: "Plan & charge",
+    description: "Core tools for route confidence, charging clarity and cost planning.",
+    items: ["/ev/charging", "/ev/route-planner", "/ev/calculator", "/ev/networks"],
+  },
+  {
+    title: "Research & compare",
+    description: "Editorial model guidance before you shortlist or sign.",
+    items: ["/ev/models", "/ev/compare", "/ev/reviews", "/ev/guides"],
+  },
+  {
+    title: "Market intelligence",
+    description: "Signals, markets and decision support around the EV ownership landscape.",
+    items: ["/ev/news", "/ev/markets", "/ev/advisor", "/ev/database"],
+  },
+];
+
 const STATS = [
   { value: "3.2M+", label: "EVs sold in Europe in 2024", icon: TrendingUp },
   { value: "800+", label: "Ionity stations across Europe", icon: Zap },
@@ -116,12 +132,12 @@ const STATS = [
 ];
 
 const FEATURED_EVS = [
-  { name: "Polestar 3", range: "631 km", origin: "Sweden", tag: "Long-range SUV" },
-  { name: "Tesla Model Y", range: "533 km", origin: "USA", tag: "Best seller" },
-  { name: "BMW iX", range: "630 km", origin: "Germany", tag: "Luxury flagship" },
-  { name: "Volvo EX90", range: "580 km", origin: "Sweden", tag: "Family SUV" },
-  { name: "Hyundai IONIQ 6", range: "614 km", origin: "Korea", tag: "Efficiency leader" },
-  { name: "Mercedes EQS", range: "770 km", origin: "Germany", tag: "Ultra-range saloon" },
+  { name: "Polestar 3", range: "631 km", origin: "Sweden", tag: "Long-range SUV", slug: "polestar-3", strip: "from-slate-700 to-blue-800", border: "border-blue-500/20" },
+  { name: "Tesla Model Y", range: "533 km", origin: "USA", tag: "Best seller", slug: "tesla-model-y", strip: "from-slate-700 to-red-800", border: "border-red-500/20" },
+  { name: "BMW iX", range: "630 km", origin: "Germany", tag: "Luxury flagship", slug: "bmw-ix", strip: "from-zinc-700 to-blue-800", border: "border-sky-500/20" },
+  { name: "Volvo EX90", range: "580 km", origin: "Sweden", tag: "Family SUV", slug: "volvo-ex90", strip: "from-slate-700 to-teal-800", border: "border-teal-500/20" },
+  { name: "Hyundai IONIQ 6", range: "614 km", origin: "Korea", tag: "Efficiency leader", slug: "hyundai-ioniq6", strip: "from-slate-700 to-cyan-800", border: "border-cyan-500/20" },
+  { name: "Mercedes EQS", range: "770 km", origin: "Germany", tag: "Ultra-range saloon", slug: "mercedes-eqs", strip: "from-zinc-700 to-indigo-800", border: "border-violet-500/20" },
 ];
 
 export default function EVHub() {
@@ -134,12 +150,18 @@ export default function EVHub() {
       <SEO
         title="EV Hub — Electric Intelligence | AUTOVERE"
         description="Europe's premium EV intelligence layer. Charging maps, route planning, ownership guides and cost calculators — all inside AUTOVERE."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-32">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/30 pointer-events-none" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-cyan-500/5 blur-3xl pointer-events-none" />
+        {/* Decorative EV silhouette strip */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none" aria-hidden="true">
+          <div className="absolute bottom-0 left-0 right-0 h-40 bg-gradient-to-t from-background via-background/60 to-transparent z-10" />
+          <div className="absolute top-16 right-0 w-[55%] h-full opacity-[0.035]" style={{ backgroundImage: "repeating-linear-gradient(90deg, hsl(var(--accent)) 0px, hsl(var(--accent)) 1px, transparent 1px, transparent 80px), repeating-linear-gradient(0deg, hsl(var(--accent)) 0px, hsl(var(--accent)) 1px, transparent 1px, transparent 80px)" }} />
+        </div>
 
         <div className="container relative">
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-cyan-400 mb-6">
@@ -171,28 +193,78 @@ export default function EVHub() {
         </div>
       </section>
 
+      {/* Live data ticker strip */}
+      <div className="border-y border-border/30 bg-card/20 overflow-hidden">
+        <div className="container py-3">
+          <div
+            className="flex items-center gap-6 overflow-x-auto scrollbar-hide text-xs text-muted-foreground"
+            role="region"
+            aria-label="Live EV data"
+            tabIndex={0}
+          >
+            <span className="inline-flex items-center gap-1.5 text-cyan-400 font-medium flex-shrink-0">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" /> LIVE DATA
+            </span>
+            {[
+              { label: "Ionity avg. price", value: "€0.69/kWh" },
+              { label: "Fastned uptime", value: "98.2%" },
+              { label: "Tesla Supercharger EU", value: "7,200+ points" },
+              { label: "Norway EV share 2025", value: "88%" },
+              { label: "Best 10–80% time", value: "18 min (IONIQ 5)" },
+              { label: "EU EV sales 2024", value: "3.2M units" },
+            ].map((item) => (
+              <span key={item.label} className="flex-shrink-0 flex items-center gap-2">
+                <span>{item.label}:</span>
+                <span className="text-foreground font-medium">{item.value}</span>
+                <span className="text-border/60">·</span>
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* Module cards */}
       <section className="container py-24">
         <div className="text-center mb-16">
           <p className="text-xs uppercase tracking-[0.25em] text-accent mb-3">Tools</p>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Everything you need, in one place.</h2>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Everything you need, in one place.</h2>
+          <p className="max-w-2xl mx-auto text-sm md:text-base text-muted-foreground leading-relaxed">
+            The EV layer is structured around three calm workflows: planning the journey, understanding the product,
+            and tracking the market context behind ownership decisions.
+          </p>
         </div>
-        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {MODULES.map((m) => (
-            <Link
-              key={m.to}
-              to={L(m.to)}
-              className={`group glass rounded-3xl p-7 border ${m.border} bg-gradient-to-br ${m.color} hover:-translate-y-1 transition-all duration-300`}
-            >
-              <div className={`w-10 h-10 rounded-xl bg-card flex items-center justify-center mb-5 ${m.iconColor}`}>
-                <m.icon className="w-5 h-5" />
+        <div className="space-y-14">
+          {MODULE_GROUPS.map((group) => (
+            <div key={group.title}>
+              <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 mb-6">
+                <div className="max-w-xl">
+                  <p className="text-[11px] uppercase tracking-[0.25em] text-accent mb-2">{group.title}</p>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{group.description}</p>
+                </div>
               </div>
-              <h3 className="font-semibold text-lg mb-2">{m.label}</h3>
-              <p className="text-sm text-muted-foreground leading-relaxed mb-4">{m.desc}</p>
-              <span className={`inline-flex items-center gap-1 text-xs font-medium ${m.iconColor}`}>
-                Explore <ChevronRight className="w-3.5 h-3.5" />
-              </span>
-            </Link>
+              <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
+                {group.items.map((path) => {
+                  const module = MODULES.find((entry) => entry.to === path);
+                  if (!module) return null;
+                  return (
+                    <Link
+                      key={module.to}
+                      to={L(module.to)}
+                      className={`group glass rounded-3xl p-7 border ${module.border} bg-gradient-to-br ${module.color} hover:-translate-y-1 transition-all duration-300`}
+                    >
+                      <div className={`w-10 h-10 rounded-xl bg-card flex items-center justify-center mb-5 ${module.iconColor}`}>
+                        <module.icon className="w-5 h-5" />
+                      </div>
+                      <h3 className="font-semibold text-lg mb-2">{module.label}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{module.desc}</p>
+                      <span className={`inline-flex items-center gap-1 text-xs font-medium ${module.iconColor}`}>
+                        Explore <ChevronRight className="w-3.5 h-3.5" />
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
           ))}
         </div>
       </section>
@@ -229,24 +301,37 @@ export default function EVHub() {
         </div>
         <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
           {FEATURED_EVS.map((ev) => (
-            <div key={ev.name} className="glass rounded-2xl p-6 border border-border/40 hover:border-border/80 transition-colors group">
-              <div className="flex items-start justify-between mb-4">
-                <div>
-                  <div className="text-[10px] uppercase tracking-widest text-accent mb-1">{ev.tag}</div>
-                  <h3 className="font-semibold text-lg">{ev.name}</h3>
-                  <div className="text-xs text-muted-foreground">{ev.origin}</div>
+            <Link
+              key={ev.name}
+              to={L(`/ev/models/${ev.slug}`)}
+              className={`group glass rounded-2xl border ${ev.border} hover:border-opacity-60 transition-all duration-300 hover:-translate-y-1 overflow-hidden`}
+            >
+              {/* Brand colour strip */}
+              <div className={`h-1.5 w-full bg-gradient-to-r ${ev.strip}`} />
+              <div className="p-6">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <div className="text-[10px] uppercase tracking-widest text-accent mb-1">{ev.tag}</div>
+                    <h3 className="font-semibold text-lg">{ev.name}</h3>
+                    <div className="text-xs text-muted-foreground">{ev.origin}</div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-gradient">{ev.range}</div>
+                    <div className="text-[10px] text-muted-foreground uppercase tracking-wider">WLTP range</div>
+                  </div>
                 </div>
-                <div className="text-right">
-                  <div className="text-2xl font-bold text-gradient">{ev.range}</div>
-                  <div className="text-[10px] text-muted-foreground uppercase tracking-wider">WLTP range</div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1 text-amber-400">
+                    {Array.from({ length: 5 }).map((_, i) => (
+                      <Star key={i} className="w-3 h-3 fill-current" />
+                    ))}
+                  </div>
+                  <span className="text-[10px] font-medium text-accent group-hover:gap-1.5 transition-all">
+                    View guide →
+                  </span>
                 </div>
               </div>
-              <div className="flex items-center gap-1 text-amber-400">
-                {Array.from({ length: 5 }).map((_, i) => (
-                  <Star key={i} className="w-3 h-3 fill-current" />
-                ))}
-              </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>

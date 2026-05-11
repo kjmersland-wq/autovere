@@ -133,6 +133,7 @@ export default function EVGuides() {
       <SEO
         title="EV Ownership Guides | AUTOVERE"
         description="Expert EV ownership guides covering battery longevity, winter driving, charging etiquette, brake maintenance and long-term ownership."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}

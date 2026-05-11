@@ -25,7 +25,8 @@ const fr: Translation = {
     disclaimer:
       "Les recommandations d’AUTOVERE sont assistées par IA, fondées sur des données publiques et le consensus des spécialistes. Les caractéristiques varient selon les pays — vérifiez-les avant tout achat.",
     rights: "L’avenir du choix automobile.",
-    operated: "Opéré avec soin depuis Kristiansand, Norvège.",
+    operated: "Exploité avec soin depuis Kristiansand, Norvège.",
+    editor: "Rédacteur en chef",
     columns: { discover: "Découvrir", company: "Société", legal: "Mentions légales" },
     links: {
       cars: "Voitures",
@@ -36,6 +37,7 @@ const fr: Translation = {
       learn: "Apprendre",
       pricing: "Premium",
       help: "Centre d’aide",
+      about: "À propos",
       contact: "Contact",
       terms: "Conditions d’utilisation",
       privacy: "Politique de confidentialité",
@@ -102,7 +104,7 @@ const fr: Translation = {
     contact_team: "Contactez notre équipe",
     every_message: "— chaque message est lu par une vraie personne.",
     org_line: "N° d'entreprise 934 044 029 · Møviklia 4, 4623 Kristiansand, Norvège",
-    operator: "Boutique24Shop v/ K.Mersland",
+    operator: "KM TECH LABS",
   },
   seo: {
     site_name: "AUTOVERE",

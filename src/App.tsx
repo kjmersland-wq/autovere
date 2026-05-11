@@ -7,6 +7,8 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import "./i18n/config";
 import { LangSync } from "./i18n/LangSync";
 import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
+import { RouteErrorBoundary } from "./components/ErrorBoundary";
+import { ThemeProvider } from "./components/ThemeProvider";
 
 // Eagerly loaded — critical path
 import Index from "./pages/Index.tsx";
@@ -40,6 +42,7 @@ const Watch = lazy(() => import("./pages/Watch.tsx"));
 const Pricing = lazy(() => import("./pages/Pricing.tsx"));
 const Contact = lazy(() => import("./pages/Contact.tsx"));
 const Help = lazy(() => import("./pages/Help.tsx"));
+const About = lazy(() => import("./pages/About.tsx"));
 const Discover = lazy(() => import("./pages/Discover.tsx"));
 const Studio = lazy(() => import("./pages/Studio.tsx"));
 const Terms = lazy(() => import("./pages/legal/Terms.tsx"));
@@ -98,6 +101,7 @@ const ScrollManager = () => {
 };
 
 const AppRoutes = () => (
+  <RouteErrorBoundary>
   <Suspense fallback={<PageLoader />}>
     <Routes>
       <Route path="/" element={<Index />} />
@@ -115,6 +119,7 @@ const AppRoutes = () => (
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/help" element={<Help />} />
+      <Route path="/about" element={<About />} />
       <Route path="/discover" element={<Discover />} />
       <Route path="/legal/terms" element={<Terms />} />
       <Route path="/legal/privacy" element={<Privacy />} />
@@ -144,6 +149,7 @@ const AppRoutes = () => (
       <Route path="*" element={<NotFound />} />
     </Routes>
   </Suspense>
+  </RouteErrorBoundary>
 );
 
 const App = () => (
@@ -152,22 +158,24 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <ScrollManager />
-        <LangSync />
-        <PaymentTestModeBanner />
-        <Routes>
-          {/* Localized routes — same tree mounted under each language prefix */}
-          <Route path="/en/*" element={<AppRoutes />} />
-          <Route path="/no/*" element={<AppRoutes />} />
-          <Route path="/de/*" element={<AppRoutes />} />
-          <Route path="/sv/*" element={<AppRoutes />} />
-          <Route path="/fr/*" element={<AppRoutes />} />
-          <Route path="/pl/*" element={<AppRoutes />} />
-          <Route path="/it/*" element={<AppRoutes />} />
-          <Route path="/es/*" element={<AppRoutes />} />
-          {/* Default (English) at root */}
-          <Route path="/*" element={<AppRoutes />} />
-        </Routes>
+        <ThemeProvider>
+          <ScrollManager />
+          <LangSync />
+          <PaymentTestModeBanner />
+          <Routes>
+            {/* Localized routes — same tree mounted under each language prefix */}
+            <Route path="/en/*" element={<AppRoutes />} />
+            <Route path="/no/*" element={<AppRoutes />} />
+            <Route path="/de/*" element={<AppRoutes />} />
+            <Route path="/sv/*" element={<AppRoutes />} />
+            <Route path="/fr/*" element={<AppRoutes />} />
+            <Route path="/pl/*" element={<AppRoutes />} />
+            <Route path="/it/*" element={<AppRoutes />} />
+            <Route path="/es/*" element={<AppRoutes />} />
+            {/* Default (English) at root */}
+            <Route path="/*" element={<AppRoutes />} />
+          </Routes>
+        </ThemeProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

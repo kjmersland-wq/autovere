@@ -11,6 +11,7 @@ import {
   type ArticleCategory,
 } from "@/data/articles";
 import { rankArticles } from "@/lib/content-ranking";
+import { enrichArticlesWithResolvedMedia } from "@/lib/editorial-media";
 
 const CATEGORIES: { value: ArticleCategory | "all"; label: string }[] = [
   { value: "all", label: "All Intelligence" },
@@ -30,7 +31,7 @@ export default function EVNews() {
 
   // Rank by composite score (freshness × relevance × trending) not just date
   const sorted = useMemo(
-    () => rankArticles(ARTICLES, "total").map((r) => r.article),
+    () => enrichArticlesWithResolvedMedia(rankArticles(ARTICLES, "total").map((r) => r.article)),
     []
   );
 
@@ -55,6 +56,7 @@ export default function EVNews() {
       <SEO
         title="EV Intelligence — Market, Technology & Infrastructure Analysis | AUTOVERE"
         description="Expert EV analysis: charging infrastructure, battery technology, European market data and ownership intelligence. No hype — real data."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
         jsonLd={jsonLd}
       />
 

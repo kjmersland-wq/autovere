@@ -301,6 +301,7 @@ export default function EVReviews() {
       <SEO
         title="EV Video Reviews — European Model Guide | AUTOVERE"
         description="Curated YouTube EV reviews with consensus scoring, real-world range data and reviewer analysis for the best EVs in Europe."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}

@@ -26,6 +26,7 @@ const de: Translation = {
       "AUTOVERE-Empfehlungen sind KI-gestützt und basieren auf öffentlichen Daten und dem Konsens von Fachredaktionen. Fahrzeugdetails variieren je nach Region — bitte vor dem Kauf prüfen.",
     rights: "Die Zukunft der Fahrzeugwahl.",
     operated: "Mit Sorgfalt betrieben aus Kristiansand, Norwegen.",
+    editor: "Chefredakteur",
     columns: { discover: "Entdecken", company: "Unternehmen", legal: "Rechtliches" },
     links: {
       cars: "Fahrzeuge",
@@ -36,6 +37,7 @@ const de: Translation = {
       learn: "Wissen",
       pricing: "Premium",
       help: "Hilfe-Center",
+      about: "Über uns",
       contact: "Kontakt",
       terms: "Nutzungsbedingungen",
       privacy: "Datenschutzerklärung",
@@ -102,7 +104,7 @@ const de: Translation = {
     contact_team: "Kontaktieren Sie unser Team",
     every_message: "— jede Nachricht wird von einem echten Menschen gelesen.",
     org_line: "Org.-Nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norwegen",
-    operator: "Boutique24Shop v/ K.Mersland",
+    operator: "KM TECH LABS",
   },
   seo: {
     site_name: "AUTOVERE",

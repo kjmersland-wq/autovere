@@ -25,7 +25,8 @@ const pl: Translation = {
     disclaimer:
       "Rekomendacje AUTOVERE są wspierane przez AI i oparte na publicznych danych oraz konsensusie recenzentów. Szczegóły pojazdów różnią się w zależności od regionu — zweryfikuj przed zakupem.",
     rights: "Przyszłość wyboru samochodu.",
-    operated: "Obsługiwane z troską z Kristiansand, Norwegia.",
+    operated: "Prowadzone z troską z Kristiansand, Norwegia.",
+    editor: "Redaktor naczelny",
     columns: { discover: "Odkryj", company: "Firma", legal: "Prawo" },
     links: {
       cars: "Samochody",
@@ -36,6 +37,7 @@ const pl: Translation = {
       learn: "Ucz się",
       pricing: "Premium",
       help: "Centrum pomocy",
+      about: "O nas",
       contact: "Kontakt",
       terms: "Warunki usługi",
       privacy: "Polityka prywatności",
@@ -102,7 +104,7 @@ const pl: Translation = {
     contact_team: "Skontaktuj się z naszym zespołem",
     every_message: "— każda wiadomość jest czytana przez prawdziwą osobę.",
     org_line: "Org.nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norwegia",
-    operator: "Boutique24Shop v/ K.Mersland",
+    operator: "KM TECH LABS",
   },
   seo: {
     site_name: "AUTOVERE",

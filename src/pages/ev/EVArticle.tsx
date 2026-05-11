@@ -14,6 +14,7 @@ import {
   getRelatedArticles,
 } from "@/data/articles";
 import { getArticleIntelligence } from "@/data/article-intelligence";
+import { enrichArticlesWithResolvedMedia } from "@/lib/editorial-media";
 
 export default function EVArticle() {
   const { slug } = useParams<{ slug: string }>();
@@ -21,7 +22,8 @@ export default function EVArticle() {
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
 
-  const article = ARTICLES.find((a) => a.slug === slug);
+  const enriched = enrichArticlesWithResolvedMedia(ARTICLES);
+  const article = enriched.find((a) => a.slug === slug);
 
   if (!article) {
     return (
@@ -37,7 +39,7 @@ export default function EVArticle() {
     );
   }
 
-  const related = getRelatedArticles(article.slug, 3);
+  const related = getRelatedArticles(article.slug, 3).map((r) => enriched.find((e) => e.slug === r.slug) ?? r);
   const intelligence = getArticleIntelligence(article.slug);
   const categoryColor = CATEGORY_COLORS[article.category];
 
@@ -46,6 +48,7 @@ export default function EVArticle() {
     "@type": "Article",
     headline: article.title,
     description: article.summary,
+    image: article.media.ogImageUrl || article.media.heroUrl || article.media.url || "https://autovere.com/og-autovere-1200x630.jpg",
     datePublished: article.publishedAt,
     author: { "@type": "Organization", name: "AUTOVERE" },
     publisher: { "@type": "Organization", name: "AUTOVERE", url: "https://autovere.com" },
@@ -58,12 +61,13 @@ export default function EVArticle() {
         title={`${article.title} | AUTOVERE EV Intelligence`}
         description={article.summary}
         type="article"
+        image={article.media.ogImageUrl || article.media.heroUrl || article.media.url || "https://autovere.com/og-autovere-1200x630.jpg"}
         jsonLd={jsonLd}
       />
 
       {/* Hero image */}
       <div className="pt-20">
-        <MediaImage media={article.media} aspectClass="aspect-[21/7]" showAttribution className="w-full" />
+        <MediaImage media={article.media} aspectClass="aspect-[21/7]" showAttribution className="w-full" variant="hero" />
       </div>
 
       <div className="container py-12">

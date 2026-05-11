@@ -1,12 +1,13 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Sparkles, Zap, Menu, X, Warehouse } from "lucide-react";
+import { Sparkles, Zap, Menu, X, Warehouse, Sun, Moon } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { detectLangFromPath, localizePath } from "@/i18n/routing";
 import { VehicleSearch } from "@/components/VehicleSearch";
 import { useGarage } from "@/hooks/useGarage";
+import { useTheme } from "@/components/ThemeProvider";
 
 export const SiteHeader = () => {
   const { pathname } = useLocation();
@@ -15,6 +16,7 @@ export const SiteHeader = () => {
   const { t } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { totalCount } = useGarage();
+  const { theme, toggle } = useTheme();
 
   // Close mobile menu on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
@@ -73,6 +75,14 @@ export const SiteHeader = () => {
           {/* Right side */}
           <div className="flex items-center gap-3">
             <VehicleSearch compact className="hidden md:inline-flex" />
+            {/* Theme toggle */}
+            <button
+              onClick={toggle}
+              className="w-9 h-9 rounded-lg glass border border-border/40 flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors"
+              aria-label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
+            >
+              {theme === "dark" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+            </button>
             <Link
               to={L("/garage")}
               className="relative w-9 h-9 rounded-lg glass border border-border/40 flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors"

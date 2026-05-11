@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    /* Midnight Indigo design system */
+    /* Midnight Indigo design system — dark (default) */
     --background: 230 45% 4%;
     --foreground: 220 30% 96%;
 
@@ -55,6 +55,51 @@
     --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
     --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
   }
+
+  /* Light mode — Premium pearl / cloud white */
+  :root.light {
+    --background: 220 30% 97%;
+    --foreground: 230 45% 10%;
+
+    --card: 220 25% 100%;
+    --card-foreground: 230 45% 10%;
+
+    --popover: 220 25% 100%;
+    --popover-foreground: 230 45% 10%;
+
+    --primary: 243 75% 55%;
+    --primary-foreground: 220 30% 98%;
+    --primary-glow: 250 90% 60%;
+
+    --secondary: 220 20% 93%;
+    --secondary-foreground: 230 45% 10%;
+
+    --muted: 220 20% 93%;
+    --muted-foreground: 225 15% 45%;
+
+    --accent: 243 75% 55%;
+    --accent-foreground: 220 30% 98%;
+
+    --destructive: 0 70% 50%;
+    --destructive-foreground: 220 30% 98%;
+
+    --border: 220 20% 86%;
+    --input: 220 20% 90%;
+    --ring: 243 75% 55%;
+
+    --gradient-hero: radial-gradient(ellipse at top, hsl(243 75% 80% / 0.25), transparent 60%),
+                     linear-gradient(180deg, hsl(220 30% 96%) 0%, hsl(220 30% 97%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(243 75% 55%), hsl(250 90% 60%));
+    --gradient-glow: radial-gradient(circle, hsl(250 90% 60% / 0.2), transparent 70%);
+    --gradient-card: linear-gradient(180deg, hsl(220 25% 100% / 0.95), hsl(220 25% 98% / 0.9));
+
+    --shadow-glow: 0 0 40px hsl(250 90% 60% / 0.15), 0 0 80px hsl(243 75% 55% / 0.1);
+    --shadow-elegant: 0 20px 60px -20px hsl(243 75% 40% / 0.2);
+    --shadow-soft: 0 4px 24px hsl(220 30% 50% / 0.12);
+
+    --glass-bg: hsl(220 25% 100% / 0.7);
+    --glass-border: hsl(220 20% 75% / 0.5);
+  }
 }
 
 @layer base {
@@ -97,6 +142,9 @@
   .animate-float { animation: float 6s ease-in-out infinite; }
   .animate-glow-pulse { animation: glowPulse 4s ease-in-out infinite; }
   .animate-fade-up { animation: fadeUp 0.8s var(--transition-smooth) both; }
+  /* Hide scrollbar while keeping scroll functionality */
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
 }
 
 @keyframes float {

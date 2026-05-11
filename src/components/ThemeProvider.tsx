@@ -1,0 +1,65 @@
+import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+
+type Theme = "dark" | "light";
+
+interface ThemeContextValue {
+  theme: Theme;
+  toggle: () => void;
+  setTheme: (t: Theme) => void;
+}
+
+const ThemeContext = createContext<ThemeContextValue>({
+  theme: "dark",
+  toggle: () => {},
+  setTheme: () => {},
+});
+
+const STORAGE_KEY = "autovere-theme";
+
+function getInitialTheme(): Theme {
+  if (typeof window === "undefined") return "dark";
+  const stored = localStorage.getItem(STORAGE_KEY) as Theme | null;
+  if (stored === "light" || stored === "dark") return stored;
+  // Prefer light only when the OS explicitly asks for it; otherwise stay on the brand-default dark theme.
+  return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+}
+
+export function ThemeProvider({ children }: { children: ReactNode }) {
+  const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === "light") {
+      root.classList.add("light");
+      root.classList.remove("dark");
+    } else {
+      root.classList.add("dark");
+      root.classList.remove("light");
+    }
+    localStorage.setItem(STORAGE_KEY, theme);
+  }, [theme]);
+
+  // Keep theme in sync when user changes OS color-scheme preference AND has no stored override.
+  useEffect(() => {
+    const mq = window.matchMedia("(prefers-color-scheme: light)");
+    const handleChange = (e: MediaQueryListEvent) => {
+      if (localStorage.getItem(STORAGE_KEY)) return; // user has explicit preference — don't override
+      setThemeState(e.matches ? "light" : "dark");
+    };
+    mq.addEventListener("change", handleChange);
+    return () => mq.removeEventListener("change", handleChange);
+  }, []);
+
+  const setTheme = (t: Theme) => setThemeState(t);
+  const toggle = () => setThemeState((prev) => (prev === "dark" ? "light" : "dark"));
+
+  return (
+    <ThemeContext.Provider value={{ theme, toggle, setTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
+}
+
+export function useTheme() {
+  return useContext(ThemeContext);
+}

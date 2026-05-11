@@ -227,6 +227,7 @@ export default function EVMarkets() {
       <SEO
         title="European EV Market Intelligence — Country Guide | AUTOVERE"
         description="EV charging costs, incentives, infrastructure maturity and ownership economics for Norway, Sweden, Germany, France, Netherlands, Poland, Spain and Italy."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">

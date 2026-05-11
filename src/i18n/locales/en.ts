@@ -24,6 +24,7 @@ const en = {
       "AUTOVERE recommendations are AI-assisted and based on public data and reviewer consensus. Vehicle details vary by region — verify before purchase.",
     rights: "The future of choosing a car.",
     operated: "Operated with care from Kristiansand, Norway.",
+    editor: "Editor-in-chief",
     columns: { discover: "Discover", company: "Company", legal: "Legal" },
     links: {
       cars: "Cars",
@@ -34,6 +35,7 @@ const en = {
       learn: "Learn",
       pricing: "Premium",
       help: "Help center",
+      about: "About",
       contact: "Contact",
       terms: "Terms of Service",
       privacy: "Privacy Policy",
@@ -100,7 +102,7 @@ const en = {
     contact_team: "Contact our team",
     every_message: "— every message is read by a real person.",
     org_line: "Org.nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge",
-    operator: "Boutique24Shop v/ K.Mersland",
+    operator: "KM TECH LABS",
   },
   seo: {
     site_name: "AUTOVERE",

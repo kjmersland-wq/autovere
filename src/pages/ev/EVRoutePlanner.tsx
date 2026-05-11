@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Route, ArrowRight, ArrowUpDown, Battery, Zap, Clock, Euro, Thermometer, Wind, ChevronDown, ChevronUp, MapPin } from "lucide-react";
+import { Route, ArrowRight, ArrowUpDown, Battery, Zap, Clock, Euro, Thermometer, Wind, ChevronDown, ChevronUp, MapPin, Radio } from "lucide-react";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 
@@ -110,6 +110,7 @@ export default function EVRoutePlanner() {
       <SEO
         title="EV Route Planner Europe | AUTOVERE"
         description="Plan long-distance EV trips across Europe. Get charging stops, costs and travel time estimates for your electric vehicle."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}
@@ -126,6 +127,10 @@ export default function EVRoutePlanner() {
             Enter your route, select your car. We'll calculate optimal charging stops,
             real costs and total travel time — including winter adjustments.
           </p>
+          <div className="mt-6 inline-flex items-center gap-2 glass rounded-full border border-cyan-500/20 bg-cyan-500/5 text-cyan-400 px-4 py-2 text-xs font-medium">
+            <Radio className="w-3.5 h-3.5" />
+            <span>Live infrastructure aware · Powered by Open Charge Map</span>
+          </div>
         </div>
       </section>
 
@@ -311,6 +316,32 @@ export default function EVRoutePlanner() {
               </div>
             </div>
           )}
+        </div>
+      </section>
+
+      {/* Live data attribution */}
+      <section className="container pb-16">
+        <div className="glass rounded-2xl border border-border/40 p-5 max-w-4xl mx-auto">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div className="flex items-start gap-3">
+              <Radio className="w-4 h-4 text-cyan-400 mt-0.5 flex-shrink-0" />
+              <div>
+                <div className="text-sm font-medium mb-1">Live infrastructure · Estimated routing</div>
+                <p className="text-xs text-muted-foreground leading-relaxed max-w-xl">
+                  Route stops are calculated estimates using WLTP consumption data and representative European
+                  charging networks. Real-world results vary by speed, elevation, temperature and vehicle load.
+                  Live charging infrastructure data provided by <strong>Open Charge Map</strong>.
+                </p>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 text-[11px] text-muted-foreground">
+              {["WLTP range data", "Estimated stops", "Open Charge Map", "Winter adjustment"].map((item) => (
+                <span key={item} className="rounded-full border border-border/30 bg-card/40 px-3 py-1.5">
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </section>
     </PageShell>

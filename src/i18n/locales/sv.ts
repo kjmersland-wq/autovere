@@ -26,6 +26,7 @@ const sv: Translation = {
       "AUTOVEREs rekommendationer är AI-assisterade och baserade på publika data och samsyn bland recensenter. Fordonsuppgifter varierar mellan länder — verifiera före köp.",
     rights: "Framtidens sätt att välja bil.",
     operated: "Drivs med omsorg från Kristiansand, Norge.",
+    editor: "Chefredaktör",
     columns: { discover: "Upptäck", company: "Företaget", legal: "Juridik" },
     links: {
       cars: "Bilar",
@@ -36,6 +37,7 @@ const sv: Translation = {
       learn: "Lär",
       pricing: "Premium",
       help: "Hjälpcenter",
+      about: "Om oss",
       contact: "Kontakt",
       terms: "Användarvillkor",
       privacy: "Integritetspolicy",
@@ -102,7 +104,7 @@ const sv: Translation = {
     contact_team: "Kontakta vårt team",
     every_message: "— varje meddelande läses av en riktig människa.",
     org_line: "Org.nr 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge",
-    operator: "Boutique24Shop v/ K.Mersland",
+    operator: "KM TECH LABS",
   },
   seo: {
     site_name: "AUTOVERE",
