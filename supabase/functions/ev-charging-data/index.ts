@@ -100,7 +100,9 @@ function mapProvider(raw: string | undefined): string {
   const r = raw.toLowerCase();
   if (r.includes("tesla")) return "Tesla";
   if (r.includes("ionity")) return "Ionity";
-  if (r.includes("recharge") && !r.includes("shell")) return "Recharge";
+  // Shell Recharge must be checked before the generic "recharge" pattern
+  if (r.includes("shell recharge") || (r.includes("shell") && r.includes("recharge"))) return "Shell Recharge";
+  if (r.includes("recharge")) return "Recharge";
   if (r.includes("circle k")) return "Circle K";
   if (r.includes("eviny") || r.includes("bkk") || r.includes("charge365")) return "Eviny";
   if (r.includes("uno-x") || r.includes("unox")) return "Uno-X";
@@ -109,7 +111,7 @@ function mapProvider(raw: string | undefined): string {
   if (r.includes("fastned")) return "Fastned";
   if (r.includes("allego")) return "Allego";
   if (r.includes("e.on") || r.includes("eon ")) return "E.ON";
-  if (r.includes("shell recharge") || (r.includes("shell") && r.includes("recharge"))) return "Shell Recharge";
+  // Shell Recharge must come before the generic Recharge check (handled above)
   if (r.includes("freshmile")) return "Freshmile";
   if (r.includes("vattenfall") || r.includes("incharge")) return "InCharge";
   // Return the first ~20 chars of the raw name as a readable fallback

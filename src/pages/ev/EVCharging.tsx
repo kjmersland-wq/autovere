@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   Zap,
   Search,
@@ -348,12 +348,15 @@ export default function EVCharging() {
     });
   }, [liveStations, isFallback, search, provider, speed, connector]);
 
-  // Auto-select first station when filters/country change
+  // Auto-select first station when filters/country change — must be in useEffect to avoid render-phase state mutation
   const firstFilteredId = filtered[0]?.id;
+  useEffect(() => {
+    if (firstFilteredId !== undefined && !filtered.some((s) => s.id === selectedId)) {
+      setSelectedId(firstFilteredId);
+    }
+  }, [filtered, firstFilteredId, selectedId]);
+
   const selectedStation = filtered.find((s) => s.id === selectedId) ?? filtered[0];
-  if (firstFilteredId !== undefined && !filtered.some((s) => s.id === selectedId)) {
-    setSelectedId(firstFilteredId);
-  }
 
   const providerCount = new Set(filtered.map((s) => s.provider)).size;
 
