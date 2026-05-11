@@ -8,9 +8,9 @@ import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import {
   ARTICLES,
   CATEGORY_LABELS,
-  CATEGORY_COLORS,
   type ArticleCategory,
 } from "@/data/articles";
+import { rankArticles } from "@/lib/content-ranking";
 
 const CATEGORIES: { value: ArticleCategory | "all"; label: string }[] = [
   { value: "all", label: "All Intelligence" },
@@ -28,8 +28,9 @@ export default function EVNews() {
   const L = (p: string) => localizePath(p, lang);
   const [category, setCategory] = useState<ArticleCategory | "all">("all");
 
+  // Rank by composite score (freshness × relevance × trending) not just date
   const sorted = useMemo(
-    () => [...ARTICLES].sort((a, b) => b.publishedAt.localeCompare(a.publishedAt)),
+    () => rankArticles(ARTICLES, "total").map((r) => r.article),
     []
   );
 
