@@ -149,7 +149,7 @@ export default function Contact() {
           <TrustCard icon={<Sparkles className="w-5 h-5" />} title={t("pages.contact.trust_t2")} body={t("pages.contact.trust_b2")} />
           <TrustCard icon={<MessageCircle className="w-5 h-5" />} title={t("pages.contact.trust_t3")} body={t("pages.contact.trust_b3")} />
           <div className="glass rounded-2xl p-6 text-xs text-muted-foreground leading-relaxed">
-            {t("pages.contact.developed_by")} <span className="text-foreground/90 font-medium">Boutique24Shop v/ K.Mersland</span>, Kristiansand, Norway.
+            {t("pages.contact.developed_by")} <span className="text-foreground/90 font-medium">KM TECH LABS</span>, Kristiansand, Norway. Editor-in-chief: <span className="text-foreground/90 font-medium">Kjell Mersland</span>.
           </div>
         </aside>
       </section>

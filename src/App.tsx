@@ -42,6 +42,7 @@ const Watch = lazy(() => import("./pages/Watch.tsx"));
 const Pricing = lazy(() => import("./pages/Pricing.tsx"));
 const Contact = lazy(() => import("./pages/Contact.tsx"));
 const Help = lazy(() => import("./pages/Help.tsx"));
+const About = lazy(() => import("./pages/About.tsx"));
 const Discover = lazy(() => import("./pages/Discover.tsx"));
 const Studio = lazy(() => import("./pages/Studio.tsx"));
 const Terms = lazy(() => import("./pages/legal/Terms.tsx"));
@@ -118,6 +119,7 @@ const AppRoutes = () => (
       <Route path="/pricing" element={<Pricing />} />
       <Route path="/contact" element={<Contact />} />
       <Route path="/help" element={<Help />} />
+      <Route path="/about" element={<About />} />
       <Route path="/discover" element={<Discover />} />
       <Route path="/legal/terms" element={<Terms />} />
       <Route path="/legal/privacy" element={<Privacy />} />
