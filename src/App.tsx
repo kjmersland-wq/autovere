@@ -30,6 +30,7 @@ const EVArticle = lazy(() => import("./pages/ev/EVArticle.tsx"));
 const EVNetworkDetail = lazy(() => import("./pages/ev/EVNetworkDetail.tsx"));
 
 // Lazy-loaded page chunks — core pages
+const Garage = lazy(() => import("./pages/Garage.tsx"));
 const CarDetail = lazy(() => import("./pages/CarDetail.tsx"));
 const Compare = lazy(() => import("./pages/Compare.tsx"));
 const CollectionDetail = lazy(() => import("./pages/Collection.tsx"));
@@ -122,6 +123,7 @@ const AppRoutes = () => (
       <Route path="/legal/subscriptions" element={<Subscriptions />} />
       <Route path="/studio" element={<Studio />} />
       <Route path="/auth" element={<Auth />} />
+      <Route path="/garage" element={<Garage />} />
       {/* EV ecosystem */}
       <Route path="/ev" element={<EVHub />} />
       <Route path="/ev/charging" element={<EVCharging />} />
