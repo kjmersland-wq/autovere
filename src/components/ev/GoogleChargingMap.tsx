@@ -53,22 +53,6 @@ interface GoogleMapsLike {
 const GOOGLE_SCRIPT_ID = "autovere-google-maps-script";
 const FALLBACK_DISTANCE_KM = 140;
 
-const PROVIDER_MARKER_COLORS: Record<string, string> = {
-  Tesla: "#ef4444",
-  Ionity: "#60a5fa",
-  Recharge: "#34d399",
-  "Circle K": "#fb923c",
-  Eviny: "#22d3ee",
-  "Uno-X": "#facc15",
-  Mer: "#d946ef",
-  Kople: "#a78bfa",
-  Fastned: "#fcd34d",
-  Allego: "#a3e635",
-  "E.ON": "#2dd4bf",
-  "Shell Recharge": "#fdba74",
-  Other: "#94a3b8",
-};
-
 const DARK_CINEMATIC_MAP_STYLE: Array<Record<string, unknown>> = [
   { elementType: "geometry", stylers: [{ color: "#0b1220" }] },
   { elementType: "labels.text.fill", stylers: [{ color: "#8aa0b8" }] },
@@ -276,7 +260,7 @@ export function GoogleChargingMap({
     clustered.forEach((point) => {
       const isCluster = point.count > 1;
       const isActive = !isCluster && point.stationIds[0] === selectedId;
-      const color = PROVIDER_MARKER_COLORS[point.provider] ?? PROVIDER_MARKER_COLORS.Other;
+      const color = CHARGING_PROVIDER_META[point.provider as ChargingProvider]?.markerColor ?? "#94a3b8";
 
       const marker = new g.maps.Marker({
         position: { lat: point.lat, lng: point.lng },

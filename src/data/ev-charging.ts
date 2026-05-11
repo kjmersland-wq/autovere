@@ -20,6 +20,7 @@ export interface ChargingProviderMeta {
   badgeClass: string;
   tintClass: string;
   focus: string;
+  markerColor: string;
 }
 
 export interface ChargingStation {
@@ -50,72 +51,84 @@ export const CHARGING_PROVIDER_META: Record<ChargingProvider, ChargingProviderMe
     badgeClass: "text-red-400 bg-red-400/10 border-red-400/20",
     tintClass: "from-red-500/15 to-red-500/0",
     focus: "Dense motorway and urban Supercharger backbone",
+    markerColor: "#ef4444",
   },
   Ionity: {
     provider: "Ionity",
     badgeClass: "text-blue-400 bg-blue-400/10 border-blue-400/20",
     tintClass: "from-blue-500/15 to-blue-500/0",
     focus: "Premium high-power motorway stops",
+    markerColor: "#60a5fa",
   },
   Recharge: {
     provider: "Recharge",
     badgeClass: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
     tintClass: "from-emerald-500/15 to-emerald-500/0",
     focus: "Scandinavian everyday fast charging coverage",
+    markerColor: "#34d399",
   },
   "Circle K": {
     provider: "Circle K",
     badgeClass: "text-orange-400 bg-orange-400/10 border-orange-400/20",
     tintClass: "from-orange-500/15 to-orange-500/0",
     focus: "Forecourt-based charging with food and facilities",
+    markerColor: "#fb923c",
   },
   Eviny: {
     provider: "Eviny",
     badgeClass: "text-cyan-400 bg-cyan-400/10 border-cyan-400/20",
     tintClass: "from-cyan-500/15 to-cyan-500/0",
     focus: "Western Norway urban and corridor charging",
+    markerColor: "#22d3ee",
   },
   "Uno-X": {
     provider: "Uno-X",
     badgeClass: "text-amber-400 bg-amber-400/10 border-amber-400/20",
     tintClass: "from-amber-500/15 to-amber-500/0",
     focus: "Norwegian corridor HPC build-out",
+    markerColor: "#facc15",
   },
   Mer: {
     provider: "Mer",
     badgeClass: "text-fuchsia-400 bg-fuchsia-400/10 border-fuchsia-400/20",
     tintClass: "from-fuchsia-500/15 to-fuchsia-500/0",
     focus: "Urban and destination charging across Norway",
+    markerColor: "#d946ef",
   },
   Kople: {
     provider: "Kople",
     badgeClass: "text-violet-400 bg-violet-400/10 border-violet-400/20",
     tintClass: "from-violet-500/15 to-violet-500/0",
     focus: "Local charging footprint across Norwegian cities",
+    markerColor: "#a78bfa",
   },
   Fastned: {
     provider: "Fastned",
     badgeClass: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
     tintClass: "from-yellow-500/15 to-yellow-500/0",
     focus: "Premium canopy-based HPC network",
+    markerColor: "#fcd34d",
   },
   Allego: {
     provider: "Allego",
     badgeClass: "text-lime-400 bg-lime-400/10 border-lime-400/20",
     tintClass: "from-lime-500/15 to-lime-500/0",
     focus: "Pan-European motorway and urban HPC",
+    markerColor: "#a3e635",
   },
   "E.ON": {
     provider: "E.ON",
     badgeClass: "text-teal-400 bg-teal-400/10 border-teal-400/20",
     tintClass: "from-teal-500/15 to-teal-500/0",
     focus: "Central European energy utility charging",
+    markerColor: "#2dd4bf",
   },
   "Shell Recharge": {
     provider: "Shell Recharge",
     badgeClass: "text-orange-300 bg-orange-300/10 border-orange-300/20",
     tintClass: "from-orange-400/15 to-orange-400/0",
     focus: "Forecourt-integrated European HPC",
+    markerColor: "#fdba74",
   },
 };
 
