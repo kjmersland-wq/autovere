@@ -72,7 +72,7 @@ type ClusterPoint = {
   lng: number;
   count: number;
   stationIds: number[];
-  provider: ChargingProvider | "Other";
+  provider: ChargingProvider;
 };
 
 function getGoogleMaps(): GoogleMapsLike | null {
@@ -260,7 +260,7 @@ export function GoogleChargingMap({
     clustered.forEach((point) => {
       const isCluster = point.count > 1;
       const isActive = !isCluster && point.stationIds[0] === selectedId;
-      const color = CHARGING_PROVIDER_META[point.provider as ChargingProvider]?.markerColor ?? "#94a3b8";
+      const color = CHARGING_PROVIDER_META[point.provider]?.markerColor ?? CHARGING_PROVIDER_META.Other.markerColor;
 
       const marker = new g.maps.Marker({
         position: { lat: point.lat, lng: point.lng },

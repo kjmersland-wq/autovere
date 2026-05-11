@@ -1,4 +1,5 @@
 export type ChargingProvider =
+  | "Other"
   | "Tesla"
   | "Ionity"
   | "Recharge"
@@ -46,6 +47,13 @@ export interface ChargingStation {
 }
 
 export const CHARGING_PROVIDER_META: Record<ChargingProvider, ChargingProviderMeta> = {
+  Other: {
+    provider: "Other",
+    badgeClass: "text-slate-300 bg-slate-400/10 border-slate-400/20",
+    tintClass: "from-slate-500/15 to-slate-500/0",
+    focus: "Independent or mixed operator infrastructure",
+    markerColor: "#94a3b8",
+  },
   Tesla: {
     provider: "Tesla",
     badgeClass: "text-red-400 bg-red-400/10 border-red-400/20",
