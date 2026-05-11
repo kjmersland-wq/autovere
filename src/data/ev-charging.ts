@@ -7,7 +7,10 @@ export type ChargingProvider =
   | "Uno-X"
   | "Mer"
   | "Kople"
-  | "Fastned";
+  | "Fastned"
+  | "Allego"
+  | "E.ON"
+  | "Shell Recharge";
 
 export type ChargingSpeed = "AC" | "DC" | "HPC";
 export type ChargingConnector = "CCS" | "CHAdeMO" | "Type 2" | "NACS";
@@ -95,6 +98,24 @@ export const CHARGING_PROVIDER_META: Record<ChargingProvider, ChargingProviderMe
     badgeClass: "text-yellow-400 bg-yellow-400/10 border-yellow-400/20",
     tintClass: "from-yellow-500/15 to-yellow-500/0",
     focus: "Premium canopy-based HPC network",
+  },
+  Allego: {
+    provider: "Allego",
+    badgeClass: "text-lime-400 bg-lime-400/10 border-lime-400/20",
+    tintClass: "from-lime-500/15 to-lime-500/0",
+    focus: "Pan-European motorway and urban HPC",
+  },
+  "E.ON": {
+    provider: "E.ON",
+    badgeClass: "text-teal-400 bg-teal-400/10 border-teal-400/20",
+    tintClass: "from-teal-500/15 to-teal-500/0",
+    focus: "Central European energy utility charging",
+  },
+  "Shell Recharge": {
+    provider: "Shell Recharge",
+    badgeClass: "text-orange-300 bg-orange-300/10 border-orange-300/20",
+    tintClass: "from-orange-400/15 to-orange-400/0",
+    focus: "Forecourt-integrated European HPC",
   },
 };
 
