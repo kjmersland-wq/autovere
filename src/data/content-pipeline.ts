@@ -108,6 +108,72 @@ export const TRUSTED_SOURCES: ContentSource[] = [
     requiresAuth: false,
   },
   {
+    id: "porsche-newsroom",
+    name: "Porsche Newsroom",
+    homepage: "https://newsroom.porsche.com/en.html",
+    format: "rss",
+    category: "oem-press",
+    trustScore: 95,
+    language: "en",
+    active: true,
+    requiresAuth: false,
+  },
+  {
+    id: "mercedes-media",
+    name: "Mercedes-Benz Group Media",
+    homepage: "https://media.mercedes-benz.com",
+    format: "rss",
+    category: "oem-press",
+    trustScore: 95,
+    language: "en",
+    active: true,
+    requiresAuth: false,
+  },
+  {
+    id: "volvo-media",
+    name: "Volvo Cars Media",
+    homepage: "https://www.media.volvocars.com/global/en-gb",
+    format: "html",
+    category: "oem-press",
+    trustScore: 94,
+    language: "en",
+    active: true,
+    requiresAuth: false,
+  },
+  {
+    id: "rivian-news",
+    name: "Rivian Newsroom",
+    homepage: "https://stories.rivian.com",
+    format: "html",
+    category: "oem-press",
+    trustScore: 91,
+    language: "en",
+    active: true,
+    requiresAuth: false,
+  },
+  {
+    id: "lucid-newsroom",
+    name: "Lucid Newsroom",
+    homepage: "https://lucidmotors.com/media-room",
+    format: "html",
+    category: "oem-press",
+    trustScore: 90,
+    language: "en",
+    active: true,
+    requiresAuth: false,
+  },
+  {
+    id: "recharge-news",
+    name: "Recharge Press",
+    homepage: "https://rechargeinfra.com/news",
+    format: "html",
+    category: "charging-network",
+    trustScore: 92,
+    language: "en",
+    active: true,
+    requiresAuth: false,
+  },
+  {
     id: "acea-press",
     name: "ACEA — European Automobile Manufacturers' Association",
     homepage: "https://www.acea.auto/news",
@@ -347,4 +413,50 @@ export interface MultilocaleContent {
   slug: string;
   canonical: LocalizedContentVariant;
   variants: Partial<Record<SupportedLocale, LocalizedContentVariant>>;
+}
+
+// ---------------------------------------------------------------------------
+// Live refresh cadence utilities
+// ---------------------------------------------------------------------------
+
+const CATEGORY_REFRESH_MINUTES: Record<SourceCategory, number> = {
+  "oem-press": 90,
+  "charging-network": 60,
+  "market-data": 180,
+  "industry-news": 120,
+  youtube: 240,
+  government: 240,
+  research: 360,
+};
+
+export interface SourceRefreshPlan {
+  sourceId: string;
+  nextRefreshAt: string;
+  urgency: "breaking" | "high" | "normal";
+}
+
+export function computeNextRefreshAt(source: ContentSource, now: Date = new Date()): string {
+  const baselineMinutes = CATEGORY_REFRESH_MINUTES[source.category] ?? 180;
+  const trustFactor = source.trustScore >= 95 ? 0.75 : source.trustScore >= 85 ? 0.9 : 1.15;
+  const rateLimitFactor = source.rateLimit?.requestsPerHour && source.rateLimit.requestsPerHour < 20 ? 1.3 : 1;
+  const minutes = Math.max(30, Math.round(baselineMinutes * trustFactor * rateLimitFactor));
+  return new Date(now.getTime() + minutes * 60_000).toISOString();
+}
+
+export function buildRefreshPlan(now: Date = new Date()): SourceRefreshPlan[] {
+  return getActiveSources()
+    .map((source) => {
+      const urgency: SourceRefreshPlan["urgency"] =
+        source.category === "charging-network" || source.category === "oem-press"
+          ? "breaking"
+          : source.category === "industry-news" || source.category === "market-data"
+            ? "high"
+            : "normal";
+      return {
+        sourceId: source.id,
+        nextRefreshAt: computeNextRefreshAt(source, now),
+        urgency,
+      };
+    })
+    .sort((a, b) => new Date(a.nextRefreshAt).getTime() - new Date(b.nextRefreshAt).getTime());
 }

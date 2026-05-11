@@ -11,6 +11,9 @@ export interface ArticleScore {
   ownershipImpact: number;
   europeanRelevance: number;
   longRangeRelevance: number;
+  infrastructureImportance: number;
+  marketSignificance: number;
+  breakingPriority: number;
 }
 
 const FRESHNESS_HALF_LIFE_DAYS = 90;
@@ -39,6 +42,9 @@ const OWNERSHIP_TAGS = ["tco", "depreciation", "ownership", "cost", "residual", 
 const EV_TAGS = ["ev", "electric", "battery", "range", "bev", "kwh", "wltp", "sodium", "degradation"];
 const EUROPEAN_TAGS = ["europe", "norway", "germany", "france", "eu", "nordic", "sweden", "uk", "netherlands", "european"];
 const LONG_RANGE_TAGS = ["range", "long-distance", "motorway", "highway", "route", "wltp", "real-world range", "efficiency"];
+const INFRASTRUCTURE_IMPORTANCE_TAGS = ["expansion", "rollout", "network", "uptime", "charger", "station", "supercharger", "ionity", "fastned", "recharge"];
+const MARKET_SIGNIFICANCE_TAGS = ["market", "sales", "pricing", "cost", "tariff", "grant", "subsidy", "depreciation", "residual", "adoption"];
+const BREAKING_TAGS = ["today", "breaking", "announced", "launch", "approved", "ban", "regulation", "expansion", "price change", "breakthrough"];
 
 function tagScore(tags: string[], targets: string[]): number {
   const lower = tags.map((t) => t.toLowerCase());
@@ -57,18 +63,37 @@ export function scoreArticle(article: ArticleData, now: Date = new Date()): Arti
   const ownershipImpact = Math.min(100, tagScore(article.tags, OWNERSHIP_TAGS) + (article.category === "ownership" ? 35 : 0));
   const europeanRelevance = Math.min(100, tagScore(article.tags, EUROPEAN_TAGS) + 20);
   const longRangeRelevance = tagScore(article.tags, LONG_RANGE_TAGS);
+  const infrastructureImportance = Math.min(100, tagScore(article.tags, INFRASTRUCTURE_IMPORTANCE_TAGS) + article.relatedNetworks.length * 22);
+  const marketSignificance = Math.min(100, tagScore(article.tags, MARKET_SIGNIFICANCE_TAGS) + (article.category === "market" ? 24 : 0));
+  const breakingPriority = Math.min(100, Math.round(freshness * 0.65 + tagScore(article.tags, BREAKING_TAGS) * 0.35));
 
   const total = Math.round(
-    freshness * 0.22 +
-    trending * 0.18 +
-    evRelevance * 0.18 +
-    europeanRelevance * 0.12 +
-    chargingRelevance * 0.10 +
-    ownershipImpact * 0.10 +
-    (winterRelevance + longRangeRelevance) * 0.05
+    freshness * 0.19 +
+    trending * 0.14 +
+    evRelevance * 0.14 +
+    europeanRelevance * 0.10 +
+    chargingRelevance * 0.09 +
+    ownershipImpact * 0.08 +
+    infrastructureImportance * 0.11 +
+    marketSignificance * 0.10 +
+    breakingPriority * 0.05
   );
 
-  return { slug: article.slug, total, freshness, trending, evRelevance, winterRelevance, chargingRelevance, ownershipImpact, europeanRelevance, longRangeRelevance };
+  return {
+    slug: article.slug,
+    total,
+    freshness,
+    trending,
+    evRelevance,
+    winterRelevance,
+    chargingRelevance,
+    ownershipImpact,
+    europeanRelevance,
+    longRangeRelevance,
+    infrastructureImportance,
+    marketSignificance,
+    breakingPriority,
+  };
 }
 
 export function rankArticles(

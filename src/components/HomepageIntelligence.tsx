@@ -5,6 +5,7 @@ import { ArticleCard } from "@/components/ArticleCard";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import { ARTICLES } from "@/data/articles";
 import { buildHomepageSections } from "@/lib/content-ranking";
+import { enrichArticlesWithResolvedMedia } from "@/lib/editorial-media";
 
 type SignalTab = "trending" | "charging" | "ownership" | "winter" | "longrange";
 
@@ -22,7 +23,7 @@ export function HomepageIntelligence() {
   const L = (p: string) => localizePath(p, lang);
   const [activeTab, setActiveTab] = useState<SignalTab>("trending");
 
-  const sections = useMemo(() => buildHomepageSections(ARTICLES), []);
+  const sections = useMemo(() => buildHomepageSections(enrichArticlesWithResolvedMedia(ARTICLES)), []);
 
   const tabArticles: Record<SignalTab, typeof ARTICLES> = {
     trending: sections.trending,

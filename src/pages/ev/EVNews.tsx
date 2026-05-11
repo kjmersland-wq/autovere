@@ -11,6 +11,7 @@ import {
   type ArticleCategory,
 } from "@/data/articles";
 import { rankArticles } from "@/lib/content-ranking";
+import { enrichArticlesWithResolvedMedia } from "@/lib/editorial-media";
 
 const CATEGORIES: { value: ArticleCategory | "all"; label: string }[] = [
   { value: "all", label: "All Intelligence" },
@@ -30,7 +31,7 @@ export default function EVNews() {
 
   // Rank by composite score (freshness × relevance × trending) not just date
   const sorted = useMemo(
-    () => rankArticles(ARTICLES, "total").map((r) => r.article),
+    () => enrichArticlesWithResolvedMedia(rankArticles(ARTICLES, "total").map((r) => r.article)),
     []
   );
 

@@ -29,6 +29,7 @@ export function ArticleCard({ article, featured = false, showWhyItMatters = fals
           media={article.media}
           aspectClass="aspect-[16/7]"
           showAttribution
+          variant="card"
         />
         <div className="p-8">
           <div className="flex items-center gap-3 mb-4">
@@ -68,7 +69,7 @@ export function ArticleCard({ article, featured = false, showWhyItMatters = fals
       to={href}
       className="group glass rounded-2xl border border-border/40 hover:border-border/70 transition-all duration-300 overflow-hidden hover:-translate-y-0.5 flex flex-col"
     >
-      <MediaImage media={article.media} aspectClass="aspect-[16/9]" showAttribution />
+      <MediaImage media={article.media} aspectClass="aspect-[16/9]" showAttribution variant="card" />
       <div className="p-5 flex flex-col flex-1">
         <div className="flex items-center gap-2 mb-3">
           <span className={`text-[9px] uppercase tracking-wider px-2 py-0.5 rounded-full border font-medium ${categoryColor}`}>

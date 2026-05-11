@@ -12,6 +12,13 @@ export interface MediaAttribution {
   url: string;
   alt: string;
   gradient?: string;
+  thumbnailUrl?: string;
+  heroUrl?: string;
+  ogImageUrl?: string;
+  sourceUrl?: string;
+  attribution?: string;
+  fallbackStatus?: "matched" | "generic-fallback" | "gradient-fallback";
+  imageId?: string;
 }
 
 export interface ArticleData {

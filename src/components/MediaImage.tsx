@@ -6,6 +6,7 @@ interface MediaImageProps {
   className?: string;
   aspectClass?: string;
   showAttribution?: boolean;
+  variant?: "hero" | "card";
 }
 
 export function MediaImage({
@@ -13,25 +14,28 @@ export function MediaImage({
   className = "",
   aspectClass = "aspect-[16/9]",
   showAttribution = false,
+  variant = "card",
 }: MediaImageProps) {
-  const [failed, setFailed] = useState(!media.url);
+  const resolvedUrl = variant === "hero" ? (media.heroUrl ?? media.url) : (media.thumbnailUrl ?? media.url);
+  const [failed, setFailed] = useState(!resolvedUrl);
   const [loaded, setLoaded] = useState(false);
   const gradient = media.gradient ?? "from-slate-900 to-slate-800";
   const fallbackGridColor = "hsl(var(--foreground) / 0.18)";
 
   useEffect(() => {
-    setFailed(!media.url);
+    setFailed(!resolvedUrl);
     setLoaded(false);
-  }, [media.url]);
+  }, [resolvedUrl]);
 
   return (
     <div className={`relative overflow-hidden ${aspectClass} ${className}`}>
-      {!failed && media.url ? (
+      {!failed && resolvedUrl ? (
         <>
           <img
-            src={media.url}
+            src={resolvedUrl}
             alt={media.alt}
-            loading="lazy"
+            loading={variant === "hero" ? "eager" : "lazy"}
+            fetchPriority={variant === "hero" ? "high" : "auto"}
             className={`absolute inset-0 w-full h-full object-cover transition-all duration-700 ${
               loaded ? "opacity-100 scale-100" : "opacity-0 scale-[1.02]"
             }`}
