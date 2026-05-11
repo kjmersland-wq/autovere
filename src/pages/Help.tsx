@@ -42,20 +42,23 @@ const FAQ_ITEMS = [
 
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
+  const id = `faq-${q.slice(0, 20).replace(/\W+/g, "-").toLowerCase()}`;
   return (
     <div className="border-b border-border/30 last:border-0">
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center justify-between py-5 text-left gap-4 group"
         aria-expanded={open}
+        aria-controls={id}
       >
         <span className="font-medium leading-snug group-hover:text-accent transition-colors">{q}</span>
         <ChevronDown
           className={`w-4 h-4 text-muted-foreground flex-shrink-0 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          aria-hidden="true"
         />
       </button>
       {open && (
-        <p className="pb-5 text-sm text-muted-foreground leading-relaxed">{a}</p>
+        <p id={id} className="pb-5 text-sm text-muted-foreground leading-relaxed">{a}</p>
       )}
     </div>
   );

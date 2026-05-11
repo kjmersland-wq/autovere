@@ -180,7 +180,12 @@ export default function EVHub() {
       {/* Live data ticker strip */}
       <div className="border-y border-border/30 bg-card/20 overflow-hidden">
         <div className="container py-3">
-          <div className="flex items-center gap-6 overflow-x-auto scrollbar-hide text-xs text-muted-foreground">
+          <div
+            className="flex items-center gap-6 overflow-x-auto scrollbar-hide text-xs text-muted-foreground"
+            role="region"
+            aria-label="Live EV data"
+            tabIndex={0}
+          >
             <span className="inline-flex items-center gap-1.5 text-cyan-400 font-medium flex-shrink-0">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" /> LIVE DATA
             </span>
