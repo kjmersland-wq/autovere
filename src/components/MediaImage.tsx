@@ -17,7 +17,7 @@ export function MediaImage({
   const [failed, setFailed] = useState(!media.url);
   const [loaded, setLoaded] = useState(false);
   const gradient = media.gradient ?? "from-slate-900 to-slate-800";
-  const fallbackGridColor = "hsl(232 50% 80% / 1)";
+  const fallbackGridColor = "hsl(var(--foreground) / 0.18)";
 
   useEffect(() => {
     setFailed(!media.url);
