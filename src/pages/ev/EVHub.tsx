@@ -244,20 +244,20 @@ export default function EVHub() {
               </div>
               <div className="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
                 {group.items.map((path) => {
-                  const m = MODULES.find((module) => module.to === path);
-                  if (!m) return null;
+                  const module = MODULES.find((entry) => entry.to === path);
+                  if (!module) return null;
                   return (
                     <Link
-                      key={m.to}
-                      to={L(m.to)}
-                      className={`group glass rounded-3xl p-7 border ${m.border} bg-gradient-to-br ${m.color} hover:-translate-y-1 transition-all duration-300`}
+                      key={module.to}
+                      to={L(module.to)}
+                      className={`group glass rounded-3xl p-7 border ${module.border} bg-gradient-to-br ${module.color} hover:-translate-y-1 transition-all duration-300`}
                     >
-                      <div className={`w-10 h-10 rounded-xl bg-card flex items-center justify-center mb-5 ${m.iconColor}`}>
-                        <m.icon className="w-5 h-5" />
+                      <div className={`w-10 h-10 rounded-xl bg-card flex items-center justify-center mb-5 ${module.iconColor}`}>
+                        <module.icon className="w-5 h-5" />
                       </div>
-                      <h3 className="font-semibold text-lg mb-2">{m.label}</h3>
-                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{m.desc}</p>
-                      <span className={`inline-flex items-center gap-1 text-xs font-medium ${m.iconColor}`}>
+                      <h3 className="font-semibold text-lg mb-2">{module.label}</h3>
+                      <p className="text-sm text-muted-foreground leading-relaxed mb-4">{module.desc}</p>
+                      <span className={`inline-flex items-center gap-1 text-xs font-medium ${module.iconColor}`}>
                         Explore <ChevronRight className="w-3.5 h-3.5" />
                       </span>
                     </Link>

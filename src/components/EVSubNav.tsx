@@ -1,7 +1,6 @@
 import { NavLink, useLocation } from "react-router-dom";
-import { detectLangFromPath, localizePath } from "@/i18n/routing";
+import { detectLangFromPath, localizePath, stripLocalizedPath } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
-import { DEFAULT_LANG } from "@/i18n/config";
 
 type NavItem = {
   label: string;
@@ -23,18 +22,10 @@ const NAV_ITEMS: NavItem[] = [
   { label: "Markets", to: "/ev/markets" },
 ];
 
-const stripLocalePrefix = (pathname: string) => {
-  const lang = detectLangFromPath(pathname);
-  const localizedRoot = lang === DEFAULT_LANG ? "" : `/${lang}`;
-  return localizedRoot && pathname.startsWith(localizedRoot)
-    ? pathname.slice(localizedRoot.length) || "/"
-    : pathname;
-};
-
 export function EVSubNav() {
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
-  const normalizedPath = stripLocalePrefix(pathname);
+  const normalizedPath = stripLocalizedPath(pathname);
 
   return (
     <div className="fixed inset-x-0 top-20 z-40">

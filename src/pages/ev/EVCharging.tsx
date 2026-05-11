@@ -40,7 +40,7 @@ const CONNECTORS: ConnectorFilter[] = ["All", "CCS", "CHAdeMO", "Type 2", "NACS"
 const NORWAY_LAT = { min: 58.4, max: 63.8 };
 const NORWAY_LNG = { min: 5.0, max: 11.4 };
 
-const getMapPosition = (station: ChargingStation) => {
+const calculateStationMapPosition = (station: ChargingStation) => {
   const left = ((station.coordinates.lng - NORWAY_LNG.min) / (NORWAY_LNG.max - NORWAY_LNG.min)) * 100;
   const top = 100 - ((station.coordinates.lat - NORWAY_LAT.min) / (NORWAY_LAT.max - NORWAY_LAT.min)) * 100;
   return {
@@ -83,7 +83,7 @@ function StationMapPreview({
 
         {stations.map((station) => {
           const meta = CHARGING_PROVIDER_META[station.provider];
-          const position = getMapPosition(station);
+          const position = calculateStationMapPosition(station);
           const selected = station.id === selectedId;
           return (
             <button

@@ -40,16 +40,18 @@ const FAQ_ITEMS = [
   },
 ];
 
+const FAQ_ID_MAX_LENGTH = 20;
+
 function FaqItem({ q, a }: { q: string; a: string }) {
   const [open, setOpen] = useState(false);
-  const id = `faq-${q.slice(0, 20).replace(/\W+/g, "-").toLowerCase()}`;
+  const faqItemId = `faq-${q.slice(0, FAQ_ID_MAX_LENGTH).replace(/\W+/g, "-").toLowerCase()}`;
   return (
     <div className="border-b border-border/30 last:border-0">
       <button
         onClick={() => setOpen((v) => !v)}
         className="w-full flex items-center justify-between py-5 text-left gap-4 group"
         aria-expanded={open}
-        aria-controls={id}
+        aria-controls={faqItemId}
       >
         <span className="font-medium leading-snug group-hover:text-accent transition-colors">{q}</span>
         <ChevronDown
@@ -58,7 +60,7 @@ function FaqItem({ q, a }: { q: string; a: string }) {
         />
       </button>
       {open && (
-        <p id={id} className="pb-5 text-sm text-muted-foreground leading-relaxed">{a}</p>
+        <p id={faqItemId} className="pb-5 text-sm text-muted-foreground leading-relaxed">{a}</p>
       )}
     </div>
   );

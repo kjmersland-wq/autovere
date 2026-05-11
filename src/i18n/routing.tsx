@@ -27,6 +27,14 @@ export const localizePath = (path: string, lang: Lang): string => {
   return lang === DEFAULT_LANG ? clean : `/${lang}${clean}`;
 };
 
+export const stripLocalizedPath = (pathname: string): string => {
+  const lang = detectLangFromPath(pathname);
+  const localizedPrefix = lang === DEFAULT_LANG ? "" : `/${lang}`;
+  return localizedPrefix && pathname.startsWith(localizedPrefix)
+    ? pathname.slice(localizedPrefix.length) || "/"
+    : pathname;
+};
+
 type LLinkProps = Omit<LinkProps, "to"> & { to: string };
 
 export const LLink = forwardRef<HTMLAnchorElement, LLinkProps>(({ to, ...rest }, ref) => {
