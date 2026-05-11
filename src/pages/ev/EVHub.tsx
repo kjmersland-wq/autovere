@@ -116,12 +116,12 @@ const STATS = [
 ];
 
 const FEATURED_EVS = [
-  { name: "Polestar 3", range: "631 km", origin: "Sweden", tag: "Long-range SUV", slug: "polestar-3", accent: "from-slate-800/60 to-blue-900/40", border: "border-blue-500/20" },
-  { name: "Tesla Model Y", range: "533 km", origin: "USA", tag: "Best seller", slug: "tesla-model-y", accent: "from-slate-900/60 to-red-900/30", border: "border-red-500/20" },
-  { name: "BMW iX", range: "630 km", origin: "Germany", tag: "Luxury flagship", slug: "bmw-ix", accent: "from-zinc-900/60 to-blue-900/30", border: "border-sky-500/20" },
-  { name: "Volvo EX90", range: "580 km", origin: "Sweden", tag: "Family SUV", slug: "volvo-ex90", accent: "from-slate-800/60 to-teal-900/30", border: "border-teal-500/20" },
-  { name: "Hyundai IONIQ 6", range: "614 km", origin: "Korea", tag: "Efficiency leader", slug: "hyundai-ioniq6", accent: "from-slate-900/60 to-cyan-900/40", border: "border-cyan-500/20" },
-  { name: "Mercedes EQS", range: "770 km", origin: "Germany", tag: "Ultra-range saloon", slug: "mercedes-eqs", accent: "from-zinc-900/60 to-indigo-900/30", border: "border-violet-500/20" },
+  { name: "Polestar 3", range: "631 km", origin: "Sweden", tag: "Long-range SUV", slug: "polestar-3", strip: "from-slate-700 to-blue-800", border: "border-blue-500/20" },
+  { name: "Tesla Model Y", range: "533 km", origin: "USA", tag: "Best seller", slug: "tesla-model-y", strip: "from-slate-700 to-red-800", border: "border-red-500/20" },
+  { name: "BMW iX", range: "630 km", origin: "Germany", tag: "Luxury flagship", slug: "bmw-ix", strip: "from-zinc-700 to-blue-800", border: "border-sky-500/20" },
+  { name: "Volvo EX90", range: "580 km", origin: "Sweden", tag: "Family SUV", slug: "volvo-ex90", strip: "from-slate-700 to-teal-800", border: "border-teal-500/20" },
+  { name: "Hyundai IONIQ 6", range: "614 km", origin: "Korea", tag: "Efficiency leader", slug: "hyundai-ioniq6", strip: "from-slate-700 to-cyan-800", border: "border-cyan-500/20" },
+  { name: "Mercedes EQS", range: "770 km", origin: "Germany", tag: "Ultra-range saloon", slug: "mercedes-eqs", strip: "from-zinc-700 to-indigo-800", border: "border-violet-500/20" },
 ];
 
 export default function EVHub() {
@@ -266,7 +266,7 @@ export default function EVHub() {
               className={`group glass rounded-2xl border ${ev.border} hover:border-opacity-60 transition-all duration-300 hover:-translate-y-1 overflow-hidden`}
             >
               {/* Brand colour strip */}
-              <div className={`h-1.5 w-full bg-gradient-to-r ${ev.accent.replace("from-", "from-").replace("/60", "").replace("/40", "").replace("/30", "")}`} />
+              <div className={`h-1.5 w-full bg-gradient-to-r ${ev.strip}`} />
               <div className="p-6">
                 <div className="flex items-start justify-between mb-4">
                   <div>

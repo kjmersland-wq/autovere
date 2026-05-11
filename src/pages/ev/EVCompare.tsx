@@ -19,7 +19,6 @@ function ScoreBar({ value, max = 100, color }: { value: number; max?: number; co
       <div
         className={`h-full rounded-full transition-all duration-700 ${color}`}
         style={{ width: `${width}%` }}
-        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
     </div>
   );
@@ -212,6 +211,7 @@ export default function EVCompare() {
       <SEO
         title="EV Comparison Engine — Best European EVs Compared | AUTOVERE"
         description="Compare Tesla Model Y, Porsche Macan EV, BMW i5, Audi Q6 e-tron, Kia EV9, Hyundai Ioniq 5 and more. Real-world range, charging speed, winter performance and ownership cost."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}
