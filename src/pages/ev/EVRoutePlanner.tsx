@@ -110,6 +110,7 @@ export default function EVRoutePlanner() {
       <SEO
         title="EV Route Planner Europe | AUTOVERE"
         description="Plan long-distance EV trips across Europe. Get charging stops, costs and travel time estimates for your electric vehicle."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}

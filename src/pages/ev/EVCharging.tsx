@@ -74,6 +74,7 @@ export default function EVCharging() {
       <SEO
         title="EV Charging Map Europe | AUTOVERE"
         description="Find Tesla Superchargers, Ionity, Fastned and all major EV charging networks across Europe. Filter by speed, connector and provider."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}

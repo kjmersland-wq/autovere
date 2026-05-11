@@ -45,6 +45,7 @@ export function EVModelsIndex() {
       <SEO
         title="EV Models — European Buyer's Guide | AUTOVERE"
         description="In-depth pages for every major European EV. Real-world range, charging data, winter performance and pricing by country."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/20 pointer-events-none" />
@@ -113,11 +114,14 @@ export default function EVModelDetail() {
       <SEO
         title={`${model.name} Review — Real-World EV Guide | AUTOVERE`}
         description={`${model.name} honest review: ${model.specs.range.realWorld} km real-world range, ${model.specs.charging.maxDC} kW DC charging, winter performance and ownership analysis.`}
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/20 pointer-events-none" />
+        {/* Brand colour glow */}
+        <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-primary opacity-60" />
         <div className="container relative">
           <Link to={L("/ev/models")} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-6 transition-colors">
             <ChevronLeft className="w-3.5 h-3.5" /> All EV models
@@ -132,15 +136,15 @@ export default function EVModelDetail() {
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed mb-8">{model.tagline}</p>
 
           {/* Key stats bar */}
-          <div className="flex flex-wrap gap-4">
+          <div className="flex flex-wrap gap-3">
             {[
-              { label: "Real range", value: `${model.specs.range.realWorld} km`, color: "text-foreground" },
-              { label: "Winter range", value: `${model.specs.range.winter} km`, color: "text-cyan-400" },
-              { label: "Max DC", value: `${model.specs.charging.maxDC} kW`, color: "text-emerald-400" },
-              { label: "10–80%", value: `${model.specs.charging.time10to80} min`, color: "text-amber-400" },
-              { label: "0–100 km/h", value: `${model.specs.performance.zeroTo100}s`, color: "text-violet-400" },
+              { label: "Real range", value: `${model.specs.range.realWorld} km`, color: "text-foreground", bg: "bg-card/60" },
+              { label: "Winter range", value: `${model.specs.range.winter} km`, color: "text-cyan-400", bg: "bg-cyan-500/5" },
+              { label: "Max DC", value: `${model.specs.charging.maxDC} kW`, color: "text-emerald-400", bg: "bg-emerald-500/5" },
+              { label: "10–80%", value: `${model.specs.charging.time10to80} min`, color: "text-amber-400", bg: "bg-amber-500/5" },
+              { label: "0–100 km/h", value: `${model.specs.performance.zeroTo100}s`, color: "text-violet-400", bg: "bg-violet-500/5" },
             ].map((s) => (
-              <div key={s.label} className="glass rounded-xl border border-border/40 px-5 py-3 text-center">
+              <div key={s.label} className={`glass rounded-xl border border-border/40 px-5 py-3 text-center ${s.bg}`}>
                 <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
                 <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">{s.label}</div>
               </div>

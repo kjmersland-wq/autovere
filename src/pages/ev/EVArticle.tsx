@@ -58,6 +58,7 @@ export default function EVArticle() {
         title={`${article.title} | AUTOVERE EV Intelligence`}
         description={article.summary}
         type="article"
+        image="https://autovere.com/og-autovere-1200x630.jpg"
         jsonLd={jsonLd}
       />
 

@@ -24,6 +24,7 @@ export function EVNetworksIndex() {
       <SEO
         title="EV Charging Networks in Europe | AUTOVERE"
         description="Compare Tesla Supercharger, Ionity, Fastned, Recharge and Allego. Speeds, pricing, coverage and compatibility for every major European charging network."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/20 pointer-events-none" />

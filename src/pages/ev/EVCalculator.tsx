@@ -90,6 +90,7 @@ export default function EVCalculator() {
       <SEO
         title="EV Charging Cost Calculator | AUTOVERE"
         description="Calculate exactly what it costs to charge your EV in Europe. Compare home vs public charging and see your savings vs petrol."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       {/* Hero */}

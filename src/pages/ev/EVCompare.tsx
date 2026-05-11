@@ -19,6 +19,7 @@ function ScoreBar({ value, max = 100, color }: { value: number; max?: number; co
       <div
         className={`h-full rounded-full transition-all duration-700 ${color}`}
         style={{ width: `${width}%` }}
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
     </div>
   );

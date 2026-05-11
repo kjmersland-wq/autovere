@@ -55,6 +55,7 @@ export default function EVNews() {
       <SEO
         title="EV Intelligence — Market, Technology & Infrastructure Analysis | AUTOVERE"
         description="Expert EV analysis: charging infrastructure, battery technology, European market data and ownership intelligence. No hype — real data."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
         jsonLd={jsonLd}
       />
 

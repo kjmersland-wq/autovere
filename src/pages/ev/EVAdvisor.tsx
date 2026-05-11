@@ -295,6 +295,7 @@ export default function EVAdvisor() {
       <SEO
         title="EV Buying Advisor — Find Your Perfect EV | AUTOVERE"
         description="Answer 7 questions and get personalised EV recommendations matched to your budget, climate, family size and driving habits. European EVs compared honestly."
+        image="https://autovere.com/og-autovere-1200x630.jpg"
       />
 
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">

@@ -124,7 +124,8 @@ function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: Re
             allow="autoplay; fullscreen"
             className="w-full h-full"
             title={title}
-          />
+            image="https://autovere.com/og-autovere-1200x630.jpg"
+      />
         ) : (
           <>
             <img
