@@ -50,6 +50,12 @@ const de: Translation = {
     test_mode: "Alle Zahlungen in der Vorschau erfolgen im Testmodus.",
     read_more: "Mehr erfahren",
   },
+  cookies: {
+    message: "Wir verwenden essentielle Cookies für Authentifizierung und Analysen, um dein Erlebnis zu verbessern.",
+    accept: "Akzeptieren",
+    decline: "Ablehnen",
+    learn_more: "Cookie-Richtlinie",
+  },
   region: { label: "Erfahrung anpassen an", aria: "Region" },
   language: { label: "Sprache" },
   common: {

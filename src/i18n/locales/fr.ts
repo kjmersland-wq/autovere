@@ -50,6 +50,12 @@ const fr: Translation = {
     test_mode: "Tous les paiements en aperçu sont en mode test.",
     read_more: "En savoir plus",
   },
+  cookies: {
+    message: "Nous utilisons des cookies essentiels pour l’authentification et l’analyse afin d’améliorer votre expérience.",
+    accept: "Accepter",
+    decline: "Refuser",
+    learn_more: "Politique des cookies",
+  },
   region: { label: "Adapter l’expérience à", aria: "Région" },
   language: { label: "Langue" },
   common: {

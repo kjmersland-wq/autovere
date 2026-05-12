@@ -61,6 +61,17 @@ async function handleSubscriptionDeleted(subscription: Stripe.Subscription, env:
     .eq('environment', env);
 }
 
+async function handleInvoicePaymentFailed(invoice: Stripe.Invoice, env: string) {
+  const subscriptionId = typeof invoice.subscription === 'string'
+    ? invoice.subscription
+    : (invoice.subscription as Stripe.Subscription)?.id;
+  if (!subscriptionId) { console.error('[webhook] invoice.payment_failed: no subscription id'); return; }
+  await getSupabase().from('subscriptions')
+    .update({ status: 'past_due', updated_at: new Date().toISOString() })
+    .eq('stripe_subscription_id', subscriptionId)
+    .eq('environment', env);
+}
+
 Deno.serve(async (req) => {
   if (req.method !== 'POST') return new Response('Method not allowed', { status: 405 });
   const env = getStripeEnvironment();
@@ -74,6 +85,8 @@ Deno.serve(async (req) => {
         await handleSubscriptionUpsert(event.data.object as Stripe.Subscription, env); break;
       case 'customer.subscription.deleted':
         await handleSubscriptionDeleted(event.data.object as Stripe.Subscription, env); break;
+      case 'invoice.payment_failed':
+        await handleInvoicePaymentFailed(event.data.object as Stripe.Invoice, env); break;
       default:
         console.log('Unhandled event:', event.type);
     }

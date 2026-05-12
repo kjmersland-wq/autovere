@@ -50,6 +50,12 @@ const no: Translation = {
     test_mode: "Alle betalinger i forhåndsvisningen kjøres i testmodus.",
     read_more: "Les mer",
   },
+  cookies: {
+    message: "Vi bruker viktige informasjonskapsler for autentisering og analyse for å forbedre opplevelsen din.",
+    accept: "Godta",
+    decline: "Avslå",
+    learn_more: "Cookie-policy",
+  },
   region: { label: "Tilpass opplevelsen til", aria: "Region" },
   language: { label: "Språk" },
   common: {

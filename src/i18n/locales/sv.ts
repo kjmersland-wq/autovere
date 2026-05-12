@@ -50,6 +50,12 @@ const sv: Translation = {
     test_mode: "Alla betalningar i förhandsvisningen sker i testläge.",
     read_more: "Läs mer",
   },
+  cookies: {
+    message: "Vi använder nödvändiga cookies för autentisering och analys för att förbättra din upplevelse.",
+    accept: "Acceptera",
+    decline: "Avvisa",
+    learn_more: "Cookie-policy",
+  },
   region: { label: "Anpassa upplevelsen efter", aria: "Region" },
   language: { label: "Språk" },
   common: {

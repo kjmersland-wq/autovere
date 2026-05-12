@@ -9,6 +9,7 @@ import "./i18n/config";
 import { LangSync } from "./i18n/LangSync";
 import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import { CookieConsent } from "./components/CookieConsent";
 
 // Eagerly loaded — critical path
 import Index from "./pages/Index.tsx";
@@ -163,6 +164,7 @@ const App = () => (
           <ScrollManager />
           <LangSync />
           <PaymentTestModeBanner />
+          <CookieConsent />
           <Routes>
             {/* Localized routes — same tree mounted under each language prefix */}
             <Route path="/en/*" element={<AppRoutes />} />

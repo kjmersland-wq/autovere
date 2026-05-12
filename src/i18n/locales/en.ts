@@ -48,6 +48,12 @@ const en = {
     test_mode: "All payments made in the preview are in test mode.",
     read_more: "Read more",
   },
+  cookies: {
+    message: "We use essential cookies for authentication and analytics to improve your experience.",
+    accept: "Accept",
+    decline: "Decline",
+    learn_more: "Cookie Policy",
+  },
   region: { label: "Tailor experience to", aria: "Region" },
   language: { label: "Language" },
   common: {

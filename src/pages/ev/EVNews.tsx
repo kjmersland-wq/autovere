@@ -57,6 +57,7 @@ export default function EVNews() {
       <SEO
         title={t("ev.news.seo_title")}
         description={t("ev.news.seo_desc")}
+        image="https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=80"
         jsonLd={jsonLd}
       />
 
