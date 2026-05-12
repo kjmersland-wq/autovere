@@ -1,5 +1,6 @@
 import { useParams, Link, useLocation } from "react-router-dom";
-import { ArrowLeft, Clock, Lightbulb, Tag, ChevronRight } from "lucide-react";
+import { Clock, Lightbulb, Tag, ChevronRight, Share2, Link2, Check } from "lucide-react";
+import { useState } from "react";
 import { EVBreadcrumb } from "@/components/EVBreadcrumb";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
@@ -24,6 +25,7 @@ export default function EVArticle() {
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
+  const [copied, setCopied] = useState(false);
 
   const article = ARTICLES.find((a) => a.slug === slug);
 
@@ -64,6 +66,7 @@ export default function EVArticle() {
         title={`${article.title} | AUTOVERE EV Intelligence`}
         description={article.summary}
         type="article"
+        image={resolveArticleImage(article, 1200)}
         jsonLd={jsonLd}
       />
 
@@ -126,7 +129,7 @@ export default function EVArticle() {
               ))}
             </div>
 
-            <div className="flex flex-wrap items-center gap-2 mb-10 pb-10 border-b border-border/30">
+            <div className="flex flex-wrap items-center gap-2 mb-6">
               <Tag className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
               {article.tags.map((tag) => (
                 <span
@@ -136,6 +139,41 @@ export default function EVArticle() {
                   {tag}
                 </span>
               ))}
+            </div>
+
+            {/* Share bar */}
+            <div className="flex items-center gap-3 mb-10 pb-10 border-b border-border/30">
+              <Share2 className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+              <span className="text-xs text-muted-foreground mr-1">Share</span>
+              <a
+                href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Share on X (Twitter)"
+                className="text-[10px] glass border border-border/40 rounded-full px-2.5 py-1 text-muted-foreground hover:text-foreground hover:border-border/70 transition-colors"
+              >
+                X / Twitter
+              </a>
+              <a
+                href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Share on LinkedIn"
+                className="text-[10px] glass border border-border/40 rounded-full px-2.5 py-1 text-muted-foreground hover:text-foreground hover:border-border/70 transition-colors"
+              >
+                LinkedIn
+              </a>
+              <button
+                onClick={() => {
+                  navigator.clipboard.writeText(window.location.href);
+                  setCopied(true);
+                  setTimeout(() => setCopied(false), 2000);
+                }}
+                aria-label="Copy link"
+                className="text-[10px] glass border border-border/40 rounded-full px-2.5 py-1 text-muted-foreground hover:text-foreground hover:border-border/70 transition-colors inline-flex items-center gap-1"
+              >
+                {copied ? <><Check className="w-3 h-3 text-accent" /> Copied</> : <><Link2 className="w-3 h-3" /> Copy link</>}
+              </button>
             </div>
 
             {intelligence && (

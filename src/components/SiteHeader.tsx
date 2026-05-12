@@ -63,7 +63,7 @@ export const SiteHeader = () => {
     { to: "/ev/database", label: t("ev.nav.database"), icon: Database },
     { to: "/ev/compare", label: t("ev.nav.compare"), icon: GitCompare },
     { to: "/ev/charging", label: t("ev.nav.charging"), icon: Map },
-    { to: "/ev/networks", label: "Networks", icon: Wifi },
+    { to: "/ev/networks", label: t("ev.nav.networks"), icon: Wifi },
     { to: "/ev/route-planner", label: t("ev.nav.planner"), icon: Route },
     { to: "/ev/calculator", label: t("ev.nav.calculator"), icon: Calculator },
     { to: "/ev/advisor", label: t("ev.nav.advisor"), icon: Brain },
@@ -137,7 +137,8 @@ export const SiteHeader = () => {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden w-9 h-9 rounded-lg glass border border-border/40 flex items-center justify-center"
-              aria-label="Toggle menu"
+              aria-label={t("ev.nav.toggle_menu")}
+              aria-expanded={mobileOpen}
             >
               {mobileOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
             </button>

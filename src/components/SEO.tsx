@@ -71,6 +71,7 @@ export const SEO = ({ title, description, canonical, image, type = "website", js
 
     const path = typeof window !== "undefined" ? window.location.pathname : "/";
     const lang = detectLangFromPath(path);
+    document.documentElement.lang = lang;
     const canonicalUrl = canonical || buildLocalized(path, lang);
     setLink("canonical", canonicalUrl);
     setMeta('meta[property="og:url"]', "content", canonicalUrl);
