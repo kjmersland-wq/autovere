@@ -8,6 +8,7 @@ import { Personality } from "@/components/Personality";
 import { SEO } from "@/components/SEO";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { EVNavProvider } from "@/contexts/EVNavContext";
 import { CarCard } from "@/components/CarCard";
 import { HomepageIntelligence } from "@/components/HomepageIntelligence";
 import { SignalFeedCompact } from "@/components/SignalFeed";
@@ -85,6 +86,7 @@ const Index = () => {
   ];
 
   return (
+    <EVNavProvider>
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden">
       <SEO
         title={t("pages.index.seo_title")}
@@ -408,6 +410,7 @@ const Index = () => {
 
       <SiteFooter />
     </div>
+    </EVNavProvider>
   );
 };
 

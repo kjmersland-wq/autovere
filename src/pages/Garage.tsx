@@ -19,6 +19,7 @@ import { CHARGING_NETWORKS } from "@/data/charging-networks";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import { SiteHeader } from "@/components/SiteHeader";
 import { SiteFooter } from "@/components/SiteFooter";
+import { EVNavProvider } from "@/contexts/EVNavContext";
 import { SEO } from "@/components/SEO";
 import type { GarageSlot } from "@/data/ownership-tracking";
 
@@ -81,6 +82,7 @@ export default function Garage() {
     : [];
 
   return (
+    <EVNavProvider>
     <>
       <SEO
         title="My Garage — AUTOVERE"
@@ -371,6 +373,7 @@ export default function Garage() {
       </main>
       <SiteFooter />
     </>
+    </EVNavProvider>
   );
 }
 
