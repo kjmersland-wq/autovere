@@ -1,12 +1,15 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Sparkles, Zap, Menu, X, Warehouse } from "lucide-react";
+import { Sparkles, Zap, Menu, X, Warehouse, LogIn } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { detectLangFromPath, localizePath } from "@/i18n/routing";
 import { VehicleSearch } from "@/components/VehicleSearch";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { PreferencesDrawer } from "@/components/PreferencesDrawer";
 import { useGarage } from "@/hooks/useGarage";
+import { useSupabaseUser } from "@/hooks/useSupabaseUser";
 
 export const SiteHeader = () => {
   const { pathname } = useLocation();
@@ -15,6 +18,7 @@ export const SiteHeader = () => {
   const { t } = useTranslation();
   const [mobileOpen, setMobileOpen] = useState(false);
   const { totalCount } = useGarage();
+  const { isAuthenticated } = useSupabaseUser();
 
   // Close mobile menu on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
@@ -66,17 +70,19 @@ export const SiteHeader = () => {
                 `flex items-center gap-1 font-medium transition-colors ${isActive ? "text-cyan-400" : "text-cyan-500/80 hover:text-cyan-400"}`
               }
             >
-              <Zap className="w-3.5 h-3.5" /> EV Hub
+              <Zap className="w-3.5 h-3.5" /> {t("ev.nav.hub")}
             </NavLink>
           </nav>
 
           {/* Right side */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
             <VehicleSearch compact className="hidden md:inline-flex" />
+
+            {/* Garage icon with count badge */}
             <Link
               to={L("/garage")}
               className="relative w-9 h-9 rounded-lg glass border border-border/40 flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors"
-              aria-label="My Garage"
+              aria-label={t("ev.nav.garage")}
             >
               <Warehouse className="w-4 h-4" />
               {totalCount > 0 && (
@@ -85,10 +91,32 @@ export const SiteHeader = () => {
                 </span>
               )}
             </Link>
+
+            {/* Personalisation */}
+            <PreferencesDrawer />
+
+            {/* Theme toggle */}
+            <ThemeToggle />
+
             <LanguageSwitcher />
-            <Button asChild size="sm" className="hidden sm:flex bg-gradient-primary hover:opacity-90 rounded-xl">
-              <Link to={`${L("/")}#advisor`}>{t("nav.cta")}</Link>
-            </Button>
+
+            {/* Auth / CTA */}
+            {isAuthenticated ? (
+              <Link
+                to={L("/pricing")}
+                className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl glass border border-border/40 hover:border-accent/40 text-xs font-medium transition-colors"
+              >
+                {t("ev.nav.account")}
+              </Link>
+            ) : (
+              <Button asChild size="sm" className="hidden sm:flex bg-gradient-primary hover:opacity-90 rounded-xl">
+                <Link to={L("/auth")}>
+                  <LogIn className="w-3.5 h-3.5 mr-1.5" />
+                  {t("nav.cta")}
+                </Link>
+              </Button>
+            )}
+
             {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -127,13 +155,41 @@ export const SiteHeader = () => {
                   `flex items-center gap-2 py-3 px-3 rounded-xl text-sm font-medium transition-colors ${isActive ? "bg-cyan-400/10 text-cyan-400" : "text-cyan-500/80 hover:text-cyan-400 hover:bg-cyan-400/5"}`
                 }
               >
-                <Zap className="w-4 h-4" /> EV Hub
+                <Zap className="w-4 h-4" /> {t("ev.nav.hub")}
               </NavLink>
+              {/* Garage in mobile */}
+              <Link
+                to={L("/garage")}
+                className="flex items-center gap-2 py-3 px-3 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-card/50 transition-colors"
+              >
+                <Warehouse className="w-4 h-4" />
+                {t("ev.nav.garage")}
+                {totalCount > 0 && (
+                  <span className="ml-auto text-[10px] font-medium text-accent">{totalCount}</span>
+                )}
+              </Link>
             </div>
-            {/* CTA in mobile */}
-            <Button asChild className="mt-6 bg-gradient-primary hover:opacity-90 rounded-xl w-full">
-              <Link to={`${L("/")}#advisor`}>{t("nav.cta")}</Link>
-            </Button>
+
+            {/* Mobile footer */}
+            <div className="space-y-3 pt-4 border-t border-border/30">
+              {/* Theme + Preferences row */}
+              <div className="flex items-center gap-2">
+                <ThemeToggle className="flex-1 justify-center rounded-xl" />
+                <span className="text-xs text-muted-foreground flex-1 text-center">{t("ev.nav.theme")}</span>
+              </div>
+              {isAuthenticated ? (
+                <Link
+                  to={L("/pricing")}
+                  className="w-full flex items-center justify-center py-2.5 rounded-xl glass border border-border/40 text-sm font-medium"
+                >
+                  {t("ev.nav.my_account")}
+                </Link>
+              ) : (
+                <Button asChild className="w-full bg-gradient-primary hover:opacity-90 rounded-xl">
+                  <Link to={L("/auth")}>{t("nav.cta")}</Link>
+                </Button>
+              )}
+            </div>
           </nav>
         </div>
       )}

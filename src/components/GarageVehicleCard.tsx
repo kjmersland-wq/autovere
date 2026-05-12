@@ -1,8 +1,9 @@
 import { Link, useLocation } from "react-router-dom";
-import { Zap, Snowflake, Route, Brain, Trash2, ChevronRight, Car, Navigation } from "lucide-react";
+import { Zap, Snowflake, Route, Trash2, Car, Navigation } from "lucide-react";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import type { EnrichedGarageEntry } from "@/hooks/useGarage";
 import type { GarageSlot } from "@/data/ownership-tracking";
+import { ChargeLogSheet } from "@/components/ChargeLogSheet";
 
 const SLOT_LABELS: Record<GarageSlot, string> = {
   owned: "Owned",
@@ -124,12 +125,16 @@ export function GarageVehicleCard({ enriched, onRemove, onSlotChange }: GarageVe
           >
             <Car className="w-3.5 h-3.5" /> Full guide
           </Link>
-          <Link
-            to={L("/ev/compare")}
-            className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-medium py-2.5 rounded-xl glass border border-border/40 hover:border-cyan-400/40 hover:text-cyan-400 transition-colors"
-          >
-            <Navigation className="w-3.5 h-3.5" /> Compare
-          </Link>
+          {entry.slot === "owned" ? (
+            <ChargeLogSheet slug={entry.slug} vehicleName={model.name} />
+          ) : (
+            <Link
+              to={L("/ev/compare")}
+              className="flex-1 inline-flex items-center justify-center gap-1.5 text-xs font-medium py-2.5 rounded-xl glass border border-border/40 hover:border-cyan-400/40 hover:text-cyan-400 transition-colors"
+            >
+              <Navigation className="w-3.5 h-3.5" /> Compare
+            </Link>
+          )}
         </div>
 
         {/* Added date */}

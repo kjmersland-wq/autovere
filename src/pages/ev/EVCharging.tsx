@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Zap, Search, Filter, MapPin, Clock, ChevronRight, Wifi, CheckCircle, Circle } from "lucide-react";
+import { Zap, Search, Filter, MapPin, Wifi, CheckCircle, Circle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 
@@ -44,21 +45,22 @@ const PROVIDER_COLORS: Record<Exclude<Provider, "All">, string> = {
   "Circle K": "text-orange-400 bg-orange-400/10 border-orange-400/20",
 };
 
-const SPEED_LABELS: Record<Exclude<Speed, "All">, { label: string; color: string }> = {
-  HPC: { label: "Ultra Fast", color: "text-cyan-400" },
-  DC: { label: "Fast", color: "text-emerald-400" },
-  AC: { label: "Standard", color: "text-amber-400" },
-};
-
 const PROVIDERS: Provider[] = ["All", "Tesla", "Ionity", "Fastned", "Recharge", "Allego", "Circle K"];
 const SPEEDS: Speed[] = ["All", "HPC", "DC", "AC"];
 const CONNECTORS: Connector[] = ["All", "CCS", "CHAdeMO", "Type 2", "NACS"];
 
 export default function EVCharging() {
+  const { t } = useTranslation();
   const [search, setSearch] = useState("");
   const [provider, setProvider] = useState<Provider>("All");
   const [speed, setSpeed] = useState<Speed>("All");
   const [connector, setConnector] = useState<Connector>("All");
+
+  const speedLabels: Record<Exclude<Speed, "All">, { label: string; color: string }> = {
+    HPC: { label: t("ev.charging.ultra_fast"), color: "text-cyan-400" },
+    DC: { label: t("ev.charging.fast"), color: "text-emerald-400" },
+    AC: { label: t("ev.charging.standard"), color: "text-amber-400" },
+  };
 
   const filtered = STATIONS.filter((s) => {
     const q = search.toLowerCase();
@@ -72,8 +74,8 @@ export default function EVCharging() {
   return (
     <PageShell>
       <SEO
-        title="EV Charging Map Europe | AUTOVERE"
-        description="Find Tesla Superchargers, Ionity, Fastned and all major EV charging networks across Europe. Filter by speed, connector and provider."
+        title={t("ev.charging.seo_title")}
+        description={t("ev.charging.seo_desc")}
       />
 
       {/* Hero */}
@@ -81,14 +83,13 @@ export default function EVCharging() {
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/50 via-transparent to-blue-950/30 pointer-events-none" />
         <div className="container relative">
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-cyan-400 mb-5">
-            <Zap className="w-3.5 h-3.5" /> EV Hub › Charging
+            <Zap className="w-3.5 h-3.5" /> {t("ev.charging.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
-            Find your next charge <span className="text-gradient">across Europe.</span>
+            {t("ev.charging.title")} <span className="text-gradient">{t("ev.charging.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed">
-            All major networks in one place. Filter by speed, connector and provider.
-            Live API integration coming soon — currently showing representative data.
+            {t("ev.charging.subtitle")}
           </p>
         </div>
       </section>
@@ -102,7 +103,7 @@ export default function EVCharging() {
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
                 type="text"
-                placeholder="Search by city or country…"
+                placeholder={t("ev.charging.search_placeholder")}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="w-full pl-10 pr-4 py-2.5 rounded-xl bg-card border border-border/50 text-sm focus:outline-none focus:border-primary/50 transition-colors"
@@ -116,7 +117,7 @@ export default function EVCharging() {
                   onClick={() => setSpeed(s)}
                   className={`px-3 py-2 rounded-lg text-xs font-medium border transition-colors ${speed === s ? "bg-primary text-primary-foreground border-primary" : "glass border-border/40 text-muted-foreground hover:text-foreground"}`}
                 >
-                  {s === "HPC" ? "Ultra Fast" : s === "All" ? "All speeds" : s}
+                  {s === "HPC" ? t("ev.charging.ultra_fast") : s === "All" ? t("ev.charging.all_speeds") : s === "DC" ? t("ev.charging.fast") : t("ev.charging.standard")}
                 </button>
               ))}
             </div>
@@ -129,7 +130,7 @@ export default function EVCharging() {
                 onClick={() => setProvider(p)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${provider === p ? "bg-primary/20 border-primary/50 text-primary" : "glass border-border/30 text-muted-foreground hover:text-foreground"}`}
               >
-                {p === "All" ? "All providers" : p}
+                {p === "All" ? t("ev.charging.all_providers") : p}
               </button>
             ))}
             <div className="w-px bg-border/40 mx-1 hidden sm:block" />
@@ -139,7 +140,7 @@ export default function EVCharging() {
                 onClick={() => setConnector(c)}
                 className={`px-3 py-1.5 rounded-lg text-xs font-medium border transition-colors ${connector === c ? "bg-accent/20 border-accent/50 text-accent" : "glass border-border/30 text-muted-foreground hover:text-foreground"}`}
               >
-                {c === "All" ? "All connectors" : c}
+                {c === "All" ? t("ev.charging.all_connectors") : c}
               </button>
             ))}
           </div>
@@ -150,18 +151,18 @@ export default function EVCharging() {
       <section className="container py-12">
         <div className="flex items-center justify-between mb-8">
           <p className="text-sm text-muted-foreground">
-            <span className="text-foreground font-medium">{filtered.length}</span> stations found
+            <span className="text-foreground font-medium">{filtered.length}</span> {t("ev.charging.stations_found", { n: "" }).replace(/^\d*\s*/, "")}
           </p>
           <div className="flex items-center gap-2 text-xs text-muted-foreground">
             <Filter className="w-3.5 h-3.5" />
-            Sorted by distance
+            {t("ev.charging.sorted_distance")}
           </div>
         </div>
 
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
           {filtered.map((station) => {
             const availRatio = station.available / station.total;
-            const speedInfo = SPEED_LABELS[station.speed];
+            const speedInfo = speedLabels[station.speed];
             return (
               <div key={station.id} className="glass rounded-2xl border border-border/40 p-6 hover:border-border/80 transition-colors group">
                 {/* Header */}
@@ -174,7 +175,7 @@ export default function EVCharging() {
                   </div>
                   <div className="text-right ml-3 flex-shrink-0">
                     <div className="text-xl font-bold text-gradient">{station.maxKw}</div>
-                    <div className="text-[10px] text-muted-foreground">kW max</div>
+                    <div className="text-[10px] text-muted-foreground">{t("ev.charging.kw_max")}</div>
                   </div>
                 </div>
 
@@ -208,12 +209,12 @@ export default function EVCharging() {
                       <Circle className="w-3.5 h-3.5 text-red-400" />
                     )}
                     <span className="text-xs text-muted-foreground">
-                      {station.available}/{station.total} available
+                      {station.available}/{station.total} {t("ev.charging.available")}
                     </span>
                   </div>
                   <div className="flex items-center gap-1 text-xs text-muted-foreground">
                     <Wifi className="w-3 h-3" />
-                    {station.points} points
+                    {station.points} {t("ev.charging.points")}
                   </div>
                 </div>
 
@@ -232,8 +233,8 @@ export default function EVCharging() {
         {filtered.length === 0 && (
           <div className="text-center py-20 text-muted-foreground">
             <Zap className="w-10 h-10 mx-auto mb-4 opacity-20" />
-            <p className="text-lg font-medium mb-1">No stations match your filters.</p>
-            <p className="text-sm">Try adjusting the provider, speed or connector filters.</p>
+            <p className="text-lg font-medium mb-1">{t("ev.charging.no_stations")}</p>
+            <p className="text-sm">{t("ev.charging.no_stations_hint")}</p>
           </div>
         )}
 
@@ -241,11 +242,10 @@ export default function EVCharging() {
         <div className="mt-16 glass rounded-2xl border border-border/40 p-6 text-center">
           <div className="flex items-center justify-center gap-2 text-accent mb-2">
             <Wifi className="w-4 h-4" />
-            <span className="text-sm font-medium">Live data integration</span>
+            <span className="text-sm font-medium">{t("ev.charging.live_title")}</span>
           </div>
           <p className="text-xs text-muted-foreground max-w-md mx-auto">
-            This module displays representative charging data. Live integration with Open Charge Map,
-            PlugShare and provider APIs is in development.
+            {t("ev.charging.live_desc")}
           </p>
         </div>
       </section>

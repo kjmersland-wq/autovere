@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Play, Star, ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, ExternalLink, Zap, ShieldCheck, Globe } from "lucide-react";
+import { Play, ThumbsUp, ThumbsDown, ChevronDown, ChevronUp, ExternalLink, ShieldCheck, Globe } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { EV_MODELS } from "@/data/ev-models";
@@ -111,12 +112,12 @@ interface ReviewCardProps {
 }
 
 function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: ReviewCardProps) {
+  const { t } = useTranslation();
   const [playing, setPlaying] = useState(false);
   const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
   return (
     <div className="glass rounded-2xl border border-border/40 overflow-hidden hover:border-border/70 transition-colors group">
-      {/* Thumbnail / player */}
       <div className="relative aspect-video bg-card overflow-hidden">
         {playing ? (
           <iframe
@@ -145,12 +146,11 @@ function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: Re
             </button>
             <div className="absolute bottom-3 left-3 right-3 flex items-end justify-between">
               <span className="text-xs font-medium text-white bg-black/60 px-2 py-0.5 rounded">{channel}</span>
-              <span className="text-xs text-white/80">{views} views</span>
+              <span className="text-xs text-white/80">{views} {t("ev.reviews.views")}</span>
             </div>
           </>
         )}
       </div>
-      {/* Card body */}
       <div className="p-4">
         <Link
           to={`/ev/models/${modelSlug}`}
@@ -166,7 +166,7 @@ function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: Re
             rel="noopener noreferrer"
             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
           >
-            Watch on YouTube <ExternalLink className="w-3 h-3" />
+            {t("ev.reviews.watch_youtube")} <ExternalLink className="w-3 h-3" />
           </a>
           {CHANNEL_TRUST[channel] && (
             <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
@@ -188,12 +188,21 @@ interface ConsensusCardProps {
 }
 
 function ConsensusCard({ slug, name }: ConsensusCardProps) {
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
   const c = CONSENSUS[slug];
   const model = EV_MODELS.find((m) => m.slug === slug);
   if (!c || !model) return null;
 
   const confidenceColor = c.confidence >= 90 ? "text-emerald-400" : c.confidence >= 80 ? "text-amber-400" : "text-red-400";
+
+  const metrics = [
+    { label: t("ev.reviews.metric_range"), value: c.range },
+    { label: t("ev.reviews.metric_charging"), value: c.charging },
+    { label: t("ev.reviews.metric_winter"), value: c.winter },
+    { label: t("ev.reviews.metric_comfort"), value: c.comfort },
+    { label: t("ev.reviews.metric_value"), value: c.value },
+  ];
 
   return (
     <div className="glass rounded-2xl border border-border/40 overflow-hidden">
@@ -204,10 +213,10 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
         <div className="flex-1 min-w-0">
           <div className="font-semibold">{name}</div>
           <div className="flex items-center gap-3 mt-0.5">
-            <div className="text-xs text-muted-foreground">{model.youtubeReviews.length} reviews analysed</div>
+            <div className="text-xs text-muted-foreground">{model.youtubeReviews.length} {t("ev.reviews.reviews_analysed")}</div>
             <div className={`flex items-center gap-1 text-[10px] ${confidenceColor}`}>
               <ShieldCheck className="w-3 h-3" />
-              {c.confidence}% confidence
+              {t("ev.reviews.confidence_pct", { n: c.confidence })}
             </div>
           </div>
         </div>
@@ -222,22 +231,14 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
 
       {open && (
         <div className="px-5 pb-5 border-t border-border/40 pt-4 space-y-4">
-          {/* Highlight quote */}
           <div className="bg-card/40 border border-border/30 rounded-xl p-4">
-            <div className="text-[10px] uppercase tracking-wider text-accent mb-2">Reviewer consensus quote</div>
+            <div className="text-[10px] uppercase tracking-wider text-accent mb-2">{t("ev.reviews.consensus_quote_label")}</div>
             <p className="text-sm text-muted-foreground italic leading-relaxed">"{c.highlightQuote}"</p>
             <div className="text-[10px] text-muted-foreground mt-2">— {c.highlightChannel}</div>
           </div>
 
-          {/* Key metrics */}
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
-            {[
-              { label: "Real range", value: c.range },
-              { label: "Charging", value: c.charging },
-              { label: "Winter", value: c.winter },
-              { label: "Comfort", value: c.comfort },
-              { label: "Value", value: c.value },
-            ].map((item) => (
+            {metrics.map((item) => (
               <div key={item.label} className="bg-card/60 rounded-xl p-3">
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground mb-1">{item.label}</div>
                 <div className="text-xs font-medium">{item.value}</div>
@@ -245,11 +246,10 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
             ))}
           </div>
 
-          {/* Most praised / critiqued */}
           <div className="grid md:grid-cols-2 gap-4">
             <div>
               <div className="flex items-center gap-1.5 text-xs font-medium text-emerald-400 mb-2">
-                <ThumbsUp className="w-3.5 h-3.5" /> Most praised features
+                <ThumbsUp className="w-3.5 h-3.5" /> {t("ev.reviews.most_praised")}
               </div>
               <ul className="space-y-1">
                 {c.mostPraised.map((pro) => (
@@ -261,7 +261,7 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
             </div>
             <div>
               <div className="flex items-center gap-1.5 text-xs font-medium text-red-400 mb-2">
-                <ThumbsDown className="w-3.5 h-3.5" /> Most discussed issues
+                <ThumbsDown className="w-3.5 h-3.5" /> {t("ev.reviews.most_issues")}
               </div>
               <ul className="space-y-1">
                 {c.mostCritiqued.map((con) => (
@@ -277,7 +277,7 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
             to={`/ev/models/${slug}`}
             className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline"
           >
-            Full model deep-dive →
+            {t("ev.compare.full_deep_dive")}
           </Link>
         </div>
       )}
@@ -286,6 +286,7 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
 }
 
 export default function EVReviews() {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
@@ -299,31 +300,28 @@ export default function EVReviews() {
   return (
     <PageShell>
       <SEO
-        title="EV Video Reviews — European Model Guide | AUTOVERE"
-        description="Curated YouTube EV reviews with consensus scoring, real-world range data and reviewer analysis for the best EVs in Europe."
+        title={t("ev.reviews.seo_title")}
+        description={t("ev.reviews.seo_desc")}
       />
 
-      {/* Hero */}
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-violet-950/50 via-transparent to-cyan-950/20 pointer-events-none" />
         <div className="container relative">
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-violet-400 mb-5">
-            <Play className="w-3.5 h-3.5" /> EV Hub › Reviews
+            <Play className="w-3.5 h-3.5" /> {t("ev.reviews.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
-            Every major EV review, <span className="text-gradient">scored and synthesised.</span>
+            {t("ev.reviews.title")} <span className="text-gradient">{t("ev.reviews.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed">
-            We aggregate video reviews from trusted automotive channels, extract the key metrics
-            and build reviewer consensus scores — so you get the truth, faster.
+            {t("ev.reviews.subtitle")}
           </p>
         </div>
       </section>
 
-      {/* Consensus scores */}
       <section className="container py-16">
-        <h2 className="text-2xl font-bold tracking-tight mb-2">Reviewer consensus scores</h2>
-        <p className="text-muted-foreground text-sm mb-8">Click any model to expand key metrics, pros, cons and links to the full model page.</p>
+        <h2 className="text-2xl font-bold tracking-tight mb-2">{t("ev.reviews.consensus_heading")}</h2>
+        <p className="text-muted-foreground text-sm mb-8">{t("ev.reviews.consensus_lead")}</p>
         <div className="space-y-3 max-w-3xl">
           {EV_MODELS.map((m) => (
             <ConsensusCard key={m.slug} slug={m.slug} name={m.name} />
@@ -331,16 +329,14 @@ export default function EVReviews() {
         </div>
       </section>
 
-      {/* Review videos */}
       <section className="container pb-24">
         <div className="flex items-end justify-between mb-8 gap-4">
           <div>
-            <h2 className="text-2xl font-bold tracking-tight">Review videos</h2>
-            <p className="text-muted-foreground text-sm mt-1">{filtered.length} reviews</p>
+            <h2 className="text-2xl font-bold tracking-tight">{t("ev.reviews.videos_heading")}</h2>
+            <p className="text-muted-foreground text-sm mt-1">{filtered.length} {t("ev.reviews.views")}</p>
           </div>
         </div>
 
-        {/* Model filter */}
         <div className="flex flex-wrap gap-2 mb-8">
           {models.map((m) => (
             <button
@@ -348,7 +344,7 @@ export default function EVReviews() {
               onClick={() => setActiveModel(m)}
               className={`px-3 py-1.5 rounded-full text-xs font-medium border transition-colors ${activeModel === m ? "bg-primary text-primary-foreground border-primary" : "glass border-border/40 text-muted-foreground hover:text-foreground"}`}
             >
-              {m}
+              {m === "All" ? t("ev.reviews.all_models") : m}
             </button>
           ))}
         </div>

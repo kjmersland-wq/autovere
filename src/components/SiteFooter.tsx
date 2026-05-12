@@ -21,10 +21,23 @@ export const SiteFooter = () => {
       ],
     },
     {
+      label: t("footer.columns.ev"),
+      links: [
+        { to: "/ev", label: t("ev.nav.hub") },
+        { to: "/ev/models", label: t("ev.nav.models") },
+        { to: "/ev/database", label: t("ev.nav.database") },
+        { to: "/ev/compare", label: t("ev.nav.compare") },
+        { to: "/ev/charging", label: t("ev.nav.charging") },
+        { to: "/ev/news", label: t("ev.nav.news") },
+      ],
+    },
+    {
       label: t("footer.columns.company"),
       links: [
+        { to: "/about", label: t("footer.links.about") },
         { to: "/learn", label: t("footer.links.learn") },
         { to: "/pricing", label: t("footer.links.pricing") },
+        { to: "/faq", label: t("footer.links.faq") },
         { to: "/help", label: t("footer.links.help") },
         { to: "/contact", label: t("footer.links.contact") },
       ],
@@ -62,7 +75,7 @@ export const SiteFooter = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-10">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-10">
             {COLS.map((c) => (
               <div key={c.label}>
                 <div className="text-xs uppercase tracking-[0.18em] text-muted-foreground/70 mb-4">

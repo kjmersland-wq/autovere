@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { BookOpen, ChevronDown, ChevronUp, Battery, Thermometer, Zap, Car, Shield, Wind, BarChart3, Wrench, Sun, CheckCircle } from "lucide-react";
+import { BookOpen, ChevronDown, ChevronUp, Battery, Thermometer, Zap, Car, Shield, BarChart3, CheckCircle } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 
@@ -123,16 +124,27 @@ const GUIDES: Guide[] = [
 const CATEGORIES = ["All", ...Array.from(new Set(GUIDES.map((g) => g.category)))];
 
 export default function EVGuides() {
+  const { t } = useTranslation();
   const [activeCategory, setActiveCategory] = useState("All");
   const [expanded, setExpanded] = useState<string | null>(null);
+
+  const categoryLabel: Record<string, string> = {
+    All: t("ev.guides.filter_all"),
+    Battery: t("ev.guides.filter_battery"),
+    Winter: t("ev.guides.filter_winter"),
+    Driving: t("ev.guides.filter_driving"),
+    Maintenance: t("ev.guides.filter_maintenance"),
+    Charging: t("ev.guides.filter_charging"),
+    Ownership: t("ev.guides.filter_ownership"),
+  };
 
   const filtered = activeCategory === "All" ? GUIDES : GUIDES.filter((g) => g.category === activeCategory);
 
   return (
     <PageShell>
       <SEO
-        title="EV Ownership Guides | AUTOVERE"
-        description="Expert EV ownership guides covering battery longevity, winter driving, charging etiquette, brake maintenance and long-term ownership."
+        title={t("ev.guides.seo_title")}
+        description={t("ev.guides.seo_desc")}
       />
 
       {/* Hero */}
@@ -140,14 +152,13 @@ export default function EVGuides() {
         <div className="absolute inset-0 bg-gradient-to-br from-amber-950/40 via-transparent to-orange-950/20 pointer-events-none" />
         <div className="container relative">
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-amber-400 mb-5">
-            <BookOpen className="w-3.5 h-3.5" /> EV Hub › Ownership Guides
+            <BookOpen className="w-3.5 h-3.5" /> {t("ev.guides.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
-            Everything real EV owners <span className="text-gradient">need to know.</span>
+            {t("ev.guides.title")} <span className="text-gradient">{t("ev.guides.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed">
-            No hype, no vague optimism. Evidence-based guides written for drivers who want
-            to understand their car — not just own it.
+            {t("ev.guides.subtitle")}
           </p>
         </div>
       </section>
@@ -162,7 +173,7 @@ export default function EVGuides() {
                 onClick={() => setActiveCategory(cat)}
                 className={`px-4 py-1.5 rounded-full text-xs font-medium border transition-colors ${activeCategory === cat ? "bg-primary text-primary-foreground border-primary" : "glass border-border/40 text-muted-foreground hover:text-foreground"}`}
               >
-                {cat}
+                {categoryLabel[cat] ?? cat}
               </button>
             ))}
           </div>
@@ -185,7 +196,7 @@ export default function EVGuides() {
                     <guide.icon className="w-5 h-5 text-accent" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-[10px] uppercase tracking-widest text-accent mb-1">{guide.category}</div>
+                    <div className="text-[10px] uppercase tracking-widest text-accent mb-1">{categoryLabel[guide.category] ?? guide.category}</div>
                     <h3 className="font-semibold text-base md:text-lg mb-2 group-hover:text-foreground transition-colors">{guide.title}</h3>
                     <p className="text-sm text-muted-foreground leading-relaxed">{guide.summary}</p>
                   </div>
@@ -203,7 +214,7 @@ export default function EVGuides() {
                       ))}
                     </div>
                     <div className="bg-card/50 rounded-xl p-4">
-                      <div className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">Key takeaways</div>
+                      <div className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">{t("ev.guides.key_takeaways")}</div>
                       <ul className="space-y-2">
                         {guide.tips.map((tip, i) => (
                           <li key={i} className="flex items-start gap-2.5 text-sm">

@@ -1,5 +1,7 @@
 import { useParams, Link, useLocation } from "react-router-dom";
 import { ArrowLeft, Clock, Lightbulb, Tag, ChevronRight } from "lucide-react";
+import { EVBreadcrumb } from "@/components/EVBreadcrumb";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { MediaImage } from "@/components/MediaImage";
@@ -16,6 +18,7 @@ import {
 import { getArticleIntelligence } from "@/data/article-intelligence";
 
 export default function EVArticle() {
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
@@ -28,9 +31,9 @@ export default function EVArticle() {
       <PageShell>
         <SEO title="Article Not Found | AUTOVERE" description="This article could not be found." />
         <div className="container py-40 text-center">
-          <h1 className="text-3xl font-bold mb-4">Article not found</h1>
+          <h1 className="text-3xl font-bold mb-4">{t("ev.news.article_not_found")}</h1>
           <Link to={L("/ev/news")} className="text-accent hover:underline">
-            ← Back to EV Intelligence
+            ← {t("ev.news.back_to_intel")}
           </Link>
         </div>
       </PageShell>
@@ -52,6 +55,8 @@ export default function EVArticle() {
     keywords: article.tags.join(", "),
   };
 
+  const dateLocale = lang === "no" ? "nb-NO" : lang === "de" ? "de-DE" : lang === "sv" ? "sv-SE" : lang === "fr" ? "fr-FR" : lang === "es" ? "es-ES" : lang === "it" ? "it-IT" : lang === "pl" ? "pl-PL" : "en-GB";
+
   return (
     <PageShell>
       <SEO
@@ -61,34 +66,28 @@ export default function EVArticle() {
         jsonLd={jsonLd}
       />
 
-      {/* Hero image */}
       <div className="pt-20">
         <MediaImage media={article.media} aspectClass="aspect-[21/7]" showAttribution className="w-full" />
       </div>
 
       <div className="container py-12">
-        {/* Back */}
-        <Link
-          to={L("/ev/news")}
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-        >
-          <ArrowLeft className="w-4 h-4" /> EV Intelligence
-        </Link>
+        <EVBreadcrumb items={[
+          { label: t("ev.nav.hub"), to: L("/ev") },
+          { label: t("ev.nav.news"), to: L("/ev/news") },
+          { label: article.title },
+        ]} />
 
-        {/* Two-column layout: article body + intelligence sidebar */}
         <div className="grid lg:grid-cols-[1fr_340px] gap-12 items-start">
-          {/* Main article */}
           <div>
-            {/* Meta */}
             <div className="flex flex-wrap items-center gap-3 mb-6">
               <span className={`text-[10px] uppercase tracking-wider px-2.5 py-1 rounded-full border font-medium ${categoryColor}`}>
                 {CATEGORY_LABELS[article.category]}
               </span>
               <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <Clock className="w-3 h-3" /> {article.readMinutes} min read
+                <Clock className="w-3 h-3" /> {t("ev.news.read_time", { n: article.readMinutes })}
               </span>
               <span className="text-xs text-muted-foreground">
-                {new Date(article.publishedAt).toLocaleDateString("en-GB", {
+                {new Date(article.publishedAt).toLocaleDateString(dateLocale, {
                   day: "numeric",
                   month: "long",
                   year: "numeric",
@@ -96,26 +95,22 @@ export default function EVArticle() {
               </span>
             </div>
 
-            {/* Title */}
             <h1 className="text-3xl md:text-4xl font-bold tracking-tight leading-snug mb-6">
               {article.title}
             </h1>
 
-            {/* Summary */}
             <p className="text-lg text-muted-foreground leading-relaxed mb-8 border-l-2 border-accent pl-5">
               {article.summary}
             </p>
 
-            {/* Why it matters */}
             <div className="flex gap-4 p-5 rounded-2xl bg-accent/5 border border-accent/20 mb-10">
               <Lightbulb className="w-5 h-5 text-accent flex-shrink-0 mt-0.5" />
               <div>
-                <p className="text-sm font-semibold text-foreground mb-1">Why this matters</p>
+                <p className="text-sm font-semibold text-foreground mb-1">{t("ev.news.why_matters")}</p>
                 <p className="text-sm text-muted-foreground leading-relaxed">{article.whyItMatters}</p>
               </div>
             </div>
 
-            {/* Body */}
             <div className="space-y-5 mb-12">
               {article.body.map((para, i) => (
                 <p key={i} className="text-base text-muted-foreground leading-relaxed">
@@ -124,7 +119,6 @@ export default function EVArticle() {
               ))}
             </div>
 
-            {/* Tags */}
             <div className="flex flex-wrap items-center gap-2 mb-10 pb-10 border-b border-border/30">
               <Tag className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
               {article.tags.map((tag) => (
@@ -137,14 +131,12 @@ export default function EVArticle() {
               ))}
             </div>
 
-            {/* Mobile intelligence panel */}
             {intelligence && (
               <div className="lg:hidden mb-10">
                 <IntelligencePanel intelligence={intelligence} />
               </div>
             )}
 
-            {/* Related content cross-links */}
             <RelatedContent
               relatedVehicles={article.relatedVehicles}
               relatedNetworks={article.relatedNetworks}
@@ -152,7 +144,6 @@ export default function EVArticle() {
             />
           </div>
 
-          {/* Desktop intelligence sidebar */}
           {intelligence && (
             <div className="hidden lg:block sticky top-24">
               <IntelligencePanel intelligence={intelligence} />
@@ -160,16 +151,15 @@ export default function EVArticle() {
           )}
         </div>
 
-        {/* Related articles */}
         {related.length > 0 && (
           <div className="mt-20 pt-10 border-t border-border/30">
             <div className="flex items-center justify-between mb-8">
-              <h2 className="text-xl font-bold tracking-tight">Related Intelligence</h2>
+              <h2 className="text-xl font-bold tracking-tight">{t("ev.news.related_intel")}</h2>
               <Link
                 to={L("/ev/news")}
                 className="text-sm text-accent hover:underline flex items-center gap-1"
               >
-                All articles <ChevronRight className="w-3.5 h-3.5" />
+                {t("ev.news.all_articles")} <ChevronRight className="w-3.5 h-3.5" />
               </Link>
             </div>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">

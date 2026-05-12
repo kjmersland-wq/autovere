@@ -1,12 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 import { useEffect, lazy, Suspense } from "react";
+import { ThemeProvider } from "next-themes";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./i18n/config";
 import { LangSync } from "./i18n/LangSync";
 import { PaymentTestModeBanner } from "./components/PaymentTestModeBanner";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 // Eagerly loaded — critical path
 import Index from "./pages/Index.tsx";
@@ -31,6 +33,8 @@ const EVNetworkDetail = lazy(() => import("./pages/ev/EVNetworkDetail.tsx"));
 
 // Lazy-loaded page chunks — core pages
 const Garage = lazy(() => import("./pages/Garage.tsx"));
+const FAQ = lazy(() => import("./pages/FAQ.tsx"));
+const About = lazy(() => import("./pages/About.tsx"));
 const CarDetail = lazy(() => import("./pages/CarDetail.tsx"));
 const Compare = lazy(() => import("./pages/Compare.tsx"));
 const CollectionDetail = lazy(() => import("./pages/Collection.tsx"));
@@ -51,7 +55,6 @@ const Subscriptions = lazy(() => import("./pages/legal/Subscriptions.tsx"));
 // Named exports from files with multiple exports — resolved at module level
 import type { FC } from "react";
 
-// These files export named components alongside defaults — import the whole module lazily
 const EVModelsIndexLazy = lazy(() =>
   import("./pages/ev/EVModelDetail.tsx").then((m) => ({ default: m.EVModelsIndex }))
 );
@@ -98,78 +101,84 @@ const ScrollManager = () => {
 };
 
 const AppRoutes = () => (
-  <Suspense fallback={<PageLoader />}>
-    <Routes>
-      <Route path="/" element={<Index />} />
-      <Route path="/cars" element={<CarsIndex />} />
-      <Route path="/cars/:slug" element={<CarDetail />} />
-      <Route path="/compare" element={<CompareIndex />} />
-      <Route path="/compare/:slug" element={<Compare />} />
-      <Route path="/collections" element={<CollectionsIndex />} />
-      <Route path="/collections/:slug" element={<CollectionDetail />} />
-      <Route path="/personalities" element={<PersonalitiesIndex />} />
-      <Route path="/personalities/:slug" element={<PersonalityDetail />} />
-      <Route path="/learn" element={<LearnIndex />} />
-      <Route path="/learn/:slug" element={<LearnArticle />} />
-      <Route path="/watch" element={<Watch />} />
-      <Route path="/pricing" element={<Pricing />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/help" element={<Help />} />
-      <Route path="/discover" element={<Discover />} />
-      <Route path="/legal/terms" element={<Terms />} />
-      <Route path="/legal/privacy" element={<Privacy />} />
-      <Route path="/legal/cookies" element={<Cookies />} />
-      <Route path="/legal/refund" element={<Refund />} />
-      <Route path="/legal/subscriptions" element={<Subscriptions />} />
-      <Route path="/studio" element={<Studio />} />
-      <Route path="/auth" element={<Auth />} />
-      <Route path="/garage" element={<Garage />} />
-      {/* EV ecosystem */}
-      <Route path="/ev" element={<EVHub />} />
-      <Route path="/ev/charging" element={<EVCharging />} />
-      <Route path="/ev/route-planner" element={<EVRoutePlanner />} />
-      <Route path="/ev/calculator" element={<EVCalculator />} />
-      <Route path="/ev/guides" element={<EVGuides />} />
-      <Route path="/ev/reviews" element={<EVReviews />} />
-      <Route path="/ev/models" element={<EVModelsIndexLazy />} />
-      <Route path="/ev/models/:slug" element={<EVModelDetail />} />
-      <Route path="/ev/networks" element={<EVNetworksIndexLazy />} />
-      <Route path="/ev/networks/:slug" element={<EVNetworkDetail />} />
-      <Route path="/ev/compare" element={<EVCompare />} />
-      <Route path="/ev/advisor" element={<EVAdvisor />} />
-      <Route path="/ev/markets" element={<EVMarkets />} />
-      <Route path="/ev/database" element={<EVDatabase />} />
-      <Route path="/ev/news" element={<EVNews />} />
-      <Route path="/ev/news/:slug" element={<EVArticle />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-  </Suspense>
+  <ErrorBoundary>
+    <Suspense fallback={<PageLoader />}>
+      <Routes>
+        <Route path="/" element={<Index />} />
+        <Route path="/cars" element={<CarsIndex />} />
+        <Route path="/cars/:slug" element={<CarDetail />} />
+        <Route path="/compare" element={<CompareIndex />} />
+        <Route path="/compare/:slug" element={<Compare />} />
+        <Route path="/collections" element={<CollectionsIndex />} />
+        <Route path="/collections/:slug" element={<CollectionDetail />} />
+        <Route path="/personalities" element={<PersonalitiesIndex />} />
+        <Route path="/personalities/:slug" element={<PersonalityDetail />} />
+        <Route path="/learn" element={<LearnIndex />} />
+        <Route path="/learn/:slug" element={<LearnArticle />} />
+        <Route path="/watch" element={<Watch />} />
+        <Route path="/pricing" element={<Pricing />} />
+        <Route path="/contact" element={<Contact />} />
+        <Route path="/help" element={<Help />} />
+        <Route path="/faq" element={<FAQ />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/discover" element={<Discover />} />
+        <Route path="/legal/terms" element={<Terms />} />
+        <Route path="/legal/privacy" element={<Privacy />} />
+        <Route path="/legal/cookies" element={<Cookies />} />
+        <Route path="/legal/refund" element={<Refund />} />
+        <Route path="/legal/subscriptions" element={<Subscriptions />} />
+        <Route path="/studio" element={<Studio />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/garage" element={<Garage />} />
+        {/* EV ecosystem */}
+        <Route path="/ev" element={<EVHub />} />
+        <Route path="/ev/charging" element={<EVCharging />} />
+        <Route path="/ev/route-planner" element={<EVRoutePlanner />} />
+        <Route path="/ev/calculator" element={<EVCalculator />} />
+        <Route path="/ev/guides" element={<EVGuides />} />
+        <Route path="/ev/reviews" element={<EVReviews />} />
+        <Route path="/ev/models" element={<EVModelsIndexLazy />} />
+        <Route path="/ev/models/:slug" element={<EVModelDetail />} />
+        <Route path="/ev/networks" element={<EVNetworksIndexLazy />} />
+        <Route path="/ev/networks/:slug" element={<EVNetworkDetail />} />
+        <Route path="/ev/compare" element={<EVCompare />} />
+        <Route path="/ev/advisor" element={<EVAdvisor />} />
+        <Route path="/ev/markets" element={<EVMarkets />} />
+        <Route path="/ev/database" element={<EVDatabase />} />
+        <Route path="/ev/news" element={<EVNews />} />
+        <Route path="/ev/news/:slug" element={<EVArticle />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </Suspense>
+  </ErrorBoundary>
 );
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <ScrollManager />
-        <LangSync />
-        <PaymentTestModeBanner />
-        <Routes>
-          {/* Localized routes — same tree mounted under each language prefix */}
-          <Route path="/en/*" element={<AppRoutes />} />
-          <Route path="/no/*" element={<AppRoutes />} />
-          <Route path="/de/*" element={<AppRoutes />} />
-          <Route path="/sv/*" element={<AppRoutes />} />
-          <Route path="/fr/*" element={<AppRoutes />} />
-          <Route path="/pl/*" element={<AppRoutes />} />
-          <Route path="/it/*" element={<AppRoutes />} />
-          <Route path="/es/*" element={<AppRoutes />} />
-          {/* Default (English) at root */}
-          <Route path="/*" element={<AppRoutes />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
+    <ThemeProvider attribute="class" defaultTheme="dark" enableSystem disableTransitionOnChange={false}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <ScrollManager />
+          <LangSync />
+          <PaymentTestModeBanner />
+          <Routes>
+            {/* Localized routes — same tree mounted under each language prefix */}
+            <Route path="/en/*" element={<AppRoutes />} />
+            <Route path="/no/*" element={<AppRoutes />} />
+            <Route path="/de/*" element={<AppRoutes />} />
+            <Route path="/sv/*" element={<AppRoutes />} />
+            <Route path="/fr/*" element={<AppRoutes />} />
+            <Route path="/pl/*" element={<AppRoutes />} />
+            <Route path="/it/*" element={<AppRoutes />} />
+            <Route path="/es/*" element={<AppRoutes />} />
+            {/* Default (English) at root */}
+            <Route path="/*" element={<AppRoutes />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 

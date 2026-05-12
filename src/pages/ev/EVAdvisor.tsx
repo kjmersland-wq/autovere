@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Zap, ChevronLeft, ChevronRight, Check, RotateCcw, ArrowRight, Thermometer, Users, Wallet, MapPin, Route, Gauge, Battery } from "lucide-react";
+import { Zap, ChevronLeft, ChevronRight, Check, RotateCcw, Thermometer, Users, Wallet, MapPin, Route, Gauge, Battery } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
@@ -247,6 +248,7 @@ export default function EVAdvisor() {
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
+  const { t } = useTranslation();
 
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
@@ -293,24 +295,24 @@ export default function EVAdvisor() {
   return (
     <PageShell>
       <SEO
-        title="EV Buying Advisor — Find Your Perfect EV | AUTOVERE"
-        description="Answer 7 questions and get personalised EV recommendations matched to your budget, climate, family size and driving habits. European EVs compared honestly."
+        title={t("ev.advisor.seo_title")}
+        description={t("ev.advisor.seo_desc")}
       />
 
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/30 via-transparent to-cyan-950/20 pointer-events-none" />
         <div className="container relative">
           <Link to={L("/ev")} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-6 transition-colors">
-            <ChevronLeft className="w-3.5 h-3.5" /> EV Hub
+            <ChevronLeft className="w-3.5 h-3.5" /> {t("ev.nav.hub")}
           </Link>
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-emerald-400 mb-5">
-            <Zap className="w-3.5 h-3.5" /> EV Hub › Advisor
+            <Zap className="w-3.5 h-3.5" /> {t("ev.advisor.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
-            Find your perfect EV. <span className="text-gradient">7 questions.</span>
+            {t("ev.advisor.title")} <span className="text-gradient">{t("ev.advisor.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-lg text-lg">
-            Tell us about your life. We'll match you to the right electric car — not the most popular one, the right one.
+            {t("ev.advisor.subtitle")}
           </p>
         </div>
       </section>
@@ -322,8 +324,8 @@ export default function EVAdvisor() {
               {/* Progress */}
               <div className="mb-8">
                 <div className="flex items-center justify-between text-xs text-muted-foreground mb-3">
-                  <span>Question {currentStep + 1} of {STEPS.length}</span>
-                  <span>{Math.round(progress)}% complete</span>
+                  <span>{t("ev.advisor.question_of", { current: currentStep + 1, total: STEPS.length })}</span>
+                  <span>{t("ev.advisor.pct_complete", { n: Math.round(progress) })}</span>
                 </div>
                 <div className="h-1 rounded-full bg-card overflow-hidden">
                   <div
@@ -379,14 +381,14 @@ export default function EVAdvisor() {
                   disabled={currentStep === 0}
                   className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
                 >
-                  <ChevronLeft className="w-4 h-4" /> Back
+                  <ChevronLeft className="w-4 h-4" /> {t("ev.advisor.back")}
                 </button>
                 <button
                   onClick={handleNext}
                   disabled={!currentAnswer}
                   className="inline-flex items-center gap-2 px-6 py-2.5 rounded-xl bg-gradient-primary text-primary-foreground text-sm font-medium hover:opacity-90 transition-opacity disabled:opacity-40 disabled:cursor-not-allowed"
                 >
-                  {isLast ? "See my matches" : "Next"} <ChevronRight className="w-4 h-4" />
+                  {isLast ? t("ev.advisor.see_matches") : t("ev.advisor.next")} <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             </div>
@@ -395,19 +397,19 @@ export default function EVAdvisor() {
             <div>
               <div className="text-center mb-10">
                 <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-emerald-400 mb-4">
-                  <Check className="w-3.5 h-3.5" /> Your personalised results
+                  <Check className="w-3.5 h-3.5" /> {t("ev.advisor.your_results_eyebrow")}
                 </div>
-                <h2 className="text-3xl font-bold tracking-tight mb-3">Your best EV matches</h2>
+                <h2 className="text-3xl font-bold tracking-tight mb-3">{t("ev.advisor.your_matches")}</h2>
                 <p className="text-sm text-muted-foreground">
-                  Based on your budget, climate, lifestyle and priorities — ranked by fit score.
+                  {t("ev.advisor.matches_lead")}
                 </p>
               </div>
 
               {results.length === 0 ? (
                 <div className="glass rounded-2xl border border-border/40 p-10 text-center">
-                  <p className="text-muted-foreground mb-4">No perfect match found for your exact combination. Try adjusting your budget or priorities.</p>
+                  <p className="text-muted-foreground mb-4">{t("ev.advisor.no_match")}</p>
                   <button onClick={handleRestart} className="inline-flex items-center gap-2 text-sm text-accent hover:underline">
-                    <RotateCcw className="w-3.5 h-3.5" /> Restart advisor
+                    <RotateCcw className="w-3.5 h-3.5" /> {t("ev.advisor.restart")}
                   </button>
                 </div>
               ) : (
@@ -431,22 +433,22 @@ export default function EVAdvisor() {
                           </div>
                           <div className="text-right flex-shrink-0">
                             <div className={`text-2xl font-bold ${m.accentColor}`}>{m.range.real}</div>
-                            <div className="text-[10px] text-muted-foreground uppercase">Real km</div>
+                            <div className="text-[10px] text-muted-foreground uppercase">{t("ev.advisor.real_km")}</div>
                           </div>
                         </div>
 
                         <div className="grid grid-cols-3 gap-2 mb-4">
                           <div className="bg-card/60 rounded-lg p-2 text-center">
                             <div className={`text-sm font-bold ${m.accentColor}`}>{m.charging.maxDC} kW</div>
-                            <div className="text-[9px] text-muted-foreground uppercase">DC max</div>
+                            <div className="text-[9px] text-muted-foreground uppercase">{t("ev.advisor.dc_max")}</div>
                           </div>
                           <div className="bg-card/60 rounded-lg p-2 text-center">
                             <div className={`text-sm font-bold ${m.accentColor}`}>{m.range.winter} km</div>
-                            <div className="text-[9px] text-muted-foreground uppercase">Winter range</div>
+                            <div className="text-[9px] text-muted-foreground uppercase">{t("ev.advisor.winter_range")}</div>
                           </div>
                           <div className="bg-card/60 rounded-lg p-2 text-center">
                             <div className={`text-sm font-bold ${m.accentColor}`}>€{m.annualCostEur.toLocaleString()}</div>
-                            <div className="text-[9px] text-muted-foreground uppercase">Annual cost</div>
+                            <div className="text-[9px] text-muted-foreground uppercase">{t("ev.advisor.annual_cost")}</div>
                           </div>
                         </div>
 
@@ -464,13 +466,13 @@ export default function EVAdvisor() {
                             to={`/ev/models/${m.slug}`}
                             className={`inline-flex items-center gap-1.5 text-xs font-medium ${m.accentColor} hover:underline`}
                           >
-                            Full deep-dive <ArrowRight className="w-3 h-3" />
+                            {t("ev.compare.full_deep_dive")}
                           </Link>
                           <Link
                             to={L("/ev/compare")}
                             className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
                           >
-                            Compare side by side →
+                            {t("ev.advisor.compare_side")}
                           </Link>
                         </div>
                       </div>
@@ -484,7 +486,7 @@ export default function EVAdvisor() {
                   onClick={handleRestart}
                   className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
                 >
-                  <RotateCcw className="w-3.5 h-3.5" /> Start again with different preferences
+                  <RotateCcw className="w-3.5 h-3.5" /> {t("ev.advisor.start_again")}
                 </button>
               </div>
             </div>

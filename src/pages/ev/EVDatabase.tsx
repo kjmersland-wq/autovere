@@ -1,21 +1,14 @@
 import { useState, useMemo } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Zap, ChevronLeft, SlidersHorizontal, ArrowUpDown, TrendingDown, TrendingUp, BarChart2, ChevronRight } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
-import { VEHICLES, TYPE_LABELS, TYPE_COLORS, type Vehicle, type VehicleType } from "@/data/vehicles";
+import { VEHICLES, TYPE_COLORS, type Vehicle, type VehicleType } from "@/data/vehicles";
 import { VehicleSearch } from "@/components/VehicleSearch";
 
 type SortKey = "priceFrom" | "tco.fiveYearTcoEur" | "tco.depreciationPct5yr" | "specs.realWorldRangeKm" | "specs.zeroTo100";
-
-const SORT_OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "priceFrom", label: "Starting price" },
-  { value: "tco.fiveYearTcoEur", label: "5-year TCO" },
-  { value: "tco.depreciationPct5yr", label: "Depreciation" },
-  { value: "specs.realWorldRangeKm", label: "Range / Fuel economy" },
-  { value: "specs.zeroTo100", label: "0–100 km/h" },
-];
 
 function getSortValue(v: Vehicle, key: SortKey): number {
   if (key === "priceFrom") return v.priceFrom;
@@ -27,32 +20,39 @@ function getSortValue(v: Vehicle, key: SortKey): number {
 }
 
 function BrakeWearBadge({ wear }: { wear: Vehicle["tco"]["brakeWear"] }) {
-  const map = {
-    "very-low": { label: "Very Low", color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20" },
-    low: { label: "Low", color: "text-cyan-400 bg-cyan-400/10 border-cyan-400/20" },
-    moderate: { label: "Moderate", color: "text-amber-400 bg-amber-400/10 border-amber-400/20" },
-    high: { label: "High", color: "text-red-400 bg-red-400/10 border-red-400/20" },
+  const { t } = useTranslation();
+  const map: Record<typeof wear, { key: string; color: string }> = {
+    "very-low": { key: "ev.database.brake_very_low", color: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20" },
+    low: { key: "ev.database.brake_low", color: "text-cyan-400 bg-cyan-400/10 border-cyan-400/20" },
+    moderate: { key: "ev.database.brake_moderate", color: "text-amber-400 bg-amber-400/10 border-amber-400/20" },
+    high: { key: "ev.database.brake_high", color: "text-red-400 bg-red-400/10 border-red-400/20" },
   };
   const d = map[wear];
   return (
     <span className={`text-[9px] px-1.5 py-0.5 rounded-full border font-medium uppercase tracking-wide ${d.color}`}>
-      {d.label}
+      {t(d.key)}
     </span>
   );
 }
 
 function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => string }) {
+  const { t } = useTranslation();
   const target = vehicle.evPageSlug ? L(`/ev/models/${vehicle.evPageSlug}`) : null;
+  const typeLabels: Record<string, string> = {
+    ev: t("ev.database.filter_ev"),
+    phev: t("ev.database.plug_in_hybrid"),
+    "mild-hybrid": t("ev.database.mild_hybrid"),
+    diesel: t("ev.database.filter_diesel"),
+  };
 
   return (
     <div className="glass rounded-2xl border border-border/40 hover:border-border/70 transition-all duration-200 hover:-translate-y-0.5 group overflow-hidden">
-      {/* Header */}
       <div className="p-5 pb-4">
         <div className="flex items-start justify-between gap-3 mb-3">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <span className={`text-[9px] uppercase tracking-wider px-1.5 py-0.5 rounded-full border font-medium ${TYPE_COLORS[vehicle.type]}`}>
-                {TYPE_LABELS[vehicle.type]}
+                {typeLabels[vehicle.type] ?? vehicle.type}
               </span>
               <span className="text-[9px] text-muted-foreground uppercase tracking-wider">{vehicle.body}</span>
             </div>
@@ -60,13 +60,12 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
           </div>
           <div className="text-right flex-shrink-0">
             <div className="text-base font-bold text-gradient">€{vehicle.priceFrom.toLocaleString()}</div>
-            <div className="text-[9px] text-muted-foreground">from</div>
+            <div className="text-[9px] text-muted-foreground">{t("ev.database.price_from_label")}</div>
           </div>
         </div>
         <p className="text-xs text-muted-foreground leading-relaxed line-clamp-2">{vehicle.tagline}</p>
       </div>
 
-      {/* Specs grid */}
       <div className="grid grid-cols-3 gap-px bg-border/20">
         {vehicle.type === "ev" ? (
           <>
@@ -116,45 +115,43 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
         )}
       </div>
 
-      {/* TCO summary */}
       <div className="p-5 pt-4 space-y-2.5">
         <div className="flex items-center justify-between text-xs">
-          <span className="text-muted-foreground">5-year TCO</span>
+          <span className="text-muted-foreground">{t("ev.database.tco_label")}</span>
           <span className="font-semibold">€{vehicle.tco.fiveYearTcoEur.toLocaleString()}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
-          <span className="text-muted-foreground">Annual fuel/charging</span>
+          <span className="text-muted-foreground">{t("ev.database.annual_fuel_charge")}</span>
           <span className="font-semibold">€{vehicle.tco.annualFuelOrChargingEur.toLocaleString()}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
-          <span className="text-muted-foreground">Brake wear</span>
+          <span className="text-muted-foreground">{t("ev.database.brake_wear")}</span>
           <BrakeWearBadge wear={vehicle.tco.brakeWear} />
         </div>
         <div className="flex items-center justify-between text-xs">
-          <span className="text-muted-foreground">3-year depreciation</span>
+          <span className="text-muted-foreground">{t("ev.database.depreciation_3yr")}</span>
           <span className={`font-semibold ${vehicle.tco.depreciationPct3yr <= 30 ? "text-emerald-400" : vehicle.tco.depreciationPct3yr <= 38 ? "text-amber-400" : "text-red-400"}`}>
             {vehicle.tco.depreciationPct3yr}%
           </span>
         </div>
       </div>
 
-      {/* Actions */}
       <div className="px-5 pb-5 flex items-center gap-3">
         {target ? (
           <Link
             to={target}
             className="inline-flex items-center gap-1.5 text-xs text-accent hover:underline font-medium"
           >
-            Full deep-dive <ChevronRight className="w-3 h-3" />
+            {t("ev.database.full_deep_dive")} <ChevronRight className="w-3 h-3" />
           </Link>
         ) : (
-          <span className="text-xs text-muted-foreground">Overview only</span>
+          <span className="text-xs text-muted-foreground">{t("ev.database.overview_only")}</span>
         )}
         <Link
           to={L("/ev/compare")}
           className="ml-auto inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground transition-colors"
         >
-          <BarChart2 className="w-3 h-3" /> Compare
+          <BarChart2 className="w-3 h-3" /> {t("ev.database.compare")}
         </Link>
       </div>
     </div>
@@ -162,12 +159,30 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
 }
 
 function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
+  const { t } = useTranslation();
+  const typeLabels: Record<string, string> = {
+    ev: t("ev.database.filter_ev"),
+    phev: t("ev.database.plug_in_hybrid"),
+    "mild-hybrid": t("ev.database.mild_hybrid"),
+    diesel: t("ev.database.filter_diesel"),
+  };
+  const headers = [
+    t("ev.database.tbl_vehicle"),
+    t("ev.database.tbl_type"),
+    t("ev.database.tbl_price_from"),
+    t("ev.database.annual_fuel_charge"),
+    t("ev.database.tbl_annual_service"),
+    t("ev.database.tco_label"),
+    t("ev.database.tbl_depreciation"),
+    t("ev.database.brake_wear"),
+  ];
+
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[700px] text-xs">
         <thead>
           <tr className="border-b border-border/30">
-            {["Vehicle", "Type", "Price from", "Annual fuel/charge", "Annual service", "5-yr TCO", "Depreciation 3yr", "Brake wear"].map((h) => (
+            {headers.map((h) => (
               <th key={h} className="text-left text-muted-foreground font-normal py-3 px-3 first:pl-0 last:pr-0">{h}</th>
             ))}
           </tr>
@@ -178,7 +193,7 @@ function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
               <td className="py-3 px-3 pl-0 font-medium">{v.name}</td>
               <td className="py-3 px-3">
                 <span className={`text-[9px] uppercase px-1.5 py-0.5 rounded-full border font-medium tracking-wide ${TYPE_COLORS[v.type]}`}>
-                  {TYPE_LABELS[v.type]}
+                  {typeLabels[v.type] ?? v.type}
                 </span>
               </td>
               <td className="py-3 px-3">€{v.priceFrom.toLocaleString()}</td>
@@ -200,6 +215,7 @@ function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
 }
 
 export default function EVDatabase() {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
@@ -208,6 +224,22 @@ export default function EVDatabase() {
   const [sortKey, setSortKey] = useState<SortKey>("priceFrom");
   const [sortAsc, setSortAsc] = useState(true);
   const [view, setView] = useState<"grid" | "table">("grid");
+
+  const SORT_OPTIONS: { value: SortKey; label: string }[] = [
+    { value: "priceFrom", label: t("ev.database.sort_price_from") },
+    { value: "tco.fiveYearTcoEur", label: t("ev.database.sort_tco") },
+    { value: "tco.depreciationPct5yr", label: t("ev.database.sort_depreciation") },
+    { value: "specs.realWorldRangeKm", label: t("ev.database.sort_range") },
+    { value: "specs.zeroTo100", label: t("ev.database.sort_0_100") },
+  ];
+
+  const typeGroups: { value: VehicleType | "all"; label: string; count: number }[] = [
+    { value: "all", label: t("ev.database.all_vehicles"), count: VEHICLES.length },
+    { value: "ev", label: t("ev.database.filter_ev"), count: VEHICLES.filter((v) => v.type === "ev").length },
+    { value: "phev", label: t("ev.database.plug_in_hybrid"), count: VEHICLES.filter((v) => v.type === "phev").length },
+    { value: "mild-hybrid", label: t("ev.database.mild_hybrid"), count: VEHICLES.filter((v) => v.type === "mild-hybrid").length },
+    { value: "diesel", label: t("ev.database.filter_diesel"), count: VEHICLES.filter((v) => v.type === "diesel").length },
+  ];
 
   const filtered = useMemo(() => {
     const base = typeFilter === "all" ? VEHICLES : VEHICLES.filter((v) => v.type === typeFilter);
@@ -218,50 +250,52 @@ export default function EVDatabase() {
     });
   }, [typeFilter, sortKey, sortAsc]);
 
-  const typeGroups: { value: VehicleType | "all"; label: string; count: number }[] = [
-    { value: "all", label: "All vehicles", count: VEHICLES.length },
-    { value: "ev", label: "Electric", count: VEHICLES.filter((v) => v.type === "ev").length },
-    { value: "phev", label: "Plug-in Hybrid", count: VEHICLES.filter((v) => v.type === "phev").length },
-    { value: "mild-hybrid", label: "Mild Hybrid", count: VEHICLES.filter((v) => v.type === "mild-hybrid").length },
-    { value: "diesel", label: "Diesel", count: VEHICLES.filter((v) => v.type === "diesel").length },
+  const sortLabel = SORT_OPTIONS.find((o) => o.value === sortKey)?.label ?? "";
+
+  const stats = [
+    { value: `${VEHICLES.length}`, label: t("ev.database.stat_count_label"), icon: TrendingUp },
+    { value: `${VEHICLES.filter((v) => v.type === "ev").length}`, label: t("ev.database.stat_ev_label"), icon: Zap },
+    { value: "€17k", label: t("ev.database.stat_lowest_label"), icon: TrendingDown },
+    { value: "€42k", label: t("ev.database.stat_highest_label"), icon: TrendingUp },
+  ];
+
+  const tcoBoxes = [
+    { label: t("ev.database.tco_box_fuel"), desc: "Based on 20,000 km/year. EVs use average home + public mix. ICE uses European average fuel price." },
+    { label: t("ev.database.tco_box_service"), desc: "Manufacturer-recommended intervals. EVs have fewer service items — no oil, brake fluid, timing chains." },
+    { label: t("ev.database.tco_box_tyres"), desc: "Based on realistic wear rates. Heavier EVs and performance vehicles consume tyres faster." },
+    { label: t("ev.database.brake_wear"), desc: "EVs with strong regenerative braking use friction brakes minimally. ICE brakes wear at conventional rates." },
   ];
 
   return (
     <PageShell>
       <SEO
-        title="Vehicle Database — EV, Hybrid & ICE Comparison | AUTOVERE"
-        description="Compare EVs, plug-in hybrids and diesel estates side by side. Real-world range, 5-year total cost of ownership, brake wear, depreciation and ownership analysis."
+        title={t("ev.database.seo_title")}
+        description={t("ev.database.seo_desc")}
       />
 
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-slate-950/40 via-transparent to-violet-950/20 pointer-events-none" />
         <div className="container relative">
           <Link to={L("/ev")} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-6 transition-colors">
-            <ChevronLeft className="w-3.5 h-3.5" /> EV Hub
+            <ChevronLeft className="w-3.5 h-3.5" /> {t("ev.nav.hub")}
           </Link>
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-accent mb-5">
-            <Zap className="w-3.5 h-3.5" /> EV Hub › Vehicle Database
+            <Zap className="w-3.5 h-3.5" /> {t("ev.database.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-3xl">
-            European vehicle database. <span className="text-gradient">EV, hybrid, ICE.</span>
+            {t("ev.database.title")} <span className="text-gradient">{t("ev.database.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg mb-8">
-            Real-world range, 5-year ownership costs, depreciation, brake wear and honest analysis — for every major vehicle in the European market.
+            {t("ev.database.subtitle")}
           </p>
           <VehicleSearch placeholder="Search vehicles — BMW iX3, diesel estate, winter EV..." className="max-w-md" />
         </div>
       </section>
 
-      {/* Stats bar */}
       <section className="border-y border-border/40 bg-card/30">
         <div className="container py-6">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-            {[
-              { value: `${VEHICLES.length}`, label: "Vehicles in database", icon: TrendingUp },
-              { value: `${VEHICLES.filter((v) => v.type === "ev").length}`, label: "Electric models", icon: Zap },
-              { value: "€17k", label: "Lowest 5-year TCO", icon: TrendingDown },
-              { value: "€42k", label: "Highest 5-year TCO", icon: TrendingUp },
-            ].map((s) => (
+            {stats.map((s) => (
               <div key={s.label} className="text-center">
                 <div className="text-2xl font-bold text-gradient mb-1">{s.value}</div>
                 <div className="text-xs text-muted-foreground">{s.label}</div>
@@ -272,9 +306,7 @@ export default function EVDatabase() {
       </section>
 
       <section className="container py-12">
-        {/* Filters */}
         <div className="flex flex-wrap items-center gap-3 mb-8">
-          {/* Type filter */}
           <div className="flex flex-wrap gap-2">
             {typeGroups.map((g) => (
               <button
@@ -292,7 +324,6 @@ export default function EVDatabase() {
           </div>
 
           <div className="ml-auto flex items-center gap-2">
-            {/* Sort */}
             <div className="flex items-center gap-1.5 glass rounded-xl border border-border/40 px-3 py-1.5">
               <SlidersHorizontal className="w-3.5 h-3.5 text-muted-foreground" />
               <select
@@ -312,23 +343,25 @@ export default function EVDatabase() {
               </button>
             </div>
 
-            {/* View toggle */}
             <div className="flex glass rounded-xl border border-border/40 overflow-hidden">
-              {(["grid", "table"] as const).map((v) => (
-                <button
-                  key={v}
-                  onClick={() => setView(v)}
-                  className={`px-3 py-1.5 text-xs transition-colors ${view === v ? "bg-primary/20 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
-                >
-                  {v === "grid" ? "Cards" : "Table"}
-                </button>
-              ))}
+              <button
+                onClick={() => setView("grid")}
+                className={`px-3 py-1.5 text-xs transition-colors ${view === "grid" ? "bg-primary/20 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {t("ev.database.cards")}
+              </button>
+              <button
+                onClick={() => setView("table")}
+                className={`px-3 py-1.5 text-xs transition-colors ${view === "table" ? "bg-primary/20 text-foreground" : "text-muted-foreground hover:text-foreground"}`}
+              >
+                {t("ev.database.table")}
+              </button>
             </div>
           </div>
         </div>
 
         <div className="text-xs text-muted-foreground mb-6">
-          {filtered.length} vehicle{filtered.length !== 1 ? "s" : ""} · sorted by {SORT_OPTIONS.find((o) => o.value === sortKey)?.label} ({sortAsc ? "low–high" : "high–low"})
+          {t("ev.database.results", { n: filtered.length })} · {t("ev.database.sorted_by")} {sortLabel} ({sortAsc ? t("ev.database.dir_asc") : t("ev.database.dir_desc")})
         </div>
 
         {view === "grid" ? (
@@ -344,18 +377,12 @@ export default function EVDatabase() {
         )}
       </section>
 
-      {/* TCO explainer */}
       <section className="container pb-24">
         <div className="glass rounded-3xl border border-border/40 p-8 md:p-12">
-          <h2 className="text-xl font-bold tracking-tight mb-2">How we calculate 5-year TCO</h2>
-          <p className="text-muted-foreground text-sm mb-6 max-w-2xl">Total Cost of Ownership includes all predictable running costs over 5 years, excluding insurance and road tax (which vary significantly by driver profile and country).</p>
+          <h2 className="text-xl font-bold tracking-tight mb-2">{t("ev.database.how_tco_title")}</h2>
+          <p className="text-muted-foreground text-sm mb-6 max-w-2xl">{t("ev.database.how_tco_lead")}</p>
           <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-4">
-            {[
-              { label: "Fuel / Charging", desc: "Based on 20,000 km/year. EVs use average home + public mix. ICE uses European average fuel price." },
-              { label: "Service costs", desc: "Manufacturer-recommended intervals. EVs have fewer service items — no oil, brake fluid, timing chains." },
-              { label: "Tyre replacement", desc: "Based on realistic wear rates. Heavier EVs and performance vehicles consume tyres faster." },
-              { label: "Brake wear", desc: "EVs with strong regenerative braking use friction brakes minimally. ICE brakes wear at conventional rates." },
-            ].map((item) => (
+            {tcoBoxes.map((item) => (
               <div key={item.label} className="bg-card/40 rounded-xl p-4">
                 <div className="text-xs font-semibold mb-1.5">{item.label}</div>
                 <p className="text-[11px] text-muted-foreground leading-relaxed">{item.desc}</p>

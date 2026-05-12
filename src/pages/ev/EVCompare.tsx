@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { Zap, ChevronLeft, Check, Trophy, TrendingDown, TrendingUp, Info } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
@@ -11,8 +12,8 @@ const MAX_SELECTIONS = 3;
 function ScoreBar({ value, max = 100, color }: { value: number; max?: number; color: string }) {
   const [width, setWidth] = useState(0);
   useEffect(() => {
-    const t = setTimeout(() => setWidth((value / max) * 100), 100);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setWidth((value / max) * 100), 100);
+    return () => clearTimeout(timer);
   }, [value, max]);
   return (
     <div className="h-1.5 rounded-full bg-card overflow-hidden w-full">
@@ -29,6 +30,7 @@ function ModelSelector({ models, selected, onToggle }: {
   selected: string[];
   onToggle: (slug: string) => void;
 }) {
+  const { t } = useTranslation();
   return (
     <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
       {models.map((m) => {
@@ -58,7 +60,7 @@ function ModelSelector({ models, selected, onToggle }: {
             <div className={`text-sm font-bold mt-2 ${m.accentColor}`}>
               {m.range.real} km
             </div>
-            <div className="text-[9px] text-muted-foreground">real-world range</div>
+            <div className="text-[9px] text-muted-foreground">{t("ev.compare.real_range")}</div>
           </button>
         );
       })}
@@ -67,6 +69,7 @@ function ModelSelector({ models, selected, onToggle }: {
 }
 
 function ComparisonTable({ selected }: { selected: CompareModel[] }) {
+  const { t } = useTranslation();
   const accentColors: Record<string, string> = {
     "text-red-400": "bg-red-400",
     "text-yellow-400": "bg-yellow-400",
@@ -82,7 +85,7 @@ function ComparisonTable({ selected }: { selected: CompareModel[] }) {
       <table className="w-full min-w-[640px]">
         <thead>
           <tr>
-            <th className="text-left text-xs text-muted-foreground font-normal pb-4 pr-4 w-48">Metric</th>
+            <th className="text-left text-xs text-muted-foreground font-normal pb-4 pr-4 w-48">{t("ev.compare.metric")}</th>
             {selected.map((m) => (
               <th key={m.slug} className="text-center pb-4 px-2">
                 <div className={`text-[9px] uppercase tracking-widest mb-0.5 ${m.accentColor}`}>{m.brand}</div>
@@ -142,10 +145,11 @@ function ComparisonTable({ selected }: { selected: CompareModel[] }) {
 }
 
 function VerdictCards({ selected }: { selected: CompareModel[] }) {
+  const { t } = useTranslation();
   return (
     <div className={`grid gap-6 ${selected.length === 2 ? "md:grid-cols-2" : selected.length === 3 ? "lg:grid-cols-3" : "grid-cols-1"}`}>
       {selected.map((m) => (
-        <div key={m.slug} className={`glass rounded-2xl border p-6 space-y-4`} style={{ borderColor: "rgba(255,255,255,0.1)" }}>
+        <div key={m.slug} className="glass rounded-2xl border p-6 space-y-4" style={{ borderColor: "rgba(255,255,255,0.1)" }}>
           <div>
             <div className={`text-[10px] uppercase tracking-widest mb-1 ${m.accentColor}`}>{m.brand} · {m.category}</div>
             <h3 className="font-semibold text-lg">{m.name}</h3>
@@ -154,7 +158,7 @@ function VerdictCards({ selected }: { selected: CompareModel[] }) {
           <div className="grid grid-cols-3 gap-2">
             <div className="bg-card/60 rounded-lg p-2 text-center">
               <div className={`text-base font-bold ${m.accentColor}`}>{m.range.real}</div>
-              <div className="text-[9px] text-muted-foreground uppercase">Real km</div>
+              <div className="text-[9px] text-muted-foreground uppercase">{t("ev.advisor.real_km")}</div>
             </div>
             <div className="bg-card/60 rounded-lg p-2 text-center">
               <div className={`text-base font-bold ${m.accentColor}`}>{m.charging.maxDC}</div>
@@ -171,11 +175,11 @@ function VerdictCards({ selected }: { selected: CompareModel[] }) {
           <div className="space-y-2 pt-2 border-t border-border/20">
             <div className="flex items-start gap-2">
               <TrendingUp className="w-3.5 h-3.5 text-emerald-400 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-muted-foreground"><span className="text-emerald-400 font-medium">Best for: </span>{m.bestFor}</p>
+              <p className="text-xs text-muted-foreground"><span className="text-emerald-400 font-medium">{t("ev.compare.best_for")} </span>{m.bestFor}</p>
             </div>
             <div className="flex items-start gap-2">
               <TrendingDown className="w-3.5 h-3.5 text-red-400 mt-0.5 flex-shrink-0" />
-              <p className="text-xs text-muted-foreground"><span className="text-red-400 font-medium">Not ideal: </span>{m.worstFor}</p>
+              <p className="text-xs text-muted-foreground"><span className="text-red-400 font-medium">{t("ev.compare.not_ideal")} </span>{m.worstFor}</p>
             </div>
           </div>
 
@@ -183,7 +187,7 @@ function VerdictCards({ selected }: { selected: CompareModel[] }) {
             to={`/ev/models/${m.slug}`}
             className={`inline-flex items-center gap-1.5 text-xs font-medium ${m.accentColor} hover:underline`}
           >
-            Full model deep-dive →
+            {t("ev.compare.full_deep_dive")}
           </Link>
         </div>
       ))}
@@ -195,6 +199,7 @@ export default function EVCompare() {
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
+  const { t } = useTranslation();
 
   const [selected, setSelected] = useState<string[]>(["tesla-model-y", "audi-q6-etron"]);
 
@@ -209,8 +214,8 @@ export default function EVCompare() {
   return (
     <PageShell>
       <SEO
-        title="EV Comparison Engine — Best European EVs Compared | AUTOVERE"
-        description="Compare Tesla Model Y, Porsche Macan EV, BMW i5, Audi Q6 e-tron, Kia EV9, Hyundai Ioniq 5 and more. Real-world range, charging speed, winter performance and ownership cost."
+        title={t("ev.compare.seo_title")}
+        description={t("ev.compare.seo_desc")}
       />
 
       {/* Hero */}
@@ -218,16 +223,16 @@ export default function EVCompare() {
         <div className="absolute inset-0 bg-gradient-to-br from-violet-950/40 via-transparent to-cyan-950/20 pointer-events-none" />
         <div className="container relative">
           <Link to={L("/ev")} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-6 transition-colors">
-            <ChevronLeft className="w-3.5 h-3.5" /> EV Hub
+            <ChevronLeft className="w-3.5 h-3.5" /> {t("ev.nav.hub")}
           </Link>
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-violet-400 mb-5">
-            <Zap className="w-3.5 h-3.5" /> EV Hub › Compare
+            <Zap className="w-3.5 h-3.5" /> {t("ev.compare.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-3xl">
-            EV comparison engine. <span className="text-gradient">Honest data, real verdicts.</span>
+            {t("ev.compare.title")} <span className="text-gradient">{t("ev.compare.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg">
-            Select up to {MAX_SELECTIONS} EVs. Compare real-world range, charging performance, ownership costs and expert analysis side by side.
+            {t("ev.compare.subtitle", { max: MAX_SELECTIONS })}
           </p>
         </div>
       </section>
@@ -236,9 +241,9 @@ export default function EVCompare() {
       <section className="container py-12">
         <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-xl font-bold tracking-tight">Select models to compare</h2>
+            <h2 className="text-xl font-bold tracking-tight">{t("ev.compare.select_title")}</h2>
             <p className="text-xs text-muted-foreground mt-1">
-              {selected.length} of {MAX_SELECTIONS} selected
+              {t("ev.compare.selected_of", { n: selected.length, max: MAX_SELECTIONS })}
             </p>
           </div>
           {selected.length > 0 && (
@@ -246,7 +251,7 @@ export default function EVCompare() {
               onClick={() => setSelected([])}
               className="text-xs text-muted-foreground hover:text-foreground transition-colors"
             >
-              Clear selection
+              {t("ev.compare.clear")}
             </button>
           )}
         </div>
@@ -257,7 +262,7 @@ export default function EVCompare() {
       {selectedModels.length >= 2 && (
         <section className="container pb-16">
           <div className="glass rounded-3xl border border-border/40 p-6 md:p-10">
-            <h2 className="text-xl font-bold tracking-tight mb-8">Side-by-side comparison</h2>
+            <h2 className="text-xl font-bold tracking-tight mb-8">{t("ev.compare.table_title")}</h2>
             <ComparisonTable selected={selectedModels} />
           </div>
         </section>
@@ -266,7 +271,7 @@ export default function EVCompare() {
       {selectedModels.length === 1 && (
         <section className="container pb-16">
           <div className="glass rounded-2xl border border-border/40 p-8 text-center text-muted-foreground">
-            <p className="text-sm">Select at least one more model to begin comparing.</p>
+            <p className="text-sm">{t("ev.compare.select_one_more")}</p>
           </div>
         </section>
       )}
@@ -274,7 +279,7 @@ export default function EVCompare() {
       {selectedModels.length === 0 && (
         <section className="container pb-16">
           <div className="glass rounded-2xl border border-border/40 p-8 text-center text-muted-foreground">
-            <p className="text-sm">Select 2–3 models above to start your comparison.</p>
+            <p className="text-sm">{t("ev.compare.select_two")}</p>
           </div>
         </section>
       )}
@@ -283,9 +288,9 @@ export default function EVCompare() {
       {selectedModels.length >= 1 && (
         <section className="container pb-24">
           <div className="mb-8">
-            <p className="text-xs uppercase tracking-[0.25em] text-accent mb-2">Analysis</p>
-            <h2 className="text-2xl font-bold tracking-tight">Expert ownership verdicts</h2>
-            <p className="text-sm text-muted-foreground mt-1">Synthesised from real-world data, reviewer consensus and ownership analysis.</p>
+            <p className="text-xs uppercase tracking-[0.25em] text-accent mb-2">{t("ev.compare.analysis_eyebrow")}</p>
+            <h2 className="text-2xl font-bold tracking-tight">{t("ev.compare.verdicts_title")}</h2>
+            <p className="text-sm text-muted-foreground mt-1">{t("ev.compare.verdicts_lead")}</p>
           </div>
           <VerdictCards selected={selectedModels} />
         </section>
@@ -296,15 +301,15 @@ export default function EVCompare() {
         <div className="glass rounded-3xl border border-border/40 p-10 md:p-14 text-center relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-violet-500/5 via-transparent to-cyan-500/5 pointer-events-none" />
           <div className="relative">
-            <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">Not sure which EV fits your life?</h2>
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-3">{t("ev.compare.cta_title")}</h2>
             <p className="text-muted-foreground max-w-md mx-auto mb-7 text-sm leading-relaxed">
-              Our AI buying advisor asks 7 questions and matches you to the best EV for your budget, climate, family and driving habits.
+              {t("ev.compare.cta_lead")}
             </p>
             <Link
               to={L("/ev/advisor")}
               className="inline-flex items-center gap-2 px-7 py-3 rounded-xl bg-gradient-primary text-primary-foreground font-medium hover:opacity-90 transition-opacity"
             >
-              Start the advisor →
+              {t("ev.compare.cta_btn")}
             </Link>
           </div>
         </div>

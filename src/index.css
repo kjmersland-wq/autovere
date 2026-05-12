@@ -5,8 +5,72 @@
 @tailwind utilities;
 
 @layer base {
+  /* ─── LIGHT MODE (default :root) ──────────────────────────────────────── */
   :root {
-    /* Midnight Indigo design system */
+    /* Premium editorial light — warm white / deep slate */
+    --background: 220 14% 96%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 243 75% 59%;
+    --primary-foreground: 220 30% 98%;
+    --primary-glow: 250 90% 70%;
+
+    --secondary: 220 14% 92%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 220 13% 90%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 250 80% 56%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 84%;
+    --input: 220 13% 88%;
+    --ring: 243 75% 59%;
+
+    --radius: 1rem;
+
+    /* Premium tokens — light */
+    --gradient-hero: radial-gradient(ellipse at top, hsl(243 75% 70% / 0.10), transparent 60%),
+                     linear-gradient(180deg, hsl(220 14% 96%) 0%, hsl(220 10% 98%) 100%);
+    --gradient-primary: linear-gradient(135deg, hsl(243 75% 59%), hsl(250 90% 70%));
+    --gradient-glow: radial-gradient(circle, hsl(250 90% 70% / 0.10), transparent 70%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100% / 0.9), hsl(220 14% 96% / 0.7));
+
+    --shadow-glow: 0 0 40px hsl(250 90% 70% / 0.14), 0 0 80px hsl(243 75% 59% / 0.08);
+    --shadow-elegant: 0 20px 60px -15px hsl(220 20% 40% / 0.10);
+    --shadow-soft: 0 4px 24px hsl(220 14% 50% / 0.08);
+
+    --glass-bg: hsl(0 0% 100% / 0.75);
+    --glass-border: hsl(220 13% 80% / 0.60);
+    --grid-color: hsl(220 13% 60% / 0.10);
+
+    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 243 75% 59%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 243 75% 59%;
+  }
+
+  /* ─── DARK MODE ────────────────────────────────────────────────────────── */
+  .dark {
+    /* Midnight Indigo — cinematic AUTOVERE identity */
     --background: 230 45% 4%;
     --foreground: 220 30% 96%;
 
@@ -36,9 +100,7 @@
     --input: 232 30% 14%;
     --ring: 243 75% 59%;
 
-    --radius: 1rem;
-
-    /* Premium tokens */
+    /* Premium tokens — dark */
     --gradient-hero: radial-gradient(ellipse at top, hsl(243 75% 25% / 0.6), transparent 60%),
                      linear-gradient(180deg, hsl(230 50% 6%) 0%, hsl(230 45% 4%) 100%);
     --gradient-primary: linear-gradient(135deg, hsl(243 75% 59%), hsl(250 90% 70%));
@@ -51,9 +113,17 @@
 
     --glass-bg: hsl(232 40% 10% / 0.6);
     --glass-border: hsl(232 50% 30% / 0.3);
+    --grid-color: hsl(232 50% 30% / 0.08);
 
-    --transition-smooth: cubic-bezier(0.4, 0, 0.2, 1);
-    --transition-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+    /* Sidebar */
+    --sidebar-background: 232 40% 5%;
+    --sidebar-foreground: 220 30% 96%;
+    --sidebar-primary: 243 75% 59%;
+    --sidebar-primary-foreground: 220 30% 98%;
+    --sidebar-accent: 232 35% 10%;
+    --sidebar-accent-foreground: 220 30% 96%;
+    --sidebar-border: 232 30% 16%;
+    --sidebar-ring: 243 75% 59%;
   }
 }
 
@@ -64,6 +134,7 @@
     font-family: 'DM Sans', system-ui, sans-serif;
     font-feature-settings: 'ss01', 'cv11';
     -webkit-font-smoothing: antialiased;
+    transition: background-color 0.25s ease, color 0.15s ease;
   }
   h1, h2, h3, h4, h5, h6 {
     font-family: 'Space Grotesk', system-ui, sans-serif;
@@ -90,8 +161,8 @@
   .shadow-elegant { box-shadow: var(--shadow-elegant); }
   .grid-bg {
     background-image:
-      linear-gradient(hsl(232 50% 30% / 0.08) 1px, transparent 1px),
-      linear-gradient(90deg, hsl(232 50% 30% / 0.08) 1px, transparent 1px);
+      linear-gradient(var(--grid-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-color) 1px, transparent 1px);
     background-size: 56px 56px;
   }
   .animate-float { animation: float 6s ease-in-out infinite; }

@@ -36,8 +36,5 @@ verify_jwt = false
 [functions.payments-webhook]
 verify_jwt = false
 
-[functions.create-checkout]
-verify_jwt = false
+# create-checkout and customer-portal require a valid Supabase JWT (user must be signed in)
 
-[functions.customer-portal]
-verify_jwt = false

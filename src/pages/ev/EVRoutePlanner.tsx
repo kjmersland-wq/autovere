@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Route, ArrowRight, ArrowUpDown, Battery, Zap, Clock, Euro, Thermometer, Wind, ChevronDown, ChevronUp, MapPin } from "lucide-react";
+import { Route, ArrowRight, ArrowUpDown, Zap, Clock, Euro, Thermometer, Wind, ChevronDown, ChevronUp, MapPin } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 
@@ -79,6 +80,7 @@ const SocBar = ({ value, color }: { value: number; color: string }) => (
 );
 
 export default function EVRoutePlanner() {
+  const { t } = useTranslation();
   const [origin, setOrigin] = useState("Tromsø, Norway");
   const [destination, setDestination] = useState("Barcelona, Spain");
   const [model, setModel] = useState(EV_MODELS[0]);
@@ -108,8 +110,8 @@ export default function EVRoutePlanner() {
   return (
     <PageShell>
       <SEO
-        title="EV Route Planner Europe | AUTOVERE"
-        description="Plan long-distance EV trips across Europe. Get charging stops, costs and travel time estimates for your electric vehicle."
+        title={t("ev.planner.seo_title")}
+        description={t("ev.planner.seo_desc")}
       />
 
       {/* Hero */}
@@ -117,14 +119,13 @@ export default function EVRoutePlanner() {
         <div className="absolute inset-0 bg-gradient-to-br from-violet-950/50 via-transparent to-cyan-950/20 pointer-events-none" />
         <div className="container relative">
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-violet-400 mb-5">
-            <Route className="w-3.5 h-3.5" /> EV Hub › Route Planner
+            <Route className="w-3.5 h-3.5" /> {t("ev.planner.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
-            Long-distance EV travel, <span className="text-gradient">planned precisely.</span>
+            {t("ev.planner.title")} <span className="text-gradient">{t("ev.planner.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed">
-            Enter your route, select your car. We'll calculate optimal charging stops,
-            real costs and total travel time — including winter adjustments.
+            {t("ev.planner.subtitle")}
           </p>
         </div>
       </section>
@@ -137,13 +138,13 @@ export default function EVRoutePlanner() {
             <div className="grid md:grid-cols-[1fr_auto_1fr] gap-4 items-center mb-6">
               {/* Origin */}
               <div>
-                <label className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">From</label>
+                <label className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">{t("ev.planner.from")}</label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
                     value={origin}
                     onChange={(e) => { setOrigin(e.target.value); setResult(null); }}
-                    placeholder="Departure city…"
+                    placeholder={t("ev.planner.from_placeholder")}
                     className="w-full pl-10 pr-4 py-3 rounded-xl bg-card border border-border/50 text-sm focus:outline-none focus:border-primary/50 transition-colors"
                   />
                 </div>
@@ -159,13 +160,13 @@ export default function EVRoutePlanner() {
 
               {/* Destination */}
               <div>
-                <label className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">To</label>
+                <label className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">{t("ev.planner.to")}</label>
                 <div className="relative">
                   <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                   <input
                     value={destination}
                     onChange={(e) => { setDestination(e.target.value); setResult(null); }}
-                    placeholder="Destination city…"
+                    placeholder={t("ev.planner.to_placeholder")}
                     className="w-full pl-10 pr-4 py-3 rounded-xl bg-card border border-border/50 text-sm focus:outline-none focus:border-primary/50 transition-colors"
                   />
                 </div>
@@ -175,7 +176,7 @@ export default function EVRoutePlanner() {
             {/* Vehicle + options */}
             <div className="grid sm:grid-cols-2 gap-4 mb-6">
               <div>
-                <label className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">Vehicle</label>
+                <label className="text-xs uppercase tracking-widest text-muted-foreground mb-2 block">{t("ev.planner.vehicle")}</label>
                 <select
                   value={model.name}
                   onChange={(e) => setModel(EV_MODELS.find((m) => m.name === e.target.value) ?? EV_MODELS[0])}
@@ -197,9 +198,9 @@ export default function EVRoutePlanner() {
                   <div>
                     <div className="text-sm font-medium flex items-center gap-1.5">
                       <Thermometer className="w-3.5 h-3.5 text-cyan-400" />
-                      Winter mode
+                      {t("ev.planner.winter_mode")}
                     </div>
-                    <div className="text-xs text-muted-foreground">–15% range, more stops</div>
+                    <div className="text-xs text-muted-foreground">{t("ev.planner.winter_hint")}</div>
                   </div>
                 </label>
               </div>
@@ -213,12 +214,12 @@ export default function EVRoutePlanner() {
               {loading ? (
                 <>
                   <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                  Calculating route…
+                  {t("ev.planner.planning")}
                 </>
               ) : (
                 <>
                   <Route className="w-4 h-4" />
-                  Plan my route
+                  {t("ev.planner.plan_btn")}
                 </>
               )}
             </button>
@@ -235,16 +236,16 @@ export default function EVRoutePlanner() {
                   <span className="font-medium text-foreground">{result.destination}</span>
                   {result.winterAdjusted && (
                     <span className="ml-auto inline-flex items-center gap-1 text-cyan-400 bg-cyan-400/10 px-2 py-0.5 rounded-full text-[10px] border border-cyan-400/20">
-                      <Thermometer className="w-3 h-3" /> Winter adjusted
+                      <Thermometer className="w-3 h-3" /> {t("ev.planner.winter_adjusted")}
                     </span>
                   )}
                 </div>
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-6">
                   {[
-                    { icon: Route, label: "Distance", value: result.totalDistance, color: "text-foreground" },
-                    { icon: Clock, label: "Total time", value: result.totalTime, color: "text-foreground" },
-                    { icon: Zap, label: "Charging time", value: result.chargingTime, color: "text-cyan-400" },
-                    { icon: Euro, label: "Energy cost", value: result.energyCost, color: "text-emerald-400" },
+                    { icon: Route, label: t("ev.planner.distance"), value: result.totalDistance, color: "text-foreground" },
+                    { icon: Clock, label: t("ev.planner.total_time"), value: result.totalTime, color: "text-foreground" },
+                    { icon: Zap, label: t("ev.planner.charging_time"), value: result.chargingTime, color: "text-cyan-400" },
+                    { icon: Euro, label: t("ev.planner.energy_cost"), value: result.energyCost, color: "text-emerald-400" },
                   ].map((stat) => (
                     <div key={stat.label}>
                       <div className="flex items-center gap-1.5 text-muted-foreground mb-1">
@@ -259,7 +260,7 @@ export default function EVRoutePlanner() {
 
               {/* Charging stops */}
               <h3 className="text-sm font-semibold uppercase tracking-wider text-muted-foreground mb-4">
-                {result.stops.length} charging stops
+                {t("ev.planner.stops", { n: result.stops.length })}
               </h3>
               <div className="space-y-3">
                 {result.stops.map((stop, i) => (
@@ -285,12 +286,12 @@ export default function EVRoutePlanner() {
                       <div className="px-5 pb-5 border-t border-border/40 pt-4">
                         <div className="grid grid-cols-2 gap-4 mb-4 text-sm">
                           <div>
-                            <div className="text-xs text-muted-foreground mb-0.5">Arrive with</div>
-                            <div className="font-semibold text-amber-400">{stop.arrivalSoc}% charge</div>
+                            <div className="text-xs text-muted-foreground mb-0.5">{t("ev.planner.arrive_with")}</div>
+                            <div className="font-semibold text-amber-400">{t("ev.planner.charge", { n: stop.arrivalSoc })}</div>
                           </div>
                           <div>
-                            <div className="text-xs text-muted-foreground mb-0.5">Depart with</div>
-                            <div className="font-semibold text-emerald-400">{stop.departureSoc}% charge</div>
+                            <div className="text-xs text-muted-foreground mb-0.5">{t("ev.planner.depart_with")}</div>
+                            <div className="font-semibold text-emerald-400">{t("ev.planner.charge", { n: stop.departureSoc })}</div>
                           </div>
                         </div>
                         <div className="flex items-center gap-2">
@@ -307,7 +308,7 @@ export default function EVRoutePlanner() {
               {/* Footer note */}
               <div className="mt-8 text-center text-xs text-muted-foreground">
                 <Wind className="w-3.5 h-3.5 inline mr-1" />
-                Estimates based on {result.avgConsumption} average consumption. Actual results vary by speed, load and weather.
+                {t("ev.planner.estimate_note", { consumption: result.avgConsumption })}
               </div>
             </div>
           )}

@@ -1,5 +1,7 @@
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Battery, Zap, Thermometer, ArrowRight, CheckCircle, XCircle, ChevronLeft, Play, Star, Globe } from "lucide-react";
+import { Battery, Zap, ArrowRight, CheckCircle, XCircle, Play, Globe, GitCompare, Database, Calculator, Wifi } from "lucide-react";
+import { EVBreadcrumb } from "@/components/EVBreadcrumb";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { EV_MODELS } from "@/data/ev-models";
@@ -36,6 +38,7 @@ function SpecRow({ label, value }: { label: string; value: string }) {
 }
 
 export function EVModelsIndex() {
+  const { t } = useTranslation();
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
@@ -43,20 +46,20 @@ export function EVModelsIndex() {
   return (
     <PageShell>
       <SEO
-        title="EV Models — European Buyer's Guide | AUTOVERE"
-        description="In-depth pages for every major European EV. Real-world range, charging data, winter performance and pricing by country."
+        title={t("ev.models.seo_title")}
+        description={t("ev.models.seo_desc")}
       />
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/20 pointer-events-none" />
         <div className="container relative">
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-cyan-400 mb-5">
-            <Zap className="w-3.5 h-3.5" /> EV Hub › Models
+            <Zap className="w-3.5 h-3.5" /> {t("ev.models.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
-            European EV buyer's guide. <span className="text-gradient">Honest data, no hype.</span>
+            {t("ev.models.title")} <span className="text-gradient">{t("ev.models.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg">
-            Real-world range, actual charging speeds, winter performance and full ownership analysis.
+            {t("ev.models.subtitle")}
           </p>
         </div>
       </section>
@@ -83,7 +86,7 @@ export function EVModelsIndex() {
                 </div>
               </div>
               <div className="flex items-center justify-between text-xs">
-                <span className="text-muted-foreground">from €{fmt(model.priceEur.from)}</span>
+                <span className="text-muted-foreground">{t("ev.models.from")} €{fmt(model.priceEur.from)}</span>
                 <span className="text-accent group-hover:translate-x-0.5 transition-transform">→</span>
               </div>
             </Link>
@@ -95,6 +98,7 @@ export function EVModelsIndex() {
 }
 
 export default function EVModelDetail() {
+  const { t } = useTranslation();
   const { slug } = useParams<{ slug: string }>();
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
@@ -108,20 +112,55 @@ export default function EVModelDetail() {
   const intelligence = getVehicleIntelligence(model.slug);
   const vehicleSignals = getSignalsForVehicle(model.slug);
 
+  const origin = "https://autovere.com";
+  const modelUrl = `${origin}${lang !== "en" ? `/${lang}` : ""}/ev/models/${model.slug}`;
+  const jsonLd = [
+    {
+      "@context": "https://schema.org",
+      "@type": "Car",
+      name: model.name,
+      brand: { "@type": "Brand", name: model.brand },
+      fuelType: "Electric",
+      description: model.tagline,
+      vehicleEngine: { "@type": "EngineSpecification", fuelType: "Electric" },
+      offers: { "@type": "AggregateOffer", priceCurrency: "EUR", lowPrice: model.priceEur.from, highPrice: model.priceEur.to },
+      url: modelUrl,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        { "@type": "ListItem", position: 1, name: t("ev.nav.hub"), item: `${origin}${lang !== "en" ? `/${lang}` : ""}/ev` },
+        { "@type": "ListItem", position: 2, name: t("ev.nav.models"), item: `${origin}${lang !== "en" ? `/${lang}` : ""}/ev/models` },
+        { "@type": "ListItem", position: 3, name: model.name, item: modelUrl },
+      ],
+    },
+  ];
+
+  const heroStats = [
+    { label: t("ev.models.real_range_label"), value: `${model.specs.range.realWorld} km`, color: "text-foreground" },
+    { label: t("ev.models.winter_range_label"), value: `${model.specs.range.winter} km`, color: "text-cyan-400" },
+    { label: "Max DC", value: `${model.specs.charging.maxDC} kW`, color: "text-emerald-400" },
+    { label: "10–80%", value: `${model.specs.charging.time10to80} min`, color: "text-amber-400" },
+    { label: "0–100 km/h", value: `${model.specs.performance.zeroTo100}s`, color: "text-violet-400" },
+  ];
+
   return (
     <PageShell>
       <SEO
         title={`${model.name} Review — Real-World EV Guide | AUTOVERE`}
         description={`${model.name} honest review: ${model.specs.range.realWorld} km real-world range, ${model.specs.charging.maxDC} kW DC charging, winter performance and ownership analysis.`}
+        jsonLd={jsonLd}
       />
 
-      {/* Hero */}
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/20 pointer-events-none" />
         <div className="container relative">
-          <Link to={L("/ev/models")} className="inline-flex items-center gap-1.5 text-xs text-muted-foreground hover:text-foreground mb-6 transition-colors">
-            <ChevronLeft className="w-3.5 h-3.5" /> All EV models
-          </Link>
+          <EVBreadcrumb items={[
+            { label: t("ev.nav.hub"), to: L("/ev") },
+            { label: t("ev.nav.models"), to: L("/ev/models") },
+            { label: model.name },
+          ]} />
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-accent mb-4">
             {model.brand} · {model.category} · {model.year}
           </div>
@@ -131,15 +170,8 @@ export default function EVModelDetail() {
           </div>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed mb-8">{model.tagline}</p>
 
-          {/* Key stats bar */}
           <div className="flex flex-wrap gap-4">
-            {[
-              { label: "Real range", value: `${model.specs.range.realWorld} km`, color: "text-foreground" },
-              { label: "Winter range", value: `${model.specs.range.winter} km`, color: "text-cyan-400" },
-              { label: "Max DC", value: `${model.specs.charging.maxDC} kW`, color: "text-emerald-400" },
-              { label: "10–80%", value: `${model.specs.charging.time10to80} min`, color: "text-amber-400" },
-              { label: "0–100 km/h", value: `${model.specs.performance.zeroTo100}s`, color: "text-violet-400" },
-            ].map((s) => (
+            {heroStats.map((s) => (
               <div key={s.label} className="glass rounded-xl border border-border/40 px-5 py-3 text-center">
                 <div className={`text-xl font-bold ${s.color}`}>{s.value}</div>
                 <div className="text-[10px] text-muted-foreground uppercase tracking-wider mt-0.5">{s.label}</div>
@@ -151,34 +183,30 @@ export default function EVModelDetail() {
 
       <div className="container py-16">
         <div className="grid lg:grid-cols-[1fr_360px] gap-10">
-          {/* Main content */}
           <div className="space-y-10">
-            {/* AI summary */}
             <section className="glass rounded-2xl border border-border/40 p-8">
               <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-accent mb-4">
-                <Zap className="w-3.5 h-3.5" /> Ownership summary
+                <Zap className="w-3.5 h-3.5" /> {t("ev.models.ownership_summary")}
               </div>
               <p className="text-muted-foreground leading-relaxed">{model.summary}</p>
             </section>
 
-            {/* Range visualisation */}
             <section>
-              <h2 className="text-xl font-bold tracking-tight mb-6">Range — what to actually expect</h2>
+              <h2 className="text-xl font-bold tracking-tight mb-6">{t("ev.models.range_heading")}</h2>
               <div className="glass rounded-2xl border border-border/40 p-6 space-y-4">
-                <SocBar value={model.specs.range.wltp} label="WLTP" color="bg-muted-foreground/50" />
-                <SocBar value={model.specs.range.realWorld} label="Real-world" color="bg-gradient-to-r from-primary to-accent" />
-                <SocBar value={model.specs.range.winter} label="Winter (−10°C)" color="bg-cyan-500/60" />
+                <SocBar value={model.specs.range.wltp} label={t("ev.models.wltp")} color="bg-muted-foreground/50" />
+                <SocBar value={model.specs.range.realWorld} label={t("ev.models.real_world")} color="bg-gradient-to-r from-primary to-accent" />
+                <SocBar value={model.specs.range.winter} label={t("ev.models.winter_temp")} color="bg-cyan-500/60" />
                 <p className="text-xs text-muted-foreground pt-2 border-t border-border/30">{model.winterNote}</p>
               </div>
             </section>
 
-            {/* Pros & Cons */}
             <section>
-              <h2 className="text-xl font-bold tracking-tight mb-6">Honest ownership analysis</h2>
+              <h2 className="text-xl font-bold tracking-tight mb-6">{t("ev.models.ownership_analysis")}</h2>
               <div className="grid md:grid-cols-2 gap-5">
                 <div className="glass rounded-2xl border border-emerald-500/20 p-6 bg-emerald-500/5">
                   <div className="flex items-center gap-2 text-emerald-400 font-medium text-sm mb-4">
-                    <CheckCircle className="w-4 h-4" /> What reviewers love
+                    <CheckCircle className="w-4 h-4" /> {t("ev.models.what_love")}
                   </div>
                   <ul className="space-y-2.5">
                     {model.pros.map((pro) => (
@@ -191,7 +219,7 @@ export default function EVModelDetail() {
                 </div>
                 <div className="glass rounded-2xl border border-red-500/20 p-6 bg-red-500/5">
                   <div className="flex items-center gap-2 text-red-400 font-medium text-sm mb-4">
-                    <XCircle className="w-4 h-4" /> Watch out for
+                    <XCircle className="w-4 h-4" /> {t("ev.models.watch_out")}
                   </div>
                   <ul className="space-y-2.5">
                     {model.cons.map((con) => (
@@ -205,9 +233,8 @@ export default function EVModelDetail() {
               </div>
             </section>
 
-            {/* Charging networks */}
             <section>
-              <h2 className="text-xl font-bold tracking-tight mb-4">Charging network compatibility</h2>
+              <h2 className="text-xl font-bold tracking-tight mb-4">{t("ev.models.networks")}</h2>
               <div className="flex flex-wrap gap-2">
                 {model.networks.map((n) => (
                   <span key={n} className="px-3 py-1.5 rounded-lg glass border border-border/40 text-sm">{n}</span>
@@ -215,9 +242,8 @@ export default function EVModelDetail() {
               </div>
             </section>
 
-            {/* Reviews */}
             <section>
-              <h2 className="text-xl font-bold tracking-tight mb-6">Video reviews</h2>
+              <h2 className="text-xl font-bold tracking-tight mb-6">{t("ev.models.video_reviews")}</h2>
               <div className="grid md:grid-cols-3 gap-4">
                 {model.youtubeReviews.map((r) => (
                   <div key={r.videoId} className="glass rounded-xl border border-border/40 overflow-hidden">
@@ -257,12 +283,10 @@ export default function EVModelDetail() {
             </section>
           </div>
 
-          {/* Sidebar */}
           <div className="space-y-5">
-            {/* Price by country */}
             <div className="glass rounded-2xl border border-border/40 p-6">
               <div className="flex items-center gap-2 text-xs uppercase tracking-widest text-accent mb-4">
-                <Globe className="w-3.5 h-3.5" /> Pricing by country
+                <Globe className="w-3.5 h-3.5" /> {t("ev.models.pricing")}
               </div>
               {model.pricingByCountry.map((p) => (
                 <div key={p.country} className="flex items-start justify-between py-2.5 border-b border-border/30 last:border-0">
@@ -274,29 +298,27 @@ export default function EVModelDetail() {
                 </div>
               ))}
               <div className="mt-3 text-xs text-muted-foreground">
-                from €{fmt(model.priceEur.from)} · to €{fmt(model.priceEur.to)}
+                {t("ev.models.price_range_label", { from: fmt(model.priceEur.from), to: fmt(model.priceEur.to) })}
               </div>
             </div>
 
-            {/* Specs */}
             <div className="glass rounded-2xl border border-border/40 p-6">
-              <h3 className="text-sm font-semibold mb-3">Full specifications</h3>
-              <SpecRow label="Battery (usable)" value={`${model.specs.battery.usable} kWh`} />
-              <SpecRow label="WLTP range" value={`${model.specs.range.wltp} km`} />
-              <SpecRow label="Max AC charging" value={`${model.specs.charging.maxAC} kW`} />
-              <SpecRow label="Max DC charging" value={`${model.specs.charging.maxDC} kW`} />
-              <SpecRow label="10–80% time" value={`${model.specs.charging.time10to80} min`} />
-              <SpecRow label="0–100 km/h" value={`${model.specs.performance.zeroTo100}s`} />
-              <SpecRow label="Power" value={`${model.specs.performance.powerKw} kW`} />
-              <SpecRow label="Top speed" value={`${model.specs.performance.topSpeed} km/h`} />
-              <SpecRow label="Weight" value={`${fmt(model.specs.dimensions.weightKg)} kg`} />
-              <SpecRow label="Cargo" value={`${model.specs.dimensions.cargoL} L`} />
+              <h3 className="text-sm font-semibold mb-3">{t("ev.models.specs_title")}</h3>
+              <SpecRow label={t("ev.models.spec_battery")} value={`${model.specs.battery.usable} kWh`} />
+              <SpecRow label={t("ev.models.spec_wltp")} value={`${model.specs.range.wltp} km`} />
+              <SpecRow label={t("ev.models.spec_ac")} value={`${model.specs.charging.maxAC} kW`} />
+              <SpecRow label={t("ev.models.spec_dc")} value={`${model.specs.charging.maxDC} kW`} />
+              <SpecRow label={t("ev.models.spec_charge_time")} value={`${model.specs.charging.time10to80} min`} />
+              <SpecRow label={t("ev.models.spec_0_100")} value={`${model.specs.performance.zeroTo100}s`} />
+              <SpecRow label={t("ev.models.spec_power")} value={`${model.specs.performance.powerKw} kW`} />
+              <SpecRow label={t("ev.models.spec_top_speed")} value={`${model.specs.performance.topSpeed} km/h`} />
+              <SpecRow label={t("ev.models.spec_weight")} value={`${fmt(model.specs.dimensions.weightKg)} kg`} />
+              <SpecRow label={t("ev.models.spec_cargo")} value={`${model.specs.dimensions.cargoL} L`} />
             </div>
 
-            {/* Alternatives */}
             {alternatives.length > 0 && (
               <div className="glass rounded-2xl border border-border/40 p-6">
-                <h3 className="text-sm font-semibold mb-3">Compare alternatives</h3>
+                <h3 className="text-sm font-semibold mb-3">{t("ev.models.compare_alts")}</h3>
                 <div className="space-y-2">
                   {alternatives.map((alt) => (
                     <Link
@@ -315,13 +337,11 @@ export default function EVModelDetail() {
               </div>
             )}
 
-            {/* AI Intelligence Scoring */}
             {intelligence && <VehicleIntelligenceCard intelligence={intelligence} />}
 
-            {/* Live signals for this vehicle */}
             {vehicleSignals.length > 0 && (
               <div className="glass rounded-2xl border border-border/40 p-5">
-                <div className="text-xs uppercase tracking-wider text-accent font-medium mb-3">Latest signals</div>
+                <div className="text-xs uppercase tracking-wider text-accent font-medium mb-3">{t("ev.models.latest_signals")}</div>
                 {vehicleSignals.map((s) => (
                   <div key={s.id} className="py-2.5 border-b border-border/20 last:border-0">
                     <div className="text-xs font-medium leading-snug mb-0.5">{s.title}</div>
@@ -333,6 +353,44 @@ export default function EVModelDetail() {
           </div>
         </div>
       </div>
+
+      <section className="container pb-20">
+        <h2 className="text-lg font-semibold mb-5">{t("ev.models.explore_more")}</h2>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <Link
+            to={L(`/ev/compare?a=${model.slug}`)}
+            className="glass rounded-2xl border border-border/40 p-5 hover:border-cyan-400/40 hover:-translate-y-0.5 transition-all group"
+          >
+            <GitCompare className="w-5 h-5 text-cyan-400 mb-3" />
+            <div className="text-sm font-medium mb-1">{t("ev.nav.compare")}</div>
+            <div className="text-xs text-muted-foreground">{t("ev.models.cta_compare")}</div>
+          </Link>
+          <Link
+            to={L("/ev/database")}
+            className="glass rounded-2xl border border-border/40 p-5 hover:border-violet-400/40 hover:-translate-y-0.5 transition-all group"
+          >
+            <Database className="w-5 h-5 text-violet-400 mb-3" />
+            <div className="text-sm font-medium mb-1">{t("ev.nav.database")}</div>
+            <div className="text-xs text-muted-foreground">{t("ev.models.cta_database")}</div>
+          </Link>
+          <Link
+            to={L("/ev/calculator")}
+            className="glass rounded-2xl border border-border/40 p-5 hover:border-emerald-400/40 hover:-translate-y-0.5 transition-all group"
+          >
+            <Calculator className="w-5 h-5 text-emerald-400 mb-3" />
+            <div className="text-sm font-medium mb-1">{t("ev.nav.calculator")}</div>
+            <div className="text-xs text-muted-foreground">{t("ev.models.cta_calculator")}</div>
+          </Link>
+          <Link
+            to={L("/ev/networks")}
+            className="glass rounded-2xl border border-border/40 p-5 hover:border-amber-400/40 hover:-translate-y-0.5 transition-all group"
+          >
+            <Wifi className="w-5 h-5 text-amber-400 mb-3" />
+            <div className="text-sm font-medium mb-1">{t("ev.nav.charging")}</div>
+            <div className="text-xs text-muted-foreground">{t("ev.models.cta_networks")}</div>
+          </Link>
+        </div>
+      </section>
     </PageShell>
   );
 }

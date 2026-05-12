@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Calculator, Zap, TrendingDown, Euro, Fuel, ChevronDown } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 
@@ -48,6 +49,7 @@ const StatCard = ({ label, value, sub, highlight }: { label: string; value: stri
 );
 
 export default function EVCalculator() {
+  const { t } = useTranslation();
   const [country, setCountry] = useState(COUNTRIES[0]);
   const [batteryKwh, setBatteryKwh] = useState(75);
   const [efficiencyKwh, setEfficiencyKwh] = useState(18);
@@ -88,8 +90,8 @@ export default function EVCalculator() {
   return (
     <PageShell>
       <SEO
-        title="EV Charging Cost Calculator | AUTOVERE"
-        description="Calculate exactly what it costs to charge your EV in Europe. Compare home vs public charging and see your savings vs petrol."
+        title={t("ev.calculator.seo_title")}
+        description={t("ev.calculator.seo_desc")}
       />
 
       {/* Hero */}
@@ -97,14 +99,13 @@ export default function EVCalculator() {
         <div className="absolute inset-0 bg-gradient-to-br from-emerald-950/50 via-transparent to-cyan-950/20 pointer-events-none" />
         <div className="container relative">
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-emerald-400 mb-5">
-            <Calculator className="w-3.5 h-3.5" /> EV Hub › Calculator
+            <Calculator className="w-3.5 h-3.5" /> {t("ev.calculator.eyebrow")}
           </div>
           <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
-            What does it actually <span className="text-gradient">cost to charge?</span>
+            {t("ev.calculator.title")} <span className="text-gradient">{t("ev.calculator.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed">
-            Set your country, your car and your driving habits. Get a precise, honest breakdown
-            of what you'll spend charging — at home and on the road.
+            {t("ev.calculator.subtitle")}
           </p>
         </div>
       </section>
@@ -115,11 +116,11 @@ export default function EVCalculator() {
 
           {/* Inputs */}
           <div className="glass rounded-3xl border border-border/40 p-8">
-            <h2 className="font-semibold text-lg mb-8">Your situation</h2>
+            <h2 className="font-semibold text-lg mb-8">{t("ev.calculator.your_situation")}</h2>
 
             {/* Country selector */}
             <div className="mb-6">
-              <label className="text-sm text-muted-foreground block mb-2">Country</label>
+              <label className="text-sm text-muted-foreground block mb-2">{t("ev.calculator.country")}</label>
               <div className="relative">
                 <select
                   value={country.name}
@@ -131,16 +132,16 @@ export default function EVCalculator() {
                 <ChevronDown className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground pointer-events-none" />
               </div>
               <div className="flex gap-4 mt-2 text-[11px] text-muted-foreground">
-                <span>Home: €{country.homeRate}/kWh</span>
-                <span>Public: €{country.publicRate}/kWh</span>
-                {showGasComparison && <span>Petrol: €{country.gasPrice}/L</span>}
+                <span>{t("ev.calculator.home_rate")}: €{country.homeRate}/kWh</span>
+                <span>{t("ev.calculator.public_rate")}: €{country.publicRate}/kWh</span>
+                {showGasComparison && <span>{t("ev.calculator.petrol_rate")}: €{country.gasPrice}/L</span>}
               </div>
             </div>
 
-            <Slider label="Battery capacity" value={batteryKwh} min={30} max={130} step={1} unit="kWh" onChange={setBatteryKwh} />
-            <Slider label="Energy consumption" value={efficiencyKwh} min={12} max={30} step={0.5} unit="kWh/100 km" onChange={setEfficiencyKwh} />
-            <Slider label="Annual mileage" value={annualKm} min={5000} max={60000} step={1000} unit="km" format={(v) => v.toLocaleString()} onChange={setAnnualKm} />
-            <Slider label="Home charging" value={homePercent} min={0} max={100} step={5} unit="%" onChange={setHomePercent} />
+            <Slider label={t("ev.calculator.battery")} value={batteryKwh} min={30} max={130} step={1} unit="kWh" onChange={setBatteryKwh} />
+            <Slider label={t("ev.calculator.consumption")} value={efficiencyKwh} min={12} max={30} step={0.5} unit="kWh/100 km" onChange={setEfficiencyKwh} />
+            <Slider label={t("ev.calculator.annual_km")} value={annualKm} min={5000} max={60000} step={1000} unit="km" format={(v) => v.toLocaleString()} onChange={setAnnualKm} />
+            <Slider label={t("ev.calculator.home_charging")} value={homePercent} min={0} max={100} step={5} unit="%" onChange={setHomePercent} />
 
             {/* Petrol comparison toggle */}
             <div className="mt-2">
@@ -149,11 +150,11 @@ export default function EVCalculator() {
                 className="flex items-center gap-2 text-sm text-accent hover:underline"
               >
                 <Fuel className="w-3.5 h-3.5" />
-                {showGasComparison ? "Hide petrol comparison" : "Add petrol comparison"}
+                {showGasComparison ? t("ev.calculator.hide_petrol") : t("ev.calculator.add_petrol")}
               </button>
               {showGasComparison && (
                 <div className="mt-4">
-                  <Slider label="Petrol consumption" value={gasConsumption} min={4} max={18} step={0.5} unit="L/100 km" onChange={setGasConsumption} />
+                  <Slider label={t("ev.calculator.petrol_consumption")} value={gasConsumption} min={4} max={18} step={0.5} unit="L/100 km" onChange={setGasConsumption} />
                 </div>
               )}
             </div>
@@ -161,34 +162,51 @@ export default function EVCalculator() {
 
           {/* Results */}
           <div className="space-y-4">
-            <StatCard label="Cost per 100 km" value={`€ ${fmt(results.per100Cost)}`} sub={`${efficiencyKwh} kWh × blended rate`} highlight />
-            <StatCard label="Monthly charging cost" value={`€ ${fmtInt(results.monthCost)}`} sub={`${fmtInt(annualKm / 12).toLocaleString()} km/month avg`} />
-            <StatCard label="Yearly charging cost" value={`€ ${fmtInt(results.yearCost)}`} sub={`${homePercent}% home · ${100 - homePercent}% public`} />
-            <StatCard label="Full charge cost" value={`€ ${fmt(results.fullChargeCost)}`} sub={`${batteryKwh} kWh → ~${Math.round(results.fullChargeRange)} km`} />
+            <StatCard
+              label={t("ev.calculator.per_100km")}
+              value={`€ ${fmt(results.per100Cost)}`}
+              sub={`${efficiencyKwh} kWh × ${t("ev.calculator.blended_rate")}`}
+              highlight
+            />
+            <StatCard
+              label={t("ev.calculator.monthly")}
+              value={`€ ${fmtInt(results.monthCost)}`}
+              sub={`${fmtInt(annualKm / 12)} ${t("ev.calculator.km_month")}`}
+            />
+            <StatCard
+              label={t("ev.calculator.yearly")}
+              value={`€ ${fmtInt(results.yearCost)}`}
+              sub={t("ev.calculator.home_public", { home: homePercent })}
+            />
+            <StatCard
+              label={t("ev.calculator.full_charge")}
+              value={`€ ${fmt(results.fullChargeCost)}`}
+              sub={`${batteryKwh} kWh → ~${Math.round(results.fullChargeRange)} km`}
+            />
 
             {showGasComparison && (
               <div className="glass rounded-2xl border border-emerald-500/20 p-5 bg-emerald-500/5">
                 <div className="text-xs text-muted-foreground uppercase tracking-wider mb-3 flex items-center gap-1.5">
-                  <TrendingDown className="w-3.5 h-3.5 text-emerald-400" /> vs petrol equivalent
+                  <TrendingDown className="w-3.5 h-3.5 text-emerald-400" /> {t("ev.calculator.vs_petrol")}
                 </div>
                 <div className="space-y-2">
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Petrol yearly</span>
+                    <span className="text-muted-foreground">{t("ev.calculator.petrol_yearly")}</span>
                     <span className="font-semibold">€ {fmtInt(results.gasCostYear)}</span>
                   </div>
                   <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">EV yearly</span>
+                    <span className="text-muted-foreground">{t("ev.calculator.ev_yearly")}</span>
                     <span className="font-semibold">€ {fmtInt(results.yearCost)}</span>
                   </div>
                   <div className="h-px bg-border/40 my-2" />
                   <div className="flex justify-between">
-                    <span className="text-sm font-medium">Annual saving</span>
+                    <span className="text-sm font-medium">{t("ev.calculator.annual_saving")}</span>
                     <span className={`font-bold text-lg ${results.yearlySaving > 0 ? "text-emerald-400" : "text-red-400"}`}>
                       {results.yearlySaving > 0 ? "+" : ""}€ {fmtInt(results.yearlySaving)}
                     </span>
                   </div>
                   <div className="flex justify-between text-xs text-muted-foreground">
-                    <span>5-year saving</span>
+                    <span>{t("ev.calculator.five_year")}</span>
                     <span className={results.fiveYearSaving > 0 ? "text-emerald-400" : "text-red-400"}>
                       {results.fiveYearSaving > 0 ? "+" : ""}€ {fmtInt(results.fiveYearSaving)}
                     </span>
@@ -200,7 +218,7 @@ export default function EVCalculator() {
             <div className="glass rounded-2xl border border-border/40 p-4 text-center">
               <div className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
                 <Euro className="w-3.5 h-3.5" />
-                Based on {country.name} average electricity rates · {new Date().getFullYear()}
+                {t("ev.calculator.based_on", { country: country.name, year: new Date().getFullYear() })}
               </div>
             </div>
           </div>
