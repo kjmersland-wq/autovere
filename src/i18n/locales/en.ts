@@ -258,6 +258,7 @@ const en = {
       charge: "{{n}}% charge",
       winter_adjusted: "Winter adjusted",
       estimate_note: "Estimates based on {{consumption}} average consumption. Actual results vary by speed, load and weather.",
+      popular_routes: "Popular European routes",
     },
     compare: {
       seo_title: "EV Comparison Engine — Best European EVs Compared | AUTOVERE",

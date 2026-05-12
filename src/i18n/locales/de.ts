@@ -260,6 +260,7 @@ const de: Translation = {
       charge: "{{n}}% Ladung",
       winter_adjusted: "Winterangepasst",
       estimate_note: "Schätzungen basieren auf {{consumption}} durchschnittlichem Verbrauch. Tatsächliche Ergebnisse variieren nach Geschwindigkeit, Last und Wetter.",
+      popular_routes: "Beliebte Routen in Europa",
     },
     compare: {
       seo_title: "EV-Vergleichsmotor — Beste europäische EVs verglichen | AUTOVERE",

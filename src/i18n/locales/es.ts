@@ -260,6 +260,7 @@ const es: Translation = {
       charge: "{{n}}% de carga",
       winter_adjusted: "Ajustado para invierno",
       estimate_note: "Estimaciones basadas en {{consumption}} de consumo promedio. Los resultados reales varían según velocidad, carga y clima.",
+      popular_routes: "Rutas europeas populares",
     },
     compare: {
       seo_title: "Motor de comparación VE — Mejores VE europeos comparados | AUTOVERE",

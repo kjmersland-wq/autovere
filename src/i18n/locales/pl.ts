@@ -260,6 +260,7 @@ const pl: Translation = {
       charge: "{{n}}% naładowania",
       winter_adjusted: "Skorygowane zimowo",
       estimate_note: "Szacunki oparte na {{consumption}} średnim zużyciu. Rzeczywiste wyniki różnią się w zależności od prędkości, obciążenia i pogody.",
+      popular_routes: "Popularne trasy europejskie",
     },
     compare: {
       seo_title: "Silnik porównania EV — Najlepsze europejskie EV porównane | AUTOVERE",

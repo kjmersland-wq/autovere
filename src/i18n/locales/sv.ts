@@ -260,6 +260,7 @@ const sv: Translation = {
       charge: "{{n}}% laddning",
       winter_adjusted: "Vinteranpassad",
       estimate_note: "Uppskattningar baserade på {{consumption}} genomsnittlig förbrukning. Faktiska resultat varierar beroende på hastighet, last och väder.",
+      popular_routes: "Populära europeiska rutter",
     },
     compare: {
       seo_title: "EV-jämförelseverktyg — Bästa europeiska EV jämförda | AUTOVERE",
