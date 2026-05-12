@@ -1,6 +1,10 @@
 import { useState, useEffect } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import { Sparkles, Zap, Menu, X, Warehouse, LogIn } from "lucide-react";
+import {
+  Sparkles, Zap, Menu, X, Warehouse, LogIn, ChevronDown,
+  Map, Route, Calculator, BookOpen, Car, Database, GitCompare,
+  Brain, Star, Globe, Rss, Wifi,
+} from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
@@ -10,6 +14,12 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { PreferencesDrawer } from "@/components/PreferencesDrawer";
 import { useGarage } from "@/hooks/useGarage";
 import { useSupabaseUser } from "@/hooks/useSupabaseUser";
+import { useEVNav } from "@/contexts/EVNavContext";
+
+const evPathCheck = (pathname: string, lang: string) => {
+  const clean = lang !== "en" ? pathname.replace(`/${lang}`, "") || "/" : pathname;
+  return clean === "/ev" || clean.startsWith("/ev/");
+};
 
 export const SiteHeader = () => {
   const { pathname } = useLocation();
@@ -19,11 +29,17 @@ export const SiteHeader = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const { totalCount } = useGarage();
   const { isAuthenticated } = useSupabaseUser();
+  const { open: evOpen, toggle: evToggle, setOpen: setEvOpen } = useEVNav();
+
+  // Auto-open EV nav on EV routes; auto-close when leaving
+  useEffect(() => {
+    setEvOpen(evPathCheck(pathname, lang));
+  }, [pathname, lang, setEvOpen]);
 
   // Close mobile menu on route change
   useEffect(() => { setMobileOpen(false); }, [pathname]);
 
-  // Prevent body scroll when menu is open
+  // Prevent body scroll when mobile menu is open
   useEffect(() => {
     document.body.style.overflow = mobileOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -41,14 +57,31 @@ export const SiteHeader = () => {
     { to: "/contact", label: t("nav.contact") },
   ];
 
+  const EV_CHIPS = [
+    { to: "/ev", label: t("ev.nav.hub"), icon: Zap, exact: true },
+    { to: "/ev/models", label: t("ev.nav.models"), icon: Car },
+    { to: "/ev/database", label: t("ev.nav.database"), icon: Database },
+    { to: "/ev/compare", label: t("ev.nav.compare"), icon: GitCompare },
+    { to: "/ev/charging", label: t("ev.nav.charging"), icon: Map },
+    { to: "/ev/networks", label: "Networks", icon: Wifi },
+    { to: "/ev/route-planner", label: t("ev.nav.planner"), icon: Route },
+    { to: "/ev/calculator", label: t("ev.nav.calculator"), icon: Calculator },
+    { to: "/ev/advisor", label: t("ev.nav.advisor"), icon: Brain },
+    { to: "/ev/guides", label: t("ev.nav.guides"), icon: BookOpen },
+    { to: "/ev/reviews", label: t("ev.nav.reviews"), icon: Star },
+    { to: "/ev/markets", label: t("ev.nav.markets"), icon: Globe },
+    { to: "/ev/news", label: t("ev.nav.news"), icon: Rss },
+  ];
+
   const navLinkClass = ({ isActive }: { isActive: boolean }) =>
     `hover:text-foreground transition-colors ${isActive ? "text-foreground" : ""}`;
 
   return (
     <>
       <header className="fixed top-0 inset-x-0 z-50 glass border-b border-border/30">
+
+        {/* ── Row 1: Main navigation ─────────────────────────── */}
         <div className="container flex items-center justify-between py-4">
-          {/* Logo */}
           <Link to={L("/")} className="flex items-center gap-2 font-semibold tracking-tight flex-shrink-0">
             <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow">
               <Sparkles className="w-4 h-4 text-primary-foreground" />
@@ -56,29 +89,18 @@ export const SiteHeader = () => {
             AUTOVERE
           </Link>
 
-          {/* Desktop nav */}
+          {/* Desktop nav — EV Hub lives in the strip below */}
           <nav className="hidden lg:flex items-center gap-6 text-sm text-muted-foreground">
             {NAV.map((n) => (
               <NavLink key={n.to} to={L(n.to)} className={navLinkClass}>
                 {n.label}
               </NavLink>
             ))}
-            {/* EV Hub — distinct accent */}
-            <NavLink
-              to={L("/ev")}
-              className={({ isActive }) =>
-                `flex items-center gap-1 font-medium transition-colors ${isActive ? "text-cyan-400" : "text-cyan-500/80 hover:text-cyan-400"}`
-              }
-            >
-              <Zap className="w-3.5 h-3.5" /> {t("ev.nav.hub")}
-            </NavLink>
           </nav>
 
-          {/* Right side */}
           <div className="flex items-center gap-2">
             <VehicleSearch compact className="hidden md:inline-flex" />
 
-            {/* Garage icon with count badge */}
             <Link
               to={L("/garage")}
               className="relative w-9 h-9 rounded-lg glass border border-border/40 flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors"
@@ -92,15 +114,10 @@ export const SiteHeader = () => {
               )}
             </Link>
 
-            {/* Personalisation */}
             <PreferencesDrawer />
-
-            {/* Theme toggle */}
             <ThemeToggle />
-
             <LanguageSwitcher />
 
-            {/* Auth / CTA */}
             {isAuthenticated ? (
               <Link
                 to={L("/pricing")}
@@ -117,7 +134,6 @@ export const SiteHeader = () => {
               </Button>
             )}
 
-            {/* Mobile hamburger */}
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden w-9 h-9 rounded-lg glass border border-border/40 flex items-center justify-center"
@@ -127,14 +143,67 @@ export const SiteHeader = () => {
             </button>
           </div>
         </div>
+
+        {/* ── Row 2: EV Hub trigger — always visible ──────────── */}
+        <div className="border-t border-white/[0.04]">
+          <div className="container py-1.5">
+            <button
+              onClick={evToggle}
+              aria-expanded={evOpen}
+              aria-controls="ev-nav-chips"
+              className={`inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] transition-colors duration-200 select-none ${
+                evOpen
+                  ? "text-cyan-400"
+                  : "text-cyan-500/60 hover:text-cyan-400"
+              }`}
+            >
+              <Zap className="w-3 h-3" />
+              {t("ev.nav.hub")}
+              <ChevronDown
+                className={`w-3 h-3 transition-transform duration-300 ease-in-out ${evOpen ? "rotate-180" : ""}`}
+              />
+            </button>
+          </div>
+        </div>
+
+        {/* ── Row 3: EV chips — collapsible ───────────────────── */}
+        <div
+          id="ev-nav-chips"
+          className={`grid transition-[grid-template-rows] duration-300 ease-in-out ${
+            evOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
+          }`}
+        >
+          <div className="overflow-hidden min-h-0">
+            <div className="container">
+              <div className="flex items-center gap-1 overflow-x-auto scrollbar-none pb-2 pt-0.5">
+                {EV_CHIPS.map(({ to, label, icon: Icon, exact }) => (
+                  <NavLink
+                    key={to}
+                    to={L(to)}
+                    end={exact}
+                    className={({ isActive }) =>
+                      `flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+                        isActive
+                          ? "bg-cyan-400/15 text-cyan-400 border border-cyan-400/30"
+                          : "text-muted-foreground hover:text-foreground hover:bg-card/60"
+                      }`
+                    }
+                  >
+                    <Icon className="w-3 h-3" />
+                    {label}
+                  </NavLink>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+
       </header>
 
-      {/* Mobile menu overlay */}
+      {/* ── Mobile menu overlay ─────────────────────────────── */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 lg:hidden">
-          {/* Backdrop */}
           <div className="absolute inset-0 bg-background/80 backdrop-blur-xl" onClick={() => setMobileOpen(false)} />
-          {/* Drawer */}
           <nav className="absolute top-0 right-0 h-full w-72 glass border-l border-border/40 flex flex-col pt-24 pb-8 px-6 overflow-y-auto">
             <div className="space-y-1 flex-1">
               {NAV.map((n) => (
@@ -142,22 +211,44 @@ export const SiteHeader = () => {
                   key={n.to}
                   to={L(n.to)}
                   className={({ isActive }) =>
-                    `flex items-center py-3 px-3 rounded-xl text-sm transition-colors ${isActive ? "bg-primary/10 text-foreground" : "text-muted-foreground hover:text-foreground hover:bg-card/50"}`
+                    `flex items-center py-3 px-3 rounded-xl text-sm transition-colors ${
+                      isActive
+                        ? "bg-primary/10 text-foreground"
+                        : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+                    }`
                   }
                 >
                   {n.label}
                 </NavLink>
               ))}
-              {/* EV Hub in mobile */}
-              <NavLink
-                to={L("/ev")}
-                className={({ isActive }) =>
-                  `flex items-center gap-2 py-3 px-3 rounded-xl text-sm font-medium transition-colors ${isActive ? "bg-cyan-400/10 text-cyan-400" : "text-cyan-500/80 hover:text-cyan-400 hover:bg-cyan-400/5"}`
-                }
-              >
-                <Zap className="w-4 h-4" /> {t("ev.nav.hub")}
-              </NavLink>
-              {/* Garage in mobile */}
+
+              {/* EV section — 2-column compact grid */}
+              <div className="pt-3 pb-1 px-3">
+                <span className="text-[10px] uppercase tracking-[0.18em] text-cyan-500/60 font-medium flex items-center gap-1">
+                  <Zap className="w-3 h-3" />{t("ev.nav.hub")}
+                </span>
+              </div>
+              <div className="grid grid-cols-2 gap-1">
+                {EV_CHIPS.map(({ to, label, icon: Icon, exact }) => (
+                  <NavLink
+                    key={to}
+                    to={L(to)}
+                    end={exact}
+                    className={({ isActive }) =>
+                      `flex items-center gap-2 py-2 px-3 rounded-xl text-xs transition-colors ${
+                        isActive
+                          ? "bg-cyan-400/10 text-cyan-400"
+                          : "text-muted-foreground hover:text-foreground hover:bg-card/50"
+                      }`
+                    }
+                  >
+                    <Icon className="w-3.5 h-3.5 flex-shrink-0" />
+                    <span className="truncate">{label}</span>
+                  </NavLink>
+                ))}
+              </div>
+
+              {/* Garage */}
               <Link
                 to={L("/garage")}
                 className="flex items-center gap-2 py-3 px-3 rounded-xl text-sm text-muted-foreground hover:text-foreground hover:bg-card/50 transition-colors"
@@ -170,9 +261,7 @@ export const SiteHeader = () => {
               </Link>
             </div>
 
-            {/* Mobile footer */}
             <div className="space-y-3 pt-4 border-t border-border/30">
-              {/* Theme + Preferences row */}
               <div className="flex items-center gap-2">
                 <ThemeToggle className="flex-1 justify-center rounded-xl" />
                 <span className="text-xs text-muted-foreground flex-1 text-center">{t("ev.nav.theme")}</span>
