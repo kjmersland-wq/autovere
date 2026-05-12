@@ -526,7 +526,7 @@ const de: Translation = {
       all_articles: "Alle Artikel",
       articles_count: "{{n}} Artikel",
       no_articles: "Noch keine Artikel in dieser Kategorie.",
-      why_matters_label: "Jeder Artikel enthält eine „Warum das wichtig ist"-Analyse",
+      why_matters_label: "Jeder Artikel enthält eine \"Warum das wichtig ist\"-Analyse",
       cta_title: "Tiefer einsteigen mit dem EV Hub",
       cta_lead: "Nutzen Sie unseren Routenplaner, Ladekarten, Modellführer und EV-Vergleichstools.",
       cta_compare: "EVs vergleichen",
