@@ -16,6 +16,7 @@ import {
   getRelatedArticles,
 } from "@/data/articles";
 import { getArticleIntelligence } from "@/data/article-intelligence";
+import { resolveArticleImage } from "@/lib/article-images";
 
 export default function EVArticle() {
   const { t } = useTranslation();
@@ -67,7 +68,13 @@ export default function EVArticle() {
       />
 
       <div className="pt-20">
-        <MediaImage media={article.media} aspectClass="aspect-[21/7]" showAttribution className="w-full" />
+        <MediaImage
+          media={{ ...article.media, url: resolveArticleImage(article, 1600) }}
+          aspectClass="aspect-[21/7]"
+          overlayGradient
+          showAttribution
+          className="w-full"
+        />
       </div>
 
       <div className="container py-12">
