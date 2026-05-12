@@ -17,7 +17,7 @@ export const CinematicSection = ({ image, eyebrow, title, body, align = "left", 
   return (
     <section ref={ref} className={`relative ${height} overflow-hidden`}>
       <div
-        className="absolute inset-0 bg-cover bg-center will-change-transform transition-transform duration-[1500ms] ease-out"
+        className="absolute inset-0 bg-cover bg-center will-change-transform transition-transform [transition-duration:1500ms] ease-out"
         style={{
           backgroundImage: `url(${image})`,
           transform: visible ? "scale(1.02)" : "scale(1.12)",

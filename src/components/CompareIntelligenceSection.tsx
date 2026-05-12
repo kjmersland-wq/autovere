@@ -109,7 +109,7 @@ export const CompareIntelligenceSection = ({ aSlug, bSlug, aName, bName }: Props
                     src={v.thumbnail}
                     alt={v.title}
                     loading="lazy"
-                    className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2000ms]"
+                    className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform [transition-duration:2000ms]"
                   />
                   <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent opacity-90" />
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">

@@ -14,7 +14,7 @@ export const CarCard = ({ car }: { car: Car }) => (
         loading="lazy"
         width={1280}
         height={800}
-        className="w-full h-full object-cover scale-105 group-hover:scale-115 transition-transform duration-[2200ms] ease-out"
+        className="w-full h-full object-cover scale-105 group-hover:scale-115 transition-transform [transition-duration:2200ms] ease-out"
       />
       <div className="absolute inset-0 bg-gradient-to-t from-card via-card/40 to-transparent" />
       <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-transparent to-accent/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />

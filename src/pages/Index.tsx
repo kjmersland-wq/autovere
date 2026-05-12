@@ -152,7 +152,7 @@ const Index = () => {
                 alt="Premium electric car at night"
                 width={1920}
                 height={1280}
-                className="w-full h-auto transition-transform duration-[3000ms] group-hover:scale-105"
+                className="w-full h-auto transition-transform [transition-duration:3000ms] group-hover:scale-105"
                 style={{ transform: `scale(${1 + scrollY * 0.0001})` }}
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
@@ -272,7 +272,7 @@ const Index = () => {
                 to={`/collections/${c.slug}`}
                 className="group relative overflow-hidden rounded-3xl text-left aspect-[16/10] border border-border/40 hover:border-primary/50 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow block"
               >
-                <img src={c.image} alt={c.title} loading="lazy" width={1280} height={800} className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-[2500ms] ease-out" />
+                <img src={c.image} alt={c.title} loading="lazy" width={1280} height={800} className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms] ease-out" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-background via-background/60 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="relative h-full flex flex-col justify-end p-8">
@@ -337,7 +337,7 @@ const Index = () => {
               </button>
             </div>
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-border/40 group">
-              <img src={sceneCity} alt="Underestimated cars" loading="lazy" width={1920} height={1280} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2500ms]" />
+              <img src={sceneCity} alt="Underestimated cars" loading="lazy" width={1920} height={1280} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform [transition-duration:2500ms]" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/70 via-background/10 to-transparent" />
               <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between">
                 <div>

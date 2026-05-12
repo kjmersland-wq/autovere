@@ -50,7 +50,7 @@ const Discover = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {cards.map(({ c, icon: Icon, hue }) => (
             <Link key={c.slug} to={`/collections/${c.slug}`} className="group relative overflow-hidden rounded-3xl border border-border/40 hover:border-primary/40 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow aspect-[4/5]">
-              <img src={c.image} alt={c.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-[2500ms]" />
+              <img src={c.image} alt={c.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms]" />
               <div className={`absolute inset-0 bg-gradient-to-tr ${hue}`} />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/10" />
               <div className="relative h-full flex flex-col justify-between p-7">

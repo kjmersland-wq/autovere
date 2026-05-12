@@ -80,7 +80,7 @@ export const CollectionsIndex = () => {
               to={`/collections/${c.slug}`}
               className="group relative overflow-hidden rounded-3xl aspect-[16/10] border border-border/40 hover:border-primary/50 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow"
             >
-              <img src={c.image} alt={c.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform duration-[2500ms]" />
+              <img src={c.image} alt={c.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms]" />
               <div className="absolute inset-0 bg-gradient-to-tr from-background via-background/60 to-transparent" />
               <div className="relative h-full flex flex-col justify-end p-8">
                 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">{c.title}</h2>

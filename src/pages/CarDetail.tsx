@@ -145,7 +145,7 @@ const CarDetail = () => {
         <div className="grid md:grid-cols-3 gap-4">
           {car.gallery.map((src, i) => (
             <div key={i} className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-border/40 group">
-              <img src={src} alt={`${car.name} gallery ${i + 1}`} loading="lazy" className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2500ms]" />
+              <img src={src} alt={`${car.name} gallery ${i + 1}`} loading="lazy" className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform [transition-duration:2500ms]" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           ))}

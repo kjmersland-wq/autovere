@@ -28,7 +28,7 @@ export const LiveVideoCard = ({
           src={video.thumbnail}
           alt={video.title}
           loading="lazy"
-          className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2200ms]"
+          className="absolute inset-0 w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform [transition-duration:2200ms]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent" />
         <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-500">

@@ -98,7 +98,7 @@ const Compare = () => {
         <div className="grid md:grid-cols-2">
           {[a, b].map((c, i) => (
             <Link key={c.slug} to={`/cars/${c.slug}`} className="relative aspect-[16/10] md:aspect-[4/3] overflow-hidden group">
-              <img src={c.hero} alt={c.name} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform duration-[2500ms]" />
+              <img src={c.hero} alt={c.name} className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform [transition-duration:2500ms]" />
               <div className={`absolute inset-0 bg-gradient-to-${i === 0 ? "r" : "l"} from-background via-background/30 to-transparent`} />
               <div className={`absolute inset-0 flex items-end p-10 ${i === 1 ? "justify-end text-right" : ""}`}>
                 <div>

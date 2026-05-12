@@ -3,7 +3,7 @@ import { Settings2, Snowflake, Sun, Cloud, Thermometer, Car, Route, Navigation, 
 import {
   Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger,
 } from "@/components/ui/sheet";
-import { loadPreferences, savePreferences } from "@/lib/personalization";
+import { loadPreferences, savePreferences, DEFAULT_PREFERENCES } from "@/lib/personalization";
 import type { ClimateProfile, DrivingProfile, HouseholdType, ChargingSetup, UserPreferences } from "@/lib/personalization";
 import { toast } from "sonner";
 
@@ -116,11 +116,7 @@ export function PreferencesDrawer() {
   };
 
   const reset = () => {
-    const { loadPreferences: _, savePreferences: __, patchPreferences: ___, ...rest } = {} as never;
-    void rest;
-    import("@/lib/personalization").then(({ DEFAULT_PREFERENCES }) => {
-      setPrefs(DEFAULT_PREFERENCES);
-    });
+    setPrefs(DEFAULT_PREFERENCES);
   };
 
   return (
