@@ -29,7 +29,12 @@ export default defineConfig(({ mode }) => ({
             id.includes("node_modules/react/") ||
             id.includes("node_modules/react-dom/") ||
             id.includes("node_modules/react-router") ||
-            id.includes("node_modules/scheduler/")
+            id.includes("node_modules/scheduler/") ||
+            // react-i18next must live alongside React to avoid a circular
+            // chunk dependency: vendor-react ↔ vendor-i18n when they are
+            // in separate chunks (React is CJS; its __commonJS helper ends
+            // up in vendor-i18n, which then imports React back).
+            id.includes("node_modules/react-i18next")
           ) {
             return "vendor-react";
           }
@@ -37,10 +42,9 @@ export default defineConfig(({ mode }) => ({
           if (id.includes("node_modules/@radix-ui/")) {
             return "vendor-radix";
           }
-          // i18n stack
+          // i18n stack (no React dependency here after moving react-i18next above)
           if (
             id.includes("node_modules/i18next") ||
-            id.includes("node_modules/react-i18next") ||
             id.includes("node_modules/i18next-browser")
           ) {
             return "vendor-i18n";
