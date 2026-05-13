@@ -7,6 +7,7 @@ import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import { VEHICLES, TYPE_COLORS, type Vehicle, type VehicleType } from "@/data/vehicles";
 import { VehicleSearch } from "@/components/VehicleSearch";
+import { useFormatPrice } from "@/lib/price";
 
 type SortKey = "priceFrom" | "tco.fiveYearTcoEur" | "tco.depreciationPct5yr" | "specs.realWorldRangeKm" | "specs.zeroTo100";
 
