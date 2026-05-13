@@ -13,8 +13,6 @@ const ALL_REVIEWS = EV_MODELS.flatMap((model) =>
 );
 
 interface ConsensusData {
-  score: number;
-  confidence: number;
   range: string;
   charging: string;
   winter: string;
@@ -23,84 +21,27 @@ interface ConsensusData {
   mostPraised: string[];
   mostCritiqued: string[];
   highlightQuote: string;
-  highlightChannel: string;
 }
 
-const CONSENSUS: Record<string, ConsensusData> = {
-  "tesla-model-y": {
-    score: 88, confidence: 94,
-    range: "430 km real-world", charging: "Supercharger unmatched", winter: "Heat pump helps, plan stops", comfort: "Firm ride", value: "Strong long-term",
-    mostPraised: ["Supercharger reliability", "Cargo versatility", "OTA software updates"],
-    mostCritiqued: ["Firm suspension", "No stalks / minimal controls", "Wind noise above 110 km/h"],
-    highlightQuote: "The most complete package in the segment — not perfect, but closest to right for most people.",
-    highlightChannel: "Fully Charged Show",
-  },
-  "porsche-macan-ev": {
-    score: 93, confidence: 88,
-    range: "490 km real-world", charging: "270 kW — class-best", winter: "Excellent 800V cold perf.", comfort: "Outstanding", value: "Premium justified",
-    mostPraised: ["Cold weather charging stability", "Ride and handling balance", "Interior quality"],
-    mostCritiqued: ["Price relative to class", "Smaller cargo than rivals", "Limited rear headroom"],
-    highlightQuote: "The first Porsche that genuinely makes you feel nothing is being sacrificed for the electric powertrain.",
-    highlightChannel: "Bjørn Nyland",
-  },
-  "kia-ev9": {
-    score: 90, confidence: 91,
-    range: "450 km real-world", charging: "800V reliable in cold", winter: "Good for size", comfort: "Best-in-class space", value: "Strong for families",
-    mostPraised: ["Third-row usability", "800V cold charging", "Interior space intelligence"],
-    mostCritiqued: ["Size in urban parking", "Infotainment learning curve", "Motorway efficiency"],
-    highlightQuote: "The only electric vehicle that genuinely replaces a diesel people carrier without compromise.",
-    highlightChannel: "AutoTrader UK",
-  },
-  "hyundai-ioniq5": {
-    score: 87, confidence: 96,
-    range: "400 km real-world", charging: "18 min 10–80% remarkable", winter: "Range drops noticeably", comfort: "Flat floor, airy", value: "Excellent value",
-    mostPraised: ["18-minute charging time", "Interior space design", "800V architecture value"],
-    mostCritiqued: ["Winter range sensitivity", "Rear visibility", "Software vs Tesla"],
-    highlightQuote: "18 minutes to 80% changed the conversation about whether EVs can road trip. It proved they can.",
-    highlightChannel: "Fully Charged Show",
-  },
-  "bmw-i5": {
-    score: 89, confidence: 85,
-    range: "460 km real-world", charging: "22 kW AC star feature", winter: "Strong with 22 kW AC", comfort: "Benchmark interior", value: "Expensive but earns it",
-    mostPraised: ["22 kW AC charging", "Interior refinement", "Highway efficiency"],
-    mostCritiqued: ["DC speed vs 800V rivals", "Price for non-M spec", "Large exterior dimensions"],
-    highlightQuote: "The 22 kW AC charging is a detail that sounds boring until it changes how you plan every hotel stop.",
-    highlightChannel: "Bjørn Nyland",
-  },
-  "audi-q6-etron": {
-    score: 91, confidence: 89,
-    range: "510 km real-world", charging: "270 kW minimal taper", winter: "Best 800V cold stability", comfort: "Refined and quiet", value: "Competitive segment",
-    mostPraised: ["Charging curve consistency", "Winter range leadership", "Interior quality jump"],
-    mostCritiqued: ["Price creep with options", "Smaller cargo than EV9", "Heavier than it should be"],
-    highlightQuote: "The charging curve is what makes this special — it doesn't taper the way competitors do, and that matters on long runs.",
-    highlightChannel: "InsideEVs",
-  },
-  "volvo-ex30": {
-    score: 84, confidence: 92,
-    range: "370 km real-world", charging: "153 kW adequate", winter: "Small battery feels winter", comfort: "Clever space use", value: "Best small EV value",
-    mostPraised: ["Build quality for price", "Safety ratings", "Urban agility"],
-    mostCritiqued: ["Winter range on smaller battery", "Screen-heavy controls", "Limited cargo"],
-    highlightQuote: "The first genuinely small EV that doesn't feel like a compromise — it's just a good car that happens to be electric.",
-    highlightChannel: "AutoTrader UK",
-  },
-  "bmw-ix": {
-    score: 88, confidence: 83,
-    range: "500 km real-world", charging: "22 kW AC + 195 kW DC", winter: "Large battery = confidence", comfort: "Near-silent reference", value: "Expensive — justified?",
-    mostPraised: ["Cabin refinement", "Large battery confidence", "22 kW AC versatility"],
-    mostCritiqued: ["Price vs alternatives", "Polarising exterior", "Software complexity"],
-    highlightQuote: "The quietest EV interior tested — the noise isolation is at a level most manufacturers don't attempt.",
-    highlightChannel: "Fully Charged Show",
-  },
+const CONSENSUS_META: Record<string, { score: number; confidence: number; highlightChannel: string }> = {
+  "tesla-model-y": { score: 88, confidence: 94, highlightChannel: "Fully Charged Show" },
+  "porsche-macan-ev": { score: 93, confidence: 88, highlightChannel: "Bjørn Nyland" },
+  "kia-ev9": { score: 90, confidence: 91, highlightChannel: "AutoTrader UK" },
+  "hyundai-ioniq5": { score: 87, confidence: 96, highlightChannel: "Fully Charged Show" },
+  "bmw-i5": { score: 89, confidence: 85, highlightChannel: "Bjørn Nyland" },
+  "audi-q6-etron": { score: 91, confidence: 89, highlightChannel: "InsideEVs" },
+  "volvo-ex30": { score: 84, confidence: 92, highlightChannel: "AutoTrader UK" },
+  "bmw-ix": { score: 88, confidence: 83, highlightChannel: "Fully Charged Show" },
 };
 
-const CHANNEL_TRUST: Record<string, { score: number; country: string; speciality: string }> = {
-  "Fully Charged Show": { score: 96, country: "🇬🇧 UK", speciality: "Long-term EV advocacy, real-world focus" },
-  "Bjørn Nyland": { score: 98, country: "🇯🇵 Japan / Norway", speciality: "Data-driven range and charging tests" },
-  "AutoTrader UK": { score: 88, country: "🇬🇧 UK", speciality: "Consumer perspective, value analysis" },
-  "InsideEVs": { score: 91, country: "🇺🇸 USA / EU", speciality: "Technical deep-dives, spec accuracy" },
-  "What Car?": { score: 85, country: "🇬🇧 UK", speciality: "Consumer testing, ownership focus" },
-  "Carwow": { score: 82, country: "🇬🇧 UK", speciality: "Entertainment-led, broad audience" },
-  "The Electric Viking": { score: 79, country: "🇦🇺 Australia", speciality: "Industry news, commentary" },
+const CHANNEL_META: Record<string, { score: number; country: string }> = {
+  "Fully Charged Show": { score: 96, country: "🇬🇧 UK" },
+  "Bjørn Nyland": { score: 98, country: "🇯🇵 Japan / Norway" },
+  "AutoTrader UK": { score: 88, country: "🇬🇧 UK" },
+  "InsideEVs": { score: 91, country: "🇺🇸 USA / EU" },
+  "What Car?": { score: 85, country: "🇬🇧 UK" },
+  "Carwow": { score: 82, country: "🇬🇧 UK" },
+  "The Electric Viking": { score: 79, country: "🇦🇺 Australia" },
 };
 
 interface ReviewCardProps {
@@ -175,12 +116,12 @@ function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: Re
           >
             {t("ev.reviews.watch_youtube")} <ExternalLink className="w-3 h-3" />
           </a>
-          {CHANNEL_TRUST[channel] && (
+          {CHANNEL_META[channel] && (
             <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
               <ShieldCheck className="w-3 h-3 text-emerald-400" />
-              <span className="text-emerald-400">{CHANNEL_TRUST[channel].score}</span>
+              <span className="text-emerald-400">{CHANNEL_META[channel].score}</span>
               <Globe className="w-3 h-3 ml-1" />
-              <span>{CHANNEL_TRUST[channel].country}</span>
+              <span>{CHANNEL_META[channel].country}</span>
             </div>
           )}
         </div>
@@ -197,12 +138,13 @@ interface ConsensusCardProps {
 function ConsensusCard({ slug, name }: ConsensusCardProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const c = CONSENSUS[slug];
+  const meta = CONSENSUS_META[slug];
+  const c = t(`ev.reviews.consensus.${slug}`, { returnObjects: true }) as ConsensusData | string;
   const model = EV_MODELS.find((m) => m.slug === slug);
   const { image: carImage } = useCarImage(model ? { brand: model.brand, model: model.name } : null);
-  if (!c || !model) return null;
+  if (!meta || !model || typeof c === "string") return null;
 
-  const confidenceColor = c.confidence >= 90 ? "text-emerald-400" : c.confidence >= 80 ? "text-amber-400" : "text-red-400";
+  const confidenceColor = meta.confidence >= 90 ? "text-emerald-400" : meta.confidence >= 80 ? "text-amber-400" : "text-red-400";
 
   const metrics = [
     { label: t("ev.reviews.metric_range"), value: c.range },
@@ -236,13 +178,13 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
             <div className="text-xs text-muted-foreground">{model.youtubeReviews.length} {t("ev.reviews.reviews_analysed")}</div>
             <div className={`flex items-center gap-1 text-[10px] ${confidenceColor}`}>
               <ShieldCheck className="w-3 h-3" />
-              {t("ev.reviews.confidence_pct", { n: c.confidence })}
+              {t("ev.reviews.confidence_pct", { n: meta.confidence })}
             </div>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-2xl font-bold text-gradient">{c.score}</div>
+            <div className="text-2xl font-bold text-gradient">{meta.score}</div>
             <div className="text-[10px] text-muted-foreground">/ 100</div>
           </div>
           {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
@@ -254,7 +196,7 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
           <div className="bg-card/40 border border-border/30 rounded-xl p-4">
             <div className="text-[10px] uppercase tracking-wider text-accent mb-2">{t("ev.reviews.consensus_quote_label")}</div>
             <p className="text-sm text-muted-foreground italic leading-relaxed">"{c.highlightQuote}"</p>
-            <div className="text-[10px] text-muted-foreground mt-2">— {c.highlightChannel}</div>
+            <div className="text-[10px] text-muted-foreground mt-2">— {meta.highlightChannel}</div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">

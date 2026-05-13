@@ -365,6 +365,96 @@ const no: Translation = {
       annual_cost: "Årlig kostnad",
       start_again: "Start på nytt med andre preferanser",
       compare_side: "Sammenlign side om side →",
+      reasons: {
+        nordic_winter: "{{km}} km vinterrekkevidde — pålitelig i kulde",
+        family_cargo: "{{l}} L bagasjerom — ekte familiekapasitet",
+        charging_time: "{{min}} min ladetid — effektiv stoppstrategi",
+        value_score: "{{score}}/100 i verdi — sterkt forhold mellom pris og evne",
+        comfort_score: "{{score}}/100 i komfort — premium kjøreopplevelse",
+        network_score: "{{score}}/100 i nettverk — bred ladekompatibilitet",
+        range_default: "{{km}} km reell rekkevidde",
+        annual_default: "€{{cost}} estimert årlig ladekostnad",
+      },
+      from_label: "fra",
+      steps: [
+        {
+          id: "budget",
+          question: "Hva er budsjettet ditt?",
+          subtitle: "Dette er det største enkeltfilteret. Vi viser kun det som passer.",
+          options: [
+            { value: "under35", label: "Under 35 000 €", desc: "Kompakte elbiler med sterk verdi" },
+            { value: "35to55", label: "35 000 – 55 000 €", desc: "Mellomklasse- og familieelbiler" },
+            { value: "55to75", label: "55 000 – 75 000 €", desc: "Premium og store SUV-er" },
+            { value: "over75", label: "Over 75 000 €", desc: "Topp-elbiler med ytelse i fokus" }
+          ]
+        },
+        {
+          id: "climate",
+          question: "Hvor bor og kjører du mest?",
+          subtitle: "Klimaet påvirker reell rekkevidde dramatisk — spesielt om vinteren.",
+          options: [
+            { value: "nordic", label: "Norden / Alpene", desc: "Norge, Sverige, Finland og fjellområder — kalde vintre" },
+            { value: "continental", label: "Kontinental-Europa", desc: "Tyskland, Polen, Frankrike — kalde vintre, varme somre" },
+            { value: "atlantic", label: "Atlanterhavet / Britisk øy", desc: "UK, Irland, kyst-Frankrike — mildt, men vått" },
+            { value: "mediterranean", label: "Middelhavet", desc: "Spania, Italia, sør-Frankrike — varmt, milde vintre" }
+          ]
+        },
+        {
+          id: "family",
+          question: "Hvem kjører du med?",
+          subtitle: "Familiestørrelse avgjør behov for plass og bagasjerom.",
+          options: [
+            { value: "solo", label: "Alene eller par", desc: "To voksne, lite bagasje" },
+            { value: "small", label: "Liten familie", desc: "2 voksne, 1–2 barn, av og til last" },
+            { value: "large", label: "Stor familie", desc: "3+ barn eller jevnlig 5+ voksne" },
+            { value: "dog", label: "Hund eller utstyr", desc: "Mye last, sportsutstyr, kjæledyr" }
+          ]
+        },
+        {
+          id: "driving",
+          question: "Hvordan kjører du mest?",
+          subtitle: "Bykjøring og motorvei gir svært ulike effektivitetsprofiler.",
+          options: [
+            { value: "city", label: "Mest i byen", desc: "Korte turer, start-stopp, under 50 km daglig" },
+            { value: "mixed", label: "By og motorvei blandet", desc: "Pendling pluss noen lengre turer" },
+            { value: "highway", label: "Mest motorvei", desc: "Lang pendling, mye motorveikjøring" },
+            { value: "rural", label: "Distrikt og natur", desc: "Variert terreng, lange avstander, færre ladere" }
+          ]
+        },
+        {
+          id: "charging",
+          question: "Hvor skal du lade?",
+          subtitle: "Hjemmelading endrer økonomien og hverdagen som elbileier dramatisk.",
+          options: [
+            { value: "home", label: "Garasje eller carport hjemme", desc: "Kan montere wallbox — ideelt elbiloppsett" },
+            { value: "workplace", label: "Lading på jobb", desc: "Arbeidsgiver tilbyr ladetilgang" },
+            { value: "mixed_access", label: "Hjemme + offentlig", desc: "Litt hjemmelading, litt offentlig" },
+            { value: "public_only", label: "Kun offentlig lading", desc: "Ingen hjemmelading — nettverkskompatibilitet er kritisk" }
+          ]
+        },
+        {
+          id: "roadtrips",
+          question: "Hvor ofte tar du langtur?",
+          subtitle: "Ladestopp og nettverksdekning betyr mer for de som reiser ofte.",
+          options: [
+            { value: "rarely", label: "Sjelden", desc: "Mest lokal kjøring, av og til en lengre tur" },
+            { value: "monthly", label: "Månedlig", desc: "Én lengre kjøretur omtrent én gang i måneden" },
+            { value: "weekly", label: "Ukentlig", desc: "Regelmessige langturer" },
+            { value: "cross_border", label: "Internasjonalt", desc: "Krysser europeiske grenser jevnlig" }
+          ]
+        },
+        {
+          id: "priority",
+          question: "Hva betyr mest for deg?",
+          subtitle: "Hvis du bare kunne optimere én ting, hva ville det vært?",
+          options: [
+            { value: "range", label: "Maks rekkevidde", desc: "Jeg vil ha flest mulig km mellom ladninger" },
+            { value: "charging", label: "Raskest lading", desc: "Ladetid betyr mer enn rekkevidde" },
+            { value: "comfort", label: "Komfort og kvalitet", desc: "Interiør, kjørekomfort, raffinement" },
+            { value: "value", label: "Best verdi", desc: "Mest bil for hver krone" }
+          ]
+        }
+      ]
     },
     guides: {
       seo_title: "EV-eierskapsguider — Batteri, Vinter, Lading | AUTOVERE",
@@ -590,6 +680,65 @@ const no: Translation = {
       metric_winter: "Vinter",
       metric_comfort: "Komfort",
       metric_value: "Verdi",
+      consensus: {
+        "tesla-model-y": {
+          range: "430 km reelt", charging: "Supercharger uovertruffen", winter: "Varmepumpe hjelper, planlegg stopp", comfort: "Fast understell", value: "Sterk over tid",
+          mostPraised: ["Pålitelig Supercharger-nett", "Allsidig bagasjeplass", "Programvareoppdateringer over nettet"],
+          mostCritiqued: ["Stivt understell", "Ingen rattstilkar / minimalt med knapper", "Vindstøy over 110 km/t"],
+          highlightQuote: "Den mest komplette pakken i segmentet — ikke perfekt, men nærmest riktig for de fleste."
+        },
+        "porsche-macan-ev": {
+          range: "490 km reelt", charging: "270 kW — best i klassen", winter: "Utmerket 800V-kuldeytelse", comfort: "Eksepsjonell", value: "Premium som forsvares",
+          mostPraised: ["Stabil kuldelading", "Balanse mellom komfort og kjøreglede", "Interiørkvalitet"],
+          mostCritiqued: ["Pris i forhold til klassen", "Mindre bagasje enn konkurrentene", "Begrenset takhøyde bak"],
+          highlightQuote: "Den første Porsche som virkelig får deg til å føle at ingenting ofres for elektrisk drift."
+        },
+        "kia-ev9": {
+          range: "450 km reelt", charging: "Pålitelig 800V i kulde", winter: "Bra for størrelsen", comfort: "Best-i-klassen plass", value: "Sterk for familier",
+          mostPraised: ["Brukbar tredjerad", "800V-lading i kulde", "Smart bruk av interiørplass"],
+          mostCritiqued: ["Stor i bytrafikk", "Infotainment har læringskurve", "Motorveieffektivitet"],
+          highlightQuote: "Den eneste elbilen som faktisk erstatter en diesel-familiebil uten kompromisser."
+        },
+        "hyundai-ioniq5": {
+          range: "400 km reelt", charging: "18 min 10–80 % imponerende", winter: "Rekkevidde faller merkbart", comfort: "Flatt gulv, luftig", value: "Utmerket verdi",
+          mostPraised: ["18-minutters ladetid", "Smart interiørdesign", "Verdi på 800V-arkitektur"],
+          mostCritiqued: ["Vinterrekkevidde varierer", "Sikt bakover", "Programvare vs Tesla"],
+          highlightQuote: "18 minutter til 80 % endret debatten om hvorvidt elbiler kan gå på langtur. Den beviste at de kan."
+        },
+        "bmw-i5": {
+          range: "460 km reelt", charging: "22 kW AC er bestselgerargumentet", winter: "Sterk med 22 kW AC", comfort: "Referanseinteriør", value: "Dyr, men leverer",
+          mostPraised: ["22 kW AC-lading", "Interiørraffinement", "Motorveieffektivitet"],
+          mostCritiqued: ["DC-fart vs 800V-rivaler", "Pris for ikke-M-versjoner", "Store ytre mål"],
+          highlightQuote: "22 kW AC-lading er en detalj som høres kjedelig ut — helt til den endrer hvordan du planlegger hvert hotellstopp."
+        },
+        "audi-q6-etron": {
+          range: "510 km reelt", charging: "270 kW med minimal nedtrapping", winter: "Beste 800V-stabilitet i kulde", comfort: "Raffinert og stille", value: "Konkurransedyktig i klassen",
+          mostPraised: ["Konsistent ladekurve", "Best i klassen på vinterrekkevidde", "Stort kvalitetsløft i interiør"],
+          mostCritiqued: ["Prisen kryper opp med tilvalg", "Mindre bagasje enn EV9", "Tyngre enn den burde være"],
+          highlightQuote: "Ladekurven er det som gjør den spesiell — den faller ikke som hos konkurrentene, og det betyr noe på lange turer."
+        },
+        "volvo-ex30": {
+          range: "370 km reelt", charging: "153 kW akseptabelt", winter: "Lite batteri merkes om vinteren", comfort: "Smart bruk av plass", value: "Best verdi blant små elbiler",
+          mostPraised: ["Byggekvalitet for prisen", "Sikkerhetsvurderinger", "Smidig i by"],
+          mostCritiqued: ["Vinterrekkevidde med lite batteri", "Mye styres via skjerm", "Begrenset bagasjeplass"],
+          highlightQuote: "Den første ekte små elbilen som ikke føles som et kompromiss — bare en god bil som tilfeldigvis er elektrisk."
+        },
+        "bmw-ix": {
+          range: "500 km reelt", charging: "22 kW AC + 195 kW DC", winter: "Stort batteri = trygghet", comfort: "Nesten lydløs referanse", value: "Dyr — forsvarlig?",
+          mostPraised: ["Raffinert kupé", "Trygghet med stort batteri", "Allsidighet med 22 kW AC"],
+          mostCritiqued: ["Pris vs alternativer", "Polariserende design", "Programvarekompleksitet"],
+          highlightQuote: "Det stilleste elbilinteriøret vi har testet — lydisolasjonen er på et nivå de fleste produsenter ikke prøver seg på."
+        }
+      },
+      channels: {
+        "Fully Charged Show": "Langsiktig elbil-talsperson, fokus på reell bruk",
+        "Bjørn Nyland": "Datadrevne rekkevidde- og ladetester",
+        "AutoTrader UK": "Forbrukerperspektiv, verdianalyse",
+        "InsideEVs": "Tekniske dypdykk, presisjon på spesifikasjoner",
+        "What Car?": "Forbrukertesting, fokus på eierskap",
+        "Carwow": "Underholdende format, bredt publikum",
+        "The Electric Viking": "Industrinytt og kommentarer"
+      }
     },
     database: {
       seo_title: "EV total eierskapskostnadsdatabase | AUTOVERE",
@@ -723,6 +872,19 @@ const no: Translation = {
       index_title: "Hvilket ladenett",
       index_title_b: "passer for deg?",
       index_subtitle: "Hastighet, dekning, priser og kompatibilitet — alle større europeiske nettverk, ærlig sammenlignet.",
+      index_seo_desc: "Sammenlign Tesla Supercharger, Ionity, Fastned, Recharge og Allego. Hastigheter, priser, dekning og kompatibilitet for alle store europeiske ladenettverk.",
+      planner_eyebrow: "Ny — EV-ruteplanlegger",
+      planner_title: "Planlegg turen mellom hvilken som helst to byer i Europa",
+      planner_lead: "Få ladestopp, ankomsttid, total ladekostnad og bompenger — pluss direkte sammenligning mot diesel og bensin.",
+      planner_chip_time: "Reisetid + ankomst",
+      planner_chip_cost: "Lading + bom",
+      planner_chip_vs: "Vs bensin/diesel",
+      planner_cta: "Åpne planlegger",
+      live_eyebrow: "— Live infrastruktur",
+      live_h2: "Hver lader i Europa, på ett kart.",
+      live_lead: "Filtrer etter land og nettverk — Tesla, Ionity, Fastned, Allego og flere. Live data via OpenChargeMap.",
+      deep_eyebrow: "— Dypdykk i nettverkene",
+      deep_h2: "Sammenlign de største ladenettverkene side om side.",
     },
   },
   pages: {

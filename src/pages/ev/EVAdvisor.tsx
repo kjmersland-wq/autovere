@@ -7,100 +7,34 @@ import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import { COMPARE_MODELS, type CompareModel } from "@/data/ev-compare";
 
+interface StepOption { value: string; label: string; desc: string; icon?: string }
 interface Step {
   id: string;
   question: string;
   subtitle: string;
   icon: React.ElementType;
-  options: { value: string; label: string; desc: string; icon?: string }[];
+  options: StepOption[];
 }
 
-const STEPS: Step[] = [
-  {
-    id: "budget",
-    question: "What's your budget?",
-    subtitle: "This is the single biggest filter. We'll only show you what fits.",
-    icon: Wallet,
-    options: [
-      { value: "under35", label: "Under €35,000", desc: "Compact EVs with strong value", icon: "💚" },
-      { value: "35to55", label: "€35,000 – €55,000", desc: "Mid-range and family EVs", icon: "💛" },
-      { value: "55to75", label: "€55,000 – €75,000", desc: "Premium and large SUVs", icon: "🧡" },
-      { value: "over75", label: "Over €75,000", desc: "Flagship performance EVs", icon: "❤️" },
-    ],
-  },
-  {
-    id: "climate",
-    question: "Where do you live and drive most?",
-    subtitle: "Climate dramatically affects real-world EV range — especially in winter.",
-    icon: Thermometer,
-    options: [
-      { value: "nordic", label: "Nordic / Alpine", desc: "Norway, Sweden, Finland, mountain regions — cold winters", icon: "❄️" },
-      { value: "continental", label: "Continental Europe", desc: "Germany, Poland, France — cold winters, warm summers", icon: "🌤️" },
-      { value: "atlantic", label: "Atlantic / British Isles", desc: "UK, Ireland, coastal France — mild but wet", icon: "🌧️" },
-      { value: "mediterranean", label: "Mediterranean", desc: "Spain, Italy, southern France — warm, mild winters", icon: "☀️" },
-    ],
-  },
-  {
-    id: "family",
-    question: "Who's riding with you?",
-    subtitle: "Family size determines cargo space and seat count priorities.",
-    icon: Users,
-    options: [
-      { value: "solo", label: "Solo or couple", desc: "Two adults, minimal luggage needs", icon: "👤" },
-      { value: "small", label: "Small family", desc: "2 adults, 1–2 children, occasional cargo", icon: "👨‍👩‍👦" },
-      { value: "large", label: "Large family", desc: "3+ children or regular 5+ adult travel", icon: "👨‍👩‍👧‍👦" },
-      { value: "dog", label: "Dog or gear", desc: "Regular large cargo, sports equipment, pets", icon: "🐕" },
-    ],
-  },
-  {
-    id: "driving",
-    question: "How do you mostly drive?",
-    subtitle: "Urban and highway driving have very different EV efficiency profiles.",
-    icon: MapPin,
-    options: [
-      { value: "city", label: "Mostly city", desc: "Short trips, stop-start, under 50 km daily", icon: "🏙️" },
-      { value: "mixed", label: "Mixed city and highway", desc: "Commuting plus occasional longer trips", icon: "🛣️" },
-      { value: "highway", label: "Mostly highway", desc: "Long commutes, frequent motorway use", icon: "🏎️" },
-      { value: "rural", label: "Rural and regional", desc: "Varied terrain, longer distances, fewer chargers", icon: "🌄" },
-    ],
-  },
-  {
-    id: "charging",
-    question: "Where will you charge?",
-    subtitle: "Home charging dramatically changes EV economics and convenience.",
-    icon: Battery,
-    options: [
-      { value: "home", label: "Home garage or driveway", desc: "Can install a wallbox — ideal EV setup", icon: "🏠" },
-      { value: "workplace", label: "Workplace charging", desc: "Employer provides charging access", icon: "🏢" },
-      { value: "mixed_access", label: "Home + public mix", desc: "Some home access, some public top-ups", icon: "⚡" },
-      { value: "public_only", label: "Public charging only", desc: "No home access — network compatibility critical", icon: "📍" },
-    ],
-  },
-  {
-    id: "roadtrips",
-    question: "How often do you road trip?",
-    subtitle: "Charging stop frequency and network coverage matter more for frequent travellers.",
-    icon: Route,
-    options: [
-      { value: "rarely", label: "Rarely", desc: "Mostly local driving, occasional longer trip", icon: "🏡" },
-      { value: "monthly", label: "Monthly", desc: "A long drive roughly once a month", icon: "📅" },
-      { value: "weekly", label: "Weekly", desc: "Regular long-distance travel", icon: "🗺️" },
-      { value: "cross_border", label: "International", desc: "Regularly cross European borders", icon: "🌍" },
-    ],
-  },
-  {
-    id: "priority",
-    question: "What matters most to you?",
-    subtitle: "If you could only optimise one thing, what would it be?",
-    icon: Gauge,
-    options: [
-      { value: "range", label: "Maximum range", desc: "I want the most km possible between charges", icon: "🔋" },
-      { value: "charging", label: "Fastest charging", desc: "Charge stop time matters more than range", icon: "⚡" },
-      { value: "comfort", label: "Comfort and quality", desc: "Interior, ride quality, refinement", icon: "💺" },
-      { value: "value", label: "Best value", desc: "Most capability per euro spent", icon: "💶" },
-    ],
-  },
-];
+const STEP_ICONS: Record<string, React.ElementType> = {
+  budget: Wallet,
+  climate: Thermometer,
+  family: Users,
+  driving: MapPin,
+  charging: Battery,
+  roadtrips: Route,
+  priority: Gauge,
+};
+
+const STEP_OPTION_ICONS: Record<string, Record<string, string>> = {
+  budget: { under35: "💚", "35to55": "💛", "55to75": "🧡", over75: "❤️" },
+  climate: { nordic: "❄️", continental: "🌤️", atlantic: "🌧️", mediterranean: "☀️" },
+  family: { solo: "👤", small: "👨‍👩‍👦", large: "👨‍👩‍👧‍👦", dog: "🐕" },
+  driving: { city: "🏙️", mixed: "🛣️", highway: "🏎️", rural: "🌄" },
+  charging: { home: "🏠", workplace: "🏢", mixed_access: "⚡", public_only: "📍" },
+  roadtrips: { rarely: "🏡", monthly: "📅", weekly: "🗺️", cross_border: "🌍" },
+  priority: { range: "🔋", charging: "⚡", comfort: "💺", value: "💶" },
+};
 
 interface Answers {
   budget?: string;
@@ -185,30 +119,30 @@ function scoreModel(model: CompareModel, answers: Answers): number {
   return Math.max(0, score);
 }
 
-function getReasonText(model: CompareModel, answers: Answers): string[] {
+function getReasonText(model: CompareModel, answers: Answers, t: (k: string, o?: Record<string, unknown>) => string): string[] {
   const reasons: string[] = [];
 
   if (answers.climate === "nordic" && model.range.winter >= 300) {
-    reasons.push(`${model.range.winter} km winter range — reliable in cold conditions`);
+    reasons.push(t("ev.advisor.reasons.nordic_winter", { km: model.range.winter }));
   }
   if (answers.family === "large" && model.cargoL > 800) {
-    reasons.push(`${model.cargoL.toLocaleString()} L cargo — genuine family capacity`);
+    reasons.push(t("ev.advisor.reasons.family_cargo", { l: model.cargoL.toLocaleString() }));
   }
   if (answers.roadtrips === "weekly" && model.charging.time10to80 <= 24) {
-    reasons.push(`${model.charging.time10to80}-min charge time — efficient stop strategy`);
+    reasons.push(t("ev.advisor.reasons.charging_time", { min: model.charging.time10to80 }));
   }
   if (answers.priority === "value" && model.scores.valueForMoney >= 85) {
-    reasons.push(`${model.scores.valueForMoney}/100 value score — strong cost-capability ratio`);
+    reasons.push(t("ev.advisor.reasons.value_score", { score: model.scores.valueForMoney }));
   }
   if (answers.priority === "comfort" && model.scores.comfort >= 88) {
-    reasons.push(`${model.scores.comfort}/100 comfort score — premium ride quality`);
+    reasons.push(t("ev.advisor.reasons.comfort_score", { score: model.scores.comfort }));
   }
   if (answers.charging === "public_only" && model.scores.networkCompat >= 85) {
-    reasons.push(`${model.scores.networkCompat}/100 network score — broad charging compatibility`);
+    reasons.push(t("ev.advisor.reasons.network_score", { score: model.scores.networkCompat }));
   }
   if (reasons.length < 2) {
-    reasons.push(`${model.range.real} km real-world range`);
-    reasons.push(`€${model.annualCostEur.toLocaleString()} estimated annual charging cost`);
+    reasons.push(t("ev.advisor.reasons.range_default", { km: model.range.real }));
+    reasons.push(t("ev.advisor.reasons.annual_default", { cost: model.annualCostEur.toLocaleString() }));
   }
 
   return reasons.slice(0, 3);
@@ -253,6 +187,20 @@ export default function EVAdvisor() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [showResults, setShowResults] = useState(false);
+
+  const rawSteps = t("ev.advisor.steps", { returnObjects: true }) as Array<{
+    id: string;
+    question: string;
+    subtitle: string;
+    options: { value: string; label: string; desc: string }[];
+  }>;
+  const STEPS: Step[] = rawSteps.map((s) => ({
+    id: s.id,
+    question: s.question,
+    subtitle: s.subtitle,
+    icon: STEP_ICONS[s.id] ?? Wallet,
+    options: s.options.map((o) => ({ ...o, icon: STEP_OPTION_ICONS[s.id]?.[o.value] })),
+  }));
 
   const step = STEPS[currentStep];
   const currentAnswer = answers[step.id as keyof Answers];
@@ -415,7 +363,7 @@ export default function EVAdvisor() {
               ) : (
                 <div className="space-y-5">
                   {results.map(({ model: m }, idx) => {
-                    const reasons = getReasonText(m, answers);
+                    const reasons = getReasonText(m, answers, t);
                     const medals = ["🥇", "🥈", "🥉"];
                     return (
                       <div
@@ -429,7 +377,7 @@ export default function EVAdvisor() {
                               <span className={`text-[10px] uppercase tracking-widest ${m.accentColor}`}>{m.brand} · {m.category}</span>
                             </div>
                             <h3 className="font-bold text-xl">{m.name}</h3>
-                            <p className="text-xs text-muted-foreground mt-0.5">from €{m.priceFrom.toLocaleString()}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{t("ev.advisor.from_label")} €{m.priceFrom.toLocaleString()}</p>
                           </div>
                           <div className="text-right flex-shrink-0">
                             <div className={`text-2xl font-bold ${m.accentColor}`}>{m.range.real}</div>

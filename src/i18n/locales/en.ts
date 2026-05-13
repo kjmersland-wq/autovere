@@ -363,6 +363,96 @@ const en = {
       annual_cost: "Annual cost",
       start_again: "Start again with different preferences",
       compare_side: "Compare side by side →",
+      reasons: {
+        nordic_winter: "{{km}} km winter range — reliable in cold conditions",
+        family_cargo: "{{l}} L cargo — genuine family capacity",
+        charging_time: "{{min}}-min charge time — efficient stop strategy",
+        value_score: "{{score}}/100 value score — strong cost-capability ratio",
+        comfort_score: "{{score}}/100 comfort score — premium ride quality",
+        network_score: "{{score}}/100 network score — broad charging compatibility",
+        range_default: "{{km}} km real-world range",
+        annual_default: "€{{cost}} estimated annual charging cost",
+      },
+      from_label: "from",
+      steps: [
+        {
+          id: "budget",
+          question: "What's your budget?",
+          subtitle: "This is the single biggest filter. We'll only show you what fits.",
+          options: [
+            { value: "under35", label: "Under €35,000", desc: "Compact EVs with strong value" },
+            { value: "35to55", label: "€35,000 – €55,000", desc: "Mid-range and family EVs" },
+            { value: "55to75", label: "€55,000 – €75,000", desc: "Premium and large SUVs" },
+            { value: "over75", label: "Over €75,000", desc: "Flagship performance EVs" }
+          ]
+        },
+        {
+          id: "climate",
+          question: "Where do you live and drive most?",
+          subtitle: "Climate dramatically affects real-world EV range — especially in winter.",
+          options: [
+            { value: "nordic", label: "Nordic / Alpine", desc: "Norway, Sweden, Finland, mountain regions — cold winters" },
+            { value: "continental", label: "Continental Europe", desc: "Germany, Poland, France — cold winters, warm summers" },
+            { value: "atlantic", label: "Atlantic / British Isles", desc: "UK, Ireland, coastal France — mild but wet" },
+            { value: "mediterranean", label: "Mediterranean", desc: "Spain, Italy, southern France — warm, mild winters" }
+          ]
+        },
+        {
+          id: "family",
+          question: "Who's riding with you?",
+          subtitle: "Family size determines cargo space and seat count priorities.",
+          options: [
+            { value: "solo", label: "Solo or couple", desc: "Two adults, minimal luggage needs" },
+            { value: "small", label: "Small family", desc: "2 adults, 1–2 children, occasional cargo" },
+            { value: "large", label: "Large family", desc: "3+ children or regular 5+ adult travel" },
+            { value: "dog", label: "Dog or gear", desc: "Regular large cargo, sports equipment, pets" }
+          ]
+        },
+        {
+          id: "driving",
+          question: "How do you mostly drive?",
+          subtitle: "Urban and highway driving have very different EV efficiency profiles.",
+          options: [
+            { value: "city", label: "Mostly city", desc: "Short trips, stop-start, under 50 km daily" },
+            { value: "mixed", label: "Mixed city and highway", desc: "Commuting plus occasional longer trips" },
+            { value: "highway", label: "Mostly highway", desc: "Long commutes, frequent motorway use" },
+            { value: "rural", label: "Rural and regional", desc: "Varied terrain, longer distances, fewer chargers" }
+          ]
+        },
+        {
+          id: "charging",
+          question: "Where will you charge?",
+          subtitle: "Home charging dramatically changes EV economics and convenience.",
+          options: [
+            { value: "home", label: "Home garage or driveway", desc: "Can install a wallbox — ideal EV setup" },
+            { value: "workplace", label: "Workplace charging", desc: "Employer provides charging access" },
+            { value: "mixed_access", label: "Home + public mix", desc: "Some home access, some public top-ups" },
+            { value: "public_only", label: "Public charging only", desc: "No home access — network compatibility critical" }
+          ]
+        },
+        {
+          id: "roadtrips",
+          question: "How often do you road trip?",
+          subtitle: "Charging stop frequency and network coverage matter more for frequent travellers.",
+          options: [
+            { value: "rarely", label: "Rarely", desc: "Mostly local driving, occasional longer trip" },
+            { value: "monthly", label: "Monthly", desc: "A long drive roughly once a month" },
+            { value: "weekly", label: "Weekly", desc: "Regular long-distance travel" },
+            { value: "cross_border", label: "International", desc: "Regularly cross European borders" }
+          ]
+        },
+        {
+          id: "priority",
+          question: "What matters most to you?",
+          subtitle: "If you could only optimise one thing, what would it be?",
+          options: [
+            { value: "range", label: "Maximum range", desc: "I want the most km possible between charges" },
+            { value: "charging", label: "Fastest charging", desc: "Charge stop time matters more than range" },
+            { value: "comfort", label: "Comfort and quality", desc: "Interior, ride quality, refinement" },
+            { value: "value", label: "Best value", desc: "Most capability per euro spent" }
+          ]
+        }
+      ]
     },
     guides: {
       seo_title: "EV Ownership Guides — Battery, Winter, Charging | AUTOVERE",
@@ -588,6 +678,65 @@ const en = {
       metric_winter: "Winter",
       metric_comfort: "Comfort",
       metric_value: "Value",
+      consensus: {
+        "tesla-model-y": {
+          range: "430 km real-world", charging: "Supercharger unmatched", winter: "Heat pump helps, plan stops", comfort: "Firm ride", value: "Strong long-term",
+          mostPraised: ["Supercharger reliability", "Cargo versatility", "OTA software updates"],
+          mostCritiqued: ["Firm suspension", "No stalks / minimal controls", "Wind noise above 110 km/h"],
+          highlightQuote: "The most complete package in the segment — not perfect, but closest to right for most people."
+        },
+        "porsche-macan-ev": {
+          range: "490 km real-world", charging: "270 kW — class-best", winter: "Excellent 800V cold perf.", comfort: "Outstanding", value: "Premium justified",
+          mostPraised: ["Cold weather charging stability", "Ride and handling balance", "Interior quality"],
+          mostCritiqued: ["Price relative to class", "Smaller cargo than rivals", "Limited rear headroom"],
+          highlightQuote: "The first Porsche that genuinely makes you feel nothing is being sacrificed for the electric powertrain."
+        },
+        "kia-ev9": {
+          range: "450 km real-world", charging: "800V reliable in cold", winter: "Good for size", comfort: "Best-in-class space", value: "Strong for families",
+          mostPraised: ["Third-row usability", "800V cold charging", "Interior space intelligence"],
+          mostCritiqued: ["Size in urban parking", "Infotainment learning curve", "Motorway efficiency"],
+          highlightQuote: "The only electric vehicle that genuinely replaces a diesel people carrier without compromise."
+        },
+        "hyundai-ioniq5": {
+          range: "400 km real-world", charging: "18 min 10–80% remarkable", winter: "Range drops noticeably", comfort: "Flat floor, airy", value: "Excellent value",
+          mostPraised: ["18-minute charging time", "Interior space design", "800V architecture value"],
+          mostCritiqued: ["Winter range sensitivity", "Rear visibility", "Software vs Tesla"],
+          highlightQuote: "18 minutes to 80% changed the conversation about whether EVs can road trip. It proved they can."
+        },
+        "bmw-i5": {
+          range: "460 km real-world", charging: "22 kW AC star feature", winter: "Strong with 22 kW AC", comfort: "Benchmark interior", value: "Expensive but earns it",
+          mostPraised: ["22 kW AC charging", "Interior refinement", "Highway efficiency"],
+          mostCritiqued: ["DC speed vs 800V rivals", "Price for non-M spec", "Large exterior dimensions"],
+          highlightQuote: "The 22 kW AC charging is a detail that sounds boring until it changes how you plan every hotel stop."
+        },
+        "audi-q6-etron": {
+          range: "510 km real-world", charging: "270 kW minimal taper", winter: "Best 800V cold stability", comfort: "Refined and quiet", value: "Competitive segment",
+          mostPraised: ["Charging curve consistency", "Winter range leadership", "Interior quality jump"],
+          mostCritiqued: ["Price creep with options", "Smaller cargo than EV9", "Heavier than it should be"],
+          highlightQuote: "The charging curve is what makes this special — it doesn't taper the way competitors do, and that matters on long runs."
+        },
+        "volvo-ex30": {
+          range: "370 km real-world", charging: "153 kW adequate", winter: "Small battery feels winter", comfort: "Clever space use", value: "Best small EV value",
+          mostPraised: ["Build quality for price", "Safety ratings", "Urban agility"],
+          mostCritiqued: ["Winter range on smaller battery", "Screen-heavy controls", "Limited cargo"],
+          highlightQuote: "The first genuinely small EV that doesn't feel like a compromise — it's just a good car that happens to be electric."
+        },
+        "bmw-ix": {
+          range: "500 km real-world", charging: "22 kW AC + 195 kW DC", winter: "Large battery = confidence", comfort: "Near-silent reference", value: "Expensive — justified?",
+          mostPraised: ["Cabin refinement", "Large battery confidence", "22 kW AC versatility"],
+          mostCritiqued: ["Price vs alternatives", "Polarising exterior", "Software complexity"],
+          highlightQuote: "The quietest EV interior tested — the noise isolation is at a level most manufacturers don't attempt."
+        }
+      },
+      channels: {
+        "Fully Charged Show": "Long-term EV advocacy, real-world focus",
+        "Bjørn Nyland": "Data-driven range and charging tests",
+        "AutoTrader UK": "Consumer perspective, value analysis",
+        "InsideEVs": "Technical deep-dives, spec accuracy",
+        "What Car?": "Consumer testing, ownership focus",
+        "Carwow": "Entertainment-led, broad audience",
+        "The Electric Viking": "Industry news, commentary"
+      }
     },
     database: {
       seo_title: "EV Total Cost of Ownership Database | AUTOVERE",
@@ -721,6 +870,19 @@ const en = {
       index_title: "Which charging network",
       index_title_b: "is right for you?",
       index_subtitle: "Speed, coverage, pricing and compatibility — every major European network, compared honestly.",
+      index_seo_desc: "Compare Tesla Supercharger, Ionity, Fastned, Recharge and Allego. Speeds, pricing, coverage and compatibility for every major European charging network.",
+      planner_eyebrow: "New — EV route planner",
+      planner_title: "Plan a trip between any two cities in Europe",
+      planner_lead: "Get charging stops, arrival time, total charging cost and tolls — plus a direct comparison against diesel and petrol.",
+      planner_chip_time: "Travel time + arrival",
+      planner_chip_cost: "Charging + tolls",
+      planner_chip_vs: "Vs petrol/diesel",
+      planner_cta: "Open planner",
+      live_eyebrow: "— Live infrastructure",
+      live_h2: "Every charger in Europe, on one map.",
+      live_lead: "Filter by country and by network — Tesla, Ionity, Fastned, Allego and more. Live data via OpenChargeMap.",
+      deep_eyebrow: "— Network deep dives",
+      deep_h2: "Compare the major networks side by side.",
     },
   },
   pages: {
