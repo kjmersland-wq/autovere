@@ -406,7 +406,7 @@ export function RoutePlanner() {
                   <TrendingDown className="w-4 h-4 text-emerald-400" />
                   <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-300">Du sparer på EV</span>
                 </div>
-                <div className="text-2xl font-bold text-emerald-400 tabular-nums">€ {plan.savings.toFixed(2)}</div>
+                <div className="text-2xl font-bold text-emerald-400 tabular-nums">€ {adjustedSavings.toFixed(2)}</div>
                 <div className="text-[11px] text-muted-foreground mt-1">vs samme tur med bensin/diesel</div>
               </div>
             </div>
