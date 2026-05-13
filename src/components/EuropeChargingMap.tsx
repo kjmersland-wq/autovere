@@ -105,9 +105,11 @@ async function fetchPOIs(opts: { country?: string; bbox?: [number, number, numbe
 function FlyTo({ bbox }: { bbox: [number, number, number, number] }) {
   const map = useMap();
   useEffect(() => {
-    map.flyToBounds(
+    // Use fitBounds (instant) instead of flyToBounds — animation gets interrupted
+    // by re-renders from BoundsWatcher and country sometimes never lands.
+    map.fitBounds(
       [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
-      { duration: 1.0, padding: [20, 20] }
+      { padding: [20, 20], animate: true, duration: 0.6 }
     );
   }, [bbox, map]);
   return null;
@@ -154,14 +156,26 @@ export function EuropeChargingMap() {
   const [bbox, setBbox] = useState<[number, number, number, number]>(EUROPE_BBOX);
   const fetchSeq = useRef(0);
 
-  // Auto-refetch on every bbox change (zoom/pan), debounced.
-  // Higher max when zoomed-in country mode for completeness.
+  // Fetch strategy:
+  //  - country selected → fetch ALL stations in that country (server-side filter, max 5000)
+  //  - no country → fetch by current viewport bbox (zoom/pan auto-updates), debounced
   useEffect(() => {
+    if (!country) return;
+    const seq = ++fetchSeq.current;
+    setLoading(true);
+    setError(null);
+    fetchPOIs({ country, max: 5000 })
+      .then((data) => { if (seq === fetchSeq.current) setPois(data); })
+      .catch((e) => { if (seq === fetchSeq.current) setError(e.message ?? "Could not load stations"); })
+      .finally(() => { if (seq === fetchSeq.current) setLoading(false); });
+  }, [country]);
+
+  useEffect(() => {
+    if (country) return; // country mode handles its own fetch
     const t = setTimeout(() => {
       const seq = ++fetchSeq.current;
       setLoading(true);
       setError(null);
-      // Estimate area to scale max results — small bbox = denser zoom = fetch more relative to area
       const area = Math.max(0.001, (bbox[2] - bbox[0]) * (bbox[3] - bbox[1]));
       const max = area < 5 ? 2000 : area < 50 ? 1500 : 1000;
       fetchPOIs({ bbox, max })
@@ -170,7 +184,7 @@ export function EuropeChargingMap() {
         .finally(() => { if (seq === fetchSeq.current) setLoading(false); });
     }, 450);
     return () => clearTimeout(t);
-  }, [bbox]);
+  }, [bbox, country]);
 
   const filtered = useMemo(() => {
     if (activeNetworks.size === 0) return pois;
