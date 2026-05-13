@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Loader2, MapPin, Zap } from "lucide-react";
 import { useTheme } from "next-themes";
+import { supabase } from "@/integrations/supabase/client";
 
 /* ────────────────────────────────────────────────────────────────────── */
 /* Network catalog — name match (case-insensitive substring on Operator)  */
@@ -86,16 +87,13 @@ interface POI {
 }
 
 async function fetchPOIs(opts: { country?: string; bbox?: [number, number, number, number]; max: number }): Promise<POI[]> {
-  const params = new URLSearchParams({
-    output: "json",
-    compact: "true",
-    verbose: "false",
-    maxresults: String(opts.max),
-  });
+  const params = new URLSearchParams({ maxresults: String(opts.max) });
   if (opts.country) params.set("countrycode", opts.country);
   if (opts.bbox) params.set("boundingbox", `(${opts.bbox[0]},${opts.bbox[1]}),(${opts.bbox[2]},${opts.bbox[3]})`);
-  const url = `https://api.openchargemap.io/v3/poi?${params.toString()}`;
-  const res = await fetch(url, { headers: { "X-API-Key": "" } });
+  const url = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/ocm-proxy?${params.toString()}`;
+  const res = await fetch(url, {
+    headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string },
+  });
   if (!res.ok) throw new Error(`OCM ${res.status}`);
   return (await res.json()) as POI[];
 }
@@ -156,34 +154,23 @@ export function EuropeChargingMap() {
   const [bbox, setBbox] = useState<[number, number, number, number]>(EUROPE_BBOX);
   const fetchSeq = useRef(0);
 
-  // Refetch on country change
+  // Auto-refetch on every bbox change (zoom/pan), debounced.
+  // Higher max when zoomed-in country mode for completeness.
   useEffect(() => {
-    const seq = ++fetchSeq.current;
-    setLoading(true);
-    setError(null);
-    const opts = country
-      ? { country, max: 2000 }
-      : { bbox, max: 1500 };
-    fetchPOIs(opts)
-      .then((data) => { if (seq === fetchSeq.current) setPois(data); })
-      .catch((e) => { if (seq === fetchSeq.current) setError(e.message ?? "Could not load stations"); })
-      .finally(() => { if (seq === fetchSeq.current) setLoading(false); });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [country]);
-
-  // When user pans map without a country selected, refetch with bbox (debounced)
-  useEffect(() => {
-    if (country) return;
     const t = setTimeout(() => {
       const seq = ++fetchSeq.current;
       setLoading(true);
-      fetchPOIs({ bbox, max: 1500 })
+      setError(null);
+      // Estimate area to scale max results — small bbox = denser zoom = fetch more relative to area
+      const area = Math.max(0.001, (bbox[2] - bbox[0]) * (bbox[3] - bbox[1]));
+      const max = area < 5 ? 2000 : area < 50 ? 1500 : 1000;
+      fetchPOIs({ bbox, max })
         .then((data) => { if (seq === fetchSeq.current) setPois(data); })
-        .catch(() => {})
+        .catch((e) => { if (seq === fetchSeq.current) setError(e.message ?? "Could not load stations"); })
         .finally(() => { if (seq === fetchSeq.current) setLoading(false); });
-    }, 600);
+    }, 450);
     return () => clearTimeout(t);
-  }, [bbox, country]);
+  }, [bbox]);
 
   const filtered = useMemo(() => {
     if (activeNetworks.size === 0) return pois;
