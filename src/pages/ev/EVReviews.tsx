@@ -6,6 +6,7 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { EV_MODELS } from "@/data/ev-models";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
+import { useCarImage } from "@/hooks/useCarImage";
 
 const ALL_REVIEWS = EV_MODELS.flatMap((model) =>
   model.youtubeReviews.map((r) => ({ ...r, model }))
