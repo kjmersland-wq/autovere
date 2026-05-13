@@ -426,7 +426,7 @@ const en = {
       spec_weight: "Weight",
       spec_cargo: "Cargo",
       from: "from",
-      price_range_label: "from €{{from}} to €{{to}}",
+      price_range_label: "from {{from}} to {{to}}",
       explore_more: "Explore further",
       cta_compare: "Compare with other EVs",
       cta_database: "Browse full database",
