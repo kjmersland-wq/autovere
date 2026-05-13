@@ -404,6 +404,21 @@ export function RoutePlanner() {
             </div>
           )}
 
+          {/* Send to car */}
+          {from && to && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl border border-accent/30 bg-accent/5">
+              <div>
+                <div className="text-sm font-semibold mb-0.5">Klar til å kjøre?</div>
+                <div className="text-[11px] text-muted-foreground">Send hele ruten direkte til bilens navigasjon — Tesla, CarPlay, Android Auto eller Waze.</div>
+              </div>
+              <SendToCar
+                from={{ label: from.label, lat: from.lat, lon: from.lon }}
+                to={{ label: to.label, lat: to.lat, lon: to.lon }}
+                stops={plan.stops.map((s) => ({ lat: s.lat, lon: s.lon }))}
+              />
+            </div>
+          )}
+
           <div className="text-[10px] text-muted-foreground flex items-start gap-1.5">
             <Info className="w-3 h-3 mt-0.5 flex-shrink-0" />
             <span>Alle priser er estimater basert på gjennomsnittlige bom-, strøm- og drivstoffpriser i Europa. Faktisk pris varierer med ladenettverk, tid på året og spesifikk rute. Justér tallene under "Bil og priser" for nøyaktigere beregning.</span>
