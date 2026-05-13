@@ -79,7 +79,7 @@ export function EVModelsIndex() {
               <div className="grid grid-cols-2 gap-2 mb-4">
                 <div className="bg-card/60 rounded-lg p-2 text-center">
                   <div className="text-base font-bold text-gradient">{model.specs.range.realWorld}</div>
-                  <div className="text-[9px] text-muted-foreground uppercase">Real km</div>
+                  <div className="text-[9px] text-muted-foreground uppercase">{t("ev.database.unit_real_km")}</div>
                 </div>
                 <div className="bg-card/60 rounded-lg p-2 text-center">
                   <div className="text-base font-bold text-cyan-400">{model.specs.charging.maxDC}</div>
