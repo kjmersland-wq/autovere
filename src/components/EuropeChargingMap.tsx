@@ -105,9 +105,11 @@ async function fetchPOIs(opts: { country?: string; bbox?: [number, number, numbe
 function FlyTo({ bbox }: { bbox: [number, number, number, number] }) {
   const map = useMap();
   useEffect(() => {
-    map.flyToBounds(
+    // Use fitBounds (instant) instead of flyToBounds — animation gets interrupted
+    // by re-renders from BoundsWatcher and country sometimes never lands.
+    map.fitBounds(
       [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
-      { duration: 1.0, padding: [20, 20] }
+      { padding: [20, 20], animate: true, duration: 0.6 }
     );
   }, [bbox, map]);
   return null;
