@@ -241,6 +241,52 @@ export function RoutePlanner() {
           </div>
         </div>
 
+        {/* Charging network selector — always visible */}
+        <div className="pt-2 border-t border-border/30">
+          <div className="flex items-center justify-between gap-3 mb-2">
+            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Ladenettverk</label>
+            <label className="flex items-center gap-2 text-[11px] text-muted-foreground cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={!!vehicle.hasMembership}
+                onChange={(e) => setVehicle({ ...vehicle, hasMembership: e.target.checked })}
+                className="accent-cyan-400"
+              />
+              Jeg har medlemskap / abonnement
+            </label>
+          </div>
+          <div className="flex flex-wrap gap-1.5">
+            {CHARGING_NETWORKS.map((n) => {
+              const active = (vehicle.network ?? "cheapest") === n.id;
+              const price = effectivePrice(n, !!vehicle.hasMembership, vehicle.evPricePerKwh);
+              return (
+                <button
+                  key={n.id}
+                  onClick={() => setVehicle({ ...vehicle, network: n.id })}
+                  className={`group inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-[11px] font-medium border transition-all ${
+                    active
+                      ? "bg-cyan-400/10 border-cyan-400/40 text-cyan-300 shadow-[0_0_15px_-4px_rgba(34,211,238,0.4)]"
+                      : "bg-card/40 border-border/40 text-muted-foreground hover:text-foreground hover:border-border"
+                  }`}
+                  title={n.note}
+                >
+                  <span className="w-2 h-2 rounded-full" style={{ background: n.color }} />
+                  {n.name}
+                  {n.id !== "cheapest" && (
+                    <span className="tabular-nums opacity-70">€{price.toFixed(2)}/kWh</span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+          <div className="text-[10px] text-muted-foreground mt-2">
+            {networkById(vehicle.network).note}
+            {vehicle.hasMembership && networkById(vehicle.network).memberPerKwh
+              ? " · medlemspris brukt"
+              : ""}
+          </div>
+        </div>
+
         <button
           onClick={() => setShowAdvanced((s) => !s)}
           className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
@@ -252,7 +298,7 @@ export function RoutePlanner() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 border-t border-border/30">
             <NumField label="EV forbruk (kWh/100km)" value={vehicle.evConsumptionKwhPer100} onChange={(v) => setVehicle({ ...vehicle, evConsumptionKwhPer100: v })} step={0.5} />
             <NumField label="EV rekkevidde (km)" value={vehicle.evRangeKm} onChange={(v) => setVehicle({ ...vehicle, evRangeKm: v })} step={10} />
-            <NumField label="Strømpris (€/kWh)" value={vehicle.evPricePerKwh} onChange={(v) => setVehicle({ ...vehicle, evPricePerKwh: v })} step={0.05} />
+            <NumField label="Egen strømpris (€/kWh)" value={vehicle.evPricePerKwh} onChange={(v) => setVehicle({ ...vehicle, evPricePerKwh: v })} step={0.05} />
             <NumField label="Lading per stopp (min)" value={vehicle.evChargeMinutesPerStop} onChange={(v) => setVehicle({ ...vehicle, evChargeMinutesPerStop: v })} step={5} />
             <NumField label="Diesel/bensin (L/100km)" value={vehicle.iceConsumptionLPer100} onChange={(v) => setVehicle({ ...vehicle, iceConsumptionLPer100: v })} step={0.5} />
             <NumField label="Drivstoffpris (€/L)" value={vehicle.icePricePerL} onChange={(v) => setVehicle({ ...vehicle, icePricePerL: v })} step={0.05} />
