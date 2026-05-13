@@ -428,7 +428,7 @@ const no: Translation = {
       spec_weight: "Vekt",
       spec_cargo: "Bagasjerom",
       from: "fra",
-      price_range_label: "fra €{{from}} til €{{to}}",
+      price_range_label: "fra {{from}} til {{to}}",
       explore_more: "Utforsk videre",
       cta_compare: "Sammenlign med andre elbiler",
       cta_database: "Se hele databasen",
