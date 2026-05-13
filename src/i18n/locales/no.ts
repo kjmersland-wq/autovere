@@ -365,6 +365,96 @@ const no: Translation = {
       annual_cost: "Årlig kostnad",
       start_again: "Start på nytt med andre preferanser",
       compare_side: "Sammenlign side om side →",
+      reasons: {
+        nordic_winter: "{{km}} km vinterrekkevidde — pålitelig i kulde",
+        family_cargo: "{{l}} L bagasjerom — ekte familiekapasitet",
+        charging_time: "{{min}} min ladetid — effektiv stoppstrategi",
+        value_score: "{{score}}/100 i verdi — sterkt forhold mellom pris og evne",
+        comfort_score: "{{score}}/100 i komfort — premium kjøreopplevelse",
+        network_score: "{{score}}/100 i nettverk — bred ladekompatibilitet",
+        range_default: "{{km}} km reell rekkevidde",
+        annual_default: "€{{cost}} estimert årlig ladekostnad",
+      },
+      from_label: "fra",
+      steps: [
+        {
+          id: "budget",
+          question: "Hva er budsjettet ditt?",
+          subtitle: "Dette er det største enkeltfilteret. Vi viser kun det som passer.",
+          options: [
+            { value: "under35", label: "Under 35 000 €", desc: "Kompakte elbiler med sterk verdi" },
+            { value: "35to55", label: "35 000 – 55 000 €", desc: "Mellomklasse- og familieelbiler" },
+            { value: "55to75", label: "55 000 – 75 000 €", desc: "Premium og store SUV-er" },
+            { value: "over75", label: "Over 75 000 €", desc: "Topp-elbiler med ytelse i fokus" }
+          ]
+        },
+        {
+          id: "climate",
+          question: "Hvor bor og kjører du mest?",
+          subtitle: "Klimaet påvirker reell rekkevidde dramatisk — spesielt om vinteren.",
+          options: [
+            { value: "nordic", label: "Norden / Alpene", desc: "Norge, Sverige, Finland og fjellområder — kalde vintre" },
+            { value: "continental", label: "Kontinental-Europa", desc: "Tyskland, Polen, Frankrike — kalde vintre, varme somre" },
+            { value: "atlantic", label: "Atlanterhavet / Britisk øy", desc: "UK, Irland, kyst-Frankrike — mildt, men vått" },
+            { value: "mediterranean", label: "Middelhavet", desc: "Spania, Italia, sør-Frankrike — varmt, milde vintre" }
+          ]
+        },
+        {
+          id: "family",
+          question: "Hvem kjører du med?",
+          subtitle: "Familiestørrelse avgjør behov for plass og bagasjerom.",
+          options: [
+            { value: "solo", label: "Alene eller par", desc: "To voksne, lite bagasje" },
+            { value: "small", label: "Liten familie", desc: "2 voksne, 1–2 barn, av og til last" },
+            { value: "large", label: "Stor familie", desc: "3+ barn eller jevnlig 5+ voksne" },
+            { value: "dog", label: "Hund eller utstyr", desc: "Mye last, sportsutstyr, kjæledyr" }
+          ]
+        },
+        {
+          id: "driving",
+          question: "Hvordan kjører du mest?",
+          subtitle: "Bykjøring og motorvei gir svært ulike effektivitetsprofiler.",
+          options: [
+            { value: "city", label: "Mest i byen", desc: "Korte turer, start-stopp, under 50 km daglig" },
+            { value: "mixed", label: "By og motorvei blandet", desc: "Pendling pluss noen lengre turer" },
+            { value: "highway", label: "Mest motorvei", desc: "Lang pendling, mye motorveikjøring" },
+            { value: "rural", label: "Distrikt og natur", desc: "Variert terreng, lange avstander, færre ladere" }
+          ]
+        },
+        {
+          id: "charging",
+          question: "Hvor skal du lade?",
+          subtitle: "Hjemmelading endrer økonomien og hverdagen som elbileier dramatisk.",
+          options: [
+            { value: "home", label: "Garasje eller carport hjemme", desc: "Kan montere wallbox — ideelt elbiloppsett" },
+            { value: "workplace", label: "Lading på jobb", desc: "Arbeidsgiver tilbyr ladetilgang" },
+            { value: "mixed_access", label: "Hjemme + offentlig", desc: "Litt hjemmelading, litt offentlig" },
+            { value: "public_only", label: "Kun offentlig lading", desc: "Ingen hjemmelading — nettverkskompatibilitet er kritisk" }
+          ]
+        },
+        {
+          id: "roadtrips",
+          question: "Hvor ofte tar du langtur?",
+          subtitle: "Ladestopp og nettverksdekning betyr mer for de som reiser ofte.",
+          options: [
+            { value: "rarely", label: "Sjelden", desc: "Mest lokal kjøring, av og til en lengre tur" },
+            { value: "monthly", label: "Månedlig", desc: "Én lengre kjøretur omtrent én gang i måneden" },
+            { value: "weekly", label: "Ukentlig", desc: "Regelmessige langturer" },
+            { value: "cross_border", label: "Internasjonalt", desc: "Krysser europeiske grenser jevnlig" }
+          ]
+        },
+        {
+          id: "priority",
+          question: "Hva betyr mest for deg?",
+          subtitle: "Hvis du bare kunne optimere én ting, hva ville det vært?",
+          options: [
+            { value: "range", label: "Maks rekkevidde", desc: "Jeg vil ha flest mulig km mellom ladninger" },
+            { value: "charging", label: "Raskest lading", desc: "Ladetid betyr mer enn rekkevidde" },
+            { value: "comfort", label: "Komfort og kvalitet", desc: "Interiør, kjørekomfort, raffinement" },
+            { value: "value", label: "Best verdi", desc: "Mest bil for hver krone" }
+          ]
+        }
+      ]
     },
     guides: {
       seo_title: "EV-eierskapsguider — Batteri, Vinter, Lading | AUTOVERE",
