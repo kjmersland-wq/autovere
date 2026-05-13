@@ -7,15 +7,17 @@ export type CountryCode = string; // ISO-3166-1 alpha-2
 
 export interface VehicleProfile {
   // EV
-  evConsumptionKwhPer100: number;   // kWh/100 km
-  evRangeKm: number;                // realistic motorway range
-  evChargeFromPct: number;          // SoC start of stop
-  evChargeToPct: number;            // SoC end of stop
-  evChargeMinutesPerStop: number;   // wall time per stop
-  evPricePerKwh: number;            // €
+  evConsumptionKwhPer100: number;
+  evRangeKm: number;
+  evChargeFromPct: number;
+  evChargeToPct: number;
+  evChargeMinutesPerStop: number;
+  evPricePerKwh: number;            // fallback / "egen pris"
+  network?: ChargingNetworkId;      // 'cheapest' (default) or specific
+  hasMembership?: boolean;
   // ICE comparison
-  iceConsumptionLPer100: number;    // L/100 km
-  icePricePerL: number;             // €
+  iceConsumptionLPer100: number;
+  icePricePerL: number;
 }
 
 export const DEFAULT_VEHICLE: VehicleProfile = {
@@ -25,9 +27,54 @@ export const DEFAULT_VEHICLE: VehicleProfile = {
   evChargeToPct: 80,
   evChargeMinutesPerStop: 25,
   evPricePerKwh: 0.45,
+  network: "cheapest",
+  hasMembership: true,
   iceConsumptionLPer100: 6.5,
   icePricePerL: 1.85,
 };
+
+// ─── Charging networks (public list prices, EU averages, ad-hoc DC fast) ─
+export type ChargingNetworkId =
+  | "cheapest" | "tesla" | "ionity" | "fastned" | "allego" | "recharge"
+  | "mer" | "eviny" | "circlek" | "shell" | "plugsurfing" | "elli" | "custom";
+
+export interface ChargingNetwork {
+  id: ChargingNetworkId;
+  name: string;
+  adHocPerKwh: number;       // €/kWh public DC fast (EU avg)
+  memberPerKwh?: number;     // €/kWh with subscription
+  note?: string;
+  color: string;
+}
+
+export const CHARGING_NETWORKS: ChargingNetwork[] = [
+  { id: "cheapest",    name: "Billigste på ruten",      adHocPerKwh: 0.00,                       note: "Plukker laveste pris per stopp", color: "#10b981" },
+  { id: "tesla",       name: "Tesla Supercharger",      adHocPerKwh: 0.55, memberPerKwh: 0.39,   note: "Tesla-abonnement",               color: "#e31937" },
+  { id: "ionity",      name: "IONITY",                  adHocPerKwh: 0.69, memberPerKwh: 0.39,   note: "Power / Passport",               color: "#1f2a44" },
+  { id: "fastned",     name: "Fastned",                 adHocPerKwh: 0.59, memberPerKwh: 0.35,   note: "Gold Member",                    color: "#f5c518" },
+  { id: "allego",      name: "Allego",                  adHocPerKwh: 0.65, memberPerKwh: 0.45,   note: "Smoov / app",                    color: "#ff5a00" },
+  { id: "recharge",    name: "Recharge (Norden)",       adHocPerKwh: 0.62, memberPerKwh: 0.49,   note: "Fastpris-medlemskap",            color: "#00b388" },
+  { id: "mer",         name: "Mer",                     adHocPerKwh: 0.59, memberPerKwh: 0.45,   note: "Mer Connect",                    color: "#7c3aed" },
+  { id: "eviny",       name: "Eviny",                   adHocPerKwh: 0.61, memberPerKwh: 0.47,   note: "Pluss-medlem",                   color: "#0ea5e9" },
+  { id: "circlek",     name: "Circle K Charge",         adHocPerKwh: 0.64, memberPerKwh: 0.49,   note: "Extra Club",                     color: "#dc2626" },
+  { id: "shell",       name: "Shell Recharge",          adHocPerKwh: 0.69, memberPerKwh: 0.55,   note: "Go+ medlem",                     color: "#facc15" },
+  { id: "plugsurfing", name: "Plugsurfing (roaming)",   adHocPerKwh: 0.69,                       note: "Roaming-tariff",                 color: "#22d3ee" },
+  { id: "elli",        name: "Elli (VW We Charge)",     adHocPerKwh: 0.61, memberPerKwh: 0.49,   note: "We Charge Plus",                 color: "#94a3b8" },
+  { id: "custom",      name: "Egen pris (avansert)",    adHocPerKwh: 0.45,                       note: "Bruker felt under",              color: "#64748b" },
+];
+
+export function networkById(id?: ChargingNetworkId): ChargingNetwork {
+  return CHARGING_NETWORKS.find((n) => n.id === id) ?? CHARGING_NETWORKS[0];
+}
+
+export function effectivePrice(net: ChargingNetwork, hasMembership: boolean, fallback: number): number {
+  if (net.id === "custom") return fallback;
+  if (net.id === "cheapest") {
+    const real = CHARGING_NETWORKS.filter((n) => n.id !== "cheapest" && n.id !== "custom");
+    return Math.min(...real.map((n) => (hasMembership && n.memberPerKwh) ? n.memberPerKwh : n.adHocPerKwh));
+  }
+  return (hasMembership && net.memberPerKwh) ? net.memberPerKwh : net.adHocPerKwh;
+}
 
 /** € per 100 km of motorway driving in that country (rough avg). EV factor scales it. */
 export interface TollProfile {
@@ -77,6 +124,9 @@ export interface ChargingStop {
   energyKwh: number;
   minutes: number;
   cost: number;
+  networkId: ChargingNetworkId;
+  networkName: string;
+  pricePerKwh: number;
 }
 
 export interface RoutePlan {
@@ -118,6 +168,21 @@ export function pickStops(
   const energyPerStop =
     ((vehicle.evChargeToPct - vehicle.evChargeFromPct) / 100) *
     (vehicle.evRangeKm * (vehicle.evConsumptionKwhPer100 / 100));
+
+  const chosen = networkById(vehicle.network ?? "cheapest");
+  const hasMembership = !!vehicle.hasMembership;
+  // Pre-compute the network actually used per stop. For "cheapest" we pick the
+  // single cheapest network available (member or ad-hoc). For any explicit
+  // choice we just use that one.
+  const real = CHARGING_NETWORKS.filter((n) => n.id !== "cheapest" && n.id !== "custom");
+  const cheapest = real.reduce((best, n) => {
+    const p = (hasMembership && n.memberPerKwh) ? n.memberPerKwh : n.adHocPerKwh;
+    const bp = (hasMembership && best.memberPerKwh) ? best.memberPerKwh : best.adHocPerKwh;
+    return p < bp ? n : best;
+  }, real[0]);
+  const stopNetwork = chosen.id === "cheapest" ? cheapest : chosen;
+  const pricePerKwh = effectivePrice(chosen, hasMembership, vehicle.evPricePerKwh);
+
   const stops: ChargingStop[] = [];
   for (let i = 1; i <= numStops; i++) {
     const fraction = i / (numStops + 1);
@@ -129,7 +194,10 @@ export function pickStops(
       lat, lon,
       energyKwh: Math.round(energyPerStop * 10) / 10,
       minutes: vehicle.evChargeMinutesPerStop,
-      cost: Math.round(energyPerStop * vehicle.evPricePerKwh * 100) / 100,
+      cost: Math.round(energyPerStop * pricePerKwh * 100) / 100,
+      networkId: stopNetwork.id,
+      networkName: stopNetwork.name,
+      pricePerKwh: Math.round(pricePerKwh * 100) / 100,
     });
   }
   return stops;
