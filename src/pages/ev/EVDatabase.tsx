@@ -38,6 +38,7 @@ function BrakeWearBadge({ wear }: { wear: Vehicle["tco"]["brakeWear"] }) {
 
 function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => string }) {
   const { t } = useTranslation();
+  const fmt = useFormatPrice();
   const target = vehicle.evPageSlug ? L(`/ev/models/${vehicle.evPageSlug}`) : null;
   const typeLabels: Record<string, string> = {
     ev: t("ev.database.filter_ev"),
