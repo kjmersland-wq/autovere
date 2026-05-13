@@ -13,6 +13,7 @@ import { SaveButton } from "@/components/SaveButton";
 import { SignalFeedCompact } from "@/components/SignalFeed";
 import { getVehicleIntelligence } from "@/data/vehicle-intelligence";
 import { getSignalsForVehicle } from "@/data/automotive-signals";
+import { useCarImage } from "@/hooks/useCarImage";
 
 const fmt = (n: number) => n.toLocaleString();
 
