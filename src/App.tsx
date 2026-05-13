@@ -52,6 +52,8 @@ const Privacy = lazy(() => import("./pages/legal/Privacy.tsx"));
 const Cookies = lazy(() => import("./pages/legal/Cookies.tsx"));
 const Refund = lazy(() => import("./pages/legal/Refund.tsx"));
 const Subscriptions = lazy(() => import("./pages/legal/Subscriptions.tsx"));
+const Biltester = lazy(() => import("./pages/Biltester.tsx").then((m) => ({ default: m.Biltester })));
+const CarReviews = lazy(() => import("./pages/Biltester.tsx").then((m) => ({ default: m.CarReviews })));
 
 // Named exports from files with multiple exports — resolved at module level
 import type { FC } from "react";
@@ -148,6 +150,8 @@ const AppRoutes = () => (
         <Route path="/ev/database" element={<EVDatabase />} />
         <Route path="/ev/news" element={<EVNews />} />
         <Route path="/ev/news/:slug" element={<EVArticle />} />
+        <Route path="/biltester" element={<Biltester />} />
+        <Route path="/car-reviews" element={<CarReviews />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Suspense>
