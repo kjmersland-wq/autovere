@@ -100,8 +100,8 @@ export const SiteFooter = () => {
 
         <div className="pt-8 border-t border-border/30 grid md:grid-cols-[1fr_auto] gap-6 text-xs text-muted-foreground">
           <div className="space-y-1.5 leading-relaxed">
-            <div className="text-foreground/90 font-medium">Boutique24Shop v/ K.Mersland</div>
-            <div>Org.nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge</div>
+            <div className="text-foreground/90 font-medium">KM TECH LABS</div>
+            <div>Org.nr. 934 044 029 · Kristiansand, Norge · Ansvarlig redaktør: Kjell Mersland</div>
             <div className="opacity-80">© {new Date().getFullYear()} AUTOVERE. {t("footer.rights")}</div>
           </div>
           <div className="md:text-right opacity-80 self-end">{t("footer.operated")}</div>
