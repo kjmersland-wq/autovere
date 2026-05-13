@@ -9,6 +9,7 @@ import {
 import {
   DEFAULT_VEHICLE, VehicleProfile, computePlan, samplePath, formatDuration,
   addMinutes, formatTime, RoutePlan, TOLL_BY_COUNTRY, CountrySegment,
+  CHARGING_NETWORKS, networkById, effectivePrice, ChargingNetworkId,
 } from "@/lib/route-cost";
 import { SendToCar } from "@/components/SendToCar";
 
