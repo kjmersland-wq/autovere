@@ -27,7 +27,7 @@ export function EVNetworksIndex() {
     <PageShell>
       <SEO
         title={t("ev.database.networks_seo_title")}
-        description="Compare Tesla Supercharger, Ionity, Fastned, Recharge and Allego. Speeds, pricing, coverage and compatibility for every major European charging network."
+        description={t("ev.networks.index_seo_desc")}
       />
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/20 pointer-events-none" />
@@ -55,21 +55,21 @@ export function EVNetworksIndex() {
               <RouteIcon className="w-6 h-6 text-accent" />
             </div>
             <div className="flex-1">
-              <div className="text-[10px] uppercase tracking-[0.3em] text-accent mb-2">Ny — EV ruteplanlegger</div>
+              <div className="text-[10px] uppercase tracking-[0.3em] text-accent mb-2">{t("ev.networks.planner_eyebrow")}</div>
               <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-2">
-                Planlegg turen mellom hvilken som helst by i Europa
+                {t("ev.networks.planner_title")}
               </h3>
               <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
-                Få ladestopp, ankomsttid, total ladekostnad og bompenger — pluss en direkte sammenligning mot diesel/bensin.
+                {t("ev.networks.planner_lead")}
               </p>
               <div className="flex flex-wrap gap-4 mt-3 text-[11px] text-muted-foreground">
-                <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> Reisetid + ankomst</span>
-                <span className="inline-flex items-center gap-1"><Euro className="w-3 h-3" /> Lading + bom</span>
-                <span className="inline-flex items-center gap-1"><Fuel className="w-3 h-3" /> Vs bensin/diesel</span>
+                <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> {t("ev.networks.planner_chip_time")}</span>
+                <span className="inline-flex items-center gap-1"><Euro className="w-3 h-3" /> {t("ev.networks.planner_chip_cost")}</span>
+                <span className="inline-flex items-center gap-1"><Fuel className="w-3 h-3" /> {t("ev.networks.planner_chip_vs")}</span>
               </div>
             </div>
             <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent text-accent-foreground font-medium text-sm group-hover:gap-3 transition-all">
-              Åpne planlegger <ArrowRight className="w-4 h-4" />
+              {t("ev.networks.planner_cta")} <ArrowRight className="w-4 h-4" />
             </div>
           </div>
         </Link>
@@ -78,10 +78,10 @@ export function EVNetworksIndex() {
       {/* Live charging map — every station in Europe via OpenChargeMap */}
       <section className="container py-12">
         <div className="max-w-2xl mb-8">
-          <div className="text-[10px] uppercase tracking-[0.4em] text-accent mb-3">— Live infrastructure</div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">Every charger in Europe, on one map.</h2>
+          <div className="text-[10px] uppercase tracking-[0.4em] text-accent mb-3">{t("ev.networks.live_eyebrow")}</div>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">{t("ev.networks.live_h2")}</h2>
           <p className="text-muted-foreground leading-relaxed">
-            Filter by country and by network — Tesla, Ionity, Fastned, Allego and more. Live data via OpenChargeMap.
+            {t("ev.networks.live_lead")}
           </p>
         </div>
         <EuropeChargingMap />
@@ -89,8 +89,8 @@ export function EVNetworksIndex() {
 
       <section className="container py-16">
         <div className="max-w-2xl mb-8">
-          <div className="text-[10px] uppercase tracking-[0.4em] text-accent mb-3">— Network deep dives</div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Compare the major networks side by side.</h2>
+          <div className="text-[10px] uppercase tracking-[0.4em] text-accent mb-3">{t("ev.networks.deep_eyebrow")}</div>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">{t("ev.networks.deep_h2")}</h2>
         </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
           {CHARGING_NETWORKS.map((network) => (
