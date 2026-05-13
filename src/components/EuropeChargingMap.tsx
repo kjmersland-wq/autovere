@@ -291,18 +291,15 @@ export function EuropeChargingMap() {
           worldCopyJump
           style={{ height: "min(75vh, 720px)", width: "100%", background: "hsl(var(--background))" }}
         >
+          {/* Voyager: rich detail with motorways, primary roads, country & admin borders, city labels */}
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> · stations from <a href="https://openchargemap.org">OpenChargeMap</a>'
-            url={isDark
-              ? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
-              : "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"}
-            className="ocm-base-tiles"
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
+            className={isDark ? "ocm-base-tiles ocm-base-dark" : "ocm-base-tiles"}
           />
           <TileLayer
-            url={isDark
-              ? "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png"
-              : "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"}
-            className="ocm-label-tiles"
+            url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png"
+            className={isDark ? "ocm-label-tiles ocm-label-dark" : "ocm-label-tiles"}
             attribution=""
           />
           {targetBbox && <FlyTo bbox={targetBbox} />}
