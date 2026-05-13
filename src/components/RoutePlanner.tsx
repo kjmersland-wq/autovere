@@ -192,11 +192,11 @@ export function RoutePlanner() {
   const swap = () => { setFrom(to); setTo(from); };
 
   const calculate = async () => {
-    if (!from || !to) { setError("Velg både start og destinasjon"); return; }
+    if (!from || !to) { setError(tt("err_select_both")); return; }
     setLoading(true); setError(null); setRoute(null); setPlan(null);
     try {
       const r = await osrmRoute(from, to);
-      if (!r) throw new Error("Fant ikke rute mellom disse byene");
+      if (!r) throw new Error(tt("err_no_route"));
       setRoute(r);
 
       // Sample 6 points along the route, reverse-geocode countries, build segments
@@ -216,7 +216,7 @@ export function RoutePlanner() {
       const p = computePlan(r.distanceKm, r.durationMin, r.coords, segments, vehicle);
       setPlan(p);
     } catch (e: any) {
-      setError(e?.message ?? "Klarte ikke beregne ruten");
+      setError(e?.message ?? tt("err_calc_failed"));
     } finally {
       setLoading(false);
     }
