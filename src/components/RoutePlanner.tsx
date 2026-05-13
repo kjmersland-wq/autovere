@@ -326,17 +326,23 @@ export function RoutePlanner() {
                 )}
                 {from && <Marker position={[from.lat, from.lon]} icon={flagIcon("Start", "#10b981")} />}
                 {to && <Marker position={[to.lat, to.lon]} icon={flagIcon("Mål", "#ef4444")} />}
-                {plan.stops.map((s) => (
-                  <Marker key={s.index} position={[s.lat, s.lon]} icon={dotIcon("#facc15", 14)}>
-                    <Popup>
-                      <div className="text-xs">
-                        <strong>Ladestopp {s.index}</strong><br />
-                        ~{s.approxKmFromStart} km · {s.energyKwh} kWh · {s.minutes} min<br />
-                        € {s.cost.toFixed(2)}
-                      </div>
-                    </Popup>
-                  </Marker>
-                ))}
+                {plan.stops.map((s) => {
+                  const net = networkById(s.networkId);
+                  return (
+                    <Marker key={s.index} position={[s.lat, s.lon]} icon={dotIcon(net.color, 16)}>
+                      <Popup>
+                        <div className="text-xs space-y-1">
+                          <div className="flex items-center gap-1.5 font-semibold">
+                            <span className="inline-block w-2 h-2 rounded-full" style={{ background: net.color }} />
+                            Ladestopp {s.index} · {s.networkName}
+                          </div>
+                          <div>~{s.approxKmFromStart} km · {s.energyKwh} kWh · {s.minutes} min</div>
+                          <div>€ {s.cost.toFixed(2)} <span className="opacity-60">(€{s.pricePerKwh.toFixed(2)}/kWh)</span></div>
+                        </div>
+                      </Popup>
+                    </Marker>
+                  );
+                })}
               </MapContainer>
             </div>
 
