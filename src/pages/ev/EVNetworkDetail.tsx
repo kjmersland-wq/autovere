@@ -6,6 +6,7 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { CHARGING_NETWORKS } from "@/data/charging-networks";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
+import { EuropeChargingMap } from "@/components/EuropeChargingMap";
 import NotFound from "@/pages/NotFound";
 
 const COVERAGE_COUNTRIES: Record<string, string[]> = {
