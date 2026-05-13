@@ -320,7 +320,7 @@ export function RoutePlanner() {
           <div className="text-[10px] text-muted-foreground mt-2">
             {networkById(vehicle.network).note}
             {vehicle.hasMembership && networkById(vehicle.network).memberPerKwh
-              ? " · medlemspris brukt"
+              ? tt("member_used")
               : ""}
           </div>
         </div>
@@ -329,17 +329,17 @@ export function RoutePlanner() {
           onClick={() => setShowAdvanced((s) => !s)}
           className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
         >
-          Bil og priser <ChevronDown className={`w-3 h-3 transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
+          {tt("toggle_advanced")} <ChevronDown className={`w-3 h-3 transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
         </button>
 
         {showAdvanced && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 border-t border-border/30">
-            <NumField label="EV forbruk (kWh/100km)" value={vehicle.evConsumptionKwhPer100} onChange={(v) => setVehicle({ ...vehicle, evConsumptionKwhPer100: v })} step={0.5} />
-            <NumField label="EV rekkevidde (km)" value={vehicle.evRangeKm} onChange={(v) => setVehicle({ ...vehicle, evRangeKm: v })} step={10} />
-            <NumField label="Egen strømpris (€/kWh)" value={vehicle.evPricePerKwh} onChange={(v) => setVehicle({ ...vehicle, evPricePerKwh: v })} step={0.05} />
-            <NumField label="Lading per stopp (min)" value={vehicle.evChargeMinutesPerStop} onChange={(v) => setVehicle({ ...vehicle, evChargeMinutesPerStop: v })} step={5} />
-            <NumField label="Diesel/bensin (L/100km)" value={vehicle.iceConsumptionLPer100} onChange={(v) => setVehicle({ ...vehicle, iceConsumptionLPer100: v })} step={0.5} />
-            <NumField label="Drivstoffpris (€/L)" value={vehicle.icePricePerL} onChange={(v) => setVehicle({ ...vehicle, icePricePerL: v })} step={0.05} />
+            <NumField label={tt("f_ev_consumption")} value={vehicle.evConsumptionKwhPer100} onChange={(v) => setVehicle({ ...vehicle, evConsumptionKwhPer100: v })} step={0.5} />
+            <NumField label={tt("f_ev_range")} value={vehicle.evRangeKm} onChange={(v) => setVehicle({ ...vehicle, evRangeKm: v })} step={10} />
+            <NumField label={tt("f_ev_price")} value={vehicle.evPricePerKwh} onChange={(v) => setVehicle({ ...vehicle, evPricePerKwh: v })} step={0.05} />
+            <NumField label={tt("f_ev_charge_min")} value={vehicle.evChargeMinutesPerStop} onChange={(v) => setVehicle({ ...vehicle, evChargeMinutesPerStop: v })} step={5} />
+            <NumField label={tt("f_ice_consumption")} value={vehicle.iceConsumptionLPer100} onChange={(v) => setVehicle({ ...vehicle, iceConsumptionLPer100: v })} step={0.5} />
+            <NumField label={tt("f_fuel_price")} value={vehicle.icePricePerL} onChange={(v) => setVehicle({ ...vehicle, icePricePerL: v })} step={0.05} />
           </div>
         )}
 
