@@ -6,6 +6,7 @@ import { SEO } from "@/components/SEO";
 import { COLLECTIONS } from "@/data/cars";
 import { EditorialPulseSection } from "@/components/EditorialPulseSection";
 import { ApprovedAdditionsSection } from "@/components/ApprovedAdditionsSection";
+import { useLoc } from "@/lib/loc";
 
 const THEMES = [
   { slug: "winter-confidence", icon: Snowflake, hue: "from-sky-500/20 to-blue-500/5" },
@@ -22,6 +23,7 @@ const THEMES = [
 
 const Discover = () => {
   const { t } = useTranslation();
+  const { l } = useLoc();
   const cards = THEMES
     .map((th) => ({ ...th, c: COLLECTIONS.find((c) => c.slug === th.slug) }))
     .filter((x): x is typeof x & { c: NonNullable<typeof x.c> } => Boolean(x.c));
@@ -31,7 +33,7 @@ const Discover = () => {
     "@type": "CollectionPage",
     name: t("pages.discover.seo_title"),
     description: t("pages.discover.seo_desc"),
-    hasPart: cards.map((x) => ({ "@type": "CreativeWork", name: x.c.title, url: `https://autovere.com/collections/${x.c.slug}` })),
+    hasPart: cards.map((x) => ({ "@type": "CreativeWork", name: l(x.c.title), url: `https://autovere.com/collections/${x.c.slug}` })),
   };
 
   return (
@@ -50,7 +52,7 @@ const Discover = () => {
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
           {cards.map(({ c, icon: Icon, hue }) => (
             <Link key={c.slug} to={`/collections/${c.slug}`} className="group relative overflow-hidden rounded-3xl border border-border/40 hover:border-primary/40 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow aspect-[4/5]">
-              <img src={c.image} alt={c.title} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms]" />
+              <img src={c.image} alt={l(c.title)} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms]" />
               <div className={`absolute inset-0 bg-gradient-to-tr ${hue}`} />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/70 to-background/10" />
               <div className="relative h-full flex flex-col justify-between p-7">
@@ -58,8 +60,8 @@ const Discover = () => {
                   <Icon className="w-5 h-5 text-accent" />
                 </div>
                 <div>
-                  <h2 className="text-2xl font-semibold tracking-tight mb-2 leading-snug">{c.title}</h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">{c.description}</p>
+                  <h2 className="text-2xl font-semibold tracking-tight mb-2 leading-snug">{l(c.title)}</h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4 line-clamp-2">{l(c.description)}</p>
                   <div className="text-xs text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
                     {t("common.open_collection")} <ArrowRight className="w-3 h-3" />
                   </div>
