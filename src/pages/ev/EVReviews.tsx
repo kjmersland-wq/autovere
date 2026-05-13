@@ -178,13 +178,13 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
             <div className="text-xs text-muted-foreground">{model.youtubeReviews.length} {t("ev.reviews.reviews_analysed")}</div>
             <div className={`flex items-center gap-1 text-[10px] ${confidenceColor}`}>
               <ShieldCheck className="w-3 h-3" />
-              {t("ev.reviews.confidence_pct", { n: c.confidence })}
+              {t("ev.reviews.confidence_pct", { n: meta.confidence })}
             </div>
           </div>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-right">
-            <div className="text-2xl font-bold text-gradient">{c.score}</div>
+            <div className="text-2xl font-bold text-gradient">{meta.score}</div>
             <div className="text-[10px] text-muted-foreground">/ 100</div>
           </div>
           {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
@@ -196,7 +196,7 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
           <div className="bg-card/40 border border-border/30 rounded-xl p-4">
             <div className="text-[10px] uppercase tracking-wider text-accent mb-2">{t("ev.reviews.consensus_quote_label")}</div>
             <p className="text-sm text-muted-foreground italic leading-relaxed">"{c.highlightQuote}"</p>
-            <div className="text-[10px] text-muted-foreground mt-2">— {c.highlightChannel}</div>
+            <div className="text-[10px] text-muted-foreground mt-2">— {meta.highlightChannel}</div>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
