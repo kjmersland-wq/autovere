@@ -25,7 +25,7 @@ const no: Translation = {
     disclaimer:
       "AUTOVEREs anbefalinger er AI-assisterte og bygger på offentlige data og konsensus blant biltestere. Spesifikasjoner varierer mellom land — verifiser før kjøp.",
     rights: "Fremtidens måte å velge bil på.",
-    operated: "Drevet med omtanke fra Kristiansand, Norge.",
+    operated: "Utviklet og drevet med omtanke fra Kristiansand, Norge.",
     columns: { discover: "Oppdag", company: "Selskapet", legal: "Juridisk", ev: "EV Intelligens" },
     links: {
       cars: "Biler",
