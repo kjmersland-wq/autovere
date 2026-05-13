@@ -470,20 +470,20 @@ export function RoutePlanner() {
             <div className="glass rounded-2xl border border-border/40 p-5">
               <div className="flex items-center justify-between mb-3 gap-3">
                 <h3 className="text-sm font-semibold flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-amber-400" /> Ladestopp på ruten
+                  <Zap className="w-4 h-4 text-amber-400" /> {tt("stops_title")}
                 </h3>
                 {Object.keys(stopOverrides).length > 0 && (
                   <button
                     onClick={() => setStopOverrides({})}
                     className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Tilbakestill
+                    {tt("reset_overrides")}
                   </button>
                 )}
               </div>
               <div className="space-y-2">
                 {displayStops.map((s) => {
-                  const t = addMinutes(departureDate,
+                  const arrTime = addMinutes(departureDate,
                     Math.round((plan.drivingMinutes * (s.approxKmFromStart / plan.distanceKm)) + (s.index - 1) * vehicle.evChargeMinutesPerStop)
                   );
                   const net = networkById(s.networkId);
@@ -504,7 +504,7 @@ export function RoutePlanner() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-xs font-semibold flex items-center gap-2 flex-wrap">
-                          ~{s.approxKmFromStart} km fra start
+                          {tt("from_start_km", { km: s.approxKmFromStart })}
                           <div className="relative inline-flex items-center">
                             <select
                               value={s.networkId}
@@ -533,14 +533,14 @@ export function RoutePlanner() {
                                 const n = { ...prev }; delete n[s.index]; return n;
                               })}
                               className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
-                              title="Bruk billigste igjen"
+                              title={tt("use_cheapest_again")}
                             >
                               ↺
                             </button>
                           )}
                         </div>
                         <div className="text-[10px] text-muted-foreground">
-                          Ankomst ca {formatTime(t)} · {s.energyKwh} kWh tilført · €{s.pricePerKwh.toFixed(2)}/kWh
+                          {tt("stop_meta", { time: formatTime(arrTime), kwh: s.energyKwh, price: s.pricePerKwh.toFixed(2) })}
                         </div>
                       </div>
                       <div className="text-right">
@@ -558,8 +558,8 @@ export function RoutePlanner() {
           {from && to && (
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl border border-accent/30 bg-accent/5">
               <div>
-                <div className="text-sm font-semibold mb-0.5">Klar til å kjøre?</div>
-                <div className="text-[11px] text-muted-foreground">Send hele ruten direkte til bilens navigasjon — Tesla, CarPlay, Android Auto eller Waze.</div>
+                <div className="text-sm font-semibold mb-0.5">{tt("ready_title")}</div>
+                <div className="text-[11px] text-muted-foreground">{tt("ready_lead")}</div>
               </div>
               <SendToCar
                 from={{ label: from.label, lat: from.lat, lon: from.lon }}
@@ -571,7 +571,7 @@ export function RoutePlanner() {
 
           <div className="text-[10px] text-muted-foreground flex items-start gap-1.5">
             <Info className="w-3 h-3 mt-0.5 flex-shrink-0" />
-            <span>Alle priser er estimater basert på gjennomsnittlige bom-, strøm- og drivstoffpriser i Europa. Faktisk pris varierer med ladenettverk, tid på året og spesifikk rute. Justér tallene under "Bil og priser" for nøyaktigere beregning.</span>
+            <span>{tt("disclaimer")}</span>
           </div>
         </>
       )}
