@@ -154,34 +154,23 @@ export function EuropeChargingMap() {
   const [bbox, setBbox] = useState<[number, number, number, number]>(EUROPE_BBOX);
   const fetchSeq = useRef(0);
 
-  // Refetch on country change
+  // Auto-refetch on every bbox change (zoom/pan), debounced.
+  // Higher max when zoomed-in country mode for completeness.
   useEffect(() => {
-    const seq = ++fetchSeq.current;
-    setLoading(true);
-    setError(null);
-    const opts = country
-      ? { country, max: 2000 }
-      : { bbox, max: 1500 };
-    fetchPOIs(opts)
-      .then((data) => { if (seq === fetchSeq.current) setPois(data); })
-      .catch((e) => { if (seq === fetchSeq.current) setError(e.message ?? "Could not load stations"); })
-      .finally(() => { if (seq === fetchSeq.current) setLoading(false); });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [country]);
-
-  // When user pans map without a country selected, refetch with bbox (debounced)
-  useEffect(() => {
-    if (country) return;
     const t = setTimeout(() => {
       const seq = ++fetchSeq.current;
       setLoading(true);
-      fetchPOIs({ bbox, max: 1500 })
+      setError(null);
+      // Estimate area to scale max results — small bbox = denser zoom = fetch more relative to area
+      const area = Math.max(0.001, (bbox[2] - bbox[0]) * (bbox[3] - bbox[1]));
+      const max = area < 5 ? 2000 : area < 50 ? 1500 : 1000;
+      fetchPOIs({ bbox, max })
         .then((data) => { if (seq === fetchSeq.current) setPois(data); })
-        .catch(() => {})
+        .catch((e) => { if (seq === fetchSeq.current) setError(e.message ?? "Could not load stations"); })
         .finally(() => { if (seq === fetchSeq.current) setLoading(false); });
-    }, 600);
+    }, 450);
     return () => clearTimeout(t);
-  }, [bbox, country]);
+  }, [bbox]);
 
   const filtered = useMemo(() => {
     if (activeNetworks.size === 0) return pois;
