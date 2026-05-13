@@ -1,3 +1,4 @@
+// AI advisor — powered by Anthropic Claude
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -14,46 +15,90 @@ Voice & style:
 
 Format recommendations as clean markdown with bold car names. Keep it scannable.`;
 
+const MODEL = "claude-sonnet-4-5-20250929";
+
 Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
     const { messages } = await req.json();
-    const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
-    if (!LOVABLE_API_KEY) throw new Error("LOVABLE_API_KEY missing");
+    const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
+    if (!ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY missing");
 
-    const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
+    // Anthropic expects messages without a system role; pass system separately.
+    const cleanMessages = (messages || []).filter((m: any) => m?.role !== "system");
+
+    const upstream = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
-        Authorization: `Bearer ${LOVABLE_API_KEY}`,
-        "Content-Type": "application/json",
+        "x-api-key": ANTHROPIC_API_KEY,
+        "anthropic-version": "2023-06-01",
+        "content-type": "application/json",
       },
       body: JSON.stringify({
-        model: "google/gemini-2.0-flash",
-        messages: [{ role: "system", content: SYSTEM_PROMPT }, ...messages],
+        model: MODEL,
+        max_tokens: 1024,
+        system: SYSTEM_PROMPT,
         stream: true,
+        messages: cleanMessages,
       }),
     });
 
-    if (!response.ok) {
-      if (response.status === 429) {
-        return new Response(JSON.stringify({ error: "Lumen is at capacity right now. Try again in a moment." }), {
-          status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      if (response.status === 402) {
-        return new Response(JSON.stringify({ error: "AI credits required. Add funds to continue." }), {
-          status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" },
-        });
-      }
-      const t = await response.text();
-      console.error("AI gateway error:", response.status, t);
-      return new Response(JSON.stringify({ error: "AI gateway error" }), {
-        status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    if (!upstream.ok) {
+      const text = await upstream.text();
+      console.error("Anthropic error:", upstream.status, text);
+      const status = upstream.status === 429 ? 429 : upstream.status === 401 ? 401 : 500;
+      const message =
+        status === 429 ? "Lumen is at capacity right now. Try again in a moment." :
+        status === 401 ? "Anthropic API key is invalid or missing." :
+        "AI provider error";
+      return new Response(JSON.stringify({ error: message }), {
+        status, headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
 
-    return new Response(response.body, {
+    // Translate Anthropic SSE → OpenAI-compatible SSE so the frontend stream parser keeps working.
+    const stream = new ReadableStream({
+      async start(controller) {
+        const reader = upstream.body!.getReader();
+        const decoder = new TextDecoder();
+        const encoder = new TextEncoder();
+        let buffer = "";
+
+        const send = (obj: unknown) =>
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(obj)}\n\n`));
+
+        try {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+            buffer += decoder.decode(value, { stream: true });
+            let idx: number;
+            while ((idx = buffer.indexOf("\n")) !== -1) {
+              const line = buffer.slice(0, idx).trim();
+              buffer = buffer.slice(idx + 1);
+              if (!line.startsWith("data:")) continue;
+              const payload = line.slice(5).trim();
+              if (!payload || payload === "[DONE]") continue;
+              try {
+                const evt = JSON.parse(payload);
+                if (evt.type === "content_block_delta" && evt.delta?.type === "text_delta") {
+                  send({ choices: [{ delta: { content: evt.delta.text } }] });
+                } else if (evt.type === "message_stop") {
+                  controller.enqueue(encoder.encode("data: [DONE]\n\n"));
+                }
+              } catch { /* skip bad chunk */ }
+            }
+          }
+          controller.close();
+        } catch (e) {
+          console.error("stream relay error:", e);
+          controller.error(e);
+        }
+      },
+    });
+
+    return new Response(stream, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (e) {
