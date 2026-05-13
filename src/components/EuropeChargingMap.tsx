@@ -105,13 +105,25 @@ async function fetchPOIs(opts: { country?: string; bbox?: [number, number, numbe
 function FlyTo({ bbox }: { bbox: [number, number, number, number] }) {
   const map = useMap();
   useEffect(() => {
-    // Use fitBounds (instant) instead of flyToBounds — animation gets interrupted
-    // by re-renders from BoundsWatcher and country sometimes never lands.
     map.fitBounds(
       [[bbox[0], bbox[1]], [bbox[2], bbox[3]]],
       { padding: [20, 20], animate: true, duration: 0.6 }
     );
   }, [bbox, map]);
+  return null;
+}
+
+function FitToMarkers({ points }: { points: [number, number][] }) {
+  const map = useMap();
+  const key = points.length > 0
+    ? `${points.length}:${points[0][0].toFixed(2)},${points[0][1].toFixed(2)}`
+    : "0";
+  useEffect(() => {
+    if (points.length === 0) return;
+    const bounds = L.latLngBounds(points.map(([lat, lng]) => L.latLng(lat, lng)));
+    map.fitBounds(bounds, { padding: [40, 40], animate: true, duration: 0.6, maxZoom: 12 });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, map]);
   return null;
 }
 
