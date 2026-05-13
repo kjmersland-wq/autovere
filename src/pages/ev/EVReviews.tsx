@@ -193,6 +193,7 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
   const [open, setOpen] = useState(false);
   const c = CONSENSUS[slug];
   const model = EV_MODELS.find((m) => m.slug === slug);
+  const { image: carImage } = useCarImage(model ? `${model.brand} ${model.name}` : null);
   if (!c || !model) return null;
 
   const confidenceColor = c.confidence >= 90 ? "text-emerald-400" : c.confidence >= 80 ? "text-amber-400" : "text-red-400";
