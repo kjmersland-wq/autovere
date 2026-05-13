@@ -32,7 +32,9 @@ async function fetchWikipediaImage(brand: string, model: string): Promise<CarIma
   const url = `${SUPA_URL}/functions/v1/model-image?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`;
   const r = await fetch(url, { headers: HEADERS });
   if (!r.ok) return null;
-  return (await r.json()) as CarImage;
+  const data = await r.json();
+  if (!data || !data.url) return null;
+  return data as CarImage;
 }
 
 async function fetchStockImage(query: string): Promise<CarImage | null> {
