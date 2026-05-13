@@ -361,7 +361,7 @@ export function RoutePlanner() {
                 )}
                 {from && <Marker position={[from.lat, from.lon]} icon={flagIcon("Start", "#10b981")} />}
                 {to && <Marker position={[to.lat, to.lon]} icon={flagIcon("Mål", "#ef4444")} />}
-                {plan.stops.map((s) => {
+                {displayStops.map((s) => {
                   const net = networkById(s.networkId);
                   return (
                     <Marker key={s.index} position={[s.lat, s.lon]} icon={dotIcon(net.color, 16)}>
