@@ -13,6 +13,7 @@ import { toast } from "sonner";
 
 const Pricing = () => {
   const { t } = useTranslation();
+  const fmt = useFormatPrice();
   const navigate = useNavigate();
   const { openCheckout, loading: checkoutLoading } = useStripeCheckout();
   const { isActive, subscription, userId, refetch } = useSubscription();
