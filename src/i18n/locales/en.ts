@@ -107,8 +107,8 @@ const en = {
     have_question: "Have a question about this document?",
     contact_team: "Contact our team",
     every_message: "— every message is read by a real person.",
-    org_line: "Org.nr. 934 044 029 · Møviklia 4, 4623 Kristiansand, Norge",
-    operator: "Boutique24Shop v/ K.Mersland",
+    org_line: "Org.nr. 934 044 029 · Kristiansand, Norge · Ansvarlig redaktør: Kjell Mersland",
+    operator: "KM TECH LABS",
   },
   seo: {
     site_name: "AUTOVERE",
