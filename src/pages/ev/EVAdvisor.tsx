@@ -377,7 +377,7 @@ export default function EVAdvisor() {
                               <span className={`text-[10px] uppercase tracking-widest ${m.accentColor}`}>{m.brand} · {m.category}</span>
                             </div>
                             <h3 className="font-bold text-xl">{m.name}</h3>
-                            <p className="text-xs text-muted-foreground mt-0.5">from €{m.priceFrom.toLocaleString()}</p>
+                            <p className="text-xs text-muted-foreground mt-0.5">{t("ev.advisor.from_label")} €{m.priceFrom.toLocaleString()}</p>
                           </div>
                           <div className="text-right flex-shrink-0">
                             <div className={`text-2xl font-bold ${m.accentColor}`}>{m.range.real}</div>
