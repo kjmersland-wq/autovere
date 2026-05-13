@@ -259,8 +259,8 @@ export default function EVDatabase() {
   const stats = [
     { value: `${VEHICLES.length}`, label: t("ev.database.stat_count_label"), icon: TrendingUp },
     { value: `${VEHICLES.filter((v) => v.type === "ev").length}`, label: t("ev.database.stat_ev_label"), icon: Zap },
-    { value: "€17k", label: t("ev.database.stat_lowest_label"), icon: TrendingDown },
-    { value: "€42k", label: t("ev.database.stat_highest_label"), icon: TrendingUp },
+    { value: fmt(17000), label: t("ev.database.stat_lowest_label"), icon: TrendingDown },
+    { value: fmt(42000), label: t("ev.database.stat_highest_label"), icon: TrendingUp },
   ];
 
   const tcoBoxes = [
