@@ -58,7 +58,7 @@ export function useCarImage(query: string | undefined | null | { brand: string; 
     ? null
     : typeof query === "string"
       ? `img:${query.toLowerCase()}`
-      : `img:wiki:${query.brand.toLowerCase()}:${query.model.toLowerCase()}`;
+      : `img:wiki2:${query.brand.toLowerCase()}:${query.model.toLowerCase()}`;
 
   useEffect(() => {
     if (!query || !key) { setImage(null); return; }
