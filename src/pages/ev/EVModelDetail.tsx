@@ -146,7 +146,7 @@ export default function EVModelDetail() {
     { label: "0–100 km/h", value: `${model.specs.performance.zeroTo100}s`, color: "text-violet-400" },
   ];
 
-  const { image: heroImage } = useCarImage(`${model.brand} ${model.name}`);
+  const { image: heroImage } = useCarImage({ brand: model.brand, model: model.name });
 
   return (
     <PageShell>
