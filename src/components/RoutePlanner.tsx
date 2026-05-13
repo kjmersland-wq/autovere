@@ -12,6 +12,7 @@ import {
   CHARGING_NETWORKS, networkById, effectivePrice, ChargingNetworkId,
 } from "@/lib/route-cost";
 import { SendToCar } from "@/components/SendToCar";
+import { useTranslation } from "react-i18next";
 
 // ─── Types ────────────────────────────────────────────────────────────
 interface PhotonHit {
