@@ -23,7 +23,7 @@ const en = {
     disclaimer:
       "AUTOVERE recommendations are AI-assisted and based on public data and reviewer consensus. Vehicle details vary by region — verify before purchase.",
     rights: "The future of choosing a car.",
-    operated: "Operated with care from Kristiansand, Norway.",
+    operated: "Built and operated with care from Kristiansand, Norway.",
     columns: { discover: "Discover", company: "Company", legal: "Legal", ev: "EV Intelligence" },
     links: {
       cars: "Cars",
