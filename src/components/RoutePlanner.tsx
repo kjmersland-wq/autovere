@@ -462,29 +462,79 @@ export function RoutePlanner() {
             </div>
           )}
 
-          {/* Charging stops */}
-          {plan.stops.length > 0 && (
+          {/* Charging stops — per-stop network override */}
+          {displayStops.length > 0 && (
             <div className="glass rounded-2xl border border-border/40 p-5">
-              <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Zap className="w-4 h-4 text-amber-400" /> Ladestopp på ruten
-              </h3>
+              <div className="flex items-center justify-between mb-3 gap-3">
+                <h3 className="text-sm font-semibold flex items-center gap-2">
+                  <Zap className="w-4 h-4 text-amber-400" /> Ladestopp på ruten
+                </h3>
+                {Object.keys(stopOverrides).length > 0 && (
+                  <button
+                    onClick={() => setStopOverrides({})}
+                    className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground transition-colors"
+                  >
+                    Tilbakestill
+                  </button>
+                )}
+              </div>
               <div className="space-y-2">
-                {plan.stops.map((s) => {
+                {displayStops.map((s) => {
                   const t = addMinutes(departureDate,
                     Math.round((plan.drivingMinutes * (s.approxKmFromStart / plan.distanceKm)) + (s.index - 1) * vehicle.evChargeMinutesPerStop)
                   );
+                  const net = networkById(s.networkId);
+                  const isOverridden = stopOverrides[s.index] !== undefined;
                   return (
                     <div key={s.index} className="flex items-center gap-4 p-3 rounded-xl bg-card/60 border border-border/30">
-                      <div className="w-9 h-9 rounded-full bg-amber-500/15 border border-amber-500/30 flex items-center justify-center text-xs font-bold text-amber-400">
+                      <div
+                        className="w-9 h-9 rounded-full flex items-center justify-center text-xs font-bold"
+                        style={{
+                          background: `${net.color}26`,
+                          borderColor: `${net.color}66`,
+                          color: net.color,
+                          borderWidth: 1,
+                          borderStyle: "solid",
+                        }}
+                      >
                         {s.index}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs font-semibold flex items-center gap-2">
+                        <div className="text-xs font-semibold flex items-center gap-2 flex-wrap">
                           ~{s.approxKmFromStart} km fra start
-                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-cyan-400/10 border border-cyan-400/25 text-[10px] font-medium text-cyan-300">
-                            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-                            {s.networkName}
-                          </span>
+                          <div className="relative inline-flex items-center">
+                            <select
+                              value={s.networkId}
+                              onChange={(e) => setStopOverrides((prev) => ({ ...prev, [s.index]: e.target.value as ChargingNetworkId }))}
+                              className={`appearance-none pl-5 pr-6 py-0.5 rounded-full text-[10px] font-medium border cursor-pointer focus:outline-none transition-colors ${
+                                isOverridden
+                                  ? "bg-amber-400/10 border-amber-400/40 text-amber-300"
+                                  : "bg-cyan-400/10 border-cyan-400/25 text-cyan-300 hover:border-cyan-400/50"
+                              }`}
+                            >
+                              {CHARGING_NETWORKS.filter((n) => n.id !== "cheapest").map((n) => (
+                                <option key={n.id} value={n.id} className="bg-background text-foreground">
+                                  {n.name}
+                                </option>
+                              ))}
+                            </select>
+                            <span
+                              className="absolute left-1.5 w-1.5 h-1.5 rounded-full pointer-events-none"
+                              style={{ background: net.color }}
+                            />
+                            <ChevronDown className="w-3 h-3 absolute right-1 pointer-events-none opacity-60" />
+                          </div>
+                          {isOverridden && (
+                            <button
+                              onClick={() => setStopOverrides((prev) => {
+                                const n = { ...prev }; delete n[s.index]; return n;
+                              })}
+                              className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
+                              title="Bruk billigste igjen"
+                            >
+                              ↺
+                            </button>
+                          )}
                         </div>
                         <div className="text-[10px] text-muted-foreground">
                           Ankomst ca {formatTime(t)} · {s.energyKwh} kWh tilført · €{s.pricePerKwh.toFixed(2)}/kWh
