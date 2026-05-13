@@ -157,6 +157,16 @@ export default function EVModelDetail() {
       />
 
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
+        {heroImage && (
+          <>
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-30 transition-opacity duration-1000"
+              style={{ backgroundImage: `url(${heroImage.url})` }}
+              aria-hidden
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/40 pointer-events-none" aria-hidden />
+          </>
+        )}
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/20 pointer-events-none" />
         <div className="container relative">
           <EVBreadcrumb items={[
