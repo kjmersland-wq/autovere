@@ -1,5 +1,5 @@
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Zap, CheckCircle, XCircle, Globe, CreditCard, Wifi, MapPin } from "lucide-react";
+import { Zap, CheckCircle, XCircle, Globe, CreditCard, Wifi, MapPin, Route as RouteIcon, ArrowRight, Fuel, Euro, Clock } from "lucide-react";
 import { EVBreadcrumb } from "@/components/EVBreadcrumb";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
@@ -42,6 +42,37 @@ export function EVNetworksIndex() {
             {t("ev.networks.index_subtitle")}
           </p>
         </div>
+      </section>
+
+      {/* Route planner CTA */}
+      <section className="container pt-12">
+        <Link
+          to={L("/ev/route-planner")}
+          className="group block rounded-3xl border border-accent/30 bg-gradient-to-br from-accent/10 via-cyan-500/5 to-violet-500/10 p-6 md:p-8 hover:border-accent/60 transition-all"
+        >
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-5 md:gap-8">
+            <div className="w-14 h-14 rounded-2xl bg-accent/20 border border-accent/40 flex items-center justify-center flex-shrink-0">
+              <RouteIcon className="w-6 h-6 text-accent" />
+            </div>
+            <div className="flex-1">
+              <div className="text-[10px] uppercase tracking-[0.3em] text-accent mb-2">Ny — EV ruteplanlegger</div>
+              <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-2">
+                Planlegg turen mellom hvilken som helst by i Europa
+              </h3>
+              <p className="text-sm text-muted-foreground leading-relaxed max-w-2xl">
+                Få ladestopp, ankomsttid, total ladekostnad og bompenger — pluss en direkte sammenligning mot diesel/bensin.
+              </p>
+              <div className="flex flex-wrap gap-4 mt-3 text-[11px] text-muted-foreground">
+                <span className="inline-flex items-center gap-1"><Clock className="w-3 h-3" /> Reisetid + ankomst</span>
+                <span className="inline-flex items-center gap-1"><Euro className="w-3 h-3" /> Lading + bom</span>
+                <span className="inline-flex items-center gap-1"><Fuel className="w-3 h-3" /> Vs bensin/diesel</span>
+              </div>
+            </div>
+            <div className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-accent text-accent-foreground font-medium text-sm group-hover:gap-3 transition-all">
+              Åpne planlegger <ArrowRight className="w-4 h-4" />
+            </div>
+          </div>
+        </Link>
       </section>
 
       {/* Live charging map — every station in Europe via OpenChargeMap */}
