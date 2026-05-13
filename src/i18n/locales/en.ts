@@ -432,6 +432,9 @@ const en = {
       cta_database: "Browse full database",
       cta_calculator: "Calculate charging costs",
       cta_networks: "Find charging networks",
+      detail_seo_title: "{{name}} Review — Real-World EV Guide | AUTOVERE",
+      detail_seo_desc: "{{name}} honest review: {{range}} km real-world range, {{dc}} kW DC charging, winter performance and ownership analysis.",
+      photo_credit: "Photo",
     },
     markets: {
       seo_title: "EV Markets in Europe — Country Guide | AUTOVERE",

@@ -151,8 +151,8 @@ export default function EVModelDetail() {
   return (
     <PageShell>
       <SEO
-        title={`${model.name} Review — Real-World EV Guide | AUTOVERE`}
-        description={`${model.name} honest review: ${model.specs.range.realWorld} km real-world range, ${model.specs.charging.maxDC} kW DC charging, winter performance and ownership analysis.`}
+        title={t("ev.models.detail_seo_title", { name: model.name })}
+        description={t("ev.models.detail_seo_desc", { name: model.name, range: model.specs.range.realWorld, dc: model.specs.charging.maxDC })}
         jsonLd={jsonLd}
       />
 
@@ -193,7 +193,7 @@ export default function EVModelDetail() {
           </div>
           {heroImage && (
             <div className="mt-6 text-[10px] text-muted-foreground/70 uppercase tracking-wider">
-              Photo: <a href={heroImage.creditUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">{heroImage.credit}</a> · {heroImage.source}
+              {t("ev.models.photo_credit")}: <a href={heroImage.creditUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">{heroImage.credit}</a> · {heroImage.source}
             </div>
           )}
         </div>
