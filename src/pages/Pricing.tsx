@@ -8,10 +8,12 @@ import { Button } from "@/components/ui/button";
 import { supabase } from "@/integrations/supabase/client";
 import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
+import { useFormatPrice } from "@/lib/price";
 import { toast } from "sonner";
 
 const Pricing = () => {
   const { t } = useTranslation();
+  const fmt = useFormatPrice();
   const navigate = useNavigate();
   const { openCheckout, loading: checkoutLoading } = useStripeCheckout();
   const { isActive, subscription, userId, refetch } = useSubscription();
@@ -102,12 +104,12 @@ const Pricing = () => {
           </div>
           <div className="flex items-baseline gap-2 mb-1">
             <span className="text-5xl font-bold tracking-tighter text-gradient">
-              {interval === "month" ? "€6.99" : "€59"}
+              {interval === "month" ? fmt(6.99) : fmt(59)}
             </span>
             <span className="text-muted-foreground">/ {interval}</span>
           </div>
           <div className="text-xs text-muted-foreground mb-4">
-            {interval === "month" ? t("pages.pricing.yearly_save") : t("pages.pricing.billed_yearly")}
+            {interval === "month" ? t("pages.pricing.yearly_save", { price: fmt(59) }) : t("pages.pricing.billed_yearly")}
           </div>
           <div className="inline-flex p-1 rounded-full bg-secondary/40 border border-border/40 mb-6 self-start">
             {(["month", "year"] as const).map((i) => (

@@ -7,6 +7,7 @@ import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import { VEHICLES, TYPE_COLORS, type Vehicle, type VehicleType } from "@/data/vehicles";
 import { VehicleSearch } from "@/components/VehicleSearch";
+import { useFormatPrice } from "@/lib/price";
 
 type SortKey = "priceFrom" | "tco.fiveYearTcoEur" | "tco.depreciationPct5yr" | "specs.realWorldRangeKm" | "specs.zeroTo100";
 
@@ -37,6 +38,7 @@ function BrakeWearBadge({ wear }: { wear: Vehicle["tco"]["brakeWear"] }) {
 
 function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => string }) {
   const { t } = useTranslation();
+  const fmt = useFormatPrice();
   const target = vehicle.evPageSlug ? L(`/ev/models/${vehicle.evPageSlug}`) : null;
   const typeLabels: Record<string, string> = {
     ev: t("ev.database.filter_ev"),
@@ -59,7 +61,7 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
             <h3 className="font-semibold text-sm">{vehicle.name}</h3>
           </div>
           <div className="text-right flex-shrink-0">
-            <div className="text-base font-bold text-gradient">€{vehicle.priceFrom.toLocaleString()}</div>
+            <div className="text-base font-bold text-gradient">{fmt(vehicle.priceFrom)}</div>
             <div className="text-[9px] text-muted-foreground">{t("ev.database.price_from_label")}</div>
           </div>
         </div>
@@ -118,11 +120,11 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
       <div className="p-5 pt-4 space-y-2.5">
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">{t("ev.database.tco_label")}</span>
-          <span className="font-semibold">€{vehicle.tco.fiveYearTcoEur.toLocaleString()}</span>
+          <span className="font-semibold">{fmt(vehicle.tco.fiveYearTcoEur)}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">{t("ev.database.annual_fuel_charge")}</span>
-          <span className="font-semibold">€{vehicle.tco.annualFuelOrChargingEur.toLocaleString()}</span>
+          <span className="font-semibold">{fmt(vehicle.tco.annualFuelOrChargingEur)}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">{t("ev.database.brake_wear")}</span>
@@ -160,6 +162,7 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
 
 function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
   const { t } = useTranslation();
+  const fmt = useFormatPrice();
   const typeLabels: Record<string, string> = {
     ev: t("ev.database.filter_ev"),
     phev: t("ev.database.plug_in_hybrid"),
@@ -196,10 +199,10 @@ function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
                   {typeLabels[v.type] ?? v.type}
                 </span>
               </td>
-              <td className="py-3 px-3">€{v.priceFrom.toLocaleString()}</td>
-              <td className="py-3 px-3">€{v.tco.annualFuelOrChargingEur.toLocaleString()}</td>
-              <td className="py-3 px-3">€{v.tco.annualServiceEur.toLocaleString()}</td>
-              <td className="py-3 px-3 font-semibold">€{v.tco.fiveYearTcoEur.toLocaleString()}</td>
+              <td className="py-3 px-3">{fmt(v.priceFrom)}</td>
+              <td className="py-3 px-3">{fmt(v.tco.annualFuelOrChargingEur)}</td>
+              <td className="py-3 px-3">{fmt(v.tco.annualServiceEur)}</td>
+              <td className="py-3 px-3 font-semibold">{fmt(v.tco.fiveYearTcoEur)}</td>
               <td className="py-3 px-3">
                 <span className={v.tco.depreciationPct3yr <= 30 ? "text-emerald-400" : v.tco.depreciationPct3yr <= 38 ? "text-amber-400" : "text-red-400"}>
                   {v.tco.depreciationPct3yr}%
@@ -216,6 +219,7 @@ function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
 
 export default function EVDatabase() {
   const { t } = useTranslation();
+  const fmt = useFormatPrice();
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
@@ -255,8 +259,8 @@ export default function EVDatabase() {
   const stats = [
     { value: `${VEHICLES.length}`, label: t("ev.database.stat_count_label"), icon: TrendingUp },
     { value: `${VEHICLES.filter((v) => v.type === "ev").length}`, label: t("ev.database.stat_ev_label"), icon: Zap },
-    { value: "€17k", label: t("ev.database.stat_lowest_label"), icon: TrendingDown },
-    { value: "€42k", label: t("ev.database.stat_highest_label"), icon: TrendingUp },
+    { value: fmt(17000), label: t("ev.database.stat_lowest_label"), icon: TrendingDown },
+    { value: fmt(42000), label: t("ev.database.stat_highest_label"), icon: TrendingUp },
   ];
 
   const tcoBoxes = [
