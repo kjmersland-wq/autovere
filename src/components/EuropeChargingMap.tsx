@@ -220,7 +220,7 @@ export function EuropeChargingMap() {
   const filtered = useMemo(() => {
     if (activeNetworks.size === 0) return pois;
     return pois.filter((p) => {
-      const n = networkFor(p.OperatorInfo?.Title ?? "");
+      const n = networkFor(p.OperatorInfo?.Title ?? "", p.AddressInfo?.Title ?? "", maxPowerKw(p));
       return n && activeNetworks.has(n.id);
     });
   }, [pois, activeNetworks]);
@@ -230,7 +230,7 @@ export function EuropeChargingMap() {
     const c: Record<string, number> = { _other: 0 };
     NETWORKS.forEach((n) => (c[n.id] = 0));
     pois.forEach((p) => {
-      const n = networkFor(p.OperatorInfo?.Title ?? "");
+      const n = networkFor(p.OperatorInfo?.Title ?? "", p.AddressInfo?.Title ?? "", maxPowerKw(p));
       if (n) c[n.id]++; else c._other++;
     });
     return c;
