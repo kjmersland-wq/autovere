@@ -438,8 +438,16 @@ export function RoutePlanner() {
                         {s.index}
                       </div>
                       <div className="flex-1 min-w-0">
-                        <div className="text-xs font-semibold">~{s.approxKmFromStart} km fra start</div>
-                        <div className="text-[10px] text-muted-foreground">Ankomst ca {formatTime(t)} · {s.energyKwh} kWh tilført</div>
+                        <div className="text-xs font-semibold flex items-center gap-2">
+                          ~{s.approxKmFromStart} km fra start
+                          <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full bg-cyan-400/10 border border-cyan-400/25 text-[10px] font-medium text-cyan-300">
+                            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
+                            {s.networkName}
+                          </span>
+                        </div>
+                        <div className="text-[10px] text-muted-foreground">
+                          Ankomst ca {formatTime(t)} · {s.energyKwh} kWh tilført · €{s.pricePerKwh.toFixed(2)}/kWh
+                        </div>
                       </div>
                       <div className="text-right">
                         <div className="text-xs font-semibold tabular-nums">{s.minutes} min</div>
