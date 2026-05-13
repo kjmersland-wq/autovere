@@ -14,8 +14,9 @@ Deno.serve(async (req) => {
     const url = new URL(req.url)
     const params = new URLSearchParams(url.search)
     params.set('output', 'json')
-    params.set('compact', 'true')
-    params.set('verbose', 'false')
+    // compact=false + verbose=true so OperatorInfo.Title is included (needed for network filtering)
+    params.set('compact', 'false')
+    params.set('verbose', 'true')
     if (!params.has('maxresults')) params.set('maxresults', '1500')
     params.set('key', apiKey)
 
