@@ -3,13 +3,15 @@ import { getStripeClient, getStripeEnvironment } from '../_shared/stripe.ts';
 import { corsHeaders, handleCors } from '../_shared/cors.ts';
 
 const getErrorMessage = (error: unknown): string => {
-  if (error instanceof Error) return error.message;
-  if (typeof error === 'string') return error;
-  if (error && typeof error === 'object') {
-    const message = (error as { message?: unknown }).message;
-    if (typeof message === 'string' && message.trim().length > 0) return message;
+  if (error instanceof Error) {
+    if (error.message.startsWith('Not authenticated')) return 'Not authenticated';
+    if (error.message.startsWith('Auth error:')) return 'Authentication failed';
+    if (error.message === 'Invalid priceId') return 'Invalid priceId';
+    if (error.message === 'Missing checkout redirect URLs') return 'Missing checkout redirect URLs';
+    if (error.message === 'Invalid checkout redirect URLs') return 'Invalid checkout redirect URLs';
+    if (error.message.startsWith('Price not configured:')) return 'Checkout price is not configured';
   }
-  return 'Unknown checkout error';
+  return 'Checkout request failed';
 };
 
 Deno.serve(async (req) => {
@@ -36,14 +38,19 @@ Deno.serve(async (req) => {
     const { priceId, successUrl, cancelUrl } = body;
     console.log('[create-checkout] step=body-parsed priceId=' + priceId);
     if (priceId !== 'premium_monthly' && priceId !== 'premium_yearly') {
-      throw new Error(`Invalid priceId: ${priceId}`);
+      throw new Error('Invalid priceId');
     }
 
-    const origin = req.headers.get('origin') ?? '';
-    const resolvedSuccessUrl = successUrl || (origin ? `${origin}/pricing?checkout=success` : '');
-    const resolvedCancelUrl = cancelUrl || (origin ? `${origin}/pricing` : '');
-    if (!resolvedSuccessUrl || !resolvedCancelUrl) {
+    if (!successUrl || !cancelUrl) {
       throw new Error('Missing checkout redirect URLs');
+    }
+    let resolvedSuccessUrl: string;
+    let resolvedCancelUrl: string;
+    try {
+      resolvedSuccessUrl = new URL(successUrl).toString();
+      resolvedCancelUrl = new URL(cancelUrl).toString();
+    } catch {
+      throw new Error('Invalid checkout redirect URLs');
     }
 
     const stripe = getStripeClient();

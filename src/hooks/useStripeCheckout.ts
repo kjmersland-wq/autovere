@@ -22,7 +22,8 @@ export function useStripeCheckout() {
             return responseBody.message;
           }
         }
-      } catch {
+      } catch (parseError) {
+        console.warn("[useStripeCheckout] failed to parse function error response:", parseError);
         // fall through to message
       }
     }
