@@ -2,6 +2,16 @@ import { createClient } from 'npm:@supabase/supabase-js@2';
 import { getStripeClient, getStripeEnvironment } from '../_shared/stripe.ts';
 import { corsHeaders, handleCors } from '../_shared/cors.ts';
 
+const getErrorMessage = (error: unknown): string => {
+  if (error instanceof Error) return error.message;
+  if (typeof error === 'string') return error;
+  try {
+    return JSON.stringify(error);
+  } catch {
+    return String(error);
+  }
+};
+
 Deno.serve(async (req) => {
   const preflight = handleCors(req);
   if (preflight) return preflight;
@@ -25,6 +35,16 @@ Deno.serve(async (req) => {
     const body = await req.json();
     const { priceId, successUrl, cancelUrl } = body;
     console.log('[create-checkout] step=body-parsed priceId=' + priceId);
+    if (priceId !== 'premium_monthly' && priceId !== 'premium_yearly') {
+      throw new Error(`Invalid priceId: ${String(priceId)}`);
+    }
+
+    const origin = req.headers.get('origin') ?? '';
+    const resolvedSuccessUrl = successUrl || (origin ? `${origin}/pricing?checkout=success` : '');
+    const resolvedCancelUrl = cancelUrl || (origin ? `${origin}/pricing` : '');
+    if (!resolvedSuccessUrl || !resolvedCancelUrl) {
+      throw new Error('Missing checkout redirect URLs');
+    }
 
     const stripe = getStripeClient();
     const env = getStripeEnvironment();
@@ -65,8 +85,8 @@ Deno.serve(async (req) => {
       customer: stripeCustomerId,
       line_items: [{ price: stripePriceId, quantity: 1 }],
       mode: 'subscription',
-      success_url: successUrl,
-      cancel_url: cancelUrl,
+      success_url: resolvedSuccessUrl,
+      cancel_url: resolvedCancelUrl,
       subscription_data: {
         metadata: { userId: user.id, environment: env },
       },
@@ -78,8 +98,9 @@ Deno.serve(async (req) => {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
   } catch (e) {
-    console.error('[create-checkout] FAILED:', String(e));
-    return new Response(JSON.stringify({ error: String(e) }), {
+    const message = getErrorMessage(e);
+    console.error('[create-checkout] FAILED:', e);
+    return new Response(JSON.stringify({ error: message }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
