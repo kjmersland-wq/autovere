@@ -14,6 +14,7 @@ import { HomepageIntelligence } from "@/components/HomepageIntelligence";
 import { SignalFeedCompact } from "@/components/SignalFeed";
 import { LLink } from "@/i18n/routing";
 import { CARS, COLLECTIONS as DATA_COLLECTIONS } from "@/data/cars";
+import { useLoc } from "@/lib/loc";
 import heroCar from "@/assets/hero-car.jpg";
 import sceneNight from "@/assets/scene-night-drive.jpg";
 import sceneNordic from "@/assets/scene-nordic.jpg";
@@ -26,6 +27,7 @@ const SAMPLE_CARS = CARS.slice(0, 3);
 
 const Index = () => {
   const { t } = useTranslation();
+  const { l } = useLoc();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
   const [seedPrompt, setSeedPrompt] = useState<string | undefined>();
   const [heroInput, setHeroInput] = useState("");
@@ -319,12 +321,12 @@ const Index = () => {
                 to={`/collections/${c.slug}`}
                 className="group relative overflow-hidden rounded-3xl text-left aspect-[16/10] border border-border/40 hover:border-primary/50 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow block"
               >
-                <img src={c.image} alt={c.title} loading="lazy" width={1280} height={800} className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms] ease-out" />
+                <img src={c.image} alt={l(c.title)} loading="lazy" width={1280} height={800} className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms] ease-out" />
                 <div className="absolute inset-0 bg-gradient-to-tr from-background via-background/60 to-transparent" />
                 <div className="absolute inset-0 bg-gradient-to-br from-primary/0 via-transparent to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
                 <div className="relative h-full flex flex-col justify-end p-8">
-                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">{c.title}</h3>
-                  <p className="text-sm text-muted-foreground max-w-md mb-3">{c.description}</p>
+                  <h3 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">{l(c.title)}</h3>
+                  <p className="text-sm text-muted-foreground max-w-md mb-3">{l(c.description)}</p>
                   <div className="text-xs text-accent flex items-center gap-1 opacity-80 group-hover:opacity-100 group-hover:gap-2 transition-all">
                     {t("common.open_collection")} <ArrowRight className="w-3 h-3" />
                   </div>
