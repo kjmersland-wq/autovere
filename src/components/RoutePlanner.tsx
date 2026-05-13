@@ -10,6 +10,7 @@ import {
   DEFAULT_VEHICLE, VehicleProfile, computePlan, samplePath, formatDuration,
   addMinutes, formatTime, RoutePlan, TOLL_BY_COUNTRY, CountrySegment,
 } from "@/lib/route-cost";
+import { SendToCar } from "@/components/SendToCar";
 
 // ─── Types ────────────────────────────────────────────────────────────
 interface PhotonHit {
