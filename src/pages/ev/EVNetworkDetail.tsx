@@ -140,7 +140,7 @@ export default function EVNetworkDetail() {
 
   const countries = COVERAGE_COUNTRIES[slug] ?? [];
 
-  const origin = "https://autovere.com";
+  const origin = "https://www.autovere.com";
   const networkUrl = `${origin}${lang !== "en" ? `/${lang}` : ""}/ev/networks/${network.slug}`;
   const jsonLd = [
     {

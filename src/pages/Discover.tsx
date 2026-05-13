@@ -33,7 +33,7 @@ const Discover = () => {
     "@type": "CollectionPage",
     name: t("pages.discover.seo_title"),
     description: t("pages.discover.seo_desc"),
-    hasPart: cards.map((x) => ({ "@type": "CreativeWork", name: l(x.c.title), url: `https://autovere.com/collections/${x.c.slug}` })),
+    hasPart: cards.map((x) => ({ "@type": "CreativeWork", name: l(x.c.title), url: `https://www.autovere.com/collections/${x.c.slug}` })),
   };
 
   return (

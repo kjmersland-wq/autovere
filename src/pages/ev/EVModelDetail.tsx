@@ -113,7 +113,7 @@ export default function EVModelDetail() {
   const intelligence = getVehicleIntelligence(model.slug);
   const vehicleSignals = getSignalsForVehicle(model.slug);
 
-  const origin = "https://autovere.com";
+  const origin = "https://www.autovere.com";
   const modelUrl = `${origin}${lang !== "en" ? `/${lang}` : ""}/ev/models/${model.slug}`;
   const jsonLd = [
     {

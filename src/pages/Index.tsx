@@ -64,7 +64,7 @@ const Index = () => {
     t("pages.index.popular_3"),
   ];
 
-  const origin = typeof window !== "undefined" ? window.location.origin : "https://autovere.com";
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://www.autovere.com";
   const seoJsonLd = [
     {
       "@context": "https://schema.org",
@@ -83,7 +83,7 @@ const Index = () => {
       name: "AUTOVERE",
       url: origin,
       logo: `${origin}/favicon.ico`,
-      sameAs: ["https://autovere.com"],
+      sameAs: ["https://www.autovere.com"],
     },
   ];
 

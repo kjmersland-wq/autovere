@@ -38,7 +38,7 @@ export default function About() {
           "@type": "Organization",
           name: "AUTOVERE",
           description: t("pages.about.seo_desc"),
-          url: "https://autovere.com",
+          url: "https://www.autovere.com",
           foundingLocation: { "@type": "Place", name: "Norway" },
           areaServed: "Europe",
         }}
