@@ -219,6 +219,7 @@ function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
 
 export default function EVDatabase() {
   const { t } = useTranslation();
+  const fmt = useFormatPrice();
   const { pathname } = useLocation();
   const lang = detectLangFromPath(pathname);
   const L = (p: string) => localizePath(p, lang);
