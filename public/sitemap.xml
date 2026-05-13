@@ -8,36 +8,938 @@
     <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/"/>
   </url>
-  <url><loc>https://www.autovere.com/no</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://www.autovere.com/about</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/pricing</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/contact</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/faq</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/help</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/discover</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.autovere.com/cars</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.autovere.com/compare</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/collections</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.autovere.com/personalities</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/learn</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.autovere.com/watch</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.autovere.com/garage</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.autovere.com/ev/database</loc><changefreq>weekly</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.autovere.com/ev/reviews</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/models</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/networks</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/charging</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/route-planner</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/calculator</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/guides</loc><changefreq>weekly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/compare</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/advisor</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/markets</loc><changefreq>monthly</changefreq></url>
-  <url><loc>https://www.autovere.com/ev/news</loc><changefreq>daily</changefreq><priority>0.9</priority></url>
-  <url><loc>https://www.autovere.com/legal/terms</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.autovere.com/legal/privacy</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.autovere.com/legal/cookies</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.autovere.com/legal/refund</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
-  <url><loc>https://www.autovere.com/legal/subscriptions</loc><changefreq>yearly</changefreq><priority>0.3</priority></url>
+  <url>
+    <loc>https://www.autovere.com/no</loc>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/about</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/about"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/about"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/about</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/about"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/about"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/about"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/pricing</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/pricing"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/pricing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/pricing"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/pricing</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/pricing"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/pricing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/pricing"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/contact</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/contact"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/contact"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/contact</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/contact"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/contact"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/contact"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/faq</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/faq"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/faq"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/faq</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/faq"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/faq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/faq"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/help</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/help"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/help"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/help"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/help</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/help"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/help"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/help"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/discover</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/discover"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/discover"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/discover"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/discover</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/discover"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/discover"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/discover"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/cars</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/cars"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/cars"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/cars"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/cars</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/cars"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/cars"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/cars"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/compare</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/compare"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/compare"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/compare"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/compare</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/compare"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/compare"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/compare"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/collections</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/collections"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/collections"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/collections"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/collections</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/collections"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/collections"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/collections"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/personalities</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/personalities"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/personalities"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/personalities"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/personalities</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/personalities"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/personalities"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/personalities"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/learn</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/learn"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/learn"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/learn"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/learn</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/learn"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/learn"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/learn"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/watch</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/watch"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/watch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/watch"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/watch</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/watch"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/watch"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/watch"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/garage</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/garage"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/garage"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/garage"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/garage</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/garage"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/garage"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/garage"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/database</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/database"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/database"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/database"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/database</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/database"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/database"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/database"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/reviews</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/reviews"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/reviews"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/reviews"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/reviews</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/reviews"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/reviews"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/reviews"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/networks</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/networks</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/charging</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/charging"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/charging"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/charging"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/charging</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/charging"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/charging"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/charging"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/route-planner</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/route-planner"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/route-planner"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/route-planner"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/route-planner</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/route-planner"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/route-planner"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/route-planner"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/calculator</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/calculator"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/calculator"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/calculator"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/calculator</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/calculator"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/calculator"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/calculator"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/guides</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/guides"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/guides"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/guides"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/guides</loc>
+    <changefreq>weekly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/guides"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/guides"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/guides"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/compare</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/compare"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/compare"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/compare"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/compare</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/compare"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/compare"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/compare"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/advisor</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/advisor"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/advisor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/advisor"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/advisor</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/advisor"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/advisor"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/advisor"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/markets</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/markets"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/markets"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/markets"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/markets</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/markets"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/markets"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/markets"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news</loc>
+    <changefreq>daily</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/legal/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/terms"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/terms"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/legal/terms</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/terms"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/terms"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/terms"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/legal/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/privacy"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/privacy"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/legal/privacy</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/privacy"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/privacy"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/privacy"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/legal/cookies</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/cookies"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/cookies"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/cookies"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/legal/cookies</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/cookies"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/cookies"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/cookies"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/legal/refund</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/refund"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/refund"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/refund"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/legal/refund</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/refund"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/refund"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/refund"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/legal/subscriptions</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/subscriptions"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/subscriptions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/subscriptions"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/legal/subscriptions</loc>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/legal/subscriptions"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/legal/subscriptions"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/legal/subscriptions"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/tesla-model-y</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/tesla-model-y"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/tesla-model-y"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/tesla-model-y"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/tesla-model-y</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/tesla-model-y"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/tesla-model-y"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/tesla-model-y"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/porsche-macan-ev</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/porsche-macan-ev"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/porsche-macan-ev"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/porsche-macan-ev"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/porsche-macan-ev</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/porsche-macan-ev"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/porsche-macan-ev"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/porsche-macan-ev"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/kia-ev9</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/kia-ev9"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/kia-ev9"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/kia-ev9"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/kia-ev9</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/kia-ev9"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/kia-ev9"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/kia-ev9"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/hyundai-ioniq5</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/hyundai-ioniq5"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/hyundai-ioniq5"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/hyundai-ioniq5"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/hyundai-ioniq5</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/hyundai-ioniq5"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/hyundai-ioniq5"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/hyundai-ioniq5"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/bmw-i5</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/bmw-i5"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/bmw-i5"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/bmw-i5"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/bmw-i5</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/bmw-i5"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/bmw-i5"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/bmw-i5"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/audi-q6-etron</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/audi-q6-etron"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/audi-q6-etron"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/audi-q6-etron"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/audi-q6-etron</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/audi-q6-etron"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/audi-q6-etron"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/audi-q6-etron"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/volvo-ex30</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/volvo-ex30"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/volvo-ex30"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/volvo-ex30"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/volvo-ex30</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/volvo-ex30"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/volvo-ex30"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/volvo-ex30"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/bmw-ix</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/bmw-ix"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/bmw-ix"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/bmw-ix"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/bmw-ix</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/bmw-ix"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/bmw-ix"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/bmw-ix"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/bmw-ix3</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/bmw-ix3"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/bmw-ix3"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/bmw-ix3"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/bmw-ix3</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/bmw-ix3"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/bmw-ix3"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/bmw-ix3"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/polestar-2</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/polestar-2"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/polestar-2"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/polestar-2"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/polestar-2</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/polestar-2"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/polestar-2"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/polestar-2"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/skoda-enyaq</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/skoda-enyaq"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/skoda-enyaq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/skoda-enyaq"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/skoda-enyaq</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/skoda-enyaq"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/skoda-enyaq"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/skoda-enyaq"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/volkswagen-id7</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/volkswagen-id7"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/volkswagen-id7"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/volkswagen-id7"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/volkswagen-id7</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/volkswagen-id7"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/volkswagen-id7"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/volkswagen-id7"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/mercedes-eqe-suv</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/mercedes-eqe-suv"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/mercedes-eqe-suv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/mercedes-eqe-suv"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/mercedes-eqe-suv</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/mercedes-eqe-suv"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/mercedes-eqe-suv"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/mercedes-eqe-suv"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/models/audi-q8-etron</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/audi-q8-etron"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/audi-q8-etron"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/audi-q8-etron"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/models/audi-q8-etron</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models/audi-q8-etron"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/models/audi-q8-etron"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/models/audi-q8-etron"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/networks/ionity</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/ionity"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/ionity"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/ionity"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/networks/ionity</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/ionity"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/ionity"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/ionity"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/networks/tesla-supercharger</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/tesla-supercharger"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/tesla-supercharger"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/tesla-supercharger"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/networks/tesla-supercharger</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/tesla-supercharger"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/tesla-supercharger"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/tesla-supercharger"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/networks/fastned</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/fastned"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/fastned"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/fastned"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/networks/fastned</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/fastned"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/fastned"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/fastned"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/networks/recharge</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/recharge"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/recharge"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/recharge"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/networks/recharge</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/recharge"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/recharge"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/recharge"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/networks/allego</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/allego"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/allego"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/allego"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/networks/allego</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/networks/allego"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/networks/allego"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/networks/allego"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/ionity-gen2-chargers-rollout-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/ionity-gen2-chargers-rollout-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/ionity-gen2-chargers-rollout-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/ionity-gen2-chargers-rollout-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/ionity-gen2-chargers-rollout-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/ionity-gen2-chargers-rollout-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/ionity-gen2-chargers-rollout-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/ionity-gen2-chargers-rollout-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/real-world-winter-range-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/real-world-winter-range-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/real-world-winter-range-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/real-world-winter-range-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/real-world-winter-range-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/real-world-winter-range-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/real-world-winter-range-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/real-world-winter-range-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/germany-ev-market-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/germany-ev-market-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/germany-ev-market-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/germany-ev-market-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/germany-ev-market-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/germany-ev-market-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/germany-ev-market-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/germany-ev-market-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/sodium-ion-battery-2026-preview</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/sodium-ion-battery-2026-preview"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/sodium-ion-battery-2026-preview"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/sodium-ion-battery-2026-preview"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/sodium-ion-battery-2026-preview</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/sodium-ion-battery-2026-preview"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/sodium-ion-battery-2026-preview"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/sodium-ion-battery-2026-preview"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/fastned-expansion-nordics-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/fastned-expansion-nordics-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/fastned-expansion-nordics-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/fastned-expansion-nordics-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/fastned-expansion-nordics-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/fastned-expansion-nordics-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/fastned-expansion-nordics-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/fastned-expansion-nordics-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/ev-depreciation-2025-data</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/ev-depreciation-2025-data"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/ev-depreciation-2025-data"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/ev-depreciation-2025-data"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/ev-depreciation-2025-data</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/ev-depreciation-2025-data"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/ev-depreciation-2025-data"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/ev-depreciation-2025-data"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/eu-2035-ice-ban-update</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/eu-2035-ice-ban-update"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/eu-2035-ice-ban-update"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/eu-2035-ice-ban-update"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/eu-2035-ice-ban-update</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/eu-2035-ice-ban-update"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/eu-2035-ice-ban-update"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/eu-2035-ice-ban-update"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/home-charging-installation-guide-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/home-charging-installation-guide-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/home-charging-installation-guide-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/home-charging-installation-guide-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/home-charging-installation-guide-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/home-charging-installation-guide-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/home-charging-installation-guide-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/home-charging-installation-guide-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/polestar-2-vs-model-3-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/polestar-2-vs-model-3-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/polestar-2-vs-model-3-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/polestar-2-vs-model-3-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/polestar-2-vs-model-3-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/polestar-2-vs-model-3-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/polestar-2-vs-model-3-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/polestar-2-vs-model-3-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/norway-ev-88-percent-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/norway-ev-88-percent-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/norway-ev-88-percent-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/norway-ev-88-percent-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/norway-ev-88-percent-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/norway-ev-88-percent-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/norway-ev-88-percent-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/norway-ev-88-percent-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/ev-battery-degradation-real-data</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/ev-battery-degradation-real-data"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/ev-battery-degradation-real-data"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/ev-battery-degradation-real-data"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/ev-battery-degradation-real-data</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/ev-battery-degradation-real-data"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/ev-battery-degradation-real-data"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/ev-battery-degradation-real-data"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/v2g-vehicle-to-grid-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/v2g-vehicle-to-grid-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/v2g-vehicle-to-grid-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/v2g-vehicle-to-grid-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/v2g-vehicle-to-grid-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/v2g-vehicle-to-grid-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/v2g-vehicle-to-grid-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/v2g-vehicle-to-grid-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/tesla-supercharger-open-network-europe</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/tesla-supercharger-open-network-europe"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/tesla-supercharger-open-network-europe"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/tesla-supercharger-open-network-europe"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/tesla-supercharger-open-network-europe</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/tesla-supercharger-open-network-europe"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/tesla-supercharger-open-network-europe"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/tesla-supercharger-open-network-europe"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/skoda-enyaq-value-case-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/skoda-enyaq-value-case-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/skoda-enyaq-value-case-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/skoda-enyaq-value-case-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/skoda-enyaq-value-case-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/skoda-enyaq-value-case-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/skoda-enyaq-value-case-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/skoda-enyaq-value-case-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/ev/news/public-charging-reliability-europe-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/public-charging-reliability-europe-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/public-charging-reliability-europe-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/public-charging-reliability-europe-2025"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/ev/news/public-charging-reliability-europe-2025</loc>
+    <changefreq>monthly</changefreq>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/news/public-charging-reliability-europe-2025"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/ev/news/public-charging-reliability-europe-2025"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/news/public-charging-reliability-europe-2025"/>
+  </url>
 </urlset>
