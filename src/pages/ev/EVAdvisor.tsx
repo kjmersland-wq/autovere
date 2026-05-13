@@ -119,30 +119,30 @@ function scoreModel(model: CompareModel, answers: Answers): number {
   return Math.max(0, score);
 }
 
-function getReasonText(model: CompareModel, answers: Answers): string[] {
+function getReasonText(model: CompareModel, answers: Answers, t: (k: string, o?: Record<string, unknown>) => string): string[] {
   const reasons: string[] = [];
 
   if (answers.climate === "nordic" && model.range.winter >= 300) {
-    reasons.push(`${model.range.winter} km winter range — reliable in cold conditions`);
+    reasons.push(t("ev.advisor.reasons.nordic_winter", { km: model.range.winter }));
   }
   if (answers.family === "large" && model.cargoL > 800) {
-    reasons.push(`${model.cargoL.toLocaleString()} L cargo — genuine family capacity`);
+    reasons.push(t("ev.advisor.reasons.family_cargo", { l: model.cargoL.toLocaleString() }));
   }
   if (answers.roadtrips === "weekly" && model.charging.time10to80 <= 24) {
-    reasons.push(`${model.charging.time10to80}-min charge time — efficient stop strategy`);
+    reasons.push(t("ev.advisor.reasons.charging_time", { min: model.charging.time10to80 }));
   }
   if (answers.priority === "value" && model.scores.valueForMoney >= 85) {
-    reasons.push(`${model.scores.valueForMoney}/100 value score — strong cost-capability ratio`);
+    reasons.push(t("ev.advisor.reasons.value_score", { score: model.scores.valueForMoney }));
   }
   if (answers.priority === "comfort" && model.scores.comfort >= 88) {
-    reasons.push(`${model.scores.comfort}/100 comfort score — premium ride quality`);
+    reasons.push(t("ev.advisor.reasons.comfort_score", { score: model.scores.comfort }));
   }
   if (answers.charging === "public_only" && model.scores.networkCompat >= 85) {
-    reasons.push(`${model.scores.networkCompat}/100 network score — broad charging compatibility`);
+    reasons.push(t("ev.advisor.reasons.network_score", { score: model.scores.networkCompat }));
   }
   if (reasons.length < 2) {
-    reasons.push(`${model.range.real} km real-world range`);
-    reasons.push(`€${model.annualCostEur.toLocaleString()} estimated annual charging cost`);
+    reasons.push(t("ev.advisor.reasons.range_default", { km: model.range.real }));
+    reasons.push(t("ev.advisor.reasons.annual_default", { cost: model.annualCostEur.toLocaleString() }));
   }
 
   return reasons.slice(0, 3);
@@ -187,6 +187,20 @@ export default function EVAdvisor() {
   const [currentStep, setCurrentStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({});
   const [showResults, setShowResults] = useState(false);
+
+  const rawSteps = t("ev.advisor.steps", { returnObjects: true }) as Array<{
+    id: string;
+    question: string;
+    subtitle: string;
+    options: { value: string; label: string; desc: string }[];
+  }>;
+  const STEPS: Step[] = rawSteps.map((s) => ({
+    id: s.id,
+    question: s.question,
+    subtitle: s.subtitle,
+    icon: STEP_ICONS[s.id] ?? Wallet,
+    options: s.options.map((o) => ({ ...o, icon: STEP_OPTION_ICONS[s.id]?.[o.value] })),
+  }));
 
   const step = STEPS[currentStep];
   const currentAnswer = answers[step.id as keyof Answers];
