@@ -363,7 +363,7 @@ export default function EVAdvisor() {
               ) : (
                 <div className="space-y-5">
                   {results.map(({ model: m }, idx) => {
-                    const reasons = getReasonText(m, answers);
+                    const reasons = getReasonText(m, answers, t);
                     const medals = ["🥇", "🥈", "🥉"];
                     return (
                       <div
