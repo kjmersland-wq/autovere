@@ -28,12 +28,31 @@ export const NETWORKS = [
 
 const OTHER_COLOR = "#9ca3af";
 
-function networkFor(operatorTitle: string): { id: string; color: string } | null {
-  const t = operatorTitle?.toLowerCase() ?? "";
+function networkFor(operatorTitle: string, stationTitle = "", maxKw = 0): { id: string; color: string } | null {
+  const operator = operatorTitle?.toLowerCase() ?? "";
+  const title = stationTitle?.toLowerCase() ?? "";
+  const t = `${operator} ${title}`;
+
+  // Tesla Superchargers are sometimes published without OperatorInfo in OpenChargeMap.
+  // Match Superchargers from the station title, but avoid treating low-power Tesla
+  // destination chargers (hotels/AC) as Supercharger network pins.
+  if (
+    title.includes("supercharger") ||
+    (operator.includes("tesla") && (operator.includes("including non-tesla") || maxKw >= 100))
+  ) {
+    const tesla = NETWORKS.find((n) => n.id === "tesla");
+    return tesla ? { id: tesla.id, color: tesla.color } : null;
+  }
+
   for (const n of NETWORKS) {
+    if (n.id === "tesla") continue;
     if (n.match.some((m) => t.includes(m))) return { id: n.id, color: n.color };
   }
   return null;
+}
+
+function maxPowerKw(p: POI) {
+  return Math.max(0, ...(p.Connections?.map((c) => c.PowerKW ?? 0) ?? []));
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
