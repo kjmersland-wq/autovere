@@ -4,6 +4,7 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import { Loader2, MapPin, Zap } from "lucide-react";
 import { useTheme } from "next-themes";
+import { supabase } from "@/integrations/supabase/client";
 
 /* ────────────────────────────────────────────────────────────────────── */
 /* Network catalog — name match (case-insensitive substring on Operator)  */
