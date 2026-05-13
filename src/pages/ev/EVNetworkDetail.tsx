@@ -1,5 +1,5 @@
 import { Link, useLocation, useParams } from "react-router-dom";
-import { Zap, CheckCircle, XCircle, Globe, CreditCard, Wifi, MapPin } from "lucide-react";
+import { Zap, CheckCircle, XCircle, Globe, CreditCard, Wifi, MapPin, Route as RouteIcon, ArrowRight, Fuel, Euro, Clock } from "lucide-react";
 import { EVBreadcrumb } from "@/components/EVBreadcrumb";
 import { useTranslation } from "react-i18next";
 import { PageShell } from "@/components/PageShell";
