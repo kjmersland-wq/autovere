@@ -61,7 +61,7 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
             <h3 className="font-semibold text-sm">{vehicle.name}</h3>
           </div>
           <div className="text-right flex-shrink-0">
-            <div className="text-base font-bold text-gradient">€{vehicle.priceFrom.toLocaleString()}</div>
+            <div className="text-base font-bold text-gradient">{fmt(vehicle.priceFrom)}</div>
             <div className="text-[9px] text-muted-foreground">{t("ev.database.price_from_label")}</div>
           </div>
         </div>
