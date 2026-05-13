@@ -678,6 +678,65 @@ const en = {
       metric_winter: "Winter",
       metric_comfort: "Comfort",
       metric_value: "Value",
+      consensus: {
+        "tesla-model-y": {
+          range: "430 km real-world", charging: "Supercharger unmatched", winter: "Heat pump helps, plan stops", comfort: "Firm ride", value: "Strong long-term",
+          mostPraised: ["Supercharger reliability", "Cargo versatility", "OTA software updates"],
+          mostCritiqued: ["Firm suspension", "No stalks / minimal controls", "Wind noise above 110 km/h"],
+          highlightQuote: "The most complete package in the segment — not perfect, but closest to right for most people."
+        },
+        "porsche-macan-ev": {
+          range: "490 km real-world", charging: "270 kW — class-best", winter: "Excellent 800V cold perf.", comfort: "Outstanding", value: "Premium justified",
+          mostPraised: ["Cold weather charging stability", "Ride and handling balance", "Interior quality"],
+          mostCritiqued: ["Price relative to class", "Smaller cargo than rivals", "Limited rear headroom"],
+          highlightQuote: "The first Porsche that genuinely makes you feel nothing is being sacrificed for the electric powertrain."
+        },
+        "kia-ev9": {
+          range: "450 km real-world", charging: "800V reliable in cold", winter: "Good for size", comfort: "Best-in-class space", value: "Strong for families",
+          mostPraised: ["Third-row usability", "800V cold charging", "Interior space intelligence"],
+          mostCritiqued: ["Size in urban parking", "Infotainment learning curve", "Motorway efficiency"],
+          highlightQuote: "The only electric vehicle that genuinely replaces a diesel people carrier without compromise."
+        },
+        "hyundai-ioniq5": {
+          range: "400 km real-world", charging: "18 min 10–80% remarkable", winter: "Range drops noticeably", comfort: "Flat floor, airy", value: "Excellent value",
+          mostPraised: ["18-minute charging time", "Interior space design", "800V architecture value"],
+          mostCritiqued: ["Winter range sensitivity", "Rear visibility", "Software vs Tesla"],
+          highlightQuote: "18 minutes to 80% changed the conversation about whether EVs can road trip. It proved they can."
+        },
+        "bmw-i5": {
+          range: "460 km real-world", charging: "22 kW AC star feature", winter: "Strong with 22 kW AC", comfort: "Benchmark interior", value: "Expensive but earns it",
+          mostPraised: ["22 kW AC charging", "Interior refinement", "Highway efficiency"],
+          mostCritiqued: ["DC speed vs 800V rivals", "Price for non-M spec", "Large exterior dimensions"],
+          highlightQuote: "The 22 kW AC charging is a detail that sounds boring until it changes how you plan every hotel stop."
+        },
+        "audi-q6-etron": {
+          range: "510 km real-world", charging: "270 kW minimal taper", winter: "Best 800V cold stability", comfort: "Refined and quiet", value: "Competitive segment",
+          mostPraised: ["Charging curve consistency", "Winter range leadership", "Interior quality jump"],
+          mostCritiqued: ["Price creep with options", "Smaller cargo than EV9", "Heavier than it should be"],
+          highlightQuote: "The charging curve is what makes this special — it doesn't taper the way competitors do, and that matters on long runs."
+        },
+        "volvo-ex30": {
+          range: "370 km real-world", charging: "153 kW adequate", winter: "Small battery feels winter", comfort: "Clever space use", value: "Best small EV value",
+          mostPraised: ["Build quality for price", "Safety ratings", "Urban agility"],
+          mostCritiqued: ["Winter range on smaller battery", "Screen-heavy controls", "Limited cargo"],
+          highlightQuote: "The first genuinely small EV that doesn't feel like a compromise — it's just a good car that happens to be electric."
+        },
+        "bmw-ix": {
+          range: "500 km real-world", charging: "22 kW AC + 195 kW DC", winter: "Large battery = confidence", comfort: "Near-silent reference", value: "Expensive — justified?",
+          mostPraised: ["Cabin refinement", "Large battery confidence", "22 kW AC versatility"],
+          mostCritiqued: ["Price vs alternatives", "Polarising exterior", "Software complexity"],
+          highlightQuote: "The quietest EV interior tested — the noise isolation is at a level most manufacturers don't attempt."
+        }
+      },
+      channels: {
+        "Fully Charged Show": "Long-term EV advocacy, real-world focus",
+        "Bjørn Nyland": "Data-driven range and charging tests",
+        "AutoTrader UK": "Consumer perspective, value analysis",
+        "InsideEVs": "Technical deep-dives, spec accuracy",
+        "What Car?": "Consumer testing, ownership focus",
+        "Carwow": "Entertainment-led, broad audience",
+        "The Electric Viking": "Industry news, commentary"
+      }
     },
     database: {
       seo_title: "EV Total Cost of Ownership Database | AUTOVERE",

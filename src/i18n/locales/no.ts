@@ -680,6 +680,65 @@ const no: Translation = {
       metric_winter: "Vinter",
       metric_comfort: "Komfort",
       metric_value: "Verdi",
+      consensus: {
+        "tesla-model-y": {
+          range: "430 km reelt", charging: "Supercharger uovertruffen", winter: "Varmepumpe hjelper, planlegg stopp", comfort: "Fast understell", value: "Sterk over tid",
+          mostPraised: ["Pålitelig Supercharger-nett", "Allsidig bagasjeplass", "Programvareoppdateringer over nettet"],
+          mostCritiqued: ["Stivt understell", "Ingen rattstilkar / minimalt med knapper", "Vindstøy over 110 km/t"],
+          highlightQuote: "Den mest komplette pakken i segmentet — ikke perfekt, men nærmest riktig for de fleste."
+        },
+        "porsche-macan-ev": {
+          range: "490 km reelt", charging: "270 kW — best i klassen", winter: "Utmerket 800V-kuldeytelse", comfort: "Eksepsjonell", value: "Premium som forsvares",
+          mostPraised: ["Stabil kuldelading", "Balanse mellom komfort og kjøreglede", "Interiørkvalitet"],
+          mostCritiqued: ["Pris i forhold til klassen", "Mindre bagasje enn konkurrentene", "Begrenset takhøyde bak"],
+          highlightQuote: "Den første Porsche som virkelig får deg til å føle at ingenting ofres for elektrisk drift."
+        },
+        "kia-ev9": {
+          range: "450 km reelt", charging: "Pålitelig 800V i kulde", winter: "Bra for størrelsen", comfort: "Best-i-klassen plass", value: "Sterk for familier",
+          mostPraised: ["Brukbar tredjerad", "800V-lading i kulde", "Smart bruk av interiørplass"],
+          mostCritiqued: ["Stor i bytrafikk", "Infotainment har læringskurve", "Motorveieffektivitet"],
+          highlightQuote: "Den eneste elbilen som faktisk erstatter en diesel-familiebil uten kompromisser."
+        },
+        "hyundai-ioniq5": {
+          range: "400 km reelt", charging: "18 min 10–80 % imponerende", winter: "Rekkevidde faller merkbart", comfort: "Flatt gulv, luftig", value: "Utmerket verdi",
+          mostPraised: ["18-minutters ladetid", "Smart interiørdesign", "Verdi på 800V-arkitektur"],
+          mostCritiqued: ["Vinterrekkevidde varierer", "Sikt bakover", "Programvare vs Tesla"],
+          highlightQuote: "18 minutter til 80 % endret debatten om hvorvidt elbiler kan gå på langtur. Den beviste at de kan."
+        },
+        "bmw-i5": {
+          range: "460 km reelt", charging: "22 kW AC er bestselgerargumentet", winter: "Sterk med 22 kW AC", comfort: "Referanseinteriør", value: "Dyr, men leverer",
+          mostPraised: ["22 kW AC-lading", "Interiørraffinement", "Motorveieffektivitet"],
+          mostCritiqued: ["DC-fart vs 800V-rivaler", "Pris for ikke-M-versjoner", "Store ytre mål"],
+          highlightQuote: "22 kW AC-lading er en detalj som høres kjedelig ut — helt til den endrer hvordan du planlegger hvert hotellstopp."
+        },
+        "audi-q6-etron": {
+          range: "510 km reelt", charging: "270 kW med minimal nedtrapping", winter: "Beste 800V-stabilitet i kulde", comfort: "Raffinert og stille", value: "Konkurransedyktig i klassen",
+          mostPraised: ["Konsistent ladekurve", "Best i klassen på vinterrekkevidde", "Stort kvalitetsløft i interiør"],
+          mostCritiqued: ["Prisen kryper opp med tilvalg", "Mindre bagasje enn EV9", "Tyngre enn den burde være"],
+          highlightQuote: "Ladekurven er det som gjør den spesiell — den faller ikke som hos konkurrentene, og det betyr noe på lange turer."
+        },
+        "volvo-ex30": {
+          range: "370 km reelt", charging: "153 kW akseptabelt", winter: "Lite batteri merkes om vinteren", comfort: "Smart bruk av plass", value: "Best verdi blant små elbiler",
+          mostPraised: ["Byggekvalitet for prisen", "Sikkerhetsvurderinger", "Smidig i by"],
+          mostCritiqued: ["Vinterrekkevidde med lite batteri", "Mye styres via skjerm", "Begrenset bagasjeplass"],
+          highlightQuote: "Den første ekte små elbilen som ikke føles som et kompromiss — bare en god bil som tilfeldigvis er elektrisk."
+        },
+        "bmw-ix": {
+          range: "500 km reelt", charging: "22 kW AC + 195 kW DC", winter: "Stort batteri = trygghet", comfort: "Nesten lydløs referanse", value: "Dyr — forsvarlig?",
+          mostPraised: ["Raffinert kupé", "Trygghet med stort batteri", "Allsidighet med 22 kW AC"],
+          mostCritiqued: ["Pris vs alternativer", "Polariserende design", "Programvarekompleksitet"],
+          highlightQuote: "Det stilleste elbilinteriøret vi har testet — lydisolasjonen er på et nivå de fleste produsenter ikke prøver seg på."
+        }
+      },
+      channels: {
+        "Fully Charged Show": "Langsiktig elbil-talsperson, fokus på reell bruk",
+        "Bjørn Nyland": "Datadrevne rekkevidde- og ladetester",
+        "AutoTrader UK": "Forbrukerperspektiv, verdianalyse",
+        "InsideEVs": "Tekniske dypdykk, presisjon på spesifikasjoner",
+        "What Car?": "Forbrukertesting, fokus på eierskap",
+        "Carwow": "Underholdende format, bredt publikum",
+        "The Electric Viking": "Industrinytt og kommentarer"
+      }
     },
     database: {
       seo_title: "EV total eierskapskostnadsdatabase | AUTOVERE",
