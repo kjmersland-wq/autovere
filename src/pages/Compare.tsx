@@ -9,6 +9,7 @@ import { useSafetyIntelligence } from "@/hooks/use-safety-intelligence";
 import { CompareIntelligenceSection } from "@/components/CompareIntelligenceSection";
 import { CompareNextStepsSection } from "@/components/CompareNextStepsSection";
 import type { Car } from "@/data/cars";
+import { useLoc } from "@/lib/loc";
 
 const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string; icon?: typeof ShieldCheck }) => (
   <div className="grid grid-cols-1 md:grid-cols-[200px_1fr_1fr] gap-4 md:gap-8 py-6 border-b border-border/30">
@@ -23,7 +24,8 @@ const Row = ({ label, a, b, icon: Icon }: { label: string; a: string; b: string;
 
 const FeelCard = ({ car }: { car: Car }) => {
   const { t } = useTranslation();
-  const { data, loading } = useSafetyIntelligence(car.name, car.type, car.lifestyle);
+  const { l } = useLoc();
+  const { data, loading } = useSafetyIntelligence(car.name, l(car.type), l(car.lifestyle));
   return (
     <div className="glass rounded-3xl p-7 space-y-5">
       <div>
@@ -71,6 +73,7 @@ const NotFound = () => {
 
 const Compare = () => {
   const { t } = useTranslation();
+  const { l } = useLoc();
   const { slug = "" } = useParams();
   const parts = slug.split("-vs-");
   if (parts.length !== 2) return <NotFound />;
@@ -90,6 +93,9 @@ const Compare = () => {
     about: [a.name, b.name],
   };
 
+  const aClimate = l(a.climate);
+  const bClimate = l(b.climate);
+
   return (
     <PageShell>
       <SEO title={title} description={desc} type="article" jsonLd={jsonLd} />
@@ -104,7 +110,7 @@ const Compare = () => {
                 <div>
                   <div className="text-xs uppercase tracking-[0.3em] text-accent mb-2">{c.brand}</div>
                   <div className="text-3xl md:text-5xl font-bold tracking-tighter">{c.name}</div>
-                  <div className="text-muted-foreground mt-2">{c.fit}</div>
+                  <div className="text-muted-foreground mt-2">{l(c.fit)}</div>
                 </div>
               </div>
             </Link>
@@ -129,14 +135,14 @@ const Compare = () => {
 
       <section className="container pb-20">
         <div className="text-[11px] uppercase tracking-[0.3em] text-accent mb-4">{t("pages.compare.detailed")}</div>
-        <Row label={t("pages.compare.driving_feel")} icon={CarIcon} a={a.summary} b={b.summary} />
-        <Row label={t("pages.compare.comfort")} icon={Heart} a={a.comfort} b={b.comfort} />
-        <Row label={t("pages.compare.safety")} icon={ShieldCheck} a={`${t("pages.compare.strong_confidence")} ${a.climate.toLowerCase()}`} b={`${t("pages.compare.strong_confidence")} ${b.climate.toLowerCase()}`} />
-        <Row label={t("pages.compare.winter")} icon={Snowflake} a={a.climate} b={b.climate} />
-        <Row label={t("pages.compare.family")} icon={Users} a={a.practicality} b={b.practicality} />
-        <Row label={t("pages.compare.ownership_stress")} a={a.ownership} b={b.ownership} />
-        <Row label={t("pages.compare.personality_fit")} a={a.personality} b={b.personality} />
-        <Row label={t("pages.compare.lifestyle")} a={a.lifestyle} b={b.lifestyle} />
+        <Row label={t("pages.compare.driving_feel")} icon={CarIcon} a={l(a.summary)} b={l(b.summary)} />
+        <Row label={t("pages.compare.comfort")} icon={Heart} a={l(a.comfort)} b={l(b.comfort)} />
+        <Row label={t("pages.compare.safety")} icon={ShieldCheck} a={`${t("pages.compare.strong_confidence")} ${aClimate.toLowerCase()}`} b={`${t("pages.compare.strong_confidence")} ${bClimate.toLowerCase()}`} />
+        <Row label={t("pages.compare.winter")} icon={Snowflake} a={aClimate} b={bClimate} />
+        <Row label={t("pages.compare.family")} icon={Users} a={l(a.practicality)} b={l(b.practicality)} />
+        <Row label={t("pages.compare.ownership_stress")} a={l(a.ownership)} b={l(b.ownership)} />
+        <Row label={t("pages.compare.personality_fit")} a={l(a.personality)} b={l(b.personality)} />
+        <Row label={t("pages.compare.lifestyle")} a={l(a.lifestyle)} b={l(b.lifestyle)} />
       </section>
 
       <section className="container pb-20">
@@ -154,7 +160,7 @@ const Compare = () => {
         {[a, b].map((c) => (
           <div key={c.slug} className="glass rounded-3xl p-8">
             <div className="text-xs uppercase tracking-wider text-accent mb-2">{t("pages.compare.choose_if", { name: c.name })}</div>
-            <p className="text-lg leading-relaxed mb-4">{c.lifestyle}</p>
+            <p className="text-lg leading-relaxed mb-4">{l(c.lifestyle)}</p>
             <Button asChild variant="outline" className="rounded-xl">
               <Link to={`/cars/${c.slug}`}>{t("pages.compare.read_full_review", { name: c.name })} <ArrowRight className="w-4 h-4 ml-2" /></Link>
             </Button>

@@ -11,6 +11,7 @@ import { CarMediaSection } from "@/components/CarMediaSection";
 import { PricingOwnership } from "@/components/PricingOwnership";
 import { SafetyOwnershipBlock } from "@/components/SafetyOwnershipBlock";
 import { ContinueExploringSection } from "@/components/ContinueExploringSection";
+import { useLoc } from "@/lib/loc";
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -28,6 +29,7 @@ const NotFound = () => {
 
 const CarDetail = () => {
   const { t } = useTranslation();
+  const { l, la } = useLoc();
   const { slug = "" } = useParams();
   const car = getCar(slug);
   if (!car) return <NotFound />;
@@ -35,6 +37,9 @@ const CarDetail = () => {
   const related = car.comparesWellWith
     .map((s) => getCar(s))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
+
+  const summary = l(car.summary);
+  const fit = l(car.fit);
 
   const origin = typeof window !== "undefined" ? window.location.origin : "https://autovere.com";
   const carUrl = `${origin}/cars/${car.slug}`;
@@ -44,11 +49,11 @@ const CarDetail = () => {
       "@type": "Car",
       name: car.name,
       brand: { "@type": "Brand", name: car.brand },
-      vehicleConfiguration: car.type,
+      vehicleConfiguration: l(car.type),
       numberOfDoors: 5,
       seatingCapacity: car.seats,
       fuelType: "Electric",
-      description: car.summary,
+      description: summary,
       image: car.hero,
       url: carUrl,
     },
@@ -66,8 +71,8 @@ const CarDetail = () => {
   return (
     <PageShell>
       <SEO
-        title={`${car.name} — ${car.fit} · AUTOVERE`}
-        description={car.summary.slice(0, 155)}
+        title={`${car.name} — ${fit} · AUTOVERE`}
+        description={summary.slice(0, 155)}
         image={car.hero}
         type="article"
         jsonLd={jsonLd}
@@ -78,9 +83,9 @@ const CarDetail = () => {
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-transparent" />
         <div className="container relative z-10 h-full flex flex-col justify-end pb-16">
-          <div className="text-xs uppercase tracking-[0.3em] text-accent mb-4">{car.brand} · {car.type}</div>
+          <div className="text-xs uppercase tracking-[0.3em] text-accent mb-4">{car.brand} · {l(car.type)}</div>
           <h1 className="text-5xl md:text-7xl font-bold tracking-tighter max-w-4xl leading-[1.05]">{car.name}</h1>
-          <p className="text-xl md:text-2xl text-muted-foreground italic mt-4 max-w-2xl">"{car.tagline}"</p>
+          <p className="text-xl md:text-2xl text-muted-foreground italic mt-4 max-w-2xl">"{l(car.tagline)}"</p>
           <div className="flex flex-wrap gap-3 mt-8">
             <div className="glass rounded-2xl px-4 py-3">
               <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("pages.car.match")}</div>
@@ -89,19 +94,19 @@ const CarDetail = () => {
             {car.range && (
               <div className="glass rounded-2xl px-4 py-3">
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("pages.car.range")}</div>
-                <div className="text-base font-semibold">{car.range}</div>
+                <div className="text-base font-semibold">{l(car.range)}</div>
               </div>
             )}
             {car.startingPrice && (
               <div className="glass rounded-2xl px-4 py-3">
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("pages.car.price")}</div>
-                <div className="text-base font-semibold">{car.startingPrice}</div>
+                <div className="text-base font-semibold">{l(car.startingPrice)}</div>
               </div>
             )}
             {car.drivetrain && (
               <div className="glass rounded-2xl px-4 py-3">
                 <div className="text-[10px] uppercase tracking-wider text-muted-foreground">{t("pages.car.drivetrain")}</div>
-                <div className="text-base font-semibold">{car.drivetrain}</div>
+                <div className="text-base font-semibold">{l(car.drivetrain)}</div>
               </div>
             )}
           </div>
@@ -111,31 +116,31 @@ const CarDetail = () => {
       <section className="container py-24 grid lg:grid-cols-[1.4fr_1fr] gap-16">
         <div>
           <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.car.summary_eyebrow")}</div>
-          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">{car.fit}.</h2>
-          <p className="text-lg text-muted-foreground leading-relaxed mb-8">{car.summary}</p>
-          <p className="text-base text-muted-foreground leading-relaxed">{car.lifestyle}</p>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-6 leading-tight">{fit}.</h2>
+          <p className="text-lg text-muted-foreground leading-relaxed mb-8">{summary}</p>
+          <p className="text-base text-muted-foreground leading-relaxed">{l(car.lifestyle)}</p>
         </div>
         <aside className="glass rounded-3xl p-8 h-fit">
           <div className="text-xs uppercase tracking-wider text-muted-foreground mb-4">{t("pages.car.personality_fit")}</div>
           <div className="text-xl font-semibold mb-6 flex items-center gap-2">
-            <Heart className="w-5 h-5 text-accent" /> {car.personality}
+            <Heart className="w-5 h-5 text-accent" /> {l(car.personality)}
           </div>
           <div className="space-y-5 text-sm">
             <div>
               <div className="text-muted-foreground flex items-center gap-2 mb-1"><Sparkles className="w-4 h-4 text-accent" /> {t("pages.car.comfort")}</div>
-              <div>{car.comfort}</div>
+              <div>{l(car.comfort)}</div>
             </div>
             <div>
               <div className="text-muted-foreground flex items-center gap-2 mb-1"><MapPin className="w-4 h-4 text-accent" /> {t("pages.car.climate")}</div>
-              <div>{car.climate}</div>
+              <div>{l(car.climate)}</div>
             </div>
             <div>
               <div className="text-muted-foreground flex items-center gap-2 mb-1"><Zap className="w-4 h-4 text-accent" /> {t("pages.car.practicality")}</div>
-              <div>{car.practicality}</div>
+              <div>{l(car.practicality)}</div>
             </div>
             <div>
               <div className="text-muted-foreground flex items-center gap-2 mb-1"><Sparkles className="w-4 h-4 text-accent" /> {t("pages.car.ownership")}</div>
-              <div>{car.ownership}</div>
+              <div>{l(car.ownership)}</div>
             </div>
           </div>
         </aside>
@@ -156,7 +161,7 @@ const CarDetail = () => {
         <div className="glass rounded-3xl p-8">
           <div className="text-xs uppercase tracking-wider text-accent mb-3">{t("pages.car.strengths")}</div>
           <ul className="space-y-3">
-            {car.strengths.map((s) => (
+            {la(car.strengths).map((s) => (
               <li key={s} className="flex items-start gap-3">
                 <Check className="w-5 h-5 text-accent shrink-0 mt-0.5" /> <span>{s}</span>
               </li>
@@ -166,7 +171,7 @@ const CarDetail = () => {
         <div className="glass rounded-3xl p-8">
           <div className="text-xs uppercase tracking-wider text-muted-foreground mb-3">{t("pages.car.tradeoffs")}</div>
           <ul className="space-y-3">
-            {car.tradeoffs.map((s) => (
+            {la(car.tradeoffs).map((s) => (
               <li key={s} className="flex items-start gap-3">
                 <X className="w-5 h-5 text-muted-foreground shrink-0 mt-0.5" /> <span className="text-muted-foreground">{s}</span>
               </li>
@@ -201,7 +206,7 @@ const CarDetail = () => {
                 <div>
                   <div className="text-xs uppercase tracking-wider text-muted-foreground mb-2">{t("pages.car.compare_label")}</div>
                   <div className="text-xl font-semibold mb-1">{car.name} vs {r.name}</div>
-                  <div className="text-sm text-muted-foreground">{r.fit} · {r.type}</div>
+                  <div className="text-sm text-muted-foreground">{l(r.fit)} · {l(r.type)}</div>
                 </div>
                 <ArrowRight className="w-5 h-5 text-accent group-hover:translate-x-1 transition-transform" />
               </Link>
