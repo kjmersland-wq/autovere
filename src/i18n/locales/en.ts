@@ -58,6 +58,7 @@ const en = {
   language: { label: "Language" },
   common: {
     loading: "Loading…",
+    copied: "Copied",
     error: "That didn't work. Mind trying again?",
     retry: "Try again",
     save: "Save",
