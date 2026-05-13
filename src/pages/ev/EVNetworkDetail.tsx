@@ -44,7 +44,23 @@ export function EVNetworksIndex() {
         </div>
       </section>
 
+      {/* Live charging map — every station in Europe via OpenChargeMap */}
+      <section className="container py-12">
+        <div className="max-w-2xl mb-8">
+          <div className="text-[10px] uppercase tracking-[0.4em] text-accent mb-3">— Live infrastructure</div>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-3">Every charger in Europe, on one map.</h2>
+          <p className="text-muted-foreground leading-relaxed">
+            Filter by country and by network — Tesla, Ionity, Fastned, Allego and more. Live data via OpenChargeMap.
+          </p>
+        </div>
+        <EuropeChargingMap />
+      </section>
+
       <section className="container py-16">
+        <div className="max-w-2xl mb-8">
+          <div className="text-[10px] uppercase tracking-[0.4em] text-accent mb-3">— Network deep dives</div>
+          <h2 className="text-3xl md:text-4xl font-bold tracking-tight">Compare the major networks side by side.</h2>
+        </div>
         <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-5">
           {CHARGING_NETWORKS.map((network) => (
             <Link
