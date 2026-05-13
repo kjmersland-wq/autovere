@@ -109,7 +109,7 @@ const Pricing = () => {
             <span className="text-muted-foreground">/ {interval}</span>
           </div>
           <div className="text-xs text-muted-foreground mb-4">
-            {interval === "month" ? t("pages.pricing.yearly_save") : t("pages.pricing.billed_yearly")}
+            {interval === "month" ? t("pages.pricing.yearly_save", { price: fmt(59) }) : t("pages.pricing.billed_yearly")}
           </div>
           <div className="inline-flex p-1 rounded-full bg-secondary/40 border border-border/40 mb-6 self-start">
             {(["month", "year"] as const).map((i) => (
