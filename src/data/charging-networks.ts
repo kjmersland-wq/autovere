@@ -172,10 +172,10 @@ export const CHARGING_NETWORKS: ChargingNetwork[] = [
     coverageStrength: ["Netherlands", "Belgium", "Germany", "France", "Poland"],
     coverageWeak: ["Scandinavia", "UK", "Southern Europe"],
     pros: ["Widest country coverage in Europe", "High interoperability — most roaming apps work", "CHAdeMO support for older EVs", "Urban and retail placement", "Reasonable AC pricing"],
-    cons: ["175 kW max DC below class leaders", "Station quality inconsistent", "UI less polished than Tesla/Ionity", "Less visible in premium locations", "Reliability reports variable"],
+    cons: ["Station quality inconsistent across legacy sites", "UI less polished than Tesla/Ionity", "Less visible in premium locations", "35,000 charge points includes a lot of slower AC", "Reliability uneven on third-party hosted sites"],
     compatible: ["CCS", "CHAdeMO", "Type 2", "Most RFID and roaming apps", "Plugsurfing, CHARG.E, etc."],
     bestFor: "Drivers needing broad European coverage, especially in BeNeLux and Central Europe.",
-    summary: "Allego's strength is breadth. With stations across 25+ European countries and broad roaming app compatibility, it's the network most drivers encounter unexpectedly — at retail parks, airports, hotels. 175 kW DC maximum is the ceiling, and consistency varies more than premium networks. Where Allego wins is interoperability: it works with almost every charging app and RFID card in Europe, making it the fallback option that actually works.",
+    summary: "Allego's strength is breadth. With over 1,000 fast-charging stations and 35,000+ total charge points across 16 European countries (1,000th fast-charging site opened October 2025), it's one of the largest pan-European operators by charge point count. Network reliability is published at 99.0% (PCPR-compliant for 2025). Newest Mega-E hubs reach 400 kW. Where Allego wins is interoperability: it works with almost every charging app and RFID card in Europe, making it the fallback option that actually works.",
     accentColor: "text-violet-400",
     speeds: [
       { label: "Maximum HPC", kw: 400, typical: "Latest Allego Mega-E hubs, 800V capable" },
