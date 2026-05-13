@@ -23,6 +23,8 @@ const STATIC_PATHS = [
   { path: "/ev", changefreq: "weekly", priority: "0.9" },
   { path: "/ev/database", changefreq: "weekly", priority: "0.9" },
   { path: "/ev/reviews", changefreq: "weekly" },
+  { path: "/biltester", changefreq: "weekly", priority: "0.9" },
+  { path: "/car-reviews", changefreq: "weekly", priority: "0.9" },
   { path: "/ev/models", changefreq: "weekly" },
   { path: "/ev/networks", changefreq: "monthly" },
   { path: "/ev/charging", changefreq: "monthly" },
