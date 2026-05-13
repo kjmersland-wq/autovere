@@ -1,0 +1,53 @@
+# AUTOVERE
+
+> A calm, intelligent AI advisor that learns how you live and guides you to the few cars worth your attention. Bilingual (English / Norwegian), with deep coverage of the European EV market.
+
+AUTOVERE blends an editorial car magazine with an AI-driven advisor. We focus on real ownership: range in Nordic winters, charging across Europe, family fit, and total cost — not horsepower for its own sake.
+
+## Pages
+
+- [Home](/): The AI advisor, featured cars, and the latest signals.
+- [About](/about): Who we are and how the advisor reasons.
+- [Pricing](/pricing): Free tier and AUTOVERE Premium.
+- [Contact](/contact): Reach the editorial team.
+- [FAQ](/faq): Common questions about the advisor and data.
+- [Help](/help): Guides for getting the most out of AUTOVERE.
+
+## Cars and discovery
+
+- [Discover](/discover): Curated entry point for new visitors.
+- [Cars](/cars): Full vehicle catalogue with intelligence cards.
+- [Compare](/compare): Side-by-side comparison of any two cars.
+- [Collections](/collections): Editor-curated themed lineups.
+- [Personalities](/personalities): Cars matched to driver archetypes.
+- [Learn](/learn): Long-form guides on ownership and choosing a car.
+- [Watch](/watch): Curated video reviews and walkarounds.
+
+## EV intelligence hub
+
+- [EV Hub](/ev): Overview of the EV section.
+- [EV Database](/ev/database): Specs for every major EV sold in Europe.
+- [EV Models](/ev/models): Detailed model pages with charging, range, and ownership data.
+- [EV Reviews](/ev/reviews): Editorial and aggregated reviews.
+- [EV News](/ev/news): Daily EV market and policy news.
+- [EV Guides](/ev/guides): How-to guides for buying, charging, and living with an EV.
+- [EV Charging](/ev/charging): Networks, speeds, and pricing across Europe.
+- [Charging Networks](/ev/networks): Per-network detail pages (Ionity, Tesla, Recharge, etc.).
+- [Route Planner](/ev/route-planner): Plan EV routes across Europe.
+- [EV Calculator](/ev/calculator): Cost, range, and charging-time calculator.
+- [EV Compare](/ev/compare): Side-by-side EV comparison.
+- [EV Advisor](/ev/advisor): Guided EV recommendation flow.
+- [EV Markets](/ev/markets): Country-by-country EV market snapshots.
+
+## Languages
+
+- English: https://www.autovere.com/
+- Norsk: https://www.autovere.com/no
+
+## Optional
+
+- [Terms](/legal/terms)
+- [Privacy](/legal/privacy)
+- [Cookies](/legal/cookies)
+- [Refund policy](/legal/refund)
+- [Subscriptions](/legal/subscriptions)
