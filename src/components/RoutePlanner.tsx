@@ -417,9 +417,9 @@ export function RoutePlanner() {
             <CostCard
               title="Elbil"
               icon={<Zap className="w-4 h-4 text-emerald-400" />}
-              total={plan.totalEv}
+              total={adjustedTotalEv}
               rows={[
-                { label: `Lading (${plan.evEnergyKwh} kWh)`, value: plan.evCost },
+                { label: `Lading (${plan.evEnergyKwh} kWh)`, value: adjustedEvCost },
                 { label: "Bompenger (estimert)", value: plan.tollEv },
               ]}
               accent="emerald"
