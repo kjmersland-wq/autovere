@@ -5,7 +5,7 @@ export type CarImage = {
   thumb: string;
   credit: string;
   creditUrl: string;
-  source: "unsplash" | "pexels" | "pixabay";
+  source: "unsplash" | "pexels" | "pixabay" | "wikipedia";
 };
 
 const memCache = new Map<string, CarImage | null>();
@@ -24,17 +24,44 @@ function writeSession(key: string, val: CarImage | null) {
   try { sessionStorage.setItem(key, JSON.stringify(val)); } catch { /* ignore */ }
 }
 
+const SUPA_URL = import.meta.env.VITE_SUPABASE_URL;
+const SUPA_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+const HEADERS = { Authorization: `Bearer ${SUPA_KEY}`, apikey: SUPA_KEY as string };
+
+async function fetchWikipediaImage(brand: string, model: string): Promise<CarImage | null> {
+  const url = `${SUPA_URL}/functions/v1/model-image?brand=${encodeURIComponent(brand)}&model=${encodeURIComponent(model)}`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) return null;
+  return (await r.json()) as CarImage;
+}
+
+async function fetchStockImage(query: string): Promise<CarImage | null> {
+  const url = `${SUPA_URL}/functions/v1/image-search?q=${encodeURIComponent(query)}`;
+  const r = await fetch(url, { headers: HEADERS });
+  if (!r.ok) return null;
+  return (await r.json()) as CarImage;
+}
+
 /**
- * Fetch a cinematic stock photo for the given query (e.g. "Tesla Model Y").
- * Uses a session cache so the same query is requested at most once per tab.
+ * Fetch the canonical photo for a specific car model.
+ * Priority: Wikipedia infobox (always the actual model) → stock search fallback.
+ *
+ * Pass either:
+ *   useCarImage("Tesla Model Y")              // generic query (stock search only)
+ *   useCarImage({ brand: "Tesla", model: "Model Y" })  // Wikipedia first
  */
-export function useCarImage(query: string | undefined | null) {
+export function useCarImage(query: string | undefined | null | { brand: string; model: string }) {
   const [image, setImage] = useState<CarImage | null>(null);
   const [loading, setLoading] = useState(false);
 
+  const key = !query
+    ? null
+    : typeof query === "string"
+      ? `img:${query.toLowerCase()}`
+      : `img:wiki:${query.brand.toLowerCase()}:${query.model.toLowerCase()}`;
+
   useEffect(() => {
-    if (!query) { setImage(null); return; }
-    const key = `img:${query.toLowerCase()}`;
+    if (!query || !key) { setImage(null); return; }
 
     if (memCache.has(key)) { setImage(memCache.get(key) ?? null); return; }
     const cached = readSession(key);
@@ -42,25 +69,28 @@ export function useCarImage(query: string | undefined | null) {
 
     let cancelled = false;
     setLoading(true);
-    const url = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/image-search?q=${encodeURIComponent(query)}`;
-    fetch(url, {
-      headers: {
-        Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      },
-    })
-      .then(async (r) => (r.ok ? (await r.json()) as CarImage : null))
-      .then((hit) => {
-        if (cancelled) return;
-        memCache.set(key, hit);
-        writeSession(key, hit);
-        setImage(hit);
-      })
-      .catch(() => { if (!cancelled) setImage(null); })
-      .finally(() => { if (!cancelled) setLoading(false); });
+
+    const run = async () => {
+      let hit: CarImage | null = null;
+      if (typeof query === "object") {
+        // Wikipedia first — guaranteed correct model
+        hit = await fetchWikipediaImage(query.brand, query.model).catch(() => null);
+        if (!hit) {
+          hit = await fetchStockImage(`${query.brand} ${query.model}`).catch(() => null);
+        }
+      } else {
+        hit = await fetchStockImage(query).catch(() => null);
+      }
+      if (cancelled) return;
+      memCache.set(key, hit);
+      writeSession(key, hit);
+      setImage(hit);
+      setLoading(false);
+    };
+    run();
 
     return () => { cancelled = true; };
-  }, [query]);
+  }, [key]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return { image, loading };
 }
