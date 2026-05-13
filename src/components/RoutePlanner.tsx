@@ -362,8 +362,8 @@ export function RoutePlanner() {
                 {polyline.length > 0 && (
                   <Polyline positions={polyline} pathOptions={{ color: "#3b82f6", weight: 5, opacity: 0.85 }} />
                 )}
-                {from && <Marker position={[from.lat, from.lon]} icon={flagIcon("Start", "#10b981")} />}
-                {to && <Marker position={[to.lat, to.lon]} icon={flagIcon("Mål", "#ef4444")} />}
+                {from && <Marker position={[from.lat, from.lon]} icon={flagIcon(tt("marker_start"), "#10b981")} />}
+                {to && <Marker position={[to.lat, to.lon]} icon={flagIcon(tt("marker_goal"), "#ef4444")} />}
                 {displayStops.map((s) => {
                   const net = networkById(s.networkId);
                   return (
@@ -372,7 +372,7 @@ export function RoutePlanner() {
                         <div className="text-xs space-y-1">
                           <div className="flex items-center gap-1.5 font-semibold">
                             <span className="inline-block w-2 h-2 rounded-full" style={{ background: net.color }} />
-                            Ladestopp {s.index} · {s.networkName}
+                            {tt("stop_label", { n: s.index })} · {s.networkName}
                           </div>
                           <div>~{s.approxKmFromStart} km · {s.energyKwh} kWh · {s.minutes} min</div>
                           <div>€ {s.cost.toFixed(2)} <span className="opacity-60">(€{s.pricePerKwh.toFixed(2)}/kWh)</span></div>
@@ -388,29 +388,29 @@ export function RoutePlanner() {
             <div className="space-y-3">
               <SummaryCard
                 icon={<Clock className="w-4 h-4 text-cyan-400" />}
-                label="Total reisetid"
+                label={tt("total_time")}
                 primary={formatDuration(plan.totalMinutes)}
-                secondary={`${formatDuration(plan.drivingMinutes)} kjøring + ${formatDuration(plan.chargingMinutes)} lading`}
+                secondary={tt("time_breakdown", { drive: formatDuration(plan.drivingMinutes), charge: formatDuration(plan.chargingMinutes) })}
               />
               <SummaryCard
                 icon={<Calendar className="w-4 h-4 text-violet-400" />}
-                label="Avreise → ankomst"
+                label={tt("depart_arrive")}
                 primary={formatTime(arrivalDate)}
-                secondary={`Start ${formatTime(departureDate)}`}
+                secondary={tt("start_at", { time: formatTime(departureDate) })}
               />
               <SummaryCard
                 icon={<RouteIcon className="w-4 h-4 text-accent" />}
-                label="Distanse"
-                primary={`${plan.distanceKm.toLocaleString("nb-NO")} km`}
-                secondary={`${plan.stops.length} ladestopp · ${plan.evEnergyKwh} kWh totalt`}
+                label={tt("distance")}
+                primary={`${plan.distanceKm.toLocaleString()} km`}
+                secondary={tt("distance_meta", { stops: plan.stops.length, kwh: plan.evEnergyKwh })}
               />
               <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingDown className="w-4 h-4 text-emerald-400" />
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-300">Du sparer på EV</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-300">{tt("you_save")}</span>
                 </div>
                 <div className="text-2xl font-bold text-emerald-400 tabular-nums">€ {adjustedSavings.toFixed(2)}</div>
-                <div className="text-[11px] text-muted-foreground mt-1">vs samme tur med bensin/diesel</div>
+                <div className="text-[11px] text-muted-foreground mt-1">{tt("vs_ice")}</div>
               </div>
             </div>
           </div>
@@ -418,22 +418,22 @@ export function RoutePlanner() {
           {/* Cost breakdown */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <CostCard
-              title="Elbil"
+              title={tt("ev_label")}
               icon={<Zap className="w-4 h-4 text-emerald-400" />}
               total={adjustedTotalEv}
               rows={[
-                { label: `Lading (${plan.evEnergyKwh} kWh)`, value: adjustedEvCost },
-                { label: "Bompenger (estimert)", value: plan.tollEv },
+                { label: tt("cost_charging", { kwh: plan.evEnergyKwh }), value: adjustedEvCost },
+                { label: tt("cost_tolls"), value: plan.tollEv },
               ]}
               accent="emerald"
             />
             <CostCard
-              title="Diesel/bensin"
+              title={tt("ice_label")}
               icon={<Fuel className="w-4 h-4 text-rose-400" />}
               total={plan.totalIce}
               rows={[
-                { label: `Drivstoff (${plan.iceFuelL.toFixed(1)} L)`, value: plan.iceCost },
-                { label: "Bompenger (estimert)", value: plan.tollIce },
+                { label: tt("cost_fuel", { l: plan.iceFuelL.toFixed(1) }), value: plan.iceCost },
+                { label: tt("cost_tolls"), value: plan.tollIce },
               ]}
               accent="rose"
             />
@@ -443,7 +443,7 @@ export function RoutePlanner() {
           {plan.tollBreakdown.length > 0 && (plan.tollEv > 0 || plan.tollIce > 0) && (
             <div className="glass rounded-2xl border border-border/40 p-5">
               <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Euro className="w-4 h-4 text-amber-400" /> Bompenger pr land
+                <Euro className="w-4 h-4 text-amber-400" /> {tt("tolls_per_country")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {plan.tollBreakdown.map((b) => {
