@@ -12,6 +12,7 @@ import {
   CHARGING_NETWORKS, networkById, effectivePrice, ChargingNetworkId,
 } from "@/lib/route-cost";
 import { SendToCar } from "@/components/SendToCar";
+import { useTranslation } from "react-i18next";
 
 // ─── Types ────────────────────────────────────────────────────────────
 interface PhotonHit {
@@ -137,6 +138,8 @@ function CityInput({
 
 // ─── Main planner ─────────────────────────────────────────────────────
 export function RoutePlanner() {
+  const { t } = useTranslation();
+  const tt = (k: string, opts?: Record<string, unknown>) => t(`ev.planner.tool.${k}`, opts as never) as unknown as string;
   const [from, setFrom] = useState<PhotonHit | null>(null);
   const [to, setTo] = useState<PhotonHit | null>(null);
   const [departAt, setDepartAt] = useState<string>(() => {
@@ -189,11 +192,11 @@ export function RoutePlanner() {
   const swap = () => { setFrom(to); setTo(from); };
 
   const calculate = async () => {
-    if (!from || !to) { setError("Velg både start og destinasjon"); return; }
+    if (!from || !to) { setError(tt("err_select_both")); return; }
     setLoading(true); setError(null); setRoute(null); setPlan(null);
     try {
       const r = await osrmRoute(from, to);
-      if (!r) throw new Error("Fant ikke rute mellom disse byene");
+      if (!r) throw new Error(tt("err_no_route"));
       setRoute(r);
 
       // Sample 6 points along the route, reverse-geocode countries, build segments
@@ -213,7 +216,7 @@ export function RoutePlanner() {
       const p = computePlan(r.distanceKm, r.durationMin, r.coords, segments, vehicle);
       setPlan(p);
     } catch (e: any) {
-      setError(e?.message ?? "Klarte ikke beregne ruten");
+      setError(e?.message ?? tt("err_calc_failed"));
     } finally {
       setLoading(false);
     }
@@ -240,20 +243,20 @@ export function RoutePlanner() {
       {/* Input panel */}
       <div className="glass rounded-2xl border border-border/40 p-5 md:p-6 space-y-4">
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
-          <CityInput value={from} setValue={setFrom} placeholder="Fra (by, adresse, land)" />
+          <CityInput value={from} setValue={setFrom} placeholder={tt("from_ph")} />
           <button
             onClick={swap}
             className="self-center p-2 rounded-lg border border-border/40 hover:bg-accent/10 transition-colors"
-            aria-label="Bytt fra/til"
+            aria-label={tt("swap_aria")}
           >
             <ArrowDownUp className="w-4 h-4" />
           </button>
-          <CityInput value={to} setValue={setTo} placeholder="Til (by, adresse, land)" />
+          <CityInput value={to} setValue={setTo} placeholder={tt("to_ph")} />
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground block mb-1.5">Avreise</label>
+            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground block mb-1.5">{tt("depart")}</label>
             <div className="relative">
               <Calendar className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
               <input
@@ -271,7 +274,7 @@ export function RoutePlanner() {
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RouteIcon className="w-4 h-4" />}
-              Beregn rute
+              {loading ? tt("calculating") : tt("calculate")}
             </button>
           </div>
         </div>
@@ -279,7 +282,7 @@ export function RoutePlanner() {
         {/* Charging network selector — always visible */}
         <div className="pt-2 border-t border-border/30">
           <div className="flex items-center justify-between gap-3 mb-2">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Ladenettverk</label>
+            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{tt("networks_label")}</label>
             <label className="flex items-center gap-2 text-[11px] text-muted-foreground cursor-pointer select-none">
               <input
                 type="checkbox"
@@ -287,7 +290,7 @@ export function RoutePlanner() {
                 onChange={(e) => setVehicle({ ...vehicle, hasMembership: e.target.checked })}
                 className="accent-cyan-400"
               />
-              Jeg har medlemskap / abonnement
+              {tt("member_pricing")}
             </label>
           </div>
           <div className="flex flex-wrap gap-1.5">
@@ -317,7 +320,7 @@ export function RoutePlanner() {
           <div className="text-[10px] text-muted-foreground mt-2">
             {networkById(vehicle.network).note}
             {vehicle.hasMembership && networkById(vehicle.network).memberPerKwh
-              ? " · medlemspris brukt"
+              ? tt("member_used")
               : ""}
           </div>
         </div>
@@ -326,17 +329,17 @@ export function RoutePlanner() {
           onClick={() => setShowAdvanced((s) => !s)}
           className="flex items-center gap-1.5 text-[11px] uppercase tracking-[0.2em] text-muted-foreground hover:text-foreground transition-colors"
         >
-          Bil og priser <ChevronDown className={`w-3 h-3 transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
+          {tt("toggle_advanced")} <ChevronDown className={`w-3 h-3 transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
         </button>
 
         {showAdvanced && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 pt-2 border-t border-border/30">
-            <NumField label="EV forbruk (kWh/100km)" value={vehicle.evConsumptionKwhPer100} onChange={(v) => setVehicle({ ...vehicle, evConsumptionKwhPer100: v })} step={0.5} />
-            <NumField label="EV rekkevidde (km)" value={vehicle.evRangeKm} onChange={(v) => setVehicle({ ...vehicle, evRangeKm: v })} step={10} />
-            <NumField label="Egen strømpris (€/kWh)" value={vehicle.evPricePerKwh} onChange={(v) => setVehicle({ ...vehicle, evPricePerKwh: v })} step={0.05} />
-            <NumField label="Lading per stopp (min)" value={vehicle.evChargeMinutesPerStop} onChange={(v) => setVehicle({ ...vehicle, evChargeMinutesPerStop: v })} step={5} />
-            <NumField label="Diesel/bensin (L/100km)" value={vehicle.iceConsumptionLPer100} onChange={(v) => setVehicle({ ...vehicle, iceConsumptionLPer100: v })} step={0.5} />
-            <NumField label="Drivstoffpris (€/L)" value={vehicle.icePricePerL} onChange={(v) => setVehicle({ ...vehicle, icePricePerL: v })} step={0.05} />
+            <NumField label={tt("f_ev_consumption")} value={vehicle.evConsumptionKwhPer100} onChange={(v) => setVehicle({ ...vehicle, evConsumptionKwhPer100: v })} step={0.5} />
+            <NumField label={tt("f_ev_range")} value={vehicle.evRangeKm} onChange={(v) => setVehicle({ ...vehicle, evRangeKm: v })} step={10} />
+            <NumField label={tt("f_ev_price")} value={vehicle.evPricePerKwh} onChange={(v) => setVehicle({ ...vehicle, evPricePerKwh: v })} step={0.05} />
+            <NumField label={tt("f_ev_charge_min")} value={vehicle.evChargeMinutesPerStop} onChange={(v) => setVehicle({ ...vehicle, evChargeMinutesPerStop: v })} step={5} />
+            <NumField label={tt("f_ice_consumption")} value={vehicle.iceConsumptionLPer100} onChange={(v) => setVehicle({ ...vehicle, iceConsumptionLPer100: v })} step={0.5} />
+            <NumField label={tt("f_fuel_price")} value={vehicle.icePricePerL} onChange={(v) => setVehicle({ ...vehicle, icePricePerL: v })} step={0.05} />
           </div>
         )}
 
@@ -359,8 +362,8 @@ export function RoutePlanner() {
                 {polyline.length > 0 && (
                   <Polyline positions={polyline} pathOptions={{ color: "#3b82f6", weight: 5, opacity: 0.85 }} />
                 )}
-                {from && <Marker position={[from.lat, from.lon]} icon={flagIcon("Start", "#10b981")} />}
-                {to && <Marker position={[to.lat, to.lon]} icon={flagIcon("Mål", "#ef4444")} />}
+                {from && <Marker position={[from.lat, from.lon]} icon={flagIcon(tt("marker_start"), "#10b981")} />}
+                {to && <Marker position={[to.lat, to.lon]} icon={flagIcon(tt("marker_goal"), "#ef4444")} />}
                 {displayStops.map((s) => {
                   const net = networkById(s.networkId);
                   return (
@@ -369,7 +372,7 @@ export function RoutePlanner() {
                         <div className="text-xs space-y-1">
                           <div className="flex items-center gap-1.5 font-semibold">
                             <span className="inline-block w-2 h-2 rounded-full" style={{ background: net.color }} />
-                            Ladestopp {s.index} · {s.networkName}
+                            {tt("stop_label", { n: s.index })} · {s.networkName}
                           </div>
                           <div>~{s.approxKmFromStart} km · {s.energyKwh} kWh · {s.minutes} min</div>
                           <div>€ {s.cost.toFixed(2)} <span className="opacity-60">(€{s.pricePerKwh.toFixed(2)}/kWh)</span></div>
@@ -385,29 +388,29 @@ export function RoutePlanner() {
             <div className="space-y-3">
               <SummaryCard
                 icon={<Clock className="w-4 h-4 text-cyan-400" />}
-                label="Total reisetid"
+                label={tt("total_time")}
                 primary={formatDuration(plan.totalMinutes)}
-                secondary={`${formatDuration(plan.drivingMinutes)} kjøring + ${formatDuration(plan.chargingMinutes)} lading`}
+                secondary={tt("time_breakdown", { drive: formatDuration(plan.drivingMinutes), charge: formatDuration(plan.chargingMinutes) })}
               />
               <SummaryCard
                 icon={<Calendar className="w-4 h-4 text-violet-400" />}
-                label="Avreise → ankomst"
+                label={tt("depart_arrive")}
                 primary={formatTime(arrivalDate)}
-                secondary={`Start ${formatTime(departureDate)}`}
+                secondary={tt("start_at", { time: formatTime(departureDate) })}
               />
               <SummaryCard
                 icon={<RouteIcon className="w-4 h-4 text-accent" />}
-                label="Distanse"
-                primary={`${plan.distanceKm.toLocaleString("nb-NO")} km`}
-                secondary={`${plan.stops.length} ladestopp · ${plan.evEnergyKwh} kWh totalt`}
+                label={tt("distance")}
+                primary={`${plan.distanceKm.toLocaleString()} km`}
+                secondary={tt("distance_meta", { stops: plan.stops.length, kwh: plan.evEnergyKwh })}
               />
               <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/5 p-4">
                 <div className="flex items-center gap-2 mb-2">
                   <TrendingDown className="w-4 h-4 text-emerald-400" />
-                  <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-300">Du sparer på EV</span>
+                  <span className="text-[10px] uppercase tracking-[0.2em] text-emerald-300">{tt("you_save")}</span>
                 </div>
                 <div className="text-2xl font-bold text-emerald-400 tabular-nums">€ {adjustedSavings.toFixed(2)}</div>
-                <div className="text-[11px] text-muted-foreground mt-1">vs samme tur med bensin/diesel</div>
+                <div className="text-[11px] text-muted-foreground mt-1">{tt("vs_ice")}</div>
               </div>
             </div>
           </div>
@@ -415,22 +418,22 @@ export function RoutePlanner() {
           {/* Cost breakdown */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <CostCard
-              title="Elbil"
+              title={tt("ev_label")}
               icon={<Zap className="w-4 h-4 text-emerald-400" />}
               total={adjustedTotalEv}
               rows={[
-                { label: `Lading (${plan.evEnergyKwh} kWh)`, value: adjustedEvCost },
-                { label: "Bompenger (estimert)", value: plan.tollEv },
+                { label: tt("cost_charging", { kwh: plan.evEnergyKwh }), value: adjustedEvCost },
+                { label: tt("cost_tolls"), value: plan.tollEv },
               ]}
               accent="emerald"
             />
             <CostCard
-              title="Diesel/bensin"
+              title={tt("ice_label")}
               icon={<Fuel className="w-4 h-4 text-rose-400" />}
               total={plan.totalIce}
               rows={[
-                { label: `Drivstoff (${plan.iceFuelL.toFixed(1)} L)`, value: plan.iceCost },
-                { label: "Bompenger (estimert)", value: plan.tollIce },
+                { label: tt("cost_fuel", { l: plan.iceFuelL.toFixed(1) }), value: plan.iceCost },
+                { label: tt("cost_tolls"), value: plan.tollIce },
               ]}
               accent="rose"
             />
@@ -440,7 +443,7 @@ export function RoutePlanner() {
           {plan.tollBreakdown.length > 0 && (plan.tollEv > 0 || plan.tollIce > 0) && (
             <div className="glass rounded-2xl border border-border/40 p-5">
               <h3 className="text-sm font-semibold mb-3 flex items-center gap-2">
-                <Euro className="w-4 h-4 text-amber-400" /> Bompenger pr land
+                <Euro className="w-4 h-4 text-amber-400" /> {tt("tolls_per_country")}
               </h3>
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2">
                 {plan.tollBreakdown.map((b) => {
@@ -467,20 +470,20 @@ export function RoutePlanner() {
             <div className="glass rounded-2xl border border-border/40 p-5">
               <div className="flex items-center justify-between mb-3 gap-3">
                 <h3 className="text-sm font-semibold flex items-center gap-2">
-                  <Zap className="w-4 h-4 text-amber-400" /> Ladestopp på ruten
+                  <Zap className="w-4 h-4 text-amber-400" /> {tt("stops_title")}
                 </h3>
                 {Object.keys(stopOverrides).length > 0 && (
                   <button
                     onClick={() => setStopOverrides({})}
                     className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground hover:text-foreground transition-colors"
                   >
-                    Tilbakestill
+                    {tt("reset_overrides")}
                   </button>
                 )}
               </div>
               <div className="space-y-2">
                 {displayStops.map((s) => {
-                  const t = addMinutes(departureDate,
+                  const arrTime = addMinutes(departureDate,
                     Math.round((plan.drivingMinutes * (s.approxKmFromStart / plan.distanceKm)) + (s.index - 1) * vehicle.evChargeMinutesPerStop)
                   );
                   const net = networkById(s.networkId);
@@ -501,7 +504,7 @@ export function RoutePlanner() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <div className="text-xs font-semibold flex items-center gap-2 flex-wrap">
-                          ~{s.approxKmFromStart} km fra start
+                          {tt("from_start_km", { km: s.approxKmFromStart })}
                           <div className="relative inline-flex items-center">
                             <select
                               value={s.networkId}
@@ -530,14 +533,14 @@ export function RoutePlanner() {
                                 const n = { ...prev }; delete n[s.index]; return n;
                               })}
                               className="text-[9px] uppercase tracking-wider text-muted-foreground hover:text-foreground"
-                              title="Bruk billigste igjen"
+                              title={tt("use_cheapest_again")}
                             >
                               ↺
                             </button>
                           )}
                         </div>
                         <div className="text-[10px] text-muted-foreground">
-                          Ankomst ca {formatTime(t)} · {s.energyKwh} kWh tilført · €{s.pricePerKwh.toFixed(2)}/kWh
+                          {tt("stop_meta", { time: formatTime(arrTime), kwh: s.energyKwh, price: s.pricePerKwh.toFixed(2) })}
                         </div>
                       </div>
                       <div className="text-right">
@@ -555,8 +558,8 @@ export function RoutePlanner() {
           {from && to && (
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl border border-accent/30 bg-accent/5">
               <div>
-                <div className="text-sm font-semibold mb-0.5">Klar til å kjøre?</div>
-                <div className="text-[11px] text-muted-foreground">Send hele ruten direkte til bilens navigasjon — Tesla, CarPlay, Android Auto eller Waze.</div>
+                <div className="text-sm font-semibold mb-0.5">{tt("ready_title")}</div>
+                <div className="text-[11px] text-muted-foreground">{tt("ready_lead")}</div>
               </div>
               <SendToCar
                 from={{ label: from.label, lat: from.lat, lon: from.lon }}
@@ -568,7 +571,7 @@ export function RoutePlanner() {
 
           <div className="text-[10px] text-muted-foreground flex items-start gap-1.5">
             <Info className="w-3 h-3 mt-0.5 flex-shrink-0" />
-            <span>Alle priser er estimater basert på gjennomsnittlige bom-, strøm- og drivstoffpriser i Europa. Faktisk pris varierer med ladenettverk, tid på året og spesifikk rute. Justér tallene under "Bil og priser" for nøyaktigere beregning.</span>
+            <span>{tt("disclaimer")}</span>
           </div>
         </>
       )}
