@@ -13,6 +13,7 @@ import { SaveButton } from "@/components/SaveButton";
 import { SignalFeedCompact } from "@/components/SignalFeed";
 import { getVehicleIntelligence } from "@/data/vehicle-intelligence";
 import { getSignalsForVehicle } from "@/data/automotive-signals";
+import { useCarImage } from "@/hooks/useCarImage";
 
 const fmt = (n: number) => n.toLocaleString();
 
@@ -145,6 +146,8 @@ export default function EVModelDetail() {
     { label: "0–100 km/h", value: `${model.specs.performance.zeroTo100}s`, color: "text-violet-400" },
   ];
 
+  const { image: heroImage } = useCarImage(`${model.brand} ${model.name}`);
+
   return (
     <PageShell>
       <SEO
@@ -154,6 +157,16 @@ export default function EVModelDetail() {
       />
 
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">
+        {heroImage && (
+          <>
+            <div
+              className="absolute inset-0 bg-cover bg-center opacity-30 transition-opacity duration-1000"
+              style={{ backgroundImage: `url(${heroImage.url})` }}
+              aria-hidden
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/85 to-background/40 pointer-events-none" aria-hidden />
+          </>
+        )}
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-950/40 via-transparent to-violet-950/20 pointer-events-none" />
         <div className="container relative">
           <EVBreadcrumb items={[
@@ -178,6 +191,11 @@ export default function EVModelDetail() {
               </div>
             ))}
           </div>
+          {heroImage && (
+            <div className="mt-6 text-[10px] text-muted-foreground/70 uppercase tracking-wider">
+              Photo: <a href={heroImage.creditUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">{heroImage.credit}</a> · {heroImage.source}
+            </div>
+          )}
         </div>
       </section>
 
