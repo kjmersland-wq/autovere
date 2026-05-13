@@ -95,99 +95,146 @@ const Index = () => {
       />
       <SiteHeader />
 
-      <section className="relative pt-40 pb-32 bg-hero overflow-hidden">
-        <div className="absolute inset-0 grid-bg opacity-40" />
-        <div className="absolute top-1/4 -right-40 w-[600px] h-[600px] rounded-full bg-gradient-glow blur-3xl animate-glow-pulse" />
-        <div className="absolute bottom-0 -left-40 w-[500px] h-[500px] rounded-full bg-gradient-glow blur-3xl opacity-50" />
+      {/* ───────────────────────── HERO — cinematic full-bleed ───────────────────────── */}
+      <section className="relative min-h-[100svh] w-full overflow-hidden bg-background">
+        {/* Cinematic backdrop (Unsplash — European alpine road, dark moody) */}
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=2400&q=80"
+            alt="Premium European automotive landscape at dusk"
+            className="absolute inset-0 w-full h-full object-cover"
+            style={{ transform: `translateY(${scrollY * 0.25}px) scale(1.08)` }}
+            loading="eager"
+          />
+          {/* Layered cinematic vignette — Porsche/Rivian darkness */}
+          <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/55 to-background" />
+          <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-background/40" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_0%,hsl(var(--background))_85%)] opacity-70" />
+        </div>
 
-        <div className="container relative z-10">
-          <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-up">
-            <div className="inline-flex items-center gap-2 glass px-4 py-2 rounded-full text-xs font-medium tracking-wide">
+        {/* Mechanical-precision corner markers */}
+        <div className="pointer-events-none absolute inset-0 z-10">
+          <div className="absolute top-28 left-6 md:left-10 flex items-center gap-3 text-[10px] uppercase tracking-[0.4em] text-muted-foreground/70">
+            <span className="w-8 h-px bg-foreground/30" />
+            <span>N 59°54′ · E 10°45′</span>
+          </div>
+          <div className="absolute top-28 right-6 md:right-10 text-[10px] uppercase tracking-[0.4em] text-muted-foreground/70">
+            EU · 01 / 04
+          </div>
+          <div className="absolute bottom-8 left-6 md:left-10 text-[10px] uppercase tracking-[0.4em] text-muted-foreground/70">
+            {t("pages.index.hero_caption_a")}
+          </div>
+          <div className="absolute bottom-8 right-6 md:right-10 text-[10px] uppercase tracking-[0.4em] text-muted-foreground/70 italic">
+            {t("pages.index.hero_caption_b")}
+          </div>
+        </div>
+
+        {/* Content */}
+        <div className="container relative z-20 min-h-[100svh] flex flex-col justify-center pt-32 pb-24">
+          <div className="max-w-5xl space-y-10 animate-fade-up">
+            <div className="inline-flex items-center gap-3 px-4 py-2 rounded-full glass text-[11px] uppercase tracking-[0.3em] font-medium">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-glow-pulse" />
               {t("pages.index.hero_pill")}
             </div>
 
-            <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold leading-[1.05] tracking-tighter">
+            <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-[8.5rem] font-bold leading-[0.95] tracking-[-0.04em]">
               {t("pages.index.hero_h1_a")}
               <br />
               <span className="text-gradient">{t("pages.index.hero_h1_b")}</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg md:text-2xl text-muted-foreground max-w-2xl leading-relaxed font-light">
               {t("pages.index.hero_lead")}
             </p>
 
+            <div className="flex flex-col sm:flex-row gap-4 pt-2">
+              <Button
+                size="lg"
+                onClick={() => document.getElementById("advisor")?.scrollIntoView({ behavior: "smooth" })}
+                className="bg-foreground text-background hover:bg-foreground/90 rounded-none h-14 px-8 text-sm uppercase tracking-[0.2em] gap-3 shadow-elegant"
+              >
+                {t("pages.index.hero_cta_advisor")} <ArrowRight className="w-4 h-4" />
+              </Button>
+              <Button
+                asChild
+                size="lg"
+                variant="outline"
+                className="rounded-none h-14 px-8 text-sm uppercase tracking-[0.2em] gap-3 border-foreground/30 hover:border-foreground/60 bg-transparent backdrop-blur"
+              >
+                <LLink to="/ev/route-planner">
+                  {t("pages.index.hero_cta_routes")} <ArrowRight className="w-4 h-4" />
+                </LLink>
+              </Button>
+            </div>
+
+            {/* Inline advisor input — quick prompt */}
             <form
               onSubmit={(e) => { e.preventDefault(); if (heroInput.trim()) startWith(heroInput); }}
-              className="max-w-2xl mx-auto pt-4"
+              className="max-w-2xl pt-6"
             >
-              <div className="glass rounded-2xl p-2 flex items-center gap-2 shadow-elegant focus-within:ring-2 focus-within:ring-primary/40 transition-all">
-                <Sparkles className="w-5 h-5 text-accent ml-3 shrink-0" />
+              <div className="glass rounded-none p-2 flex items-center gap-2 border border-foreground/20 focus-within:border-foreground/50 transition-colors">
+                <Sparkles className="w-4 h-4 text-accent ml-3 shrink-0" />
                 <input
                   value={heroInput}
                   onChange={(e) => setHeroInput(e.target.value)}
                   placeholder={t("pages.index.hero_placeholder")}
-                  className="flex-1 bg-transparent py-3 text-base focus:outline-none placeholder:text-muted-foreground/70"
+                  className="flex-1 bg-transparent py-3 text-sm focus:outline-none placeholder:text-muted-foreground/60"
                 />
-                <Button type="submit" className="bg-gradient-primary hover:opacity-90 rounded-xl gap-2">
-                  {t("pages.index.start")} <ArrowRight className="w-4 h-4" />
+                <Button type="submit" variant="ghost" className="rounded-none uppercase tracking-[0.2em] text-xs gap-2">
+                  {t("pages.index.start")} <ArrowRight className="w-3 h-3" />
                 </Button>
               </div>
-              <div className="flex flex-wrap justify-center gap-2 mt-4 text-xs text-muted-foreground">
+              <div className="flex flex-wrap gap-x-4 gap-y-2 mt-4 text-[11px] uppercase tracking-[0.25em] text-muted-foreground">
                 <span>{t("pages.index.popular")}</span>
                 {popular.map((p) => (
-                  <button key={p} onClick={() => startWith(p)} className="hover:text-foreground underline underline-offset-4 decoration-border">
+                  <button key={p} onClick={() => startWith(p)} className="hover:text-foreground transition-colors">
                     {p}
                   </button>
                 ))}
               </div>
             </form>
           </div>
+        </div>
 
-          <div className="relative mt-20 max-w-6xl mx-auto" style={{ transform: `translateY(${scrollY * 0.08}px)` }}>
-            <div className="absolute inset-0 bg-gradient-glow blur-3xl opacity-40" />
-            <div className="relative rounded-3xl overflow-hidden shadow-elegant border border-border/50 group">
-              <img
-                src={heroCar}
-                alt="Premium electric car at night"
-                width={1920}
-                height={1280}
-                className="w-full h-auto transition-transform [transition-duration:3000ms] group-hover:scale-105"
-                style={{ transform: `scale(${1 + scrollY * 0.0001})` }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent" />
-              <div className="absolute bottom-8 left-8 right-8 flex flex-wrap items-end justify-between gap-4 opacity-90">
-                <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground">{t("pages.index.hero_caption_a")}</div>
-                <div className="text-sm text-muted-foreground italic">{t("pages.index.hero_caption_b")}</div>
-              </div>
-            </div>
-          </div>
+        {/* Scroll cue */}
+        <div className="absolute bottom-20 left-1/2 -translate-x-1/2 z-10 animate-float pointer-events-none">
+          <ChevronDown className="w-5 h-5 text-foreground/40" />
         </div>
       </section>
 
-      <section id="how" className="py-32 relative">
+      {/* ───────────────────────── FEATURE STRIP — mechanical precision ───────────────────────── */}
+      <section id="how" className="py-32 relative border-t border-border/40">
         <div className="container">
-          <div className="max-w-2xl mb-20">
-            <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.index.how_eyebrow")}</div>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-6">
-              {t("pages.index.how_title_a")} <span className="text-gradient">{t("pages.index.how_title_b")}</span>
-            </h2>
-            <p className="text-lg text-muted-foreground leading-relaxed">{t("pages.index.how_lead")}</p>
+          <div className="grid lg:grid-cols-12 gap-12 mb-24">
+            <div className="lg:col-span-4">
+              <div className="text-[10px] uppercase tracking-[0.4em] text-accent mb-4">— {t("pages.index.how_eyebrow")}</div>
+            </div>
+            <div className="lg:col-span-8">
+              <h2 className="text-4xl md:text-6xl font-bold tracking-[-0.03em] leading-[1.05] mb-8">
+                {t("pages.index.how_title_a")} <span className="text-gradient">{t("pages.index.how_title_b")}</span>
+              </h2>
+              <p className="text-lg md:text-xl text-muted-foreground leading-relaxed font-light max-w-2xl">{t("pages.index.how_lead")}</p>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 border-t border-border/40">
             {FEATURES.map((f, i) => (
-              <div key={f.title} className="glass rounded-2xl p-6 hover:-translate-y-1 transition-all duration-500 group" style={{ animationDelay: `${i * 80}ms` }}>
-                <div className="w-12 h-12 rounded-xl bg-gradient-primary flex items-center justify-center mb-4 group-hover:shadow-glow transition-all">
-                  <f.icon className="w-5 h-5 text-primary-foreground" />
+              <div
+                key={f.title}
+                className="group relative p-8 border-b border-border/40 lg:border-b-0 lg:border-r last:border-r-0 hover:bg-secondary/20 transition-colors duration-500"
+              >
+                <div className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground mb-8">
+                  0{i + 1}
                 </div>
-                <h3 className="font-semibold text-lg mb-2 tracking-tight">{f.title}</h3>
+                <f.icon className="w-6 h-6 text-accent mb-6 transition-transform duration-500 group-hover:-translate-y-1" />
+                <h3 className="font-semibold text-xl mb-3 tracking-tight">{f.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
+
 
       <section id="advisor" className="py-32 relative">
         <div className="absolute inset-x-0 top-1/3 h-96 bg-gradient-glow blur-3xl opacity-30" />
