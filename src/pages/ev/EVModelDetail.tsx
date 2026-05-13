@@ -56,7 +56,7 @@ export function EVModelsIndex() {
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-cyan-400 mb-5">
             <Zap className="w-3.5 h-3.5" /> {t("ev.models.eyebrow")}
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight break-words hyphens-auto mb-5 max-w-2xl">
             {t("ev.models.title")} <span className="text-gradient">{t("ev.models.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg">
@@ -178,7 +178,7 @@ export default function EVModelDetail() {
             {model.brand} · {model.category} · {model.year}
           </div>
           <div className="flex items-start gap-4 mb-4">
-            <h1 className="text-4xl md:text-6xl font-bold tracking-tight flex-1">{model.name}</h1>
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight break-words hyphens-auto flex-1">{model.name}</h1>
             <SaveButton type="vehicle" slug={model.slug} className="mt-2 flex-shrink-0" />
           </div>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed mb-8">{model.tagline}</p>
