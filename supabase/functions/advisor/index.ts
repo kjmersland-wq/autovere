@@ -1,4 +1,6 @@
 // AI advisor — powered by Anthropic Claude
+import { checkRateLimit, getClientIp, rateLimitResponse } from "../_shared/rate-limit.ts";
+
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
@@ -21,6 +23,11 @@ Deno.serve(async (req) => {
   if (req.method === "OPTIONS") return new Response(null, { headers: corsHeaders });
 
   try {
+    // Rate limit: 20 messages per IP per minute (AI is expensive)
+    const ip = getClientIp(req);
+    const allowed = await checkRateLimit(`advisor:${ip}`, 20, 60);
+    if (!allowed) return rateLimitResponse(corsHeaders, 60);
+
     const { messages } = await req.json();
     const ANTHROPIC_API_KEY = Deno.env.get("ANTHROPIC_API_KEY");
     if (!ANTHROPIC_API_KEY) throw new Error("ANTHROPIC_API_KEY missing");
