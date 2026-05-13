@@ -297,10 +297,12 @@ export function EuropeChargingMap() {
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png"
             className={isDark ? "ocm-base-tiles ocm-base-dark" : "ocm-base-tiles"}
           />
+          {/* Labels only at city-level zoom — avoids multilingual sea/region label stacks at low zoom */}
           <TileLayer
             url="https://{s}.basemaps.cartocdn.com/rastertiles/voyager_only_labels/{z}/{x}/{y}{r}.png"
             className={isDark ? "ocm-label-tiles ocm-label-dark" : "ocm-label-tiles"}
             attribution=""
+            minZoom={7}
           />
           {targetBbox && <FlyTo bbox={targetBbox} />}
           <BoundsWatcher onChange={setBbox} />
