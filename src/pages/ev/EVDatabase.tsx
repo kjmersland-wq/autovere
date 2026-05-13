@@ -120,11 +120,11 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
       <div className="p-5 pt-4 space-y-2.5">
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">{t("ev.database.tco_label")}</span>
-          <span className="font-semibold">€{vehicle.tco.fiveYearTcoEur.toLocaleString()}</span>
+          <span className="font-semibold">{fmt(vehicle.tco.fiveYearTcoEur)}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">{t("ev.database.annual_fuel_charge")}</span>
-          <span className="font-semibold">€{vehicle.tco.annualFuelOrChargingEur.toLocaleString()}</span>
+          <span className="font-semibold">{fmt(vehicle.tco.annualFuelOrChargingEur)}</span>
         </div>
         <div className="flex items-center justify-between text-xs">
           <span className="text-muted-foreground">{t("ev.database.brake_wear")}</span>
