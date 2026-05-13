@@ -28,12 +28,31 @@ export const NETWORKS = [
 
 const OTHER_COLOR = "#9ca3af";
 
-function networkFor(operatorTitle: string): { id: string; color: string } | null {
-  const t = operatorTitle?.toLowerCase() ?? "";
+function networkFor(operatorTitle: string, stationTitle = "", maxKw = 0): { id: string; color: string } | null {
+  const operator = operatorTitle?.toLowerCase() ?? "";
+  const title = stationTitle?.toLowerCase() ?? "";
+  const t = `${operator} ${title}`;
+
+  // Tesla Superchargers are sometimes published without OperatorInfo in OpenChargeMap.
+  // Match Superchargers from the station title, but avoid treating low-power Tesla
+  // destination chargers (hotels/AC) as Supercharger network pins.
+  if (
+    title.includes("supercharger") ||
+    (operator.includes("tesla") && (operator.includes("including non-tesla") || maxKw >= 100))
+  ) {
+    const tesla = NETWORKS.find((n) => n.id === "tesla");
+    return tesla ? { id: tesla.id, color: tesla.color } : null;
+  }
+
   for (const n of NETWORKS) {
+    if (n.id === "tesla") continue;
     if (n.match.some((m) => t.includes(m))) return { id: n.id, color: n.color };
   }
   return null;
+}
+
+function maxPowerKw(p: POI) {
+  return Math.max(0, ...(p.Connections?.map((c) => c.PowerKW ?? 0) ?? []));
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
@@ -201,7 +220,7 @@ export function EuropeChargingMap() {
   const filtered = useMemo(() => {
     if (activeNetworks.size === 0) return pois;
     return pois.filter((p) => {
-      const n = networkFor(p.OperatorInfo?.Title ?? "");
+      const n = networkFor(p.OperatorInfo?.Title ?? "", p.AddressInfo?.Title ?? "", maxPowerKw(p));
       return n && activeNetworks.has(n.id);
     });
   }, [pois, activeNetworks]);
@@ -211,7 +230,7 @@ export function EuropeChargingMap() {
     const c: Record<string, number> = { _other: 0 };
     NETWORKS.forEach((n) => (c[n.id] = 0));
     pois.forEach((p) => {
-      const n = networkFor(p.OperatorInfo?.Title ?? "");
+      const n = networkFor(p.OperatorInfo?.Title ?? "", p.AddressInfo?.Title ?? "", maxPowerKw(p));
       if (n) c[n.id]++; else c._other++;
     });
     return c;
@@ -327,9 +346,9 @@ export function EuropeChargingMap() {
           <BoundsWatcher onChange={setBbox} />
           {filtered.map((p) => {
             if (!p.AddressInfo) return null;
-            const n = networkFor(p.OperatorInfo?.Title ?? "");
+            const maxKw = maxPowerKw(p);
+            const n = networkFor(p.OperatorInfo?.Title ?? "", p.AddressInfo.Title ?? "", maxKw);
             const color = n?.color ?? OTHER_COLOR;
-            const maxKw = Math.max(0, ...(p.Connections?.map((c) => c.PowerKW ?? 0) ?? []));
             return (
               <Marker
                 key={p.ID}
