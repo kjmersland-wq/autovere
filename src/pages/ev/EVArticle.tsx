@@ -32,7 +32,7 @@ export default function EVArticle() {
   if (!article) {
     return (
       <PageShell>
-        <SEO title="Article Not Found | AUTOVERE" description="This article could not be found." />
+        <SEO title={t("ev.database.article_nf_title")} description={t("ev.database.article_nf_desc")} />
         <div className="container py-40 text-center">
           <h1 className="text-3xl font-bold mb-4">{t("ev.news.article_not_found")}</h1>
           <Link to={L("/ev/news")} className="text-accent hover:underline">
