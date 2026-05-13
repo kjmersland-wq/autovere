@@ -92,13 +92,13 @@ export async function syncLocalToCloud(userId: string): Promise<void> {
     const savedRaw = localStorage.getItem("autovere_saved_content_v1");
 
     if (garageRaw) {
-      await supabase.from("user_garage" as never).upsert({ user_id: userId, data: garageRaw });
+      await (supabase.from as any)("user_garage").upsert({ user_id: userId, data: garageRaw });
     }
     if (prefsRaw) {
-      await supabase.from("user_preferences" as never).upsert({ user_id: userId, data: prefsRaw });
+      await (supabase.from as any)("user_preferences").upsert({ user_id: userId, data: prefsRaw });
     }
     if (savedRaw) {
-      await supabase.from("user_saved_content" as never).upsert({ user_id: userId, data: savedRaw });
+      await (supabase.from as any)("user_saved_content").upsert({ user_id: userId, data: savedRaw });
     }
   } catch {
     // Tables may not exist yet — fail silently until backend tables are created
