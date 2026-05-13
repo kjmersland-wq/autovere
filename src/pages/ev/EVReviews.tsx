@@ -115,7 +115,13 @@ interface ReviewCardProps {
 function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: ReviewCardProps) {
   const { t } = useTranslation();
   const [playing, setPlaying] = useState(false);
-  const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  // maxresdefault only exists for HD uploads; hqdefault.jpg is always generated.
+  const [thumbIdx, setThumbIdx] = useState(0);
+  const thumbs = [
+    `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
+    `https://i.ytimg.com/vi/${videoId}/sddefault.jpg`,
+    `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+  ];
 
   return (
     <div className="glass rounded-2xl border border-border/40 overflow-hidden hover:border-border/70 transition-colors group">
