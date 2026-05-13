@@ -14,16 +14,16 @@ const en = {
   },
   hero: {
     eyebrow: "AUTOVERE intelligence",
-    cta_primary: "Find your car",
-    cta_secondary: "Explore the library",
+    cta_primary: "Find me a car",
+    cta_secondary: "Wander the library",
   },
   footer: {
     tagline:
-      "A calmer, more intelligent way to discover your next car. Built around transparency, responsible AI, and the people who drive what we make.",
+      "A calmer, smarter way to pick your next car. Built around honest reviews, transparent AI, and the people who actually have to drive what we recommend.",
     disclaimer:
-      "AUTOVERE recommendations are AI-assisted and based on public data and reviewer consensus. Vehicle details vary by region — verify before purchase.",
+      "AUTOVERE's recommendations are AI-assisted and grounded in public data and reviewer consensus. Specs vary by region — always verify before you sign anything.",
     rights: "The future of choosing a car.",
-    operated: "Built and operated with care from Kristiansand, Norway.",
+    operated: "Built and run with care from Kristiansand, Norway.",
     columns: { discover: "Discover", company: "Company", legal: "Legal", ev: "EV Intelligence" },
     links: {
       cars: "Cars",
