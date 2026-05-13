@@ -41,7 +41,7 @@ const CollectionDetail = () => {
         type="article"
       />
       <section className="relative h-[70vh] min-h-[500px] overflow-hidden">
-        <img src={c.image} alt={title} className="absolute inset-0 w-full h-full object-cover" />
+        <img loading="lazy" decoding="async" src={c.image} alt={title} className="absolute inset-0 w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/30" />
         <div className="container relative z-10 h-full flex flex-col justify-end pb-16 max-w-3xl">
           <div className="text-xs uppercase tracking-[0.3em] text-accent mb-4">{t("pages.collection.a_collection")}</div>
@@ -86,7 +86,7 @@ export const CollectionsIndex = () => {
               to={`/collections/${c.slug}`}
               className="group relative overflow-hidden rounded-3xl aspect-[16/10] border border-border/40 hover:border-primary/50 transition-all duration-700 hover:-translate-y-1 hover:shadow-glow"
             >
-              <img src={c.image} alt={l(c.title)} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms]" />
+              <img decoding="async" src={c.image} alt={l(c.title)} loading="lazy" className="absolute inset-0 w-full h-full object-cover scale-110 group-hover:scale-125 transition-transform [transition-duration:2500ms]" />
               <div className="absolute inset-0 bg-gradient-to-tr from-background via-background/60 to-transparent" />
               <div className="relative h-full flex flex-col justify-end p-8">
                 <h2 className="text-2xl md:text-3xl font-semibold tracking-tight mb-2">{l(c.title)}</h2>
