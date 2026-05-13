@@ -60,6 +60,7 @@ const no: Translation = {
   language: { label: "Språk" },
   common: {
     loading: "Laster …",
+    copied: "Kopiert",
     error: "Det funket ikke. Prøv en gang til?",
     retry: "Prøv igjen",
     save: "Lagre",
