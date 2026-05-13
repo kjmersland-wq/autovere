@@ -87,18 +87,13 @@ interface POI {
 }
 
 async function fetchPOIs(opts: { country?: string; bbox?: [number, number, number, number]; max: number }): Promise<POI[]> {
-  const params = new URLSearchParams({
-    output: "json",
-    compact: "true",
-    verbose: "false",
-    maxresults: String(opts.max),
-  });
-  if (opts.country) params.set("countrycode", opts.country);
-  if (opts.bbox) params.set("boundingbox", `(${opts.bbox[0]},${opts.bbox[1]}),(${opts.bbox[2]},${opts.bbox[3]})`);
-  const url = `https://api.openchargemap.io/v3/poi?${params.toString()}`;
-  const res = await fetch(url, { headers: { "X-API-Key": "" } });
-  if (!res.ok) throw new Error(`OCM ${res.status}`);
-  return (await res.json()) as POI[];
+  const params: Record<string, string> = { maxresults: String(opts.max) };
+  if (opts.country) params.countrycode = opts.country;
+  if (opts.bbox) params.boundingbox = `(${opts.bbox[0]},${opts.bbox[1]}),(${opts.bbox[2]},${opts.bbox[3]})`;
+  const qs = new URLSearchParams(params).toString();
+  const { data, error } = await supabase.functions.invoke(`ocm-proxy?${qs}`, { method: "GET" });
+  if (error) throw new Error(error.message);
+  return (data as POI[]) ?? [];
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
