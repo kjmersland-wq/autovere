@@ -1036,8 +1036,8 @@ const no: Translation = {
     },
     not_found: {
       title: "404",
-      lead: "Ups! Siden finnes ikke",
-      home: "Tilbake til forsiden",
+      lead: "Greit — denne siden er skikkelig på avveie. La oss få deg tilbake på veien.",
+      home: "Ta meg hjem",
     },
   },
 };
