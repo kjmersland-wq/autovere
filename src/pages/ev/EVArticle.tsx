@@ -144,12 +144,12 @@ export default function EVArticle() {
             {/* Share bar */}
             <div className="flex items-center gap-3 mb-10 pb-10 border-b border-border/30">
               <Share2 className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-              <span className="text-xs text-muted-foreground mr-1">Share</span>
+              <span className="text-xs text-muted-foreground mr-1">{t("ev.database.share")}</span>
               <a
                 href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(article.title)}&url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Share on X (Twitter)"
+                aria-label={t("ev.database.share_x")}
                 className="text-[10px] glass border border-border/40 rounded-full px-2.5 py-1 text-muted-foreground hover:text-foreground hover:border-border/70 transition-colors"
               >
                 X / Twitter
@@ -158,7 +158,7 @@ export default function EVArticle() {
                 href={`https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(typeof window !== "undefined" ? window.location.href : "")}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                aria-label="Share on LinkedIn"
+                aria-label={t("ev.database.share_li")}
                 className="text-[10px] glass border border-border/40 rounded-full px-2.5 py-1 text-muted-foreground hover:text-foreground hover:border-border/70 transition-colors"
               >
                 LinkedIn
@@ -169,10 +169,10 @@ export default function EVArticle() {
                   setCopied(true);
                   setTimeout(() => setCopied(false), 2000);
                 }}
-                aria-label="Copy link"
+                aria-label={t("ev.database.copy_link")}
                 className="text-[10px] glass border border-border/40 rounded-full px-2.5 py-1 text-muted-foreground hover:text-foreground hover:border-border/70 transition-colors inline-flex items-center gap-1"
               >
-                {copied ? <><Check className="w-3 h-3 text-accent" /> Copied</> : <><Link2 className="w-3 h-3" /> Copy link</>}
+                {copied ? <><Check className="w-3 h-3 text-accent" /> {t("common.copied", "Copied")}</> : <><Link2 className="w-3 h-3" /> {t("ev.database.copy_link")}</>}
               </button>
             </div>
 
