@@ -87,13 +87,15 @@ interface POI {
 }
 
 async function fetchPOIs(opts: { country?: string; bbox?: [number, number, number, number]; max: number }): Promise<POI[]> {
-  const params: Record<string, string> = { maxresults: String(opts.max) };
-  if (opts.country) params.countrycode = opts.country;
-  if (opts.bbox) params.boundingbox = `(${opts.bbox[0]},${opts.bbox[1]}),(${opts.bbox[2]},${opts.bbox[3]})`;
-  const qs = new URLSearchParams(params).toString();
-  const { data, error } = await supabase.functions.invoke(`ocm-proxy?${qs}`, { method: "GET" });
-  if (error) throw new Error(error.message);
-  return (data as POI[]) ?? [];
+  const params = new URLSearchParams({ maxresults: String(opts.max) });
+  if (opts.country) params.set("countrycode", opts.country);
+  if (opts.bbox) params.set("boundingbox", `(${opts.bbox[0]},${opts.bbox[1]}),(${opts.bbox[2]},${opts.bbox[3]})`);
+  const url = `https://${import.meta.env.VITE_SUPABASE_PROJECT_ID}.supabase.co/functions/v1/ocm-proxy?${params.toString()}`;
+  const res = await fetch(url, {
+    headers: { apikey: import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY as string },
+  });
+  if (!res.ok) throw new Error(`OCM ${res.status}`);
+  return (await res.json()) as POI[];
 }
 
 /* ────────────────────────────────────────────────────────────────────── */
