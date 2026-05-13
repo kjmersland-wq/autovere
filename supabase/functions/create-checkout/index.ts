@@ -5,11 +5,11 @@ import { corsHeaders, handleCors } from '../_shared/cors.ts';
 const getErrorMessage = (error: unknown): string => {
   if (error instanceof Error) return error.message;
   if (typeof error === 'string') return error;
-  try {
-    return JSON.stringify(error);
-  } catch {
-    return String(error);
+  if (error && typeof error === 'object') {
+    const message = (error as { message?: unknown }).message;
+    if (typeof message === 'string' && message.trim().length > 0) return message;
   }
+  return 'Unknown checkout error';
 };
 
 Deno.serve(async (req) => {
@@ -36,7 +36,7 @@ Deno.serve(async (req) => {
     const { priceId, successUrl, cancelUrl } = body;
     console.log('[create-checkout] step=body-parsed priceId=' + priceId);
     if (priceId !== 'premium_monthly' && priceId !== 'premium_yearly') {
-      throw new Error(`Invalid priceId: ${String(priceId)}`);
+      throw new Error(`Invalid priceId: ${priceId}`);
     }
 
     const origin = req.headers.get('origin') ?? '';

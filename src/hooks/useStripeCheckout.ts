@@ -12,8 +12,16 @@ export function useStripeCheckout() {
     const maybeError = error as { context?: Response; message?: string };
     if (maybeError.context instanceof Response) {
       try {
-        const body = await maybeError.context.clone().json() as { error?: string; message?: string };
-        return body.error ?? body.message ?? maybeError.message ?? null;
+        const body = await maybeError.context.clone().json() as unknown;
+        if (body && typeof body === "object") {
+          const responseBody = body as { error?: unknown; message?: unknown };
+          if (typeof responseBody.error === "string" && responseBody.error.trim().length > 0) {
+            return responseBody.error;
+          }
+          if (typeof responseBody.message === "string" && responseBody.message.trim().length > 0) {
+            return responseBody.message;
+          }
+        }
       } catch {
         // fall through to message
       }
