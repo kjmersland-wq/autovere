@@ -115,7 +115,13 @@ interface ReviewCardProps {
 function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: ReviewCardProps) {
   const { t } = useTranslation();
   const [playing, setPlaying] = useState(false);
-  const thumb = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+  // maxresdefault only exists for HD uploads; hqdefault.jpg is always generated.
+  const [thumbIdx, setThumbIdx] = useState(0);
+  const thumbs = [
+    `https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`,
+    `https://i.ytimg.com/vi/${videoId}/sddefault.jpg`,
+    `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`,
+  ];
 
   return (
     <div className="glass rounded-2xl border border-border/40 overflow-hidden hover:border-border/70 transition-colors group">
@@ -130,10 +136,10 @@ function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: Re
         ) : (
           <>
             <img
-              src={thumb}
+              src={thumbs[thumbIdx]}
               alt={title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              onError={() => setThumbIdx((i) => Math.min(i + 1, thumbs.length - 1))}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             <button
