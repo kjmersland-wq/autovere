@@ -7,30 +7,32 @@ import sceneRoad from "@/assets/scene-roadtrip.jpg";
 import sceneQuiet from "@/assets/scene-quiet.jpg";
 import sceneCity from "@/assets/scene-city.jpg";
 
+import type { LocalizedString, LocalizedArray } from "@/lib/loc";
+
 export type Car = {
   slug: string;
   name: string;
   brand: string;
-  type: string;
-  tagline: string;
-  fit: string;
+  type: LocalizedString;
+  tagline: LocalizedString;
+  fit: LocalizedString;
   score: number;
-  tag: string;
+  tag: LocalizedString;
   hero: string;
   gallery: string[];
-  summary: string;
-  personality: string;
-  comfort: string;
-  climate: string;
-  practicality: string;
-  ownership: string;
-  strengths: string[];
-  tradeoffs: string[];
-  lifestyle: string;
-  range?: string;
+  summary: LocalizedString;
+  personality: LocalizedString;
+  comfort: LocalizedString;
+  climate: LocalizedString;
+  practicality: LocalizedString;
+  ownership: LocalizedString;
+  strengths: LocalizedArray;
+  tradeoffs: LocalizedArray;
+  lifestyle: LocalizedString;
+  range?: LocalizedString;
   seats?: number;
-  startingPrice?: string;
-  drivetrain?: string;
+  startingPrice?: LocalizedString;
+  drivetrain?: LocalizedString;
   comparesWellWith: string[]; // other slugs
 };
 
