@@ -256,7 +256,7 @@ export function RoutePlanner() {
 
         <div className="flex flex-col sm:flex-row gap-3">
           <div className="flex-1">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground block mb-1.5">Avreise</label>
+            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground block mb-1.5">{tt("depart")}</label>
             <div className="relative">
               <Calendar className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
               <input
