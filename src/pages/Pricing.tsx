@@ -33,13 +33,19 @@ const Pricing = () => {
 
   const handleSubscribe = async () => {
     const priceId = interval === "month" ? "premium_monthly" : "premium_yearly";
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) {
-      toast.info(t("pages.pricing.please_sign_in"));
-      navigate("/auth");
-      return;
+    try {
+      const { data: { user }, error: authError } = await supabase.auth.getUser();
+      if (authError) throw authError;
+      if (!user) {
+        toast.info(t("pages.pricing.please_sign_in"));
+        navigate("/auth");
+        return;
+      }
+      await openCheckout({ priceId, customerEmail: user.email, userId: user.id });
+    } catch (e) {
+      console.error("[Pricing] handleSubscribe error:", e);
+      toast.error(e instanceof Error ? e.message : t("pages.pricing.checkout_error"));
     }
-    await openCheckout({ priceId, customerEmail: user.email, userId: user.id });
   };
 
   const openPortal = async () => {

@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
 export function useStripeCheckout() {
+  const { t } = useTranslation();
   const [loading, setLoading] = useState(false);
 
   const openCheckout = async (options: {
@@ -28,7 +30,8 @@ export function useStripeCheckout() {
       if (!data?.url) throw new Error("No checkout URL returned");
       window.location.href = data.url;
     } catch (e) {
-      toast.error("Could not open checkout. Please try again.");
+      console.error("[useStripeCheckout] checkout failed:", e);
+      toast.error(t("pages.pricing.checkout_error"));
     } finally {
       setLoading(false);
     }

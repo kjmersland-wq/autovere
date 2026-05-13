@@ -782,6 +782,7 @@ const no: Translation = {
       cancel_anytime: "Avslutt når som helst. Ingen mersalg, ingen mørke mønstre.",
       welcome_premium: "Velkommen til Premium! En bekreftelses-e-post er på vei.",
       portal_error: "Kunne ikke åpne kundeportalen.",
+      checkout_error: "Kunne ikke åpne kassen. Vennligst prøv igjen.",
       please_sign_in: "Logg inn for å abonnere.",
       reassurance: {
         t1: "Ingen data videresolgt",

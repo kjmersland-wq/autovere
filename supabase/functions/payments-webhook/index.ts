@@ -1,6 +1,6 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import Stripe from 'npm:stripe@14';
-import { verifyWebhook, getStripeEnvironment } from '../_shared/stripe.ts';
+import { verifyWebhook, getStripeEnvironment, getStripeClient } from '../_shared/stripe.ts';
 
 let _supabase: ReturnType<typeof createClient> | null = null;
 function getSupabase() {

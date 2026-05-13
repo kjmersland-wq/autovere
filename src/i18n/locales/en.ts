@@ -779,6 +779,7 @@ const en = {
       cancel_anytime: "Cancel anytime. No upsells, no dark patterns.",
       welcome_premium: "Welcome to Premium! A confirmation email is on its way.",
       portal_error: "Could not open the customer portal.",
+      checkout_error: "Could not open checkout. Please try again.",
       please_sign_in: "Please sign in to subscribe.",
       reassurance: {
         t1: "No data resold",
