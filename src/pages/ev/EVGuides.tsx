@@ -85,6 +85,10 @@ export default function EVGuides() {
         <div className="max-w-3xl mx-auto space-y-4">
           {filtered.map((guide) => {
             const isOpen = expanded === guide.id;
+            const title = t(`ev.guides.items.${guide.id}.title`);
+            const summary = t(`ev.guides.items.${guide.id}.summary`);
+            const body = t(`ev.guides.items.${guide.id}.body`, { returnObjects: true }) as string[];
+            const tips = t(`ev.guides.items.${guide.id}.tips`, { returnObjects: true }) as string[];
             return (
               <div key={guide.id} className="glass rounded-2xl border border-border/40 overflow-hidden hover:border-border/70 transition-colors">
                 {/* Header */}
@@ -97,8 +101,8 @@ export default function EVGuides() {
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="text-[10px] uppercase tracking-widest text-accent mb-1">{categoryLabel[guide.category] ?? guide.category}</div>
-                    <h3 className="font-semibold text-base md:text-lg mb-2 group-hover:text-foreground transition-colors">{guide.title}</h3>
-                    <p className="text-sm text-muted-foreground leading-relaxed">{guide.summary}</p>
+                    <h3 className="font-semibold text-base md:text-lg mb-2 group-hover:text-foreground transition-colors">{title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{summary}</p>
                   </div>
                   <div className="flex-shrink-0 mt-1">
                     {isOpen ? <ChevronUp className="w-5 h-5 text-muted-foreground" /> : <ChevronDown className="w-5 h-5 text-muted-foreground" />}
@@ -109,14 +113,14 @@ export default function EVGuides() {
                 {isOpen && (
                   <div className="px-6 pb-6 border-t border-border/40 pt-5">
                     <div className="space-y-4 mb-6">
-                      {guide.body.map((para, i) => (
+                      {Array.isArray(body) && body.map((para, i) => (
                         <p key={i} className="text-sm text-muted-foreground leading-relaxed">{para}</p>
                       ))}
                     </div>
                     <div className="bg-card/50 rounded-xl p-4">
                       <div className="text-xs font-semibold uppercase tracking-widest text-accent mb-3">{t("ev.guides.key_takeaways")}</div>
                       <ul className="space-y-2">
-                        {guide.tips.map((tip, i) => (
+                        {Array.isArray(tips) && tips.map((tip, i) => (
                           <li key={i} className="flex items-start gap-2.5 text-sm">
                             <CheckCircle className="w-3.5 h-3.5 text-emerald-400 mt-0.5 flex-shrink-0" />
                             <span>{tip}</span>
