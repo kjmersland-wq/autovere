@@ -136,10 +136,10 @@ function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: Re
         ) : (
           <>
             <img
-              src={thumb}
+              src={thumbs[thumbIdx]}
               alt={title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
-              onError={(e) => { (e.target as HTMLImageElement).style.display = "none"; }}
+              onError={() => setThumbIdx((i) => Math.min(i + 1, thumbs.length - 1))}
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
             <button
