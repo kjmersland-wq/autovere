@@ -98,8 +98,13 @@ Deno.serve(async (req) => {
       }
     }
 
-    return new Response(JSON.stringify({ error: "No image found" }), {
-      status: 404, headers: { ...corsHeaders, "Content-Type": "application/json" },
+    return new Response(JSON.stringify({ url: null, error: "No image found" }), {
+      status: 200,
+      headers: {
+        ...corsHeaders,
+        "Content-Type": "application/json",
+        "Cache-Control": "public, max-age=86400, s-maxage=86400",
+      },
     });
   } catch (e) {
     console.error("model-image error:", e);
