@@ -16,16 +16,16 @@ const no: Translation = {
   },
   hero: {
     eyebrow: "AUTOVERE-intelligens",
-    cta_primary: "Finn din bil",
-    cta_secondary: "Utforsk biblioteket",
+    cta_primary: "Finn bilen min",
+    cta_secondary: "Bla i biblioteket",
   },
   footer: {
     tagline:
-      "En roligere og mer intelligent måte å finne din neste bil på. Bygget rundt åpenhet, ansvarlig AI og menneskene som kjører det vi lager.",
+      "En roligere og smartere måte å plukke neste bil på. Bygget rundt ærlige tester, åpen AI og menneskene som faktisk må kjøre det vi anbefaler.",
     disclaimer:
-      "AUTOVEREs anbefalinger er AI-assisterte og bygger på offentlige data og konsensus blant biltestere. Spesifikasjoner varierer mellom land — verifiser før kjøp.",
+      "AUTOVEREs anbefalinger er AI-assisterte og bygger på offentlige data og biltesternes konsensus. Spesifikasjoner varierer mellom land — sjekk alltid før du signerer noe.",
     rights: "Fremtidens måte å velge bil på.",
-    operated: "Utviklet og drevet med omtanke fra Kristiansand, Norge.",
+    operated: "Utviklet og driftet med omtanke fra Kristiansand, Norge.",
     columns: { discover: "Oppdag", company: "Selskapet", legal: "Juridisk", ev: "EV Intelligens" },
     links: {
       cars: "Biler",
