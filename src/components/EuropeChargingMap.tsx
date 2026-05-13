@@ -346,9 +346,9 @@ export function EuropeChargingMap() {
           <BoundsWatcher onChange={setBbox} />
           {filtered.map((p) => {
             if (!p.AddressInfo) return null;
-            const n = networkFor(p.OperatorInfo?.Title ?? "");
+            const maxKw = maxPowerKw(p);
+            const n = networkFor(p.OperatorInfo?.Title ?? "", p.AddressInfo.Title ?? "", maxKw);
             const color = n?.color ?? OTHER_COLOR;
-            const maxKw = Math.max(0, ...(p.Connections?.map((c) => c.PowerKW ?? 0) ?? []));
             return (
               <Marker
                 key={p.ID}
