@@ -116,12 +116,12 @@ function ReviewCard({ videoId, channel, title, views, modelName, modelSlug }: Re
           >
             {t("ev.reviews.watch_youtube")} <ExternalLink className="w-3 h-3" />
           </a>
-          {CHANNEL_TRUST[channel] && (
+          {CHANNEL_META[channel] && (
             <div className="flex items-center gap-1 text-[10px] text-muted-foreground">
               <ShieldCheck className="w-3 h-3 text-emerald-400" />
-              <span className="text-emerald-400">{CHANNEL_TRUST[channel].score}</span>
+              <span className="text-emerald-400">{CHANNEL_META[channel].score}</span>
               <Globe className="w-3 h-3 ml-1" />
-              <span>{CHANNEL_TRUST[channel].country}</span>
+              <span>{CHANNEL_META[channel].country}</span>
             </div>
           )}
         </div>
@@ -138,12 +138,13 @@ interface ConsensusCardProps {
 function ConsensusCard({ slug, name }: ConsensusCardProps) {
   const { t } = useTranslation();
   const [open, setOpen] = useState(false);
-  const c = CONSENSUS[slug];
+  const meta = CONSENSUS_META[slug];
+  const c = t(`ev.reviews.consensus.${slug}`, { returnObjects: true }) as ConsensusData | string;
   const model = EV_MODELS.find((m) => m.slug === slug);
   const { image: carImage } = useCarImage(model ? { brand: model.brand, model: model.name } : null);
-  if (!c || !model) return null;
+  if (!meta || !model || typeof c === "string") return null;
 
-  const confidenceColor = c.confidence >= 90 ? "text-emerald-400" : c.confidence >= 80 ? "text-amber-400" : "text-red-400";
+  const confidenceColor = meta.confidence >= 90 ? "text-emerald-400" : meta.confidence >= 80 ? "text-amber-400" : "text-red-400";
 
   const metrics = [
     { label: t("ev.reviews.metric_range"), value: c.range },
