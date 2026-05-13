@@ -434,6 +434,9 @@ const no: Translation = {
       cta_database: "Se hele databasen",
       cta_calculator: "Beregn ladekostnader",
       cta_networks: "Finn ladestasjoner",
+      detail_seo_title: "{{name}} test — Ærlig elbilguide | AUTOVERE",
+      detail_seo_desc: "{{name}} ærlig anmeldelse: {{range}} km reell rekkevidde, {{dc}} kW DC-lading, vinterytelse og eierskapsanalyse.",
+      photo_credit: "Foto",
     },
     markets: {
       seo_title: "EV-markeder i Europa — Landguide | AUTOVERE",
