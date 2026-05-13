@@ -274,7 +274,7 @@ export function RoutePlanner() {
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-lg bg-primary text-primary-foreground font-medium text-sm hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed transition-opacity"
             >
               {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : <RouteIcon className="w-4 h-4" />}
-              Beregn rute
+              {loading ? tt("calculating") : tt("calculate")}
             </button>
           </div>
         </div>
