@@ -38,13 +38,18 @@ const flagIcon = (label: string, color: string) =>
     iconSize: [60, 22], iconAnchor: [30, 11],
   });
 
-async function photonSearch(q: string): Promise<PhotonHit[]> {
+const photonCache = new Map<string, PhotonHit[]>();
+
+async function photonSearch(q: string, lang = "en", signal?: AbortSignal): Promise<PhotonHit[]> {
   if (q.trim().length < 2) return [];
-  const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lang=en`;
-  const r = await fetch(url);
+  const key = `${lang}:${q.trim().toLowerCase()}`;
+  const cached = photonCache.get(key);
+  if (cached) return cached;
+  const url = `https://photon.komoot.io/api/?q=${encodeURIComponent(q)}&limit=6&lang=${lang}`;
+  const r = await fetch(url, { signal });
   if (!r.ok) return [];
   const j = await r.json();
-  return (j.features ?? []).map((f: any) => {
+  const hits: PhotonHit[] = (j.features ?? []).map((f: any) => {
     const p = f.properties ?? {};
     const [lon, lat] = f.geometry?.coordinates ?? [0, 0];
     const city = p.city ?? p.name ?? p.town ?? p.village ?? "";
@@ -52,6 +57,8 @@ async function photonSearch(q: string): Promise<PhotonHit[]> {
       .filter(Boolean);
     return { label: parts.join(", "), lat, lon, country: p.countrycode, city };
   });
+  photonCache.set(key, hits);
+  return hits;
 }
 
 async function reverseCountry(lat: number, lon: number): Promise<string | null> {
@@ -87,11 +94,14 @@ async function osrmRoute(from: PhotonHit, to: PhotonHit): Promise<OsrmResult | n
 function CityInput({
   value, setValue, placeholder, onPick,
 }: { value: PhotonHit | null; setValue: (v: PhotonHit | null) => void; placeholder: string; onPick?: () => void }) {
+  const { i18n } = useTranslation();
+  const lang = i18n.language?.toLowerCase().startsWith("no") ? "no" : "en";
   const [text, setText] = useState(value?.label ?? "");
   const [hits, setHits] = useState<PhotonHit[]>([]);
   const [open, setOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const tRef = useRef<number | null>(null);
+  const acRef = useRef<AbortController | null>(null);
 
   useEffect(() => { setText(value?.label ?? ""); }, [value]);
 
@@ -100,12 +110,18 @@ function CityInput({
     if (text.length < 2 || text === value?.label) { setHits([]); return; }
     setLoading(true);
     tRef.current = window.setTimeout(async () => {
-      const res = await photonSearch(text);
-      setHits(res);
-      setOpen(true);
-      setLoading(false);
-    }, 250);
-  }, [text, value?.label]);
+      acRef.current?.abort();
+      const ac = new AbortController();
+      acRef.current = ac;
+      try {
+        const res = await photonSearch(text, lang, ac.signal);
+        if (ac.signal.aborted) return;
+        setHits(res);
+        setOpen(true);
+      } catch { /* aborted */ }
+      finally { if (!ac.signal.aborted) setLoading(false); }
+    }, 150);
+  }, [text, value?.label, lang]);
 
   return (
     <div className="relative flex-1">
