@@ -245,6 +245,38 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/ev/reviews"/>
   </url>
   <url>
+    <loc>https://www.autovere.com/biltester</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/biltester"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/biltester"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/biltester"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/biltester</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/biltester"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/biltester"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/biltester"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/car-reviews</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/car-reviews"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/car-reviews"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/car-reviews"/>
+  </url>
+  <url>
+    <loc>https://www.autovere.com/no/car-reviews</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.9</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/car-reviews"/>
+    <xhtml:link rel="alternate" hreflang="no" href="https://www.autovere.com/no/car-reviews"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/car-reviews"/>
+  </url>
+  <url>
     <loc>https://www.autovere.com/ev/models</loc>
     <changefreq>weekly</changefreq>
     <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/ev/models"/>
