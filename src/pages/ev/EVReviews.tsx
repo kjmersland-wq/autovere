@@ -212,6 +212,18 @@ function ConsensusCard({ slug, name }: ConsensusCardProps) {
         onClick={() => setOpen(!open)}
         className="w-full flex items-center gap-4 p-5 text-left hover:bg-card/50 transition-colors"
       >
+        <div className="relative w-20 h-14 sm:w-28 sm:h-20 rounded-lg overflow-hidden bg-card border border-border/40 flex-shrink-0">
+          {carImage ? (
+            <img
+              src={carImage.thumb}
+              alt={`${model.brand} ${model.name}`}
+              loading="lazy"
+              className="w-full h-full object-cover"
+            />
+          ) : (
+            <div className="w-full h-full bg-gradient-to-br from-muted to-card" />
+          )}
+        </div>
         <div className="flex-1 min-w-0">
           <div className="font-semibold">{name}</div>
           <div className="flex items-center gap-3 mt-0.5">
