@@ -53,21 +53,25 @@ const buildLocalized = (path: string, lang: string) => {
   return lang === DEFAULT_LANG ? `${SITE}${clean}` : `${SITE}/${lang}${clean}`;
 };
 
+const LOCALE_MAP: Record<string, string> = { en: "en_US", no: "nb_NO" };
+const DEFAULT_OG_IMAGE = `${SITE}/og-image.jpg`;
+
 export const SEO = ({ title, description, canonical, image, type = "website", jsonLd }: Props) => {
   useEffect(() => {
     document.title = title.length > 60 ? title.slice(0, 57) + "…" : title;
 
     const desc = description.length > 160 ? description.slice(0, 157) + "…" : description;
+    const ogImage = image || DEFAULT_OG_IMAGE;
     setMeta('meta[name="description"]', "content", desc);
     setMeta('meta[property="og:title"]', "content", title);
     setMeta('meta[property="og:description"]', "content", desc);
     setMeta('meta[property="og:type"]', "content", type);
-    if (image) setMeta('meta[property="og:image"]', "content", image);
+    setMeta('meta[property="og:image"]', "content", ogImage);
 
     setMeta('meta[name="twitter:card"]', "content", "summary_large_image");
     setMeta('meta[name="twitter:title"]', "content", title);
     setMeta('meta[name="twitter:description"]', "content", desc);
-    if (image) setMeta('meta[name="twitter:image"]', "content", image);
+    setMeta('meta[name="twitter:image"]', "content", ogImage);
 
     const path = typeof window !== "undefined" ? window.location.pathname : "/";
     const lang = detectLangFromPath(path);
@@ -75,7 +79,7 @@ export const SEO = ({ title, description, canonical, image, type = "website", js
     const canonicalUrl = canonical || buildLocalized(path, lang);
     setLink("canonical", canonicalUrl);
     setMeta('meta[property="og:url"]', "content", canonicalUrl);
-    setMeta('meta[property="og:locale"]', "content", lang);
+    setMeta('meta[property="og:locale"]', "content", LOCALE_MAP[lang] || "en_US");
 
     // hreflang for all supported languages + x-default
     document

@@ -79,7 +79,7 @@ const CarDetail = () => {
       />
 
       <section className="relative h-[80vh] min-h-[560px] overflow-hidden">
-        <img src={car.hero} alt={car.name} className="absolute inset-0 w-full h-full object-cover scale-105" />
+        <img loading="lazy" decoding="async" src={car.hero} alt={car.name} className="absolute inset-0 w-full h-full object-cover scale-105" />
         <div className="absolute inset-0 bg-gradient-to-t from-background via-background/60 to-background/20" />
         <div className="absolute inset-0 bg-gradient-to-r from-background/80 via-transparent to-transparent" />
         <div className="container relative z-10 h-full flex flex-col justify-end pb-16">
@@ -150,7 +150,7 @@ const CarDetail = () => {
         <div className="grid md:grid-cols-3 gap-4">
           {car.gallery.map((src, i) => (
             <div key={i} className="relative aspect-[4/3] rounded-3xl overflow-hidden border border-border/40 group">
-              <img src={src} alt={`${car.name} gallery ${i + 1}`} loading="lazy" className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform [transition-duration:2500ms]" />
+              <img decoding="async" src={src} alt={`${car.name} gallery ${i + 1}`} loading="lazy" className="w-full h-full object-cover scale-105 group-hover:scale-110 transition-transform [transition-duration:2500ms]" />
               <div className="absolute inset-0 bg-gradient-to-t from-background/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </div>
           ))}
