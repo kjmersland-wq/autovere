@@ -104,7 +104,7 @@ const Pricing = () => {
           </div>
           <div className="flex items-baseline gap-2 mb-1">
             <span className="text-5xl font-bold tracking-tighter text-gradient">
-              {interval === "month" ? "€6.99" : "€59"}
+              {interval === "month" ? fmt(6.99) : fmt(59)}
             </span>
             <span className="text-muted-foreground">/ {interval}</span>
           </div>
