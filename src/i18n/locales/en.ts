@@ -1033,8 +1033,8 @@ const en = {
     },
     not_found: {
       title: "404",
-      lead: "Oops! Page not found",
-      home: "Return to Home",
+      lead: "Right — this page is properly lost. Let's get you back on the road.",
+      home: "Take me home",
     },
   },
 };
