@@ -107,6 +107,10 @@ const Index = () => {
             className="absolute inset-0 w-full h-full object-cover"
             style={{ transform: `translateY(${scrollY * 0.25}px) scale(1.08)` }}
             loading="eager"
+            fetchPriority="high"
+            decoding="async"
+            width={2400}
+            height={1600}
           />
           {/* Layered cinematic vignette — Porsche/Rivian darkness */}
           <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-background/55 to-background" />

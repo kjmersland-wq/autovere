@@ -46,6 +46,11 @@ async function loadDynamic() {
   evModels.EV_MODELS.forEach((m) => out.push({ path: `/ev/models/${m.slug}`, changefreq: "monthly" }));
   const networks = await import("../src/data/charging-networks");
   networks.CHARGING_NETWORKS.forEach((n) => out.push({ path: `/ev/networks/${n.slug}`, changefreq: "monthly" }));
+  const cars = await import("../src/data/cars");
+  cars.CARS.forEach((c: any) => out.push({ path: `/cars/${c.slug}`, changefreq: "monthly" }));
+  cars.COLLECTIONS.forEach((c: any) => out.push({ path: `/collections/${c.slug}`, changefreq: "monthly" }));
+  cars.PERSONALITIES.forEach((p: any) => out.push({ path: `/personalities/${p.slug}`, changefreq: "monthly" }));
+  cars.LEARN.forEach((l: any) => out.push({ path: `/learn/${l.slug}`, changefreq: "monthly" }));
   const articles = await import("../src/data/articles");
   // best-effort: any exported array of objects with .slug
   const anyMod = articles as unknown as Record<string, unknown>;
