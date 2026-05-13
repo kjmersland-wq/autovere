@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
 Disallow: /studio
+Disallow: /auth
+Disallow: /garage
 
-Sitemap: https://autovere.com/sitemap.xml
+Sitemap: https://www.autovere.com/sitemap.xml
