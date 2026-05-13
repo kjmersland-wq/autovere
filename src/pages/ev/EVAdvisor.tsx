@@ -7,100 +7,34 @@ import { SEO } from "@/components/SEO";
 import { localizePath, detectLangFromPath } from "@/i18n/routing";
 import { COMPARE_MODELS, type CompareModel } from "@/data/ev-compare";
 
+interface StepOption { value: string; label: string; desc: string; icon?: string }
 interface Step {
   id: string;
   question: string;
   subtitle: string;
   icon: React.ElementType;
-  options: { value: string; label: string; desc: string; icon?: string }[];
+  options: StepOption[];
 }
 
-const STEPS: Step[] = [
-  {
-    id: "budget",
-    question: "What's your budget?",
-    subtitle: "This is the single biggest filter. We'll only show you what fits.",
-    icon: Wallet,
-    options: [
-      { value: "under35", label: "Under €35,000", desc: "Compact EVs with strong value", icon: "💚" },
-      { value: "35to55", label: "€35,000 – €55,000", desc: "Mid-range and family EVs", icon: "💛" },
-      { value: "55to75", label: "€55,000 – €75,000", desc: "Premium and large SUVs", icon: "🧡" },
-      { value: "over75", label: "Over €75,000", desc: "Flagship performance EVs", icon: "❤️" },
-    ],
-  },
-  {
-    id: "climate",
-    question: "Where do you live and drive most?",
-    subtitle: "Climate dramatically affects real-world EV range — especially in winter.",
-    icon: Thermometer,
-    options: [
-      { value: "nordic", label: "Nordic / Alpine", desc: "Norway, Sweden, Finland, mountain regions — cold winters", icon: "❄️" },
-      { value: "continental", label: "Continental Europe", desc: "Germany, Poland, France — cold winters, warm summers", icon: "🌤️" },
-      { value: "atlantic", label: "Atlantic / British Isles", desc: "UK, Ireland, coastal France — mild but wet", icon: "🌧️" },
-      { value: "mediterranean", label: "Mediterranean", desc: "Spain, Italy, southern France — warm, mild winters", icon: "☀️" },
-    ],
-  },
-  {
-    id: "family",
-    question: "Who's riding with you?",
-    subtitle: "Family size determines cargo space and seat count priorities.",
-    icon: Users,
-    options: [
-      { value: "solo", label: "Solo or couple", desc: "Two adults, minimal luggage needs", icon: "👤" },
-      { value: "small", label: "Small family", desc: "2 adults, 1–2 children, occasional cargo", icon: "👨‍👩‍👦" },
-      { value: "large", label: "Large family", desc: "3+ children or regular 5+ adult travel", icon: "👨‍👩‍👧‍👦" },
-      { value: "dog", label: "Dog or gear", desc: "Regular large cargo, sports equipment, pets", icon: "🐕" },
-    ],
-  },
-  {
-    id: "driving",
-    question: "How do you mostly drive?",
-    subtitle: "Urban and highway driving have very different EV efficiency profiles.",
-    icon: MapPin,
-    options: [
-      { value: "city", label: "Mostly city", desc: "Short trips, stop-start, under 50 km daily", icon: "🏙️" },
-      { value: "mixed", label: "Mixed city and highway", desc: "Commuting plus occasional longer trips", icon: "🛣️" },
-      { value: "highway", label: "Mostly highway", desc: "Long commutes, frequent motorway use", icon: "🏎️" },
-      { value: "rural", label: "Rural and regional", desc: "Varied terrain, longer distances, fewer chargers", icon: "🌄" },
-    ],
-  },
-  {
-    id: "charging",
-    question: "Where will you charge?",
-    subtitle: "Home charging dramatically changes EV economics and convenience.",
-    icon: Battery,
-    options: [
-      { value: "home", label: "Home garage or driveway", desc: "Can install a wallbox — ideal EV setup", icon: "🏠" },
-      { value: "workplace", label: "Workplace charging", desc: "Employer provides charging access", icon: "🏢" },
-      { value: "mixed_access", label: "Home + public mix", desc: "Some home access, some public top-ups", icon: "⚡" },
-      { value: "public_only", label: "Public charging only", desc: "No home access — network compatibility critical", icon: "📍" },
-    ],
-  },
-  {
-    id: "roadtrips",
-    question: "How often do you road trip?",
-    subtitle: "Charging stop frequency and network coverage matter more for frequent travellers.",
-    icon: Route,
-    options: [
-      { value: "rarely", label: "Rarely", desc: "Mostly local driving, occasional longer trip", icon: "🏡" },
-      { value: "monthly", label: "Monthly", desc: "A long drive roughly once a month", icon: "📅" },
-      { value: "weekly", label: "Weekly", desc: "Regular long-distance travel", icon: "🗺️" },
-      { value: "cross_border", label: "International", desc: "Regularly cross European borders", icon: "🌍" },
-    ],
-  },
-  {
-    id: "priority",
-    question: "What matters most to you?",
-    subtitle: "If you could only optimise one thing, what would it be?",
-    icon: Gauge,
-    options: [
-      { value: "range", label: "Maximum range", desc: "I want the most km possible between charges", icon: "🔋" },
-      { value: "charging", label: "Fastest charging", desc: "Charge stop time matters more than range", icon: "⚡" },
-      { value: "comfort", label: "Comfort and quality", desc: "Interior, ride quality, refinement", icon: "💺" },
-      { value: "value", label: "Best value", desc: "Most capability per euro spent", icon: "💶" },
-    ],
-  },
-];
+const STEP_ICONS: Record<string, React.ElementType> = {
+  budget: Wallet,
+  climate: Thermometer,
+  family: Users,
+  driving: MapPin,
+  charging: Battery,
+  roadtrips: Route,
+  priority: Gauge,
+};
+
+const STEP_OPTION_ICONS: Record<string, Record<string, string>> = {
+  budget: { under35: "💚", "35to55": "💛", "55to75": "🧡", over75: "❤️" },
+  climate: { nordic: "❄️", continental: "🌤️", atlantic: "🌧️", mediterranean: "☀️" },
+  family: { solo: "👤", small: "👨‍👩‍👦", large: "👨‍👩‍👧‍👦", dog: "🐕" },
+  driving: { city: "🏙️", mixed: "🛣️", highway: "🏎️", rural: "🌄" },
+  charging: { home: "🏠", workplace: "🏢", mixed_access: "⚡", public_only: "📍" },
+  roadtrips: { rarely: "🏡", monthly: "📅", weekly: "🗺️", cross_border: "🌍" },
+  priority: { range: "🔋", charging: "⚡", comfort: "💺", value: "💶" },
+};
 
 interface Answers {
   budget?: string;
