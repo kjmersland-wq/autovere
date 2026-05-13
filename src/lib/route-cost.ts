@@ -168,6 +168,21 @@ export function pickStops(
   const energyPerStop =
     ((vehicle.evChargeToPct - vehicle.evChargeFromPct) / 100) *
     (vehicle.evRangeKm * (vehicle.evConsumptionKwhPer100 / 100));
+
+  const chosen = networkById(vehicle.network ?? "cheapest");
+  const hasMembership = !!vehicle.hasMembership;
+  // Pre-compute the network actually used per stop. For "cheapest" we pick the
+  // single cheapest network available (member or ad-hoc). For any explicit
+  // choice we just use that one.
+  const real = CHARGING_NETWORKS.filter((n) => n.id !== "cheapest" && n.id !== "custom");
+  const cheapest = real.reduce((best, n) => {
+    const p = (hasMembership && n.memberPerKwh) ? n.memberPerKwh : n.adHocPerKwh;
+    const bp = (hasMembership && best.memberPerKwh) ? best.memberPerKwh : best.adHocPerKwh;
+    return p < bp ? n : best;
+  }, real[0]);
+  const stopNetwork = chosen.id === "cheapest" ? cheapest : chosen;
+  const pricePerKwh = effectivePrice(chosen, hasMembership, vehicle.evPricePerKwh);
+
   const stops: ChargingStop[] = [];
   for (let i = 1; i <= numStops; i++) {
     const fraction = i / (numStops + 1);
@@ -179,7 +194,10 @@ export function pickStops(
       lat, lon,
       energyKwh: Math.round(energyPerStop * 10) / 10,
       minutes: vehicle.evChargeMinutesPerStop,
-      cost: Math.round(energyPerStop * vehicle.evPricePerKwh * 100) / 100,
+      cost: Math.round(energyPerStop * pricePerKwh * 100) / 100,
+      networkId: stopNetwork.id,
+      networkName: stopNetwork.name,
+      pricePerKwh: Math.round(pricePerKwh * 100) / 100,
     });
   }
   return stops;
