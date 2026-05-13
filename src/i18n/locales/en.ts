@@ -363,6 +363,96 @@ const en = {
       annual_cost: "Annual cost",
       start_again: "Start again with different preferences",
       compare_side: "Compare side by side →",
+      reasons: {
+        nordic_winter: "{{km}} km winter range — reliable in cold conditions",
+        family_cargo: "{{l}} L cargo — genuine family capacity",
+        charging_time: "{{min}}-min charge time — efficient stop strategy",
+        value_score: "{{score}}/100 value score — strong cost-capability ratio",
+        comfort_score: "{{score}}/100 comfort score — premium ride quality",
+        network_score: "{{score}}/100 network score — broad charging compatibility",
+        range_default: "{{km}} km real-world range",
+        annual_default: "€{{cost}} estimated annual charging cost",
+      },
+      from_label: "from",
+      steps: [
+        {
+          id: "budget",
+          question: "What's your budget?",
+          subtitle: "This is the single biggest filter. We'll only show you what fits.",
+          options: [
+            { value: "under35", label: "Under €35,000", desc: "Compact EVs with strong value" },
+            { value: "35to55", label: "€35,000 – €55,000", desc: "Mid-range and family EVs" },
+            { value: "55to75", label: "€55,000 – €75,000", desc: "Premium and large SUVs" },
+            { value: "over75", label: "Over €75,000", desc: "Flagship performance EVs" }
+          ]
+        },
+        {
+          id: "climate",
+          question: "Where do you live and drive most?",
+          subtitle: "Climate dramatically affects real-world EV range — especially in winter.",
+          options: [
+            { value: "nordic", label: "Nordic / Alpine", desc: "Norway, Sweden, Finland, mountain regions — cold winters" },
+            { value: "continental", label: "Continental Europe", desc: "Germany, Poland, France — cold winters, warm summers" },
+            { value: "atlantic", label: "Atlantic / British Isles", desc: "UK, Ireland, coastal France — mild but wet" },
+            { value: "mediterranean", label: "Mediterranean", desc: "Spain, Italy, southern France — warm, mild winters" }
+          ]
+        },
+        {
+          id: "family",
+          question: "Who's riding with you?",
+          subtitle: "Family size determines cargo space and seat count priorities.",
+          options: [
+            { value: "solo", label: "Solo or couple", desc: "Two adults, minimal luggage needs" },
+            { value: "small", label: "Small family", desc: "2 adults, 1–2 children, occasional cargo" },
+            { value: "large", label: "Large family", desc: "3+ children or regular 5+ adult travel" },
+            { value: "dog", label: "Dog or gear", desc: "Regular large cargo, sports equipment, pets" }
+          ]
+        },
+        {
+          id: "driving",
+          question: "How do you mostly drive?",
+          subtitle: "Urban and highway driving have very different EV efficiency profiles.",
+          options: [
+            { value: "city", label: "Mostly city", desc: "Short trips, stop-start, under 50 km daily" },
+            { value: "mixed", label: "Mixed city and highway", desc: "Commuting plus occasional longer trips" },
+            { value: "highway", label: "Mostly highway", desc: "Long commutes, frequent motorway use" },
+            { value: "rural", label: "Rural and regional", desc: "Varied terrain, longer distances, fewer chargers" }
+          ]
+        },
+        {
+          id: "charging",
+          question: "Where will you charge?",
+          subtitle: "Home charging dramatically changes EV economics and convenience.",
+          options: [
+            { value: "home", label: "Home garage or driveway", desc: "Can install a wallbox — ideal EV setup" },
+            { value: "workplace", label: "Workplace charging", desc: "Employer provides charging access" },
+            { value: "mixed_access", label: "Home + public mix", desc: "Some home access, some public top-ups" },
+            { value: "public_only", label: "Public charging only", desc: "No home access — network compatibility critical" }
+          ]
+        },
+        {
+          id: "roadtrips",
+          question: "How often do you road trip?",
+          subtitle: "Charging stop frequency and network coverage matter more for frequent travellers.",
+          options: [
+            { value: "rarely", label: "Rarely", desc: "Mostly local driving, occasional longer trip" },
+            { value: "monthly", label: "Monthly", desc: "A long drive roughly once a month" },
+            { value: "weekly", label: "Weekly", desc: "Regular long-distance travel" },
+            { value: "cross_border", label: "International", desc: "Regularly cross European borders" }
+          ]
+        },
+        {
+          id: "priority",
+          question: "What matters most to you?",
+          subtitle: "If you could only optimise one thing, what would it be?",
+          options: [
+            { value: "range", label: "Maximum range", desc: "I want the most km possible between charges" },
+            { value: "charging", label: "Fastest charging", desc: "Charge stop time matters more than range" },
+            { value: "comfort", label: "Comfort and quality", desc: "Interior, ride quality, refinement" },
+            { value: "value", label: "Best value", desc: "Most capability per euro spent" }
+          ]
+        }
+      ]
     },
     guides: {
       seo_title: "EV Ownership Guides — Battery, Winter, Charging | AUTOVERE",
