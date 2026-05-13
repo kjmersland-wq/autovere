@@ -193,7 +193,7 @@ export default function EVModelDetail() {
           </div>
           {heroImage && (
             <div className="mt-6 text-[10px] text-muted-foreground/70 uppercase tracking-wider">
-              Photo: <a href={heroImage.creditUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">{heroImage.credit}</a> · {heroImage.source}
+              {t("ev.models.photo_credit")}: <a href={heroImage.creditUrl} target="_blank" rel="noopener noreferrer" className="hover:text-foreground transition-colors">{heroImage.credit}</a> · {heroImage.source}
             </div>
           )}
         </div>
