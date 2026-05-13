@@ -218,6 +218,27 @@ export type Database = {
         }
         Relationships: []
       }
+      rate_limits: {
+        Row: {
+          count: number
+          id: number
+          key: string
+          window_start: string
+        }
+        Insert: {
+          count?: number
+          id?: number
+          key: string
+          window_start: string
+        }
+        Update: {
+          count?: number
+          id?: number
+          key?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       subscriptions: {
         Row: {
           cancel_at_period_end: boolean | null
@@ -292,6 +313,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      check_rate_limit: {
+        Args: { _key: string; _max_requests: number; _window_seconds?: number }
+        Returns: boolean
+      }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean

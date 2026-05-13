@@ -382,6 +382,88 @@ const no: Translation = {
       filter_ownership: "Eierskap",
       key_takeaways: "Viktige læringspunkter",
       close: "Lukk",
+      items: {
+        "battery-longevity": {
+          title: "Slik maksimerer du batteriets levetid",
+          summary: "Elbilbatterier degraderes sakte — men vanene dine kan forlenge eller forkorte levetiden betydelig. Her er den evidensbaserte tilnærmingen.",
+          body: [
+            "De fleste elbilbatterier beholder 80–90 % av opprinnelig kapasitet etter 200 000 km, men ladevaner betyr enormt mye. Å holde ladenivået mellom 20 % og 80 % i det daglige reduserer elektrokjemisk stress på cellene.",
+            "Hurtiglading (DC/HPC) er praktisk, men genererer varme — den fremste fienden til litium-ion-celler. Bruk hurtiglading til reiser, ikke til daglige toppladninger. Hjemme er AC-lading om natten alltid å foretrekke.",
+            "Ekstreme temperaturer belaster batteriet uansett retning. I kaldt klima bør du forvarme bilen mens den fortsatt er tilkoblet. I varmt klima bør du parkere i skyggen og unngå å la bilen stå med høyt ladenivå i direkte sol."
+          ],
+          tips: ["Lad til 80 % daglig, 100 % kun før lange turer", "Unngå hyppig hurtiglading når det ikke trengs", "Forvarm batteriet før kjøring i kaldt vær", "Ikke la bilen stå på 0 % eller 100 % over lang tid"]
+        },
+        "winter-driving": {
+          title: "Elbilkjøring om vinteren: hva du kan forvente",
+          summary: "Kaldt vær reduserer reell elbilrekkevidde med 15–40 %. Å forstå hvorfor — og planlegge rundt det — gjør en potensiell frustrasjon til en håndterbar realitet.",
+          body: [
+            "Litium-ion-kjemi bremser betydelig under 10 °C. Ved −10 °C øker indre motstand og batteristyringssystemet begrenser utladningshastigheten for å beskytte cellene. Dette er midlertidig — batteriet varmes opp mens du kjører.",
+            "Kupévarme er den største faktoren. I motsetning til forbrenningsmotorer produserer ikke elbiler spillvarme du kan gjenbruke. Å varme opp en kupé fra bunnen av ved −15 °C kan bruke 3–5 kW kontinuerlig — et betydelig uttak fra et 75 kWh-batteri.",
+            "Forvarming er det mest effektive vinterverktøyet. Å varme opp kupéen mens bilen er tilkoblet bruker strøm fra nettet, ikke fra batteriet — så du starter hver tur med varm bil og fullt batteri."
+          ],
+          tips: ["Forvarm mens bilen er tilkoblet — ikke fra batteriet", "Bruk setevarme i stedet for kupévifte når det er mulig", "Planlegg 25–30 % flere ladestopp på vinterturer", "Hold dekktrykket 0,2–0,3 bar over sommertrykk"]
+        },
+        "regen-braking": {
+          title: "Regenerativ bremsing: slik bruker du den riktig",
+          summary: "Regenerering er mer enn en effektivitetsfunksjon — den endrer fundamentalt hvordan du kjører, og å mestre den lønner seg i rekkevidde og bremseslitasje.",
+          body: [
+            "Regenerativ bremsing omdanner kinetisk energi tilbake til elektrisk energi når du bremser. I én-pedal-modus gir det å slippe gassen sterk regenerering — nok til å bringe de fleste biler nesten til full stopp.",
+            "Effektiviteten av regenerering avhenger av hastighet og ladenivå. Ved høye hastigheter er kinetisk energi høy og regenerering mest verdifull. Når batteriet er nesten fullt (over 95 %), begrenses regenereringskapasiteten for å beskytte cellene mot overlading.",
+            "Friksjonsbremser er nå i stor grad overflødige i daglig kjøring. Dette er en betydelig fordel — bremseskiver og klosser holder dramatisk lenger på elbiler. Bremseskiver på elbiler er imidlertid utsatt for overflateruste hvis friksjonsbremsene brukes svært sjelden."
+          ],
+          tips: ["Bruk maksimal regenerering i by- og kupert kjøring", "Planlegg regenerering i nedoverbakker for å hente energi", "Bruk friksjonsbremsene av og til for å rense skiveoverflatene", "Bruk regenerering i kaldt vær for å varme batteriet skånsomt"]
+        },
+        "brake-discs": {
+          title: "Slik unngår du bremseskiverust på elbiler",
+          summary: "Bremseskiver på elbiler kan ruste raskere enn på fossilbiler — ikke fordi de brukes mer, men fordi de brukes mindre. Her er hvorfor og hva du gjør.",
+          body: [
+            "Bremseskiver på fossilbiler poleres naturlig av hyppig friksjonsbruk. På elbiler håndterer regenerativ bremsing det meste av nedbremsingen, så friksjonsbremsene kan stå ubrukt i uker. Overflaterust dannes raskt på ubrukt stål.",
+            "Denne korrosjonen er først og fremst kosmetisk i starten, men i fuktige klimaer (Skandinavia, UK, kyst-Europa) kan det utvikle seg til groptæring som reduserer bremseeffekten og gir vibrasjoner. Det er ikke et sikkerhetsproblem først, men det kan bli det hvis det neglisjeres.",
+            "Løsningen er enkel: bruk friksjonsbremsene bestemt fra tid til annen. Én gang i uken er bevisst hard bremsing fra 80 km/t til 20 km/t nok til å holde skivene rene. Noen produsenter bygger nå inn automatisk bremseaktivering i programvaren for dette."
+          ],
+          tips: ["Bruk friksjonsbremsene bevisst minst én gang i uken", "Hard bremsing fra motorveihastigheter er mest effektivt", "Sjekk for isdannelse på skivene før kjøring om vinteren", "Vurder sinkbelagte eller rustfrie skiver ved neste service"]
+        },
+        "charging-etiquette": {
+          title: "Ladeetikett for elbiler: de uskrevne reglene",
+          summary: "Offentlig lading er en delt ressurs. Elbilmiljøet har utviklet klare normer — her er hva erfarne sjåfører følger.",
+          body: [
+            "Den viktigste regelen: flytt bilen når ladingen er ferdig. Å la en fulladet bil stå på en hurtiglader blokkerer for andre som trenger strøm. De fleste ladenettverk innfører «idle fees» etter at økten er over — men den sosiale forventningen kom før gebyrene.",
+            "Ikke koble fra noen andres bil uten tillatelse, selv om økten ser ferdig ut. Noen økter er bevisst satt på pause. Og parker aldri i en EV-ladeplass hvis du ikke lader — dette gjelder både elbiler og fossilbiler.",
+            "I rushtider på travle ladere er det høflig å lade til 80 % og dra videre hvis andre venter. De siste 20 % av ladingen er den tregeste fasen; andre kan ha mer nytte av en raskere delvis lading enn du har av en full."
+          ],
+          tips: ["Flytt bilen umiddelbart når ladingen er ferdig", "Ikke stå til 100 % når andre venter — bruk 80 %", "Koble aldri fra en annen bil uten tillatelse", "Bruk app-varsler for å komme tilbake i tide"]
+        },
+        "tyre-wear": {
+          title: "Dekkslitasje på elbil: hvorfor det skjer raskere og hvordan håndtere det",
+          summary: "Elbiler er tyngre og akselererer hardere enn tilsvarende fossilbiler. Begge faktorene øker dekkslitasje — men riktig tilnærming kompenserer betydelig.",
+          body: [
+            "Batterivekt legger 200–600 kg til de fleste elbiler sammenlignet med fossilversjoner. Denne ekstra lasten øker dekkdeformasjonen ved hver omdreining, og genererer mer varme og slitasje. Elbilspesifikke dekk er forsterket for å håndtere dette og har et lyddempende lag for å kompensere for fraværet av motorlyd.",
+            "Umiddelbart dreiemoment er den andre faktoren. Selv i hverdagskjøring kan elbiler levere fullt dreiemoment fra stillestående — noe som utsetter dekkene for skjærkrefter som fossilbiler sjelden når i normal bruk. Aggressiv akselerasjon er den raskeste veien til slitte fronthjul.",
+            "Rotasjon er essensielt. De fleste elbiler er bakhjulstrukne for traksjon, så bakdekkene slites raskere på RWD-modeller; motsatt på FWD. En 10 000 km rotasjonsplan — strammere enn fossilbil-normen — forlenger total dekklevetid betydelig."
+          ],
+          tips: ["Bruk elbilspesifikke dekk (merket «EL» eller «XL»)", "Roter dekkene hver 10 000 km — ikke 15 000", "Unngå aggressiv akselerasjon de første 3–5 km (kalde dekk)", "Hold trykket 0,2 bar over minimumsanbefaling"]
+        },
+        "fast-charging": {
+          title: "Beste praksis for hurtiglading",
+          summary: "Hurtiglading (DC) er kraftig, men krever litt disiplin for å brukes optimalt. Her er hva forskningen sier om å beskytte batteriet.",
+          body: [
+            "Topp-ladehastigheten oppstår mellom 20 % og 60 % ladenivå på de fleste elbiler. Under 20 % begrenser BMS strømmen for å beskytte cellene. Over 60 % trappes effekten ned for å forhindre overoppheting. Å planlegge stopp i dette området gir raskere økter totalt.",
+            "Påfølgende hurtigladninger uten avkjølingstid genererer varme som BMS ikke kan avlede fullt ut. På en flerdagers biltur er ikke dette en meningsfull bekymring — cellene gjenoppretter seg over natten. Men tre eller fire HPC-økter på én dag kan redusere effektiviteten i den økten.",
+            "Forvarming av batteriet før hurtiglading er stadig mer automatisert. Mange elbiler begynner å varme opp batteriet for optimal akseptrate når navigasjonen er satt til en ladestasjon. Bruk av innebygd navigasjon til ladestasjoner aktiverer dette automatisk."
+          ],
+          tips: ["Lad mellom 20–80 % for raskest gjennomstrømning", "Bruk innebygd navigasjon for å utløse batteri-forvarming", "Tillat 15 min nedkjøling mellom påfølgende hurtigladninger", "Unngå 0–100 % på HPC-ladere når det er mulig"]
+        },
+        "long-term-ownership": {
+          title: "Langsiktig elbileierskap: hva endres ved 100 000 km",
+          summary: "Tre til fem år inn endrer eierskapsopplevelsen seg. Her er hva langsiktige eiere rapporterer — det gode og det av og til frustrerende.",
+          body: [
+            "Tap av batterikapasitet er reelt, men tregere enn tidlige elbileiere fryktet. De fleste reelle data fra Tesla-, Nissan Leaf- og Hyundai-flåter viser 5–15 % kapasitetstap ved 150 000 km, der raskere degradering er unntak knyttet til ekstreme klimaer eller dårlige ladevaner.",
+            "Programvareoppdateringer fortsetter å bety mer enn på fossilbiler. Over-the-air-oppdateringer legger ofte til rekkevidde, forbedrer ladekurver og legger til funksjoner år etter kjøp — en genuint annerledes eierskapsopplevelse enn fossilbiler.",
+            "Det totale eierskapsbildet bedrer seg generelt over tid. Lavere servicekostnader (ingen olje, færre bremseskift, enklere drivverk) hoper seg opp over år. Energikostnader holder seg stabile relativt til drivstoffvolatilitet."
+          ],
+          tips: ["Følg batterihelsen med produsentens app årlig", "Hold programvaren oppdatert — kurver og rekkevidde forbedres over tid", "Service-fokus skifter til dekk, kabinfiltre og kjølevæske", "Vurder utvidet garanti for batteriet utover 8 år"]
+        }
+      }
     },
     models: {
       seo_title: "Elbilmodeller — Spesifikasjoner og reell rekkevidde | AUTOVERE",

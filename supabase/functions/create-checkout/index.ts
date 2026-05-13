@@ -1,12 +1,18 @@
 import { createClient } from 'npm:@supabase/supabase-js@2';
 import { getStripeClient, getStripeEnvironment } from '../_shared/stripe.ts';
 import { corsHeaders, handleCors } from '../_shared/cors.ts';
+import { checkRateLimit, getClientIp, rateLimitResponse } from '../_shared/rate-limit.ts';
 
 Deno.serve(async (req) => {
   const preflight = handleCors(req);
   if (preflight) return preflight;
   try {
     console.log('[create-checkout] step=start method=' + req.method);
+
+    // Rate limit: 10 checkout attempts per IP per 5 minutes
+    const ip = getClientIp(req);
+    const allowed = await checkRateLimit(`checkout:${ip}`, 10, 300);
+    if (!allowed) return rateLimitResponse(corsHeaders, 300);
 
     const authHeader = req.headers.get('Authorization');
     if (!authHeader) throw new Error('Not authenticated: missing Authorization header');
