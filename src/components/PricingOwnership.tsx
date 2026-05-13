@@ -1,80 +1,90 @@
 import { Banknote, Wrench, Battery, Shield, TrendingUp, Sparkles } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import type { Car } from "@/data/cars";
+import { useLoc, loc } from "@/lib/loc";
 
-// Heuristic ownership signals derived from car attributes — calm, directional, not pretending to be precise.
-const ownershipFor = (car: Car) => {
-  const tier = car.score >= 94 ? "Top-tier premium" : car.score >= 88 ? "Premium" : "Mid-premium";
+const ownershipFor = (car: Car, lang: "en" | "no", t: (k: string) => string) => {
+  const tagStr = loc(car.tag, "en").toLowerCase();
+  const climateStr = loc(car.climate, "en").toLowerCase();
+  const tier =
+    car.score >= 94 ? t("pages.car.po.tier_top") :
+    car.score >= 88 ? t("pages.car.po.tier_premium") :
+    t("pages.car.po.tier_mid");
   const stress =
-    car.tag.toLowerCase().includes("winter") || car.climate.toLowerCase().includes("excellent")
-      ? "Lower than average"
-      : "Average";
+    tagStr.includes("winter") || climateStr.includes("excellent")
+      ? t("pages.car.po.stress_low")
+      : t("pages.car.po.stress_avg");
   const value =
     car.score >= 94
-      ? "Strong long-term — feels more premium than the price suggests."
-      : "Fair — comfort and refinement justify the cost.";
+      ? t("pages.car.po.value_strong")
+      : t("pages.car.po.value_fair");
   const charging = car.range
-    ? "Daily charging at home covers most needs. Long trips reward planning, not anxiety."
+    ? t("pages.car.po.charging_home")
     : "—";
-  const insurance = car.type.toLowerCase().includes("performance") ? "Higher band" : "Standard premium band";
-  const resale = car.score >= 94 ? "Expected to hold value well" : "Expected to depreciate gently";
-
+  const typeStr = loc(car.type, "en").toLowerCase();
+  const insurance = typeStr.includes("performance")
+    ? t("pages.car.po.ins_higher")
+    : t("pages.car.po.ins_standard");
+  const resale = car.score >= 94
+    ? t("pages.car.po.resale_well")
+    : t("pages.car.po.resale_gentle");
   return { tier, stress, value, charging, insurance, resale };
 };
 
 export const PricingOwnership = ({ car }: { car: Car }) => {
-  const o = ownershipFor(car);
+  const { t } = useTranslation();
+  const { l, lang } = useLoc();
+  const o = ownershipFor(car, lang, t);
 
   return (
     <section className="container pb-24">
-      <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">Pricing & ownership</div>
+      <div className="text-sm text-accent font-medium mb-3 tracking-wide uppercase">{t("pages.car.po.eyebrow")}</div>
       <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-10 leading-tight max-w-3xl">
-        What it really costs to live with the {car.name}.
+        {t("pages.car.po.h", { name: car.name })}
       </h2>
 
       <div className="grid lg:grid-cols-[1fr_1.2fr] gap-6">
-        {/* Pricing card */}
         <div className="glass rounded-3xl p-8 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-glow opacity-30 pointer-events-none" />
           <div className="relative">
             <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent mb-4">
-              <Banknote className="w-3.5 h-3.5" /> Estimated pricing
+              <Banknote className="w-3.5 h-3.5" /> {t("pages.car.po.estimated")}
             </div>
             <div className="text-5xl md:text-6xl font-bold tracking-tighter mb-2">
-              {car.startingPrice ?? "—"}
+              {l(car.startingPrice) || "—"}
             </div>
             <div className="text-sm text-muted-foreground mb-6">
-              Starting price · regional estimate · before incentives
+              {t("pages.car.po.starting_meta")}
             </div>
 
             <div className="grid grid-cols-2 gap-4 text-sm">
               <div>
-                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Positioning</div>
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">{t("pages.car.po.positioning")}</div>
                 <div className="font-medium">{o.tier}</div>
               </div>
               <div>
-                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Ownership stress</div>
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">{t("pages.car.po.stress")}</div>
                 <div className="font-medium">{o.stress}</div>
               </div>
               <div>
-                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Insurance</div>
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">{t("pages.car.po.insurance")}</div>
                 <div className="font-medium">{o.insurance}</div>
               </div>
               <div>
-                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">Resale outlook</div>
+                <div className="text-[11px] uppercase tracking-wider text-muted-foreground mb-1">{t("pages.car.po.resale")}</div>
                 <div className="font-medium">{o.resale}</div>
               </div>
             </div>
 
             <div className="mt-6 pt-6 border-t border-border/40 text-[11px] text-muted-foreground leading-relaxed">
-              AutoVere estimates use regional averages, not live dealer pricing. Final figures depend on country, options and incentives.
+              {t("pages.car.po.disclaimer")}
             </div>
           </div>
         </div>
 
-        {/* AI value insights */}
         <div className="glass rounded-3xl p-8 space-y-6">
           <div className="flex items-center gap-2 text-xs uppercase tracking-[0.25em] text-accent">
-            <Sparkles className="w-3.5 h-3.5" /> AI value insight
+            <Sparkles className="w-3.5 h-3.5" /> {t("pages.car.po.ai_value")}
           </div>
           <p className="text-xl leading-relaxed">
             <span className="text-foreground font-medium">{o.value}</span>
@@ -84,34 +94,34 @@ export const PricingOwnership = ({ car }: { car: Car }) => {
             <div className="flex gap-3">
               <Battery className="w-5 h-5 text-accent shrink-0 mt-0.5" />
               <div>
-                <div className="text-sm font-semibold mb-1">Charging life</div>
+                <div className="text-sm font-semibold mb-1">{t("pages.car.po.charging_t")}</div>
                 <div className="text-sm text-muted-foreground leading-relaxed">{o.charging}</div>
               </div>
             </div>
             <div className="flex gap-3">
               <Wrench className="w-5 h-5 text-accent shrink-0 mt-0.5" />
               <div>
-                <div className="text-sm font-semibold mb-1">Maintenance</div>
+                <div className="text-sm font-semibold mb-1">{t("pages.car.po.maint_t")}</div>
                 <div className="text-sm text-muted-foreground leading-relaxed">
-                  EV servicing is light — fewer moving parts, fewer surprise bills.
+                  {t("pages.car.po.maint_b")}
                 </div>
               </div>
             </div>
             <div className="flex gap-3">
               <Shield className="w-5 h-5 text-accent shrink-0 mt-0.5" />
               <div>
-                <div className="text-sm font-semibold mb-1">Long-term confidence</div>
+                <div className="text-sm font-semibold mb-1">{t("pages.car.po.long_t")}</div>
                 <div className="text-sm text-muted-foreground leading-relaxed">
-                  Software updates and battery warranties mean the car often improves after you buy it.
+                  {t("pages.car.po.long_b")}
                 </div>
               </div>
             </div>
             <div className="flex gap-3">
               <TrendingUp className="w-5 h-5 text-accent shrink-0 mt-0.5" />
               <div>
-                <div className="text-sm font-semibold mb-1">Comfort-to-price ratio</div>
+                <div className="text-sm font-semibold mb-1">{t("pages.car.po.ratio_t")}</div>
                 <div className="text-sm text-muted-foreground leading-relaxed">
-                  Refinement and quietness rate above the price tier.
+                  {t("pages.car.po.ratio_b")}
                 </div>
               </div>
             </div>
