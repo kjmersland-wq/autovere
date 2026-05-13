@@ -763,7 +763,7 @@ const en = {
       monthly: "Monthly",
       yearly: "Yearly",
       billed_yearly: "billed yearly",
-      yearly_save: "or €59 / year — save 30%",
+      yearly_save: "or {{price}} / year — save 30%",
       premium_lead:
         "For people thinking long-term. Deeper analysis, smarter projections, fewer surprises.",
       on_premium: "✓ You're on Premium",
