@@ -10,6 +10,7 @@ import {
   DEFAULT_VEHICLE, VehicleProfile, computePlan, samplePath, formatDuration,
   addMinutes, formatTime, RoutePlan, TOLL_BY_COUNTRY, CountrySegment,
 } from "@/lib/route-cost";
+import { SendToCar } from "@/components/SendToCar";
 
 // ─── Types ────────────────────────────────────────────────────────────
 interface PhotonHit {
@@ -401,6 +402,21 @@ export function RoutePlanner() {
                   );
                 })}
               </div>
+            </div>
+          )}
+
+          {/* Send to car */}
+          {from && to && (
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-4 rounded-2xl border border-accent/30 bg-accent/5">
+              <div>
+                <div className="text-sm font-semibold mb-0.5">Klar til å kjøre?</div>
+                <div className="text-[11px] text-muted-foreground">Send hele ruten direkte til bilens navigasjon — Tesla, CarPlay, Android Auto eller Waze.</div>
+              </div>
+              <SendToCar
+                from={{ label: from.label, lat: from.lat, lon: from.lon }}
+                to={{ label: to.label, lat: to.lat, lon: to.lon }}
+                stops={plan.stops.map((s) => ({ lat: s.lat, lon: s.lon }))}
+              />
             </div>
           )}
 
