@@ -139,7 +139,7 @@ function CityInput({
 // ─── Main planner ─────────────────────────────────────────────────────
 export function RoutePlanner() {
   const { t } = useTranslation();
-  const tt = (k: string, opts?: Record<string, unknown>) => t(`ev.planner.tool.${k}`, opts as never) as string;
+  const tt = (k: string, opts?: Record<string, unknown>) => t(`ev.planner.tool.${k}`, opts as never) as unknown as string;
   const [from, setFrom] = useState<PhotonHit | null>(null);
   const [to, setTo] = useState<PhotonHit | null>(null);
   const [departAt, setDepartAt] = useState<string>(() => {
