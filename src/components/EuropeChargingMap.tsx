@@ -24,6 +24,7 @@ export const NETWORKS = [
   { id: "eon",       label: "E.ON Drive",    match: ["e.on", "eon"],                        color: "#dc2626" },
   { id: "vattenfall",label: "Vattenfall",    match: ["vattenfall"],                         color: "#0284c7" },
   { id: "totalenergies",label:"TotalEnergies",match:["total"],                              color: "#e11d48" },
+  { id: "orlen",     label: "Orlen Charge",  match: ["orlen"],                              color: "#b91c1c" },
 ] as const;
 
 const OTHER_COLOR = "#9ca3af";
