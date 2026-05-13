@@ -124,6 +124,9 @@ export interface ChargingStop {
   energyKwh: number;
   minutes: number;
   cost: number;
+  networkId: ChargingNetworkId;
+  networkName: string;
+  pricePerKwh: number;
 }
 
 export interface RoutePlan {
