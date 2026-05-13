@@ -46,7 +46,7 @@ const LearnArticle = () => {
         <Link to="/learn" className="text-xs uppercase tracking-wider text-accent mb-6 inline-block">
           {t("pages.learn.back_to")} {category}
         </Link>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.05] mb-6">{title}</h1>
+        <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight break-words hyphens-autoer leading-[1.05] mb-6">{title}</h1>
         <p className="text-xl text-muted-foreground leading-relaxed mb-12">{excerpt}</p>
         <div className="space-y-6 text-lg leading-relaxed">
           {la(a.body).map((p, i) => <p key={i}>{p}</p>)}

@@ -308,7 +308,7 @@ export default function EVAdvisor() {
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-emerald-400 mb-5">
             <Zap className="w-3.5 h-3.5" /> {t("ev.advisor.eyebrow")}
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight break-words hyphens-auto mb-5 max-w-2xl">
             {t("ev.advisor.title")} <span className="text-gradient">{t("ev.advisor.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-lg text-lg">

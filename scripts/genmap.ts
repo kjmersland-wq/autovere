@@ -1,6 +1,6 @@
 import { CARS, COLLECTIONS, PERSONALITIES, LEARN } from '../src/data/cars.ts';
 
-const base = 'https://autovere.com';
+const base = 'https://www.autovere.com';
 const langs = ['en', 'no', 'de', 'sv'] as const;
 const DEFAULT = 'en';
 

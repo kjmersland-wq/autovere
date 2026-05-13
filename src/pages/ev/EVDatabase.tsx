@@ -286,7 +286,7 @@ export default function EVDatabase() {
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-accent mb-5">
             <Zap className="w-3.5 h-3.5" /> {t("ev.database.eyebrow")}
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-3xl">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-3xl break-words hyphens-auto">
             {t("ev.database.title")} <span className="text-gradient">{t("ev.database.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg mb-8">

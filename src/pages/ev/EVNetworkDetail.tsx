@@ -35,7 +35,7 @@ export function EVNetworksIndex() {
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-cyan-400 mb-5">
             <Zap className="w-3.5 h-3.5" /> {t("ev.networks.eyebrow")}
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-2xl">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight break-words hyphens-auto mb-5 max-w-2xl">
             {t("ev.networks.index_title")} <span className="text-gradient">{t("ev.networks.index_title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg">
@@ -140,7 +140,7 @@ export default function EVNetworkDetail() {
 
   const countries = COVERAGE_COUNTRIES[slug] ?? [];
 
-  const origin = "https://autovere.com";
+  const origin = "https://www.autovere.com";
   const networkUrl = `${origin}${lang !== "en" ? `/${lang}` : ""}/ev/networks/${network.slug}`;
   const jsonLd = [
     {
@@ -189,7 +189,7 @@ export default function EVNetworkDetail() {
           <div className={`inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] mb-4 ${network.accentColor}`}>
             <Zap className="w-3.5 h-3.5" /> {t("ev.networks.est_eyebrow", { year: network.founded })}
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-4">{network.name}</h1>
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight break-words hyphens-auto mb-4">{network.name}</h1>
           <p className="text-muted-foreground max-w-xl text-lg leading-relaxed mb-8">{network.tagline}</p>
 
           <div className="flex flex-wrap gap-4">

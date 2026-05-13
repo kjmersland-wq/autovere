@@ -41,7 +41,7 @@ const CarDetail = () => {
   const summary = l(car.summary);
   const fit = l(car.fit);
 
-  const origin = typeof window !== "undefined" ? window.location.origin : "https://autovere.com";
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://www.autovere.com";
   const carUrl = `${origin}/cars/${car.slug}`;
   const jsonLd = [
     {

@@ -49,7 +49,7 @@ export default function EVNews() {
     name: "EV Intelligence — AUTOVERE",
     description:
       "Expert EV analysis: charging infrastructure, battery technology, European market data and ownership intelligence.",
-    url: "https://autovere.com/ev/news",
+    url: "https://www.autovere.com/ev/news",
   };
 
   return (

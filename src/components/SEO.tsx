@@ -11,7 +11,7 @@ type Props = {
   jsonLd?: Record<string, any> | Record<string, any>[];
 };
 
-const SITE = "https://autovere.com";
+const SITE = "https://www.autovere.com";
 
 const setMeta = (selector: string, attr: string, value: string) => {
   let el = document.head.querySelector<HTMLMetaElement>(selector);

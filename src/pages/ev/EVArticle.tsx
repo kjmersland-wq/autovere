@@ -54,7 +54,7 @@ export default function EVArticle() {
     description: article.summary,
     datePublished: article.publishedAt,
     author: { "@type": "Organization", name: "AUTOVERE" },
-    publisher: { "@type": "Organization", name: "AUTOVERE", url: "https://autovere.com" },
+    publisher: { "@type": "Organization", name: "AUTOVERE", url: "https://www.autovere.com" },
     keywords: article.tags.join(", "),
   };
 

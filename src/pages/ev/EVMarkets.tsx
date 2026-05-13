@@ -242,7 +242,7 @@ export default function EVMarkets() {
           <div className="inline-flex items-center gap-2 text-[11px] font-medium uppercase tracking-[0.25em] text-teal-400 mb-5">
             <Zap className="w-3.5 h-3.5" /> {t("ev.markets.eyebrow")}
           </div>
-          <h1 className="text-4xl md:text-6xl font-bold tracking-tight mb-5 max-w-3xl">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold tracking-tight break-words hyphens-auto mb-5 max-w-3xl">
             {t("ev.markets.title")} <span className="text-gradient">{t("ev.markets.title_b")}</span>
           </h1>
           <p className="text-muted-foreground max-w-xl text-lg">
