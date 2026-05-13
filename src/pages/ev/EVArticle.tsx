@@ -58,7 +58,7 @@ export default function EVArticle() {
     keywords: article.tags.join(", "),
   };
 
-  const dateLocale = lang === "no" ? "nb-NO" : lang === "de" ? "de-DE" : lang === "sv" ? "sv-SE" : lang === "fr" ? "fr-FR" : lang === "es" ? "es-ES" : lang === "it" ? "it-IT" : lang === "pl" ? "pl-PL" : "en-GB";
+  const dateLocale = lang === "no" ? "nb-NO" : "en-GB";
 
   return (
     <PageShell>
