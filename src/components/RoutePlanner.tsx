@@ -150,6 +150,41 @@ export function RoutePlanner() {
   const [error, setError] = useState<string | null>(null);
   const [route, setRoute] = useState<OsrmResult | null>(null);
   const [plan, setPlan] = useState<RoutePlan | null>(null);
+  const [stopOverrides, setStopOverrides] = useState<Record<number, ChargingNetworkId>>({});
+
+  // Reset per-stop overrides whenever a new plan is computed
+  useEffect(() => { setStopOverrides({}); }, [plan]);
+
+  // Apply per-stop network overrides to derive display stops + adjusted totals
+  const displayStops = useMemo(() => {
+    if (!plan) return [];
+    return plan.stops.map((s) => {
+      const overrideId = stopOverrides[s.index];
+      if (!overrideId) return s;
+      const net = networkById(overrideId);
+      const price = effectivePrice(net, !!vehicle.hasMembership, vehicle.evPricePerKwh);
+      return {
+        ...s,
+        networkId: net.id,
+        networkName: net.name,
+        pricePerKwh: Math.round(price * 100) / 100,
+        cost: Math.round(s.energyKwh * price * 100) / 100,
+      };
+    });
+  }, [plan, stopOverrides, vehicle.hasMembership, vehicle.evPricePerKwh]);
+
+  const adjustedEvCost = useMemo(
+    () => Math.round(displayStops.reduce((sum, s) => sum + s.cost, 0) * 100) / 100,
+    [displayStops],
+  );
+  const adjustedTotalEv = useMemo(
+    () => plan ? Math.round((adjustedEvCost + plan.tollEv) * 100) / 100 : 0,
+    [adjustedEvCost, plan],
+  );
+  const adjustedSavings = useMemo(
+    () => plan ? Math.round((plan.totalIce - adjustedTotalEv) * 100) / 100 : 0,
+    [adjustedTotalEv, plan],
+  );
 
   const swap = () => { setFrom(to); setTo(from); };
 
