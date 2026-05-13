@@ -293,7 +293,17 @@ export function EuropeChargingMap() {
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> · stations from <a href="https://openchargemap.org">OpenChargeMap</a>'
-            url={tileUrl}
+            url={isDark
+              ? "https://{s}.basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}{r}.png"
+              : "https://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}{r}.png"}
+            className="ocm-base-tiles"
+          />
+          <TileLayer
+            url={isDark
+              ? "https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png"
+              : "https://{s}.basemaps.cartocdn.com/light_only_labels/{z}/{x}/{y}{r}.png"}
+            className="ocm-label-tiles"
+            attribution=""
           />
           {targetBbox && <FlyTo bbox={targetBbox} />}
           <BoundsWatcher onChange={setBbox} />
