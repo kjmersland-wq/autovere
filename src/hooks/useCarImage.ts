@@ -73,11 +73,10 @@ export function useCarImage(query: string | undefined | null | { brand: string; 
     const run = async () => {
       let hit: CarImage | null = null;
       if (typeof query === "object") {
-        // Wikipedia first — guaranteed correct model
+        // Wikipedia ONLY — guaranteed to be the correct model.
+        // If Wikipedia has no article/photo, we intentionally show no image
+        // rather than risk an unrelated/wrongly-licensed stock photo.
         hit = await fetchWikipediaImage(query.brand, query.model).catch(() => null);
-        if (!hit) {
-          hit = await fetchStockImage(`${query.brand} ${query.model}`).catch(() => null);
-        }
       } else {
         hit = await fetchStockImage(query).catch(() => null);
       }
