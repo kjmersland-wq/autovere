@@ -5,6 +5,7 @@ import { PageShell } from "@/components/PageShell";
 import { SEO } from "@/components/SEO";
 import { Button } from "@/components/ui/button";
 import { LEARN, getArticle } from "@/data/cars";
+import { useLoc } from "@/lib/loc";
 
 const NotFound = () => {
   const { t } = useTranslation();
@@ -21,29 +22,34 @@ const NotFound = () => {
 
 const LearnArticle = () => {
   const { t } = useTranslation();
+  const { l, la } = useLoc();
   const { slug = "" } = useParams();
   const a = getArticle(slug);
   if (!a) return <NotFound />;
 
+  const title = l(a.title);
+  const excerpt = l(a.excerpt);
+  const category = l(a.category);
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: a.title,
-    description: a.excerpt,
-    articleSection: a.category,
+    headline: title,
+    description: excerpt,
+    articleSection: category,
   };
 
   return (
     <PageShell>
-      <SEO title={`${a.title} · AUTOVERE`} description={a.excerpt} type="article" jsonLd={jsonLd} />
+      <SEO title={`${title} · AUTOVERE`} description={excerpt} type="article" jsonLd={jsonLd} />
       <article className="container max-w-3xl pt-16 pb-24">
         <Link to="/learn" className="text-xs uppercase tracking-wider text-accent mb-6 inline-block">
-          {t("pages.learn.back_to")} {a.category}
+          {t("pages.learn.back_to")} {category}
         </Link>
-        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.05] mb-6">{a.title}</h1>
-        <p className="text-xl text-muted-foreground leading-relaxed mb-12">{a.excerpt}</p>
+        <h1 className="text-4xl md:text-6xl font-bold tracking-tighter leading-[1.05] mb-6">{title}</h1>
+        <p className="text-xl text-muted-foreground leading-relaxed mb-12">{excerpt}</p>
         <div className="space-y-6 text-lg leading-relaxed">
-          {a.body.map((p, i) => <p key={i}>{p}</p>)}
+          {la(a.body).map((p, i) => <p key={i}>{p}</p>)}
         </div>
 
         <div className="mt-16 glass rounded-3xl p-8 text-center">
@@ -62,7 +68,8 @@ export default LearnArticle;
 
 export const LearnIndex = () => {
   const { t } = useTranslation();
-  const categories = Array.from(new Set(LEARN.map((a) => a.category)));
+  const { l } = useLoc();
+  const categories = Array.from(new Set(LEARN.map((a) => l(a.category))));
   return (
     <PageShell>
       <SEO title={t("pages.learn.index_seo_title")} description={t("pages.learn.index_seo_desc")} />
@@ -79,15 +86,15 @@ export const LearnIndex = () => {
           <div key={cat} className="mb-16">
             <div className="text-xs uppercase tracking-[0.3em] text-accent mb-6">{cat}</div>
             <div className="grid md:grid-cols-2 gap-6">
-              {LEARN.filter((a) => a.category === cat).map((a) => (
+              {LEARN.filter((a) => l(a.category) === cat).map((a) => (
                 <Link
                   key={a.slug}
                   to={`/learn/${a.slug}`}
                   className="group glass rounded-3xl p-8 hover:-translate-y-1 hover:shadow-glow transition-all duration-500 block"
                 >
                   <BookOpen className="w-5 h-5 text-accent mb-4" />
-                  <h2 className="text-xl font-semibold tracking-tight mb-3">{a.title}</h2>
-                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{a.excerpt}</p>
+                  <h2 className="text-xl font-semibold tracking-tight mb-3">{l(a.title)}</h2>
+                  <p className="text-sm text-muted-foreground leading-relaxed mb-4">{l(a.excerpt)}</p>
                   <div className="text-xs text-accent flex items-center gap-1 group-hover:gap-2 transition-all">
                     {t("common.read_guide")} <ArrowRight className="w-3 h-3" />
                   </div>

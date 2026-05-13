@@ -1,9 +1,13 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { ArrowUpRight } from "lucide-react";
 import { useLatestPulse } from "@/hooks/use-latest-pulse";
 import { CARS } from "@/data/cars";
+import { useLoc } from "@/lib/loc";
 
 export const EditorialPulseSection = () => {
+  const { t, i18n } = useTranslation();
+  const { l } = useLoc();
   const { pulse, loading } = useLatestPulse();
   if (loading || !pulse) return null;
 
@@ -11,7 +15,8 @@ export const EditorialPulseSection = () => {
     .map((s) => CARS.find((c) => c.slug === s))
     .filter((c): c is NonNullable<typeof c> => Boolean(c));
 
-  const date = new Date(pulse.refreshed_at).toLocaleDateString("en-GB", {
+  const localeTag = i18n.language?.toLowerCase().startsWith("no") ? "nb-NO" : "en-GB";
+  const date = new Date(pulse.refreshed_at).toLocaleDateString(localeTag, {
     month: "long",
     day: "numeric",
     year: "numeric",
@@ -22,7 +27,7 @@ export const EditorialPulseSection = () => {
       <div className="container max-w-5xl py-20 md:py-28">
         <div className="flex items-center gap-3 text-xs uppercase tracking-[0.3em] text-accent mb-8">
           <span className="h-px w-10 bg-accent/40" />
-          The AutoVere Pulse
+          {t("pages.index.pulse_eyebrow")}
           <span className="text-muted-foreground/60 normal-case tracking-normal text-[11px]">
             · {date}
           </span>
@@ -46,7 +51,7 @@ export const EditorialPulseSection = () => {
         {featured.length > 0 && (
           <div className="mt-14 pt-8 border-t border-border/40">
             <div className="text-xs uppercase tracking-[0.3em] text-muted-foreground mb-5">
-              Featured this week
+              {t("pages.index.pulse_featured")}
             </div>
             <div className="grid sm:grid-cols-3 gap-3">
               {featured.map((car) => (
@@ -57,7 +62,7 @@ export const EditorialPulseSection = () => {
                 >
                   <div>
                     <div className="text-sm font-medium">{car.name}</div>
-                    <div className="text-xs text-muted-foreground mt-0.5">{car.fit}</div>
+                    <div className="text-xs text-muted-foreground mt-0.5">{l(car.fit)}</div>
                   </div>
                   <ArrowUpRight className="h-4 w-4 text-muted-foreground group-hover:text-accent transition-colors" />
                 </Link>
@@ -67,8 +72,7 @@ export const EditorialPulseSection = () => {
         )}
 
         <div className="mt-10 text-xs text-muted-foreground/70 max-w-xl leading-relaxed">
-          Written weekly by AutoVere's editorial intelligence — calm reflections grounded in
-          verified reviewer consensus, never hype.
+          {t("pages.index.pulse_disclaimer")}
         </div>
       </div>
     </section>

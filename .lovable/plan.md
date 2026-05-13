@@ -1,68 +1,58 @@
-# Europeisk EV-ruteplanlegger
+# Norsk lokalisering av bil-innhold
 
-Eksisterende `/ev/route-planner` har bare hardkodede eksempler. Bygges om til en ekte planlegger som funker mellom hvilke som helst byer i Europa.
+## Hva det handler om
+Sidene `/cars`, `/cars/:slug`, sammenligning og "match"-kortene henter all redaksjonell tekst fra dataobjekter — ikke fra i18n-filene. Derfor står `tagline`, `summary`, `lifestyle`, `personality`, `comfort`, `climate`, `practicality`, `ownership`, `strengths[]`, `tradeoffs[]`, `fit`, `tag` ("Best for cold climates"), pris-strenger, "AI Value Insight"-blokker, "Safety & Confidence"-prosa osv. på engelsk uansett språkvalg.
 
-## Hva brukeren får
+## Omfang
+- **39 biler** i `src/data/cars.ts` — ~12 tekstfelt per bil
+- `src/data/vehicle-intelligence.ts` (268 linjer) — "AI Value Insight", "Charging life", "Maintenance" osv.
+- Hardkodede engelske etiketter i `PricingOwnership.tsx`, `SafetyOwnershipBlock.tsx`, `ContinueExploringSection.tsx`, `CarMediaSection.tsx`, `CarCard.tsx`
+- Pris-strenger som `"from €78,000"`, `"560 km WLTP"`, `"Dual-motor AWD"` — strukturerbare, men i dag rene strenger
 
-- Skriv inn **fra** og **til** (alle europeiske byer/adresser, autocomplete)
-- Velg avreisetidspunkt og EV-modell (eller skriv inn rekkevidde + forbruk selv)
-- Resultat:
-  - Total distanse, kjøretid, ladetid, **ankomsttidspunkt**
-  - Liste over **ladestopp** (omtrentlig posisjon, ladetid, kWh, kostnad)
-  - **Total ladekostnad** (€)
-  - **Sammenligning mot bensin/diesel-bil** (forbruk + drivstoffpris per land)
-  - **Bompenger** estimert per land, med EV-rabatt der det gjelder (NO, FR, AT, ES osv.)
-  - **Totalpris** for turen (lading + bom)
-  - Besparelse vs ICE-bil
-- Kart som viser ruten og ladestopp
+Til sammen ca. **500–600 unike strenger** som må eksistere i begge språk.
 
-## Datakilder (gratis, ingen API-nøkkel)
+## Valgt arkitektur
 
-- **Geocoding/autocomplete**: Photon (`photon.komoot.io`) — CORS-vennlig, gratis
-- **Ruteberegning**: OSRM (`router.project-osrm.org`) — gratis, returnerer distanse, kjøretid, geometri
-- **Land-deteksjon for bom/drivstoff**: reverse geocoding på rutepunkter
+### 1. Datatype-endring
+Bytt strengfelter til `LocalizedString = string | { en: string; no: string }`. En `loc(value, lang)`-helper returnerer riktig språk og faller tilbake til EN hvis NO mangler. Dette unngår å bryte eksisterende kode — gamle strenger fortsetter å virke.
 
-## Kostnadsmodell (innebygde defaults, kan overstyres)
-
-- EV: 18 kWh/100km, 350 km rekkevidde, lade fra 15→80 % på 25 min, €0.45/kWh
-- ICE: 6.5 L/100km, €1.85/L diesel
-- Bom per land (€/100 km motorvei, EV-faktor):
-  - NO: €0.12, EV 0.5×
-  - FR: €9.50, EV 1.0×  (autoroute)
-  - IT: €7.00, EV 1.0×
-  - ES: €8.00, EV 1.0×
-  - AT: €0.10/km vignett, EV 1.0×
-  - PT: €6.50, EV 0.75×
-  - DE/SE/DK/NL/BE/CH/FI: €0 personbil
-- Antall ladestopp = `floor(distanse / brukbar_rekkevidde)`, energi per stopp = `(SoC_diff/100) × batteri`
-
-Tallene er åpenlyst estimater og merkes tydelig i UI som "estimert".
-
-## Filer
-
-```text
-src/components/RoutePlanner.tsx         (ny — hele interaktiv UI + logikk + kart)
-src/lib/route-cost.ts                   (ny — kostnadsmodell, bom-tabell)
-src/pages/ev/EVRoutePlanner.tsx         (skriv om — bruker ny komponent, fjerner hardkodede eksempler)
-src/pages/ev/EVCharging.tsx             (legg til CTA-kort øverst som lenker til ruteplanleggeren)
-src/components/EuropeChargingMap.tsx    (legg til "Planlegg rute"-knapp i filterlinjen)
+```ts
+export type L = string | { en: string; no: string };
+export const loc = (v: L, lang: "en" | "no") =>
+  typeof v === "string" ? v : (v[lang] ?? v.en);
 ```
 
-Ruteplanleggeren plasseres på sin egen side `/ev/route-planner` (eksisterende rute) og får tydelige inngangspunkter fra **/ev/networks** (der brukeren er nå) og **/ev/charging**.
+### 2. Bil-dataene
+Hver bil får NO-versjoner for de 12 tekstfeltene + `tag` + `strengths[]` + `tradeoffs[]`. Pris/rekkevidde/drivverk får også NO-formatering (`"fra 850 000 kr"`, `"560 km WLTP"`, `"Tomotors AWD"`).
 
-## Tekniske detaljer
+### 3. Komponenter
+`CarDetail`, `CarCard`, `PricingOwnership`, `SafetyOwnershipBlock`, `ContinueExploringSection`, `CarMediaSection`, `Compare`, hub-sider — leser via `loc(...)` med språk fra `useTranslation().i18n.language`.
 
-- Bruker `react-leaflet` (allerede installert) til å rendre rute-polylinje + stopp-markører
-- Photon autocomplete med 250ms debounce, viser by + land
-- OSRM call: `https://router.project-osrm.org/route/v1/driving/{lon1},{lat1};{lon2},{lat2}?overview=full&geometries=geojson`
-- Ladestopp plasseres jevnt langs polylinjen (geometrisk interpolering på rutekoordinatene); reverse-geocodes ikke per stopp (for fart) — viser bare "Stopp N · ~km X"
-- Bom estimeres ved å sample 5–10 punkter langs ruten, reverse-geocode landkode, summere distanse per land × bomtariff
-- Alle kostnader vises i € (forenklet, kan utvides senere)
-- Resultater lagres i URL query-string så ruter kan deles
+### 4. Hardkodede etiketter
+Flyttes til `pages.car.*` i `en.ts` / `no.ts` (eyebrows, "AI Value Insight", "Charging life", "Maintenance", "Long-term confidence", "Comfort-to-price ratio", "Estimated pricing", "Safety & Confidence", "Pricing & Ownership", "Starting price · regional estimate · before incentives", osv.).
 
-## Ut av scope (forenklinger)
+## Bølger (anbefalt rekkefølge)
 
-- Ingen sanntids strømpriser per stasjon — bruker gjennomsnittstariff
-- Ingen reell ladestasjon-matching (bare estimerte stopp langs ruten); kart-laget med ekte stasjoner finnes allerede på `/ev/networks`
-- Ingen været/temperatur-justering i v1
-- Ingen multi-waypoint i v1 (kun A→B)
+**Bølge 1 — infrastruktur + topp 8 biler** (det brukerne ser oftest)
+- Innfør `LocalizedString` + `loc()` helper
+- Migrer `CarDetail`, `CarCard`, `PricingOwnership`, `SafetyOwnershipBlock`, `ContinueExploringSection`, `CarMediaSection` til å bruke helperen
+- Oversett alle hardkodede UI-etiketter
+- Oversett innhold for de 8 mest synlige bilene (Polestar 3, BMW i5, Volvo EX90, Tesla Model Y, Hyundai Ioniq 5, Kia EV6, Mercedes EQE, Audi Q6 e-tron)
+
+**Bølge 2 — resterende 31 biler** + `vehicle-intelligence.ts` + Compare-side
+
+**Bølge 3 — `ev-models.ts`, `ev-markets.ts`, `articles.ts` redaksjonelle tekster** (hvis disse også skal være tospråklige)
+
+## Tone
+"Jeremy Miner"-stilen vi har brukt ellers — direkte, menneskelig, ikke kald markedsføring. Eksempler:
+- EN: *"The Polestar 3 doesn't try to impress you — it tries to settle you."*
+- NO: *"Polestar 3 prøver ikke å imponere deg — den prøver å roe deg ned."*
+
+## Tekniske notater
+- Ingen brytende endringer: `loc()` på en ren streng returnerer samme streng, så data som ennå ikke er lokalisert fortsetter å vises på EN inntil oversatt.
+- JSON-LD/SEO-felter på bil-detaljsiden lokaliseres også (description, breadcrumbs).
+- Tall, valuta og enheter formateres språk-bevisst der det gir mening (kr vs €), men startpris kan beholdes som forfattet streng for enkelhets skyld i denne runden.
+
+## Spørsmål før jeg starter
+1. **Skal jeg kjøre alle tre bølgene i ett**, eller stoppe etter Bølge 1 så du kan se resultatet på Polestar 3 / BMW i5 / Volvo EX90 før vi ruller ut til resten?
+2. **Pris-formatering**: beholde `€78,000` på begge språk, eller konvertere til `850 000 kr` på NO?
