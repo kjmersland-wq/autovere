@@ -243,15 +243,15 @@ export function RoutePlanner() {
       {/* Input panel */}
       <div className="glass rounded-2xl border border-border/40 p-5 md:p-6 space-y-4">
         <div className="flex flex-col md:flex-row gap-3 items-stretch md:items-center">
-          <CityInput value={from} setValue={setFrom} placeholder="Fra (by, adresse, land)" />
+          <CityInput value={from} setValue={setFrom} placeholder={tt("from_ph")} />
           <button
             onClick={swap}
             className="self-center p-2 rounded-lg border border-border/40 hover:bg-accent/10 transition-colors"
-            aria-label="Bytt fra/til"
+            aria-label={tt("swap_aria")}
           >
             <ArrowDownUp className="w-4 h-4" />
           </button>
-          <CityInput value={to} setValue={setTo} placeholder="Til (by, adresse, land)" />
+          <CityInput value={to} setValue={setTo} placeholder={tt("to_ph")} />
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
