@@ -282,7 +282,7 @@ export function RoutePlanner() {
         {/* Charging network selector — always visible */}
         <div className="pt-2 border-t border-border/30">
           <div className="flex items-center justify-between gap-3 mb-2">
-            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">Ladenettverk</label>
+            <label className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground">{tt("networks_label")}</label>
             <label className="flex items-center gap-2 text-[11px] text-muted-foreground cursor-pointer select-none">
               <input
                 type="checkbox"
@@ -290,7 +290,7 @@ export function RoutePlanner() {
                 onChange={(e) => setVehicle({ ...vehicle, hasMembership: e.target.checked })}
                 className="accent-cyan-400"
               />
-              Jeg har medlemskap / abonnement
+              {tt("member_pricing")}
             </label>
           </div>
           <div className="flex flex-wrap gap-1.5">
