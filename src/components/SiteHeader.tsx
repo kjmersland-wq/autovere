@@ -78,21 +78,29 @@ export const SiteHeader = () => {
 
   return (
     <>
-      <header className="fixed top-0 inset-x-0 z-50 glass border-b border-border/30">
+      <header className="fixed top-0 inset-x-0 z-50 backdrop-blur-xl bg-background/70 border-b border-white/5">
 
         {/* ── Row 1: Main navigation ─────────────────────────── */}
-        <div className="container flex items-center justify-between py-4">
-          <Link to={L("/")} className="flex items-center gap-2 font-semibold tracking-tight flex-shrink-0">
-            <div className="w-8 h-8 rounded-lg bg-gradient-primary flex items-center justify-center shadow-glow">
+        <div className="container flex items-center justify-between h-[68px]">
+          <Link to={L("/")} className="flex items-center gap-2.5 flex-shrink-0 group">
+            <div className="w-9 h-9 rounded-xl bg-gradient-primary flex items-center justify-center shadow-lg shadow-primary/20 group-hover:scale-105 transition-transform duration-300">
               <Sparkles className="w-4 h-4 text-primary-foreground" />
             </div>
-            AUTOVERE
+            <span className="text-base font-bold tracking-tight uppercase">AUTOVERE</span>
           </Link>
 
           {/* Desktop nav — EV Hub lives in the strip below */}
-          <nav className="hidden lg:flex items-center gap-6 text-sm text-muted-foreground">
+          <nav className="hidden lg:flex items-center gap-7 text-[13px] font-medium tracking-wide text-muted-foreground">
             {NAV.map((n) => (
-              <NavLink key={n.to} to={L(n.to)} className={navLinkClass}>
+              <NavLink
+                key={n.to}
+                to={L(n.to)}
+                className={({ isActive }) =>
+                  `relative py-1 transition-colors duration-200 hover:text-foreground ${
+                    isActive ? "text-foreground" : ""
+                  }`
+                }
+              >
                 {n.label}
               </NavLink>
             ))}
@@ -101,32 +109,39 @@ export const SiteHeader = () => {
           <div className="flex items-center gap-2">
             <VehicleSearch compact className="hidden md:inline-flex" />
 
-            <Link
-              to={L("/garage")}
-              className="relative w-9 h-9 rounded-lg glass border border-border/40 flex items-center justify-center hover:border-accent/40 hover:text-accent transition-colors"
-              aria-label={t("ev.nav.garage")}
-            >
-              <Warehouse className="w-4 h-4" />
-              {totalCount > 0 && (
-                <span className="absolute -top-1 -right-1 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center">
-                  {totalCount > 9 ? "9+" : totalCount}
-                </span>
-              )}
-            </Link>
+            {/* Grouped action pill */}
+            <div className="hidden sm:flex items-center gap-0.5 p-1 rounded-xl bg-white/[0.03] border border-white/5">
+              <Link
+                to={L("/garage")}
+                className="relative w-8 h-8 rounded-lg flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-all"
+                aria-label={t("ev.nav.garage")}
+              >
+                <Warehouse className="w-4 h-4" />
+                {totalCount > 0 && (
+                  <span className="absolute -top-0.5 -right-0.5 w-4 h-4 rounded-full bg-accent text-accent-foreground text-[9px] font-bold flex items-center justify-center ring-2 ring-background">
+                    {totalCount > 9 ? "9+" : totalCount}
+                  </span>
+                )}
+              </Link>
+              <PreferencesDrawer />
+              <ThemeToggle />
+            </div>
 
-            <PreferencesDrawer />
-            <ThemeToggle />
             <LanguageSwitcher />
 
             {isAuthenticated ? (
               <Link
                 to={L("/pricing")}
-                className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl glass border border-border/40 hover:border-accent/40 text-xs font-medium transition-colors"
+                className="hidden sm:flex items-center gap-1.5 px-4 py-2 rounded-xl bg-white/[0.03] border border-white/5 hover:border-accent/40 hover:bg-white/5 text-xs font-semibold tracking-wide transition-all"
               >
                 {t("ev.nav.account")}
               </Link>
             ) : (
-              <Button asChild size="sm" className="hidden sm:flex bg-gradient-primary hover:opacity-90 rounded-xl">
+              <Button
+                asChild
+                size="sm"
+                className="hidden sm:flex h-9 px-5 bg-gradient-primary hover:opacity-90 rounded-xl text-[13px] font-semibold shadow-lg shadow-primary/20 active:scale-95 transition-all"
+              >
                 <Link to={L("/auth")}>
                   <LogIn className="w-3.5 h-3.5 mr-1.5" />
                   {t("nav.cta")}
@@ -136,7 +151,7 @@ export const SiteHeader = () => {
 
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden w-9 h-9 rounded-lg glass border border-border/40 flex items-center justify-center"
+              className="lg:hidden w-9 h-9 rounded-lg bg-white/[0.03] border border-white/5 flex items-center justify-center"
               aria-label={t("ev.nav.toggle_menu")}
               aria-expanded={mobileOpen}
             >
@@ -146,13 +161,13 @@ export const SiteHeader = () => {
         </div>
 
         {/* ── Row 2: EV Hub trigger — always visible ──────────── */}
-        <div className="border-t border-white/[0.04]">
-          <div className="container py-1.5">
+        <div className="border-t border-white/5 bg-[hsl(var(--background))]/40">
+          <div className="container py-2">
             <button
               onClick={evToggle}
               aria-expanded={evOpen}
               aria-controls="ev-nav-chips"
-              className={`inline-flex items-center gap-1.5 text-[11px] font-medium uppercase tracking-[0.18em] transition-colors duration-200 select-none ${
+              className={`inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-[0.2em] transition-colors duration-200 select-none ${
                 evOpen
                   ? "text-cyan-400"
                   : "text-cyan-500/60 hover:text-cyan-400"
@@ -176,21 +191,21 @@ export const SiteHeader = () => {
         >
           <div className="overflow-hidden min-h-0">
             <div className="container">
-              <div className="flex items-center gap-1 overflow-x-auto scrollbar-none pb-2 pt-0.5">
+              <div className="flex items-center gap-1 overflow-x-auto scrollbar-none pb-2.5 pt-0.5 border-l-0">
                 {EV_CHIPS.map(({ to, label, icon: Icon, exact }) => (
                   <NavLink
                     key={to}
                     to={L(to)}
                     end={exact}
                     className={({ isActive }) =>
-                      `flex-shrink-0 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium transition-all whitespace-nowrap ${
+                      `flex-shrink-0 inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[12px] font-medium tracking-wide transition-all whitespace-nowrap ${
                         isActive
-                          ? "bg-cyan-400/15 text-cyan-400 border border-cyan-400/30"
-                          : "text-muted-foreground hover:text-foreground hover:bg-card/60"
+                          ? "bg-cyan-400/10 text-cyan-400 border border-cyan-400/30 shadow-[0_0_18px_-4px_rgba(34,211,238,0.35)]"
+                          : "text-muted-foreground border border-transparent hover:text-foreground hover:bg-white/[0.04]"
                       }`
                     }
                   >
-                    <Icon className="w-3 h-3" />
+                    <Icon className="w-3.5 h-3.5" />
                     {label}
                   </NavLink>
                 ))}
