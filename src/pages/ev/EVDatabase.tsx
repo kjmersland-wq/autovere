@@ -162,6 +162,7 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
 
 function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
   const { t } = useTranslation();
+  const fmt = useFormatPrice();
   const typeLabels: Record<string, string> = {
     ev: t("ev.database.filter_ev"),
     phev: t("ev.database.plug_in_hybrid"),
