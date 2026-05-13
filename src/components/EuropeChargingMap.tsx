@@ -316,7 +316,14 @@ export function EuropeChargingMap() {
             attribution=""
             minZoom={7}
           />
-          {targetBbox && <FlyTo bbox={targetBbox} />}
+          {targetBbox && activeNetworks.size === 0 && <FlyTo bbox={targetBbox} />}
+          {activeNetworks.size > 0 && (
+            <FitToMarkers
+              points={filtered
+                .filter((p) => p.AddressInfo)
+                .map((p) => [p.AddressInfo!.Latitude, p.AddressInfo!.Longitude] as [number, number])}
+            />
+          )}
           <BoundsWatcher onChange={setBbox} />
           {filtered.map((p) => {
             if (!p.AddressInfo) return null;
