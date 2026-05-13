@@ -199,10 +199,10 @@ function TCOTable({ vehicles }: { vehicles: Vehicle[] }) {
                   {typeLabels[v.type] ?? v.type}
                 </span>
               </td>
-              <td className="py-3 px-3">€{v.priceFrom.toLocaleString()}</td>
-              <td className="py-3 px-3">€{v.tco.annualFuelOrChargingEur.toLocaleString()}</td>
-              <td className="py-3 px-3">€{v.tco.annualServiceEur.toLocaleString()}</td>
-              <td className="py-3 px-3 font-semibold">€{v.tco.fiveYearTcoEur.toLocaleString()}</td>
+              <td className="py-3 px-3">{fmt(v.priceFrom)}</td>
+              <td className="py-3 px-3">{fmt(v.tco.annualFuelOrChargingEur)}</td>
+              <td className="py-3 px-3">{fmt(v.tco.annualServiceEur)}</td>
+              <td className="py-3 px-3 font-semibold">{fmt(v.tco.fiveYearTcoEur)}</td>
               <td className="py-3 px-3">
                 <span className={v.tco.depreciationPct3yr <= 30 ? "text-emerald-400" : v.tco.depreciationPct3yr <= 38 ? "text-amber-400" : "text-red-400"}>
                   {v.tco.depreciationPct3yr}%
