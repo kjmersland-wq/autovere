@@ -26,7 +26,7 @@ export function EVNetworksIndex() {
   return (
     <PageShell>
       <SEO
-        title="EV Charging Networks in Europe | AUTOVERE"
+        title={t("ev.database.networks_seo_title")}
         description="Compare Tesla Supercharger, Ionity, Fastned, Recharge and Allego. Speeds, pricing, coverage and compatibility for every major European charging network."
       />
       <section className="relative bg-hero grid-bg overflow-hidden pt-40 pb-20">

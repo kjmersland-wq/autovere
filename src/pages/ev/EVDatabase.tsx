@@ -71,11 +71,11 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
           <>
             <div className="bg-card/50 p-3 text-center">
               <div className="text-sm font-bold text-emerald-400">{vehicle.specs.realWorldRangeKm}</div>
-              <div className="text-[9px] text-muted-foreground uppercase">Real km</div>
+              <div className="text-[9px] text-muted-foreground uppercase">{t("ev.database.unit_real_km")}</div>
             </div>
             <div className="bg-card/50 p-3 text-center">
               <div className="text-sm font-bold text-cyan-400">{vehicle.specs.winterRangeKm}</div>
-              <div className="text-[9px] text-muted-foreground uppercase">Winter km</div>
+              <div className="text-[9px] text-muted-foreground uppercase">{t("ev.database.unit_winter_km")}</div>
             </div>
             <div className="bg-card/50 p-3 text-center">
               <div className="text-sm font-bold text-violet-400">{vehicle.specs.maxDCKw}</div>
@@ -86,11 +86,11 @@ function VehicleCard({ vehicle, L }: { vehicle: Vehicle; L: (p: string) => strin
           <>
             <div className="bg-card/50 p-3 text-center">
               <div className="text-sm font-bold text-cyan-400">{vehicle.specs.electricRangeKm}</div>
-              <div className="text-[9px] text-muted-foreground uppercase">EV km</div>
+              <div className="text-[9px] text-muted-foreground uppercase">{t("ev.database.unit_ev_km")}</div>
             </div>
             <div className="bg-card/50 p-3 text-center">
               <div className="text-sm font-bold text-foreground">{vehicle.specs.totalRangeKm}</div>
-              <div className="text-[9px] text-muted-foreground uppercase">Total km</div>
+              <div className="text-[9px] text-muted-foreground uppercase">{t("ev.database.unit_total_km")}</div>
             </div>
             <div className="bg-card/50 p-3 text-center">
               <div className="text-sm font-bold text-amber-400">{vehicle.specs.co2gkm}</div>
@@ -288,7 +288,7 @@ export default function EVDatabase() {
           <p className="text-muted-foreground max-w-xl text-lg mb-8">
             {t("ev.database.subtitle")}
           </p>
-          <VehicleSearch placeholder="Search vehicles — BMW iX3, diesel estate, winter EV..." className="max-w-md" />
+          <VehicleSearch placeholder={t("ev.database.search_ph")} className="max-w-md" />
         </div>
       </section>
 
