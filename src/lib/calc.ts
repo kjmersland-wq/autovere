@@ -187,3 +187,19 @@ export function formatDuration(min: number): string {
   const m = Math.round(min % 60);
   return h > 0 ? `${h}h ${m.toString().padStart(2, "0")}m` : `${m}m`;
 }
+
+export type Border = { pt: LatLng; from: string; to: string };
+
+/** Detect country transitions along the polyline (approximate, offline). */
+export function detectBorders(coords: LatLng[]): Border[] {
+  const samples = samplePolyline(coords, 8);
+  const out: Border[] = [];
+  let current: string | null = null;
+  for (const s of samples) {
+    const code = countryAt(s.pt);
+    if (!code) continue;
+    if (current && code !== current) out.push({ pt: s.pt, from: current, to: code });
+    current = code;
+  }
+  return out;
+}
