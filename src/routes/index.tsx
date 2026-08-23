@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon } from "lucide-react";
@@ -27,6 +27,7 @@ import { useLocale, useT } from "@/lib/i18n";
 import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { useTheme } from "@/hooks/use-theme";
 import { formatCurrency } from "@/lib/currency";
+import { marketingCopy } from "@/lib/marketing-i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -172,6 +173,7 @@ const LEGAL_MODAL_COPY = {
 function Index() {
   const t = useT();
   const { locale, setLocale } = useLocale();
+  const marketing = marketingCopy[locale];
   const legalCopy = LEGAL_MODAL_COPY[locale as keyof typeof LEGAL_MODAL_COPY] ?? LEGAL_MODAL_COPY.no;
   const [form, setForm] = useState<TripFormState>({
     from: null,
@@ -572,6 +574,8 @@ function Index() {
             >
               {t.contactLink}
             </button>
+            <Link to="/pricing" className="hover:text-foreground">{marketing.pricingLink}</Link>
+            <Link to="/faq" className="hover:text-foreground">{marketing.faqLink}</Link>
           </nav>
           <p className="mt-2 max-w-3xl">
             {t.footerDisclaimer}
