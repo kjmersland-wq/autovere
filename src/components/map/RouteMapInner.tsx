@@ -8,6 +8,7 @@ import type { Charger, ScenicHighlight } from "@/lib/geo";
 import type { RouteVariantKey } from "@/lib/geo";
 import type { Theme } from "@/hooks/use-theme";
 import { countryName, useLocale, useT } from "@/lib/i18n";
+import { chargerCopy } from "@/lib/charger-i18n";
 
 export type MapRoute = {
   key: RouteVariantKey;
@@ -67,6 +68,7 @@ export default function RouteMapInner({
   showChargers,
   theme,
   scenic,
+  onAddCharger,
 }: {
   routes: MapRoute[];
   start: LatLng | null;
@@ -76,9 +78,11 @@ export default function RouteMapInner({
   showChargers: boolean;
   theme: Theme;
   scenic: ScenicHighlight[];
+  onAddCharger?: (charger: Charger) => void;
 }) {
   const t = useT();
   const { locale } = useLocale();
+  const chargerText = chargerCopy[locale];
   const active = routes.find((r) => r.active)?.coords ?? [];
   return (
     <MapContainer
@@ -137,17 +141,16 @@ export default function RouteMapInner({
 
       {showChargers &&
         chargers.map((c) => (
-          <Marker key={c.id} position={[c.lat, c.lon]} icon={pin("⚡", "#7fe7d6", 26)}>
+            <Marker key={c.id} position={[c.lat, c.lon]} icon={pin(/tesla/i.test(`${c.operator ?? ""} ${c.name}`) ? "T" : /ionity/i.test(`${c.operator ?? ""} ${c.name}`) ? "I" : /fastned/i.test(`${c.operator ?? ""} ${c.name}`) ? "F" : "âš¡", /tesla/i.test(`${c.operator ?? ""} ${c.name}`) ? "#ef4444" : /ionity/i.test(`${c.operator ?? ""} ${c.name}`) ? "#60a5fa" : /fastned/i.test(`${c.operator ?? ""} ${c.name}`) ? "#facc15" : "#7fe7d6", 26)}>
             <Popup>
-              <strong>{c.name}</strong>
-              <br />
-              {c.powerKw ? `${Math.round(c.powerKw)} kW` : t.highPower} · {Math.round(c.atKm)} km {t.intoTrip}
-              {c.operator ? (
-                <>
-                  <br />
-                  {c.operator}
-                </>
-              ) : null}
+              <div className="min-w-[170px]">
+                <strong>{c.name}</strong>
+                <p>{chargerText.operator}: {c.operator ?? "-"}</p>
+                <p>{c.powerKw ? `${Math.round(c.powerKw)} kW` : t.highPower} Â· {Math.round(c.atKm)} km {t.intoTrip}</p>
+                <p>{chargerText.outlets}: {c.plugs ?? "-"}</p>
+                <p>{chargerText.status}: {c.availability ?? "-"}</p>
+                <button type="button" onClick={() => onAddCharger?.(c)} className="mt-2 rounded-md bg-primary px-2.5 py-1.5 text-xs font-semibold text-primary-foreground">{chargerText.addStop}</button>
+              </div>
             </Popup>
           </Marker>
         ))}

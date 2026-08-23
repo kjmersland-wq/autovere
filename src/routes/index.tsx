@@ -14,7 +14,7 @@ import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighligh
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
-import { fetchFastChargers, fetchMultiStopRoute, fetchScenicHighlights, type Charger, type RouteResult, type RouteVariantKey, type ScenicHighlight } from "@/lib/geo";
+import { fetchFastChargers, fetchMultiStopRoute, fetchScenicHighlights, type Charger, type Place, type RouteResult, type RouteVariantKey, type ScenicHighlight } from "@/lib/geo";
 import {
   appleMapsUrl,
   buildGpx,
@@ -29,6 +29,7 @@ import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { useTheme } from "@/hooks/use-theme";
 import { formatCurrency } from "@/lib/currency";
 import { marketingCopy } from "@/lib/marketing-i18n";
+import { chargerCopy } from "@/lib/charger-i18n";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -435,6 +436,11 @@ function Index() {
                 showChargers={submitted?.vehicle === "ev"}
                 theme={theme}
                 scenic={visibleScenic}
+                onAddCharger={(charger) => {
+                  const stop: Place = { id: `charger-${charger.id}`, name: charger.name, label: `${charger.name}, ${charger.operator ?? "EV charging"}`, lat: charger.lat, lon: charger.lon };
+                  setForm((current) => current.stops.some((item) => item?.id === stop.id) ? current : { ...current, stops: [...current.stops, stop] });
+                  toast.success(chargerCopy[locale].added);
+                }}
               />
             </div>
 
