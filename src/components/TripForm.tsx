@@ -41,7 +41,7 @@ export function TripForm({
 
   return (
     <form
-      className="panel p-5 sm:p-7"
+      className="panel rounded-2xl border-border/60 bg-card/80 p-5 shadow-2xl backdrop-blur-md sm:p-7"
       onSubmit={(e) => {
         e.preventDefault();
         onSubmit();
@@ -165,7 +165,7 @@ export function TripForm({
                 key={demo}
                 type="button"
                 onClick={() => onDemo(demo)}
-                className="rounded-full border border-border bg-surface-raised px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+                className="cursor-pointer rounded-full border border-border bg-surface-raised px-3 py-2 text-xs font-semibold text-muted-foreground transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/50 hover:text-foreground"
               >
                 {demo === "oslo-garda" ? t.osloGarda : demo === "munich-split" ? t.munichSplit : t.parisNice}
               </button>

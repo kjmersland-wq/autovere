@@ -263,6 +263,12 @@ function Index() {
             {t.heroSub}
           </p>
 
+          <div className="mt-6 flex flex-wrap gap-2" aria-label="Corridor stats">
+            <span className="rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">⚡ {t.statEvHubs}</span>
+            <span className="rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">🛡️ {t.statTollSystems}</span>
+            <span className="rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">🏕️ {t.statScenicSpots}</span>
+          </div>
+
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-muted-foreground">
             <span className="flex items-center gap-2">
               <Gauge className="size-4 text-primary" /> {t.badgeMath}
@@ -276,7 +282,10 @@ function Index() {
           </div>
 
           <div className="mt-9">
-            <TripForm state={form} setState={setForm} onSubmit={() => void run()} loading={loading} onDemo={runDemo} />
+            <div className="relative">
+              <div className="pointer-events-none absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-tr from-teal-500/10 via-transparent to-cyan-500/10 blur-2xl" aria-hidden="true" />
+              <TripForm state={form} setState={setForm} onSubmit={() => void run()} loading={loading} onDemo={runDemo} />
+            </div>
             {estimates.length === 0 && <FeatureHighlights />}
           </div>
         </div>
