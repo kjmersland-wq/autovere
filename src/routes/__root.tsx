@@ -83,25 +83,30 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "viewport",
         content: "width=device-width, initial-scale=1, viewport-fit=cover",
       },
-      { title: "AutoVere — European Toll, Vignette & EV Charging Planner" },
+      { title: "AutoVere — European Toll & Route Planner" },
       {
         name: "description",
-        content:
-          "Compare fastest, toll-bypass and toll-free European routes with real fuel, charging, toll and vignette costs.",
+        content: "Calculate accurate road tolls, required vignettes, and EV charging costs across Europe.",
       },
       { name: "author", content: "AutoVere" },
       { name: "theme-color", content: "#0b1220" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-title", content: "AutoVere" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { property: "og:title", content: "AutoVere — European Toll & Vignette Planner" },
+      { property: "og:title", content: "AutoVere — European Toll & Route Planner" },
       {
         property: "og:description",
-        content:
-          "Instant, deterministic toll, vignette, fuel and EV charging estimates for any European road trip.",
+        content: "Calculate accurate road tolls, required vignettes, and EV charging costs across Europe.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:image", content: "https://www.autovere.com/og-image.png" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
+      { property: "og:url", content: "https://www.autovere.com" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "AutoVere — European Toll & Route Planner" },
+      { name: "twitter:description", content: "Calculate accurate road tolls, required vignettes, and EV charging costs across Europe." },
+      { name: "twitter:image", content: "https://www.autovere.com/og-image.png" },
     ],
     links: [
       {
