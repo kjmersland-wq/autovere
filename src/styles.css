@@ -217,6 +217,50 @@
   }
 }
 
+@media print {
+  @page {
+    margin: 14mm;
+  }
+
+  html,
+  body {
+    background: #fff !important;
+    color: #111827 !important;
+  }
+
+  .print-hidden,
+  button,
+  select,
+  [role="dialog"],
+  [data-radix-popper-content-wrapper] {
+    display: none !important;
+  }
+
+  main {
+    min-height: auto !important;
+    padding-bottom: 0 !important;
+  }
+
+  .panel {
+    border-color: #d1d5db !important;
+    background: #fff !important;
+    box-shadow: none !important;
+    color: #111827 !important;
+    break-inside: avoid;
+  }
+
+  .text-foreground,
+  .text-primary,
+  .text-muted-foreground {
+    color: #111827 !important;
+  }
+
+  a {
+    color: #111827 !important;
+    text-decoration: none !important;
+  }
+}
+
 /* Leaflet integration with the dark design system */
 .leaflet-container {
   background: var(--color-surface);

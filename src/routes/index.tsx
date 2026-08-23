@@ -332,7 +332,7 @@ function Index() {
 
   return (
     <main className="min-h-screen overflow-x-hidden pb-24 md:pb-0">
-      <section className="hero-glow border-b border-border">
+      <section className="hero-glow border-b border-border print-hidden">
         <div className="mx-auto max-w-6xl px-5 pb-10 pt-12 sm:pt-16">
           <div className="flex items-center gap-3">
             <img src="/icons/icon-192.png" alt="" width={40} height={40} className="rounded-lg" />
@@ -497,7 +497,7 @@ function Index() {
         </section>
       )}
 
-      <footer className="border-t border-border py-8">
+      <footer className="border-t border-border py-8 print-hidden">
         <div className="mx-auto max-w-6xl px-5 text-xs leading-relaxed text-muted-foreground">
           <p className="font-semibold text-foreground">AutoVere · autovere.com</p>
           <p className="mt-2 font-medium text-foreground">{t.companyFooter}</p>
@@ -590,7 +590,7 @@ function Index() {
       </footer>
       <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
       {selectedEst && (
-        <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-border bg-background/95 p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[var(--shadow-elevated)] backdrop-blur md:hidden">
+        <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-border bg-background/95 p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[var(--shadow-elevated)] backdrop-blur md:hidden print-hidden">
           <Button size="lg" className="min-h-11 rounded-xl font-bold" onClick={() => void run()} disabled={loading || !form.from || !form.to}>
             <Navigation className="size-4" /> Calculate
           </Button>
