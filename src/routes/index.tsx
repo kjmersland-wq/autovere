@@ -3,6 +3,7 @@ import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon } from "lucide-react";
 import { TripForm, type DemoRoute, type TripFormState } from "@/components/TripForm";
+import { ContactModal } from "@/components/ContactModal";
 import { FeatureHighlights } from "@/components/FeatureHighlights";
 import { RouteMap } from "@/components/RouteMap";
 import { Breakdown, RouteCard, TradeoffBanner } from "@/components/Comparison";
@@ -190,6 +191,8 @@ function Index() {
   const [selected, setSelected] = useState<RouteVariantKey>("bypass");
   const [submitted, setSubmitted] = useState<TripFormState | null>(null);
   const [currency, setCurrency] = useState<CurrencyCode>("EUR");
+  const [contactOpen, setContactOpen] = useState(false);
+  const [legalOpen, setLegalOpen] = useState(false);
   const { theme, toggleTheme } = useTheme();
 
   const run = useCallback(async (input = form) => {
@@ -492,7 +495,7 @@ function Index() {
           <p className="font-semibold text-foreground">AutoVere · autovere.com</p>
           <p className="mt-2 font-medium text-foreground">{t.companyFooter}</p>
           <nav className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs" aria-label="Legal links">
-            <Dialog>
+            <Dialog open={legalOpen} onOpenChange={setLegalOpen}>
               <DialogTrigger asChild>
                 <button type="button" className="text-left hover:text-foreground">{t.legalNotice}</button>
               </DialogTrigger>
@@ -505,6 +508,16 @@ function Index() {
                     <p key={line}>{line}</p>
                   ))}
                 </div>
+                <button
+                  type="button"
+                  className="mt-4 text-left text-sm font-semibold text-primary transition-colors hover:text-foreground"
+                  onClick={() => {
+                    setLegalOpen(false);
+                    setContactOpen(true);
+                  }}
+                >
+                  {t.contactLink}
+                </button>
                 <DialogClose asChild>
                   <Button variant="secondary" size="sm" className="mt-5 w-full sm:w-auto">
                     {legalCopy.close}
@@ -552,12 +565,20 @@ function Index() {
                 </DialogClose>
               </DialogContent>
             </Dialog>
+            <button
+              type="button"
+              className="text-left hover:text-foreground"
+              onClick={() => setContactOpen(true)}
+            >
+              {t.contactLink}
+            </button>
           </nav>
           <p className="mt-2 max-w-3xl">
             {t.footerDisclaimer}
           </p>
         </div>
       </footer>
+      <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
       {selectedEst && (
         <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-border bg-background/95 p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[var(--shadow-elevated)] backdrop-blur md:hidden">
           <Button size="lg" className="min-h-11 rounded-xl font-bold" onClick={() => void run()} disabled={loading || !form.from || !form.to}>
