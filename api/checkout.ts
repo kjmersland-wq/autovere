@@ -9,7 +9,6 @@ type VercelResponse = ServerResponse & {
   setHeader: (name: string, value: string) => VercelResponse;
 };
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "");
 const supportedLocales = new Set(["en", "de", "nl", "no", "pl"]);
 const priceEnvByKey: Record<string, string> = {
   "pro-monthly": "STRIPE_PRO_MONTHLY_PRICE_ID",
@@ -17,6 +16,11 @@ const priceEnvByKey: Record<string, string> = {
   "business-monthly": "STRIPE_BUSINESS_MONTHLY_PRICE_ID",
   "business-yearly": "STRIPE_BUSINESS_YEARLY_PRICE_ID",
 };
+
+function getStripe() {
+  const secret = process.env.STRIPE_SECRET_KEY;
+  return secret ? new Stripe(secret) : null;
+}
 
 function parseBody(body: VercelRequest["body"]): CheckoutBody {
   if (typeof body === "string") {
@@ -40,7 +44,8 @@ export default async function handler(request: VercelRequest, response: VercelRe
     response.status(405).json({ error: "Method not allowed" });
     return;
   }
-  if (!process.env.STRIPE_SECRET_KEY) {
+  const stripe = getStripe();
+  if (!stripe) {
     response.status(500).json({ error: "Stripe is not configured." });
     return;
   }

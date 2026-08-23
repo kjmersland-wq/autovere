@@ -8,7 +8,11 @@ type VercelResponse = ServerResponse & {
 };
 
 export const config = { api: { bodyParser: false } };
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY ?? "");
+
+function getStripe() {
+  const secret = process.env.STRIPE_SECRET_KEY;
+  return secret ? new Stripe(secret) : null;
+}
 
 async function rawBody(request: VercelRequest): Promise<Buffer> {
   if (Buffer.isBuffer(request.body)) return request.body;
@@ -25,7 +29,8 @@ export default async function handler(request: VercelRequest, response: VercelRe
   }
   const secret = process.env.STRIPE_WEBHOOK_SECRET;
   const signature = request.headers["stripe-signature"];
-  if (!secret || typeof signature !== "string") {
+  const stripe = getStripe();
+  if (!stripe || !secret || typeof signature !== "string") {
     response.status(400).json({ error: "Missing Stripe webhook configuration." });
     return;
   }
