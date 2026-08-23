@@ -119,6 +119,9 @@ export type Charger = {
   name: string;
   powerKw: number | null;
   operator?: string | undefined;
+  plugs?: number | null;
+  availability?: string | null;
+  connectorTypes?: string[];
   atKm: number;
 };
 
@@ -189,6 +192,32 @@ export async function fetchFastChargers(
   coords: LatLng[],
   signal?: AbortSignal,
 ): Promise<Charger[]> {
+  try {
+    const cached = await fetch("/api/chargers", { signal: signal ?? null });
+    if (cached.ok) {
+      const data = (await cached.json()) as { stations?: Array<Omit<Charger, "atKm" | "operator"> & { operator?: string | null; atKm?: number }> };
+      const cum = cumulativeKm(coords);
+      const stations = (data.stations ?? []).map((station) => {
+        let best = 0;
+        let bestD = Infinity;
+        for (let i = 0; i < coords.length; i += 5) {
+          const distance = haversineKm([station.lat, station.lon], coords[i]!);
+          if (distance < bestD) {
+            bestD = distance;
+            best = i;
+          }
+        }
+        return { ...station, operator: station.operator ?? undefined, atKm: cum[best] ?? 0, _distanceKm: bestD };
+      });
+      return stations
+        .filter((station) => station._distanceKm <= 15)
+        .sort((a, b) => a.atKm - b.atKm)
+        .map(({ _distanceKm: _ignored, ...station }) => station);
+    }
+  } catch {
+    // Fall back to the live open-data query below.
+  }
+
   // Query a set of corridor points instead of a huge bbox to stay fast & polite.
   const anchors = samplePolyline(coords, 120).filter((_, idx) => idx % 1 === 0);
   const limited = anchors.slice(0, 25);
