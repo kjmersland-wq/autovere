@@ -1,5 +1,5 @@
-import type { LatLng } from "./countries";
 import { samplePolyline, type Charger, type Place } from "./geo";
+import { COUNTRY_NAMES, countryAt, type LatLng } from "./countries";
 
 function esc(s: string) {
   return s.replace(/[<>&'"]/g, (c) => `&#${c.charCodeAt(0)};`);
@@ -42,6 +42,59 @@ export function downloadGpx(filename: string, gpx: string) {
   URL.revokeObjectURL(url);
 }
 
+export function buildKml(opts: {
+  name: string;
+  coords: LatLng[];
+  waypoints: { lat: number; lon: number; name: string }[];
+}): string {
+  const coordinates = opts.coords.map(([lat, lon]) => `${lon},${lat},0`).join(" ");
+  const points = opts.waypoints
+    .map(
+      (waypoint) =>
+        `    <Placemark><name>${esc(waypoint.name)}</name><Point><coordinates>${waypoint.lon},${waypoint.lat},0</coordinates></Point></Placemark>`,
+    )
+    .join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2"><Document>
+  <name>${esc(opts.name)}</name>
+${points}
+  <Placemark><name>${esc(opts.name)}</name><LineString><tessellate>1</tessellate><coordinates>${coordinates}</coordinates></LineString></Placemark>
+</Document></kml>`;
+}
+
+export function routeWaypoints(
+  coords: LatLng[],
+  chargers: Charger[],
+  borders: { pt: LatLng; from: string; to: string }[],
+  vignetteCountries: string[],
+  scenic: { lat: number; lon: number; name: string }[] = [],
+) {
+  const waypoints = chargers.map((charger) => ({
+    lat: charger.lat,
+    lon: charger.lon,
+    name: `${charger.name} (${charger.powerKw ? `${Math.round(charger.powerKw)} kW` : "fast charger"}) · ${COUNTRY_NAMES[countryAt([charger.lat, charger.lon]) ?? ""] ?? "EU"}`,
+  }));
+  waypoints.push(
+    ...borders.map((border) => ({
+      lat: border.pt[0],
+      lon: border.pt[1],
+      name: `Border checkpoint: ${COUNTRY_NAMES[border.from] ?? border.from} → ${COUNTRY_NAMES[border.to] ?? border.to}`,
+    })),
+  );
+  for (const code of vignetteCountries) {
+    const checkpoint = coords.find((point) => countryAt(point) === code);
+    if (checkpoint) {
+      waypoints.push({
+        lat: checkpoint[0],
+        lon: checkpoint[1],
+        name: `${COUNTRY_NAMES[code] ?? code} vignette terminal`,
+      });
+    }
+  }
+  waypoints.push(...scenic);
+  return waypoints;
+}
+
 /** Pick evenly spaced shaping waypoints so navigation apps follow this exact route. */
 export function shapingWaypoints(coords: LatLng[], count = 5): LatLng[] {
   const samples = samplePolyline(coords, 1);
@@ -66,8 +119,18 @@ export function googleMapsUrl(from: Place, to: Place, via: LatLng[]): string {
   return `https://www.google.com/maps/dir/?${params}`;
 }
 
-export function appleMapsUrl(from: Place, to: Place): string {
-  return `https://maps.apple.com/?saddr=${from.lat},${from.lon}&daddr=${to.lat},${to.lon}&dirflg=d`;
+export function appleMapsUrl(from: Place, to: Place, via: LatLng[] = []): string {
+  const params = new URLSearchParams({
+    saddr: `${from.lat},${from.lon}`,
+    daddr: `${to.lat},${to.lon}`,
+    dirflg: "d",
+  });
+  if (via.length) params.set("waypoints", via.map(([lat, lon]) => `${lat},${lon}`).join(";"));
+  return `https://maps.apple.com/?${params}`;
+}
+
+export function wazeUrl(to: LatLng): string {
+  return `https://www.waze.com/ul?ll=${to[0]},${to[1]}&navigate=yes`;
 }
 
 export function chargerWaypoints(stops: Charger[]) {

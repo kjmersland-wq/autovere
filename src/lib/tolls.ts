@@ -121,7 +121,7 @@ export const DISTANCE_TOLLS: Record<string, { perKm: number; authority: string; 
   GR: { perKm: 0.048, authority: "Greek motorway operators", url: "https://www.olympiaodos.gr/en/" },
   PL: { perKm: 0.032, authority: "e-TOLL (official)", url: "https://etoll.gov.pl/en/" },
   NO: {
-    perKm: 0.028,
+    perKm: 0,
     authority: "Norwegian toll roads (Statens vegvesen)",
     url: "https://www.vegvesen.no/en/traffic/travel-planning/toll-roads/",
   },
@@ -131,6 +131,17 @@ export const DISTANCE_TOLLS: Record<string, { perKm: number; authority: string; 
     url: "https://storebaelt.dk/en/prices/",
   },
 };
+
+export const NORWAY_AUTOPASS = {
+  city: { label: "Oslo departure and city rings", amountNok: 72 },
+  e18: { label: "E18 southbound corridor", amountNok: 175 },
+  e6South: { label: "E6 southbound to Svinesund", amountNok: 95 },
+  e6North: { label: "E6 northbound to Trondheim", amountNok: 215 },
+  western: { label: "Western Norway fjord routes", amountNok: 145 },
+  authority: "AutoPASS official",
+  url: "https://www.autopass.no",
+  visitorUrl: "https://www.epass24.com",
+} as const;
 
 export const NORDIC_BRIDGES = {
   storebaelt: {

@@ -1,8 +1,8 @@
 import { Clock, Route as RouteIcon, Zap, BatteryCharging, TrendingDown, Check } from "lucide-react";
-import { formatDuration, type Estimate } from "@/lib/calc";
+import { type Estimate } from "@/lib/calc";
 import { formatCurrency, type CurrencyCode } from "@/lib/currency";
 import { FLAGS } from "@/lib/countries";
-import { useT } from "@/lib/i18n";
+import { countryName, dynamicText, useLocale, useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import type { RouteVariantKey } from "@/lib/geo";
 
@@ -19,6 +19,7 @@ const DOT: Record<RouteVariantKey, string> = {
 };
 
 export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[]; currency: CurrencyCode }) {
+  const t = useT();
   const fastest = estimates.find((e) => e.key === "fastest");
   const others = estimates.filter((e) => e.key !== "fastest");
   if (!fastest || !others.length) return null;
@@ -31,23 +32,27 @@ export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[];
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-success/35 bg-success/10 px-4 py-3.5">
       <TrendingDown className="size-5 shrink-0 text-success" aria-hidden />
       <p className="text-sm font-semibold text-foreground">
-        <span className="numeric text-success">+{formatDuration(extraMin)}</span> on the{" "}
-        {best.title.toLowerCase()} saves{" "}
-        <span className="numeric text-success">{formatCurrency(saving, currency)}</span>
+        {t.tradeoff(
+          t.duration(extraMin),
+          t[best.key].toLowerCase(),
+          formatCurrency(saving, currency),
+          formatCurrency(saving / Math.max(1, extraMin / 60), currency),
+        )}
       </p>
       <span className="numeric text-xs text-muted-foreground">
-        {formatCurrency(saving / Math.max(1, extraMin / 60), currency)} earned per hour of extra driving
+        {formatCurrency(saving / Math.max(1, extraMin / 60), currency)} {t.earnedPerHour}
       </span>
     </div>
   );
 }
 
 function Line({ label, detail, amount, currency }: { label: string; detail: string; amount: number; currency: CurrencyCode }) {
+  const { locale } = useLocale();
   return (
     <div className="flex items-start justify-between gap-3 py-1.5">
       <div className="min-w-0">
         <p className="truncate text-sm font-medium text-foreground">{label}</p>
-        <p className="truncate text-xs text-muted-foreground">{detail}</p>
+        <p className="truncate text-xs text-muted-foreground">{dynamicText(detail, locale)}</p>
       </div>
       <span className="numeric shrink-0 text-sm font-semibold text-foreground">
         {formatCurrency(amount, currency)}
@@ -84,11 +89,11 @@ export function RouteCard({
       <div className="flex items-start justify-between gap-3">
         <div className="flex items-center gap-2.5">
           <span className={cn("size-2.5 rounded-full", DOT[est.key])} aria-hidden />
-          <h3 className={cn("text-base font-bold", ACCENT[est.key])}>{est.title}</h3>
+          <h3 className={cn("text-base font-bold", ACCENT[est.key])}>{t[est.key]}</h3>
         </div>
         {cheapest && (
           <span className="rounded-full bg-success/15 px-2.5 py-1 text-[0.65rem] font-bold uppercase tracking-wider text-success">
-            Cheapest
+            {t.cheapest}
           </span>
         )}
         {selected && !cheapest && (
@@ -107,7 +112,7 @@ export function RouteCard({
             <RouteIcon className="size-3.5" /> {Math.round(est.distanceKm)} km
           </span>
           <span className="numeric flex items-center gap-1.5">
-            <Clock className="size-3.5" /> {formatDuration(est.durationMin)}
+            <Clock className="size-3.5" /> {t.duration(est.durationMin)}
           </span>
         </div>
       </div>
@@ -118,7 +123,7 @@ export function RouteCard({
           detail={
             isEv
               ? `${Math.round(est.ev!.energyKwh)} kWh at corridor prices`
-              : "Country-by-country pump prices"
+              : t.pumpPrices
           }
           amount={est.energyCost}
           currency={currency}
@@ -128,7 +133,7 @@ export function RouteCard({
           detail={
             est.tollLines.length
               ? est.tollLines.map((l) => FLAGS[l.country ?? ""] ?? "").join(" ")
-              : "None on this route"
+              : t.noTolls
           }
           amount={est.tollCost}
           currency={currency}
@@ -151,7 +156,7 @@ export function RouteCard({
             <Zap className="size-3.5" /> {est.ev!.stopCount} {t.chargingStops.toLowerCase()}
           </span>
           <span className="numeric flex items-center gap-1.5 text-muted-foreground">
-            <BatteryCharging className="size-3.5" /> {formatDuration(est.ev!.chargingMinutes)}{" "}
+            <BatteryCharging className="size-3.5" /> {t.duration(est.ev!.chargingMinutes)}{" "}
             {t.chargingTime.toLowerCase()}
           </span>
         </div>
@@ -162,17 +167,18 @@ export function RouteCard({
 
 export function Breakdown({ est, currency }: { est: Estimate; currency: CurrencyCode }) {
   const t = useT();
+  const { locale } = useLocale();
   return (
     <div className="panel p-5">
       <h3 className="text-sm font-bold uppercase tracking-[0.14em] text-muted-foreground">
-        {est.title} — full breakdown
+        {t.fullBreakdown}: {t[est.key]}
       </h3>
 
       <div className="mt-4 space-y-1">
         {est.legs.map((l) => (
           <div key={l.code} className="flex items-center justify-between py-1 text-sm">
             <span className="flex items-center gap-2 text-foreground">
-              <span aria-hidden>{FLAGS[l.code]}</span> {l.name}
+              <span aria-hidden>{FLAGS[l.code]}</span> {countryName(l.code, locale, l.name)}
             </span>
             <span className="numeric text-muted-foreground">{Math.round(l.km)} km</span>
           </div>
@@ -185,7 +191,7 @@ export function Breakdown({ est, currency }: { est: Estimate; currency: Currency
         ))}
         <Line
           label={est.ev ? t.charging : t.fuel}
-          detail={est.ev ? `${Math.round(est.ev.energyKwh)} kWh` : "Estimated consumption"}
+          detail={est.ev ? `${Math.round(est.ev.energyKwh)} kWh` : t.estimatedConsumption}
           amount={est.energyCost}
           currency={currency}
         />

@@ -132,6 +132,32 @@
   --shadow-glow: 0 0 0 1px oklch(0.82 0.15 178 / 35%), 0 18px 50px -20px oklch(0.82 0.15 178 / 30%);
 }
 
+.light {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --surface: #ffffff;
+  --surface-raised: #f1f5f9;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --secondary: #e2e8f0;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #475569;
+  --accent: #dbeafe;
+  --accent-foreground: #0f172a;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-accent: #e2e8f0;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --gradient-hero: radial-gradient(120% 90% at 15% 0%, oklch(0.92 0.06 196 / 55%) 0%, transparent 60%), radial-gradient(100% 80% at 90% 10%, oklch(0.94 0.05 268 / 55%) 0%, transparent 65%);
+  --shadow-elevated: 0 24px 60px -28px oklch(0.35 0.03 258 / 25%);
+}
+
 @layer base {
   * {
     border-color: var(--color-border);
@@ -183,6 +209,14 @@
   font-variant-numeric: tabular-nums;
 }
 
+@media (max-width: 767px) {
+  button,
+  select,
+  [role="button"] {
+    min-height: 44px;
+  }
+}
+
 /* Leaflet integration with the dark design system */
 .leaflet-container {
   background: var(--color-surface);
@@ -199,6 +233,9 @@
 }
 .leaflet-tile-pane {
   filter: saturate(0.65) brightness(0.78) contrast(1.05) hue-rotate(175deg) invert(0.92);
+}
+.light .leaflet-tile-pane {
+  filter: none;
 }
 .leaflet-popup-content-wrapper,
 .leaflet-popup-tip {

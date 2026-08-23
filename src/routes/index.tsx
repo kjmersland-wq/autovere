@@ -1,24 +1,29 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Download, Map as MapIcon, Navigation, Apple, Gauge, WifiOff, ShieldCheck } from "lucide-react";
+import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon } from "lucide-react";
 import { TripForm, type TripFormState } from "@/components/TripForm";
 import { RouteMap } from "@/components/RouteMap";
 import { Breakdown, RouteCard, TradeoffBanner } from "@/components/Comparison";
 import { VignetteChecklist } from "@/components/VignetteChecklist";
+import { NavigationSheet } from "@/components/NavigationSheet";
+import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighlights";
 import { Button } from "@/components/ui/button";
 import { DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
-import { fetchFastChargers, fetchRoute, type Charger, type RouteResult, type RouteVariantKey } from "@/lib/geo";
+import { fetchFastChargers, fetchRoute, fetchScenicHighlights, type Charger, type RouteResult, type RouteVariantKey, type ScenicHighlight } from "@/lib/geo";
 import {
   appleMapsUrl,
   buildGpx,
-  chargerWaypoints,
-  downloadGpx,
+  buildKml,
   googleMapsUrl,
+  routeWaypoints,
   shapingWaypoints,
+  wazeUrl,
 } from "@/lib/export";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
+import { useTheme } from "@/hooks/use-theme";
+import { formatCurrency } from "@/lib/currency";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -50,6 +55,7 @@ const VARIANTS: RouteVariantKey[] = ["fastest", "bypass", "tollfree"];
 
 function Index() {
   const t = useT();
+  const { locale, setLocale } = useLocale();
   const [form, setForm] = useState<TripFormState>({
     from: null,
     to: null,
@@ -61,9 +67,13 @@ function Index() {
   const [routes, setRoutes] = useState<Partial<Record<RouteVariantKey, RouteResult>>>({});
   const [estimates, setEstimates] = useState<Estimate[]>([]);
   const [chargers, setChargers] = useState<Charger[]>([]);
+  const [scenicHighlights, setScenicHighlights] = useState<ScenicHighlight[]>([]);
+  const [selectedScenicIds, setSelectedScenicIds] = useState<string[]>([]);
+  const [scenicFilter, setScenicFilter] = useState<ScenicFilter>("all");
   const [selected, setSelected] = useState<RouteVariantKey>("bypass");
   const [submitted, setSubmitted] = useState<TripFormState | null>(null);
   const [currency, setCurrency] = useState<CurrencyCode>("EUR");
+  const { theme, toggleTheme } = useTheme();
 
   const run = useCallback(async () => {
     const { from, to } = form;
@@ -85,10 +95,14 @@ function Index() {
         try {
           found = await fetchFastChargers(map.fastest.coords);
         } catch {
-          toast.warning("Charging network data is temporarily unavailable.");
+          toast.warning(t.chargingUnavailable);
         }
       }
       setChargers(found);
+      const scenic = await fetchScenicHighlights(map.fastest.coords, found);
+      setScenicHighlights(scenic);
+      setSelectedScenicIds([]);
+      setScenicFilter("all");
 
       const trip = {
         ...DEFAULT_TRIP,
@@ -102,9 +116,9 @@ function Index() {
       setSubmitted(form);
       const cheapest = next.reduce((a, b) => (a.total <= b.total ? a : b));
       setSelected(cheapest.key);
-      toast.success(`${next.length} routes compared — cheapest: ${cheapest.title}`);
+      toast.success(t.routeCompared(next.length, t[cheapest.key]));
     } catch (e) {
-      toast.error(e instanceof Error ? e.message : "Calculation failed. Please try again.");
+      toast.error(e instanceof Error ? e.message : t.calculationFailed);
     } finally {
       setLoading(false);
     }
@@ -133,40 +147,51 @@ function Index() {
   );
 
   const evStops = selectedEst?.ev?.stops ?? [];
+  const selectedScenic = scenicHighlights.filter((highlight) => selectedScenicIds.includes(highlight.id));
+  const visibleScenic = (scenicFilter === "all" ? scenicHighlights : scenicHighlights.filter((highlight) => highlight.category === scenicFilter)).slice(0, 8);
+  const navigationVia = selectedRoute
+    ? [
+        ...(evStops.length
+          ? evStops.map((s) => [s.lat, s.lon] as [number, number])
+          : shapingWaypoints(selectedRoute.coords, selectedEst?.key === "fastest" ? 2 : 5)),
+        ...selectedScenic.map((highlight) => [highlight.lat, highlight.lon] as [number, number]),
+      ].slice(0, 20)
+    : [];
+  const navigationWaypoints = selectedRoute
+    ? routeWaypoints(
+        selectedRoute.coords,
+        evStops,
+        borders,
+        selectedEst?.vignetteLines.map((line) => line.country).filter((country): country is string => !!country) ?? [],
+        selectedScenic.map((highlight) => ({ lat: highlight.lat, lon: highlight.lon, name: highlight.name })),
+      )
+    : [];
+  const routeName = submitted?.from && submitted.to && selectedEst
+    ? `AutoVere — ${submitted.from.name} → ${submitted.to.name} (${selectedEst.title})`
+    : "AutoVere route";
+  const googleUrl = submitted?.from && submitted.to
+    ? googleMapsUrl(submitted.from, submitted.to, navigationVia)
+    : "https://www.google.com/maps";
+  const appleUrl = submitted?.from && submitted.to
+    ? appleMapsUrl(submitted.from, submitted.to, navigationVia)
+    : "https://maps.apple.com";
+  const wazeLink = submitted?.to ? wazeUrl([submitted.to.lat, submitted.to.lon]) : "https://www.waze.com";
+  const gpx = selectedRoute ? buildGpx({ name: routeName, coords: selectedRoute.coords, waypoints: navigationWaypoints }) : "";
+  const kml = selectedRoute ? buildKml({ name: routeName, coords: selectedRoute.coords, waypoints: navigationWaypoints }) : "";
 
-  function openGoogle() {
-    if (!submitted?.from || !submitted.to || !selectedRoute) return;
-    const via = evStops.length
-      ? evStops.map((s) => [s.lat, s.lon] as [number, number])
-      : shapingWaypoints(selectedRoute.coords, selectedEst?.key === "fastest" ? 2 : 5);
-    window.open(googleMapsUrl(submitted.from, submitted.to, via), "_blank", "noopener");
-  }
-
-  function openApple() {
-    if (!submitted?.from || !submitted.to) return;
-    window.open(appleMapsUrl(submitted.from, submitted.to), "_blank", "noopener");
-  }
-
-  function exportGpx() {
-    if (!submitted?.from || !submitted.to || !selectedRoute || !selectedEst) return;
-    const gpx = buildGpx({
-      name: `AutoVere — ${submitted.from.name} → ${submitted.to.name} (${selectedEst.title})`,
-      coords: selectedRoute.coords,
-      waypoints: [
-        { lat: submitted.from.lat, lon: submitted.from.lon, name: submitted.from.name },
-        ...chargerWaypoints(evStops),
-        { lat: submitted.to.lat, lon: submitted.to.lon, name: submitted.to.name },
-      ],
-    });
-    downloadGpx(
-      `autovere-${submitted.from.name}-${submitted.to.name}.gpx`.toLowerCase().replace(/\s+/g, "-"),
-      gpx,
-    );
-    toast.success("GPX downloaded — import it into your in-car GPS.");
+  async function shareRoute() {
+    if (!selectedEst) return;
+    const shareData = {
+      title: routeName,
+      text: `${routeName} · ${formatCurrency(selectedEst.total, currency)} · Open in navigation:`,
+      url: googleUrl,
+    };
+    if (navigator.share) await navigator.share(shareData);
+    else await navigator.clipboard.writeText(`${shareData.text} ${shareData.url}`);
   }
 
   return (
-    <main className="min-h-screen">
+    <main className="min-h-screen overflow-x-hidden pb-24 md:pb-0">
       <section className="hero-glow border-b border-border">
         <div className="mx-auto max-w-6xl px-5 pb-10 pt-12 sm:pt-16">
           <div className="flex items-center gap-3">
@@ -180,12 +205,12 @@ function Index() {
               </p>
             </div>
             <label className="ml-auto flex items-center gap-2 text-xs font-semibold text-muted-foreground">
-              <span className="sr-only">Currency</span>
+              <span className="sr-only">{t.currency}</span>
               <select
                 value={currency}
                 onChange={(event) => setCurrency(event.target.value as CurrencyCode)}
                 className="rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground outline-none focus:border-primary/60"
-                aria-label="Currency"
+                aria-label={t.currency}
               >
                 {CURRENCIES.map((code) => (
                   <option key={code} value={code}>
@@ -194,6 +219,29 @@ function Index() {
                 ))}
               </select>
             </label>
+            <label className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+              <span className="sr-only">{t.language}</span>
+              <select
+                value={locale}
+                onChange={(event) => setLocale(event.target.value)}
+                className="rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground outline-none focus:border-primary/60"
+                aria-label={t.language}
+              >
+                <option value="en">🇬🇧 EN</option>
+                <option value="de">🇩🇪 DE</option>
+                <option value="no">🇳🇴 NO</option>
+                <option value="fr">🇫🇷 FR</option>
+              </select>
+            </label>
+            <button
+              type="button"
+              onClick={toggleTheme}
+              className="rounded-lg border border-border bg-surface-raised p-2 text-muted-foreground transition-colors hover:text-foreground"
+              aria-label={theme === "dark" ? "Switch to day mode" : "Switch to night mode"}
+              title={theme === "dark" ? "Switch to day mode" : "Switch to night mode"}
+            >
+              {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
+            </button>
           </div>
 
           <h1 className="mt-9 max-w-3xl text-4xl font-extrabold leading-[1.08] sm:text-6xl">
@@ -205,13 +253,13 @@ function Index() {
 
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-muted-foreground">
             <span className="flex items-center gap-2">
-              <Gauge className="size-4 text-primary" /> Instant deterministic maths
+              <Gauge className="size-4 text-primary" /> {t.badgeMath}
             </span>
             <span className="flex items-center gap-2">
-              <WifiOff className="size-4 text-primary" /> Installable & works offline
+              <WifiOff className="size-4 text-primary" /> {t.badgeOffline}
             </span>
             <span className="flex items-center gap-2">
-              <ShieldCheck className="size-4 text-primary" /> Official portals only
+              <ShieldCheck className="size-4 text-primary" /> {t.badgeOfficial}
             </span>
           </div>
 
@@ -234,6 +282,8 @@ function Index() {
                 borders={borders}
                 chargers={evStops.length ? evStops : chargers.slice(0, 40)}
                 showChargers={submitted?.vehicle === "ev"}
+                theme={theme}
+                scenic={visibleScenic}
               />
             </div>
 
@@ -254,26 +304,18 @@ function Index() {
             </div>
           </div>
 
-          <div className="mt-6 grid gap-4 sm:grid-cols-3">
-            <Button size="lg" className="h-13 rounded-xl font-bold" onClick={openGoogle}>
-              <Navigation className="size-5" /> {t.openGoogle}
-            </Button>
-            <Button
-              size="lg"
-              variant="secondary"
-              className="h-13 rounded-xl font-bold"
-              onClick={openApple}
-            >
-              <Apple className="size-5" /> {t.openApple}
-            </Button>
-            <Button
-              size="lg"
-              variant="outline"
-              className="h-13 rounded-xl font-bold"
-              onClick={exportGpx}
-            >
-              <Download className="size-5" /> {t.downloadGpx}
-            </Button>
+          <div className="mt-6">
+            <NavigationSheet
+              totalEur={selectedEst.total}
+              currency={currency}
+              googleUrl={googleUrl}
+              appleUrl={appleUrl}
+              wazeUrl={wazeLink}
+              teslaUrl={googleUrl}
+              gpx={gpx}
+              kml={kml}
+              onShare={shareRoute}
+            />
           </div>
           <p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
             <MapIcon className="size-3.5" /> Waypoints are injected so navigation apps follow the
@@ -290,6 +332,17 @@ function Index() {
               endCountry={submitted?.to?.country}
             />
           </div>
+          <ScenicHighlights
+            highlights={scenicHighlights}
+            filter={scenicFilter}
+            onFilterChange={setScenicFilter}
+            selectedIds={new Set(selectedScenicIds)}
+            onToggle={(highlight) =>
+              setSelectedScenicIds((ids) =>
+                ids.includes(highlight.id) ? ids.filter((id) => id !== highlight.id) : [...ids, highlight.id],
+              )
+            }
+          />
         </section>
       )}
 
@@ -297,12 +350,28 @@ function Index() {
         <div className="mx-auto max-w-6xl px-5 text-xs leading-relaxed text-muted-foreground">
           <p className="font-semibold text-foreground">AutoVere · autovere.com</p>
           <p className="mt-2 max-w-3xl">
-            Routing and map data © OpenStreetMap contributors, routed via the public OSRM service.
-            Toll, vignette and energy figures are indicative averages for passenger cars and are
-            calculated on your device. Always confirm prices on the official portals linked above.
+            {t.footerDisclaimer}
           </p>
         </div>
       </footer>
+      {selectedEst && (
+        <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-border bg-background/95 p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[var(--shadow-elevated)] backdrop-blur md:hidden">
+          <Button size="lg" className="min-h-11 rounded-xl font-bold" onClick={run} disabled={loading || !form.from || !form.to}>
+            <Navigation className="size-4" /> Calculate
+          </Button>
+          <NavigationSheet
+            totalEur={selectedEst.total}
+            currency={currency}
+            googleUrl={googleUrl}
+            appleUrl={appleUrl}
+            wazeUrl={wazeLink}
+            teslaUrl={googleUrl}
+            gpx={gpx}
+            kml={kml}
+            onShare={shareRoute}
+          />
+        </div>
+      )}
     </main>
   );
 }

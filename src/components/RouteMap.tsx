@@ -2,7 +2,8 @@ import { ClientOnly } from "@tanstack/react-router";
 import { Component, lazy, Suspense, type ErrorInfo, type ReactNode } from "react";
 import { Loader2 } from "lucide-react";
 import type { LatLng } from "@/lib/countries";
-import type { Charger, RouteVariantKey } from "@/lib/geo";
+import type { Charger, RouteVariantKey, ScenicHighlight } from "@/lib/geo";
+import type { Theme } from "@/hooks/use-theme";
 
 const Inner = lazy(() => import("./map/RouteMapInner"));
 
@@ -58,6 +59,8 @@ export function RouteMap(props: {
   borders: BorderMarker[];
   chargers: Charger[];
   showChargers: boolean;
+  theme: Theme;
+  scenic: ScenicHighlight[];
 }) {
   return (
     <MapErrorBoundary>

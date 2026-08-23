@@ -106,7 +106,7 @@ export function TripForm({
                       : "border-border bg-surface-raised text-muted-foreground hover:text-foreground",
                   )}
                 >
-                  {d === 365 ? "1 year" : `${d} ${d === 1 ? t.day : t.days}`}
+                  {d === 365 ? `1 ${t.year}` : `${d} ${d === 1 ? t.day : t.days}`}
                 </button>
               );
             })}
@@ -129,7 +129,7 @@ export function TripForm({
             aria-label={t.batteryRange}
           />
           <p className="mt-2 text-xs text-muted-foreground">
-            Charging stops are planned at 75% of this range so you always arrive with a buffer.
+            {t.chargingBuffer}
           </p>
         </div>
       )}

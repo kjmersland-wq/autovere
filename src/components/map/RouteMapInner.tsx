@@ -4,8 +4,10 @@ import { useEffect } from "react";
 import { MapContainer, TileLayer, Polyline, Marker, Popup, useMap } from "react-leaflet";
 import type { LatLng } from "@/lib/countries";
 import { FLAGS, COUNTRY_NAMES } from "@/lib/countries";
-import type { Charger } from "@/lib/geo";
+import type { Charger, ScenicHighlight } from "@/lib/geo";
 import type { RouteVariantKey } from "@/lib/geo";
+import type { Theme } from "@/hooks/use-theme";
+import { countryName, useLocale, useT } from "@/lib/i18n";
 
 export type MapRoute = {
   key: RouteVariantKey;
@@ -25,6 +27,11 @@ function pin(html: string, bg: string, size = 30) {
   });
 }
 
+function scenicPin(category: ScenicHighlight["category"]) {
+  const icon = category === "camping" ? "🏕" : category === "lodging" ? "🏨" : category === "food" ? "🍽" : "★";
+  return pin(icon, "#ffd166", 28);
+}
+
 function FitBounds({ coords }: { coords: LatLng[] }) {
   const map = useMap();
   useEffect(() => {
@@ -36,6 +43,21 @@ function FitBounds({ coords }: { coords: LatLng[] }) {
   return null;
 }
 
+function MapSizeSync() {
+  const map = useMap();
+  useEffect(() => {
+    const invalidate = () => map.invalidateSize({ pan: false });
+    window.addEventListener("resize", invalidate);
+    window.addEventListener("orientationchange", invalidate);
+    invalidate();
+    return () => {
+      window.removeEventListener("resize", invalidate);
+      window.removeEventListener("orientationchange", invalidate);
+    };
+  }, [map]);
+  return null;
+}
+
 export default function RouteMapInner({
   routes,
   start,
@@ -43,6 +65,8 @@ export default function RouteMapInner({
   borders,
   chargers,
   showChargers,
+  theme,
+  scenic,
 }: {
   routes: MapRoute[];
   start: LatLng | null;
@@ -50,7 +74,11 @@ export default function RouteMapInner({
   borders: BorderMarker[];
   chargers: Charger[];
   showChargers: boolean;
+  theme: Theme;
+  scenic: ScenicHighlight[];
 }) {
+  const t = useT();
+  const { locale } = useLocale();
   const active = routes.find((r) => r.active)?.coords ?? [];
   return (
     <MapContainer
@@ -61,10 +89,15 @@ export default function RouteMapInner({
       attributionControl
     >
       <TileLayer
-        url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        url={theme === "dark"
+          ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+          : "https://tile.openstreetmap.org/{z}/{x}/{y}.png"}
+        attribution={theme === "dark"
+          ? '&copy; <a href="https://carto.com/attributions">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+          : '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}
         maxZoom={19}
       />
+      <MapSizeSync />
       <FitBounds coords={active} />
 
       {routes
@@ -85,19 +118,19 @@ export default function RouteMapInner({
 
       {start && (
         <Marker position={start} icon={pin("A", "#7fe7d6", 32)}>
-          <Popup>Start</Popup>
+          <Popup>{t.start}</Popup>
         </Marker>
       )}
       {end && (
         <Marker position={end} icon={pin("B", "#ffd166", 32)}>
-          <Popup>Destination</Popup>
+          <Popup>{t.destination}</Popup>
         </Marker>
       )}
 
       {borders.map((b, i) => (
         <Marker key={`b-${i}`} position={b.pt} icon={pin(FLAGS[b.to] ?? "•", "#cfd8e6", 26)}>
           <Popup>
-            Border: {COUNTRY_NAMES[b.from] ?? b.from} → {COUNTRY_NAMES[b.to] ?? b.to}
+            {t.border}: {countryName(b.from, locale, COUNTRY_NAMES[b.from] ?? b.from)} → {countryName(b.to, locale, COUNTRY_NAMES[b.to] ?? b.to)}
           </Popup>
         </Marker>
       ))}
@@ -108,8 +141,7 @@ export default function RouteMapInner({
             <Popup>
               <strong>{c.name}</strong>
               <br />
-              {c.powerKw ? `${Math.round(c.powerKw)} kW` : "High power"} ·{" "}
-              {Math.round(c.atKm)} km into the trip
+              {c.powerKw ? `${Math.round(c.powerKw)} kW` : t.highPower} · {Math.round(c.atKm)} km {t.intoTrip}
               {c.operator ? (
                 <>
                   <br />
@@ -119,6 +151,16 @@ export default function RouteMapInner({
             </Popup>
           </Marker>
         ))}
+
+      {scenic.map((highlight) => (
+        <Marker key={`scenic-${highlight.id}`} position={[highlight.lat, highlight.lon]} icon={scenicPin(highlight.category)}>
+          <Popup>
+            <strong>{highlight.name}</strong>
+            <br />
+            {highlight.directlyOnRoute ? t.directlyOnRoute : t.minDetour(highlight.detourMinutes)}
+          </Popup>
+        </Marker>
+      ))}
     </MapContainer>
   );
 }

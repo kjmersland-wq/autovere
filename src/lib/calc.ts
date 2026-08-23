@@ -6,6 +6,7 @@ import {
   ENERGY_PRICES,
   ALPINE_SURCHARGES,
   NORDIC_BRIDGES,
+  NORWAY_AUTOPASS,
   VIGNETTES,
   vignetteFor,
 } from "./tolls";
@@ -131,6 +132,36 @@ function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[]) {
   if (legs.some((leg) => leg.code === "SE")) tollLines.push({ ...NORDIC_BRIDGES.oresund });
 }
 
+function norwayAutoPassToll(
+  coords: LatLng[],
+  norwayKm: number,
+  key: RouteVariantKey,
+  vehicle: VehicleType,
+): CostLine | null {
+  if (key === "tollfree" || norwayKm <= 20) return null;
+  const start = coords[0];
+  const end = coords[coords.length - 1];
+  if (!start || !end) return null;
+  const nearOslo = haversineKm(start, [59.91, 10.75]) < 75;
+  const reachesNorth = coords.some(([lat]) => lat > 62);
+  const reachesWest = coords.some(([, lon]) => lon < 8.5);
+  const reachesSweden = coords.some(([lat, lon]) => lat > 58.7 && lon > 10.8);
+  let corridor = NORWAY_AUTOPASS.city;
+  if (reachesNorth || norwayKm > 800) corridor = NORWAY_AUTOPASS.e6North;
+  else if (reachesWest) corridor = NORWAY_AUTOPASS.western;
+  else if (reachesSweden) corridor = NORWAY_AUTOPASS.e6South;
+  else if (nearOslo && norwayKm > 180) corridor = NORWAY_AUTOPASS.e18;
+
+  const discount = vehicle === "ev" ? 0.6 : 1;
+  const amountNok = corridor.amountNok * discount;
+  return {
+    label: `${corridor.label} AutoPASS`,
+    detail: `${Math.round(amountNok)} NOK indicative gantry total${vehicle === "ev" ? " · 40% EV discount" : ""}`,
+    amount: amountNok / 11.7,
+    country: "NO",
+  };
+}
+
 function alpineTolls(coords: LatLng[], key: RouteVariantKey): CostLine[] {
   if (key !== "fastest") return [];
   return ALPINE_SURCHARGES.filter((surcharge) =>
@@ -191,6 +222,9 @@ export function estimate(
   }
 
   addNordicBridgeTolls(legs, tollLines);
+  const norwayLeg = legs.find((leg) => leg.code === "NO");
+  const norwayToll = norwayLeg ? norwayAutoPassToll(route.coords, norwayLeg.km, key, trip.vehicle) : null;
+  if (norwayToll) tollLines.push(norwayToll);
   tollLines.push(...alpineTolls(route.coords, key));
 
   const tollCost = tollLines.reduce((a, l) => a + l.amount, 0);
