@@ -9,14 +9,7 @@ import { VitePWA } from "vite-plugin-pwa";
 
 export default defineConfig({
   nitro: {
-    // Cloudflare Pages needs the Pages preset so direct URLs are routed to the SSR worker.
-    // The default cloudflare-module preset does not emit the Pages `_routes.json` config,
-    // which is why `/legal`, `/privacy`, and `/terms` fall through to the app 404 on direct access.
-    preset: "cloudflare-pages",
-    cloudflare: {
-      deployConfig: true,
-      nodeCompat: true,
-    },
+    preset: "vercel",
   },
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
