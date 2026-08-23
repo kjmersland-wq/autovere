@@ -10,6 +10,7 @@ import { VignetteChecklist } from "@/components/VignetteChecklist";
 import { NavigationSheet } from "@/components/NavigationSheet";
 import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighlights";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
 import { fetchFastChargers, fetchRoute, fetchScenicHighlights, type Charger, type RouteResult, type RouteVariantKey, type ScenicHighlight } from "@/lib/geo";
 import {
@@ -53,6 +54,12 @@ const COLORS: Record<RouteVariantKey, string> = {
 };
 
 const VARIANTS: RouteVariantKey[] = ["fastest", "bypass", "tollfree"];
+
+const LEGAL_MODAL_TEXT = {
+  legal: "KM TECH LABS, Kristiansand, Norge. Org.nr. 934 044 029. Kontakt: contact@autovere.com.",
+  privacy: "Beregninger skjer lokalt i nettleseren. Ingen sporing eller videresalg av posisjonsdata. Fullt GDPR-kompatibel.",
+  terms: "Bompenge-, drivstoff- og ladeestimater er veiledende basert på åpne kilder (OSM/OSRM). Føreren er selv ansvarlig for å følge gjeldende skilting og offisielle takster.",
+} as const;
 
 function Index() {
   const t = useT();
@@ -373,9 +380,39 @@ function Index() {
           <p className="font-semibold text-foreground">AutoVere · autovere.com</p>
           <p className="mt-2 font-medium text-foreground">{t.companyFooter}</p>
           <nav className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs" aria-label="Legal links">
-            <a href="/legal" className="hover:text-foreground">{t.legalNotice}</a>
-            <a href="/privacy" className="hover:text-foreground">{t.privacyPolicy}</a>
-            <a href="/terms" className="hover:text-foreground">{t.termsDisclaimer}</a>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button type="button" className="text-left hover:text-foreground">{t.legalNotice}</button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md border border-white/10 bg-surface/85 text-foreground shadow-[var(--shadow-elevated)] backdrop-blur-2xl sm:rounded-2xl">
+                <DialogHeader className="space-y-2">
+                  <DialogTitle className="text-base font-semibold">{t.legalNotice}</DialogTitle>
+                </DialogHeader>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{LEGAL_MODAL_TEXT.legal}</p>
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button type="button" className="text-left hover:text-foreground">{t.privacyPolicy}</button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md border border-white/10 bg-surface/85 text-foreground shadow-[var(--shadow-elevated)] backdrop-blur-2xl sm:rounded-2xl">
+                <DialogHeader className="space-y-2">
+                  <DialogTitle className="text-base font-semibold">{t.privacyPolicy}</DialogTitle>
+                </DialogHeader>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{LEGAL_MODAL_TEXT.privacy}</p>
+              </DialogContent>
+            </Dialog>
+            <Dialog>
+              <DialogTrigger asChild>
+                <button type="button" className="text-left hover:text-foreground">{t.termsDisclaimer}</button>
+              </DialogTrigger>
+              <DialogContent className="max-w-md border border-white/10 bg-surface/85 text-foreground shadow-[var(--shadow-elevated)] backdrop-blur-2xl sm:rounded-2xl">
+                <DialogHeader className="space-y-2">
+                  <DialogTitle className="text-base font-semibold">{t.termsDisclaimer}</DialogTitle>
+                </DialogHeader>
+                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{LEGAL_MODAL_TEXT.terms}</p>
+              </DialogContent>
+            </Dialog>
           </nav>
           <p className="mt-2 max-w-3xl">
             {t.footerDisclaimer}

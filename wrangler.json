@@ -3,5 +3,12 @@
   "name": "autovere",
   "compatibility_date": "2026-08-22",
   "compatibility_flags": ["nodejs_compat"],
-  "main": "src/server.ts"
+  "main": "src/server.ts",
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "autovere-local",
+      "database_id": "00000000-0000-0000-0000-000000000000"
+    }
+  ]
 }

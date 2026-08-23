@@ -44,8 +44,18 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+function getDbBinding(env: unknown): unknown {
+  if (typeof env !== "object" || env === null) return undefined;
+  return (env as Record<string, unknown>).DB;
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
+    const db = getDbBinding(env);
+    if (!db && typeof process !== "undefined" && process.env.NODE_ENV !== "production") {
+      console.warn("[dev] Missing D1 binding 'DB'; continuing without a local database.");
+    }
+
     try {
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
