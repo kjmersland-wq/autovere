@@ -1,3 +1,4 @@
+export type Locale = "en" | "de" | "no" | "pl";
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 /**
@@ -120,10 +121,15 @@ export const en = {
   norwayAutopassDescription: "Norway uses 100% automated electronic toll gantries (no physical booths). Foreign vehicles should pre-register vehicle details at EPASS24 / AutoPASS to ensure correct environmental fuel rates.",
   visitEpass24: "Visit EPASS24",
   visitAutopass: "Visit AutoPASS",
+  companyFooter: "AutoVere is developed and operated by KM TECH LABS.",
+  legalNotice: "Legal Notice",
+  privacyPolicy: "Privacy Policy",
+  termsDisclaimer: "Terms & Disclaimer",
+  legalDisclaimer: "Route calculations and toll estimates are guidance based on open data from OSM, Overpass, and OSRM.",
 } as const;
 
 export type Dict = typeof en;
-export type Locale = "en" | "de" | "no" | "fr";
+export type Locale = "en" | "de" | "no" | "pl";
 const GERMAN_COUNTRIES: Record<string, string> = {
   DE: "Deutschland", AT: "Österreich", CH: "Schweiz", IT: "Italien", FR: "Frankreich",
   DK: "Dänemark", SE: "Schweden", NO: "Norwegen", SI: "Slowenien", CZ: "Tschechien",
@@ -134,6 +140,7 @@ const GERMAN_COUNTRIES: Record<string, string> = {
 
 const de: Dict = {
   ...en,
+  companyFooter: "AutoVere wird von KM TECH LABS entwickelt und betrieben.", legalNotice: "Impressum", privacyPolicy: "Datenschutzerklärung", termsDisclaimer: "Nutzungsbedingungen & Haftungsausschluss", legalDisclaimer: "Routenberechnungen und Mautschätzungen dienen als Orientierung und basieren auf offenen Daten von OSM, Overpass und OSRM.",
   norwayAutopassTitle: "Norwegen AutoPASS / EPASS24 Mautsystem",
   norwayAutopassDescription: "Norwegen nutzt vollständig automatische, schrankenlose Mautkameras. Ausländische Fahrer sollten Kennzeichen und Kraftstoffart bei EPASS24 / AutoPASS registrieren, damit Elektrofahrzeuge nicht versehentlich den Benzintarif zahlen.",
   visitEpass24: "EPASS24 öffnen",
@@ -162,7 +169,23 @@ const no: Dict = { ...de, tagline: "Europeisk bom-, vignett- og ladeintelligens"
 
 const fr: Dict = { ...de, tagline: "Intelligence européenne des péages, vignettes et recharges", heroTitle: "Connaissez le vrai coût avant de partir.", from: "De", to: "À", petrol: "Essence", diesel: "Diesel", ev: "Électrique (VE)", calculate: "Calculer mon trajet", calculating: "Calcul…", comparison: "Comparaison des itinéraires", fastest: "Itinéraire le plus rapide", bypass: "Détour intelligent", tollfree: "100% sans péage", fuel: "Carburant", charging: "Recharge", tolls: "Péages à la distance", vignettes: "Vignettes", total: "Coût total du trajet", checklist: "Liste des vignettes officielles", chargingStops: "Arrêts recharge", chargingTime: "Temps de recharge", noVignettes: "Aucune vignette requise sur cet itinéraire.", selected: "Sélectionné", year: "an", language: "Langue", currency: "Devise", all: "Toutes", camping: "Camping et camping-car", lodging: "Hôtels et hébergements", food: "Restaurants et cafés", sights: "Sites et panoramas", directlyOnRoute: "Directement sur l'itinéraire", add: "Ajouter", added: "Ajouté", sendToCar: "Envoyer à la voiture et navigation", sendMobile: "Envoyer au mobile / à l'application voiture", shared: "Partagé", downloadKml: "Télécharger KML", plannedTotal: "Total prévu", minDetour: (m) => `+${m} min de détour`, lezWarning: (s) => `Une vignette environnementale peut être requise en ${s}.` };
 
-export const locales: Record<Locale, Dict> = { en, de, no, fr };
+const noLocalized: Dict = {
+  ...no,
+  companyFooter: "AutoVere utvikles og driftes av KM TECH LABS.",
+  legalNotice: "Juridisk informasjon",
+  privacyPolicy: "Personvern",
+  termsDisclaimer: "Vilkår og ansvarsfraskrivelse",
+  legalDisclaimer: "Ruteberegninger og bompengeanslag er veiledende og basert på åpne data fra OSM, Overpass og OSRM.",
+};
+
+const pl: Dict = {
+  ...en,
+  heroTitle: "Poznaj prawdziwe koszty podróży, zanim wyruszysz w drogę.",
+  heroSub: "Dokładne kalkulacje opłat drogowych, winiet, paliwa i ładowania dla Twojej podróży po Europie. Otwarte dane, zero ukrytych prowizji.",
+  from: "Miejsce startu", to: "Miejsce docelowe", fromPlaceholder: "np. Monachium", toPlaceholder: "np. Mediolan", vehicle: "Pojazd", petrol: "Benzyna", diesel: "Diesel", ev: "Elektryczny (EV)", calculate: "Oblicz trasę i koszty", calculating: "Obliczanie…", comparison: "Porównanie tras", fastest: "Najszybsza trasa", bypass: "Sprytny objazd", tollfree: "100% bez opłat", fuel: "Paliwo", charging: "Ładowanie", tolls: "Opłaty odcinkowe", vignettes: "Winiety", total: "Całkowity koszt podróży", language: "Wybierz język", currency: "Wybór waluty", all: "Wszystkie", camping: "Camping i kamper", lodging: "Hotele i noclegi", food: "Jedzenie i kawiarnie", sights: "Widoki i kultura", directlyOnRoute: "Bezpośrednio przy trasie", minDetour: (m) => `+${m} min objazdu`, openMap: "Otwórz w Google Maps", website: "Odwiedź stronę", add: "Dodaj do trasy", added: "Dodano", sendToCar: "Wyślij trasę do auta i nawigacji", sendMobile: "Wyślij do smartfona / aplikacji auta", shared: "Udostępniono", tesla: "Nawigacja Tesla", googleMultiStop: "Otwórz w Google Maps", appleWaypoints: "Otwórz w Apple Maps", waze: "Nawigacja Waze", downloadGpx: "Pobierz plik GPX", downloadKml: "Pobierz plik KML", plannedTotal: "Planowana suma trasy", companyFooter: "AutoVere jest rozwijane i prowadzone przez KM TECH LABS.", legalNotice: "Nota prawna", privacyPolicy: "Polityka prywatności", termsDisclaimer: "Warunki i wyłączenie odpowiedzialności", legalDisclaimer: "Obliczenia tras i szacunki opłat są orientacyjne i opierają się na otwartych danych OSM, Overpass i OSRM.",
+};
+
+export const locales: Record<Locale, Dict> = { en, de, no: noLocalized, pl };
 
 const I18nContext = createContext<{ t: Dict; locale: string; setLocale: (l: string) => void }>({
   t: en,
@@ -175,7 +198,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = window.localStorage.getItem("autovere-locale") as Locale | null;
     const browser = navigator.language.toLowerCase();
-    const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("no") || browser.startsWith("nb") ? "no" : browser.startsWith("fr") ? "fr" : "en";
+    const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("no") || browser.startsWith("nb") || browser.startsWith("nn") ? "no" : browser.startsWith("pl") ? "pl" : "en";
     setLocale(saved && saved in locales ? saved : detected);
     document.documentElement.lang = saved && saved in locales ? saved : detected;
   }, []);

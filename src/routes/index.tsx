@@ -230,7 +230,7 @@ function Index() {
                 <option value="en">🇬🇧 EN</option>
                 <option value="de">🇩🇪 DE</option>
                 <option value="no">🇳🇴 NO</option>
-                <option value="fr">🇫🇷 FR</option>
+                  <option value="pl">🇵🇱 PL</option>
               </select>
             </label>
             <button
@@ -349,6 +349,12 @@ function Index() {
       <footer className="border-t border-border py-8">
         <div className="mx-auto max-w-6xl px-5 text-xs leading-relaxed text-muted-foreground">
           <p className="font-semibold text-foreground">AutoVere · autovere.com</p>
+          <p className="mt-2 font-medium text-foreground">{t.companyFooter}</p>
+          <nav className="mt-3 flex flex-wrap gap-x-4 gap-y-2 text-xs" aria-label="Legal links">
+            <a href="/legal" className="hover:text-foreground">{t.legalNotice}</a>
+            <a href="/privacy" className="hover:text-foreground">{t.privacyPolicy}</a>
+            <a href="/terms" className="hover:text-foreground">{t.termsDisclaimer}</a>
+          </nav>
           <p className="mt-2 max-w-3xl">
             {t.footerDisclaimer}
           </p>
