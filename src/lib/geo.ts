@@ -46,25 +46,29 @@ export type RouteResult = {
 
 export type RouteVariantKey = "fastest" | "bypass" | "tollfree";
 
+type RawRoute = {
+  distance: number;
+  duration: number;
+  geometry: { coordinates: [number, number][] };
+};
+
 export async function fetchRoute(
   from: Place,
   to: Place,
   variant: RouteVariantKey,
   signal?: AbortSignal,
 ): Promise<RouteResult> {
-  const params = new URLSearchParams({ overview: "full", geometries: "geojson" });
-  const url = `${OSRM}/route/v1/driving/${from.lon},${from.lat};${to.lon},${to.lat}?${params}`;
+  const via = variant === "fastest" ? [] : [variantWaypoint(from, to, variant)];
+  const coordinates = [from, ...via, to].map((point) => `${point.lon},${point.lat}`).join(";");
+  const params = new URLSearchParams({ overview: "full", geometries: "geojson", alternatives: "true" });
+  const url = `${OSRM}/route/v1/driving/${coordinates}?${params}`;
   const res = await fetch(url, { signal: signal ?? null });
   if (!res.ok) throw new Error("Routing service unavailable");
   const data = (await res.json()) as {
     code: string;
-    routes?: Array<{
-      distance: number;
-      duration: number;
-      geometry: { coordinates: [number, number][] };
-    }>;
+    routes?: RawRoute[];
   };
-  const route = data.routes?.[0];
+  const route = selectVariantRoute(data.routes ?? [], variant);
   if (
     data.code !== "Ok" ||
     !route ||
@@ -75,14 +79,34 @@ export async function fetchRoute(
   )
     throw new Error("No route found");
 
-  // The public OSRM demo does not support exclusions. Route tiers use the
-  // existing motorway-share cost heuristic and fall back to this route.
-  void variant;
   return {
     distanceKm: route.distance / 1000,
     durationMin: route.duration / 60,
     coords: route.geometry.coordinates.map(([lon, lat]) => [lat, lon] as LatLng),
   };
+}
+
+function variantWaypoint(from: Place, to: Place, variant: RouteVariantKey): Place {
+  const midLat = (from.lat + to.lat) / 2;
+  const midLon = (from.lon + to.lon) / 2;
+  const latSpan = to.lat - from.lat;
+  const lonSpan = to.lon - from.lon;
+  const length = Math.hypot(latSpan, lonSpan) || 1;
+  const side = variant === "tollfree" ? 0.85 : 0.4;
+  const offset = (side * length) / 2;
+  return {
+    id: `variant-${variant}`,
+    name: variant === "tollfree" ? "Toll-free corridor point" : "Bypass corridor point",
+    label: "Generated routing waypoint",
+    lat: midLat - (lonSpan / length) * offset,
+    lon: midLon + (latSpan / length) * offset,
+  };
+}
+
+function selectVariantRoute(routes: RawRoute[], variant: RouteVariantKey): RawRoute | undefined {
+  if (routes.length <= 1) return routes[0];
+  if (variant === "fastest") return routes.reduce((best, route) => route.duration < best.duration ? route : best);
+  return routes.reduce((best, route) => route.distance > best.distance ? route : best);
 }
 
 export async function fetchMultiStopRoute(

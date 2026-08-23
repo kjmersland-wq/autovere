@@ -33,14 +33,15 @@ function scenicPin(category: ScenicHighlight["category"]) {
   return pin(icon, "#ffd166", 28);
 }
 
-function FitBounds({ coords }: { coords: LatLng[] }) {
+function FitBounds({ coords, start, end }: { coords: LatLng[]; start: LatLng | null; end: LatLng | null }) {
   const map = useMap();
   useEffect(() => {
-    if (coords.length < 2) return;
-    map.fitBounds(L.latLngBounds(coords.map(([a, b]) => L.latLng(a, b))), {
+    const routeBounds = [...coords, ...(start ? [start] : []), ...(end ? [end] : [])];
+    if (routeBounds.length < 2) return;
+    map.fitBounds(L.latLngBounds(routeBounds.map(([a, b]) => L.latLng(a, b))), {
       padding: [40, 40],
     });
-  }, [coords, map]);
+  }, [coords, start, end, map]);
   return null;
 }
 
@@ -102,7 +103,7 @@ export default function RouteMapInner({
         maxZoom={19}
       />
       <MapSizeSync />
-      <FitBounds coords={active} />
+      <FitBounds coords={active} start={start} end={end} />
 
       {routes
         .slice()

@@ -35,12 +35,6 @@ const MOTORWAY_SHARE: Record<RouteVariantKey, number> = {
   tollfree: 0,
 };
 
-const ROUTE_TIME_FACTOR: Record<RouteVariantKey, number> = {
-  fastest: 1,
-  bypass: 1,
-  tollfree: 1.27,
-};
-
 export type CountryLeg = { code: string; name: string; km: number };
 
 export type CostLine = { label: string; detail: string; amount: number; country?: string | undefined };
@@ -124,7 +118,8 @@ export function planEvStops(
   return { stops, stopCount, chargingMinutes: stopCount * perStop, energyKwh };
 }
 
-function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[]) {
+function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[], key: RouteVariantKey) {
+  if (key === "tollfree") return;
   const denmark = legs.find((leg) => leg.code === "DK");
   if (!denmark || denmark.km < 40) return;
 
@@ -221,7 +216,7 @@ export function estimate(
     }
   }
 
-  addNordicBridgeTolls(legs, tollLines);
+  addNordicBridgeTolls(legs, tollLines, key);
   const norwayLeg = legs.find((leg) => leg.code === "NO");
   const norwayToll = norwayLeg ? norwayAutoPassToll(route.coords, norwayLeg.km, key, trip.vehicle) : null;
   if (norwayToll) tollLines.push(norwayToll);
@@ -239,10 +234,7 @@ export function estimate(
     key,
     title: TITLES[key],
     distanceKm: route.distanceKm,
-    durationMin:
-      route.durationMin * ROUTE_TIME_FACTOR[key] +
-      (key === "bypass" ? Math.min(35, Math.max(15, route.distanceKm / 100)) : 0) +
-      (ev ? ev.chargingMinutes : 0),
+    durationMin: route.durationMin + (ev ? ev.chargingMinutes : 0),
     legs,
     energyCost,
     tollCost,

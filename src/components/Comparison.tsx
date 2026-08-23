@@ -27,6 +27,9 @@ export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[];
   const saving = fastest.total - best.total;
   if (saving <= 1) return null;
   const extraMin = Math.max(0, best.durationMin - fastest.durationMin);
+  const distanceDelta = best.distanceKm - fastest.distanceKm;
+  const fuelDelta = fastest.energyCost - best.energyCost;
+  const tollDelta = fastest.tollCost - best.tollCost;
 
   return (
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-success/35 bg-success/10 px-4 py-3.5">
@@ -41,6 +44,9 @@ export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[];
       </p>
       <span className="numeric text-xs text-muted-foreground">
         {formatCurrency(saving / Math.max(1, extraMin / 60), currency)} {t.earnedPerHour}
+      </span>
+      <span className="numeric w-full text-xs text-muted-foreground">
+        {t.distance}: {distanceDelta >= 0 ? "+" : ""}{Math.round(distanceDelta)} km Â· {t.fuel}: {fuelDelta >= 0 ? "+" : ""}{formatCurrency(fuelDelta, currency)} Â· {t.tolls}: {tollDelta >= 0 ? "+" : ""}{formatCurrency(tollDelta, currency)}
       </span>
     </div>
   );
