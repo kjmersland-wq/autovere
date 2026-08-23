@@ -149,6 +149,21 @@ export const NORDIC_BRIDGES = {
   },
 } as const;
 
+export const LEZ_STICKERS: Record<string, { label: string; authority: string }> = {
+  FR: { label: "Crit'Air environmental sticker", authority: "French Ministry of Ecological Transition" },
+  DE: { label: "Umweltplakette environmental badge", authority: "German emissions-control zones" },
+};
+
+export const ALPINE_SURCHARGES = [
+  { id: "brenner", label: "Brenner Pass (A13)", lat: 47.0, lon: 11.5, radiusKm: 35, amount: 12.5, country: "AT" },
+  { id: "tauern", label: "Tauern / Katschberg Tunnel (A10)", lat: 47.1, lon: 13.5, radiusKm: 30, amount: 15, country: "AT" },
+  { id: "arlberg", label: "Arlberg Tunnel (S16)", lat: 47.13, lon: 10.2, radiusKm: 28, amount: 13, country: "AT" },
+  { id: "karawanken", label: "Karawanken Tunnel (A11)", lat: 46.46, lon: 14.0, radiusKm: 25, amount: 9, country: "AT/SI" },
+  { id: "mont-blanc", label: "Mont Blanc Tunnel", lat: 45.9, lon: 6.9, radiusKm: 28, amount: 55, country: "FR/IT" },
+  { id: "frejus", label: "Fréjus Tunnel", lat: 45.13, lon: 7.05, radiusKm: 28, amount: 55.5, country: "FR/IT" },
+  { id: "grand-saint-bernard", label: "Grand Saint-Bernard Tunnel", lat: 45.85, lon: 7.17, radiusKm: 22, amount: 31, country: "CH" },
+] as const;
+
 /** Indicative pump / charging prices per country (EUR). */
 export const ENERGY_PRICES: Record<string, { petrol: number; diesel: number; kwh: number }> = {
   NO: { petrol: 1.86, diesel: 1.79, kwh: 0.55 },

@@ -18,6 +18,7 @@ import {
   shapingWaypoints,
 } from "@/lib/export";
 import { useT } from "@/lib/i18n";
+import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -62,6 +63,7 @@ function Index() {
   const [chargers, setChargers] = useState<Charger[]>([]);
   const [selected, setSelected] = useState<RouteVariantKey>("bypass");
   const [submitted, setSubmitted] = useState<TripFormState | null>(null);
+  const [currency, setCurrency] = useState<CurrencyCode>("EUR");
 
   const run = useCallback(async () => {
     const { from, to } = form;
@@ -177,6 +179,21 @@ function Index() {
                 {t.tagline}
               </p>
             </div>
+            <label className="ml-auto flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+              <span className="sr-only">Currency</span>
+              <select
+                value={currency}
+                onChange={(event) => setCurrency(event.target.value as CurrencyCode)}
+                className="rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground outline-none focus:border-primary/60"
+                aria-label="Currency"
+              >
+                {CURRENCIES.map((code) => (
+                  <option key={code} value={code}>
+                    {code}
+                  </option>
+                ))}
+              </select>
+            </label>
           </div>
 
           <h1 className="mt-9 max-w-3xl text-4xl font-extrabold leading-[1.08] sm:text-6xl">
@@ -206,7 +223,7 @@ function Index() {
 
       {estimates.length > 0 && selectedEst && (
         <section className="mx-auto max-w-6xl px-5 py-10">
-          <TradeoffBanner estimates={estimates} />
+          <TradeoffBanner estimates={estimates} currency={currency} />
 
           <div className="mt-7 grid gap-6 lg:grid-cols-[1.15fr_1fr]">
             <div className="panel h-[380px] overflow-hidden lg:h-[560px]">
@@ -230,6 +247,7 @@ function Index() {
                   est={e}
                   selected={e.key === selected}
                   cheapest={e.key === cheapestKey}
+                  currency={currency}
                   onSelect={() => setSelected(e.key)}
                 />
               ))}
@@ -263,8 +281,14 @@ function Index() {
           </p>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
-            <Breakdown est={selectedEst} />
-            <VignetteChecklist est={selectedEst} days={submitted?.days ?? form.days} />
+            <Breakdown est={selectedEst} currency={currency} />
+            <VignetteChecklist
+              est={selectedEst}
+              days={submitted?.days ?? form.days}
+              currency={currency}
+              startCountry={submitted?.from?.country}
+              endCountry={submitted?.to?.country}
+            />
           </div>
         </section>
       )}

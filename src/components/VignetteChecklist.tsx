@@ -1,11 +1,25 @@
 import { ShieldCheck, ExternalLink } from "lucide-react";
 import { COUNTRY_NAMES, FLAGS } from "@/lib/countries";
-import { DISTANCE_TOLLS, VIGNETTES, vignetteFor } from "@/lib/tolls";
-import { formatEur, type Estimate } from "@/lib/calc";
+import { DISTANCE_TOLLS, LEZ_STICKERS, VIGNETTES, vignetteFor } from "@/lib/tolls";
+import { type Estimate } from "@/lib/calc";
+import { formatCurrency, type CurrencyCode } from "@/lib/currency";
 import { useT } from "@/lib/i18n";
 
-export function VignetteChecklist({ est, days }: { est: Estimate; days: number }) {
+export function VignetteChecklist({
+  est,
+  days,
+  currency,
+  startCountry,
+  endCountry,
+}: {
+  est: Estimate;
+  days: number;
+  currency: CurrencyCode;
+  startCountry?: string;
+  endCountry?: string;
+}) {
   const t = useT();
+  const lezCountries = [...new Set([startCountry, endCountry].filter((code): code is string => !!code && !!LEZ_STICKERS[code]))];
   const items = est.legs
     .map((leg) => {
       const v = VIGNETTES[leg.code];
@@ -46,6 +60,12 @@ export function VignetteChecklist({ est, days }: { est: Estimate; days: number }
         </div>
       </div>
 
+      {lezCountries.length > 0 && (
+        <div className="mt-4 rounded-lg border border-signal/30 bg-signal/10 px-3 py-2 text-xs text-signal">
+          Environmental sticker may be required in {lezCountries.map((code) => LEZ_STICKERS[code]!.label).join(" and ")}.
+        </div>
+      )}
+
       {items.length === 0 ? (
         <p className="mt-5 text-sm text-muted-foreground">{t.noVignettes}</p>
       ) : (
@@ -74,7 +94,7 @@ export function VignetteChecklist({ est, days }: { est: Estimate; days: number }
                   {i.note && <p className="mt-1 text-xs text-signal">{i.note}</p>}
                 </div>
                 <span className="numeric shrink-0 text-sm font-bold text-foreground">
-                  ≈ {formatEur(i.price)}
+                  ≈ {formatCurrency(i.price, currency)}
                 </span>
                 <ExternalLink className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
               </a>

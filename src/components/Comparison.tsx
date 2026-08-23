@@ -1,5 +1,6 @@
 import { Clock, Route as RouteIcon, Zap, BatteryCharging, TrendingDown, Check } from "lucide-react";
-import { formatDuration, formatEur, type Estimate } from "@/lib/calc";
+import { formatDuration, type Estimate } from "@/lib/calc";
+import { formatCurrency, type CurrencyCode } from "@/lib/currency";
 import { FLAGS } from "@/lib/countries";
 import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
@@ -17,7 +18,7 @@ const DOT: Record<RouteVariantKey, string> = {
   tollfree: "bg-route-free",
 };
 
-export function TradeoffBanner({ estimates }: { estimates: Estimate[] }) {
+export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[]; currency: CurrencyCode }) {
   const fastest = estimates.find((e) => e.key === "fastest");
   const others = estimates.filter((e) => e.key !== "fastest");
   if (!fastest || !others.length) return null;
@@ -32,16 +33,16 @@ export function TradeoffBanner({ estimates }: { estimates: Estimate[] }) {
       <p className="text-sm font-semibold text-foreground">
         <span className="numeric text-success">+{formatDuration(extraMin)}</span> on the{" "}
         {best.title.toLowerCase()} saves{" "}
-        <span className="numeric text-success">{formatEur(saving)}</span>
+        <span className="numeric text-success">{formatCurrency(saving, currency)}</span>
       </p>
       <span className="numeric text-xs text-muted-foreground">
-        {formatEur(saving / Math.max(1, extraMin / 60))} earned per hour of extra driving
+        {formatCurrency(saving / Math.max(1, extraMin / 60), currency)} earned per hour of extra driving
       </span>
     </div>
   );
 }
 
-function Line({ label, detail, amount }: { label: string; detail: string; amount: number }) {
+function Line({ label, detail, amount, currency }: { label: string; detail: string; amount: number; currency: CurrencyCode }) {
   return (
     <div className="flex items-start justify-between gap-3 py-1.5">
       <div className="min-w-0">
@@ -49,7 +50,7 @@ function Line({ label, detail, amount }: { label: string; detail: string; amount
         <p className="truncate text-xs text-muted-foreground">{detail}</p>
       </div>
       <span className="numeric shrink-0 text-sm font-semibold text-foreground">
-        {formatEur(amount)}
+        {formatCurrency(amount, currency)}
       </span>
     </div>
   );
@@ -65,6 +66,7 @@ export function RouteCard({
   selected: boolean;
   onSelect: () => void;
   cheapest: boolean;
+  currency: CurrencyCode;
 }) {
   const t = useT();
   const isEv = !!est.ev;
@@ -98,7 +100,7 @@ export function RouteCard({
 
       <div className="mt-4 flex items-end justify-between">
         <span className="numeric text-3xl font-extrabold tracking-tight text-foreground">
-          {formatEur(est.total)}
+          {formatCurrency(est.total, currency)}
         </span>
         <div className="flex gap-4 text-right text-xs text-muted-foreground">
           <span className="numeric flex items-center gap-1.5">
@@ -119,6 +121,7 @@ export function RouteCard({
               : "Country-by-country pump prices"
           }
           amount={est.energyCost}
+          currency={currency}
         />
         <Line
           label={t.tolls}
@@ -128,6 +131,7 @@ export function RouteCard({
               : "None on this route"
           }
           amount={est.tollCost}
+          currency={currency}
         />
         <Line
           label={t.vignettes}
@@ -137,6 +141,7 @@ export function RouteCard({
               : t.noVignettes
           }
           amount={est.vignetteCost}
+          currency={currency}
         />
       </div>
 
@@ -155,7 +160,7 @@ export function RouteCard({
   );
 }
 
-export function Breakdown({ est }: { est: Estimate }) {
+export function Breakdown({ est, currency }: { est: Estimate; currency: CurrencyCode }) {
   const t = useT();
   return (
     <div className="panel p-5">
@@ -176,12 +181,13 @@ export function Breakdown({ est }: { est: Estimate }) {
 
       <div className="mt-4 space-y-1 border-t border-border pt-3">
         {[...est.tollLines, ...est.vignetteLines].map((l, i) => (
-          <Line key={i} label={l.label} detail={l.detail} amount={l.amount} />
+          <Line key={i} label={l.label} detail={l.detail} amount={l.amount} currency={currency} />
         ))}
         <Line
           label={est.ev ? t.charging : t.fuel}
           detail={est.ev ? `${Math.round(est.ev.energyKwh)} kWh` : "Estimated consumption"}
           amount={est.energyCost}
+          currency={currency}
         />
       </div>
 
@@ -189,7 +195,7 @@ export function Breakdown({ est }: { est: Estimate }) {
         <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
           {t.total}
         </span>
-        <span className="numeric text-2xl font-extrabold text-primary">{formatEur(est.total)}</span>
+        <span className="numeric text-2xl font-extrabold text-primary">{formatCurrency(est.total, currency)}</span>
       </div>
     </div>
   );

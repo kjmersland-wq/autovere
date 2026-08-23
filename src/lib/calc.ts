@@ -1,9 +1,10 @@
 import { COUNTRY_NAMES, countryAt, type LatLng } from "./countries";
-import { cumulativeKm, samplePolyline, type Charger, type RouteResult, type RouteVariantKey } from "./geo";
+import { cumulativeKm, haversineKm, samplePolyline, type Charger, type RouteResult, type RouteVariantKey } from "./geo";
 import {
   DEFAULT_ENERGY,
   DISTANCE_TOLLS,
   ENERGY_PRICES,
+  ALPINE_SURCHARGES,
   NORDIC_BRIDGES,
   VIGNETTES,
   vignetteFor,
@@ -130,6 +131,18 @@ function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[]) {
   if (legs.some((leg) => leg.code === "SE")) tollLines.push({ ...NORDIC_BRIDGES.oresund });
 }
 
+function alpineTolls(coords: LatLng[], key: RouteVariantKey): CostLine[] {
+  if (key !== "fastest") return [];
+  return ALPINE_SURCHARGES.filter((surcharge) =>
+    coords.some((point) => haversineKm(point, [surcharge.lat, surcharge.lon]) <= surcharge.radiusKm),
+  ).map((surcharge) => ({
+    label: surcharge.label,
+    detail: "Special mountain toll · fastest route",
+    amount: surcharge.amount,
+    country: surcharge.country,
+  }));
+}
+
 export function estimate(
   key: RouteVariantKey,
   route: RouteResult,
@@ -178,6 +191,7 @@ export function estimate(
   }
 
   addNordicBridgeTolls(legs, tollLines);
+  tollLines.push(...alpineTolls(route.coords, key));
 
   const tollCost = tollLines.reduce((a, l) => a + l.amount, 0);
   const vignetteCost = vignetteLines.reduce((a, l) => a + l.amount, 0);
