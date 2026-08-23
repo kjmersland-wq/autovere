@@ -2,16 +2,34 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Check, Sparkles } from "lucide-react";
 import { useState } from "react";
 
-import { ContactModal } from "@/components/ContactModal";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
-import { annualLabels, comparisonStateLabels, marketingCopy } from "@/lib/marketing-i18n";
+import { annualLabels, checkoutLabels, comparisonStateLabels, marketingCopy } from "@/lib/marketing-i18n";
 
 function PricingPage() {
   const { locale } = useLocale();
   const copy = marketingCopy[locale];
   const [yearly, setYearly] = useState(false);
-  const [contactOpen, setContactOpen] = useState(false);
+  const [checkoutPlan, setCheckoutPlan] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState("");
+
+  async function startCheckout(priceId: string) {
+    setCheckoutPlan(priceId);
+    setCheckoutError("");
+    try {
+      const result = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ priceId, locale }),
+      });
+      const payload = (await result.json()) as { url?: string; error?: string };
+      if (!result.ok || !payload.url) throw new Error(payload.error || checkoutLabels[locale].error);
+      window.location.assign(payload.url);
+    } catch (error) {
+      setCheckoutError(error instanceof Error ? error.message : checkoutLabels[locale].error);
+      setCheckoutPlan(null);
+    }
+  }
 
   return (
     <main className="min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
@@ -44,10 +62,11 @@ function PricingPage() {
               <ul className="mt-6 flex-1 space-y-3 text-sm text-muted-foreground">
                 {plan.features.map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" /> <span>{feature}</span></li>)}
               </ul>
-              {plan.name.includes("Free") || plan.name.includes("Gratis") || plan.name.includes("Darmowy") ? <Link to="/"><Button className="mt-7 w-full">{plan.action}</Button></Link> : <Button className="mt-7 w-full" variant={plan.featured ? "default" : "secondary"} onClick={() => setContactOpen(true)}>{plan.action}</Button>}
+              {plan.name.includes("Free") || plan.name.includes("Gratis") || plan.name.includes("Darmowy") ? <Link to="/"><Button className="mt-7 w-full">{plan.action}</Button></Link> : <Button className="mt-7 w-full" variant={plan.featured ? "default" : "secondary"} disabled={checkoutPlan !== null} onClick={() => void startCheckout(`${plan.name.includes("Business") || plan.name.includes("Zakelijk") || plan.name.includes("Firma") ? "business" : "pro"}-${yearly ? "yearly" : "monthly"}`)}>{checkoutPlan ? checkoutLabels[locale].starting : plan.action}</Button>}
             </article>
           ))}
         </section>
+        {checkoutError && <p className="mt-4 text-sm text-destructive" role="alert">{checkoutError}</p>}
 
         <section className="mt-12 panel overflow-hidden p-5 sm:p-7">
           <h2 className="text-xl font-bold">{copy.compareTitle}</h2>
@@ -59,7 +78,6 @@ function PricingPage() {
           </div>
         </section>
       </div>
-      <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
     </main>
   );
 }

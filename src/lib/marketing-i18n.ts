@@ -82,3 +82,11 @@ export const comparisonStateLabels: Record<Locale, { included: string; notInclud
   no: { included: "Inkludert", notIncluded: "Ikke inkludert" },
   pl: { included: "W cenie", notIncluded: "Brak w planie" },
 };
+
+export const checkoutLabels: Record<Locale, { starting: string; error: string }> = {
+  en: { starting: "...", error: "Checkout could not be started." },
+  de: { starting: "...", error: "Der Bezahlvorgang konnte nicht gestartet werden." },
+  nl: { starting: "...", error: "De betaling kon niet worden gestart." },
+  no: { starting: "...", error: "Betalingen kunne ikke startes." },
+  pl: { starting: "...", error: "Nie udało się rozpocząć płatności." },
+};
