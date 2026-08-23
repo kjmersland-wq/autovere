@@ -18,6 +18,10 @@ export function PlaceInput({ label, placeholder, value, onChange }: Props) {
   const wrapRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    setQuery(value?.name ?? "");
+  }, [value]);
+
+  useEffect(() => {
     if (value && query === value.name) return;
     if (query.trim().length < 2) {
       setResults([]);

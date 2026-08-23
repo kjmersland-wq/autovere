@@ -253,6 +253,10 @@ function Index() {
       "munich-split": { from: { id: "demo-munich", name: "Munich", label: "Munich, Germany", lat: 48.1351, lon: 11.582, country: "DE" }, to: { id: "demo-split", name: "Split", label: "Split, Croatia", lat: 43.5081, lon: 16.4402, country: "HR" } },
       "paris-nice": { from: { id: "demo-paris", name: "Paris", label: "Paris, France", lat: 48.8566, lon: 2.3522, country: "FR" }, to: { id: "demo-nice", name: "Nice", label: "Nice, France", lat: 43.7102, lon: 7.262, country: "FR" } },
     }[demo];
+    if (!places) {
+      toast.error(t.calculationFailed);
+      return;
+    }
     const next = { ...form, from: places.from, stops: [], to: places.to };
     setForm(next);
     void run(next);

@@ -66,6 +66,7 @@ export function RouteCard({
   selected,
   onSelect,
   cheapest,
+  currency,
 }: {
   est: Estimate;
   selected: boolean;
