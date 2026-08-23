@@ -30,7 +30,7 @@ export function TradeoffBanner({ estimates }: { estimates: Estimate[] }) {
     <div className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-xl border border-success/35 bg-success/10 px-4 py-3.5">
       <TrendingDown className="size-5 shrink-0 text-success" aria-hidden />
       <p className="text-sm font-semibold text-foreground">
-        <span className="numeric text-success">+{Math.round(extraMin)} min</span> on the{" "}
+        <span className="numeric text-success">+{formatDuration(extraMin)}</span> on the{" "}
         {best.title.toLowerCase()} saves{" "}
         <span className="numeric text-success">{formatEur(saving)}</span>
       </p>
@@ -143,7 +143,7 @@ export function RouteCard({
       {isEv && (
         <div className="mt-3 flex items-center gap-4 rounded-lg bg-primary/8 px-3 py-2 text-xs">
           <span className="numeric flex items-center gap-1.5 font-semibold text-primary">
-            <Zap className="size-3.5" /> {est.ev!.stops.length} {t.chargingStops.toLowerCase()}
+            <Zap className="size-3.5" /> {est.ev!.stopCount} {t.chargingStops.toLowerCase()}
           </span>
           <span className="numeric flex items-center gap-1.5 text-muted-foreground">
             <BatteryCharging className="size-3.5" /> {formatDuration(est.ev!.chargingMinutes)}{" "}

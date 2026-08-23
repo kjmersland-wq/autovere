@@ -1,6 +1,13 @@
 import { COUNTRY_NAMES, countryAt, type LatLng } from "./countries";
 import { cumulativeKm, samplePolyline, type Charger, type RouteResult, type RouteVariantKey } from "./geo";
-import { DEFAULT_ENERGY, DISTANCE_TOLLS, ENERGY_PRICES, VIGNETTES, vignetteFor } from "./tolls";
+import {
+  DEFAULT_ENERGY,
+  DISTANCE_TOLLS,
+  ENERGY_PRICES,
+  NORDIC_BRIDGES,
+  VIGNETTES,
+  vignetteFor,
+} from "./tolls";
 
 export type VehicleType = "petrol" | "diesel" | "ev";
 
@@ -26,12 +33,19 @@ const MOTORWAY_SHARE: Record<RouteVariantKey, number> = {
   tollfree: 0,
 };
 
+const ROUTE_TIME_FACTOR: Record<RouteVariantKey, number> = {
+  fastest: 1,
+  bypass: 1,
+  tollfree: 1.27,
+};
+
 export type CountryLeg = { code: string; name: string; km: number };
 
 export type CostLine = { label: string; detail: string; amount: number; country?: string | undefined };
 
 export type EvPlan = {
   stops: Charger[];
+  stopCount: number;
   chargingMinutes: number;
   energyKwh: number;
 };
@@ -89,8 +103,9 @@ export function planEvStops(
   rangeKm: number,
   consumptionEv: number,
 ): EvPlan {
-  // Keep corridor stops between 280 and 350 km apart while preserving a range buffer.
-  const usable = Math.min(350, Math.max(280, rangeKm * 0.75));
+  const effectiveLegKm = rangeKm * 0.75;
+  const stopCount = Math.max(0, Math.ceil(distanceKm / effectiveLegKm) - 1);
+  const usable = effectiveLegKm;
   const stops: Charger[] = [];
   let nextTarget = usable;
   while (nextTarget < distanceKm - 30) {
@@ -103,9 +118,16 @@ export function planEvStops(
     nextTarget = pick.atKm + usable;
   }
   const energyKwh = (distanceKm * consumptionEv) / 100;
-  // ~35 min per 10-80% top-up at 150kW+, scaled by battery size.
-  const perStop = Math.round(Math.min(40, Math.max(18, (rangeKm * consumptionEv) / 100 / 2.2)));
-  return { stops, chargingMinutes: stops.length * perStop, energyKwh };
+  const perStop = 27;
+  return { stops, stopCount, chargingMinutes: stopCount * perStop, energyKwh };
+}
+
+function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[]) {
+  const denmark = legs.find((leg) => leg.code === "DK");
+  if (!denmark || denmark.km < 40) return;
+
+  tollLines.push({ ...NORDIC_BRIDGES.storebaelt });
+  if (legs.some((leg) => leg.code === "SE")) tollLines.push({ ...NORDIC_BRIDGES.oresund });
 }
 
 export function estimate(
@@ -155,6 +177,8 @@ export function estimate(
     }
   }
 
+  addNordicBridgeTolls(legs, tollLines);
+
   const tollCost = tollLines.reduce((a, l) => a + l.amount, 0);
   const vignetteCost = vignetteLines.reduce((a, l) => a + l.amount, 0);
 
@@ -167,7 +191,10 @@ export function estimate(
     key,
     title: TITLES[key],
     distanceKm: route.distanceKm,
-    durationMin: route.durationMin + (ev ? ev.chargingMinutes : 0),
+    durationMin:
+      route.durationMin * ROUTE_TIME_FACTOR[key] +
+      (key === "bypass" ? Math.min(35, Math.max(15, route.distanceKm / 100)) : 0) +
+      (ev ? ev.chargingMinutes : 0),
     legs,
     energyCost,
     tollCost,

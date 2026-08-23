@@ -126,11 +126,28 @@ export const DISTANCE_TOLLS: Record<string, { perKm: number; authority: string; 
     url: "https://www.vegvesen.no/en/traffic/travel-planning/toll-roads/",
   },
   DK: {
-    perKm: 0.02,
+    perKm: 0,
     authority: "Storebælt / Øresund bridges",
     url: "https://storebaelt.dk/en/prices/",
   },
 };
+
+export const NORDIC_BRIDGES = {
+  storebaelt: {
+    label: "Storebælt bridge",
+    detail: "Indicative passenger-car crossing fee",
+    amount: 38,
+    country: "DK",
+    url: "https://storebaelt.dk/en/prices/",
+  },
+  oresund: {
+    label: "Øresund bridge",
+    detail: "Indicative passenger-car crossing fee",
+    amount: 58,
+    country: "DK",
+    url: "https://www.oresundsbron.com/en/prices",
+  },
+} as const;
 
 /** Indicative pump / charging prices per country (EUR). */
 export const ENERGY_PRICES: Record<string, { petrol: number; diesel: number; kwh: number }> = {
