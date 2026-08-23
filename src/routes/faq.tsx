@@ -7,7 +7,14 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
 import { marketingCopy } from "@/lib/marketing-i18n";
+import { faqSchema } from "@/lib/seo";
 
+export const Route = createFileRoute("/faq")({
+  head: () => ({
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqSchema(marketingCopy.en.categories)) }],
+  }),
+  component: FaqPage,
+});
 function FaqPage() {
   const { locale } = useLocale();
   const copy = marketingCopy[locale];
@@ -60,4 +67,3 @@ function FaqPage() {
   );
 }
 
-export const Route = createFileRoute("/faq")({ component: FaqPage });

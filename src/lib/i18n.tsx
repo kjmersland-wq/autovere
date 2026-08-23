@@ -40,8 +40,9 @@ export function I18nProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const saved = window.localStorage.getItem("autovere-locale");
     const browser = navigator.language.toLowerCase();
+    const requested = new URLSearchParams(window.location.search).get("lang");
     const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("nl") ? "nl" : browser.startsWith("no") || browser.startsWith("nb") || browser.startsWith("nn") ? "no" : browser.startsWith("pl") ? "pl" : "en";
-    const next = saved && saved in locales ? saved as Locale : detected;
+    const next = requested && requested in locales ? requested as Locale : saved && saved in locales ? saved as Locale : detected;
     setLocaleState(next);
     document.documentElement.lang = next;
   }, []);

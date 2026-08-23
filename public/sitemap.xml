@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+  <url>
+    <loc>https://www.autovere.com/</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/?lang=en" />
+    <xhtml:link rel="alternate" hreflang="nb" href="https://www.autovere.com/?lang=no" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.autovere.com/?lang=de" />
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.autovere.com/?lang=nl" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://www.autovere.com/?lang=pl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/" />
+  </url>
+  <url>
+    <loc>https://www.autovere.com/pricing</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/pricing?lang=en" />
+    <xhtml:link rel="alternate" hreflang="nb" href="https://www.autovere.com/pricing?lang=no" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.autovere.com/pricing?lang=de" />
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.autovere.com/pricing?lang=nl" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://www.autovere.com/pricing?lang=pl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/pricing" />
+  </url>
+  <url>
+    <loc>https://www.autovere.com/faq</loc>
+    <lastmod>2026-08-23</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+    <xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/faq?lang=en" />
+    <xhtml:link rel="alternate" hreflang="nb" href="https://www.autovere.com/faq?lang=no" />
+    <xhtml:link rel="alternate" hreflang="de" href="https://www.autovere.com/faq?lang=de" />
+    <xhtml:link rel="alternate" hreflang="nl" href="https://www.autovere.com/faq?lang=nl" />
+    <xhtml:link rel="alternate" hreflang="pl" href="https://www.autovere.com/faq?lang=pl" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/faq" />
+  </url>
+  <url><loc>https://www.autovere.com/privacy</loc><lastmod>2026-08-23</lastmod><changefreq>weekly</changefreq><priority>0.4</priority><xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/privacy?lang=en" /><xhtml:link rel="alternate" hreflang="nb" href="https://www.autovere.com/privacy?lang=no" /><xhtml:link rel="alternate" hreflang="de" href="https://www.autovere.com/privacy?lang=de" /><xhtml:link rel="alternate" hreflang="nl" href="https://www.autovere.com/privacy?lang=nl" /><xhtml:link rel="alternate" hreflang="pl" href="https://www.autovere.com/privacy?lang=pl" /><xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/privacy" /></url>
+  <url><loc>https://www.autovere.com/terms</loc><lastmod>2026-08-23</lastmod><changefreq>weekly</changefreq><priority>0.4</priority><xhtml:link rel="alternate" hreflang="en" href="https://www.autovere.com/terms?lang=en" /><xhtml:link rel="alternate" hreflang="nb" href="https://www.autovere.com/terms?lang=no" /><xhtml:link rel="alternate" hreflang="de" href="https://www.autovere.com/terms?lang=de" /><xhtml:link rel="alternate" hreflang="nl" href="https://www.autovere.com/terms?lang=nl" /><xhtml:link rel="alternate" hreflang="pl" href="https://www.autovere.com/terms?lang=pl" /><xhtml:link rel="alternate" hreflang="x-default" href="https://www.autovere.com/terms" /></url>
+</urlset>

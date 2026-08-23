@@ -11,7 +11,8 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { I18nProvider } from "../lib/i18n";
+import { I18nProvider, useLocale } from "../lib/i18n";
+import { applyLocalizedSeo, applicationSchema, seoAlternates, seoCopy, siteUrl } from "../lib/seo";
 import { registerServiceWorker } from "../lib/pwa";
 import { Toaster } from "../components/ui/sonner";
 
@@ -88,6 +89,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "description",
         content: "Calculate accurate road tolls, required vignettes, and EV charging costs across Europe.",
       },
+      { name: "keywords", content: seoCopy.en.keywords },
       { name: "author", content: "AutoVere" },
       { name: "theme-color", content: "#0b1220" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
@@ -99,6 +101,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content: "Calculate accurate road tolls, required vignettes, and EV charging costs across Europe.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:site_name", content: "AutoVere" },
+      { property: "og:locale", content: "en_GB" },
+      ...seoAlternates.map((alternate) => ({ property: "og:locale:alternate", content: alternate.locale })),
       { property: "og:image", content: "https://www.autovere.com/og-image.png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
@@ -122,12 +127,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/icons/icon-192.png" },
+      { rel: "canonical", href: siteUrl },
+      ...seoAlternates.map((alternate) => ({
+        rel: "alternate",
+        hrefLang: alternate.lang,
+        href: `${siteUrl}/?lang=${alternate.path}`,
+      })),
+      { rel: "alternate", hrefLang: "x-default", href: siteUrl },
     ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(applicationSchema()) }],
   }),
   shellComponent: RootShell,
   component: RootComponent,
   notFoundComponent: NotFoundComponent,
-  errorComponent: ErrorComponent,
 });
 
 function RootShell({ children }: { children: ReactNode }) {
@@ -154,11 +166,22 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
+        <LocalizedSeo />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <Toaster position="top-center" />
       </I18nProvider>
     </QueryClientProvider>
   );
+}
+
+function LocalizedSeo() {
+  const { locale } = useLocale();
+
+  useEffect(() => {
+    applyLocalizedSeo(locale);
+  }, [locale]);
+
+  return null;
 }
 
