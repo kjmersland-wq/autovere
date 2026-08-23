@@ -89,7 +89,8 @@ export function planEvStops(
   rangeKm: number,
   consumptionEv: number,
 ): EvPlan {
-  const usable = rangeKm * 0.75; // keep a safety buffer, arrive with ~10-15%
+  // Keep corridor stops between 280 and 350 km apart while preserving a range buffer.
+  const usable = Math.min(350, Math.max(280, rangeKm * 0.75));
   const stops: Charger[] = [];
   let nextTarget = usable;
   while (nextTarget < distanceKm - 30) {

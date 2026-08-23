@@ -53,7 +53,7 @@ function Index() {
     from: null,
     to: null,
     vehicle: "petrol",
-    evRangeKm: 420,
+    evRangeKm: 450,
     days: 10,
   });
   const [loading, setLoading] = useState(false);

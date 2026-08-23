@@ -15,7 +15,7 @@ export type TripFormState = {
   days: number;
 };
 
-const DAY_PRESETS = [1, 3, 7, 10, 30, 365];
+const DAY_PRESETS = [1, 10, 30, 365];
 
 export function TripForm({
   state,
