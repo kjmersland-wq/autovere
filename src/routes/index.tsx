@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon } from "lucide-react";
 import { TripForm, type DemoRoute, type TripFormState } from "@/components/TripForm";
 import { ContactModal } from "@/components/ContactModal";
+import { ShareModal } from "@/components/ShareModal";
 import { FeatureHighlights } from "@/components/FeatureHighlights";
 import { RouteMap } from "@/components/RouteMap";
 import { Breakdown, RouteCard, TradeoffBanner } from "@/components/Comparison";
@@ -578,6 +579,7 @@ function Index() {
             >
               {t.contactLink}
             </button>
+            <ShareModal compact />
             <Link to="/pricing" className="hover:text-foreground">{marketing.pricingLink}</Link>
             <Link to="/faq" className="hover:text-foreground">{marketing.faqLink}</Link>
           </nav>

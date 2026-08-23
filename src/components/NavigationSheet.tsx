@@ -1,6 +1,7 @@
 import { useState } from "react";
-import { Car, Check, Download, ExternalLink, Map, Share2, Smartphone } from "lucide-react";
+import { Car, Check, Download, ExternalLink, Map, Smartphone } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ShareModal } from "@/components/ShareModal";
 import {
   Sheet,
   SheetContent,
@@ -68,8 +69,9 @@ export function NavigationSheet({
         </SheetHeader>
 
         <div className="mt-5 grid gap-3 sm:grid-cols-2">
+          <ShareModal />
           <Button variant="secondary" className="min-h-11 justify-start" onClick={share}>
-            {shared ? <Check className="size-4" /> : <Share2 className="size-4" />}
+            {shared ? <Check className="size-4" /> : <Smartphone className="size-4" />}
             {shared ? t.shared : t.sendMobile}
           </Button>
           <Button variant="outline" className="min-h-11 justify-start" asChild>
