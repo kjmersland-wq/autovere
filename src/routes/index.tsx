@@ -10,7 +10,7 @@ import { VignetteChecklist } from "@/components/VignetteChecklist";
 import { NavigationSheet } from "@/components/NavigationSheet";
 import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighlights";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
 import { fetchFastChargers, fetchRoute, fetchScenicHighlights, type Charger, type RouteResult, type RouteVariantKey, type ScenicHighlight } from "@/lib/geo";
 import {
@@ -55,15 +55,101 @@ const COLORS: Record<RouteVariantKey, string> = {
 
 const VARIANTS: RouteVariantKey[] = ["fastest", "bypass", "tollfree"];
 
-const LEGAL_MODAL_TEXT = {
-  legal: "KM TECH LABS, Kristiansand, Norge. Org.nr. 934 044 029. Kontakt: contact@autovere.com.",
-  privacy: "Beregninger skjer lokalt i nettleseren. Ingen sporing eller videresalg av posisjonsdata. Fullt GDPR-kompatibel.",
-  terms: "Bompenge-, drivstoff- og ladeestimater er veiledende basert på åpne kilder (OSM/OSRM). Føreren er selv ansvarlig for å følge gjeldende skilting og offisielle takster.",
+const LEGAL_MODAL_COPY = {
+  no: {
+    legalTitle: "Juridisk informasjon",
+    privacyTitle: "Personvern",
+    termsTitle: "Vilkår og ansvarsfraskrivelse",
+    close: "Lukk",
+    legal: [
+      "Utviklet og driftes av: KM TECH LABS",
+      "Sted: Kristiansand, Norge",
+      "Organisasjonsnummer: 934 044 029",
+      "E-post: contact@autovere.com",
+      "Formål: Uavhengig ruteøkonomi, bompenge- og ladekalkulator for europeiske veier.",
+    ],
+    privacy: [
+      "100 % lokal beregning på klientsiden i nettleseren.",
+      "Ingen lagring eller sporing av din eksakte posisjonshistorikk.",
+      "Ingen salg av data eller tredjeparts-annonsesporing. Fullt GDPR-kompatibel.",
+    ],
+    terms: [
+      "Bompenge-, vignett-, lade- og drivstoffberegninger er veiledende estimater basert på åpne kilder (OpenStreetMap, OSRM, Overpass).",
+      "Sjåføren er selv fullt ansvarlig for å overholde gjeldende skilting, fartsgrenser og offisielle takster.",
+    ],
+  },
+  en: {
+    legalTitle: "Legal Notice",
+    privacyTitle: "Privacy Policy",
+    termsTitle: "Terms & Disclaimer",
+    close: "Close",
+    legal: [
+      "Developed and operated by: KM TECH LABS",
+      "Location: Kristiansand, Norway",
+      "Organization no.: 934 044 029",
+      "Email: contact@autovere.com",
+      "Purpose: Independent route cost, toll and charging calculator for European roads.",
+    ],
+    privacy: [
+      "100% local calculation in the browser.",
+      "No storage or tracking of your exact position history.",
+      "No data resale or third-party ad tracking. Fully GDPR-compliant.",
+    ],
+    terms: [
+      "Toll, vignette, charging and fuel estimates are indicative and based on open sources (OpenStreetMap, OSRM, Overpass).",
+      "The driver is solely responsible for complying with current road signs, speed limits and official tariffs.",
+    ],
+  },
+  de: {
+    legalTitle: "Impressum",
+    privacyTitle: "Datenschutzerklärung",
+    termsTitle: "Allgemeine Geschäftsbedingungen",
+    close: "Schließen",
+    legal: [
+      "Entwickelt und betrieben von: KM TECH LABS",
+      "Ort: Kristiansand, Norwegen",
+      "Organisationsnummer: 934 044 029",
+      "E-Mail: contact@autovere.com",
+      "Zweck: Unabhängiger Routen-, Maut- und Lade-Rechner für europäische Straßen.",
+    ],
+    privacy: [
+      "100 % lokale Berechnung direkt im Browser.",
+      "Keine Speicherung oder Verfolgung Ihrer genauen Standorthistorie.",
+      "Kein Datenverkauf oder Tracking durch Drittanbieter. Vollständig DSGVO-konform.",
+    ],
+    terms: [
+      "Maut-, Vignette-, Lade- und Kraftstoffschätzungen sind orientierende Berechnungen auf Basis offener Datenquellen (OpenStreetMap, OSRM, Overpass).",
+      "Der Fahrer ist allein verantwortlich für die Einhaltung aktueller Beschilderung, Geschwindigkeitsbegrenzungen und offizieller Tarife.",
+    ],
+  },
+  pl: {
+    legalTitle: "Nota prawna",
+    privacyTitle: "Polityka prywatności",
+    termsTitle: "Warunki i wyłączenie odpowiedzialności",
+    close: "Zamknij",
+    legal: [
+      "Opracowane i prowadzone przez: KM TECH LABS",
+      "Lokalizacja: Kristiansand, Norwegia",
+      "Numer organizacji: 934 044 029",
+      "E-mail: contact@autovere.com",
+      "Cel: Niezależny kalkulator tras, opłat i ładowania dla europejskich dróg.",
+    ],
+    privacy: [
+      "100% lokalne obliczenia w przeglądarce.",
+      "Brak przechowywania ani śledzenia dokładnej historii położenia.",
+      "Brak sprzedaży danych ani reklamowych śledzeń firm trzecich. W pełni zgodne z RODO.",
+    ],
+    terms: [
+      "Szacunki opłat, winiet, ładowania i paliwa są orientacyjne i opierają się na otwartych źródłach (OpenStreetMap, OSRM, Overpass).",
+      "Kierowca jest wyłącznie odpowiedzialny za przestrzeganie aktualnych znaków drogowych, limitów prędkości i oficjalnych stawek.",
+    ],
+  },
 } as const;
 
 function Index() {
   const t = useT();
   const { locale, setLocale } = useLocale();
+  const legalCopy = LEGAL_MODAL_COPY[locale as keyof typeof LEGAL_MODAL_COPY] ?? LEGAL_MODAL_COPY.no;
   const [form, setForm] = useState<TripFormState>({
     from: null,
     to: null,
@@ -386,9 +472,18 @@ function Index() {
               </DialogTrigger>
               <DialogContent className="max-w-md border border-white/10 bg-surface/85 text-foreground shadow-[var(--shadow-elevated)] backdrop-blur-2xl sm:rounded-2xl">
                 <DialogHeader className="space-y-2">
-                  <DialogTitle className="text-base font-semibold">{t.legalNotice}</DialogTitle>
+                  <DialogTitle className="text-base font-semibold">{legalCopy.legalTitle}</DialogTitle>
                 </DialogHeader>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{LEGAL_MODAL_TEXT.legal}</p>
+                <div className="mt-4 space-y-2 text-sm leading-relaxed text-muted-foreground">
+                  {legalCopy.legal.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
+                <DialogClose asChild>
+                  <Button variant="secondary" size="sm" className="mt-5 w-full sm:w-auto">
+                    {legalCopy.close}
+                  </Button>
+                </DialogClose>
               </DialogContent>
             </Dialog>
             <Dialog>
@@ -397,9 +492,18 @@ function Index() {
               </DialogTrigger>
               <DialogContent className="max-w-md border border-white/10 bg-surface/85 text-foreground shadow-[var(--shadow-elevated)] backdrop-blur-2xl sm:rounded-2xl">
                 <DialogHeader className="space-y-2">
-                  <DialogTitle className="text-base font-semibold">{t.privacyPolicy}</DialogTitle>
+                  <DialogTitle className="text-base font-semibold">{legalCopy.privacyTitle}</DialogTitle>
                 </DialogHeader>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{LEGAL_MODAL_TEXT.privacy}</p>
+                <div className="mt-4 space-y-2 text-sm leading-relaxed text-muted-foreground">
+                  {legalCopy.privacy.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
+                <DialogClose asChild>
+                  <Button variant="secondary" size="sm" className="mt-5 w-full sm:w-auto">
+                    {legalCopy.close}
+                  </Button>
+                </DialogClose>
               </DialogContent>
             </Dialog>
             <Dialog>
@@ -408,9 +512,18 @@ function Index() {
               </DialogTrigger>
               <DialogContent className="max-w-md border border-white/10 bg-surface/85 text-foreground shadow-[var(--shadow-elevated)] backdrop-blur-2xl sm:rounded-2xl">
                 <DialogHeader className="space-y-2">
-                  <DialogTitle className="text-base font-semibold">{t.termsDisclaimer}</DialogTitle>
+                  <DialogTitle className="text-base font-semibold">{legalCopy.termsTitle}</DialogTitle>
                 </DialogHeader>
-                <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{LEGAL_MODAL_TEXT.terms}</p>
+                <div className="mt-4 space-y-2 text-sm leading-relaxed text-muted-foreground">
+                  {legalCopy.terms.map((line) => (
+                    <p key={line}>{line}</p>
+                  ))}
+                </div>
+                <DialogClose asChild>
+                  <Button variant="secondary" size="sm" className="mt-5 w-full sm:w-auto">
+                    {legalCopy.close}
+                  </Button>
+                </DialogClose>
               </DialogContent>
             </Dialog>
           </nav>
