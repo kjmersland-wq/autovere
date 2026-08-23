@@ -46,21 +46,13 @@ export type RouteResult = {
 
 export type RouteVariantKey = "fastest" | "bypass" | "tollfree";
 
-const EXCLUDES: Record<RouteVariantKey, string | null> = {
-  fastest: null,
-  bypass: "toll",
-  tollfree: "motorway",
-};
-
 export async function fetchRoute(
   from: Place,
   to: Place,
   variant: RouteVariantKey,
   signal?: AbortSignal,
 ): Promise<RouteResult> {
-  const exclude = EXCLUDES[variant];
   const params = new URLSearchParams({ overview: "full", geometries: "geojson" });
-  if (exclude) params.set("exclude", exclude);
   const url = `${OSRM}/route/v1/driving/${from.lon},${from.lat};${to.lon},${to.lat}?${params}`;
   const res = await fetch(url, { signal: signal ?? null });
   if (!res.ok) throw new Error("Routing service unavailable");
@@ -73,7 +65,19 @@ export async function fetchRoute(
     }>;
   };
   const route = data.routes?.[0];
-  if (data.code !== "Ok" || !route) throw new Error("No route found");
+  if (
+    data.code !== "Ok" ||
+    !route ||
+    !Number.isFinite(route.distance) ||
+    !Number.isFinite(route.duration) ||
+    !Array.isArray(route.geometry?.coordinates) ||
+    route.geometry.coordinates.length < 2
+  )
+    throw new Error("No route found");
+
+  // The public OSRM demo does not support exclusions. Route tiers use the
+  // existing motorway-share cost heuristic and fall back to this route.
+  void variant;
   return {
     distanceKm: route.distance / 1000,
     durationMin: route.duration / 60,

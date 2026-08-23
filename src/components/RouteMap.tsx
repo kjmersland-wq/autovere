@@ -1,5 +1,5 @@
 import { ClientOnly } from "@tanstack/react-router";
-import { lazy, Suspense } from "react";
+import { Component, lazy, Suspense, type ErrorInfo, type ReactNode } from "react";
 import { Loader2 } from "lucide-react";
 import type { LatLng } from "@/lib/countries";
 import type { Charger, RouteVariantKey } from "@/lib/geo";
@@ -23,6 +23,34 @@ function Skeleton() {
   );
 }
 
+type MapErrorBoundaryProps = { children: ReactNode };
+type MapErrorBoundaryState = { failed: boolean };
+
+class MapErrorBoundary extends Component<MapErrorBoundaryProps, MapErrorBoundaryState> {
+  state: MapErrorBoundaryState = { failed: false };
+
+  static getDerivedStateFromError(): MapErrorBoundaryState {
+    return { failed: true };
+  }
+
+  componentDidCatch(error: Error, info: ErrorInfo) {
+    console.error("Route map failed to load", error, info.componentStack);
+  }
+
+  render() {
+    if (this.state.failed) {
+      return (
+        <div className="flex h-full w-full items-center justify-center bg-surface p-6 text-center">
+          <p className="text-sm text-muted-foreground">
+            The map is temporarily unavailable. Your route calculation is still ready below.
+          </p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 export function RouteMap(props: {
   routes: MapRoute[];
   start: LatLng | null;
@@ -32,10 +60,12 @@ export function RouteMap(props: {
   showChargers: boolean;
 }) {
   return (
-    <ClientOnly fallback={<Skeleton />}>
-      <Suspense fallback={<Skeleton />}>
-        <Inner {...props} />
-      </Suspense>
-    </ClientOnly>
+    <MapErrorBoundary>
+      <ClientOnly fallback={<Skeleton />}>
+        <Suspense fallback={<Skeleton />}>
+          <Inner {...props} />
+        </Suspense>
+      </ClientOnly>
+    </MapErrorBoundary>
   );
 }
