@@ -9,6 +9,7 @@ import { FeatureHighlights } from "@/components/FeatureHighlights";
 import { RouteMap } from "@/components/RouteMap";
 import { Breakdown, RouteCard, TradeoffBanner } from "@/components/Comparison";
 import { VignetteChecklist } from "@/components/VignetteChecklist";
+import { SafetyRegulations } from "@/components/SafetyRegulations";
 import { NavigationSheet } from "@/components/NavigationSheet";
 import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighlights";
 import { Button } from "@/components/ui/button";
@@ -488,6 +489,9 @@ function Index() {
               startCountry={submitted?.from?.country}
               endCountry={submitted?.to?.country}
             />
+          </div>
+          <div className="mt-8">
+            <SafetyRegulations countryCodes={selectedEst.legs.map((leg) => leg.code)} />
           </div>
           <ScenicHighlights
             highlights={scenicHighlights}
