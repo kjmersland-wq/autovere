@@ -1,4 +1,4 @@
-import { Fuel, Zap, Droplets, CalendarDays, ArrowRight, Loader2 } from "lucide-react";
+import { Fuel, Zap, Droplets, CalendarDays, ArrowRight, Loader2, Plus, X } from "lucide-react";
 import { PlaceInput } from "./PlaceInput";
 import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils";
 
 export type TripFormState = {
   from: Place | null;
+  stops: (Place | null)[];
   to: Place | null;
   vehicle: VehicleType;
   evRangeKm: number;
@@ -54,6 +55,40 @@ export function TripForm({
           value={state.from}
           onChange={(from) => setState({ ...state, from })}
         />
+        <div className="space-y-3">
+          {state.stops.map((stop, index) => (
+            <div key={index} className="flex items-end gap-2">
+              <div className="min-w-0 flex-1">
+                <PlaceInput
+                  label={`${t.stop} ${index + 1}`}
+                  placeholder={t.stopPlaceholder}
+                  value={stop}
+                  onChange={(next) => {
+                    const stops = [...state.stops];
+                    stops[index] = next;
+                    setState({ ...state, stops });
+                  }}
+                />
+              </div>
+              <button
+                type="button"
+                onClick={() => setState({ ...state, stops: state.stops.filter((_, i) => i !== index) })}
+                className="mb-1 rounded-lg border border-border bg-surface-raised p-3 text-muted-foreground transition-colors hover:text-foreground"
+                aria-label={`${t.remove} ${t.stop} ${index + 1}`}
+                title={t.remove}
+              >
+                <X className="size-4" aria-hidden />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => setState({ ...state, stops: [...state.stops, null] })}
+            className="inline-flex items-center gap-2 text-sm font-semibold text-primary transition-colors hover:text-foreground"
+          >
+            <Plus className="size-4" aria-hidden /> {t.addStop}
+          </button>
+        </div>
         <PlaceInput
           label={t.to}
           placeholder={t.toPlaceholder}

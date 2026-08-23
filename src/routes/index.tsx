@@ -12,7 +12,7 @@ import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighligh
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
-import { fetchFastChargers, fetchRoute, fetchScenicHighlights, type Charger, type RouteResult, type RouteVariantKey, type ScenicHighlight } from "@/lib/geo";
+import { fetchFastChargers, fetchMultiStopRoute, fetchScenicHighlights, type Charger, type RouteResult, type RouteVariantKey, type ScenicHighlight } from "@/lib/geo";
 import {
   appleMapsUrl,
   buildGpx,
@@ -122,6 +122,28 @@ const LEGAL_MODAL_COPY = {
       "Der Fahrer ist allein verantwortlich für die Einhaltung aktueller Beschilderung, Geschwindigkeitsbegrenzungen und offizieller Tarife.",
     ],
   },
+  nl: {
+    legalTitle: "Juridische informatie",
+    privacyTitle: "Privacybeleid",
+    termsTitle: "Voorwaarden en disclaimer",
+    close: "Sluiten",
+    legal: [
+      "Ontwikkeld en beheerd door: KM TECH LABS",
+      "Locatie: Kristiansand, Noorwegen",
+      "Organisatienummer: 934 044 029",
+      "E-mail: contact@autovere.com",
+      "Doel: een onafhankelijke route-, tol- en laadcalculator voor Europese wegen.",
+    ],
+    privacy: [
+      "Alle berekeningen worden lokaal in je browser uitgevoerd.",
+      "We slaan je exacte locatiegeschiedenis niet op en volgen die niet.",
+      "We verkopen geen gegevens en gebruiken geen tracking voor advertenties van derden.",
+    ],
+    terms: [
+      "Schattingen voor tol, vignetten, laden en brandstof zijn indicatief en gebaseerd op open bronnen zoals OpenStreetMap, OSRM en Overpass.",
+      "De bestuurder blijft zelf verantwoordelijk voor actuele verkeersborden, snelheidslimieten en officiële tarieven.",
+    ],
+  },
   pl: {
     legalTitle: "Nota prawna",
     privacyTitle: "Polityka prywatności",
@@ -152,6 +174,7 @@ function Index() {
   const legalCopy = LEGAL_MODAL_COPY[locale as keyof typeof LEGAL_MODAL_COPY] ?? LEGAL_MODAL_COPY.no;
   const [form, setForm] = useState<TripFormState>({
     from: null,
+    stops: [],
     to: null,
     vehicle: "petrol",
     evRangeKm: 450,
@@ -172,10 +195,11 @@ function Index() {
   const run = useCallback(async (input = form) => {
     const { from, to } = input;
     if (!from || !to) return;
+    const points = [from, ...input.stops.filter((stop): stop is NonNullable<typeof stop> => !!stop), to];
     setLoading(true);
     try {
       const results = await Promise.allSettled(
-        VARIANTS.map((v) => fetchRoute(from, to, v)),
+        VARIANTS.map((v) => fetchMultiStopRoute(points, v)),
       );
       const map: Partial<Record<RouteVariantKey, RouteResult>> = {};
       VARIANTS.forEach((v, i) => {
@@ -224,7 +248,7 @@ function Index() {
       "munich-split": { from: { id: "demo-munich", name: "Munich", label: "Munich, Germany", lat: 48.1351, lon: 11.582, country: "DE" }, to: { id: "demo-split", name: "Split", label: "Split, Croatia", lat: 43.5081, lon: 16.4402, country: "HR" } },
       "paris-nice": { from: { id: "demo-paris", name: "Paris", label: "Paris, France", lat: 48.8566, lon: 2.3522, country: "FR" }, to: { id: "demo-nice", name: "Nice", label: "Nice, France", lat: 43.7102, lon: 7.262, country: "FR" } },
     }[demo];
-    const next = { ...form, from: places.from, to: places.to };
+    const next = { ...form, from: places.from, stops: [], to: places.to };
     setForm(next);
     void run(next);
   }
@@ -256,6 +280,7 @@ function Index() {
   const visibleScenic = (scenicFilter === "all" ? scenicHighlights : scenicHighlights.filter((highlight) => highlight.category === scenicFilter)).slice(0, 8);
   const navigationVia = selectedRoute
     ? [
+        ...(submitted?.stops.filter((stop): stop is NonNullable<typeof stop> => !!stop).map((stop) => [stop.lat, stop.lon] as [number, number]) ?? []),
         ...(evStops.length
           ? evStops.map((s) => [s.lat, s.lon] as [number, number])
           : shapingWaypoints(selectedRoute.coords, selectedEst?.key === "fastest" ? 2 : 5)),
@@ -535,7 +560,7 @@ function Index() {
       </footer>
       {selectedEst && (
         <div className="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-border bg-background/95 p-3 pb-[calc(env(safe-area-inset-bottom)+0.75rem)] shadow-[var(--shadow-elevated)] backdrop-blur md:hidden">
-          <Button size="lg" className="min-h-11 rounded-xl font-bold" onClick={run} disabled={loading || !form.from || !form.to}>
+          <Button size="lg" className="min-h-11 rounded-xl font-bold" onClick={() => void run()} disabled={loading || !form.from || !form.to}>
             <Navigation className="size-4" /> Calculate
           </Button>
           <NavigationSheet

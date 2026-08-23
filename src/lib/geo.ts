@@ -85,6 +85,22 @@ export async function fetchRoute(
   };
 }
 
+export async function fetchMultiStopRoute(
+  points: Place[],
+  variant: RouteVariantKey,
+  signal?: AbortSignal,
+): Promise<RouteResult> {
+  if (points.length < 2) throw new Error("At least two places are required");
+  const legs = await Promise.all(
+    points.slice(0, -1).map((from, index) => fetchRoute(from, points[index + 1]!, variant, signal)),
+  );
+  return {
+    distanceKm: legs.reduce((total, leg) => total + leg.distanceKm, 0),
+    durationMin: legs.reduce((total, leg) => total + leg.durationMin, 0),
+    coords: legs.flatMap((leg, index) => (index === 0 ? leg.coords : leg.coords.slice(1))),
+  };
+}
+
 export function haversineKm(a: LatLng, b: LatLng): number {
   const R = 6371;
   const dLat = ((b[0] - a[0]) * Math.PI) / 180;
