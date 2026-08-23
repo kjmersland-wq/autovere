@@ -1,265 +1,48 @@
-export type Locale = "en" | "de" | "no" | "pl";
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-/**
- * Minimal i18n layer. Add a new locale by adding a dictionary below —
- * every string in the UI resolves through useT().
- */
 export const en = {
-  brand: "AutoVere",
-  tagline: "European toll, vignette & charging intelligence",
-  heroTitle: "Know the real cost before you drive.",
-  heroSub:
-    "Instant, deterministic toll, vignette, fuel and charging estimates for any European road trip — built on open data, no accounts, no reseller markups.",
-  from: "From",
-  to: "To",
-  fromPlaceholder: "Oslo, Norway",
-  toPlaceholder: "Milan, Italy",
-  vehicle: "Vehicle",
-  petrol: "Petrol",
-  diesel: "Diesel",
-  ev: "Electric (EV)",
-  batteryRange: "Real-world range",
-  chargingBuffer: "Charging stops are planned at 75% of this range so you always arrive with a buffer.",
-  tripDuration: "Trip duration",
-  days: "days",
-  day: "day",
-  calculate: "Calculate my trip",
-  calculating: "Calculating…",
-  comparison: "Route comparison",
-  fastest: "Fastest Route",
-  bypass: "Smart Bypass",
-  tollfree: "100% Toll-Free",
-  distance: "Distance",
-  driveTime: "Drive time",
-  fuel: "Fuel",
-  charging: "Charging",
-  tolls: "Distance tolls",
-  vignettes: "Vignettes",
-  total: "Total trip cost",
-  openGoogle: "Open in Google Maps",
-  openApple: "Open in Apple Maps",
-  downloadGpx: "Download GPX",
-  checklist: "Official vignette checklist",
-  checklistSub:
-    "Buy only from these official government portals. Resellers charge up to 300% markup for the same vignette.",
-  chargingStops: "Charging stops",
-  chargingTime: "Charging time",
-  noVignettes: "No vignettes required on this route.",
-  selected: "Selected",
-  select: "Select route",
-  savings: "saves",
-  slower: "slower",
-  faster: "faster",
-  year: "year",
-  language: "Language",
-  currency: "Currency",
-  scenicTitle: "Scenic Highlights & Stops along Route",
-  scenicSub: "Curated places worth a pause along your corridor.",
-  scenicPicks: "OpenStreetMap picks",
-  all: "All",
-  camping: "Camping & RV",
-  lodging: "Hotels & Lodging",
-  food: "Food & Cafes",
-  sights: "Sights & Views",
-  viewpoint: "Viewpoint",
-  history: "History",
-  nature: "Nature",
-  coffeeStop: "Coffee stop",
-  directlyOnRoute: "Directly on route",
-  minDetour: (minutes: number) => `+${minutes} min detour`,
-  openMap: "Maps",
-  website: "Site",
-  add: "Add",
-  added: "Added",
-  amenities: "Amenities",
-  sendToCar: "Send to Car & Navigation",
-  sendDescription: "Share this route with your connected car app or export it for your in-car GPS.",
-  sendMobile: "Send to Mobile / Car App",
-  shared: "Shared",
-  tesla: "Tesla Navigation",
-  googleMultiStop: "Google Maps multi-stop",
-  appleWaypoints: "Apple Maps waypoints",
-  waze: "Waze navigation",
-  downloadKml: "Download KML",
-  plannedTotal: "Planned route total",
-  mapUnavailable: "The map is temporarily unavailable. Your route calculation is still ready below.",
-  lezWarning: (stickers: string) => `Environmental sticker may be required in ${stickers}.`,
-  cheapest: "Cheapest",
-  noTolls: "None on this route",
-  pumpPrices: "Country-by-country pump prices",
-  fullBreakdown: "Full breakdown",
-  estimatedConsumption: "Estimated consumption",
-  earnedPerHour: "earned per hour of extra driving",
-  borderCheckpoint: "Border checkpoint",
-  vignetteTerminal: "vignette terminal",
-  badgeMath: "Instant deterministic maths",
-  badgeOffline: "Installable & works offline",
-  badgeOfficial: "Official portals only",
-  tollStatus: "Distance tolls",
-  vignetteStatus: "Vignette required",
-  noTollStatus: "None on this route",
-  tollBooths: "Toll booths / electronic tolling",
-  highPower: "High power",
-  intoTrip: "into the trip",
-  start: "Start",
-  destination: "Destination",
-  border: "Border",
-  and: "and",
-  duration: (minutes: number) => {
-    const hours = Math.floor(minutes / 60);
-    const remainder = Math.round(minutes % 60);
-    return hours > 0 ? `${hours}h ${remainder.toString().padStart(2, "0")}m` : `${remainder}m`;
-  },
-  tradeoff: (time: string, route: string, amount: string, rate: string) => `+${time} on the ${route} saves ${amount} (${rate} saved per hour of detour).`,
-  routeCompared: (count: number, route: string) => `${count} routes compared — cheapest: ${route}`,
-  calculationFailed: "Calculation failed. Please try again.",
-  chargingUnavailable: "Charging network data is temporarily unavailable.",
-  gpxDownloaded: "GPX downloaded — import it into your in-car GPS.",
-  footerDisclaimer: "Routing and map data © OpenStreetMap contributors, routed via the public OSRM service. Toll, vignette and energy figures are indicative averages for passenger cars and are calculated on your device. Always confirm prices on the official portals linked above.",
-  norwayAutopassTitle: "Norway AutoPASS / EPASS24",
-  norwayAutopassDescription: "Norway uses 100% automated electronic toll gantries (no physical booths). Foreign vehicles should pre-register vehicle details at EPASS24 / AutoPASS to ensure correct environmental fuel rates.",
-  visitEpass24: "Visit EPASS24",
-  visitAutopass: "Visit AutoPASS",
-  companyFooter: "AutoVere is developed and operated by KM TECH LABS.",
-  legalNotice: "Legal Notice",
-  privacyPolicy: "Privacy Policy",
-  termsDisclaimer: "Terms & Disclaimer",
-  legalDisclaimer: "Route calculations and toll estimates are guidance based on open data from OSM, Overpass, and OSRM.",
+  popularRoutes: "Popular routes", osloGarda: "Oslo → Lake Garda", munichSplit: "Munich → Split", parisNice: "Paris → Nice", featureEvTitle: "Real EV Buffer & Charging", featureEvDescription: "Calculates charge intervals with a 75% safety buffer.", featureMarkupTitle: "Zero Markups", featureMarkupDescription: "Official direct portals for vignettes and AutoPASS/EPASS24.", featureScenicTitle: "Scenic & Cost Bypasses", featureScenicDescription: "Compare expensive tunnels and tolls against scenic Alpine passes.",
+  brand: "AutoVere", tagline: "European toll, vignette & charging intelligence", heroTitle: "Know the real cost before you drive.", heroSub: "Instant, deterministic toll, vignette, fuel and charging estimates for any European road trip — built on open data, no accounts, no reseller markups.", from: "From", to: "To", fromPlaceholder: "Oslo, Norway", toPlaceholder: "Milan, Italy", vehicle: "Vehicle", petrol: "Petrol", diesel: "Diesel", ev: "Electric (EV)", batteryRange: "Real-world range", chargingBuffer: "Charging stops are planned at 75% of this range so you always arrive with a buffer.", tripDuration: "Trip duration", days: "days", day: "day", calculate: "Calculate my trip", calculating: "Calculating…", comparison: "Route comparison", fastest: "Fastest Route", bypass: "Smart Bypass", tollfree: "100% Toll-Free", distance: "Distance", driveTime: "Drive time", fuel: "Fuel", charging: "Charging", tolls: "Distance tolls", vignettes: "Vignettes", total: "Total trip cost", openGoogle: "Open in Google Maps", openApple: "Open in Apple Maps", downloadGpx: "Download GPX", checklist: "Official vignette checklist", checklistSub: "Buy only from these official government portals.", chargingStops: "Charging stops", chargingTime: "Charging time", noVignettes: "No vignettes required on this route.", selected: "Selected", select: "Select route", savings: "saves", slower: "slower", faster: "faster", year: "year", language: "Language", currency: "Currency", scenicTitle: "Scenic Highlights & Stops along Route", scenicSub: "Curated places worth a pause along your corridor.", scenicPicks: "OpenStreetMap picks", all: "All", camping: "Camping & RV", lodging: "Hotels & Lodging", food: "Food & Cafes", sights: "Sights & Views", viewpoint: "Viewpoint", history: "History", nature: "Nature", coffeeStop: "Coffee stop", directlyOnRoute: "Directly on route", minDetour: (m: number) => `+${m} min detour`, openMap: "Maps", website: "Site", add: "Add", added: "Added", amenities: "Amenities", sendToCar: "Send to Car & Navigation", sendDescription: "Share this route with your connected car app or export it for your in-car GPS.", sendMobile: "Send to Mobile / Car App", shared: "Shared", tesla: "Tesla Navigation", googleMultiStop: "Google Maps multi-stop", appleWaypoints: "Apple Maps waypoints", waze: "Waze navigation", downloadKml: "Download KML", plannedTotal: "Planned route total", mapUnavailable: "The map is temporarily unavailable. Your route calculation is still ready below.", lezWarning: (s: string) => `Environmental sticker may be required in ${s}.`, cheapest: "Cheapest", noTolls: "None on this route", pumpPrices: "Country-by-country pump prices", fullBreakdown: "Full breakdown", estimatedConsumption: "Estimated consumption", earnedPerHour: "earned per hour of extra driving", borderCheckpoint: "Border checkpoint", vignetteTerminal: "vignette terminal", badgeMath: "Instant deterministic maths", badgeOffline: "Installable & works offline", badgeOfficial: "Official portals only", tollStatus: "Distance tolls", vignetteStatus: "Vignette required", noTollStatus: "None on this route", tollBooths: "Toll booths / electronic tolling", highPower: "High power", intoTrip: "into the trip", start: "Start", destination: "Destination", border: "Border", and: "and", duration: (m: number) => `${Math.floor(m / 60)}h ${Math.round(m % 60).toString().padStart(2, "0")}m`, tradeoff: (time: string, route: string, amount: string, rate: string) => `+${time} on the ${route} saves ${amount} (${rate} saved per hour of detour).`, routeCompared: (count: number, route: string) => `${count} routes compared — cheapest: ${route}`, calculationFailed: "Calculation failed. Please try again.", chargingUnavailable: "Charging network data is temporarily unavailable.", gpxDownloaded: "GPX downloaded — import it into your in-car GPS.", footerDisclaimer: "Routing and map data © OpenStreetMap contributors, routed via the public OSRM service. Toll, vignette and energy figures are indicative averages for passenger cars and are calculated on your device. Always confirm prices on the official portals linked above.", norwayAutopassTitle: "Norway AutoPASS / EPASS24", norwayAutopassDescription: "Norway uses 100% automated electronic toll gantries (no physical booths). Foreign vehicles should pre-register vehicle details at EPASS24 / AutoPASS to ensure correct environmental fuel rates.", visitEpass24: "Visit EPASS24", visitAutopass: "Visit AutoPASS", companyFooter: "AutoVere is developed and operated by KM TECH LABS.", legalNotice: "Legal Notice", privacyPolicy: "Privacy Policy", termsDisclaimer: "Terms & Disclaimer", legalDisclaimer: "Route calculations and toll estimates are guidance based on open data from OSM, Overpass, and OSRM.",
 } as const;
 
 export type Dict = typeof en;
 export type Locale = "en" | "de" | "no" | "pl";
-const GERMAN_COUNTRIES: Record<string, string> = {
-  DE: "Deutschland", AT: "Österreich", CH: "Schweiz", IT: "Italien", FR: "Frankreich",
-  DK: "Dänemark", SE: "Schweden", NO: "Norwegen", SI: "Slowenien", CZ: "Tschechien",
-  HR: "Kroatien", SK: "Slowakei", HU: "Ungarn", PL: "Polen", NL: "Niederlande",
-  BE: "Belgien", LU: "Luxemburg", ES: "Spanien", PT: "Portugal", RO: "Rumänien",
-  BG: "Bulgarien", GR: "Griechenland",
+
+const de: Dict = { ...en, tagline: "Europäische Maut-, Vignetten- und Ladeintelligenz", heroTitle: "Kenne die echten Reisekosten, bevor du losfährst.", heroSub: "Genaue Maut-, Vignetten-, Sprit- und Ladestopp-Berechnung für deinen Europa-Roadtrip. Offene Daten, keine versteckten Gebühren.", from: "Startort", to: "Zielort", fromPlaceholder: "z. B. München", toPlaceholder: "z. B. Mailand", vehicle: "Fahrzeug", petrol: "Benzin", diesel: "Diesel", ev: "Elektro (EV)", batteryRange: "Reale Reichweite", chargingBuffer: "Ladestopps werden bei 75 % Puffer geplant, damit du immer entspannt ankommst.", tripDuration: "Reisedauer", days: "Tage", day: "Tag", year: "Jahr", calculate: "Route & Kosten berechnen", comparison: "Routenvergleich", fastest: "Schnellste Route", bypass: "Smarter Bypass (Maut sparen)", tollfree: "100 % Mautfrei", fuel: "Sprit", charging: "Laden", tolls: "Streckenmaut", total: "Gesamtkosten", openGoogle: "In Google Maps öffnen", openApple: "In Apple Maps öffnen", downloadGpx: "GPX-Datei herunterladen", checklist: "Offizielle Vignetten-Checkliste", checklistSub: "Kaufe Vignetten ausschließlich über offizielle Portale. Drittanbieter verlangen bis zu 300 % Aufschlag für dieselbe Vignette.", chargingStops: "Ladestopps", chargingTime: "Ladezeit", noVignettes: "Keine Vignetten auf dieser Route erforderlich.", selected: "Ausgewählt", language: "Sprache wählen", currency: "Währungsauswahl", scenicTitle: "Highlights & Stopps entlang der Route", all: "Alle", camping: "Camping & Wohnmobil", lodging: "Hotels & Unterkünfte", food: "Essen & Cafés", sights: "Aussicht & Kultur", directlyOnRoute: "Direkt an der Route", minDetour: (m) => `+${m} Min. Umweg`, openMap: "In Google Maps öffnen", website: "Webseite besuchen", add: "Zur Route hinzufügen", added: "Hinzugefügt", sendToCar: "Route an dein Auto & Navi senden", sendDescription: "Wegpunkte und Ladestopps direkt in deine Navigations-App oder dein Fahrzeug übertragen.", sendMobile: "An Smartphone / Auto-App senden", shared: "Geteilt", tesla: "Tesla-Navigation", googleMultiStop: "In Google Maps öffnen", appleWaypoints: "In Apple Maps öffnen", waze: "Waze-Navigation", downloadKml: "KML-Datei herunterladen", plannedTotal: "Geplante Routensumme", cheapest: "Günstigste", noTolls: "Keine Maut auf dieser Route", pumpPrices: "Länderabhängige Spritpreise", fullBreakdown: "Vollständige Aufschlüsselung", estimatedConsumption: "Geschätzter Verbrauch", earnedPerHour: "gespart pro Stunde Umweg", badgeMath: "Exakte Berechnungen", badgeOffline: "Funktioniert offline", badgeOfficial: "Nur offizielle Portale", tollStatus: "Streckenmaut", vignetteStatus: "Vignette erforderlich", tollBooths: "Mautstellen / elektronische Maut", highPower: "Hohe Ladeleistung", intoTrip: "in die Reise", start: "Start", destination: "Ziel", border: "Grenze", and: "und", duration: (m) => `${Math.floor(m / 60)} Std. ${Math.round(m % 60).toString().padStart(2, "0")} Min.`, tradeoff: (time, route, amount, rate) => `+${time} auf der ${route} spart dir ${amount} (${rate} gespart pro Stunde Umweg).`, routeCompared: (count, route) => `${count} Routen verglichen — günstigste: ${route}`, calculationFailed: "Berechnung fehlgeschlagen. Bitte versuche es erneut.", chargingUnavailable: "Ladenetzwerk ist vorübergehend nicht verfügbar.", gpxDownloaded: "GPX heruntergeladen — importiere es in dein Fahrzeug-GPS.", footerDisclaimer: "Routen- und Kartendaten © OpenStreetMap-Mitwirkende, berechnet über den öffentlichen OSRM-Dienst. Maut-, Vignetten- und Energiewerte sind Richtwerte für Pkw und werden auf deinem Gerät berechnet. Prüfe Preise immer auf den verlinkten offiziellen Portalen.", norwayAutopassTitle: "Norwegen AutoPASS / EPASS24 Mautsystem", norwayAutopassDescription: "Norwegen nutzt vollständig automatische, schrankenlose Mautkameras. Ausländische Fahrer sollten Kennzeichen und Kraftstoffart bei EPASS24 / AutoPASS registrieren, damit Elektrofahrzeuge nicht versehentlich den Benzintarif zahlen.", visitEpass24: "EPASS24 öffnen", visitAutopass: "AutoPASS öffnen", companyFooter: "AutoVere wird von KM TECH LABS entwickelt und betrieben.", legalNotice: "Impressum", privacyPolicy: "Datenschutzerklärung", termsDisclaimer: "Nutzungsbedingungen & Haftungsausschluss", legalDisclaimer: "Routenberechnungen und Mautschätzungen dienen als Orientierung und basieren auf offenen Daten von OSM, Overpass und OSRM.", lezWarning: (s) => `Umweltplakette kann erforderlich sein in ${s}.` };
+
+const no: Dict = { ...en, tagline: "Europeisk bom-, vignett- og ladeintelligens", heroTitle: "Kjenn de virkelige reisekostnadene før du kjører.", heroSub: "Eksakte beregninger av bompenger, vignetter, drivstoff og ladestopp for bilferien i Europa. Basert på åpne data, helt uten gebyrer.", from: "FRA", to: "TIL", fromPlaceholder: "f.eks. Oslo", toPlaceholder: "f.eks. Milano", vehicle: "KJØRETØY", petrol: "Bensin", diesel: "Diesel", ev: "Elektrisk (EV)", calculate: "Beregn turen", comparison: "Rutesammenligning", fastest: "Raskeste rute", bypass: "Smart omvei", tollfree: "100 % bomfri", fuel: "Drivstoff", charging: "Lading", tolls: "Strekningsavgifter", total: "Total reisekostnad", openGoogle: "Åpne i Google Maps", openApple: "Åpne i Apple Maps", downloadGpx: "Last ned GPX", checklist: "Offisiell vignettliste", chargingStops: "Ladestopp", chargingTime: "Ladetid", noVignettes: "Ingen vignetter kreves på denne ruten.", language: "Velg språk", currency: "Valg av valuta", all: "Alle", camping: "Camping og bobil", lodging: "Hotell og overnatting", food: "Mat og kafeer", sights: "Utsikt og kultur", directlyOnRoute: "Direkte på ruten", minDetour: (m) => `+${m} min omvei`, openMap: "Åpne i Google Maps", website: "Besøk nettsted", add: "Legg til på ruten", added: "Lagt til", sendToCar: "Send ruten til bil og navigasjon", sendMobile: "Send til smarttelefon / bilapp", shared: "Delt", tesla: "Tesla-navigasjon", googleMultiStop: "Åpne i Google Maps", appleWaypoints: "Åpne i Apple Maps", waze: "Waze-navigasjon", downloadKml: "Last ned KML", companyFooter: "AutoVere er utviklet og driftes av KM TECH LABS i Kristiansand, Norge. Org.nr: 934 044 029.", legalNotice: "Juridisk informasjon", privacyPolicy: "Personvern", termsDisclaimer: "Vilkår og ansvarsfraskrivelse", footerDisclaimer: "Rute- og kartdata fra © OpenStreetMap-bidragsytere, beregnet via OSRM. Bompenger, vignetter og energiverdier er veiledende estimater for personbil beregnet på din enhet. Kontroller alltid gjeldende priser på de offisielle portalene.", norwayAutopassTitle: "Norway AutoPASS / EPASS24", norwayAutopassDescription: "Norge bruker 100 % automatiske elektroniske bomstasjoner uten fysiske bommer. Utenlandske kjøretøy bør registrere opplysninger hos EPASS24 / AutoPASS.", visitEpass24: "Åpne EPASS24", visitAutopass: "Åpne AutoPASS", badgeMath: "Eksakte beregninger", badgeOffline: "Fungerer offline", badgeOfficial: "Kun offisielle portaler", cheapest: "Billigst", noTolls: "Ingen bompenger på denne ruten", tollStatus: "Strekningsavgift", vignetteStatus: "Vignett kreves", tollBooths: "Bomstasjoner / elektronisk innkreving", highPower: "Høy ladeeffekt", intoTrip: "inn i reisen", start: "Start", destination: "Mål", border: "Grense", and: "og", duration: (m) => `${Math.floor(m / 60)} t ${Math.round(m % 60).toString().padStart(2, "0")} min`, tradeoff: (time, route, amount, rate) => `+${time} på ${route} sparer ${amount} (${rate} spart per time med omvei).`, routeCompared: (count, route) => `${count} ruter sammenlignet — billigst: ${route}`, calculationFailed: "Beregningen mislyktes. Prøv igjen.", chargingUnavailable: "Ladenettverket er midlertidig utilgjengelig.", gpxDownloaded: "GPX lastet ned — importer den i bilens GPS.",
 };
 
-const de: Dict = {
-  ...en,
-  companyFooter: "AutoVere wird von KM TECH LABS entwickelt und betrieben.", legalNotice: "Impressum", privacyPolicy: "Datenschutzerklärung", termsDisclaimer: "Nutzungsbedingungen & Haftungsausschluss", legalDisclaimer: "Routenberechnungen und Mautschätzungen dienen als Orientierung und basieren auf offenen Daten von OSM, Overpass und OSRM.",
-  norwayAutopassTitle: "Norwegen AutoPASS / EPASS24 Mautsystem",
-  norwayAutopassDescription: "Norwegen nutzt vollständig automatische, schrankenlose Mautkameras. Ausländische Fahrer sollten Kennzeichen und Kraftstoffart bei EPASS24 / AutoPASS registrieren, damit Elektrofahrzeuge nicht versehentlich den Benzintarif zahlen.",
-  visitEpass24: "EPASS24 öffnen",
-  visitAutopass: "AutoPASS öffnen",
-  tagline: "Europäische Maut-, Vignetten- und Ladeintelligenz",
-  heroTitle: "Kenne die echten Reisekosten, bevor du losfährst.",
-  heroSub: "Genaue Maut-, Vignetten-, Sprit- und Ladestopp-Berechnung für deinen Europa-Roadtrip. Offene Daten, keine versteckten Gebühren.",
-  from: "Startort", to: "Zielort", fromPlaceholder: "z. B. München", toPlaceholder: "z. B. Mailand",
-  vehicle: "Fahrzeug", petrol: "Benzin", diesel: "Diesel", ev: "Elektro (EV)", batteryRange: "Reale Reichweite",
-  chargingBuffer: "Ladestopps werden bei 75 % Puffer geplant, damit du immer entspannt ankommst.",
-  tripDuration: "Reisedauer", days: "Tage", day: "Tag", calculate: "Route & Kosten berechnen", calculating: "Berechnung…",
-  comparison: "Routenvergleich", fastest: "Schnellste Route", bypass: "Smarter Bypass (Maut sparen)", tollfree: "100 % Mautfrei",
-  fuel: "Sprit", charging: "Laden", tolls: "Streckenmaut", vignettes: "Vignetten", total: "Gesamtkosten",
-  openGoogle: "In Google Maps öffnen", openApple: "In Apple Maps öffnen", downloadGpx: "GPX-Datei herunterladen (für Auto-USB & Navi)",
-  checklist: "Offizielle Vignetten-Checkliste", checklistSub: "Kaufe Vignetten ausschließlich über offizielle Portale. Drittanbieter verlangen bis zu 300 % Aufschlag für dieselbe Vignette.",
-  chargingStops: "Ladestopps", chargingTime: "Ladezeit", noVignettes: "Keine Vignetten auf dieser Route erforderlich.",
-  selected: "Ausgewählt", select: "Route auswählen", savings: "spart", slower: "langsamer", faster: "schneller",
-  year: "Jahr", language: "Sprache wählen", currency: "Währungsauswahl", scenicTitle: "Highlights & Stopps entlang der Route",
-  scenicSub: "Kuratierte Orte für eine lohnende Pause.", scenicPicks: "OpenStreetMap-Auswahl", all: "Alle", camping: "Camping & Wohnmobil",
-  lodging: "Hotels & Unterkünfte", food: "Essen & Cafés", sights: "Aussicht & Kultur", viewpoint: "Aussichtspunkt", history: "Geschichte",
-  nature: "Natur", coffeeStop: "Kaffeestopp", directlyOnRoute: "Direkt an der Route", minDetour: (m) => `+${m} Min. Umweg`, openMap: "In Google Maps öffnen", website: "Webseite besuchen", add: "Zur Route hinzufügen", added: "Hinzugefügt", amenities: "Ausstattung",
-  sendToCar: "Route an dein Auto & Navi senden", sendDescription: "Wegpunkte und Ladestopps direkt in deine Navigations-App oder dein Fahrzeug übertragen.", sendMobile: "An Smartphone / Auto-App senden", shared: "Geteilt", tesla: "Tesla-Navigation", googleMultiStop: "In Google Maps öffnen", appleWaypoints: "In Apple Maps öffnen", waze: "Waze-Navigation", downloadKml: "KML-Datei herunterladen", plannedTotal: "Geplante Routensumme", mapUnavailable: "Die Karte ist vorübergehend nicht verfügbar. Die Routenberechnung ist unten bereit.", lezWarning: (s) => `Umweltplakette kann erforderlich sein in ${s}.`, cheapest: "Günstigste", noTolls: "Keine Maut auf dieser Route", pumpPrices: "Länderabhängige Spritpreise", fullBreakdown: "Vollständige Aufschlüsselung", estimatedConsumption: "Geschätzter Verbrauch", earnedPerHour: "gespart pro Stunde Umweg", borderCheckpoint: "Grenzkontrolle", vignetteTerminal: "Vignettenstation", badgeMath: "Exakte Berechnungen", badgeOffline: "Funktioniert offline", badgeOfficial: "Nur offizielle Portale", tollStatus: "Streckenmaut", vignetteStatus: "Vignette erforderlich", noTollStatus: "Keine Maut auf dieser Route", tollBooths: "Mautstellen / elektronische Maut", highPower: "Hohe Ladeleistung", intoTrip: "in die Reise", start: "Start", destination: "Ziel", border: "Grenze", and: "und", duration: (m) => { const h = Math.floor(m / 60); const min = Math.round(m % 60); return h > 0 ? `${h} Std. ${min.toString().padStart(2, "0")} Min.` : `${min} Min.`; }, tradeoff: (time, route, amount, rate) => `+${time} auf der ${route} spart dir ${amount} (${rate} gespart pro Stunde Umweg).`, routeCompared: (count, route) => `${count} Routen verglichen — günstigste: ${route}`, calculationFailed: "Berechnung fehlgeschlagen. Bitte versuche es erneut.", chargingUnavailable: "Ladenetzwerk ist vorübergehend nicht verfügbar.", gpxDownloaded: "GPX heruntergeladen — importiere es in dein Fahrzeug-GPS.", footerDisclaimer: "Routen- und Kartendaten © OpenStreetMap-Mitwirkende, berechnet über den öffentlichen OSRM-Dienst. Maut-, Vignetten- und Energiewerte sind Richtwerte für Pkw und werden auf deinem Gerät berechnet. Prüfe Preise immer auf den verlinkten offiziellen Portalen.",
+const pl: Dict = { ...en, heroTitle: "Poznaj prawdziwe koszty podróży, zanim wyruszysz w drogę.", heroSub: "Dokładne kalkulacje opłat drogowych, winiet, paliwa i ładowania dla Twojej podróży po Europie. Otwarte dane, zero ukrytych prowizji.", from: "Miejsce startu", to: "Miejsce docelowe", fromPlaceholder: "np. Monachium", toPlaceholder: "np. Mediolan", vehicle: "Pojazd", petrol: "Benzyna", diesel: "Diesel", ev: "Elektryczny (EV)", calculate: "Oblicz trasę i koszty", comparison: "Porównanie tras", fastest: "Najszybsza trasa", bypass: "Sprytny objazd", tollfree: "100% bez opłat", fuel: "Paliwo", charging: "Ładowanie", tolls: "Opłaty odcinkowe", vignettes: "Winiety", total: "Całkowity koszt podróży", language: "Wybierz język", currency: "Wybór waluty", all: "Wszystkie", camping: "Camping i kamper", lodging: "Hotele i noclegi", food: "Jedzenie i kawiarnie", sights: "Widoki i kultura", directlyOnRoute: "Bezpośrednio przy trasie", minDetour: (m) => `+${m} min objazdu`, openMap: "Otwórz w Google Maps", website: "Odwiedź stronę", add: "Dodaj do trasy", added: "Dodano", sendToCar: "Wyślij trasę do auta i nawigacji", sendMobile: "Wyślij do smartfona / aplikacji auta", shared: "Udostępniono", tesla: "Nawigacja Tesla", googleMultiStop: "Otwórz w Google Maps", appleWaypoints: "Otwórz w Apple Maps", waze: "Nawigacja Waze", downloadGpx: "Pobierz plik GPX", downloadKml: "Pobierz plik KML", companyFooter: "AutoVere jest rozwijane i prowadzone przez KM TECH LABS.", legalNotice: "Nota prawna", privacyPolicy: "Polityka prywatności", termsDisclaimer: "Warunki i wyłączenie odpowiedzialności", legalDisclaimer: "Obliczenia tras i szacunki opłat są orientacyjne i opierają się na otwartych danych OSM, Overpass i OSRM.", badgeMath: "Dokładne kalkulacje", badgeOffline: "Działa offline", badgeOfficial: "Tylko oficjalne portale", cheapest: "Najtańsza", noTolls: "Brak opłat na tej trasie", pumpPrices: "Ceny paliwa według kraju", fullBreakdown: "Pełne zestawienie", estimatedConsumption: "Szacowane zużycie", earnedPerHour: "oszczędności na godzinę objazdu", tollStatus: "Opłata odcinkowa", vignetteStatus: "Wymagana winieta", tollBooths: "Bramki / elektroniczne opłaty", highPower: "Wysoka moc", intoTrip: "na trasie", start: "Start", destination: "Cel", border: "Granica", and: "i", duration: (m) => `${Math.floor(m / 60)} godz. ${Math.round(m % 60)} min.`, tradeoff: (time, route, amount, rate) => `+${time} na trasie ${route} oszczędza ${amount} (${rate} oszczędności na godzinę objazdu).`, routeCompared: (count, route) => `Porównano ${count} tras — najtańsza: ${route}`, calculationFailed: "Obliczenia nie powiodły się. Spróbuj ponownie.", chargingUnavailable: "Sieć ładowania jest tymczasowo niedostępna.", gpxDownloaded: "Pobrano GPX — zaimportuj go do nawigacji auta.", footerDisclaimer: "Dane tras i map © OpenStreetMap, trasy wyznaczane przez publiczny OSRM. Wartości opłat i energii są orientacyjne i obliczane na urządzeniu.",
 };
 
-const no: Dict = { ...de, tagline: "Europeisk bom-, vignett- og ladeintelligens", heroTitle: "Kjenn den virkelige kostnaden før du kjører.", from: "Fra", to: "Til", petrol: "Bensin", diesel: "Diesel", ev: "Elektrisk (EV)", calculate: "Beregn turen", calculating: "Beregner…", comparison: "Rutesammenligning", fastest: "Raskeste rute", bypass: "Smart omvei", tollfree: "100% bomfri", fuel: "Drivstoff", charging: "Lading", tolls: "Avstandsavgifter", vignettes: "Vignetter", total: "Total reisekostnad", checklist: "Offisiell vignettliste", chargingStops: "Ladestopp", chargingTime: "Ladetid", noVignettes: "Ingen vignetter kreves på denne ruten.", selected: "Valgt", year: "år", language: "Språk", currency: "Valuta", all: "Alle", camping: "Camping og bobil", lodging: "Hotell og overnatting", food: "Mat og kaféer", sights: "Severdigheter", directlyOnRoute: "Direkte på ruten", add: "Legg til", added: "Lagt til", sendToCar: "Send til bil og navigasjon", sendMobile: "Send til mobil / bilapp", shared: "Delt", downloadKml: "Last ned KML", plannedTotal: "Planlagt rutesum", minDetour: (m) => `+${m} min omvei`, lezWarning: (s) => `Miljømerke kan kreves i ${s}.` };
+const deComplete: Dict = { ...de, popularRoutes: "Beliebte Routen", osloGarda: "Oslo → Gardasee", munichSplit: "München → Split", parisNice: "Paris → Nizza", featureEvTitle: "Echte EV-Reichweite und Laden", featureEvDescription: "Ladeintervalle mit 75 % Sicherheitspuffer berechnen.", featureMarkupTitle: "Keine Aufschläge", featureMarkupDescription: "Direkte offizielle Portale für Vignetten und AutoPASS/EPASS24.", featureScenicTitle: "Panorama- und Kostenumfahrungen", featureScenicDescription: "Teure Tunnel und Maut mit malerischen Alpenpässen vergleichen." };
+const noComplete: Dict = { ...no, popularRoutes: "Populære ruter", osloGarda: "Oslo → Gardasjøen", munichSplit: "München → Split", parisNice: "Paris → Nice", featureEvTitle: "Reell EV-buffer og lading", featureEvDescription: "Beregner ladeintervaller med 75 % sikkerhetsbuffer.", featureMarkupTitle: "Ingen påslag", featureMarkupDescription: "Offisielle direkteportaler for vignetter og AutoPASS/EPASS24.", featureScenicTitle: "Naturskjønne og kostnadsfrie omveier", featureScenicDescription: "Sammenlign dyre tunneler og bomveier med vakre alpepass." };
+const plComplete: Dict = { ...pl, popularRoutes: "Popularne trasy", osloGarda: "Oslo → Jezioro Garda", munichSplit: "Monachium → Split", parisNice: "Paryż → Nicea", featureEvTitle: "Rzeczywisty bufor EV i ładowanie", featureEvDescription: "Oblicza odstępy ładowania z 75% buforem bezpieczeństwa.", featureMarkupTitle: "Zero prowizji", featureMarkupDescription: "Oficjalne portale winiet oraz AutoPASS/EPASS24.", featureScenicTitle: "Widokowe objazdy i oszczędności", featureScenicDescription: "Porównuj drogie tunele i opłaty z malowniczymi przełęczami Alp." };
 
-const fr: Dict = { ...de, tagline: "Intelligence européenne des péages, vignettes et recharges", heroTitle: "Connaissez le vrai coût avant de partir.", from: "De", to: "À", petrol: "Essence", diesel: "Diesel", ev: "Électrique (VE)", calculate: "Calculer mon trajet", calculating: "Calcul…", comparison: "Comparaison des itinéraires", fastest: "Itinéraire le plus rapide", bypass: "Détour intelligent", tollfree: "100% sans péage", fuel: "Carburant", charging: "Recharge", tolls: "Péages à la distance", vignettes: "Vignettes", total: "Coût total du trajet", checklist: "Liste des vignettes officielles", chargingStops: "Arrêts recharge", chargingTime: "Temps de recharge", noVignettes: "Aucune vignette requise sur cet itinéraire.", selected: "Sélectionné", year: "an", language: "Langue", currency: "Devise", all: "Toutes", camping: "Camping et camping-car", lodging: "Hôtels et hébergements", food: "Restaurants et cafés", sights: "Sites et panoramas", directlyOnRoute: "Directement sur l'itinéraire", add: "Ajouter", added: "Ajouté", sendToCar: "Envoyer à la voiture et navigation", sendMobile: "Envoyer au mobile / à l'application voiture", shared: "Partagé", downloadKml: "Télécharger KML", plannedTotal: "Total prévu", minDetour: (m) => `+${m} min de détour`, lezWarning: (s) => `Une vignette environnementale peut être requise en ${s}.` };
-
-const noLocalized: Dict = {
-  ...no,
-  companyFooter: "AutoVere utvikles og driftes av KM TECH LABS.",
-  legalNotice: "Juridisk informasjon",
-  privacyPolicy: "Personvern",
-  termsDisclaimer: "Vilkår og ansvarsfraskrivelse",
-  legalDisclaimer: "Ruteberegninger og bompengeanslag er veiledende og basert på åpne data fra OSM, Overpass og OSRM.",
-};
-
-const pl: Dict = {
-  ...en,
-  heroTitle: "Poznaj prawdziwe koszty podróży, zanim wyruszysz w drogę.",
-  heroSub: "Dokładne kalkulacje opłat drogowych, winiet, paliwa i ładowania dla Twojej podróży po Europie. Otwarte dane, zero ukrytych prowizji.",
-  from: "Miejsce startu", to: "Miejsce docelowe", fromPlaceholder: "np. Monachium", toPlaceholder: "np. Mediolan", vehicle: "Pojazd", petrol: "Benzyna", diesel: "Diesel", ev: "Elektryczny (EV)", calculate: "Oblicz trasę i koszty", calculating: "Obliczanie…", comparison: "Porównanie tras", fastest: "Najszybsza trasa", bypass: "Sprytny objazd", tollfree: "100% bez opłat", fuel: "Paliwo", charging: "Ładowanie", tolls: "Opłaty odcinkowe", vignettes: "Winiety", total: "Całkowity koszt podróży", language: "Wybierz język", currency: "Wybór waluty", all: "Wszystkie", camping: "Camping i kamper", lodging: "Hotele i noclegi", food: "Jedzenie i kawiarnie", sights: "Widoki i kultura", directlyOnRoute: "Bezpośrednio przy trasie", minDetour: (m) => `+${m} min objazdu`, openMap: "Otwórz w Google Maps", website: "Odwiedź stronę", add: "Dodaj do trasy", added: "Dodano", sendToCar: "Wyślij trasę do auta i nawigacji", sendMobile: "Wyślij do smartfona / aplikacji auta", shared: "Udostępniono", tesla: "Nawigacja Tesla", googleMultiStop: "Otwórz w Google Maps", appleWaypoints: "Otwórz w Apple Maps", waze: "Nawigacja Waze", downloadGpx: "Pobierz plik GPX", downloadKml: "Pobierz plik KML", plannedTotal: "Planowana suma trasy", companyFooter: "AutoVere jest rozwijane i prowadzone przez KM TECH LABS.", legalNotice: "Nota prawna", privacyPolicy: "Polityka prywatności", termsDisclaimer: "Warunki i wyłączenie odpowiedzialności", legalDisclaimer: "Obliczenia tras i szacunki opłat są orientacyjne i opierają się na otwartych danych OSM, Overpass i OSRM.",
-};
-
-export const locales: Record<Locale, Dict> = { en, de, no: noLocalized, pl };
-
-const I18nContext = createContext<{ t: Dict; locale: string; setLocale: (l: string) => void }>({
-  t: en,
-  locale: "en",
-  setLocale: () => {},
-});
+export const locales: Record<Locale, Dict> = { en, de: deComplete, no: noComplete, pl: plComplete };
+const Context = createContext<{ t: Dict; locale: Locale; setLocale: (locale: string) => void }>({ t: en, locale: "en", setLocale: () => {} });
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocale] = useState("en");
+  const [locale, setLocaleState] = useState<Locale>("en");
   useEffect(() => {
-    const saved = window.localStorage.getItem("autovere-locale") as Locale | null;
+    const saved = window.localStorage.getItem("autovere-locale");
     const browser = navigator.language.toLowerCase();
     const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("no") || browser.startsWith("nb") || browser.startsWith("nn") ? "no" : browser.startsWith("pl") ? "pl" : "en";
-    setLocale(saved && saved in locales ? saved : detected);
-    document.documentElement.lang = saved && saved in locales ? saved : detected;
+    const next = saved && saved in locales ? saved as Locale : detected;
+    setLocaleState(next);
+    document.documentElement.lang = next;
   }, []);
-  const chooseLocale = (next: string) => {
+  const setLocale = (next: string) => {
     if (!(next in locales)) return;
-    setLocale(next);
+    setLocaleState(next as Locale);
     window.localStorage.setItem("autovere-locale", next);
     document.documentElement.lang = next;
   };
-  const value = useMemo(
-    () => ({ t: locales[locale as Locale] ?? en, locale, setLocale: chooseLocale }),
-    [locale],
-  );
-  return <I18nContext.Provider value={value}>{children}</I18nContext.Provider>;
+  const value = useMemo(() => ({ t: locales[locale], locale, setLocale }), [locale]);
+  return <Context.Provider value={value}>{children}</Context.Provider>;
 }
-
-export function useT(): Dict {
-  return useContext(I18nContext).t;
-}
-
-export function useLocale() {
-  const context = useContext(I18nContext);
-  return { locale: context.locale as Locale, setLocale: context.setLocale };
-}
-
-export function countryName(code: string, locale: Locale, fallback: string): string {
-  return locale === "de" ? GERMAN_COUNTRIES[code] ?? fallback : fallback;
-}
-
-export function dynamicText(text: string, locale: Locale): string {
-  if (locale !== "de") return text;
-  return text
-    .replace(/Norway/gi, "Norwegen")
-    .replace(/Sweden/gi, "Schweden")
-    .replace(/Denmark/gi, "Dänemark")
-    .replace(/Germany/gi, "Deutschland")
-    .replace(/Austria/gi, "Österreich")
-    .replace(/Switzerland/gi, "Schweiz")
-    .replace(/Italy/gi, "Italien")
-    .replace(/France/gi, "Frankreich")
-    .replace(/Slovenia/gi, "Slowenien")
-    .replace(/Croatia/gi, "Kroatien")
-    .replace(/Czech Republic/gi, "Tschechien")
-    .replace(/Slovakia/gi, "Slowakei")
-    .replace(/1-day/gi, "1-Tages")
-    .replace(/10-day/gi, "10-Tages")
-    .replace(/7-day/gi, "7-Tages")
-    .replace(/Monthly/gi, "Monatliche")
-    .replace(/Annual/gi, "Jahres")
-    .replace(/vignette/gi, "Vignette")
-    .replace(/official/gi, "offiziell")
-    .replace(/motorway tolls/gi, "Streckenmaut")
-    .replace(/motorway/gi, "Autobahn")
-    .replace(/tolls/gi, "Maut")
-    .replace(/tolled/gi, "mautpflichtig")
-    .replace(/Vignette required/gi, "Vignette erforderlich")
-    .replace(/Pay-per-km tolls/gi, "Streckenmaut")
-    .replace(/Toll booths \/ electronic tolling/gi, "Mautstellen / elektronische Maut")
-    .replace(/Special mountain toll/gi, "Sondermaut")
-    .replace(/fastest route/gi, "schnellste Route")
-    .replace(/Country-by-country pump prices/gi, "Länderabhängige Spritpreise")
-    .replace(/Estimated consumption/gi, "Geschätzter Verbrauch")
-    .replace(/No route found/gi, "Keine Route gefunden");
-}
+export function useT(): Dict { return useContext(Context).t; }
+export function useLocale() { const context = useContext(Context); return { locale: context.locale, setLocale: context.setLocale }; }
+export function countryName(code: string, locale: Locale, fallback: string): string { return locale === "de" ? ({ DE: "Deutschland", AT: "Österreich", CH: "Schweiz", IT: "Italien", FR: "Frankreich", DK: "Dänemark", SE: "Schweden", NO: "Norwegen", SI: "Slowenien", CZ: "Tschechien", HR: "Kroatien", SK: "Slowakei", PL: "Polen" }[code] ?? fallback) : fallback; }
+export function dynamicText(text: string, locale: Locale): string { return locale === "de" ? text.replace(/motorway tolls/gi, "Streckenmaut").replace(/motorway/gi, "Autobahn").replace(/tolled/gi, "mautpflichtig").replace(/Toll booths \/ electronic tolling/gi, "Mautstellen / elektronische Maut").replace(/Annual/gi, "Jahres").replace(/Monthly/gi, "Monatliche").replace(/1-day/gi, "1-Tages").replace(/10-day/gi, "10-Tages") : text; }

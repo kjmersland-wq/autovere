@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import { useCallback, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon } from "lucide-react";
-import { TripForm, type TripFormState } from "@/components/TripForm";
+import { TripForm, type DemoRoute, type TripFormState } from "@/components/TripForm";
+import { FeatureHighlights } from "@/components/FeatureHighlights";
 import { RouteMap } from "@/components/RouteMap";
 import { Breakdown, RouteCard, TradeoffBanner } from "@/components/Comparison";
 import { VignetteChecklist } from "@/components/VignetteChecklist";
@@ -75,8 +76,8 @@ function Index() {
   const [currency, setCurrency] = useState<CurrencyCode>("EUR");
   const { theme, toggleTheme } = useTheme();
 
-  const run = useCallback(async () => {
-    const { from, to } = form;
+  const run = useCallback(async (input = form) => {
+    const { from, to } = input;
     if (!from || !to) return;
     setLoading(true);
     try {
@@ -91,7 +92,7 @@ function Index() {
       if (!map.fastest) throw new Error("No drivable route between these places.");
 
       let found: Charger[] = [];
-      if (form.vehicle === "ev") {
+      if (input.vehicle === "ev") {
         try {
           found = await fetchFastChargers(map.fastest.coords);
         } catch {
@@ -106,14 +107,14 @@ function Index() {
 
       const trip = {
         ...DEFAULT_TRIP,
-        vehicle: form.vehicle,
-        days: form.days,
-        evRangeKm: form.evRangeKm,
+        vehicle: input.vehicle,
+        days: input.days,
+        evRangeKm: input.evRangeKm,
       };
       const next = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, trip, found));
       setRoutes(map);
       setEstimates(next);
-      setSubmitted(form);
+      setSubmitted(input);
       const cheapest = next.reduce((a, b) => (a.total <= b.total ? a : b));
       setSelected(cheapest.key);
       toast.success(t.routeCompared(next.length, t[cheapest.key]));
@@ -123,6 +124,17 @@ function Index() {
       setLoading(false);
     }
   }, [form]);
+
+  function runDemo(demo: DemoRoute) {
+    const places = {
+      "oslo-garda": { from: { id: "demo-oslo", name: "Oslo", label: "Oslo, Norway", lat: 59.9139, lon: 10.7522, country: "NO" }, to: { id: "demo-garda", name: "Lake Garda", label: "Lake Garda, Italy", lat: 45.604, lon: 10.654, country: "IT" } },
+      "munich-split": { from: { id: "demo-munich", name: "Munich", label: "Munich, Germany", lat: 48.1351, lon: 11.582, country: "DE" }, to: { id: "demo-split", name: "Split", label: "Split, Croatia", lat: 43.5081, lon: 16.4402, country: "HR" } },
+      "paris-nice": { from: { id: "demo-paris", name: "Paris", label: "Paris, France", lat: 48.8566, lon: 2.3522, country: "FR" }, to: { id: "demo-nice", name: "Nice", label: "Nice, France", lat: 43.7102, lon: 7.262, country: "FR" } },
+    }[demo];
+    const next = { ...form, from: places.from, to: places.to };
+    setForm(next);
+    void run(next);
+  }
 
   const selectedEst = estimates.find((e) => e.key === selected) ?? estimates[0];
   const selectedRoute = selectedEst ? routes[selectedEst.key] : undefined;
@@ -264,7 +276,8 @@ function Index() {
           </div>
 
           <div className="mt-9">
-            <TripForm state={form} setState={setForm} onSubmit={run} loading={loading} />
+            <TripForm state={form} setState={setForm} onSubmit={() => void run()} loading={loading} onDemo={runDemo} />
+            {estimates.length === 0 && <FeatureHighlights />}
           </div>
         </div>
       </section>

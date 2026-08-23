@@ -15,6 +15,8 @@ export type TripFormState = {
   days: number;
 };
 
+export type DemoRoute = "oslo-garda" | "munich-split" | "paris-nice";
+
 const DAY_PRESETS = [1, 10, 30, 365];
 
 export function TripForm({
@@ -22,11 +24,13 @@ export function TripForm({
   setState,
   onSubmit,
   loading,
+  onDemo,
 }: {
   state: TripFormState;
   setState: (s: TripFormState) => void;
   onSubmit: () => void;
   loading: boolean;
+  onDemo?: (demo: DemoRoute) => void;
 }) {
   const t = useT();
   const vehicles: { key: VehicleType; label: string; icon: typeof Fuel }[] = [
@@ -150,6 +154,25 @@ export function TripForm({
           </>
         )}
       </Button>
+      {onDemo && (
+        <div className="mt-4">
+          <p className="mb-2 text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            {t.popularRoutes}
+          </p>
+          <div className="flex flex-wrap gap-2">
+            {(["oslo-garda", "munich-split", "paris-nice"] as DemoRoute[]).map((demo) => (
+              <button
+                key={demo}
+                type="button"
+                onClick={() => onDemo(demo)}
+                className="rounded-full border border-border bg-surface-raised px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:border-primary/50 hover:text-foreground"
+              >
+                {demo === "oslo-garda" ? t.osloGarda : demo === "munich-split" ? t.munichSplit : t.parisNice}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
     </form>
   );
 }
