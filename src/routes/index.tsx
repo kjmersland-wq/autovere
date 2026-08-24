@@ -171,6 +171,27 @@ const LEGAL_MODAL_COPY = {
       "Kierowca jest wyłącznie odpowiedzialny za przestrzeganie aktualnych znaków drogowych, limitów prędkości i oficjalnych stawek.",
     ],
   },
+  sv: {
+    legalTitle: "Juridisk information",
+    privacyTitle: "Integritetspolicy",
+    termsTitle: "Villkor och ansvarsfriskrivning",
+    close: "Stäng",
+    legal: [
+      "AutoVere utvecklas och drivs av KM TECH LABS i Kristiansand, Norge.",
+      "Org.nr: 934 044 029",
+      "E-post: contact@autovere.com",
+      "Syfte: Oberoende beräkning av resrutter, vägavgifter och laddning för europeiska vägar.",
+    ],
+    privacy: [
+      "100 % lokal beräkning på klientsidan i webbläsaren.",
+      "Ingen lagring eller spårning av din exakta positionshistorik.",
+      "Ingen försäljning av data eller tredjeparts annonsspårning. Fullt GDPR-kompatibel.",
+    ],
+    terms: [
+      "Beräkningar av vägavgifter, vinjetter, laddning och drivmedel är vägledande uppskattningar baserade på öppna källor som OpenStreetMap, OSRM och Overpass.",
+      "Föraren ansvarar själv för att följa aktuell skyltning, hastighetsbegränsningar, trafikregler och officiella avgifter.",
+    ],
+  },
 } as const;
 
 function Index() {
