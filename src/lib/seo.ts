@@ -74,7 +74,7 @@ export function upsertMeta(attribute: "name" | "property", key: string, content:
 }
 
 export function applyLocalizedSeo(locale: Locale) {
-  const copy = seoCopy[locale];
+  const copy = seoCopy[locale] ?? seoCopy.en;
   const pathname = window.location.pathname;
   document.title = copy.title;
   upsertMeta("name", "description", copy.description);
