@@ -4,7 +4,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import type { Place } from "@/lib/geo";
 import type { VehicleType } from "@/lib/calc";
-import { useT } from "@/lib/i18n";
+import { autoPassLabels, useLocale, useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export type TripFormState = {
@@ -36,6 +36,7 @@ export function TripForm({
   onDemo?: (demo: DemoRoute) => void;
 }) {
   const t = useT();
+  const { locale } = useLocale();
   const vehicles: { key: VehicleType; label: string; icon: typeof Fuel }[] = [
     { key: "petrol", label: t.petrol, icon: Fuel },
     { key: "diesel", label: t.diesel, icon: Droplets },
@@ -127,7 +128,7 @@ export function TripForm({
             })}
           </div>
           <label className="mt-3 flex items-center justify-between gap-3 text-sm text-foreground">
-            <span>AutoPASS / Brikkeavtale</span>
+            <span>{autoPassLabels[locale]}</span>
             <input
               type="checkbox"
               checked={state.autoPass}
