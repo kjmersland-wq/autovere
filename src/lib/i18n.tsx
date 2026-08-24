@@ -9,7 +9,15 @@ export const en = {
 } as const;
 
 export type Dict = typeof en;
-export type Locale = "en" | "de" | "nl" | "no" | "pl" | "sv" | "fr";
+export type Locale = "en" | "de" | "nl" | "no" | "pl" | "sv" | "fr" | "da";
+
+const da: Dict = {
+  ...en,
+  tagline: "Europæisk motorvejsafgifts-, vignet- og ladeintelligens",
+  heroTitle: "Kend de reelle rejseomkostninger, før du kører.",
+  heroSub: "Øjeblikkelige, deterministiske beregninger af motorvejsafgifter, vignetter, brændstof og ladestop til din kør-selv-ferie i Europa. Baseret på åbne data, helt uden konti eller mellemmandsgebyrer.",
+  from: "FRA", to: "TIL", fromPlaceholder: "f.eks. København, Danmark", toPlaceholder: "f.eks. Gardasøen, Italien", vehicle: "Køretøj", petrol: "Benzin", diesel: "Diesel", ev: "Elbil (EV)", tripDuration: "Rejsens varighed", days: "dage", day: "dag", year: "år", calculate: "Beregn turen →", calculating: "Beregner…", comparison: "Sammenligning af ruter", fastest: "Hurtigste rute", bypass: "Smart omkørsel", tollfree: "100 % afgiftsfri", distance: "Afstand", driveTime: "Køretid", fuel: "Brændstof", charging: "Ladning", tolls: "Vejafgifter", vignettes: "Vignetter", total: "Samlet rejsepris", language: "Sprog", currency: "Valuta", popularRoutes: "Populære resruter", osloGarda: "København → Gardasøen", munichSplit: "Aarhus → Split", parisNice: "København → Paris", featureEvTitle: "Reel elbil-buffer og ladning", featureEvDescription: "Beregner ladestop med 75 % sikkerhedsbuffer tilpasset rute og topografi.", featureMarkupTitle: "Nul skjulte tillæg", featureMarkupDescription: "Direkte links til officielle portaler for vignetter og betalingsanlæg.", featureScenicTitle: "Naturskønne genveje", featureScenicDescription: "Sammenlign dyre tunneler og betalingsveje med smukke bjergpas.", all: "Alle", camping: "Camping og autocamper", lodging: "Hoteller og overnatning", food: "Mad og caféer", sights: "Seværdigheder og udsigtspunkter", directlyOnRoute: "Direkte på ruten", minDetour: (m) => `+${m} min omvej`, openMap: "Kort", website: "Websted", add: "Tilføj", added: "Tilføjet", legalNotice: "Juridisk information", privacyPolicy: "Privatlivspolitik", termsDisclaimer: "Vilkår og ansvarsfraskrivning", badgeMath: "Deterministisk matematik", badgeOffline: "Fungerer offline", badgeOfficial: "Kun officielle portaler", cheapest: "Billigst", noTolls: "Ingen på denne rute", pumpPrices: "Brændstofpriser pr. land", fullBreakdown: "Fuld omkostningsoversigt", estimatedConsumption: "Anslået forbrug", chargingUnavailable: "Ladenetværket er midlertidigt utilgængeligt.", calculationFailed: "Beregningen mislykkedes. Prøv igen.",
+} as const;
 
 export const autoPassLabels: Record<Locale, string> = {
   en: "AutoPASS / Tag agreement",
@@ -19,6 +27,7 @@ export const autoPassLabels: Record<Locale, string> = {
   pl: "AutoPASS / umowa opłat",
   sv: "AutoPASS / Bizz-avtal",
   fr: "AutoPASS / contrat de péage",
+  da: "AutoPASS / betalingsaftale",
 };
 
 export type FaqCopy = {
@@ -78,6 +87,7 @@ export const locales: Record<Locale, Dict> = {
   pl: { ...plComplete, addStop: "Dodaj przystanek", stop: "Przystanek", stopPlaceholder: "Miejsce po drodze", remove: "Usuń", contactTitle: "Wyślij nam wiadomość", contactDescription: "Masz pytanie albo pomysł? Napisz do nas, a odezwiemy się tak szybko, jak to możliwe.", contactName: "Imię", contactNamePlaceholder: "Twoje imię", contactEmail: "E-mail", contactEmailPlaceholder: "ty@przyklad.pl", contactSubject: "Temat", contactSubjectPlaceholder: "Czego dotyczy wiadomość?", contactMessage: "Wiadomość", contactMessagePlaceholder: "Napisz, co masz na myśli...", contactSend: "Wyślij wiadomość", contactSending: "Wysyłanie...", contactSuccess: "Dziękujemy za wiadomość", contactSuccessText: "Wiadomość została wysłana. Odezwiemy się tak szybko, jak możemy.", contactClose: "Zamknij", contactError: "Nie udało się wysłać wiadomości. Spróbuj ponownie.", contactLink: "Wyślij wiadomość przez formularz kontaktowy", statEvHubs: "Ponad 1 400 ultraszybkich hubów EV", statTollSystems: "28 europejskich systemów opłat i winiet", statScenicSpots: "Ponad 10 000 atrakcji i campingów" },
     sv,
   fr,
+  da,
 };
 const Context = createContext<{ t: Dict; locale: Locale; setLocale: (locale: string) => void }>({ t: en, locale: "en", setLocale: () => {} });
 
@@ -87,7 +97,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     const saved = window.localStorage.getItem("autovere-locale");
     const browser = navigator.language.toLowerCase();
     const requested = new URLSearchParams(window.location.search).get("lang");
-    const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("nl") ? "nl" : browser.startsWith("no") || browser.startsWith("nb") || browser.startsWith("nn") ? "no" : browser.startsWith("pl") ? "pl" : browser.startsWith("sv") ? "sv" : browser.startsWith("fr") ? "fr" : "en";
+    const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("nl") ? "nl" : browser.startsWith("no") || browser.startsWith("nb") || browser.startsWith("nn") ? "no" : browser.startsWith("pl") ? "pl" : browser.startsWith("sv") ? "sv" : browser.startsWith("fr") ? "fr" : browser.startsWith("da") ? "da" : "en";
     const next = requested && requested in locales ? requested as Locale : saved && saved in locales ? saved as Locale : detected;
     setLocaleState(next);
     document.documentElement.lang = next;
