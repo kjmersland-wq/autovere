@@ -66,16 +66,20 @@ export default async function handler(request: VercelRequest, response: VercelRe
     await stripe.prices.retrieve(priceId);
     const stripeLocale = locale === "no" ? "nb" : locale;
     const session = await stripe.checkout.sessions.create({
+      payment_method_types: ["card"],
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       locale: stripeLocale as Stripe.Checkout.SessionCreateParams.Locale,
-      success_url: `${siteUrl(request)}/pricing?checkout=success&locale=${locale}`,
-      cancel_url: `${siteUrl(request)}/pricing?checkout=cancelled&locale=${locale}`,
+      success_url: "https://autovere.com/pricing?success=true",
+      cancel_url: "https://autovere.com/pricing?canceled=true",
       allow_promotion_codes: true,
       billing_address_collection: "auto",
       metadata: { locale, plan: requestedPrice || "configured-price" },
     });
-    if (!session.url) throw new Error("Stripe did not return a Checkout URL");
+    if (!session.url) {
+      response.status(500).json({ error: "Failed to create session URL" });
+      return;
+    }
     response.status(200).json({ url: session.url });
   } catch (error) {
     const stripeError = error as Stripe.errors.StripeError;

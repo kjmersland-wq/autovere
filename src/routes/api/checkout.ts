@@ -43,6 +43,7 @@ export const Route = createFileRoute("/api/checkout")({
           const success_url = "https://autovere.com/pricing?success=true";
           const cancel_url = "https://autovere.com/pricing?canceled=true";
           const session = await stripe.checkout.sessions.create({
+            payment_method_types: ["card"],
             mode: "subscription",
             line_items: [{ price: priceId, quantity: 1 }],
             locale: stripeLocale as Stripe.Checkout.SessionCreateParams.Locale,
@@ -52,8 +53,16 @@ export const Route = createFileRoute("/api/checkout")({
             billing_address_collection: "auto",
             metadata: { locale, plan: requestedPrice || "configured-price" },
           });
-          if (!session.url) throw new Error("Stripe did not return a Checkout URL");
-          return Response.json({ url: session.url });
+          if (!session.url) {
+            return new Response(JSON.stringify({ error: "Failed to create session URL" }), {
+              status: 500,
+              headers: { "Content-Type": "application/json" },
+            });
+          }
+          return new Response(JSON.stringify({ url: session.url }), {
+            status: 200,
+            headers: { "Content-Type": "application/json" },
+          });
         } catch (error) {
           const stripeError = error as Stripe.errors.StripeError;
           console.error("Stripe Checkout session failed", {
