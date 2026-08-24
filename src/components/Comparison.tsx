@@ -210,6 +210,11 @@ export function Breakdown({ est, currency }: { est: Estimate; currency: Currency
         </span>
         <span className="numeric text-2xl font-extrabold text-primary">{formatCurrency(est.total, currency)}</span>
       </div>
+      {est.ev && est.tollSavings && est.tollSavings > 0 && (
+        <p className="mt-3 text-xs font-semibold text-success">
+          {locale === "no" ? `Du sparer ${formatCurrency(est.tollSavings, currency)} i bompenger med elbil på denne ruten.` : `EV toll saving: ${formatCurrency(est.tollSavings, currency)}`}
+        </p>
+      )}
     </div>
   );
 }

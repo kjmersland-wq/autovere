@@ -12,6 +12,8 @@ export type TripFormState = {
   stops: (Place | null)[];
   to: Place | null;
   vehicle: VehicleType;
+  fuelType: "EV" | "ICE";
+  autoPass: boolean;
   evRangeKm: number;
   days: number;
 };
@@ -53,7 +55,7 @@ export function TripForm({
           label={t.from}
           placeholder={t.fromPlaceholder}
           value={state.from}
-          onChange={(from) => setState({ ...state, from })}
+          onChange={(from) => setState({ ...state, from, autoPass: from?.country === "NO" ? true : state.autoPass })}
         />
         <div className="space-y-3">
           {state.stops.map((stop, index) => (
@@ -109,7 +111,7 @@ export function TripForm({
                 <button
                   key={v.key}
                   type="button"
-                  onClick={() => setState({ ...state, vehicle: v.key })}
+                  onClick={() => setState({ ...state, vehicle: v.key, fuelType: v.key === "ev" ? "EV" : "ICE" })}
                   className={cn(
                     "flex items-center justify-center gap-2 rounded-lg px-2 py-2.5 text-sm font-semibold transition-all",
                     active
@@ -124,6 +126,15 @@ export function TripForm({
               );
             })}
           </div>
+          <label className="mt-3 flex items-center justify-between gap-3 text-sm text-foreground">
+            <span>AutoPASS / Brikkeavtale</span>
+            <input
+              type="checkbox"
+              checked={state.autoPass}
+              onChange={(e) => setState({ ...state, autoPass: e.target.checked })}
+              className="size-4 accent-primary"
+            />
+          </label>
         </div>
 
         <div>

@@ -12,9 +12,12 @@ import {
 } from "./tolls";
 
 export type VehicleType = "petrol" | "diesel" | "ev";
+export type FuelType = "EV" | "ICE";
 
 export type TripInput = {
   vehicle: VehicleType;
+  fuelType: FuelType;
+  autoPass: boolean;
   days: number;
   evRangeKm: number;
   consumptionPetrol: number; // L/100km
@@ -54,6 +57,7 @@ export type Estimate = {
   legs: CountryLeg[];
   energyCost: number;
   tollCost: number;
+  tollSavings?: number | undefined;
   vignetteCost: number;
   vignetteLines: CostLine[];
   tollLines: CostLine[];
@@ -132,6 +136,7 @@ function norwayAutoPassToll(
   norwayKm: number,
   key: RouteVariantKey,
   vehicle: VehicleType,
+  autoPass: boolean,
 ): CostLine | null {
   if (key === "tollfree" || norwayKm <= 20) return null;
   const start = coords[0];
@@ -147,11 +152,11 @@ function norwayAutoPassToll(
   else if (reachesSweden) corridor = NORWAY_AUTOPASS.e6South;
   else if (nearOslo && norwayKm > 180) corridor = NORWAY_AUTOPASS.e18;
 
-  const discount = vehicle === "ev" ? 0.6 : 1;
+  const discount = vehicle === "ev" ? (autoPass ? 0.56 : 0.7) : autoPass ? 0.8 : 1;
   const amountNok = corridor.amountNok * discount;
   return {
     label: `${corridor.label} AutoPASS`,
-    detail: `${Math.round(amountNok)} NOK indicative gantry total${vehicle === "ev" ? " · 40% EV discount" : ""}`,
+    detail: `${Math.round(amountNok)} NOK indicative gantry total${vehicle === "ev" ? ` · ${autoPass ? "44% EV + AutoPASS discount" : "30% EV discount"}` : autoPass ? " · 20% AutoPASS discount" : ""}`,
     amount: amountNok / 11.7,
     country: "NO",
   };
@@ -218,7 +223,8 @@ export function estimate(
 
   addNordicBridgeTolls(legs, tollLines, key);
   const norwayLeg = legs.find((leg) => leg.code === "NO");
-  const norwayToll = norwayLeg ? norwayAutoPassToll(route.coords, norwayLeg.km, key, trip.vehicle) : null;
+  const norwayToll = norwayLeg ? norwayAutoPassToll(route.coords, norwayLeg.km, key, trip.vehicle, trip.autoPass) : null;
+  const standardNorwayToll = norwayLeg ? norwayAutoPassToll(route.coords, norwayLeg.km, key, "petrol", false) : null;
   if (norwayToll) tollLines.push(norwayToll);
   tollLines.push(...alpineTolls(route.coords, key));
 
@@ -238,6 +244,7 @@ export function estimate(
     legs,
     energyCost,
     tollCost,
+    tollSavings: trip.fuelType === "EV" && standardNorwayToll && norwayToll ? Math.max(0, standardNorwayToll.amount - norwayToll.amount) : undefined,
     vignetteCost,
     vignetteLines,
     tollLines,

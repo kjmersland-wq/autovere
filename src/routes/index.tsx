@@ -183,6 +183,8 @@ function Index() {
     stops: [],
     to: null,
     vehicle: "petrol",
+    fuelType: "ICE",
+    autoPass: false,
     evRangeKm: 450,
     days: 10,
   });
@@ -233,6 +235,8 @@ function Index() {
       const trip = {
         ...DEFAULT_TRIP,
         vehicle: input.vehicle,
+        fuelType: input.fuelType,
+        autoPass: input.autoPass,
         days: input.days,
         evRangeKm: input.evRangeKm,
       };
