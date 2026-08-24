@@ -17,8 +17,8 @@ export const Route = createFileRoute("/faq")({
 });
 function FaqPage() {
   const { locale } = useLocale();
-  const copy = faqCopy[locale];
-  const marketing = marketingCopy[locale];
+  const copy = faqCopy[locale] ?? faqCopy.en;
+  const marketing = marketingCopy[locale] ?? marketingCopy.en;
   const [query, setQuery] = useState("");
   const [contactOpen, setContactOpen] = useState(false);
   const filteredCategories = useMemo(() => {

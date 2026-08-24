@@ -68,7 +68,7 @@ export function RouteMap(props: {
 }) {
   const [chargerFilter, setChargerFilter] = useState<"all" | "tesla" | "highPower">("all");
   const { locale } = useLocale();
-  const chargerText = chargerCopy[locale];
+  const chargerText = chargerCopy[locale] ?? chargerCopy.en;
   const visibleChargers = props.chargers.filter((charger) => {
     if (chargerFilter === "highPower") return (charger.powerKw ?? 0) > 150;
     if (chargerFilter === "tesla") return /tesla/i.test(`${charger.operator ?? ""} ${charger.name}`);

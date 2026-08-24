@@ -83,7 +83,7 @@ export default function RouteMapInner({
 }) {
   const t = useT();
   const { locale } = useLocale();
-  const chargerText = chargerCopy[locale];
+  const chargerText = chargerCopy[locale] ?? chargerCopy.en;
   const active = routes.find((r) => r.active)?.coords ?? [];
   return (
     <MapContainer

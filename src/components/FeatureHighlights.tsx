@@ -5,11 +5,12 @@ import { europeCoverageCopy } from "@/lib/feature-i18n";
 export function FeatureHighlights() {
   const t = useT();
   const { locale } = useLocale();
+  const coverage = europeCoverageCopy[locale] ?? europeCoverageCopy.en;
   const features = [
     { icon: Zap, title: t.featureEvTitle, description: t.featureEvDescription },
     { icon: ShieldCheck, title: t.featureMarkupTitle, description: t.featureMarkupDescription },
     { icon: Mountain, title: t.featureScenicTitle, description: t.featureScenicDescription },
-    { icon: Globe2, title: europeCoverageCopy[locale].title, description: europeCoverageCopy[locale].description },
+    { icon: Globe2, title: coverage.title, description: coverage.description },
   ];
   return (
     <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">

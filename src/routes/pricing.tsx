@@ -8,7 +8,7 @@ import { annualLabels, checkoutLabels, comparisonStateLabels, marketingCopy } fr
 
 function PricingPage() {
   const { locale } = useLocale();
-  const copy = marketingCopy[locale];
+    const copy = marketingCopy[locale] ?? marketingCopy.en;
   const [freePlan, proPlan, businessPlan] = copy.plans;
   const [yearly, setYearly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<number>(1);
