@@ -394,6 +394,7 @@ function Index() {
                 <option value="nl">🇳🇱 NL</option>
                 <option value="no">🇳🇴 NO</option>
                   <option value="pl">🇵🇱 PL</option>
+                  <option value="sv">🇸🇪 SV</option>
               </select>
             </label>
             <button

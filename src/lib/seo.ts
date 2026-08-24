@@ -13,6 +13,7 @@ export const seoCopy: Record<Locale, SeoCopy> = {
   de: { title: "AutoVere — Maut-, Vignetten- & E-Auto-Routenplaner für Europa", description: "Planen Sie Ihre Europareise. Genaue Mautkosten, Vignettenpflicht, Kraftstoff und Tesla/Ionity-Ladestopps berechnen.", keywords: "Maut Rechner, Vignette Europa, E-Auto Routenplaner, Tesla Ladestopp, Ionity", ogLocale: "de_DE" },
   nl: { title: "AutoVere — Europese Tol-, Vignet- en EV-Routeplanner", description: "Plan je autovakantie in Europa. Bereken tolkosten, verplichte vignetten, brandstof en Tesla/Ionity-laadpalen.", keywords: "tolkosten Frankrijk, vignet Europa, EV routeplanner, Tesla laadpalen, Ionity", ogLocale: "nl_NL" },
   pl: { title: "AutoVere — Europejski planer tras, opłat drogowych, winiet i ładowania EV", description: "Zaplanuj podróż po Europie. Oblicz opłaty drogowe, winiety, paliwo oraz stacje ładowania Tesla i Ionity.", keywords: "opłaty drogowe Europa, winiety Europa, planer tras EV, ładowarki Tesla, Ionity", ogLocale: "pl_PL" },
+  sv: { title: "AutoVere — Europeisk resruttplanerare för tullar, vinjetter och elbilsladdning", description: "Planera din bilresa i Europa. Beräkna vägavgifter, vinjetter, drivmedel och laddstopp för Tesla och Ionity.", keywords: "vägavgifter Europa, motorvägsvinjett, elbil resruttplanerare, Tesla laddning, Ionity", ogLocale: "sv_SE" },
 };
 
 export const seoAlternates = [
@@ -21,6 +22,7 @@ export const seoAlternates = [
   { lang: "de", locale: "de_DE", path: "de" },
   { lang: "nl", locale: "nl_NL", path: "nl" },
   { lang: "pl", locale: "pl_PL", path: "pl" },
+  { lang: "sv", locale: "sv_SE", path: "sv" },
 ] as const;
 
 export const siteUrl = "https://www.autovere.com";

@@ -6,4 +6,5 @@ export const europeCoverageCopy: Record<Locale, { title: string; description: st
   nl: { title: "Dekking in heel Europa", description: "Plan zorgeloos over grenzen heen met regels, tol, vignetten en laden op één plek." },
   no: { title: "Dekker hele Europa", description: "Planlegg trygt på tvers av grenser med regler, bom, vignetter og lading samlet på ett sted." },
   pl: { title: "Zasięg w całej Europie", description: "Planuj spokojnie przez granice, mając przepisy, opłaty, winiety i ładowanie w jednym miejscu." },
+  sv: { title: "Täckning i hela Europa", description: "Planera tryggt över gränserna med regler, vägavgifter, vinjetter och laddning samlat på ett ställe." },
 };
