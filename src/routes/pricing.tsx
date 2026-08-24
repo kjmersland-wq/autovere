@@ -11,6 +11,7 @@ function PricingPage() {
   const copy = marketingCopy[locale];
   const [freePlan, proPlan, businessPlan] = copy.plans;
   const [yearly, setYearly] = useState(false);
+  const [focusedPlan, setFocusedPlan] = useState(1);
   const [checkoutPlan, setCheckoutPlan] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
 
@@ -55,8 +56,8 @@ function PricingPage() {
 
         <section className="mt-6 grid gap-4 lg:grid-cols-3" aria-label={copy.pricingTitle}>
           {copy.plans.map((plan, planIndex) => (
-            <article key={plan.name} className={`panel flex flex-col p-5 sm:p-6 ${plan.featured ? "border-primary/60 panel-glow" : ""}`}>
-              {plan.featured && <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary"><Sparkles className="size-3.5" /> AUTOVERE Pro</span>}
+            <article key={plan.name} onClick={() => setFocusedPlan(planIndex)} className={`panel flex flex-col p-5 sm:p-6 ${focusedPlan === planIndex ? "border-primary/60 panel-glow" : ""}`}>
+              {planIndex === 1 && focusedPlan === 1 && <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary"><Sparkles className="size-3.5" /> AUTOVERE Pro</span>}
               <h2 className="text-xl font-bold">{plan.name}</h2>
               <p className="mt-2 min-h-12 text-sm leading-relaxed text-muted-foreground">{plan.description}</p>
               <div className="mt-5 flex items-baseline gap-1">
@@ -66,7 +67,7 @@ function PricingPage() {
               <ul className="mt-6 flex-1 space-y-3 text-sm text-muted-foreground">
                 {plan.features.map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" /> <span>{feature}</span></li>)}
               </ul>
-              {planIndex === 0 ? <Link to="/"><Button className="mt-7 w-full">Kom i gang</Button></Link> : <Button className="mt-7 w-full" variant="default" disabled={checkoutPlan !== null} onClick={() => void startCheckout(`${planIndex === 2 ? "business" : "pro"}-${yearly ? "yearly" : "monthly"}`)}>{checkoutPlan ? checkoutLabels[locale].starting : planIndex === 2 ? "Kjøp Bedrift" : "Kjøp Pro"}</Button>}
+              {planIndex === 0 ? <Link to="/"><Button className="mt-7 w-full">Kom i gang</Button></Link> : <Button className="mt-7 w-full" variant={focusedPlan === planIndex ? "default" : "secondary"} disabled={checkoutPlan !== null} onClick={() => void startCheckout(`${planIndex === 2 ? "business" : "pro"}-${yearly ? "yearly" : "monthly"}`)}>{checkoutPlan ? checkoutLabels[locale].starting : planIndex === 2 ? "Kjøp Bedrift" : "Kjøp Pro"}</Button>}
             </article>
           ))}
         </section>
