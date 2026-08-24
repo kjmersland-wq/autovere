@@ -7,7 +7,7 @@ import { ContactModal } from "@/components/ContactModal";
 import { ShareModal } from "@/components/ShareModal";
 import { FeatureHighlights } from "@/components/FeatureHighlights";
 import { RouteMap } from "@/components/RouteMap";
-import { Breakdown, RouteCard, TradeoffBanner } from "@/components/Comparison";
+import { Breakdown, EvSavingsCard, RouteCard, TradeoffBanner } from "@/components/Comparison";
 import { VignetteChecklist } from "@/components/VignetteChecklist";
 import { SafetyRegulations } from "@/components/SafetyRegulations";
 import { NavigationSheet } from "@/components/NavigationSheet";
@@ -191,6 +191,7 @@ function Index() {
   const [loading, setLoading] = useState(false);
   const [routes, setRoutes] = useState<Partial<Record<RouteVariantKey, RouteResult>>>({});
   const [estimates, setEstimates] = useState<Estimate[]>([]);
+  const [evComparisonEstimates, setEvComparisonEstimates] = useState<Estimate[]>([]);
   const [chargers, setChargers] = useState<Charger[]>([]);
   const [scenicHighlights, setScenicHighlights] = useState<ScenicHighlight[]>([]);
   const [selectedScenicIds, setSelectedScenicIds] = useState<string[]>([]);
@@ -219,12 +220,10 @@ function Index() {
       if (!map.fastest) throw new Error("No drivable route between these places.");
 
       let found: Charger[] = [];
-      if (input.vehicle === "ev") {
-        try {
-          found = await fetchFastChargers(map.fastest.coords);
-        } catch {
-          toast.warning(t.chargingUnavailable);
-        }
+      try {
+        found = await fetchFastChargers(map.fastest.coords);
+      } catch {
+        if (input.vehicle === "ev") toast.warning(t.chargingUnavailable);
       }
       setChargers(found);
       const scenic = await fetchScenicHighlights(map.fastest.coords, found);
@@ -241,8 +240,11 @@ function Index() {
         evRangeKm: input.evRangeKm,
       };
       const next = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, trip, found));
+      const comparisonTrip = { ...trip, vehicle: input.vehicle === "ev" ? "petrol" as const : "ev" as const, fuelType: input.vehicle === "ev" ? "ICE" as const : "EV" as const };
+      const comparison = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, comparisonTrip, found));
       setRoutes(map);
       setEstimates(next);
+      setEvComparisonEstimates(comparison);
       setSubmitted(input);
       const cheapest = next.reduce((a, b) => (a.total <= b.total ? a : b));
       setSelected(cheapest.key);
@@ -269,7 +271,21 @@ function Index() {
     void run(next);
   }
 
+  function showEvDetails() {
+    const next = {
+      ...form,
+      vehicle: "ev" as const,
+      fuelType: "EV" as const,
+      autoPass: form.from?.country === "NO" ? true : form.autoPass,
+    };
+    setForm(next);
+    void run(next);
+  }
+
   const selectedEst = estimates.find((e) => e.key === selected) ?? estimates[0];
+  const comparisonEst = selectedEst
+    ? evComparisonEstimates.find((e) => e.key === selectedEst.key)
+    : undefined;
   const selectedRoute = selectedEst ? routes[selectedEst.key] : undefined;
   const cheapestKey = estimates.length
     ? estimates.reduce((a, b) => (a.total <= b.total ? a : b)).key
@@ -463,6 +479,16 @@ function Index() {
                   onSelect={() => setSelected(e.key)}
                 />
               ))}
+              {selectedEst && comparisonEst && (
+                <EvSavingsCard
+                  vehicle={submitted?.vehicle ?? form.vehicle}
+                  evEstimate={submitted?.vehicle === "ev" ? selectedEst : comparisonEst}
+                  fossilEstimate={submitted?.vehicle === "ev" ? comparisonEst : selectedEst}
+                  fossilLabel={submitted?.vehicle === "diesel" ? t.diesel : t.petrol}
+                  currency={currency}
+                  onShowDetails={showEvDetails}
+                />
+              )}
             </div>
           </div>
 

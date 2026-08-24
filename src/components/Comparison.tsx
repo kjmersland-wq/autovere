@@ -1,5 +1,5 @@
 import { Clock, Route as RouteIcon, Zap, BatteryCharging, TrendingDown, Check } from "lucide-react";
-import { type Estimate } from "@/lib/calc";
+import { type Estimate, type VehicleType } from "@/lib/calc";
 import { formatCurrency, type CurrencyCode } from "@/lib/currency";
 import { FLAGS } from "@/lib/countries";
 import { countryName, dynamicText, useLocale, useT } from "@/lib/i18n";
@@ -17,6 +17,64 @@ const DOT: Record<RouteVariantKey, string> = {
   bypass: "bg-route-bypass",
   tollfree: "bg-route-free",
 };
+
+const savingsCopy = {
+  en: { heading: "What would this trip cost in an EV?", smart: "Smart choice! You save an estimated {savings} on this trip compared with petrol/diesel.", evTotal: "Total price with an EV", compared: "vs.", fossil: "with", saved: "You save {savings} on this trip!", energy: "Lower fuel/charging cost", tolls: "Discounted tolls and environmental benefits", details: "See details for an EV", minutes: "Estimated charging time: +{time} minutes." },
+  de: { heading: "Was würde dieser Roadtrip mit einem E-Auto kosten?", smart: "Klug gewählt! Du sparst auf dieser Strecke schätzungsweise {savings} im Vergleich zu Benzin/Diesel.", evTotal: "Gesamtpreis mit E-Auto", compared: "vs.", fossil: "mit", saved: "Du sparst {savings} auf dieser Strecke!", energy: "Niedrigere Kraftstoff-/Ladekosten", tolls: "Vergünstigte Maut und Umweltvorteile", details: "Details zum E-Auto ansehen", minutes: "Geschätzte Ladezeit: +{time} Minuten." },
+  no: { heading: "Hva om du kjørte elbil?", smart: "Smart valg! Du sparer anslagsvis {savings} på denne turen sammenlignet med bensin/diesel.", evTotal: "Totalpris med elbil", compared: "vs.", fossil: "med", saved: "Du sparer {savings} på denne turen!", energy: "Lavere drivstoff-/ladekostnad", tolls: "Rabatterte bompenger og miljøfordeler", details: "Se detaljer for elbil", minutes: "Beregnet ladetid: +{time} minutter." },
+  pl: { heading: "Ile kosztowałaby ta podróż samochodem elektrycznym?", smart: "Dobry wybór! Szacunkowo oszczędzasz {savings} w porównaniu z benzyną/dieslem.", evTotal: "Całkowity koszt z EV", compared: "vs.", fossil: "z", saved: "Oszczędzasz {savings} na tej trasie!", energy: "Niższy koszt paliwa/ładowania", tolls: "Niższe opłaty i korzyści środowiskowe", details: "Zobacz szczegóły dla EV", minutes: "Szacowany czas ładowania: +{time} minut." },
+  nl: { heading: "Wat zou deze rit kosten met een EV?", smart: "Slimme keuze! Je bespaart naar schatting {savings} op deze rit vergeleken met benzine/diesel.", evTotal: "Totale prijs met een EV", compared: "vs.", fossil: "met", saved: "Je bespaart {savings} op deze rit!", energy: "Lagere brandstof-/laadkosten", tolls: "Korting op tol en milieuvoordelen", details: "Bekijk EV-details", minutes: "Geschatte laadtijd: +{time} minuten." },
+} as const;
+
+function replaceCopy(text: string, values: Record<string, string>): string {
+  return Object.entries(values).reduce((result, [key, value]) => result.replace(`{${key}}`, value), text);
+}
+
+export function EvSavingsCard({
+  vehicle,
+  evEstimate,
+  fossilEstimate,
+  fossilLabel,
+  currency,
+  onShowDetails,
+}: {
+  vehicle: VehicleType;
+  evEstimate: Estimate;
+  fossilEstimate: Estimate;
+  fossilLabel: string;
+  currency: CurrencyCode;
+  onShowDetails: () => void;
+}) {
+  const { locale } = useLocale();
+  const copy = savingsCopy[locale];
+  const savings = Math.max(0, fossilEstimate.total - evEstimate.total);
+  const energySavings = Math.max(0, fossilEstimate.energyCost - evEstimate.energyCost);
+  const tollSavings = Math.max(0, fossilEstimate.tollCost - evEstimate.tollCost);
+  const isEv = vehicle === "ev";
+
+  return (
+    <aside className="rounded-xl border border-primary/60 bg-slate-950 p-5 text-slate-100 shadow-[0_0_24px_rgba(45,212,191,0.2)]">
+      <div className="flex items-start gap-3">
+        <Zap className="mt-1 size-6 shrink-0 text-primary" aria-hidden />
+        <div className="min-w-0 flex-1">
+          <h3 className="text-lg font-extrabold text-primary">{isEv ? copy.smart.replace("{savings}", formatCurrency(savings, currency)) : copy.heading}</h3>
+          <p className="mt-3 text-sm leading-relaxed text-slate-200">
+            {copy.evTotal}: <strong>{formatCurrency(evEstimate.total, currency)}</strong> {copy.compared} <strong>{formatCurrency(fossilEstimate.total, currency)}</strong> {copy.fossil} {fossilLabel}.
+          </p>
+          <p className="mt-3 text-base font-bold text-primary">{replaceCopy(copy.saved, { savings: formatCurrency(savings, currency) })}</p>
+          <ul className="mt-3 space-y-1.5 text-sm text-slate-300">
+            <li>• {copy.energy}: {formatCurrency(energySavings, currency)}</li>
+            <li>• {copy.tolls}: {formatCurrency(tollSavings, currency)}</li>
+          </ul>
+          {!isEv && evEstimate.ev && (
+            <p className="mt-3 text-sm text-slate-300">{replaceCopy(copy.minutes, { time: String(evEstimate.ev.chargingMinutes) })}</p>
+          )}
+          {!isEv && <button type="button" onClick={onShowDetails} className="mt-4 rounded-lg bg-primary px-4 py-2 text-sm font-bold text-primary-foreground transition-colors hover:bg-primary/85">{copy.details}</button>}
+        </div>
+      </div>
+    </aside>
+  );
+}
 
 export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[]; currency: CurrencyCode }) {
   const t = useT();
