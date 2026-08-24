@@ -221,7 +221,7 @@ const LEGAL_MODAL_COPY = {
 function Index() {
   const t = useT();
   const { locale, setLocale } = useLocale();
-  const marketing = marketingCopy[locale];
+  const marketing = marketingCopy[locale] ?? marketingCopy.en;
   const legalCopy = LEGAL_MODAL_COPY[locale as keyof typeof LEGAL_MODAL_COPY] ?? LEGAL_MODAL_COPY.no;
   const [form, setForm] = useState<TripFormState>({
     from: null,
