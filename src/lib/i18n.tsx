@@ -9,7 +9,7 @@ export const en = {
 } as const;
 
 export type Dict = typeof en;
-export type Locale = "en" | "de" | "nl" | "no" | "pl" | "sv";
+export type Locale = "en" | "de" | "nl" | "no" | "pl" | "sv" | "fr";
 
 export const autoPassLabels: Record<Locale, string> = {
   en: "AutoPASS / Tag agreement",
@@ -18,7 +18,14 @@ export const autoPassLabels: Record<Locale, string> = {
   no: "AutoPASS / brikkeavtale",
   pl: "AutoPASS / umowa opłat",
   sv: "AutoPASS / Bizz-avtal",
+  fr: "AutoPASS / contrat de péage",
 };
+
+const fr: Dict = {
+  ...en,
+  back: "Retour au planificateur",
+  brand: "AutoVere", tagline: "Intelligence européenne pour les péages, les vignettes et la recharge", heroTitle: "Connaissez le vrai coût avant de partir.", heroSub: "Des estimations claires des péages, vignettes, carburant et recharges pour vos trajets en Europe, fondées sur des données ouvertes.", from: "Départ", to: "Arrivée", fromPlaceholder: "Oslo, Norvège", toPlaceholder: "Milan, Italie", vehicle: "Véhicule", petrol: "Essence", diesel: "Diesel", ev: "Électrique (VE)", batteryRange: "Autonomie réelle", chargingBuffer: "Les arrêts sont planifiés à 75 % de cette autonomie pour conserver une marge.", tripDuration: "Durée du trajet", days: "jours", day: "jour", year: "an", calculate: "Calculer mon trajet", calculating: "Calcul en cours…", comparison: "Comparaison des itinéraires", fastest: "Itinéraire le plus rapide", bypass: "Itinéraire malin", tollfree: "100 % sans péage", distance: "Distance", driveTime: "Temps de conduite", fuel: "Carburant", charging: "Recharge", tolls: "Péages", vignettes: "Vignettes", total: "Coût total du trajet", openGoogle: "Ouvrir dans Google Maps", openApple: "Ouvrir dans Apple Plans", downloadGpx: "Télécharger le GPX", checklist: "Liste des vignettes officielles", checklistSub: "Achetez uniquement sur ces portails officiels.", chargingStops: "Arrêts de recharge", chargingTime: "Temps de recharge", noVignettes: "Aucune vignette requise sur cet itinéraire.", selected: "Sélectionné", select: "Choisir l'itinéraire", language: "Langue", currency: "Devise", popularRoutes: "Itinéraires populaires", featureEvTitle: "Autonomie réelle et recharge", featureEvDescription: "Calcule les intervalles de recharge avec une marge de sécurité de 75 %.", featureMarkupTitle: "Aucune majoration", featureMarkupDescription: "Liens directs vers les portails officiels des vignettes et d'AutoPASS/EPASS24.", featureScenicTitle: "Détours panoramiques et économiques", featureScenicDescription: "Comparez les tunnels et péages coûteux aux cols alpins pittoresques.", all: "Tous", camping: "Camping et camping-car", lodging: "Hôtels et hébergements", food: "Restaurants et cafés", sights: "Vues et sites", viewpoint: "Point de vue", history: "Histoire", nature: "Nature", coffeeStop: "Pause-café", directlyOnRoute: "Directement sur l'itinéraire", minDetour: (m) => `+${m} min de détour`, openMap: "Cartes", website: "Site web", add: "Ajouter", added: "Ajouté", legalNotice: "Informations légales", privacyPolicy: "Politique de confidentialité", termsDisclaimer: "Conditions et avertissement", badgeMath: "Calculs instantanés", badgeOffline: "Installable et utilisable hors ligne", badgeOfficial: "Portails officiels uniquement", cheapest: "Le moins cher", noTolls: "Aucun péage sur cet itinéraire", pumpPrices: "Prix du carburant par pays", fullBreakdown: "Détail complet", estimatedConsumption: "Consommation estimée", earnedPerHour: "économisés par heure de détour", calculationFailed: "Le calcul a échoué. Veuillez réessayer.", chargingUnavailable: "Le réseau de recharge est temporairement indisponible.", gpxDownloaded: "GPX téléchargé — importez-le dans votre GPS.", routeCompared: (count, route) => `${count} itinéraires comparés — le moins cher : ${route}`,
+} as const;
 
 const sv: Dict = {
   ...en,
@@ -48,6 +55,7 @@ export const locales: Record<Locale, Dict> = {
   no: { ...noComplete, addStop: "Legg til stopp", stop: "Stopp", stopPlaceholder: "Et sted på veien", remove: "Fjern", contactTitle: "Send oss en melding", contactDescription: "Har du et spørsmål eller en idé? Skriv til oss, så svarer vi så snart vi kan.", contactName: "Navn", contactNamePlaceholder: "Navnet ditt", contactEmail: "E-post", contactEmailPlaceholder: "du@eksempel.no", contactSubject: "Emne", contactSubjectPlaceholder: "Hva gjelder det?", contactMessage: "Melding", contactMessagePlaceholder: "Hva har du på hjertet?", contactSend: "Send melding", contactSending: "Sender...", contactSuccess: "Takk for meldingen", contactSuccessText: "Meldingen er sendt. Vi svarer så snart vi kan.", contactClose: "Lukk", contactError: "Meldingen ble ikke sendt. Prøv igjen.", contactLink: "Send melding via kontaktskjema", statEvHubs: "1 400+ lynraske EV-ladepunkter", statTollSystems: "28 europeiske bom- og vignettordninger", statScenicSpots: "10 000+ naturskjønne steder og campingplasser" },
   pl: { ...plComplete, addStop: "Dodaj przystanek", stop: "Przystanek", stopPlaceholder: "Miejsce po drodze", remove: "Usuń", contactTitle: "Wyślij nam wiadomość", contactDescription: "Masz pytanie albo pomysł? Napisz do nas, a odezwiemy się tak szybko, jak to możliwe.", contactName: "Imię", contactNamePlaceholder: "Twoje imię", contactEmail: "E-mail", contactEmailPlaceholder: "ty@przyklad.pl", contactSubject: "Temat", contactSubjectPlaceholder: "Czego dotyczy wiadomość?", contactMessage: "Wiadomość", contactMessagePlaceholder: "Napisz, co masz na myśli...", contactSend: "Wyślij wiadomość", contactSending: "Wysyłanie...", contactSuccess: "Dziękujemy za wiadomość", contactSuccessText: "Wiadomość została wysłana. Odezwiemy się tak szybko, jak możemy.", contactClose: "Zamknij", contactError: "Nie udało się wysłać wiadomości. Spróbuj ponownie.", contactLink: "Wyślij wiadomość przez formularz kontaktowy", statEvHubs: "Ponad 1 400 ultraszybkich hubów EV", statTollSystems: "28 europejskich systemów opłat i winiet", statScenicSpots: "Ponad 10 000 atrakcji i campingów" },
     sv,
+  fr,
 };
 const Context = createContext<{ t: Dict; locale: Locale; setLocale: (locale: string) => void }>({ t: en, locale: "en", setLocale: () => {} });
 
@@ -57,7 +65,7 @@ export function I18nProvider({ children }: { children: ReactNode }) {
     const saved = window.localStorage.getItem("autovere-locale");
     const browser = navigator.language.toLowerCase();
     const requested = new URLSearchParams(window.location.search).get("lang");
-    const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("nl") ? "nl" : browser.startsWith("no") || browser.startsWith("nb") || browser.startsWith("nn") ? "no" : browser.startsWith("pl") ? "pl" : browser.startsWith("sv") ? "sv" : "en";
+    const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("nl") ? "nl" : browser.startsWith("no") || browser.startsWith("nb") || browser.startsWith("nn") ? "no" : browser.startsWith("pl") ? "pl" : browser.startsWith("sv") ? "sv" : browser.startsWith("fr") ? "fr" : "en";
     const next = requested && requested in locales ? requested as Locale : saved && saved in locales ? saved as Locale : detected;
     setLocaleState(next);
     document.documentElement.lang = next;
