@@ -410,14 +410,14 @@ function Index() {
                 className="rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground outline-none focus:border-primary/60"
                 aria-label={t.language}
               >
-                <option value="en">🇬🇧 GB EN</option>
-                <option value="no">🇳🇴 NO NO</option>
-                <option value="sv">🇸🇪 SE SV</option>
-                <option value="da">🇩🇰 DK DA</option>
-                <option value="de">🇩🇪 DE DE</option>
-                <option value="nl">🇳🇱 NL NL</option>
-                <option value="fr">🇫🇷 FR FR</option>
-                <option value="pl">🇵🇱 PL PL</option>
+                <option value="en">🇬🇧 EN</option>
+                <option value="no">🇳🇴 NO</option>
+                <option value="sv">🇸🇪 SV</option>
+                <option value="da">🇩🇰 DA</option>
+                <option value="de">🇩🇪 DE</option>
+                <option value="nl">🇳🇱 NL</option>
+                <option value="fr">🇫🇷 FR</option>
+                <option value="pl">🇵🇱 PL</option>
               </select>
             </label>
             <button
