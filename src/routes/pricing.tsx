@@ -23,9 +23,11 @@ function PricingPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ priceId, locale }),
       });
-      const payload = (await result.json()) as { url?: string; error?: string };
-      if (!result.ok || !payload.url) throw new Error(payload.error || checkoutLabels[locale].error);
-      window.location.assign(payload.url);
+      const data = (await result.json()) as { url?: string; error?: string };
+      if (!result.ok || !data.url) throw new Error(data.error || checkoutLabels[locale].error);
+      if (data.url) {
+        window.location.href = data.url;
+      }
     } catch (error) {
       console.error(error);
       setCheckoutError(error instanceof Error ? error.message : checkoutLabels[locale].error);

@@ -12,9 +12,11 @@ const priceEnvByKey: Record<string, string> = {
 };
 
 function siteUrl(request: Request): string {
-  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXTAUTH_URL;
-  if (configuredUrl) return configuredUrl.replace(/\/$/, "");
-  return new URL(request.url).origin;
+  let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://autovere.com";
+  if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
+    baseUrl = `https://${baseUrl}`;
+  }
+  return baseUrl.replace(/\/$/, "");
 }
 
 export const Route = createFileRoute("/api/checkout")({
@@ -50,8 +52,8 @@ export const Route = createFileRoute("/api/checkout")({
             mode: "subscription",
             line_items: [{ price: priceId, quantity: 1 }],
             locale: stripeLocale as Stripe.Checkout.SessionCreateParams.Locale,
-            success_url: `${siteUrl(request)}/pricing?checkout=success&locale=${locale}`,
-            cancel_url: `${siteUrl(request)}/pricing?checkout=cancelled&locale=${locale}`,
+            success_url: `${siteUrl(request)}/pricing?success=true&session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${siteUrl(request)}/pricing?canceled=true`,
             allow_promotion_codes: true,
             billing_address_collection: "auto",
             metadata: { locale, plan: requestedPrice || "configured-price" },
