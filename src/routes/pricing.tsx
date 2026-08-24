@@ -27,6 +27,7 @@ function PricingPage() {
       if (!result.ok || !payload.url) throw new Error(payload.error || checkoutLabels[locale].error);
       window.location.assign(payload.url);
     } catch (error) {
+      console.error(error);
       setCheckoutError(error instanceof Error ? error.message : checkoutLabels[locale].error);
       setCheckoutPlan(null);
     }

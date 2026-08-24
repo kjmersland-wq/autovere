@@ -15,6 +15,7 @@ import { Route as LegalRouteImport } from './routes/legal'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
+import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -46,6 +47,11 @@ const TermsRoute = TermsRouteImport.update({
   path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
+  id: '/api/checkout',
+  path: '/api/checkout',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -54,6 +60,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/api/checkout': typeof ApiCheckoutRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -62,6 +69,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/api/checkout': typeof ApiCheckoutRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -71,13 +79,36 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
+  '/api/checkout': typeof ApiCheckoutRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/faq' | '/legal' | '/pricing' | '/privacy' | '/terms'
+  fullPaths:
+    | '/'
+    | '/faq'
+    | '/legal'
+    | '/pricing'
+    | '/privacy'
+    | '/terms'
+    | '/api/checkout'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/faq' | '/legal' | '/pricing' | '/privacy' | '/terms'
-  id: '__root__' | '/' | '/faq' | '/legal' | '/pricing' | '/privacy' | '/terms'
+  to:
+    | '/'
+    | '/faq'
+    | '/legal'
+    | '/pricing'
+    | '/privacy'
+    | '/terms'
+    | '/api/checkout'
+  id:
+    | '__root__'
+    | '/'
+    | '/faq'
+    | '/legal'
+    | '/pricing'
+    | '/privacy'
+    | '/terms'
+    | '/api/checkout'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -87,6 +118,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
+  ApiCheckoutRoute: typeof ApiCheckoutRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -133,6 +165,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/checkout': {
+      id: '/api/checkout'
+      path: '/api/checkout'
+      fullPath: '/api/checkout'
+      preLoaderRoute: typeof ApiCheckoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -143,6 +182,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
+  ApiCheckoutRoute: ApiCheckoutRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

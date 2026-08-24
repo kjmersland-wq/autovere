@@ -34,7 +34,8 @@ function parseBody(body: VercelRequest["body"]): CheckoutBody {
 }
 
 function siteUrl(request: VercelRequest): string {
-  if (process.env.NEXT_PUBLIC_SITE_URL) return process.env.NEXT_PUBLIC_SITE_URL.replace(/\/$/, "");
+  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXTAUTH_URL;
+  if (configuredUrl) return configuredUrl.replace(/\/$/, "");
   const host = request.headers.host ?? process.env.VERCEL_URL ?? "localhost:3000";
   return `${host.includes("localhost") ? "http" : "https"}://${host}`;
 }
@@ -62,6 +63,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
   }
 
   try {
+    await stripe.prices.retrieve(priceId);
     const stripeLocale = locale === "no" ? "nb" : locale;
     const session = await stripe.checkout.sessions.create({
       mode: "subscription",
@@ -76,7 +78,13 @@ export default async function handler(request: VercelRequest, response: VercelRe
     if (!session.url) throw new Error("Stripe did not return a Checkout URL");
     response.status(200).json({ url: session.url });
   } catch (error) {
-    console.error("Stripe Checkout session failed", error);
-    response.status(500).json({ error: "Could not start checkout." });
+    const stripeError = error as Stripe.errors.StripeError;
+    console.error("Stripe Checkout session failed", {
+      message: stripeError.message,
+      type: stripeError.type,
+      code: stripeError.code,
+    });
+    const statusCode = typeof stripeError.statusCode === "number" && stripeError.statusCode >= 400 && stripeError.statusCode < 500 ? stripeError.statusCode : 500;
+    response.status(statusCode).json({ error: stripeError.message || "Could not start checkout." });
   }
 }
