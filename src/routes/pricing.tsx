@@ -66,7 +66,7 @@ function PricingPage() {
               <ul className="mt-6 flex-1 space-y-3 text-sm text-muted-foreground">
                 {plan.features.map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" /> <span>{feature}</span></li>)}
               </ul>
-              {planIndex === 0 ? <Link to="/"><Button className="mt-7 w-full">{plan.action}</Button></Link> : <Button className="mt-7 w-full" variant={plan.featured ? "default" : "secondary"} disabled={checkoutPlan !== null} onClick={() => void startCheckout(`${planIndex === 2 ? "business" : "pro"}-${yearly ? "yearly" : "monthly"}`)}>{checkoutPlan ? checkoutLabels[locale].starting : planIndex === 2 ? "Velg Bedrift" : plan.action}</Button>}
+              {planIndex === 0 ? <Link to="/"><Button className="mt-7 w-full">Kom i gang</Button></Link> : <Button className="mt-7 w-full" variant="default" disabled={checkoutPlan !== null} onClick={() => void startCheckout(`${planIndex === 2 ? "business" : "pro"}-${yearly ? "yearly" : "monthly"}`)}>{checkoutPlan ? checkoutLabels[locale].starting : planIndex === 2 ? "Kjøp Bedrift" : "Kjøp Pro"}</Button>}
             </article>
           ))}
         </section>

@@ -11,14 +11,6 @@ const priceEnvByKey: Record<string, string> = {
   "business-yearly": "STRIPE_BUSINESS_YEARLY_PRICE_ID",
 };
 
-function siteUrl(request: Request): string {
-  let baseUrl = process.env.NEXT_PUBLIC_SITE_URL || process.env.NEXTAUTH_URL || "https://autovere.com";
-  if (!baseUrl.startsWith("http://") && !baseUrl.startsWith("https://")) {
-    baseUrl = `https://${baseUrl}`;
-  }
-  return baseUrl.replace(/\/$/, "");
-}
-
 export const Route = createFileRoute("/api/checkout")({
   server: {
     handlers: {
@@ -48,12 +40,14 @@ export const Route = createFileRoute("/api/checkout")({
           const stripe = new Stripe(secret);
           await stripe.prices.retrieve(priceId);
           const stripeLocale = locale === "no" ? "nb" : locale;
+          const success_url = "https://autovere.com/pricing?success=true";
+          const cancel_url = "https://autovere.com/pricing?canceled=true";
           const session = await stripe.checkout.sessions.create({
             mode: "subscription",
             line_items: [{ price: priceId, quantity: 1 }],
             locale: stripeLocale as Stripe.Checkout.SessionCreateParams.Locale,
-            success_url: `${siteUrl(request)}/pricing?success=true&session_id={CHECKOUT_SESSION_ID}`,
-            cancel_url: `${siteUrl(request)}/pricing?canceled=true`,
+            success_url,
+            cancel_url,
             allow_promotion_codes: true,
             billing_address_collection: "auto",
             metadata: { locale, plan: requestedPrice || "configured-price" },
