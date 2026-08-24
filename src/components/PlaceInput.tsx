@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { MapPin, Loader2 } from "lucide-react";
 import { searchPlaces, type Place } from "@/lib/geo";
+import { COUNTRY_NAMES, FLAGS } from "@/lib/countries";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -86,15 +87,22 @@ export function PlaceInput({ label, placeholder, value, onChange }: Props) {
             <li key={r.id}>
               <button
                 type="button"
-                className="flex w-full flex-col items-start gap-0.5 rounded-lg px-3 py-2 text-left transition-colors hover:bg-accent"
+                className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-colors hover:bg-accent"
                 onClick={() => {
                   onChange(r);
                   setQuery(r.name);
                   setOpen(false);
                 }}
               >
-                <span className="text-sm font-semibold text-foreground">{r.name}</span>
-                <span className="line-clamp-1 text-xs text-muted-foreground">{r.label}</span>
+                <span className="flex size-8 shrink-0 items-center justify-center text-xl" aria-hidden>
+                  {FLAGS[r.country ?? ""] ?? "🌍"}
+                </span>
+                <span className="min-w-0">
+                  <span className="block text-sm font-semibold text-foreground">{r.name}</span>
+                  <span className="block truncate text-xs text-muted-foreground">
+                    {r.country ? (r.country === "GB" ? "UK" : COUNTRY_NAMES[r.country] ?? r.country) : r.label}
+                  </span>
+                </span>
               </button>
             </li>
           ))}
