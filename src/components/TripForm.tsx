@@ -4,7 +4,7 @@ import { Slider } from "@/components/ui/slider";
 import { Button } from "@/components/ui/button";
 import type { Place } from "@/lib/geo";
 import type { VehicleType } from "@/lib/calc";
-import { autoPassLabels, useLocale, useT } from "@/lib/i18n";
+import { autoPassLabels, durationLabels, useLocale, useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export type TripFormState = {
@@ -16,6 +16,7 @@ export type TripFormState = {
   autoPass: boolean;
   evRangeKm: number;
   days: number;
+  durationMode: "preset" | "custom";
 };
 
 export type DemoRoute = "oslo-garda" | "munich-split" | "paris-nice";
@@ -42,12 +43,15 @@ export function TripForm({
     { key: "diesel", label: t.diesel, icon: Droplets },
     { key: "ev", label: t.ev, icon: Zap },
   ];
+  const customDuration = state.durationMode === "custom";
+  const durationIsValid = Number.isInteger(state.days) && state.days >= 1 && state.days <= 3650;
 
   return (
     <form
       className="panel rounded-2xl border-border/60 bg-card/80 p-5 shadow-2xl backdrop-blur-md sm:p-7"
       onSubmit={(e) => {
         e.preventDefault();
+        if (!durationIsValid) return;
         onSubmit();
       }}
     >
@@ -144,12 +148,12 @@ export function TripForm({
           </span>
           <div className="flex flex-wrap gap-2">
             {DAY_PRESETS.map((d) => {
-              const active = state.days === d;
+              const active = state.durationMode === "preset" && state.days === d;
               return (
                 <button
                   key={d}
                   type="button"
-                  onClick={() => setState({ ...state, days: d })}
+                  onClick={() => setState({ ...state, days: d, durationMode: "preset" })}
                   className={cn(
                     "numeric rounded-lg border px-3.5 py-2 text-sm font-semibold transition-all",
                     active
@@ -161,7 +165,49 @@ export function TripForm({
                 </button>
               );
             })}
+            <button
+              type="button"
+              onClick={() => setState({ ...state, durationMode: "custom", days: durationIsValid ? state.days : 1 })}
+              className={cn(
+                "numeric rounded-lg border px-3.5 py-2 text-sm font-semibold transition-all",
+                customDuration
+                  ? "border-primary/70 bg-primary/15 text-primary"
+                  : "border-border bg-surface-raised text-muted-foreground hover:text-foreground",
+              )}
+              aria-pressed={customDuration}
+            >
+              {durationLabels[locale].custom}
+            </button>
           </div>
+          {customDuration && (
+            <div className="mt-3 space-y-1.5">
+              <label htmlFor="custom-trip-days" className="text-xs font-semibold text-muted-foreground">
+                {durationLabels[locale].custom}
+              </label>
+              <input
+                id="custom-trip-days"
+                type="number"
+                inputMode="numeric"
+                min={1}
+                max={3650}
+                step={1}
+                value={state.days}
+                onChange={(event) => {
+                  const rawValue = event.target.value;
+                  const isWholeNumber = /^\d*$/.test(rawValue);
+                  const value = rawValue === "" ? 0 : Number(rawValue);
+                  setState({ ...state, durationMode: "custom", days: isWholeNumber ? value : 0 });
+                }}
+                className={cn(
+                  "numeric w-full rounded-lg border bg-surface-raised px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60",
+                  !durationIsValid ? "border-destructive" : "border-border",
+                )}
+                aria-invalid={!durationIsValid}
+                aria-describedby="custom-trip-days-error"
+              />
+              {!durationIsValid && <p id="custom-trip-days-error" className="text-xs text-destructive">{durationLabels[locale].invalid}</p>}
+            </div>
+          )}
         </div>
       </div>
 
@@ -188,7 +234,7 @@ export function TripForm({
       <Button
         type="submit"
         size="lg"
-        disabled={!state.from || !state.to || loading}
+        disabled={!state.from || !state.to || loading || !durationIsValid}
         className="mt-6 h-13 w-full rounded-xl text-base font-bold"
       >
         {loading ? (

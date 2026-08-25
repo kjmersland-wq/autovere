@@ -1,3 +1,12 @@
+export const durationLabels: Record<Locale, { custom: string; invalid: string }> = {
+  en: { custom: "Custom", invalid: "Enter a whole number of days between 1 and 3650." },
+  de: { custom: "Benutzerdefiniert", invalid: "Gib eine ganze Zahl zwischen 1 und 3650 Tagen ein." },
+  nl: { custom: "Aangepast", invalid: "Voer een geheel aantal dagen tussen 1 en 3650 in." },
+  no: { custom: "Egendefinert", invalid: "Skriv inn et helt antall dager mellom 1 og 3650." },
+  pl: { custom: "Niestandardowy", invalid: "Wpisz całkowitą liczbę dni od 1 do 3650." },
+  sv: { custom: "Anpassad", invalid: "Ange ett helt antal dagar mellan 1 och 3650." },
+  fr: { custom: "Personnalisé", invalid: "Saisissez un nombre entier de jours entre 1 et 3650." },
+};
 import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
 export const en = {

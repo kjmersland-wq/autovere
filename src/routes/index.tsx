@@ -232,6 +232,7 @@ function Index() {
     autoPass: false,
     evRangeKm: 450,
     days: 10,
+    durationMode: "preset",
   });
   const [loading, setLoading] = useState(false);
   const [routes, setRoutes] = useState<Partial<Record<RouteVariantKey, RouteResult>>>({});
