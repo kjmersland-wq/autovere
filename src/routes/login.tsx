@@ -13,7 +13,7 @@ function LoginPage() {
     setLoading(true);
     setMessage("");
     try {
-      const response = await fetch("/api/auth/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
+      const response = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
       const data = (await response.json()) as { error?: string };
       if (!response.ok) throw new Error(data.error || "Could not send the login email.");
       setMessage("Check your email for a secure AutoVere login link.");
