@@ -23,7 +23,7 @@ function authBaseUrl(): string {
   const raw = (process.env["AUTH_BASE_URL"] || process.env["NEXT_PUBLIC_SITE_URL"] || "https://autovere.com").trim();
   // Tolerate a value accidentally pasted as a Markdown link, e.g. "[https://x](https://x)",
   // or wrapped in stray quotes - pull out the first real URL if one is embedded.
-  const embedded = raw.match(/https?:\/\/[^\s\]\)'"]+/);
+  const embedded = raw.match(/https?:\/\/[^\s\])'"]+/);
   const configured = (embedded ? embedded[0] : raw.replace(/^['"]|['"]$/g, "").trim()).replace(/\/$/, "");
   if (/^https?:\/\//.test(configured)) return configured;
   return `https://${configured}`;

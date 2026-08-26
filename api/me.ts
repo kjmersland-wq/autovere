@@ -66,6 +66,35 @@ export default async function handler(request: Request, response: Response) {
     }
     const price = active.items.data[0]?.price;
     const plan = planForPriceId(price?.id);
+    const periodEndRaw = (active as unknown as { current_period_end?: number }).current_period_end ?? active.items.data[0]?.current_period_end ?? null;
+    const renewsAt = periodEndRaw ? new Date(periodEndRaw * 1000).toISOString() : null;
+
+    let paymentMethod: { brand: string; last4: string } | null = null;
+    const defaultPm = !("deleted" in customer) ? customer.invoice_settings?.default_payment_method : undefined;
+    const pmId = typeof defaultPm === "string" ? defaultPm : active.default_payment_method;
+    if (typeof pmId === "string") {
+      try {
+        const pm = await stripe.paymentMethods.retrieve(pmId);
+        if (pm.card) paymentMethod = { brand: pm.card.brand, last4: pm.card.last4 };
+      } catch {
+        paymentMethod = null;
+      }
+    }
+
+    let invoices: { id: string; amount: number; currency: string; date: string; url: string | null }[] = [];
+    try {
+      const invoiceList = await stripe.invoices.list({ customer: customer.id, limit: 5 });
+      invoices = invoiceList.data.map((invoice) => ({
+        id: invoice.id ?? invoice.number ?? "",
+        amount: invoice.amount_paid / 100,
+        currency: invoice.currency.toUpperCase(),
+        date: new Date(invoice.created * 1000).toISOString(),
+        url: invoice.hosted_invoice_url ?? null,
+      }));
+    } catch {
+      invoices = [];
+    }
+
     response.status(200).json({
       email,
       subscription: {
@@ -74,6 +103,9 @@ export default async function handler(request: Request, response: Response) {
         tier: plan?.tier ?? null,
         interval: price?.recurring?.interval ?? null,
         cancelAtPeriodEnd: active.cancel_at_period_end,
+        renewsAt,
+        paymentMethod,
+        invoices,
       },
     });
   } catch (error) {
