@@ -79,7 +79,7 @@ function AccountPage() {
 
   useEffect(() => {
     let cancelled = false;
-    fetch("/api/me")
+    fetch("/api/account")
       .then(async (response) => {
         const body = (await response.json()) as MeResponse;
         if (cancelled) return;
@@ -101,7 +101,7 @@ function AccountPage() {
   async function logout() {
     setLoggingOut(true);
     try {
-      await fetch("/api/logout", { method: "POST" });
+      await fetch("/api/account?action=logout", { method: "POST" });
     } finally {
       window.location.href = "/";
     }
@@ -110,7 +110,7 @@ function AccountPage() {
   async function openBillingPortal() {
     setOpeningBilling(true);
     try {
-      const response = await fetch("/api/billing-portal", { method: "POST" });
+      const response = await fetch("/api/account?action=billing-portal", { method: "POST" });
       const body = (await response.json()) as { url?: string; error?: string };
       if (response.ok && body.url) {
         window.location.href = body.url;
@@ -124,7 +124,7 @@ function AccountPage() {
   async function deleteAccount() {
     setDeleting(true);
     try {
-      await fetch("/api/delete-account", { method: "POST" });
+      await fetch("/api/account?action=delete", { method: "POST" });
     } finally {
       window.location.href = "/";
     }
@@ -133,7 +133,7 @@ function AccountPage() {
   async function exportData() {
     setExporting(true);
     try {
-      const response = await fetch("/api/export-data");
+      const response = await fetch("/api/account?view=export");
       const blob = await response.blob();
       const url = URL.createObjectURL(blob);
       const link = document.createElement("a");
@@ -863,7 +863,7 @@ function PreferencesSection({ copy, locale, setLocale }: CopyProps & { locale: s
   const [savedFlag, setSavedFlag] = useState(false);
 
   useEffect(() => {
-    jsonFetch<{ settings: Settings }>("/api/settings")
+    jsonFetch<{ settings: Settings }>("/api/account?view=settings")
       .then((body) => setSettings(body.settings))
       .catch(() => setSettings({ language: null, currency: null, units: null, notificationsEmail: true }));
   }, []);
@@ -873,7 +873,7 @@ function PreferencesSection({ copy, locale, setLocale }: CopyProps & { locale: s
     setSaving(true);
     setSavedFlag(false);
     try {
-      await jsonFetch("/api/settings", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...settings, language: locale }) });
+      await jsonFetch("/api/account?view=settings", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...settings, language: locale }) });
       setSavedFlag(true);
     } finally {
       setSaving(false);

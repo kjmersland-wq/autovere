@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { randomUUID } from "node:crypto";
 import { neon } from "@neondatabase/serverless";
 
 type Request = IncomingMessage & { body?: unknown; query?: Record<string, string | string[]> };
@@ -33,16 +34,20 @@ function parseBody(body: unknown): Record<string, unknown> {
   return (body as Record<string, unknown>) ?? {};
 }
 
-function idFromUrl(request: Request): string {
+function idFromUrl(request: Request): string | null {
   const raw = request.query?.["id"];
-  if (typeof raw === "string") return raw;
+  if (Array.isArray(raw)) return raw[0] ?? null;
+  if (typeof raw === "string" && raw) return raw;
   const url = new URL(request.url ?? "", "http://localhost");
-  return url.pathname.split("/").pop() ?? "";
+  const segments = url.pathname.split("/").filter(Boolean);
+  return segments.length > 2 ? (segments[segments.length - 1] ?? null) : null;
 }
 
 function toPlace(row: PlaceRow) {
   return { id: row.id, name: row.name, category: row.category, lat: row.lat !== null ? Number(row.lat) : null, lon: row.lon !== null ? Number(row.lon) : null, notes: row.notes, createdAt: row.created_at };
 }
+
+const CATEGORIES = new Set(["charging", "camping", "attraction", "other"]);
 
 export default async function handler(request: Request, response: Response) {
   const email = readCookie(request, "autovere_user");
@@ -50,12 +55,40 @@ export default async function handler(request: Request, response: Response) {
     response.status(401).json({ error: "Not logged in" });
     return;
   }
+  const sql = getSql();
   const id = idFromUrl(request);
+
   if (!id) {
-    response.status(400).json({ error: "Missing place id." });
+    if (request.method === "GET") {
+      const rows = (await sql`SELECT id, name, category, lat, lon, notes, created_at FROM saved_places WHERE user_email = ${email} ORDER BY created_at DESC`) as PlaceRow[];
+      response.status(200).json({ places: rows.map(toPlace) });
+      return;
+    }
+    if (request.method === "POST") {
+      const body = parseBody(request.body);
+      const name = typeof body["name"] === "string" ? body["name"].trim().slice(0, 160) : "";
+      const category = typeof body["category"] === "string" ? body["category"] : "";
+      const lat = typeof body["lat"] === "number" && Number.isFinite(body["lat"]) ? body["lat"] : null;
+      const lon = typeof body["lon"] === "number" && Number.isFinite(body["lon"]) ? body["lon"] : null;
+      const notes = typeof body["notes"] === "string" ? body["notes"].trim().slice(0, 1000) : null;
+
+      if (!name || !CATEGORIES.has(category)) {
+        response.status(400).json({ error: "A place name and a valid category are required." });
+        return;
+      }
+
+      const newId = randomUUID();
+      const rows = (await sql`
+        INSERT INTO saved_places (id, user_email, name, category, lat, lon, notes)
+        VALUES (${newId}, ${email}, ${name}, ${category}, ${lat}, ${lon}, ${notes})
+        RETURNING id, name, category, lat, lon, notes, created_at
+      `) as PlaceRow[];
+      response.status(201).json({ place: toPlace(rows[0]!) });
+      return;
+    }
+    response.status(405).json({ error: "Method not allowed" });
     return;
   }
-  const sql = getSql();
 
   const owned = await sql`SELECT id FROM saved_places WHERE id = ${id} AND user_email = ${email}`;
   if (owned.length === 0) {

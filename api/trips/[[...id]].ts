@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { randomUUID } from "node:crypto";
 import { neon } from "@neondatabase/serverless";
 
 type Request = IncomingMessage & { body?: unknown; query?: Record<string, string | string[]> };
@@ -33,11 +34,13 @@ function parseBody(body: unknown): Record<string, unknown> {
   return (body as Record<string, unknown>) ?? {};
 }
 
-function idFromUrl(request: Request): string {
+function idFromUrl(request: Request): string | null {
   const raw = request.query?.["id"];
-  if (typeof raw === "string") return raw;
+  if (Array.isArray(raw)) return raw[0] ?? null;
+  if (typeof raw === "string" && raw) return raw;
   const url = new URL(request.url ?? "", "http://localhost");
-  return url.pathname.split("/").pop() ?? "";
+  const segments = url.pathname.split("/").filter(Boolean);
+  return segments.length > 2 ? (segments[segments.length - 1] ?? null) : null;
 }
 
 function toTrip(row: TripRow) {
@@ -61,12 +64,48 @@ export default async function handler(request: Request, response: Response) {
     response.status(401).json({ error: "Not logged in" });
     return;
   }
+  const sql = getSql();
   const id = idFromUrl(request);
+
   if (!id) {
-    response.status(400).json({ error: "Missing trip id." });
+    if (request.method === "GET") {
+      const rows = (await sql`SELECT id, name, from_place, to_place, vehicle_type, currency, days, estimate, created_at, updated_at FROM trips WHERE user_email = ${email} ORDER BY updated_at DESC LIMIT 100`) as TripRow[];
+      response.status(200).json({ trips: rows.map(toTrip) });
+      return;
+    }
+    if (request.method === "POST") {
+      const body = parseBody(request.body);
+      const name = typeof body["name"] === "string" ? body["name"].trim().slice(0, 160) : "";
+      const fromPlace = typeof body["fromPlace"] === "string" ? body["fromPlace"].trim().slice(0, 160) : null;
+      const toPlace = typeof body["toPlace"] === "string" ? body["toPlace"].trim().slice(0, 160) : null;
+      const vehicleType = typeof body["vehicleType"] === "string" ? body["vehicleType"].slice(0, 40) : null;
+      const currency = typeof body["currency"] === "string" ? body["currency"].slice(0, 10) : null;
+      const days = typeof body["days"] === "number" && Number.isFinite(body["days"]) ? Math.round(body["days"]) : null;
+      const estimate = body["estimate"] && typeof body["estimate"] === "object" ? body["estimate"] : null;
+
+      if (!name) {
+        response.status(400).json({ error: "A trip name is required." });
+        return;
+      }
+
+      const countRow = (await sql`SELECT count(*)::int AS count FROM trips WHERE user_email = ${email}`) as { count: number }[];
+      if ((countRow[0]?.count ?? 0) >= 200) {
+        response.status(400).json({ error: "You've reached the saved trip limit. Delete an old trip first." });
+        return;
+      }
+
+      const newId = randomUUID();
+      const rows = (await sql`
+        INSERT INTO trips (id, user_email, name, from_place, to_place, vehicle_type, currency, days, estimate)
+        VALUES (${newId}, ${email}, ${name}, ${fromPlace}, ${toPlace}, ${vehicleType}, ${currency}, ${days}, ${estimate ? JSON.stringify(estimate) : null})
+        RETURNING id, name, from_place, to_place, vehicle_type, currency, days, estimate, created_at, updated_at
+      `) as TripRow[];
+      response.status(201).json({ trip: toTrip(rows[0]!) });
+      return;
+    }
+    response.status(405).json({ error: "Method not allowed" });
     return;
   }
-  const sql = getSql();
 
   const owned = await sql`SELECT id FROM trips WHERE id = ${id} AND user_email = ${email}`;
   if (owned.length === 0) {

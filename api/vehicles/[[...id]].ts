@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { randomUUID } from "node:crypto";
 import { neon } from "@neondatabase/serverless";
 
 type Request = IncomingMessage & { body?: unknown; query?: Record<string, string | string[]> };
@@ -33,11 +34,13 @@ function parseBody(body: unknown): Record<string, unknown> {
   return (body as Record<string, unknown>) ?? {};
 }
 
-function idFromUrl(request: Request): string {
+function idFromUrl(request: Request): string | null {
   const raw = request.query?.["id"];
-  if (typeof raw === "string") return raw;
+  if (Array.isArray(raw)) return raw[0] ?? null;
+  if (typeof raw === "string" && raw) return raw;
   const url = new URL(request.url ?? "", "http://localhost");
-  return url.pathname.split("/").pop() ?? "";
+  const segments = url.pathname.split("/").filter(Boolean);
+  return segments.length > 2 ? (segments[segments.length - 1] ?? null) : null;
 }
 
 function toVehicle(row: VehicleRow) {
@@ -60,12 +63,45 @@ export default async function handler(request: Request, response: Response) {
     response.status(401).json({ error: "Not logged in" });
     return;
   }
+  const sql = getSql();
   const id = idFromUrl(request);
+
   if (!id) {
-    response.status(400).json({ error: "Missing vehicle id." });
+    if (request.method === "GET") {
+      const rows = (await sql`SELECT id, name, vehicle_type, consumption, range_km, is_default, created_at FROM vehicles WHERE user_email = ${email} ORDER BY created_at ASC`) as VehicleRow[];
+      response.status(200).json({ vehicles: rows.map(toVehicle) });
+      return;
+    }
+    if (request.method === "POST") {
+      const body = parseBody(request.body);
+      const name = typeof body["name"] === "string" ? body["name"].trim().slice(0, 120) : "";
+      const vehicleType = typeof body["vehicleType"] === "string" ? body["vehicleType"] : "";
+      const consumption = typeof body["consumption"] === "number" && Number.isFinite(body["consumption"]) ? body["consumption"] : null;
+      const rangeKm = typeof body["rangeKm"] === "number" && Number.isFinite(body["rangeKm"]) ? body["rangeKm"] : null;
+      const isDefault = body["isDefault"] === true;
+
+      if (!name || !VEHICLE_TYPES.has(vehicleType)) {
+        response.status(400).json({ error: "A vehicle name and a valid vehicle type are required." });
+        return;
+      }
+
+      const newId = randomUUID();
+      const existing = await sql`SELECT id FROM vehicles WHERE user_email = ${email} LIMIT 1`;
+      const shouldBeDefault = isDefault || existing.length === 0;
+      if (shouldBeDefault) {
+        await sql`UPDATE vehicles SET is_default = false WHERE user_email = ${email}`;
+      }
+      const rows = (await sql`
+        INSERT INTO vehicles (id, user_email, name, vehicle_type, consumption, range_km, is_default)
+        VALUES (${newId}, ${email}, ${name}, ${vehicleType}, ${consumption}, ${rangeKm}, ${shouldBeDefault})
+        RETURNING id, name, vehicle_type, consumption, range_km, is_default, created_at
+      `) as VehicleRow[];
+      response.status(201).json({ vehicle: toVehicle(rows[0]!) });
+      return;
+    }
+    response.status(405).json({ error: "Method not allowed" });
     return;
   }
-  const sql = getSql();
 
   const owned = await sql`SELECT id FROM vehicles WHERE id = ${id} AND user_email = ${email}`;
   if (owned.length === 0) {
