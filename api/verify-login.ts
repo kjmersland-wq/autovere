@@ -41,6 +41,6 @@ export default async function handler(request: Request, response: Response) {
     return;
   }
   response.setHeader("Set-Cookie", `autovere_user=${encodeURIComponent(email)}; Path=/; Max-Age=2592000; HttpOnly; Secure; SameSite=Lax`);
-  response.setHeader("Location", "/?login=success");
+  response.setHeader("Location", "/account");
   response.status(302).json({ ok: true });
 }
