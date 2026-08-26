@@ -460,7 +460,7 @@ function TripsSection({ copy, locale, dateFormatter }: CopyProps & { locale: str
     if (!window.confirm(copy.trips.deleteConfirm)) return;
     setBusyId(id);
     try {
-      await jsonFetch(`/api/trips/${id}`, { method: "DELETE" });
+      await jsonFetch(`/api/trips?id=${id}`, { method: "DELETE" });
       setTrips((current) => (current ? current.filter((trip) => trip.id !== id) : current));
     } finally {
       setBusyId(null);
@@ -488,7 +488,7 @@ function TripsSection({ copy, locale, dateFormatter }: CopyProps & { locale: str
     }
     setBusyId(id);
     try {
-      const body = await jsonFetch<{ trip: Trip }>(`/api/trips/${id}`, {
+      const body = await jsonFetch<{ trip: Trip }>(`/api/trips?id=${id}`, {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ name: renameValue.trim() }),
@@ -638,7 +638,7 @@ function VehiclesSection({ copy }: CopyProps) {
   async function setDefault(id: string) {
     setBusyId(id);
     try {
-      await jsonFetch(`/api/vehicles/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ isDefault: true }) });
+      await jsonFetch(`/api/vehicles?id=${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ isDefault: true }) });
       load();
     } finally {
       setBusyId(null);
@@ -649,7 +649,7 @@ function VehiclesSection({ copy }: CopyProps) {
     if (!window.confirm(copy.vehicles.deleteConfirm)) return;
     setBusyId(id);
     try {
-      await jsonFetch(`/api/vehicles/${id}`, { method: "DELETE" });
+      await jsonFetch(`/api/vehicles?id=${id}`, { method: "DELETE" });
       load();
     } finally {
       setBusyId(null);
@@ -775,7 +775,7 @@ function PlacesSection({ copy }: CopyProps) {
   async function remove(id: string) {
     setBusyId(id);
     try {
-      await jsonFetch(`/api/places/${id}`, { method: "DELETE" });
+      await jsonFetch(`/api/places?id=${id}`, { method: "DELETE" });
       load();
     } finally {
       setBusyId(null);
