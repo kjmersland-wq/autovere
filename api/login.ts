@@ -27,7 +27,7 @@ export default async function handler(request: Request, response: Response) {
     response.status(500).json({ error: "Login email is not configured." });
     return;
   }
-  const link = `${authBaseUrl(new RequestObject(request))}/api/verify-login?token=${encodeURIComponent(createMagicToken(email))}`;
+  const link = `${authBaseUrl(request)}/api/verify-login?token=${encodeURIComponent(createMagicToken(email))}`;
   try {
     await nodemailer.createTransport({ service: "gmail", auth: { user: process.env["GMAIL_USER"], pass: process.env["GMAIL_APP_PASSWORD"] } }).sendMail({
       from: process.env["GMAIL_USER"],
@@ -40,11 +40,5 @@ export default async function handler(request: Request, response: Response) {
   } catch (error) {
     console.error("Magic link email failed", error);
     response.status(500).json({ error: "Could not send the login email." });
-  }
-}
-
-class RequestObject extends Request {
-  constructor(request: Request) {
-    super(request);
   }
 }

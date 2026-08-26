@@ -3,7 +3,7 @@ import { createHmac, timingSafeEqual } from "node:crypto";
 const TOKEN_TTL_SECONDS = 15 * 60;
 
 function secret(): string {
-  const value = process.env.AUTH_TOKEN_SECRET;
+  const value = process.env["AUTH_TOKEN_SECRET"];
   if (!value) throw new Error("AUTH_TOKEN_SECRET is not configured.");
   return value;
 }
@@ -28,8 +28,12 @@ export function verifyMagicToken(token: string): string | null {
   }
 }
 
-export function authBaseUrl(request: Request): string {
-  const configured = (process.env.AUTH_BASE_URL || process.env.NEXT_PUBLIC_SITE_URL || "https://autovere.com").trim();
+export function authBaseUrl(_request?: Request | { headers?: Record<string, string | string[] | undefined> }): string {
+  const configured = (
+    process.env["AUTH_BASE_URL"] ||
+    process.env["NEXT_PUBLIC_SITE_URL"] ||
+    "https://autovere.com"
+  ).trim();
   if (/^https?:\/\//.test(configured)) return configured.replace(/\/$/, "");
   return `https://${configured.replace(/\/$/, "")}`;
 }
