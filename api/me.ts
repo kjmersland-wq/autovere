@@ -81,7 +81,7 @@ export default async function handler(request: Request, response: Response) {
       }
     }
 
-    let invoices: { id: string; amount: number; currency: string; date: string; url: string | null }[] = [];
+    let invoices: { id: string; amount: number; currency: string; date: string; url: string | null; pdfUrl: string | null }[] = [];
     try {
       const invoiceList = await stripe.invoices.list({ customer: customer.id, limit: 5 });
       invoices = invoiceList.data.map((invoice) => ({
@@ -90,6 +90,7 @@ export default async function handler(request: Request, response: Response) {
         currency: invoice.currency.toUpperCase(),
         date: new Date(invoice.created * 1000).toISOString(),
         url: invoice.hosted_invoice_url ?? null,
+        pdfUrl: invoice.invoice_pdf ?? null,
       }));
     } catch {
       invoices = [];

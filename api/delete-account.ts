@@ -1,5 +1,6 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import Stripe from "stripe";
+import { neon } from "@neondatabase/serverless";
 
 type Request = IncomingMessage;
 type Response = ServerResponse & {
@@ -46,6 +47,18 @@ export default async function handler(request: Request, response: Response) {
       console.error("Cancelling subscription during account deletion failed", error);
       response.status(500).json({ error: "Could not cancel your subscription. Please contact support." });
       return;
+    }
+  }
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (databaseUrl) {
+    try {
+      const sql = neon(databaseUrl);
+      await sql`DELETE FROM trips WHERE user_email = ${email}`;
+      await sql`DELETE FROM vehicles WHERE user_email = ${email}`;
+      await sql`DELETE FROM saved_places WHERE user_email = ${email}`;
+      await sql`DELETE FROM user_settings WHERE user_email = ${email}`;
+    } catch (error) {
+      console.error("Deleting account data during account deletion failed", error);
     }
   }
   response.setHeader("Set-Cookie", "autovere_user=; Path=/; Max-Age=0; HttpOnly; Secure; SameSite=Lax");

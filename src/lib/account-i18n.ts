@@ -1,7 +1,7 @@
 import type { Locale } from "./i18n";
 
 export type AccountCopy = {
-  nav: { overview: string; trips: string; vehicles: string; preferences: string; billing: string; places: string; profile: string };
+  nav: { overview: string; trips: string; vehicles: string; preferences: string; billing: string; places: string; profile: string; help: string };
   backToPlanner: string;
   eyebrow: string;
   title: string;
@@ -14,15 +14,91 @@ export type AccountCopy = {
   actions: { viewPlans: string; manageBilling: string; signOut: string; signingOut: string };
   unlocked: { title: string; upgradeTitle: string; upgradeCta: string };
   billing: { title: string; plan: string; price: string; renewsOn: string; paymentMethod: string; noPaymentMethod: string; manage: string; history: string; noHistory: string; viewInvoice: string; noSubscription: string };
-  trips: { title: string; emptyTitle: string; emptyBody: string };
-  vehicles: { title: string; emptyTitle: string; emptyBody: string };
-  places: { title: string; emptyTitle: string; emptyBody: string };
-  preferences: { title: string; language: string; more: string };
-  profile: { title: string; email: string; security: string; securityBody: string; dangerTitle: string; deleteAccount: string; deleteConfirm: string; deleteCancel: string };
+  trips: {
+    title: string;
+    emptyTitle: string;
+    emptyBody: string;
+    open: string;
+    print: string;
+    days: string;
+    created: string;
+    estimate: string;
+    rename: string;
+    duplicate: string;
+    delete: string;
+    deleteConfirm: string;
+    save: string;
+    cancel: string;
+    savedOn: (date: string) => string;
+  };
+  vehicles: {
+    title: string;
+    emptyTitle: string;
+    emptyBody: string;
+    add: string;
+    name: string;
+    namePlaceholder: string;
+    type: string;
+    typePetrol: string;
+    typeDiesel: string;
+    typeEv: string;
+    consumption: string;
+    range: string;
+    default: string;
+    setDefault: string;
+    edit: string;
+    delete: string;
+    deleteConfirm: string;
+    save: string;
+    cancel: string;
+  };
+  places: {
+    title: string;
+    emptyTitle: string;
+    emptyBody: string;
+    add: string;
+    name: string;
+    namePlaceholder: string;
+    category: string;
+    categoryCharging: string;
+    categoryCamping: string;
+    categoryAttraction: string;
+    categoryOther: string;
+    notes: string;
+    save: string;
+    cancel: string;
+    delete: string;
+  };
+  preferences: {
+    title: string;
+    language: string;
+    currency: string;
+    units: string;
+    unitsMetric: string;
+    unitsImperial: string;
+    notifications: string;
+    notificationsEmail: string;
+    save: string;
+    saved: string;
+    more: string;
+  };
+  profile: {
+    title: string;
+    email: string;
+    security: string;
+    securityBody: string;
+    exportData: string;
+    exportDataBody: string;
+    dangerTitle: string;
+    deleteAccount: string;
+    deleteConfirm: string;
+    deleteCancel: string;
+  };
+  help: { title: string; subtitle: string; faqTitle: string; faqBody: string; faqLink: string; contactTitle: string; contactBody: string; contactLink: string };
 };
 
 const en: AccountCopy = {
-  nav: { overview: "Overview", trips: "My Trips", vehicles: "My Vehicles", preferences: "Preferences", billing: "Subscription & Billing", places: "Saved Places", profile: "Profile & Security" },
+  nav: { overview: "Overview", trips: "My Trips", vehicles: "My Vehicles", preferences: "Settings", billing: "Subscription & Billing", places: "Saved Places", profile: "Profile & Security", help: "Help & Support" },
   backToPlanner: "Back to planner",
   eyebrow: "AUTOVERE",
   title: "My AutoVere",
@@ -35,15 +111,16 @@ const en: AccountCopy = {
   actions: { viewPlans: "View plans", manageBilling: "Manage billing", signOut: "Sign out", signingOut: "Signing out…" },
   unlocked: { title: "What's unlocked on your plan", upgradeTitle: "Upgrade for more confidence on the road", upgradeCta: "See Pro & Business plans" },
   billing: { title: "Subscription & Billing", plan: "Plan", price: "Price", renewsOn: "Next renewal", paymentMethod: "Payment method", noPaymentMethod: "No payment method on file.", manage: "Manage plan, payment method & invoices", history: "Billing history", noHistory: "No invoices yet.", viewInvoice: "View", noSubscription: "You don't have an active subscription yet." },
-  trips: { title: "My Trips", emptyTitle: "No saved trips yet", emptyBody: "Trip saving isn't connected to your account yet — this section is ready and waiting for that feature. Your calculations on the planner still work as normal." },
-  vehicles: { title: "My Vehicles", emptyTitle: "No saved vehicles yet", emptyBody: "Saving vehicle profiles to your account isn't connected yet. This section is ready for it — for now, set your vehicle directly on the planner for each trip." },
-  places: { title: "Saved Places", emptyTitle: "No saved places yet", emptyBody: "Saving hotels, chargers and other stops to your account isn't connected yet. This section is ready and waiting for that feature." },
-  preferences: { title: "Preferences", language: "Language", more: "Currency and route preferences are set per trip on the planner for now — account-wide defaults are on the way." },
-  profile: { title: "Profile & Security", email: "Email", security: "Sign-in", securityBody: "AutoVere uses secure email sign-in links instead of a password — there's nothing to remember, and nothing that can be guessed.", dangerTitle: "Danger zone", deleteAccount: "Delete account", deleteConfirm: "This cancels your subscription and signs you out everywhere. Are you sure?", deleteCancel: "Cancel" },
+  trips: { title: "My Trips", emptyTitle: "No saved trips yet", emptyBody: "Save a trip from the planner to see it here.", open: "Open", print: "Print / Save as PDF", days: "Days", created: "Created", estimate: "Estimate", rename: "Rename", duplicate: "Duplicate", delete: "Delete", deleteConfirm: "Delete this trip? This cannot be undone.", save: "Save", cancel: "Cancel", savedOn: (date) => `Saved ${date}` },
+  vehicles: { title: "My Vehicles", emptyTitle: "No saved vehicles yet", emptyBody: "Add a vehicle to reuse it directly on the planner.", add: "Add vehicle", name: "Name", namePlaceholder: "e.g. Family EV", type: "Type", typePetrol: "Petrol", typeDiesel: "Diesel", typeEv: "Electric (EV)", consumption: "Consumption (L or kWh /100km)", range: "Real-world range (km)", default: "Default", setDefault: "Set as default", edit: "Edit", delete: "Delete", deleteConfirm: "Delete this vehicle?", save: "Save", cancel: "Cancel" },
+  places: { title: "Saved Places", emptyTitle: "No saved places yet", emptyBody: "Save chargers, stays and stops you want to find again.", add: "Add place", name: "Name", namePlaceholder: "e.g. Fjord View Campsite", category: "Category", categoryCharging: "Charging", categoryCamping: "Camping / overnight", categoryAttraction: "Attraction", categoryOther: "Other", notes: "Notes", save: "Save", cancel: "Cancel", delete: "Delete" },
+  preferences: { title: "Settings", language: "Language", currency: "Currency", units: "Measurement units", unitsMetric: "Metric (km, litres)", unitsImperial: "Imperial (miles, gallons)", notifications: "Notifications", notificationsEmail: "Email me about my account and billing", save: "Save settings", saved: "Settings saved", more: "These apply as your defaults across AutoVere." },
+  profile: { title: "Profile & Security", email: "Email", security: "Sign-in", securityBody: "AutoVere uses secure email sign-in links instead of a password — there's nothing to remember, and nothing that can be guessed.", exportData: "Export my data", exportDataBody: "Download a copy of everything linked to your account (profile, subscription, trips, vehicles, places).", dangerTitle: "Danger zone", deleteAccount: "Delete account", deleteConfirm: "This cancels your subscription, deletes your saved data and signs you out everywhere. Are you sure?", deleteCancel: "Cancel" },
+  help: { title: "Help & Support", subtitle: "We're here if something isn't working the way it should.", faqTitle: "Frequently asked questions", faqBody: "Answers to the most common questions about routes, tolls, vignettes and charging.", faqLink: "Open Help & FAQ", contactTitle: "Contact support", contactBody: "Send us a message and we'll get back to you — this is also the right place to report a problem.", contactLink: "Send a message" },
 };
 
 const de: AccountCopy = {
-  nav: { overview: "Übersicht", trips: "Meine Reisen", vehicles: "Meine Fahrzeuge", preferences: "Einstellungen", billing: "Abo & Zahlung", places: "Gespeicherte Orte", profile: "Profil & Sicherheit" },
+  nav: { overview: "Übersicht", trips: "Meine Reisen", vehicles: "Meine Fahrzeuge", preferences: "Einstellungen", billing: "Abo & Zahlung", places: "Gespeicherte Orte", profile: "Profil & Sicherheit", help: "Hilfe & Support" },
   backToPlanner: "Zurück zum Routenplaner",
   eyebrow: "AUTOVERE",
   title: "Mein AutoVere",
@@ -56,15 +133,16 @@ const de: AccountCopy = {
   actions: { viewPlans: "Pläne ansehen", manageBilling: "Zahlung verwalten", signOut: "Abmelden", signingOut: "Wird abgemeldet…" },
   unlocked: { title: "Das schaltet dein Plan frei", upgradeTitle: "Mehr Sicherheit unterwegs mit einem Upgrade", upgradeCta: "Pro- & Business-Pläne ansehen" },
   billing: { title: "Abo & Zahlung", plan: "Plan", price: "Preis", renewsOn: "Nächste Verlängerung", paymentMethod: "Zahlungsmethode", noPaymentMethod: "Keine Zahlungsmethode hinterlegt.", manage: "Plan, Zahlungsmethode & Rechnungen verwalten", history: "Rechnungsverlauf", noHistory: "Noch keine Rechnungen.", viewInvoice: "Ansehen", noSubscription: "Du hast noch kein aktives Abo." },
-  trips: { title: "Meine Reisen", emptyTitle: "Noch keine gespeicherten Reisen", emptyBody: "Das Speichern von Reisen ist noch nicht mit deinem Konto verbunden — dieser Bereich ist bereit dafür. Berechnungen im Planer funktionieren weiterhin normal." },
-  vehicles: { title: "Meine Fahrzeuge", emptyTitle: "Noch keine gespeicherten Fahrzeuge", emptyBody: "Das Speichern von Fahrzeugprofilen ist noch nicht verbunden. Lege dein Fahrzeug vorerst direkt im Planer für jede Reise fest." },
-  places: { title: "Gespeicherte Orte", emptyTitle: "Noch keine gespeicherten Orte", emptyBody: "Das Speichern von Hotels, Ladepunkten und anderen Stopps ist noch nicht mit deinem Konto verbunden." },
-  preferences: { title: "Einstellungen", language: "Sprache", more: "Währung und Routeneinstellungen werden vorerst pro Reise im Planer festgelegt — kontoweite Standards folgen." },
-  profile: { title: "Profil & Sicherheit", email: "E-Mail", security: "Anmeldung", securityBody: "AutoVere verwendet sichere Anmelde-Links per E-Mail statt eines Passworts — nichts zu merken, nichts zu erraten.", dangerTitle: "Gefahrenzone", deleteAccount: "Konto löschen", deleteConfirm: "Dies kündigt dein Abo und meldet dich überall ab. Bist du sicher?", deleteCancel: "Abbrechen" },
+  trips: { title: "Meine Reisen", emptyTitle: "Noch keine gespeicherten Reisen", emptyBody: "Speichere eine Reise im Planer, um sie hier zu sehen.", open: "Öffnen", print: "Drucken / Als PDF speichern", days: "Tage", created: "Erstellt", estimate: "Kostenschätzung", rename: "Umbenennen", duplicate: "Duplizieren", delete: "Löschen", deleteConfirm: "Diese Reise löschen? Das kann nicht rückgängig gemacht werden.", save: "Speichern", cancel: "Abbrechen", savedOn: (date) => `Gespeichert am ${date}` },
+  vehicles: { title: "Meine Fahrzeuge", emptyTitle: "Noch keine gespeicherten Fahrzeuge", emptyBody: "Füge ein Fahrzeug hinzu, um es direkt im Planer zu nutzen.", add: "Fahrzeug hinzufügen", name: "Name", namePlaceholder: "z. B. Familien-EV", type: "Typ", typePetrol: "Benzin", typeDiesel: "Diesel", typeEv: "Elektro (EV)", consumption: "Verbrauch (L oder kWh /100km)", range: "Reale Reichweite (km)", default: "Standard", setDefault: "Als Standard festlegen", edit: "Bearbeiten", delete: "Löschen", deleteConfirm: "Dieses Fahrzeug löschen?", save: "Speichern", cancel: "Abbrechen" },
+  places: { title: "Gespeicherte Orte", emptyTitle: "Noch keine gespeicherten Orte", emptyBody: "Speichere Ladepunkte, Unterkünfte und Stopps, die du wiederfinden willst.", add: "Ort hinzufügen", name: "Name", namePlaceholder: "z. B. Fjordblick-Campingplatz", category: "Kategorie", categoryCharging: "Laden", categoryCamping: "Camping / Übernachtung", categoryAttraction: "Sehenswürdigkeit", categoryOther: "Sonstiges", notes: "Notizen", save: "Speichern", cancel: "Abbrechen", delete: "Löschen" },
+  preferences: { title: "Einstellungen", language: "Sprache", currency: "Währung", units: "Maßeinheiten", unitsMetric: "Metrisch (km, Liter)", unitsImperial: "Imperial (Meilen, Gallonen)", notifications: "Benachrichtigungen", notificationsEmail: "Per E-Mail über Konto und Abrechnung informieren", save: "Einstellungen speichern", saved: "Einstellungen gespeichert", more: "Diese gelten als deine Standardwerte in ganz AutoVere." },
+  profile: { title: "Profil & Sicherheit", email: "E-Mail", security: "Anmeldung", securityBody: "AutoVere verwendet sichere Anmelde-Links per E-Mail statt eines Passworts — nichts zu merken, nichts zu erraten.", exportData: "Meine Daten exportieren", exportDataBody: "Lade eine Kopie aller mit deinem Konto verknüpften Daten herunter (Profil, Abo, Reisen, Fahrzeuge, Orte).", dangerTitle: "Gefahrenzone", deleteAccount: "Konto löschen", deleteConfirm: "Dies kündigt dein Abo, löscht deine gespeicherten Daten und meldet dich überall ab. Bist du sicher?", deleteCancel: "Abbrechen" },
+  help: { title: "Hilfe & Support", subtitle: "Wir sind da, wenn etwas nicht wie erwartet funktioniert.", faqTitle: "Häufig gestellte Fragen", faqBody: "Antworten auf die häufigsten Fragen zu Routen, Maut, Vignetten und Laden.", faqLink: "Hilfe & FAQ öffnen", contactTitle: "Support kontaktieren", contactBody: "Schick uns eine Nachricht — hier meldest du auch Probleme.", contactLink: "Nachricht senden" },
 };
 
 const nl: AccountCopy = {
-  nav: { overview: "Overzicht", trips: "Mijn Reizen", vehicles: "Mijn Voertuigen", preferences: "Voorkeuren", billing: "Abonnement & Facturatie", places: "Opgeslagen Plekken", profile: "Profiel & Beveiliging" },
+  nav: { overview: "Overzicht", trips: "Mijn Reizen", vehicles: "Mijn Voertuigen", preferences: "Instellingen", billing: "Abonnement & Facturatie", places: "Opgeslagen Plekken", profile: "Profiel & Beveiliging", help: "Help & Ondersteuning" },
   backToPlanner: "Terug naar de planner",
   eyebrow: "AUTOVERE",
   title: "Mijn AutoVere",
@@ -77,15 +155,16 @@ const nl: AccountCopy = {
   actions: { viewPlans: "Bekijk abonnementen", manageBilling: "Facturatie beheren", signOut: "Uitloggen", signingOut: "Bezig met uitloggen…" },
   unlocked: { title: "Dit ontgrendelt je abonnement", upgradeTitle: "Upgrade voor meer zekerheid onderweg", upgradeCta: "Bekijk Pro- & Business-abonnementen" },
   billing: { title: "Abonnement & Facturatie", plan: "Abonnement", price: "Prijs", renewsOn: "Volgende verlenging", paymentMethod: "Betaalmethode", noPaymentMethod: "Geen betaalmethode bekend.", manage: "Beheer abonnement, betaalmethode & facturen", history: "Factuurgeschiedenis", noHistory: "Nog geen facturen.", viewInvoice: "Bekijken", noSubscription: "Je hebt nog geen actief abonnement." },
-  trips: { title: "Mijn Reizen", emptyTitle: "Nog geen opgeslagen reizen", emptyBody: "Reizen opslaan is nog niet gekoppeld aan je account — dit onderdeel staat klaar. Berekeningen in de planner werken gewoon door." },
-  vehicles: { title: "Mijn Voertuigen", emptyTitle: "Nog geen opgeslagen voertuigen", emptyBody: "Voertuigprofielen opslaan is nog niet gekoppeld. Stel je voertuig voorlopig per reis in op de planner." },
-  places: { title: "Opgeslagen Plekken", emptyTitle: "Nog geen opgeslagen plekken", emptyBody: "Hotels, laadpunten en andere stops opslaan is nog niet gekoppeld aan je account." },
-  preferences: { title: "Voorkeuren", language: "Taal", more: "Valuta en routevoorkeuren stel je voorlopig per reis in op de planner — accountbrede standaardinstellingen volgen nog." },
-  profile: { title: "Profiel & Beveiliging", email: "E-mail", security: "Inloggen", securityBody: "AutoVere gebruikt beveiligde inloglinks via e-mail in plaats van een wachtwoord — niets om te onthouden, niets te raden.", dangerTitle: "Gevarenzone", deleteAccount: "Account verwijderen", deleteConfirm: "Dit zegt je abonnement op en logt je overal uit. Weet je het zeker?", deleteCancel: "Annuleren" },
+  trips: { title: "Mijn Reizen", emptyTitle: "Nog geen opgeslagen reizen", emptyBody: "Sla een reis op vanuit de planner om hem hier te zien.", open: "Openen", print: "Afdrukken / Opslaan als PDF", days: "Dagen", created: "Aangemaakt", estimate: "Schatting", rename: "Naam wijzigen", duplicate: "Dupliceren", delete: "Verwijderen", deleteConfirm: "Deze reis verwijderen? Dit kan niet ongedaan worden gemaakt.", save: "Opslaan", cancel: "Annuleren", savedOn: (date) => `Opgeslagen op ${date}` },
+  vehicles: { title: "Mijn Voertuigen", emptyTitle: "Nog geen opgeslagen voertuigen", emptyBody: "Voeg een voertuig toe om het direct in de planner te gebruiken.", add: "Voertuig toevoegen", name: "Naam", namePlaceholder: "bijv. Gezins-EV", type: "Type", typePetrol: "Benzine", typeDiesel: "Diesel", typeEv: "Elektrisch (EV)", consumption: "Verbruik (L of kWh /100km)", range: "Praktijkbereik (km)", default: "Standaard", setDefault: "Als standaard instellen", edit: "Bewerken", delete: "Verwijderen", deleteConfirm: "Dit voertuig verwijderen?", save: "Opslaan", cancel: "Annuleren" },
+  places: { title: "Opgeslagen Plekken", emptyTitle: "Nog geen opgeslagen plekken", emptyBody: "Sla laders, overnachtingen en stops op die je wilt terugvinden.", add: "Plek toevoegen", name: "Naam", namePlaceholder: "bijv. Fjordzicht Camping", category: "Categorie", categoryCharging: "Laden", categoryCamping: "Camping / overnachting", categoryAttraction: "Attractie", categoryOther: "Overig", notes: "Notities", save: "Opslaan", cancel: "Annuleren", delete: "Verwijderen" },
+  preferences: { title: "Instellingen", language: "Taal", currency: "Valuta", units: "Meeteenheden", unitsMetric: "Metrisch (km, liter)", unitsImperial: "Imperiaal (mijlen, gallons)", notifications: "Meldingen", notificationsEmail: "Mail me over mijn account en facturering", save: "Instellingen opslaan", saved: "Instellingen opgeslagen", more: "Dit zijn je standaardwaarden in heel AutoVere." },
+  profile: { title: "Profiel & Beveiliging", email: "E-mail", security: "Inloggen", securityBody: "AutoVere gebruikt beveiligde inloglinks via e-mail in plaats van een wachtwoord — niets om te onthouden, niets te raden.", exportData: "Mijn gegevens exporteren", exportDataBody: "Download een kopie van alles wat aan je account gekoppeld is (profiel, abonnement, reizen, voertuigen, plekken).", dangerTitle: "Gevarenzone", deleteAccount: "Account verwijderen", deleteConfirm: "Dit zegt je abonnement op, verwijdert je opgeslagen gegevens en logt je overal uit. Weet je het zeker?", deleteCancel: "Annuleren" },
+  help: { title: "Help & Ondersteuning", subtitle: "We staan klaar als iets niet werkt zoals het hoort.", faqTitle: "Veelgestelde vragen", faqBody: "Antwoorden op de meest gestelde vragen over routes, tol, vignetten en laden.", faqLink: "Open Help & FAQ", contactTitle: "Contact met support", contactBody: "Stuur ons een bericht — dit is ook de juiste plek om een probleem te melden.", contactLink: "Bericht sturen" },
 };
 
 const no: AccountCopy = {
-  nav: { overview: "Oversikt", trips: "Mine reiser", vehicles: "Mine kjøretøy", preferences: "Innstillinger", billing: "Abonnement og fakturering", places: "Lagrede steder", profile: "Profil og sikkerhet" },
+  nav: { overview: "Oversikt", trips: "Mine reiser", vehicles: "Mine kjøretøy", preferences: "Innstillinger", billing: "Abonnement og fakturering", places: "Lagrede steder", profile: "Profil og sikkerhet", help: "Hjelp og support" },
   backToPlanner: "Tilbake til ruteplanleggeren",
   eyebrow: "AUTOVERE",
   title: "Min AutoVere",
@@ -98,15 +177,16 @@ const no: AccountCopy = {
   actions: { viewPlans: "Se abonnementer", manageBilling: "Administrer fakturering", signOut: "Logg ut", signingOut: "Logger ut…" },
   unlocked: { title: "Dette låser abonnementet ditt opp", upgradeTitle: "Oppgrader for mer trygghet på veien", upgradeCta: "Se Pro- og Bedrift-abonnement" },
   billing: { title: "Abonnement og fakturering", plan: "Abonnement", price: "Pris", renewsOn: "Neste fornyelse", paymentMethod: "Betalingsmetode", noPaymentMethod: "Ingen betalingsmetode registrert.", manage: "Administrer abonnement, betalingsmetode og fakturaer", history: "Fakturahistorikk", noHistory: "Ingen fakturaer ennå.", viewInvoice: "Vis", noSubscription: "Du har ikke noe aktivt abonnement ennå." },
-  trips: { title: "Mine reiser", emptyTitle: "Ingen lagrede reiser ennå", emptyBody: "Lagring av reiser er ikke koblet til kontoen din ennå — denne seksjonen står klar for det. Beregninger i ruteplanleggeren fungerer som normalt." },
-  vehicles: { title: "Mine kjøretøy", emptyTitle: "Ingen lagrede kjøretøy ennå", emptyBody: "Lagring av kjøretøyprofiler er ikke koblet til kontoen din ennå. Sett kjøretøyet direkte i ruteplanleggeren for hver tur i mellomtiden." },
-  places: { title: "Lagrede steder", emptyTitle: "Ingen lagrede steder ennå", emptyBody: "Lagring av hoteller, ladestasjoner og andre stopp er ikke koblet til kontoen din ennå." },
-  preferences: { title: "Innstillinger", language: "Språk", more: "Valuta og rutepreferanser settes foreløpig per tur i ruteplanleggeren — kontobaserte standardvalg kommer." },
-  profile: { title: "Profil og sikkerhet", email: "E-post", security: "Innlogging", securityBody: "AutoVere bruker sikre innloggingslenker på e-post i stedet for passord — ingenting å huske, ingenting å gjette.", dangerTitle: "Faresone", deleteAccount: "Slett konto", deleteConfirm: "Dette avslutter abonnementet ditt og logger deg ut overalt. Er du sikker?", deleteCancel: "Avbryt" },
+  trips: { title: "Mine reiser", emptyTitle: "Ingen lagrede reiser ennå", emptyBody: "Lagre en reise fra ruteplanleggeren for å se den her.", open: "Åpne", print: "Skriv ut / Lagre som PDF", days: "Dager", created: "Opprettet", estimate: "Kostnadsestimat", rename: "Gi nytt navn", duplicate: "Dupliser", delete: "Slett", deleteConfirm: "Slette denne reisen? Dette kan ikke angres.", save: "Lagre", cancel: "Avbryt", savedOn: (date) => `Lagret ${date}` },
+  vehicles: { title: "Mine kjøretøy", emptyTitle: "Ingen lagrede kjøretøy ennå", emptyBody: "Legg til et kjøretøy for å bruke det direkte i ruteplanleggeren.", add: "Legg til kjøretøy", name: "Navn", namePlaceholder: "f.eks. Familie-elbil", type: "Type", typePetrol: "Bensin", typeDiesel: "Diesel", typeEv: "Elektrisk (EV)", consumption: "Forbruk (L eller kWh /100km)", range: "Reell rekkevidde (km)", default: "Standard", setDefault: "Sett som standard", edit: "Rediger", delete: "Slett", deleteConfirm: "Slette dette kjøretøyet?", save: "Lagre", cancel: "Avbryt" },
+  places: { title: "Lagrede steder", emptyTitle: "Ingen lagrede steder ennå", emptyBody: "Lagre ladestasjoner, overnattinger og stopp du vil finne igjen.", add: "Legg til sted", name: "Navn", namePlaceholder: "f.eks. Fjordutsikt Camping", category: "Kategori", categoryCharging: "Lading", categoryCamping: "Camping / overnatting", categoryAttraction: "Attraksjon", categoryOther: "Annet", notes: "Notater", save: "Lagre", cancel: "Avbryt", delete: "Slett" },
+  preferences: { title: "Innstillinger", language: "Språk", currency: "Valuta", units: "Måleenheter", unitsMetric: "Metrisk (km, liter)", unitsImperial: "Imperisk (miles, gallons)", notifications: "Varsler", notificationsEmail: "Send meg e-post om konto og fakturering", save: "Lagre innstillinger", saved: "Innstillinger lagret", more: "Disse gjelder som standardvalgene dine i hele AutoVere." },
+  profile: { title: "Profil og sikkerhet", email: "E-post", security: "Innlogging", securityBody: "AutoVere bruker sikre innloggingslenker på e-post i stedet for passord — ingenting å huske, ingenting å gjette.", exportData: "Eksporter dataene mine", exportDataBody: "Last ned en kopi av alt som er knyttet til kontoen din (profil, abonnement, reiser, kjøretøy, steder).", dangerTitle: "Faresone", deleteAccount: "Slett konto", deleteConfirm: "Dette avslutter abonnementet ditt, sletter lagrede data og logger deg ut overalt. Er du sikker?", deleteCancel: "Avbryt" },
+  help: { title: "Hjelp og support", subtitle: "Vi er her hvis noe ikke fungerer som det skal.", faqTitle: "Ofte stilte spørsmål", faqBody: "Svar på de vanligste spørsmålene om ruter, bompenger, vignetter og lading.", faqLink: "Åpne hjelp og FAQ", contactTitle: "Kontakt support", contactBody: "Send oss en melding, så svarer vi deg — dette er også riktig sted å melde fra om et problem.", contactLink: "Send melding" },
 };
 
 const pl: AccountCopy = {
-  nav: { overview: "Przegląd", trips: "Moje podróże", vehicles: "Moje pojazdy", preferences: "Preferencje", billing: "Subskrypcja i płatności", places: "Zapisane miejsca", profile: "Profil i bezpieczeństwo" },
+  nav: { overview: "Przegląd", trips: "Moje podróże", vehicles: "Moje pojazdy", preferences: "Ustawienia", billing: "Subskrypcja i płatności", places: "Zapisane miejsca", profile: "Profil i bezpieczeństwo", help: "Pomoc i wsparcie" },
   backToPlanner: "Powrót do planera",
   eyebrow: "AUTOVERE",
   title: "Moje AutoVere",
@@ -119,15 +199,16 @@ const pl: AccountCopy = {
   actions: { viewPlans: "Zobacz plany", manageBilling: "Zarządzaj płatnościami", signOut: "Wyloguj się", signingOut: "Wylogowywanie…" },
   unlocked: { title: "To odblokowuje Twój plan", upgradeTitle: "Ulepsz plan dla większej pewności w podróży", upgradeCta: "Zobacz plany Pro i Business" },
   billing: { title: "Subskrypcja i płatności", plan: "Plan", price: "Cena", renewsOn: "Kolejne odnowienie", paymentMethod: "Metoda płatności", noPaymentMethod: "Brak zapisanej metody płatności.", manage: "Zarządzaj planem, metodą płatności i fakturami", history: "Historia płatności", noHistory: "Brak faktur.", viewInvoice: "Zobacz", noSubscription: "Nie masz jeszcze aktywnej subskrypcji." },
-  trips: { title: "Moje podróże", emptyTitle: "Brak zapisanych podróży", emptyBody: "Zapisywanie podróży nie jest jeszcze połączone z Twoim kontem — ta sekcja jest na to gotowa. Obliczenia w planerze nadal działają normalnie." },
-  vehicles: { title: "Moje pojazdy", emptyTitle: "Brak zapisanych pojazdów", emptyBody: "Zapisywanie profili pojazdów nie jest jeszcze połączone. Na razie ustaw pojazd bezpośrednio w planerze dla każdej podróży." },
-  places: { title: "Zapisane miejsca", emptyTitle: "Brak zapisanych miejsc", emptyBody: "Zapisywanie hoteli, ładowarek i innych przystanków nie jest jeszcze połączone z Twoim kontem." },
-  preferences: { title: "Preferencje", language: "Język", more: "Waluta i preferencje trasy są na razie ustawiane dla każdej podróży w planerze — ustawienia domyślne konta pojawią się wkrótce." },
-  profile: { title: "Profil i bezpieczeństwo", email: "E-mail", security: "Logowanie", securityBody: "AutoVere używa bezpiecznych linków logowania e-mail zamiast hasła — nic do zapamiętania, nic do odgadnięcia.", dangerTitle: "Strefa zagrożenia", deleteAccount: "Usuń konto", deleteConfirm: "To anuluje Twoją subskrypcję i wyloguje Cię wszędzie. Czy na pewno?", deleteCancel: "Anuluj" },
+  trips: { title: "Moje podróże", emptyTitle: "Brak zapisanych podróży", emptyBody: "Zapisz podróż z planera, aby zobaczyć ją tutaj.", open: "Otwórz", print: "Drukuj / Zapisz jako PDF", days: "Dni", created: "Utworzono", estimate: "Szacunek", rename: "Zmień nazwę", duplicate: "Duplikuj", delete: "Usuń", deleteConfirm: "Usunąć tę podróż? Tej czynności nie można cofnąć.", save: "Zapisz", cancel: "Anuluj", savedOn: (date) => `Zapisano ${date}` },
+  vehicles: { title: "Moje pojazdy", emptyTitle: "Brak zapisanych pojazdów", emptyBody: "Dodaj pojazd, aby użyć go bezpośrednio w planerze.", add: "Dodaj pojazd", name: "Nazwa", namePlaceholder: "np. Rodzinny EV", type: "Typ", typePetrol: "Benzyna", typeDiesel: "Diesel", typeEv: "Elektryczny (EV)", consumption: "Zużycie (L lub kWh /100km)", range: "Rzeczywisty zasięg (km)", default: "Domyślny", setDefault: "Ustaw jako domyślny", edit: "Edytuj", delete: "Usuń", deleteConfirm: "Usunąć ten pojazd?", save: "Zapisz", cancel: "Anuluj" },
+  places: { title: "Zapisane miejsca", emptyTitle: "Brak zapisanych miejsc", emptyBody: "Zapisz ładowarki, noclegi i przystanki, które chcesz łatwo odnaleźć.", add: "Dodaj miejsce", name: "Nazwa", namePlaceholder: "np. Kemping z widokiem na fiord", category: "Kategoria", categoryCharging: "Ładowanie", categoryCamping: "Kemping / nocleg", categoryAttraction: "Atrakcja", categoryOther: "Inne", notes: "Notatki", save: "Zapisz", cancel: "Anuluj", delete: "Usuń" },
+  preferences: { title: "Ustawienia", language: "Język", currency: "Waluta", units: "Jednostki miary", unitsMetric: "Metryczne (km, litry)", unitsImperial: "Imperialne (mile, galony)", notifications: "Powiadomienia", notificationsEmail: "Wysyłaj e-mail o koncie i płatnościach", save: "Zapisz ustawienia", saved: "Ustawienia zapisane", more: "Te ustawienia obowiązują jako domyślne w całym AutoVere." },
+  profile: { title: "Profil i bezpieczeństwo", email: "E-mail", security: "Logowanie", securityBody: "AutoVere używa bezpiecznych linków logowania e-mail zamiast hasła — nic do zapamiętania, nic do odgadnięcia.", exportData: "Eksportuj moje dane", exportDataBody: "Pobierz kopię wszystkiego powiązanego z Twoim kontem (profil, subskrypcja, podróże, pojazdy, miejsca).", dangerTitle: "Strefa zagrożenia", deleteAccount: "Usuń konto", deleteConfirm: "To anuluje Twoją subskrypcję, usunie zapisane dane i wyloguje Cię wszędzie. Czy na pewno?", deleteCancel: "Anuluj" },
+  help: { title: "Pomoc i wsparcie", subtitle: "Jesteśmy tutaj, jeśli coś nie działa tak, jak powinno.", faqTitle: "Najczęściej zadawane pytania", faqBody: "Odpowiedzi na najczęstsze pytania o trasy, opłaty drogowe, winiety i ładowanie.", faqLink: "Otwórz pomoc i FAQ", contactTitle: "Kontakt z pomocą", contactBody: "Napisz do nas, a odpowiemy — to też właściwe miejsce, aby zgłosić problem.", contactLink: "Wyślij wiadomość" },
 };
 
 const sv: AccountCopy = {
-  nav: { overview: "Översikt", trips: "Mina resor", vehicles: "Mina fordon", preferences: "Inställningar", billing: "Prenumeration och fakturering", places: "Sparade platser", profile: "Profil och säkerhet" },
+  nav: { overview: "Översikt", trips: "Mina resor", vehicles: "Mina fordon", preferences: "Inställningar", billing: "Prenumeration och fakturering", places: "Sparade platser", profile: "Profil och säkerhet", help: "Hjälp och support" },
   backToPlanner: "Tillbaka till resruttplaneraren",
   eyebrow: "AUTOVERE",
   title: "Mitt AutoVere",
@@ -140,15 +221,16 @@ const sv: AccountCopy = {
   actions: { viewPlans: "Se planer", manageBilling: "Hantera fakturering", signOut: "Logga ut", signingOut: "Loggar ut…" },
   unlocked: { title: "Det här låser din plan upp", upgradeTitle: "Uppgradera för mer trygghet på vägen", upgradeCta: "Se Pro- och Business-planer" },
   billing: { title: "Prenumeration och fakturering", plan: "Plan", price: "Pris", renewsOn: "Nästa förnyelse", paymentMethod: "Betalmetod", noPaymentMethod: "Ingen betalmetod registrerad.", manage: "Hantera plan, betalmetod och fakturor", history: "Fakturahistorik", noHistory: "Inga fakturor än.", viewInvoice: "Visa", noSubscription: "Du har ingen aktiv prenumeration än." },
-  trips: { title: "Mina resor", emptyTitle: "Inga sparade resor än", emptyBody: "Att spara resor är inte kopplat till ditt konto än — den här sektionen är redo för det. Beräkningar i planeraren fungerar som vanligt." },
-  vehicles: { title: "Mina fordon", emptyTitle: "Inga sparade fordon än", emptyBody: "Att spara fordonsprofiler är inte kopplat än. Ställ in ditt fordon direkt i planeraren för varje resa tills vidare." },
-  places: { title: "Sparade platser", emptyTitle: "Inga sparade platser än", emptyBody: "Att spara hotell, laddare och andra stopp är inte kopplat till ditt konto än." },
-  preferences: { title: "Inställningar", language: "Språk", more: "Valuta och ruttinställningar sätts tills vidare per resa i planeraren — kontoomfattande standardval kommer snart." },
-  profile: { title: "Profil och säkerhet", email: "E-post", security: "Inloggning", securityBody: "AutoVere använder säkra inloggningslänkar via e-post istället för lösenord — inget att komma ihåg, inget att gissa.", dangerTitle: "Farlig zon", deleteAccount: "Ta bort konto", deleteConfirm: "Det här avslutar din prenumeration och loggar ut dig överallt. Är du säker?", deleteCancel: "Avbryt" },
+  trips: { title: "Mina resor", emptyTitle: "Inga sparade resor än", emptyBody: "Spara en resa från planeraren för att se den här.", open: "Öppna", print: "Skriv ut / Spara som PDF", days: "Dagar", created: "Skapad", estimate: "Kostnadsuppskattning", rename: "Byt namn", duplicate: "Duplicera", delete: "Ta bort", deleteConfirm: "Ta bort den här resan? Detta kan inte ångras.", save: "Spara", cancel: "Avbryt", savedOn: (date) => `Sparad ${date}` },
+  vehicles: { title: "Mina fordon", emptyTitle: "Inga sparade fordon än", emptyBody: "Lägg till ett fordon för att använda det direkt i planeraren.", add: "Lägg till fordon", name: "Namn", namePlaceholder: "t.ex. Familje-EV", type: "Typ", typePetrol: "Bensin", typeDiesel: "Diesel", typeEv: "Elektrisk (EV)", consumption: "Förbrukning (L eller kWh /100km)", range: "Verklig räckvidd (km)", default: "Standard", setDefault: "Ange som standard", edit: "Redigera", delete: "Ta bort", deleteConfirm: "Ta bort det här fordonet?", save: "Spara", cancel: "Avbryt" },
+  places: { title: "Sparade platser", emptyTitle: "Inga sparade platser än", emptyBody: "Spara laddare, boenden och stopp du vill hitta igen.", add: "Lägg till plats", name: "Namn", namePlaceholder: "t.ex. Fjordutsikt Camping", category: "Kategori", categoryCharging: "Laddning", categoryCamping: "Camping / övernattning", categoryAttraction: "Sevärdhet", categoryOther: "Övrigt", notes: "Anteckningar", save: "Spara", cancel: "Avbryt", delete: "Ta bort" },
+  preferences: { title: "Inställningar", language: "Språk", currency: "Valuta", units: "Måttenheter", unitsMetric: "Metriskt (km, liter)", unitsImperial: "Brittiskt (miles, gallons)", notifications: "Notiser", notificationsEmail: "Mejla mig om konto och fakturering", save: "Spara inställningar", saved: "Inställningar sparade", more: "Dessa gäller som dina standardval i hela AutoVere." },
+  profile: { title: "Profil och säkerhet", email: "E-post", security: "Inloggning", securityBody: "AutoVere använder säkra inloggningslänkar via e-post istället för lösenord — inget att komma ihåg, inget att gissa.", exportData: "Exportera mina data", exportDataBody: "Ladda ner en kopia av allt som är kopplat till ditt konto (profil, prenumeration, resor, fordon, platser).", dangerTitle: "Farlig zon", deleteAccount: "Ta bort konto", deleteConfirm: "Det här avslutar din prenumeration, tar bort dina sparade data och loggar ut dig överallt. Är du säker?", deleteCancel: "Avbryt" },
+  help: { title: "Hjälp och support", subtitle: "Vi finns här om något inte fungerar som det ska.", faqTitle: "Vanliga frågor", faqBody: "Svar på de vanligaste frågorna om rutter, vägavgifter, vinjetter och laddning.", faqLink: "Öppna hjälp och FAQ", contactTitle: "Kontakta support", contactBody: "Skicka ett meddelande till oss — det är också rätt ställe att rapportera ett problem.", contactLink: "Skicka meddelande" },
 };
 
 const fr: AccountCopy = {
-  nav: { overview: "Aperçu", trips: "Mes voyages", vehicles: "Mes véhicules", preferences: "Préférences", billing: "Abonnement et facturation", places: "Lieux enregistrés", profile: "Profil et sécurité" },
+  nav: { overview: "Aperçu", trips: "Mes voyages", vehicles: "Mes véhicules", preferences: "Paramètres", billing: "Abonnement et facturation", places: "Lieux enregistrés", profile: "Profil et sécurité", help: "Aide et assistance" },
   backToPlanner: "Retour au planificateur",
   eyebrow: "AUTOVERE",
   title: "Mon AutoVere",
@@ -161,11 +243,12 @@ const fr: AccountCopy = {
   actions: { viewPlans: "Voir les forfaits", manageBilling: "Gérer la facturation", signOut: "Se déconnecter", signingOut: "Déconnexion…" },
   unlocked: { title: "Ce que votre forfait débloque", upgradeTitle: "Passez à un forfait supérieur pour plus de sérénité", upgradeCta: "Voir les forfaits Pro et Business" },
   billing: { title: "Abonnement et facturation", plan: "Forfait", price: "Prix", renewsOn: "Prochain renouvellement", paymentMethod: "Moyen de paiement", noPaymentMethod: "Aucun moyen de paiement enregistré.", manage: "Gérer le forfait, le paiement et les factures", history: "Historique de facturation", noHistory: "Aucune facture pour l'instant.", viewInvoice: "Voir", noSubscription: "Vous n'avez pas encore d'abonnement actif." },
-  trips: { title: "Mes voyages", emptyTitle: "Aucun voyage enregistré", emptyBody: "L'enregistrement des voyages n'est pas encore relié à votre compte — cette section est prête pour cela. Les calculs du planificateur fonctionnent normalement." },
-  vehicles: { title: "Mes véhicules", emptyTitle: "Aucun véhicule enregistré", emptyBody: "L'enregistrement des profils de véhicule n'est pas encore relié. Définissez votre véhicule directement dans le planificateur pour chaque voyage en attendant." },
-  places: { title: "Lieux enregistrés", emptyTitle: "Aucun lieu enregistré", emptyBody: "L'enregistrement des hôtels, bornes de recharge et autres arrêts n'est pas encore relié à votre compte." },
-  preferences: { title: "Préférences", language: "Langue", more: "La devise et les préférences d'itinéraire se règlent pour l'instant par voyage dans le planificateur — des réglages par défaut arrivent bientôt." },
-  profile: { title: "Profil et sécurité", email: "E-mail", security: "Connexion", securityBody: "AutoVere utilise des liens de connexion sécurisés par e-mail plutôt qu'un mot de passe — rien à retenir, rien à deviner.", dangerTitle: "Zone sensible", deleteAccount: "Supprimer le compte", deleteConfirm: "Cela résilie votre abonnement et vous déconnecte partout. Êtes-vous sûr ?", deleteCancel: "Annuler" },
+  trips: { title: "Mes voyages", emptyTitle: "Aucun voyage enregistré", emptyBody: "Enregistrez un voyage depuis le planificateur pour le voir ici.", open: "Ouvrir", print: "Imprimer / Enregistrer en PDF", days: "Jours", created: "Créé", estimate: "Estimation", rename: "Renommer", duplicate: "Dupliquer", delete: "Supprimer", deleteConfirm: "Supprimer ce voyage ? Cette action est irréversible.", save: "Enregistrer", cancel: "Annuler", savedOn: (date) => `Enregistré le ${date}` },
+  vehicles: { title: "Mes véhicules", emptyTitle: "Aucun véhicule enregistré", emptyBody: "Ajoutez un véhicule pour l'utiliser directement dans le planificateur.", add: "Ajouter un véhicule", name: "Nom", namePlaceholder: "ex. VE familial", type: "Type", typePetrol: "Essence", typeDiesel: "Diesel", typeEv: "Électrique (VE)", consumption: "Consommation (L ou kWh /100km)", range: "Autonomie réelle (km)", default: "Par défaut", setDefault: "Définir par défaut", edit: "Modifier", delete: "Supprimer", deleteConfirm: "Supprimer ce véhicule ?", save: "Enregistrer", cancel: "Annuler" },
+  places: { title: "Lieux enregistrés", emptyTitle: "Aucun lieu enregistré", emptyBody: "Enregistrez bornes de recharge, hébergements et arrêts à retrouver facilement.", add: "Ajouter un lieu", name: "Nom", namePlaceholder: "ex. Camping vue fjord", category: "Catégorie", categoryCharging: "Recharge", categoryCamping: "Camping / étape nocturne", categoryAttraction: "Attraction", categoryOther: "Autre", notes: "Notes", save: "Enregistrer", cancel: "Annuler", delete: "Supprimer" },
+  preferences: { title: "Paramètres", language: "Langue", currency: "Devise", units: "Unités de mesure", unitsMetric: "Métrique (km, litres)", unitsImperial: "Impérial (miles, gallons)", notifications: "Notifications", notificationsEmail: "M'envoyer des e-mails sur mon compte et ma facturation", save: "Enregistrer les paramètres", saved: "Paramètres enregistrés", more: "Ces réglages s'appliquent par défaut dans tout AutoVere." },
+  profile: { title: "Profil et sécurité", email: "E-mail", security: "Connexion", securityBody: "AutoVere utilise des liens de connexion sécurisés par e-mail plutôt qu'un mot de passe — rien à retenir, rien à deviner.", exportData: "Exporter mes données", exportDataBody: "Téléchargez une copie de tout ce qui est lié à votre compte (profil, abonnement, voyages, véhicules, lieux).", dangerTitle: "Zone sensible", deleteAccount: "Supprimer le compte", deleteConfirm: "Cela résilie votre abonnement, supprime vos données enregistrées et vous déconnecte partout. Êtes-vous sûr ?", deleteCancel: "Annuler" },
+  help: { title: "Aide et assistance", subtitle: "Nous sommes là si quelque chose ne fonctionne pas comme prévu.", faqTitle: "Questions fréquentes", faqBody: "Réponses aux questions les plus courantes sur les itinéraires, péages, vignettes et recharge.", faqLink: "Ouvrir l'aide et la FAQ", contactTitle: "Contacter le support", contactBody: "Envoyez-nous un message, nous vous répondrons — c'est aussi l'endroit pour signaler un problème.", contactLink: "Envoyer un message" },
 };
 
 export const accountCopy: Partial<Record<Locale, AccountCopy>> = { en, de, nl, no, pl, sv, fr };

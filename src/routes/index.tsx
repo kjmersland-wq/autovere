@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon, Check, ChevronDown } from "lucide-react";
 import { TripForm, type DemoRoute, type TripFormState } from "@/components/TripForm";
@@ -31,6 +31,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { formatCurrency } from "@/lib/currency";
 import { marketingCopy } from "@/lib/marketing-i18n";
 import { chargerCopy } from "@/lib/charger-i18n";
+import { openPrintReport } from "@/lib/print-report";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -245,6 +246,7 @@ function Index() {
   const [selected, setSelected] = useState<RouteVariantKey>("bypass");
   const [submitted, setSubmitted] = useState<TripFormState | null>(null);
   const [currency, setCurrency] = useState<CurrencyCode>("EUR");
+  const [savingTrip, setSavingTrip] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [legalOpen, setLegalOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
@@ -302,6 +304,100 @@ function Index() {
       setLoading(false);
     }
   }, [form]);
+
+  useEffect(() => {
+    try {
+      const raw = sessionStorage.getItem("autovere-reopen-trip");
+      if (!raw) return;
+      sessionStorage.removeItem("autovere-reopen-trip");
+      const trip = JSON.parse(raw) as { estimate?: { form?: TripFormState } };
+      const savedForm = trip.estimate?.form;
+      if (savedForm && savedForm.from && savedForm.to) {
+        setForm(savedForm);
+        void run(savedForm);
+      }
+    } catch {
+      /* no reopened trip, or storage unavailable */
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function saveTrip() {
+    if (!submitted || !selectedEst) return;
+    setSavingTrip(true);
+    try {
+      const response = await fetch("/api/trips", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: `${submitted.from?.name ?? "?"} → ${submitted.to?.name ?? "?"}`,
+          fromPlace: submitted.from?.label ?? submitted.from?.name ?? null,
+          toPlace: submitted.to?.label ?? submitted.to?.name ?? null,
+          vehicleType: submitted.vehicle,
+          currency,
+          days: submitted.days,
+          estimate: {
+            form: submitted,
+            summary: {
+              [t.distance]: `${Math.round(selectedEst.distanceKm)} km`,
+              [t.total]: formatCurrency(selectedEst.total, currency),
+              [t.tolls]: formatCurrency(selectedEst.tollCost, currency),
+              [t.vignettes]: formatCurrency(selectedEst.vignetteCost, currency),
+              [t.fuel]: formatCurrency(selectedEst.energyCost, currency),
+            },
+          },
+        }),
+      });
+      if (response.status === 401) {
+        toast.error(t.signInToSave);
+        return;
+      }
+      if (!response.ok) throw new Error("Save failed");
+      toast.success(t.tripSaved);
+    } catch {
+      toast.error(t.tripSaveFailed);
+    } finally {
+      setSavingTrip(false);
+    }
+  }
+
+  function printCurrentTrip() {
+    if (!submitted || !selectedEst) return;
+    openPrintReport({
+      title: `${submitted.from?.name ?? "?"} → ${submitted.to?.name ?? "?"}`,
+      subtitle: selectedEst.title,
+      generatedAtLabel: new Intl.DateTimeFormat(locale, { dateStyle: "long", timeStyle: "short" }).format(new Date()),
+      sections: [
+        {
+          heading: t.comparison,
+          rows: [
+            { label: t.distance, value: `${Math.round(selectedEst.distanceKm)} km` },
+            { label: t.driveTime, value: t.duration(selectedEst.durationMin) },
+            { label: t.vehicle, value: submitted.vehicle === "ev" ? t.ev : submitted.vehicle === "diesel" ? t.diesel : t.petrol },
+            { label: t.tripDuration, value: `${submitted.days} ${submitted.days === 1 ? t.day : t.days}` },
+          ],
+        },
+        {
+          heading: t.total,
+          rows: [
+            { label: t.fuel, value: formatCurrency(selectedEst.energyCost, currency) },
+            { label: t.tolls, value: formatCurrency(selectedEst.tollCost, currency) },
+            { label: t.vignettes, value: formatCurrency(selectedEst.vignetteCost, currency) },
+            { label: t.total, value: formatCurrency(selectedEst.total, currency) },
+          ],
+        },
+        ...(evStops.length > 0
+          ? [
+              {
+                heading: t.chargingStops,
+                rows: evStops.map((stop, index) => ({ label: `${t.chargingStops} ${index + 1}`, value: stop.name ?? "—" })),
+              },
+            ]
+          : []),
+      ],
+      disclaimer: t.footerDisclaimer,
+    });
+  }
 
   function runDemo(demo: DemoRoute) {
     const places = {
@@ -584,6 +680,15 @@ function Index() {
             <MapIcon className="size-3.5" /> Waypoints are injected so navigation apps follow the
             bypass and charging stops exactly.
           </p>
+
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Button variant="secondary" size="sm" disabled={savingTrip} onClick={saveTrip}>
+              {savingTrip ? "…" : t.saveTrip}
+            </Button>
+            <Button variant="secondary" size="sm" onClick={printCurrentTrip}>
+              {t.printReport}
+            </Button>
+          </div>
 
           <div className="mt-8 grid gap-6 lg:grid-cols-2">
             <Breakdown est={selectedEst} currency={currency} />

@@ -1,14 +1,34 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { ArrowLeft, Bookmark, Car, CreditCard, LayoutDashboard, Route as RouteIcon, ShieldCheck, Sparkles, SlidersHorizontal, Check } from "lucide-react";
+import {
+  ArrowLeft,
+  Bookmark,
+  Car,
+  Check,
+  CreditCard,
+  Download,
+  HelpCircle,
+  LayoutDashboard,
+  Pencil,
+  Printer,
+  Route as RouteIcon,
+  ShieldCheck,
+  Sparkles,
+  SlidersHorizontal,
+  Star,
+  Trash2,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ContactModal } from "@/components/ContactModal";
 import { marketingCopy } from "@/lib/marketing-i18n";
 import { useLocale } from "@/lib/i18n";
+import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { getAccountCopy } from "@/lib/account-i18n";
+import { openPrintReport } from "@/lib/print-report";
 
 export const Route = createFileRoute("/account")({ component: AccountPage });
 
-type Invoice = { id: string; amount: number; currency: string; date: string; url: string | null };
+type Invoice = { id: string; amount: number; currency: string; date: string; url: string | null; pdfUrl: string | null };
 type PaymentMethod = { brand: string; last4: string } | null;
 type Subscription = {
   status: string;
@@ -21,7 +41,12 @@ type Subscription = {
   invoices: Invoice[];
 };
 type MeResponse = { email: string; subscription: Subscription | null } | { error: string };
-type Section = "overview" | "trips" | "vehicles" | "preferences" | "billing" | "places" | "profile";
+type Section = "overview" | "trips" | "vehicles" | "preferences" | "billing" | "places" | "profile" | "help";
+
+type Trip = { id: string; name: string; fromPlace: string | null; toPlace: string | null; vehicleType: string | null; currency: string | null; days: number | null; estimate: unknown; createdAt: string; updatedAt: string };
+type Vehicle = { id: string; name: string; vehicleType: "petrol" | "diesel" | "ev"; consumption: number | null; rangeKm: number | null; isDefault: boolean; createdAt: string };
+type SavedPlace = { id: string; name: string; category: "charging" | "camping" | "attraction" | "other"; lat: number | null; lon: number | null; notes: string | null; createdAt: string };
+type Settings = { language: string | null; currency: CurrencyCode | null; units: "metric" | "imperial" | null; notificationsEmail: boolean };
 
 const proPlan = marketingCopy.en.plans[1]!;
 const businessPlan = marketingCopy.en.plans[2]!;
@@ -30,6 +55,13 @@ function featuresForTier(tier: Subscription["tier"]): string[] {
   if (tier === "business") return [...proPlan.features, ...businessPlan.features];
   if (tier === "pro") return proPlan.features;
   return [];
+}
+
+async function jsonFetch<T>(url: string, init?: RequestInit): Promise<T> {
+  const response = await fetch(url, init);
+  const body = (await response.json()) as T;
+  if (!response.ok) throw new Error((body as { error?: string })?.error ?? "Request failed");
+  return body;
 }
 
 function AccountPage() {
@@ -42,6 +74,8 @@ function AccountPage() {
   const [section, setSection] = useState<Section>("overview");
   const [confirmingDelete, setConfirmingDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [exporting, setExporting] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -96,6 +130,22 @@ function AccountPage() {
     }
   }
 
+  async function exportData() {
+    setExporting(true);
+    try {
+      const response = await fetch("/api/export-data");
+      const blob = await response.blob();
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "autovere-data-export.json";
+      link.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setExporting(false);
+    }
+  }
+
   if (state === "loading") {
     return (
       <main className="flex min-h-screen items-center justify-center bg-background text-foreground">
@@ -134,6 +184,7 @@ function AccountPage() {
     { key: "billing", label: copy.nav.billing, icon: CreditCard },
     { key: "places", label: copy.nav.places, icon: Bookmark },
     { key: "profile", label: copy.nav.profile, icon: ShieldCheck },
+    { key: "help", label: copy.nav.help, icon: HelpCircle },
   ];
 
   return (
@@ -266,18 +317,23 @@ function AccountPage() {
                       {subscription.invoices.length > 0 ? (
                         <ul className="mt-3 divide-y divide-border">
                           {subscription.invoices.map((invoice) => (
-                            <li key={invoice.id} className="flex items-center justify-between py-2.5 text-sm">
+                            <li key={invoice.id} className="flex items-center justify-between gap-3 py-2.5 text-sm">
                               <span className="text-muted-foreground">{dateFormatter.format(new Date(invoice.date))}</span>
                               <span className="font-semibold">
                                 {invoice.amount.toFixed(2)} {invoice.currency}
                               </span>
-                              {invoice.url ? (
-                                <a href={invoice.url} target="_blank" rel="noreferrer" className="text-primary hover:underline">
-                                  {copy.billing.viewInvoice}
-                                </a>
-                              ) : (
-                                <span />
-                              )}
+                              <div className="flex shrink-0 gap-3">
+                                {invoice.url && (
+                                  <a href={invoice.url} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                                    {copy.billing.viewInvoice}
+                                  </a>
+                                )}
+                                {invoice.pdfUrl && (
+                                  <a href={invoice.pdfUrl} target="_blank" rel="noreferrer" className="text-primary hover:underline">
+                                    PDF
+                                  </a>
+                                )}
+                              </div>
                             </li>
                           ))}
                         </ul>
@@ -297,35 +353,11 @@ function AccountPage() {
               </section>
             )}
 
-            {section === "trips" && <EmptySection title={copy.trips.title} emptyTitle={copy.trips.emptyTitle} emptyBody={copy.trips.emptyBody} icon={RouteIcon} />}
-            {section === "vehicles" && <EmptySection title={copy.vehicles.title} emptyTitle={copy.vehicles.emptyTitle} emptyBody={copy.vehicles.emptyBody} icon={Car} />}
-            {section === "places" && <EmptySection title={copy.places.title} emptyTitle={copy.places.emptyTitle} emptyBody={copy.places.emptyBody} icon={Bookmark} />}
+            {section === "trips" && <TripsSection copy={copy} locale={locale} dateFormatter={dateFormatter} />}
+            {section === "vehicles" && <VehiclesSection copy={copy} />}
+            {section === "places" && <PlacesSection copy={copy} />}
 
-            {section === "preferences" && (
-              <section className="panel p-5 sm:p-7">
-                <h2 className="text-xl font-bold">{copy.preferences.title}</h2>
-                <div className="mt-5 max-w-xs">
-                  <label className="text-xs uppercase tracking-wide text-muted-foreground" htmlFor="account-language">
-                    {copy.preferences.language}
-                  </label>
-                  <select
-                    id="account-language"
-                    value={locale}
-                    onChange={(event) => setLocale(event.target.value)}
-                    className="mt-2 w-full rounded-lg border border-border bg-surface-raised px-3 py-2 text-foreground outline-none focus:border-primary/60"
-                  >
-                    <option value="en">English</option>
-                    <option value="no">Norsk</option>
-                    <option value="de">Deutsch</option>
-                    <option value="nl">Nederlands</option>
-                    <option value="pl">Polski</option>
-                    <option value="sv">Svenska</option>
-                    <option value="fr">Français</option>
-                  </select>
-                </div>
-                <p className="mt-5 text-sm text-muted-foreground">{copy.preferences.more}</p>
-              </section>
-            )}
+            {section === "preferences" && <PreferencesSection copy={copy} locale={locale} setLocale={setLocale} />}
 
             {section === "profile" && (
               <section className="space-y-6">
@@ -338,6 +370,13 @@ function AccountPage() {
                   <div className="mt-5 rounded-lg border border-border bg-surface-raised p-4">
                     <p className="text-sm font-semibold">{copy.profile.security}</p>
                     <p className="mt-1 text-sm text-muted-foreground">{copy.profile.securityBody}</p>
+                  </div>
+                  <div className="mt-5 rounded-lg border border-border bg-surface-raised p-4">
+                    <p className="text-sm font-semibold">{copy.profile.exportData}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{copy.profile.exportDataBody}</p>
+                    <Button variant="secondary" className="mt-3" disabled={exporting} onClick={exportData}>
+                      <Download className="mr-1.5 size-4" /> {copy.profile.exportData}
+                    </Button>
                   </div>
                 </div>
                 <div className="panel border-destructive/40 p-5 sm:p-7">
@@ -362,6 +401,30 @@ function AccountPage() {
                 </div>
               </section>
             )}
+
+            {section === "help" && (
+              <section className="space-y-6">
+                <div className="panel p-5 sm:p-7">
+                  <h2 className="text-xl font-bold">{copy.help.title}</h2>
+                  <p className="mt-2 text-sm text-muted-foreground">{copy.help.subtitle}</p>
+                </div>
+                <div className="panel p-5 sm:p-7">
+                  <h3 className="text-lg font-bold">{copy.help.faqTitle}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{copy.help.faqBody}</p>
+                  <Link to="/faq">
+                    <Button className="mt-4">{copy.help.faqLink}</Button>
+                  </Link>
+                </div>
+                <div className="panel p-5 sm:p-7">
+                  <h3 className="text-lg font-bold">{copy.help.contactTitle}</h3>
+                  <p className="mt-2 text-sm text-muted-foreground">{copy.help.contactBody}</p>
+                  <Button className="mt-4" onClick={() => setContactOpen(true)}>
+                    {copy.help.contactLink}
+                  </Button>
+                </div>
+                <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
+              </section>
+            )}
           </div>
         </div>
       </div>
@@ -369,15 +432,525 @@ function AccountPage() {
   );
 }
 
-function EmptySection({ title, emptyTitle, emptyBody, icon: Icon }: { title: string; emptyTitle: string; emptyBody: string; icon: typeof LayoutDashboard }) {
+function EmptyState({ title, body, icon: Icon }: { title: string; body: string; icon: typeof LayoutDashboard }) {
+  return (
+    <div className="mt-6 flex flex-col items-center rounded-lg border border-dashed border-border py-12 text-center">
+      <Icon className="size-8 text-muted-foreground/50" />
+      <p className="mt-4 text-sm font-semibold">{title}</p>
+      <p className="mt-2 max-w-sm text-sm text-muted-foreground">{body}</p>
+    </div>
+  );
+}
+
+type CopyProps = { copy: ReturnType<typeof getAccountCopy> };
+
+function TripsSection({ copy, locale, dateFormatter }: CopyProps & { locale: string; dateFormatter: Intl.DateTimeFormat }) {
+  const [trips, setTrips] = useState<Trip[] | null>(null);
+  const [renamingId, setRenamingId] = useState<string | null>(null);
+  const [renameValue, setRenameValue] = useState("");
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  useEffect(() => {
+    jsonFetch<{ trips: Trip[] }>("/api/trips")
+      .then((body) => setTrips(body.trips))
+      .catch(() => setTrips([]));
+  }, []);
+
+  async function remove(id: string) {
+    if (!window.confirm(copy.trips.deleteConfirm)) return;
+    setBusyId(id);
+    try {
+      await jsonFetch(`/api/trips/${id}`, { method: "DELETE" });
+      setTrips((current) => (current ? current.filter((trip) => trip.id !== id) : current));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function duplicate(trip: Trip) {
+    setBusyId(trip.id);
+    try {
+      const body = await jsonFetch<{ trip: Trip }>("/api/trips", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: `${trip.name} (copy)`, fromPlace: trip.fromPlace, toPlace: trip.toPlace, vehicleType: trip.vehicleType, currency: trip.currency, days: trip.days, estimate: trip.estimate }),
+      });
+      setTrips((current) => (current ? [body.trip, ...current] : [body.trip]));
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function saveRename(id: string) {
+    if (!renameValue.trim()) {
+      setRenamingId(null);
+      return;
+    }
+    setBusyId(id);
+    try {
+      const body = await jsonFetch<{ trip: Trip }>(`/api/trips/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: renameValue.trim() }),
+      });
+      setTrips((current) => (current ? current.map((trip) => (trip.id === id ? body.trip : trip)) : current));
+    } finally {
+      setBusyId(null);
+      setRenamingId(null);
+    }
+  }
+
+  function print(trip: Trip) {
+    const estimate = (trip.estimate ?? {}) as { summary?: Record<string, string | number | null | undefined> };
+    const summary = estimate.summary ?? {};
+    const summaryRows = Object.entries(summary)
+      .filter(([, value]) => value !== null && value !== undefined && value !== "")
+      .map(([label, value]) => ({ label, value: String(value) }));
+
+    openPrintReport({
+      title: trip.name,
+      subtitle: [trip.fromPlace, trip.toPlace].filter(Boolean).join(" → ") || undefined,
+      generatedAtLabel: new Intl.DateTimeFormat(locale, { dateStyle: "long", timeStyle: "short" }).format(new Date()),
+      sections: [
+        {
+          heading: copy.trips.title,
+          rows: [
+            { label: copy.vehicles.type, value: trip.vehicleType ?? "—" },
+            { label: copy.preferences.currency, value: trip.currency ?? "—" },
+            { label: copy.trips.days, value: trip.days ? String(trip.days) : "—" },
+            { label: copy.trips.created, value: dateFormatter.format(new Date(trip.createdAt)) },
+          ],
+        },
+        ...(summaryRows.length > 0 ? [{ heading: copy.trips.estimate, rows: summaryRows }] : []),
+      ],
+      disclaimer: "Figures are estimates calculated on your device from open data (OpenStreetMap, OSRM) at the time the trip was saved. Always confirm official prices before you travel.",
+    });
+  }
+
+  function reopen(trip: Trip) {
+    try {
+      sessionStorage.setItem("autovere-reopen-trip", JSON.stringify(trip));
+    } catch {
+      /* storage unavailable */
+    }
+    window.location.href = "/";
+  }
+
   return (
     <section className="panel p-5 sm:p-7">
-      <h2 className="text-xl font-bold">{title}</h2>
-      <div className="mt-6 flex flex-col items-center rounded-lg border border-dashed border-border py-12 text-center">
-        <Icon className="size-8 text-muted-foreground/50" />
-        <p className="mt-4 text-sm font-semibold">{emptyTitle}</p>
-        <p className="mt-2 max-w-sm text-sm text-muted-foreground">{emptyBody}</p>
+      <h2 className="text-xl font-bold">{copy.trips.title}</h2>
+      {trips === null ? (
+        <p className="mt-4 text-sm text-muted-foreground">{copy.loading}</p>
+      ) : trips.length === 0 ? (
+        <EmptyState title={copy.trips.emptyTitle} body={copy.trips.emptyBody} icon={RouteIcon} />
+      ) : (
+        <ul className="mt-5 divide-y divide-border">
+          {trips.map((trip) => (
+            <li key={trip.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div className="min-w-0">
+                {renamingId === trip.id ? (
+                  <input
+                    autoFocus
+                    value={renameValue}
+                    onChange={(event) => setRenameValue(event.target.value)}
+                    onBlur={() => saveRename(trip.id)}
+                    onKeyDown={(event) => event.key === "Enter" && saveRename(trip.id)}
+                    className="w-full rounded-md border border-border bg-surface-raised px-2 py-1 text-sm outline-none focus:border-primary/60"
+                  />
+                ) : (
+                  <p className="truncate font-semibold">{trip.name}</p>
+                )}
+                <p className="truncate text-xs text-muted-foreground">
+                  {[trip.fromPlace, trip.toPlace].filter(Boolean).join(" → ") || "—"} · {copy.trips.savedOn(dateFormatter.format(new Date(trip.updatedAt)))}
+                </p>
+              </div>
+              <div className="flex shrink-0 flex-wrap gap-2">
+                <Button size="sm" variant="secondary" disabled={busyId === trip.id} onClick={() => reopen(trip)}>
+                  {copy.trips.open}
+                </Button>
+                <Button size="sm" variant="ghost" title={copy.trips.print} disabled={busyId === trip.id} onClick={() => print(trip)}>
+                  <Printer className="size-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  disabled={busyId === trip.id}
+                  onClick={() => {
+                    setRenamingId(trip.id);
+                    setRenameValue(trip.name);
+                  }}
+                >
+                  <Pencil className="size-4" />
+                </Button>
+                <Button size="sm" variant="ghost" disabled={busyId === trip.id} onClick={() => duplicate(trip)}>
+                  {copy.trips.duplicate}
+                </Button>
+                <Button size="sm" variant="ghost" disabled={busyId === trip.id} onClick={() => remove(trip.id)}>
+                  <Trash2 className="size-4 text-destructive" />
+                </Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+const VEHICLE_TYPES: Vehicle["vehicleType"][] = ["petrol", "diesel", "ev"];
+
+function VehiclesSection({ copy }: CopyProps) {
+  const [vehicles, setVehicles] = useState<Vehicle[] | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [form, setForm] = useState({ name: "", vehicleType: "petrol" as Vehicle["vehicleType"], consumption: "", rangeKm: "" });
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  function load() {
+    jsonFetch<{ vehicles: Vehicle[] }>("/api/vehicles")
+      .then((body) => setVehicles(body.vehicles))
+      .catch(() => setVehicles([]));
+  }
+
+  useEffect(load, []);
+
+  async function add() {
+    if (!form.name.trim()) return;
+    setBusyId("new");
+    try {
+      await jsonFetch("/api/vehicles", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: form.name.trim(),
+          vehicleType: form.vehicleType,
+          consumption: form.consumption ? Number(form.consumption) : null,
+          rangeKm: form.rangeKm ? Number(form.rangeKm) : null,
+        }),
+      });
+      setForm({ name: "", vehicleType: "petrol", consumption: "", rangeKm: "" });
+      setAdding(false);
+      load();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function setDefault(id: string) {
+    setBusyId(id);
+    try {
+      await jsonFetch(`/api/vehicles/${id}`, { method: "PATCH", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ isDefault: true }) });
+      load();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function remove(id: string) {
+    if (!window.confirm(copy.vehicles.deleteConfirm)) return;
+    setBusyId(id);
+    try {
+      await jsonFetch(`/api/vehicles/${id}`, { method: "DELETE" });
+      load();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  const typeLabel: Record<Vehicle["vehicleType"], string> = { petrol: copy.vehicles.typePetrol, diesel: copy.vehicles.typeDiesel, ev: copy.vehicles.typeEv };
+
+  return (
+    <section className="panel p-5 sm:p-7">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">{copy.vehicles.title}</h2>
+        {!adding && (
+          <Button size="sm" onClick={() => setAdding(true)}>
+            {copy.vehicles.add}
+          </Button>
+        )}
       </div>
+
+      {adding && (
+        <div className="mt-5 space-y-3 rounded-lg border border-border bg-surface-raised p-4">
+          <div>
+            <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.vehicles.name}</label>
+            <input value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder={copy.vehicles.namePlaceholder} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary/60" />
+          </div>
+          <div className="grid gap-3 sm:grid-cols-3">
+            <div>
+              <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.vehicles.type}</label>
+              <select value={form.vehicleType} onChange={(event) => setForm({ ...form, vehicleType: event.target.value as Vehicle["vehicleType"] })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary/60">
+                {VEHICLE_TYPES.map((type) => (
+                  <option key={type} value={type}>
+                    {typeLabel[type]}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.vehicles.consumption}</label>
+              <input type="number" step="0.1" value={form.consumption} onChange={(event) => setForm({ ...form, consumption: event.target.value })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary/60" />
+            </div>
+            <div>
+              <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.vehicles.range}</label>
+              <input type="number" value={form.rangeKm} onChange={(event) => setForm({ ...form, rangeKm: event.target.value })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary/60" />
+            </div>
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" disabled={busyId === "new"} onClick={add}>
+              {copy.vehicles.save}
+            </Button>
+            <Button size="sm" variant="secondary" onClick={() => setAdding(false)}>
+              {copy.vehicles.cancel}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {vehicles === null ? (
+        <p className="mt-4 text-sm text-muted-foreground">{copy.loading}</p>
+      ) : vehicles.length === 0 && !adding ? (
+        <EmptyState title={copy.vehicles.emptyTitle} body={copy.vehicles.emptyBody} icon={Car} />
+      ) : (
+        <ul className="mt-5 divide-y divide-border">
+          {vehicles.map((vehicle) => (
+            <li key={vehicle.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="flex items-center gap-2 font-semibold">
+                  {vehicle.name}
+                  {vehicle.isDefault && <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-bold text-primary">{copy.vehicles.default}</span>}
+                </p>
+                <p className="text-xs text-muted-foreground">
+                  {typeLabel[vehicle.vehicleType]}
+                  {vehicle.consumption ? ` · ${vehicle.consumption}/100km` : ""}
+                  {vehicle.rangeKm ? ` · ${vehicle.rangeKm}km` : ""}
+                </p>
+              </div>
+              <div className="flex shrink-0 gap-2">
+                {!vehicle.isDefault && (
+                  <Button size="sm" variant="secondary" disabled={busyId === vehicle.id} onClick={() => setDefault(vehicle.id)}>
+                    <Star className="mr-1 size-3.5" /> {copy.vehicles.setDefault}
+                  </Button>
+                )}
+                <Button size="sm" variant="ghost" disabled={busyId === vehicle.id} onClick={() => remove(vehicle.id)}>
+                  <Trash2 className="size-4 text-destructive" />
+                </Button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+const PLACE_CATEGORIES: SavedPlace["category"][] = ["charging", "camping", "attraction", "other"];
+
+function PlacesSection({ copy }: CopyProps) {
+  const [places, setPlaces] = useState<SavedPlace[] | null>(null);
+  const [adding, setAdding] = useState(false);
+  const [form, setForm] = useState({ name: "", category: "charging" as SavedPlace["category"], notes: "" });
+  const [busyId, setBusyId] = useState<string | null>(null);
+
+  function load() {
+    jsonFetch<{ places: SavedPlace[] }>("/api/places")
+      .then((body) => setPlaces(body.places))
+      .catch(() => setPlaces([]));
+  }
+
+  useEffect(load, []);
+
+  async function add() {
+    if (!form.name.trim()) return;
+    setBusyId("new");
+    try {
+      await jsonFetch("/api/places", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ name: form.name.trim(), category: form.category, notes: form.notes.trim() || undefined }) });
+      setForm({ name: "", category: "charging", notes: "" });
+      setAdding(false);
+      load();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  async function remove(id: string) {
+    setBusyId(id);
+    try {
+      await jsonFetch(`/api/places/${id}`, { method: "DELETE" });
+      load();
+    } finally {
+      setBusyId(null);
+    }
+  }
+
+  const categoryLabel: Record<SavedPlace["category"], string> = {
+    charging: copy.places.categoryCharging,
+    camping: copy.places.categoryCamping,
+    attraction: copy.places.categoryAttraction,
+    other: copy.places.categoryOther,
+  };
+
+  return (
+    <section className="panel p-5 sm:p-7">
+      <div className="flex items-center justify-between">
+        <h2 className="text-xl font-bold">{copy.places.title}</h2>
+        {!adding && (
+          <Button size="sm" onClick={() => setAdding(true)}>
+            {copy.places.add}
+          </Button>
+        )}
+      </div>
+
+      {adding && (
+        <div className="mt-5 space-y-3 rounded-lg border border-border bg-surface-raised p-4">
+          <div>
+            <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.places.name}</label>
+            <input value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} placeholder={copy.places.namePlaceholder} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary/60" />
+          </div>
+          <div>
+            <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.places.category}</label>
+            <select value={form.category} onChange={(event) => setForm({ ...form, category: event.target.value as SavedPlace["category"] })} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary/60">
+              {PLACE_CATEGORIES.map((category) => (
+                <option key={category} value={category}>
+                  {categoryLabel[category]}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.places.notes}</label>
+            <textarea value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} rows={2} className="mt-1 w-full rounded-md border border-border bg-background px-3 py-2 text-sm outline-none focus:border-primary/60" />
+          </div>
+          <div className="flex gap-2">
+            <Button size="sm" disabled={busyId === "new"} onClick={add}>
+              {copy.places.save}
+            </Button>
+            <Button size="sm" variant="secondary" onClick={() => setAdding(false)}>
+              {copy.places.cancel}
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {places === null ? (
+        <p className="mt-4 text-sm text-muted-foreground">{copy.loading}</p>
+      ) : places.length === 0 && !adding ? (
+        <EmptyState title={copy.places.emptyTitle} body={copy.places.emptyBody} icon={Bookmark} />
+      ) : (
+        <ul className="mt-5 divide-y divide-border">
+          {places.map((place) => (
+            <li key={place.id} className="flex flex-col gap-3 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="font-semibold">{place.name}</p>
+                <p className="text-xs text-muted-foreground">
+                  {categoryLabel[place.category]}
+                  {place.notes ? ` · ${place.notes}` : ""}
+                </p>
+              </div>
+              <Button size="sm" variant="ghost" disabled={busyId === place.id} onClick={() => remove(place.id)}>
+                <Trash2 className="size-4 text-destructive" />
+              </Button>
+            </li>
+          ))}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+function PreferencesSection({ copy, locale, setLocale }: CopyProps & { locale: string; setLocale: (locale: string) => void }) {
+  const [settings, setSettings] = useState<Settings | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [savedFlag, setSavedFlag] = useState(false);
+
+  useEffect(() => {
+    jsonFetch<{ settings: Settings }>("/api/settings")
+      .then((body) => setSettings(body.settings))
+      .catch(() => setSettings({ language: null, currency: null, units: null, notificationsEmail: true }));
+  }, []);
+
+  async function save() {
+    if (!settings) return;
+    setSaving(true);
+    setSavedFlag(false);
+    try {
+      await jsonFetch("/api/settings", { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...settings, language: locale }) });
+      setSavedFlag(true);
+    } finally {
+      setSaving(false);
+    }
+  }
+
+  if (!settings) {
+    return (
+      <section className="panel p-5 sm:p-7">
+        <h2 className="text-xl font-bold">{copy.preferences.title}</h2>
+        <p className="mt-4 text-sm text-muted-foreground">{copy.loading}</p>
+      </section>
+    );
+  }
+
+  return (
+    <section className="panel p-5 sm:p-7">
+      <h2 className="text-xl font-bold">{copy.preferences.title}</h2>
+      <div className="mt-5 grid gap-5 sm:grid-cols-2">
+        <div>
+          <label className="text-xs uppercase tracking-wide text-muted-foreground" htmlFor="account-language">
+            {copy.preferences.language}
+          </label>
+          <select id="account-language" value={locale} onChange={(event) => setLocale(event.target.value)} className="mt-1 w-full rounded-lg border border-border bg-surface-raised px-3 py-2 text-foreground outline-none focus:border-primary/60">
+            <option value="en">English</option>
+            <option value="no">Norsk</option>
+            <option value="de">Deutsch</option>
+            <option value="nl">Nederlands</option>
+            <option value="pl">Polski</option>
+            <option value="sv">Svenska</option>
+            <option value="fr">Français</option>
+          </select>
+        </div>
+        <div>
+          <label className="text-xs uppercase tracking-wide text-muted-foreground" htmlFor="account-currency">
+            {copy.preferences.currency}
+          </label>
+          <select
+            id="account-currency"
+            value={settings.currency ?? ""}
+            onChange={(event) => setSettings({ ...settings, currency: (event.target.value || null) as CurrencyCode | null })}
+            className="mt-1 w-full rounded-lg border border-border bg-surface-raised px-3 py-2 text-foreground outline-none focus:border-primary/60"
+          >
+            <option value="">—</option>
+            {CURRENCIES.map((code) => (
+              <option key={code} value={code}>
+                {code}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.preferences.units}</label>
+          <div className="mt-1 flex gap-2">
+            <button type="button" onClick={() => setSettings({ ...settings, units: "metric" })} className={`flex-1 rounded-lg border px-3 py-2 text-sm ${settings.units === "metric" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>
+              {copy.preferences.unitsMetric}
+            </button>
+            <button type="button" onClick={() => setSettings({ ...settings, units: "imperial" })} className={`flex-1 rounded-lg border px-3 py-2 text-sm ${settings.units === "imperial" ? "border-primary bg-primary/10 text-primary" : "border-border text-muted-foreground"}`}>
+              {copy.preferences.unitsImperial}
+            </button>
+          </div>
+        </div>
+        <div>
+          <label className="text-xs uppercase tracking-wide text-muted-foreground">{copy.preferences.notifications}</label>
+          <label className="mt-1 flex items-center gap-2 text-sm">
+            <input type="checkbox" checked={settings.notificationsEmail} onChange={(event) => setSettings({ ...settings, notificationsEmail: event.target.checked })} />
+            {copy.preferences.notificationsEmail}
+          </label>
+        </div>
+      </div>
+      <div className="mt-6 flex items-center gap-3">
+        <Button disabled={saving} onClick={save}>
+          {copy.preferences.save}
+        </Button>
+        {savedFlag && <span className="text-sm text-primary">{copy.preferences.saved}</span>}
+      </div>
+      <p className="mt-4 text-sm text-muted-foreground">{copy.preferences.more}</p>
     </section>
   );
 }
