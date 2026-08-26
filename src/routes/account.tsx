@@ -25,6 +25,7 @@ import { useLocale } from "@/lib/i18n";
 import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { getAccountCopy } from "@/lib/account-i18n";
 import { openPrintReport } from "@/lib/print-report";
+import { AccountShell, EmptyState, type AccountNavItem } from "@/components/account/AccountFrame";
 
 export const Route = createFileRoute("/account")({ component: AccountPage });
 
@@ -176,7 +177,7 @@ function AccountPage() {
   const features = featuresForTier(subscription?.tier ?? null);
   const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
 
-  const nav: { key: Section; label: string; icon: typeof LayoutDashboard }[] = [
+  const nav: AccountNavItem<Section>[] = [
     { key: "overview", label: copy.nav.overview, icon: LayoutDashboard },
     { key: "trips", label: copy.nav.trips, icon: RouteIcon },
     { key: "vehicles", label: copy.nav.vehicles, icon: Car },
@@ -188,37 +189,16 @@ function AccountPage() {
   ];
 
   return (
-    <main className="min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
-      <div className="mx-auto max-w-6xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
-          <ArrowLeft className="size-4" /> {copy.backToPlanner}
-        </Link>
-
-        <header className="mt-10 max-w-3xl">
-          <p className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-primary">{copy.eyebrow}</p>
-          <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">{copy.welcome(firstName)}</h1>
-          <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{subscription ? copy.subtitleActive : copy.subtitleFree}</p>
-        </header>
-
-        <div className="mt-8 grid gap-6 lg:grid-cols-[240px_1fr]">
-          <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0">
-            {nav.map(({ key, label, icon: Icon }) => (
-              <button
-                key={key}
-                type="button"
-                onClick={() => setSection(key)}
-                className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-left text-sm font-semibold transition-colors ${
-                  section === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-surface-raised hover:text-foreground"
-                }`}
-              >
-                <Icon className="size-4 shrink-0" />
-                <span className="whitespace-nowrap lg:whitespace-normal">{label}</span>
-              </button>
-            ))}
-          </nav>
-
-          <div className="min-w-0 space-y-6">
-            {section === "overview" && (
+    <AccountShell
+      backLabel={copy.backToPlanner}
+      eyebrow={copy.eyebrow}
+      title={copy.welcome(firstName)}
+      subtitle={subscription ? copy.subtitleActive : copy.subtitleFree}
+      nav={nav}
+      active={section}
+      onSelect={setSection}
+    >
+      {section === "overview" && (
               <>
                 <div className={`panel flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7 ${subscription ? "border-primary/60 panel-glow" : ""}`}>
                   <div>
@@ -425,20 +405,7 @@ function AccountPage() {
                 <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
               </section>
             )}
-          </div>
-        </div>
-      </div>
-    </main>
-  );
-}
-
-function EmptyState({ title, body, icon: Icon }: { title: string; body: string; icon: typeof LayoutDashboard }) {
-  return (
-    <div className="mt-6 flex flex-col items-center rounded-lg border border-dashed border-border py-12 text-center">
-      <Icon className="size-8 text-muted-foreground/50" />
-      <p className="mt-4 text-sm font-semibold">{title}</p>
-      <p className="mt-2 max-w-sm text-sm text-muted-foreground">{body}</p>
-    </div>
+    </AccountShell>
   );
 }
 
