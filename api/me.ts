@@ -19,17 +19,17 @@ function getStripe(): Stripe | null {
   return secret ? new Stripe(secret) : null;
 }
 
-const planLabelByEnv: Record<string, string> = {
-  STRIPE_PRO_MONTHLY_PRICE_ID: "AutoVere Pro",
-  STRIPE_PRO_YEARLY_PRICE_ID: "AutoVere Pro",
-  STRIPE_BUSINESS_MONTHLY_PRICE_ID: "AutoVere Business",
-  STRIPE_BUSINESS_YEARLY_PRICE_ID: "AutoVere Business",
+const planByEnv: Record<string, { label: string; tier: "pro" | "business" }> = {
+  STRIPE_PRO_MONTHLY_PRICE_ID: { label: "AutoVere Pro", tier: "pro" },
+  STRIPE_PRO_YEARLY_PRICE_ID: { label: "AutoVere Pro", tier: "pro" },
+  STRIPE_BUSINESS_MONTHLY_PRICE_ID: { label: "AutoVere Business", tier: "business" },
+  STRIPE_BUSINESS_YEARLY_PRICE_ID: { label: "AutoVere Business", tier: "business" },
 };
 
-function planLabelForPriceId(priceId: string | undefined): string | null {
+function planForPriceId(priceId: string | undefined): { label: string; tier: "pro" | "business" } | null {
   if (!priceId) return null;
-  for (const [envName, label] of Object.entries(planLabelByEnv)) {
-    if (process.env[envName] === priceId) return label;
+  for (const [envName, plan] of Object.entries(planByEnv)) {
+    if (process.env[envName] === priceId) return plan;
   }
   return null;
 }
@@ -65,11 +65,13 @@ export default async function handler(request: Request, response: Response) {
       return;
     }
     const price = active.items.data[0]?.price;
+    const plan = planForPriceId(price?.id);
     response.status(200).json({
       email,
       subscription: {
         status: active.status,
-        plan: planLabelForPriceId(price?.id) ?? price?.nickname ?? price?.id ?? "AutoVere",
+        plan: plan?.label ?? price?.nickname ?? price?.id ?? "AutoVere",
+        tier: plan?.tier ?? null,
         interval: price?.recurring?.interval ?? null,
         cancelAtPeriodEnd: active.cancel_at_period_end,
       },
