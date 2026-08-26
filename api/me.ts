@@ -19,6 +19,21 @@ function getStripe(): Stripe | null {
   return secret ? new Stripe(secret) : null;
 }
 
+const planLabelByEnv: Record<string, string> = {
+  STRIPE_PRO_MONTHLY_PRICE_ID: "AutoVere Pro",
+  STRIPE_PRO_YEARLY_PRICE_ID: "AutoVere Pro",
+  STRIPE_BUSINESS_MONTHLY_PRICE_ID: "AutoVere Business",
+  STRIPE_BUSINESS_YEARLY_PRICE_ID: "AutoVere Business",
+};
+
+function planLabelForPriceId(priceId: string | undefined): string | null {
+  if (!priceId) return null;
+  for (const [envName, label] of Object.entries(planLabelByEnv)) {
+    if (process.env[envName] === priceId) return label;
+  }
+  return null;
+}
+
 export default async function handler(request: Request, response: Response) {
   if (request.method !== "GET") {
     response.status(405).json({ error: "Method not allowed" });
@@ -54,7 +69,7 @@ export default async function handler(request: Request, response: Response) {
       email,
       subscription: {
         status: active.status,
-        plan: price?.nickname ?? price?.id ?? "AutoVere",
+        plan: planLabelForPriceId(price?.id) ?? price?.nickname ?? price?.id ?? "AutoVere",
         interval: price?.recurring?.interval ?? null,
         cancelAtPeriodEnd: active.cancel_at_period_end,
       },
