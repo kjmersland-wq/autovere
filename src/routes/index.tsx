@@ -25,7 +25,7 @@ import {
   shapingWaypoints,
   wazeUrl,
 } from "@/lib/export";
-import { useLocale, useT } from "@/lib/i18n";
+import { loginLabels, useLocale, useT } from "@/lib/i18n";
 import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { useTheme } from "@/hooks/use-theme";
 import { formatCurrency } from "@/lib/currency";
@@ -465,6 +465,12 @@ function Index() {
                 </div>
               )}
             </div>
+            <Link
+              to="/login"
+              className="rounded-lg border border-primary/40 bg-primary/10 px-2.5 py-2 text-xs font-bold text-primary transition-colors hover:border-primary/70 hover:bg-primary/15"
+            >
+              {loginLabels[locale]}
+            </Link>
             <button
               type="button"
               onClick={toggleTheme}

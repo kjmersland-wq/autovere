@@ -20,6 +20,17 @@ export const en = {
 export type Dict = typeof en;
 export type Locale = "en" | "de" | "nl" | "no" | "pl" | "sv" | "fr" | "da";
 
+export const loginLabels: Record<Locale, string> = {
+  en: "Sign in",
+  de: "Anmelden",
+  nl: "Inloggen",
+  no: "Logg inn",
+  pl: "Zaloguj się",
+  sv: "Logga in",
+  fr: "Se connecter",
+  da: "Log ind",
+};
+
 const da: Dict = {
   ...en,
   tagline: "Europæisk motorvejsafgifts-, vignet- og ladeintelligens",
