@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon, Check, ChevronDown } from "lucide-react";
+import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon, Check, ChevronDown, Sparkles } from "lucide-react";
 import { TripForm, type DemoRoute, type TripFormState } from "@/components/TripForm";
 import { ContactModal } from "@/components/ContactModal";
 import { ShareModal } from "@/components/ShareModal";
@@ -562,6 +562,12 @@ function Index() {
               )}
             </div>
             <Link
+              to="/demo"
+              className="hidden items-center gap-1.5 rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary sm:flex"
+            >
+              <Sparkles className="size-3.5" /> {t.exploreDemo}
+            </Link>
+            <Link
               to="/login"
               className="rounded-lg border border-primary/40 bg-primary/10 px-2.5 py-2 text-xs font-bold text-primary transition-colors hover:border-primary/70 hover:bg-primary/15"
             >
@@ -802,6 +808,7 @@ function Index() {
             <ShareModal compact />
             <Link to="/pricing" className="hover:text-foreground">{marketing.pricingLink}</Link>
             <Link to="/faq" className="hover:text-foreground">{marketing.faqLink}</Link>
+            <Link to="/demo" className="hover:text-foreground">{t.exploreDemo}</Link>
           </nav>
           <p className="mt-2 max-w-3xl">
             {t.footerDisclaimer}
