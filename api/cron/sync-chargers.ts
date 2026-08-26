@@ -31,8 +31,8 @@ type OpenChargeMapStation = {
 const apiUrl = "https://api.openchargemap.io/v3/poi/?output=json&boundingbox=71.2,-25,34,45&maxresults=5000&compact=true&verbose=false";
 
 function cronAuthorized(request: VercelRequest) {
-  const secret = process.env.CRON_SECRET;
-  if (process.env.NODE_ENV !== "production" && !secret) return true;
+  const secret = process.env["CRON_SECRET"];
+  if (process.env["NODE_ENV"] !== "production" && !secret) return true;
   return Boolean(secret && request.headers.authorization === `Bearer ${secret}`);
 }
 
@@ -69,7 +69,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
     return;
   }
   try {
-    const apiKey = process.env.OPEN_CHARGE_MAP_API_KEY;
+    const apiKey = process.env["OPEN_CHARGE_MAP_API_KEY"];
     const url = apiKey ? `${apiUrl}&key=${encodeURIComponent(apiKey)}` : apiUrl;
     const upstream = await fetch(url, { headers: { Accept: "application/json" } });
     if (!upstream.ok) throw new Error(`Open Charge Map returned ${upstream.status}`);

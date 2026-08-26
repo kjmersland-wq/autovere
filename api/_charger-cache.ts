@@ -33,7 +33,7 @@ export function setMemoryChargerCache(cache: ChargerCache) {
 
 export async function saveChargerCache(cache: ChargerCache) {
   setMemoryChargerCache(cache);
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  if (!process.env["BLOB_READ_WRITE_TOKEN"]) return null;
   const blob = await put(blobPath, JSON.stringify(cache), {
     access: "public",
     addRandomSuffix: false,
@@ -45,7 +45,7 @@ export async function saveChargerCache(cache: ChargerCache) {
 
 export async function loadChargerCache(): Promise<ChargerCache | null> {
   if (memoryCache) return memoryCache;
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return null;
+  if (!process.env["BLOB_READ_WRITE_TOKEN"]) return null;
   const existing = await list({ prefix: blobPath, limit: 1 });
   const blob = existing.blobs[0];
   if (!blob) return null;
@@ -58,7 +58,7 @@ export async function loadChargerCache(): Promise<ChargerCache | null> {
 }
 
 export async function chargerCacheExists() {
-  if (!process.env.BLOB_READ_WRITE_TOKEN) return Boolean(memoryCache);
+  if (!process.env["BLOB_READ_WRITE_TOKEN"]) return Boolean(memoryCache);
   try {
     return Boolean((await head(blobPath)).url);
   } catch {

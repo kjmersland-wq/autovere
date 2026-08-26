@@ -10,7 +10,7 @@ type VercelResponse = ServerResponse & {
 export const config = { api: { bodyParser: false } };
 
 function getStripe() {
-  const secret = process.env.STRIPE_SECRET_KEY;
+  const secret = process.env["STRIPE_SECRET_KEY"];
   return secret ? new Stripe(secret) : null;
 }
 
@@ -27,7 +27,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
     response.status(405).json({ error: "Method not allowed" });
     return;
   }
-  const secret = process.env.STRIPE_WEBHOOK_SECRET;
+  const secret = process.env["STRIPE_WEBHOOK_SECRET"];
   const signature = request.headers["stripe-signature"];
   const stripe = getStripe();
   if (!stripe || !secret || typeof signature !== "string") {

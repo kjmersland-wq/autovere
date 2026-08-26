@@ -18,7 +18,7 @@ const priceEnvByKey: Record<string, string> = {
 };
 
 function getStripe() {
-  const secret = process.env.STRIPE_SECRET_KEY;
+  const secret = process.env["STRIPE_SECRET_KEY"];
   return secret ? new Stripe(secret) : null;
 }
 
@@ -34,9 +34,9 @@ function parseBody(body: VercelRequest["body"]): CheckoutBody {
 }
 
 function siteUrl(request: VercelRequest): string {
-  const configuredUrl = process.env.NEXT_PUBLIC_SITE_URL ?? process.env.NEXTAUTH_URL;
+  const configuredUrl = process.env["NEXT_PUBLIC_SITE_URL"] ?? process.env["NEXTAUTH_URL"];
   if (configuredUrl) return configuredUrl.replace(/\/$/, "");
-  const host = request.headers.host ?? process.env.VERCEL_URL ?? "localhost:3000";
+  const host = request.headers.host ?? process.env["VERCEL_URL"] ?? "localhost:3000";
   return `${host.includes("localhost") ? "http" : "https"}://${host}`;
 }
 

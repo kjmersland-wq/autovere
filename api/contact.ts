@@ -77,7 +77,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
     response.status(400).json({ error: "Meldingen er for lang." });
     return;
   }
-  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+  if (!process.env["GMAIL_USER"] || !process.env["GMAIL_APP_PASSWORD"]) {
     console.error("Missing GMAIL_USER or GMAIL_APP_PASSWORD environment variable");
     response.status(500).json({ error: "E-posttjenesten er ikke konfigurert ennå." });
     return;
@@ -86,8 +86,8 @@ export default async function handler(request: VercelRequest, response: VercelRe
   const transporter = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: process.env.GMAIL_USER,
-      pass: process.env.GMAIL_APP_PASSWORD,
+      user: process.env["GMAIL_USER"],
+      pass: process.env["GMAIL_APP_PASSWORD"],
     },
   });
   const safeName = escapeHtml(name);
@@ -97,7 +97,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
 
   try {
     await transporter.sendMail({
-      from: process.env.GMAIL_USER,
+      from: process.env["GMAIL_USER"],
       to: recipient,
       replyTo: email,
       subject: `[AUTOVERE Henvendelse] ${subject}`,
