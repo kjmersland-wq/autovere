@@ -20,9 +20,14 @@ function createMagicToken(email: string): string {
 }
 
 function authBaseUrl(): string {
-  const configured = (process.env["AUTH_BASE_URL"] || process.env["NEXT_PUBLIC_SITE_URL"] || "https://autovere.com").trim();
+  const raw = (process.env["AUTH_BASE_URL"] || process.env["NEXT_PUBLIC_SITE_URL"] || "https://autovere.com").trim();
+  const configured = raw.replace(/^['"]|['"]$/g, "").trim();
   if (/^https?:\/\//.test(configured)) return configured.replace(/\/$/, "");
   return `https://${configured.replace(/\/$/, "")}`;
+}
+
+function escapeHtmlAttr(value: string): string {
+  return value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character] ?? character);
 }
 
 function parseBody(body: Request["body"]): { email?: unknown } {
@@ -54,7 +59,7 @@ export default async function handler(request: Request, response: Response) {
       to: email,
       subject: "Your AutoVere login link",
       text: `Use this link to sign in to AutoVere. It expires in 15 minutes:\n\n${link}`,
-      html: `<p>Use this link to sign in to AutoVere. It expires in 15 minutes:</p><p><a href="${link}">Sign in to AutoVere</a></p>`,
+      html: `<p>Use this link to sign in to AutoVere. It expires in 15 minutes:</p><p><a href="${escapeHtmlAttr(link)}">Sign in to AutoVere</a></p><p style="word-break:break-all;color:#666;font-size:12px">${escapeHtmlAttr(link)}</p>`,
     });
     response.status(200).json({ ok: true });
   } catch (error) {
