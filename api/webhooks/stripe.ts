@@ -1,5 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { randomUUID } from "node:crypto";
 import Stripe from "stripe";
+import { neon } from "@neondatabase/serverless";
 
 type VercelRequest = IncomingMessage & { body?: unknown };
 type VercelResponse = ServerResponse & {
@@ -48,7 +50,19 @@ export default async function handler(request: VercelRequest, response: VercelRe
     case "checkout.session.completed": {
       const session = event.data.object as Stripe.Checkout.Session;
       console.info("Stripe checkout completed", { sessionId: session.id, customerId: session.customer, subscriptionId: session.subscription });
-      // TODO: Persist the customer's plan and subscription access when accounts are added.
+      const partnerId = session.metadata?.["partnerId"];
+      const databaseUrl = process.env["DATABASE_URL"];
+      if (partnerId && databaseUrl) {
+        try {
+          const sql = neon(databaseUrl);
+          await sql`
+            INSERT INTO partner_referrals (id, partner_id, email, stripe_customer_id, stripe_subscription_id)
+            VALUES (${randomUUID()}, ${partnerId}, ${session.customer_details?.email ?? null}, ${typeof session.customer === "string" ? session.customer : null}, ${typeof session.subscription === "string" ? session.subscription : null})
+          `;
+        } catch (error) {
+          console.error("Recording partner referral failed", error);
+        }
+      }
       break;
     }
     case "customer.subscription.deleted": {

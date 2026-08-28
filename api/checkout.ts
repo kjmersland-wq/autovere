@@ -1,7 +1,8 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import Stripe from "stripe";
+import { neon } from "@neondatabase/serverless";
 
-type CheckoutBody = { priceId?: unknown; locale?: unknown };
+type CheckoutBody = { priceId?: unknown; locale?: unknown; partnerId?: unknown };
 type VercelRequest = IncomingMessage & { body?: CheckoutBody | string };
 type VercelResponse = ServerResponse & {
   status: (code: number) => VercelResponse;
@@ -31,6 +32,45 @@ function parseBody(body: VercelRequest["body"]): CheckoutBody {
     }
   }
   return body ?? {};
+}
+
+type PartnerRow = {
+  id: string;
+  active: boolean;
+  start_date: string | null;
+  end_date: string | null;
+  discount_percent: number;
+  discount_code: string;
+};
+
+function isPartnerActiveNow(row: PartnerRow): boolean {
+  if (!row.active) return false;
+  const today = new Date().toISOString().slice(0, 10);
+  if (row.start_date && today < row.start_date) return false;
+  if (row.end_date && today > row.end_date) return false;
+  return true;
+}
+
+async function resolvePartnerPromotionCode(stripe: Stripe, partnerId: string): Promise<string | null> {
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (!databaseUrl) return null;
+  try {
+    const sql = neon(databaseUrl);
+    const rows = (await sql`SELECT id, active, start_date, end_date, discount_percent, discount_code FROM partners WHERE id = ${partnerId.toUpperCase()}`) as PartnerRow[];
+    const partner = rows[0];
+    if (!partner || !isPartnerActiveNow(partner)) return null;
+
+    const existing = await stripe.promotionCodes.list({ code: partner.discount_code, active: true, limit: 1 });
+    const found = existing.data[0];
+    if (found) return found.id;
+
+    const coupon = await stripe.coupons.create({ percent_off: partner.discount_percent, duration: "forever", name: `${partner.id} member benefit` });
+    const promotionCode = await stripe.promotionCodes.create({ coupon: coupon.id, code: partner.discount_code });
+    return promotionCode.id;
+  } catch (error) {
+    console.error("Resolving partner discount failed", error);
+    return null;
+  }
 }
 
 function siteUrl(request: VercelRequest): string {
@@ -65,6 +105,9 @@ export default async function handler(request: VercelRequest, response: VercelRe
   try {
     await stripe.prices.retrieve(priceId);
     const stripeLocale = locale === "no" ? "nb" : locale;
+    const partnerId = typeof body.partnerId === "string" ? body.partnerId.trim() : "";
+    const promotionCodeId = partnerId ? await resolvePartnerPromotionCode(stripe, partnerId) : null;
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "subscription",
@@ -72,9 +115,9 @@ export default async function handler(request: VercelRequest, response: VercelRe
       locale: stripeLocale as Stripe.Checkout.SessionCreateParams.Locale,
       success_url: "https://autovere.com/pricing?success=true",
       cancel_url: "https://autovere.com/pricing?canceled=true",
-      allow_promotion_codes: true,
       billing_address_collection: "auto",
-      metadata: { locale, plan: requestedPrice || "configured-price" },
+      metadata: { locale, plan: requestedPrice || "configured-price", ...(promotionCodeId ? { partnerId: partnerId.toUpperCase() } : {}) },
+      ...(promotionCodeId ? { discounts: [{ promotion_code: promotionCodeId }] } : { allow_promotion_codes: true }),
     });
     if (!session.url) {
       response.status(500).json({ error: "Failed to create session URL" });

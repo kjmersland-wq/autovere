@@ -5,10 +5,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
 import { annualLabels, checkoutLabels, comparisonStateLabels, marketingCopy } from "@/lib/marketing-i18n";
+import { usePartner } from "@/lib/partner-context";
+import { partnerCopy } from "@/lib/partner-i18n";
 
 function PricingPage() {
   const { locale } = useLocale();
     const copy = marketingCopy[locale] ?? marketingCopy.en;
+    const partner = usePartner();
   const [freePlan, proPlan, businessPlan] = copy.plans;
   const [yearly, setYearly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<number>(1);
@@ -22,7 +25,7 @@ function PricingPage() {
       const result = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ priceId, locale }),
+        body: JSON.stringify({ priceId, locale, ...(partner ? { partnerId: partner.id } : {}) }),
       });
       const data = (await result.json()) as { url?: string; error?: string };
       console.log("API Response:", data);
@@ -48,6 +51,12 @@ function PricingPage() {
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">{copy.pricingTitle}</h1>
           <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{copy.pricingSubtitle}</p>
         </header>
+
+        {partner && (
+          <p className="mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
+            {(partnerCopy[locale] ?? partnerCopy.en).page.checkoutBanner(partner.discountCode, partner.discountPercent)}
+          </p>
+        )}
 
         <div className="mt-8 inline-flex items-center gap-1 rounded-xl border border-border bg-surface-raised p-1" aria-label={`${copy.monthly} / ${copy.yearly}`}>
           <button type="button" onClick={() => setYearly(false)} className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${!yearly ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>{copy.monthly}</button>

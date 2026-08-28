@@ -30,6 +30,7 @@ import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { useTheme } from "@/hooks/use-theme";
 import { formatCurrency } from "@/lib/currency";
 import { marketingCopy } from "@/lib/marketing-i18n";
+import { partnerCopy } from "@/lib/partner-i18n";
 import { chargerCopy } from "@/lib/charger-i18n";
 import { openPrintReport } from "@/lib/print-report";
 
@@ -223,6 +224,7 @@ function Index() {
   const t = useT();
   const { locale, setLocale } = useLocale();
   const marketing = marketingCopy[locale] ?? marketingCopy.en;
+  const partnerNav = partnerCopy[locale] ?? partnerCopy.en;
   const legalCopy = LEGAL_MODAL_COPY[locale as keyof typeof LEGAL_MODAL_COPY] ?? LEGAL_MODAL_COPY.no;
   const [form, setForm] = useState<TripFormState>({
     from: null,
@@ -813,6 +815,7 @@ function Index() {
             <Link to="/pricing" className="hover:text-foreground">{marketing.pricingLink}</Link>
             <Link to="/faq" className="hover:text-foreground">{marketing.faqLink}</Link>
             <Link to="/demo" className="hover:text-foreground">{t.exploreDemo}</Link>
+            <Link to="/partners" className="hover:text-foreground">{partnerNav.navLink}</Link>
           </nav>
           <p className="mt-2 max-w-3xl">
             {t.footerDisclaimer}

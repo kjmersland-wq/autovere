@@ -61,6 +61,36 @@ async function main() {
     )
   `;
 
+  await sql`
+    CREATE TABLE IF NOT EXISTS partners (
+      id TEXT PRIMARY KEY,
+      name TEXT NOT NULL,
+      country TEXT,
+      logo TEXT,
+      website TEXT NOT NULL,
+      discount_percent INTEGER NOT NULL,
+      discount_code TEXT NOT NULL UNIQUE,
+      active BOOLEAN NOT NULL DEFAULT true,
+      start_date DATE,
+      end_date DATE,
+      notes TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS partner_referrals (
+      id TEXT PRIMARY KEY,
+      partner_id TEXT NOT NULL REFERENCES partners(id),
+      email TEXT,
+      stripe_customer_id TEXT,
+      stripe_subscription_id TEXT,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS partner_referrals_partner_id_idx ON partner_referrals(partner_id)`;
+
   console.log("Migration complete.");
 }
 

@@ -15,6 +15,9 @@ import { I18nProvider, useLocale } from "../lib/i18n";
 import { applyLocalizedSeo, applicationSchema, seoAlternates, seoCopy, siteUrl } from "../lib/seo";
 import { registerServiceWorker } from "../lib/pwa";
 import { Toaster } from "../components/ui/sonner";
+import { PartnerProvider, usePartner } from "../lib/partner-context";
+import { partnerCopy } from "../lib/partner-i18n";
+import { PartnerHeader } from "../components/partner/PartnerHeader";
 
 function NotFoundComponent() {
   return (
@@ -166,10 +169,13 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <I18nProvider>
-        <LocalizedSeo />
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-        <Toaster position="top-center" />
+        <PartnerProvider>
+          <LocalizedSeo />
+          <PartnerBar />
+          {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+          <Outlet />
+          <Toaster position="top-center" />
+        </PartnerProvider>
       </I18nProvider>
     </QueryClientProvider>
   );
@@ -183,5 +189,13 @@ function LocalizedSeo() {
   }, [locale]);
 
   return null;
+}
+
+function PartnerBar() {
+  const partner = usePartner();
+  const { locale } = useLocale();
+  if (!partner) return null;
+  const copy = partnerCopy[locale] ?? partnerCopy.en;
+  return <PartnerHeader name={partner.name} logo={partner.logo ?? ""} website={partner.website} visitLabel={copy.header.visitWebsite} partnerLabel={copy.header.partnerLabel} />;
 }
 

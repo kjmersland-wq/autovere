@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 168 48" role="img" aria-labelledby="eta-logo-title">
+  <title id="eta-logo-title">European Touring Association — fictional demonstration logo</title>
+  <defs>
+    <linearGradient id="eta-badge-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f766e" />
+      <stop offset="100%" stop-color="#0e7490" />
+    </linearGradient>
+  </defs>
+  <rect x="0" y="2" width="168" height="44" rx="10" fill="#f8fafc" />
+  <circle cx="25" cy="24" r="18" fill="url(#eta-badge-gradient)" />
+  <path d="M15.5 26.5c2.6-7.4 6.6-11.4 9.5-11.4s6.9 4 9.5 11.4" fill="none" stroke="#f0fdfa" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+  <circle cx="25" cy="15" r="2" fill="#f0fdfa" />
+  <circle cx="17.5" cy="28.5" r="1.8" fill="#f0fdfa" />
+  <circle cx="32.5" cy="28.5" r="1.8" fill="#f0fdfa" />
+  <path d="M13.5 32c3.4 2 7.4 3 11.5 3s8.1-1 11.5-3" fill="none" stroke="#f0fdfa" stroke-width="1.4" stroke-linecap="round" opacity="0.85" />
+  <text x="56" y="21" font-family="'Sora', 'Manrope', Arial, sans-serif" font-size="15" font-weight="800" letter-spacing="0.4" fill="#0f172a">ETA</text>
+  <text x="56" y="33" font-family="'Manrope', Arial, sans-serif" font-size="6.6" font-weight="700" letter-spacing="1.1" fill="#475569">TOURING ASSOCIATION</text>
+</svg>
