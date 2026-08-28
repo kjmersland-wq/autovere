@@ -500,17 +500,20 @@ function Index() {
     <main className="min-h-screen overflow-x-hidden pb-24 md:pb-0">
       <section className="hero-glow border-b border-border print-hidden">
         <div className="mx-auto max-w-6xl px-5 pb-10 pt-12 sm:pt-16">
-          <div className="flex items-center gap-3">
-            <img src="/icons/icon-192.png" alt="" width={40} height={40} className="rounded-lg" />
-            <div>
-              <p className="font-display text-xl font-extrabold tracking-tight text-foreground">
-                {t.brand}
-              </p>
-              <p className="text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">
-                {t.tagline}
-              </p>
+          <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
+            <div className="flex items-center gap-3">
+              <img src="/icons/icon-192.png" alt="" width={40} height={40} className="rounded-lg" />
+              <div>
+                <p className="font-display text-xl font-extrabold tracking-tight text-foreground">
+                  {t.brand}
+                </p>
+                <p className="text-[0.7rem] uppercase tracking-[0.18em] text-muted-foreground">
+                  {t.tagline}
+                </p>
+              </div>
             </div>
-            <label className="ml-auto flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+            <div className="ml-auto flex flex-wrap items-center gap-2">
+            <label className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
               <span className="sr-only">{t.currency}</span>
               <select
                 value={currency}
@@ -563,7 +566,7 @@ function Index() {
             </div>
             <Link
               to="/demo"
-              className="hidden items-center gap-1.5 rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary sm:flex"
+              className="flex items-center gap-1.5 rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary"
             >
               <Sparkles className="size-3.5" /> {t.exploreDemo}
             </Link>
@@ -582,6 +585,7 @@ function Index() {
             >
               {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
             </button>
+            </div>
           </div>
 
           <h1 className="mt-9 max-w-3xl text-4xl font-extrabold leading-[1.08] sm:text-6xl">

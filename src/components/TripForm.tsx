@@ -125,8 +125,8 @@ export function TripForm({
                   )}
                   aria-pressed={active}
                 >
-                  <v.icon className="size-4" aria-hidden />
-                  <span className="hidden sm:inline">{v.label}</span>
+                  <v.icon className="size-4 shrink-0" aria-hidden />
+                  <span className="text-[11px] leading-tight sm:text-sm">{v.label}</span>
                 </button>
               );
             })}
