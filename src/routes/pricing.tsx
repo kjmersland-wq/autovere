@@ -68,7 +68,7 @@ function PricingPage() {
               <ul className="mt-6 flex-1 space-y-3 text-sm text-muted-foreground">
                 {plan.features.map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" /> <span>{feature}</span></li>)}
               </ul>
-              {planIndex === 0 ? <Link to="/" onClick={() => setSelectedPlan(planIndex)}><Button className="mt-7 w-full">Kom i gang</Button></Link> : <Button className="mt-7 w-full" variant={selectedPlan === planIndex ? "default" : "secondary"} disabled={checkoutPlan !== null} onClick={() => { setSelectedPlan(planIndex); void startCheckout(`${planIndex === 2 ? "business" : "pro"}-${yearly ? "yearly" : "monthly"}`); }}>{checkoutPlan ? checkoutLabels[locale].starting : planIndex === 2 ? "Kjøp Bedrift" : "Kjøp Pro"}</Button>}
+              {planIndex === 0 ? <Link to="/" onClick={() => setSelectedPlan(planIndex)}><Button className="mt-7 w-full">{plan.action}</Button></Link> : <Button className="mt-7 w-full" variant={selectedPlan === planIndex ? "default" : "secondary"} disabled={checkoutPlan !== null} onClick={() => { setSelectedPlan(planIndex); void startCheckout(`${planIndex === 2 ? "business" : "pro"}-${yearly ? "yearly" : "monthly"}`); }}>{checkoutPlan ? checkoutLabels[locale].starting : plan.action}</Button>}
             </article>
           ))}
         </section>
@@ -88,4 +88,16 @@ function PricingPage() {
   );
 }
 
-export const Route = createFileRoute("/pricing")({ component: PricingPage });
+export const Route = createFileRoute("/pricing")({
+  head: () => ({
+    meta: [
+      { title: "AutoVere Pricing — Free, Pro & Business Road-Trip Planning" },
+      {
+        name: "description",
+        content:
+          "Compare AutoVere Free, Pro and Business plans: toll and vignette calculations, EV charging routes, weather-adjusted charging buffers and fleet tools for European road trips.",
+      },
+    ],
+  }),
+  component: PricingPage,
+});

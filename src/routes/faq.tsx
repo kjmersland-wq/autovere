@@ -11,7 +11,15 @@ import { faqSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/faq")({
   head: () => ({
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqSchema(marketingCopy.en.categories)) }],
+    meta: [
+      { title: "AutoVere Help & FAQ — Tolls, Vignettes, EV Charging & Accounts" },
+      {
+        name: "description",
+        content:
+          "Answers on how AutoVere calculates tolls and vignettes, EV charging and weather-adjusted range, what needs an account, and how your data is handled.",
+      },
+    ],
+    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqSchema(faqCopy.en.categories)) }],
   }),
   component: FaqPage,
 });
