@@ -211,6 +211,21 @@ async function handlePublicOne(id: string, response: Response) {
   response.status(200).json({ partner: toPublic(row) });
 }
 
+async function handlePublicByCode(code: string, response: Response) {
+  const sql = requireDb();
+  if (!sql) {
+    response.status(404).json({ error: "Member code not recognised." });
+    return;
+  }
+  const rows = (await sql`SELECT * FROM partners WHERE discount_code = ${code}`) as PartnerRow[];
+  const row = rows[0];
+  if (!row || !isActiveNow(row)) {
+    response.status(404).json({ error: "Member code not recognised." });
+    return;
+  }
+  response.status(200).json({ partner: toPublic(row) });
+}
+
 async function handleAdminList(response: Response) {
   const sql = requireDb();
   if (!sql) {
@@ -282,6 +297,7 @@ async function handleUpdate(id: string, request: Request, response: Response) {
 export default async function handler(request: Request, response: Response) {
   const action = queryParam(request, "action");
   const id = queryParam(request, "id");
+  const code = queryParam(request, "code");
   const admin = queryParam(request, "admin");
 
   if (request.method === "POST" && action === "admin-login") return handleAdminLogin(request, response);
@@ -295,6 +311,7 @@ export default async function handler(request: Request, response: Response) {
     return handleAdminList(response);
   }
 
+  if (request.method === "GET" && code) return handlePublicByCode(code.toUpperCase(), response);
   if (request.method === "GET" && id) return handlePublicOne(id.toUpperCase(), response);
   if (request.method === "GET" && !id && !admin) return handlePublicList(response);
 

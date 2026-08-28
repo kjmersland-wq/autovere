@@ -52,15 +52,32 @@ export default async function handler(request: VercelRequest, response: VercelRe
       console.info("Stripe checkout completed", { sessionId: session.id, customerId: session.customer, subscriptionId: session.subscription });
       const partnerId = session.metadata?.["partnerId"];
       const databaseUrl = process.env["DATABASE_URL"];
+      const email = session.customer_details?.email ?? null;
       if (partnerId && databaseUrl) {
         try {
           const sql = neon(databaseUrl);
           await sql`
             INSERT INTO partner_referrals (id, partner_id, email, stripe_customer_id, stripe_subscription_id)
-            VALUES (${randomUUID()}, ${partnerId}, ${session.customer_details?.email ?? null}, ${typeof session.customer === "string" ? session.customer : null}, ${typeof session.subscription === "string" ? session.subscription : null})
+            VALUES (${randomUUID()}, ${partnerId}, ${email}, ${typeof session.customer === "string" ? session.customer : null}, ${typeof session.subscription === "string" ? session.subscription : null})
           `;
+          // A completed, discounted checkout is the only server-verified moment we trust to
+          // register a partner membership — never taken from the client or the URL alone.
+          if (email) {
+            const partnerRows = (await sql`SELECT discount_percent FROM partners WHERE id = ${partnerId}`) as { discount_percent: number }[];
+            const discountPercent = partnerRows[0]?.discount_percent;
+            if (discountPercent) {
+              const validUntil = new Date();
+              validUntil.setFullYear(validUntil.getFullYear() + 1);
+              await sql`
+                INSERT INTO partner_memberships (user_email, partner_id, discount_percent, valid_until, linked_at, source)
+                VALUES (${email}, ${partnerId}, ${discountPercent}, ${validUntil.toISOString().slice(0, 10)}, now(), 'checkout')
+                ON CONFLICT (user_email) DO UPDATE SET
+                  partner_id = ${partnerId}, discount_percent = ${discountPercent}, valid_until = ${validUntil.toISOString().slice(0, 10)}, linked_at = now(), source = 'checkout'
+              `;
+            }
+          }
         } catch (error) {
-          console.error("Recording partner referral failed", error);
+          console.error("Recording partner referral or membership failed", error);
         }
       }
       break;

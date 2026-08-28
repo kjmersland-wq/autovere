@@ -24,6 +24,7 @@ import { marketingCopy } from "@/lib/marketing-i18n";
 import { useLocale } from "@/lib/i18n";
 import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { getAccountCopy } from "@/lib/account-i18n";
+import { partnerCopy } from "@/lib/partner-i18n";
 import { openPrintReport } from "@/lib/print-report";
 import { AccountShell, EmptyState, type AccountNavItem } from "@/components/account/AccountFrame";
 
@@ -41,7 +42,16 @@ type Subscription = {
   paymentMethod: PaymentMethod;
   invoices: Invoice[];
 };
-type MeResponse = { email: string; subscription: Subscription | null } | { error: string };
+type Membership = {
+  partnerId: string;
+  partnerName: string;
+  partnerLogo: string | null;
+  partnerWebsite: string;
+  discountPercent: number;
+  validUntil: string;
+  status: "active" | "expired";
+};
+type MeResponse = { email: string; subscription: Subscription | null; membership: Membership | null } | { error: string };
 type Section = "overview" | "trips" | "vehicles" | "preferences" | "billing" | "places" | "profile" | "help";
 
 type Trip = { id: string; name: string; fromPlace: string | null; toPlace: string | null; vehicleType: string | null; currency: string | null; days: number | null; estimate: unknown; createdAt: string; updatedAt: string };
@@ -173,6 +183,8 @@ function AccountPage() {
 
   const email = data.email;
   const subscription = data.subscription;
+  const membership = data.membership;
+  const partnerLabels = partnerCopy[locale] ?? partnerCopy.en;
   const firstName = email.split("@")[0] ?? email;
   const features = featuresForTier(subscription?.tier ?? null);
   const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
@@ -236,6 +248,38 @@ function AccountPage() {
                     </Button>
                   </div>
                 </div>
+
+                {membership && (
+                  <section className="panel p-5 sm:p-7">
+                    <h2 className="text-xl font-bold">{copy.membership.sectionTitle}</h2>
+                    <a
+                      href={membership.partnerWebsite}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={partnerLabels.header.visitWebsite(membership.partnerName)}
+                      className="mt-4 flex w-fit items-center gap-3 rounded-lg border border-border bg-surface-raised p-3 transition-colors hover:border-primary/50"
+                    >
+                      {membership.partnerLogo && <img src={membership.partnerLogo} alt={membership.partnerName} className="h-6 w-auto max-w-[100px] object-contain" />}
+                      <span className="text-sm font-semibold">{membership.partnerName}</span>
+                    </a>
+                    <p className="mt-3 text-lg font-bold text-primary">{copy.membership.discountLine(membership.discountPercent)}</p>
+                    <dl className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div>
+                        <dt className="text-xs uppercase tracking-wide text-muted-foreground">{copy.membership.validUntil}</dt>
+                        <dd className="mt-1 text-sm font-semibold">{dateFormatter.format(new Date(membership.validUntil))}</dd>
+                      </div>
+                      <div>
+                        <dt className="text-xs uppercase tracking-wide text-muted-foreground">{copy.membership.statusLabel}</dt>
+                        <dd className="mt-1">
+                          <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${membership.status === "active" ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
+                            {membership.status === "active" ? copy.membership.statusActive : copy.membership.statusExpired}
+                          </span>
+                        </dd>
+                      </div>
+                    </dl>
+                    {membership.status === "expired" && <p className="mt-4 text-sm text-muted-foreground">{copy.membership.expiredNote}</p>}
+                  </section>
+                )}
 
                 {subscription ? (
                   <section className="panel p-5 sm:p-7">

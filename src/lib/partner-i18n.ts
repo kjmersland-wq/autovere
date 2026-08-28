@@ -36,6 +36,7 @@ export type PartnerCopy = {
     checkoutBanner: (code: string, percent: number) => string;
   };
   demo: { name: string; country: string; note: string };
+  memberCode: { label: string; placeholder: string; apply: string; applying: string; invalid: string };
 };
 
 export const en: PartnerCopy = {
@@ -74,6 +75,7 @@ export const en: PartnerCopy = {
     checkoutBanner: (code, percent) => `Organisation member code ${code} → ${percent}% member discount applied`,
   },
   demo: { name: "European Touring Association", country: "Norway", note: "Fictional example organisation, for demonstration only." },
+  memberCode: { label: "Organisation member code", placeholder: "e.g. ETA25", apply: "Apply", applying: "Checking…", invalid: "We couldn't recognise that code — check it and try again." },
 };
 
 export const de: PartnerCopy = {
@@ -112,6 +114,7 @@ export const de: PartnerCopy = {
     checkoutBanner: (code, percent) => `Mitgliedscode ${code} → ${percent} % Mitgliederrabatt angewendet`,
   },
   demo: { name: "European Touring Association", country: "Norwegen", note: "Fiktive Beispielorganisation, nur zu Demonstrationszwecken." },
+  memberCode: { label: "Mitgliedscode deiner Organisation", placeholder: "z. B. ETA25", apply: "Anwenden", applying: "Wird geprüft…", invalid: "Diesen Code konnten wir nicht erkennen — bitte überprüfe ihn und versuche es erneut." },
 };
 
 export const nl: PartnerCopy = {
@@ -150,6 +153,7 @@ export const nl: PartnerCopy = {
     checkoutBanner: (code, percent) => `Ledencode van organisatie ${code} → ${percent}% ledenkorting toegepast`,
   },
   demo: { name: "European Touring Association", country: "Noorwegen", note: "Fictieve voorbeeldorganisatie, uitsluitend ter demonstratie." },
+  memberCode: { label: "Ledencode van je organisatie", placeholder: "bijv. ETA25", apply: "Toepassen", applying: "Controleren…", invalid: "We herkennen deze code niet — controleer hem en probeer het opnieuw." },
 };
 
 export const no: PartnerCopy = {
@@ -188,6 +192,7 @@ export const no: PartnerCopy = {
     checkoutBanner: (code, percent) => `Medlemskode ${code} → ${percent} % medlemsrabatt er lagt til`,
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv eksempelorganisasjon, kun til demonstrasjon." },
+  memberCode: { label: "Medlemskode fra organisasjonen din", placeholder: "f.eks. ETA25", apply: "Bruk kode", applying: "Sjekker…", invalid: "Vi kjente ikke igjen denne koden — sjekk den og prøv igjen." },
 };
 
 export const pl: PartnerCopy = {
@@ -226,6 +231,7 @@ export const pl: PartnerCopy = {
     checkoutBanner: (code, percent) => `Kod członkowski organizacji ${code} → zastosowano ${percent}% zniżki dla członków`,
   },
   demo: { name: "European Touring Association", country: "Norwegia", note: "Fikcyjna organizacja przykładowa, wyłącznie do demonstracji." },
+  memberCode: { label: "Kod członkowski Twojej organizacji", placeholder: "np. ETA25", apply: "Zastosuj", applying: "Sprawdzanie…", invalid: "Nie rozpoznaliśmy tego kodu — sprawdź go i spróbuj ponownie." },
 };
 
 export const sv: PartnerCopy = {
@@ -264,6 +270,7 @@ export const sv: PartnerCopy = {
     checkoutBanner: (code, percent) => `Medlemskod ${code} → ${percent} % medlemsrabatt tillämpad`,
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv exempelorganisation, endast för demonstration." },
+  memberCode: { label: "Medlemskod från din organisation", placeholder: "t.ex. ETA25", apply: "Använd", applying: "Kontrollerar…", invalid: "Vi kände inte igen den koden — kontrollera den och försök igen." },
 };
 
 export const fr: PartnerCopy = {
@@ -302,6 +309,7 @@ export const fr: PartnerCopy = {
     checkoutBanner: (code, percent) => `Code membre ${code} → réduction membre de ${percent} % appliquée`,
   },
   demo: { name: "European Touring Association", country: "Norvège", note: "Organisation fictive d'exemple, à des fins de démonstration uniquement." },
+  memberCode: { label: "Code membre de votre organisation", placeholder: "ex. ETA25", apply: "Appliquer", applying: "Vérification…", invalid: "Nous n'avons pas reconnu ce code — vérifiez-le et réessayez." },
 };
 
 export const da: PartnerCopy = {
@@ -340,6 +348,7 @@ export const da: PartnerCopy = {
     checkoutBanner: (code, percent) => `Medlemskode ${code} → ${percent} % medlemsrabat tilføjet`,
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv eksempelorganisation, kun til demonstration." },
+  memberCode: { label: "Medlemskode fra din organisation", placeholder: "f.eks. ETA25", apply: "Anvend", applying: "Tjekker…", invalid: "Vi kunne ikke genkende den kode — tjek den, og prøv igen." },
 };
 
 export const partnerCopy: Record<Locale, PartnerCopy> = { en, de, nl, no, pl, sv, fr, da };

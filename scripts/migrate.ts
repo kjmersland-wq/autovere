@@ -91,6 +91,17 @@ async function main() {
   `;
   await sql`CREATE INDEX IF NOT EXISTS partner_referrals_partner_id_idx ON partner_referrals(partner_id)`;
 
+  await sql`
+    CREATE TABLE IF NOT EXISTS partner_memberships (
+      user_email TEXT PRIMARY KEY,
+      partner_id TEXT NOT NULL REFERENCES partners(id),
+      discount_percent INTEGER NOT NULL,
+      valid_until DATE NOT NULL,
+      linked_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      source TEXT NOT NULL DEFAULT 'checkout'
+    )
+  `;
+
   console.log("Migration complete.");
 }
 

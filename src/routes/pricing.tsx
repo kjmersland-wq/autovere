@@ -7,16 +7,37 @@ import { useLocale } from "@/lib/i18n";
 import { annualLabels, checkoutLabels, comparisonStateLabels, marketingCopy } from "@/lib/marketing-i18n";
 import { usePartner } from "@/lib/partner-context";
 import { partnerCopy } from "@/lib/partner-i18n";
+import { fetchPartnerByCode, storePartner, type PartnerRecord } from "@/lib/partners";
 
 function PricingPage() {
   const { locale } = useLocale();
     const copy = marketingCopy[locale] ?? marketingCopy.en;
-    const partner = usePartner();
+    const urlPartner = usePartner();
+    const [manualPartner, setManualPartner] = useState<PartnerRecord | null>(null);
+    const [codeInput, setCodeInput] = useState("");
+    const [applyingCode, setApplyingCode] = useState(false);
+    const [codeError, setCodeError] = useState("");
+    const partner = manualPartner ?? urlPartner;
+    const partnerLabels = partnerCopy[locale] ?? partnerCopy.en;
   const [freePlan, proPlan, businessPlan] = copy.plans;
   const [yearly, setYearly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<number>(1);
   const [checkoutPlan, setCheckoutPlan] = useState<string | null>(null);
   const [checkoutError, setCheckoutError] = useState("");
+
+  async function applyCode() {
+    if (!codeInput.trim()) return;
+    setApplyingCode(true);
+    setCodeError("");
+    const found = await fetchPartnerByCode(codeInput.trim());
+    setApplyingCode(false);
+    if (!found) {
+      setCodeError(partnerLabels.memberCode.invalid);
+      return;
+    }
+    storePartner(found);
+    setManualPartner(found);
+  }
 
   async function startCheckout(priceId: string) {
     setCheckoutPlan(priceId);
@@ -52,11 +73,28 @@ function PricingPage() {
           <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{copy.pricingSubtitle}</p>
         </header>
 
-        {partner && (
+        {partner ? (
           <p className="mt-6 inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary">
-            {(partnerCopy[locale] ?? partnerCopy.en).page.checkoutBanner(partner.discountCode, partner.discountPercent)}
+            {partnerLabels.page.checkoutBanner(partner.discountCode, partner.discountPercent)}
           </p>
+        ) : (
+          <div className="mt-6 flex flex-wrap items-end gap-2">
+            <label>
+              <span className="mb-1 block text-xs font-semibold uppercase tracking-wide text-muted-foreground">{partnerLabels.memberCode.label}</span>
+              <input
+                value={codeInput}
+                onChange={(event) => setCodeInput(event.target.value)}
+                onKeyDown={(event) => event.key === "Enter" && void applyCode()}
+                placeholder={partnerLabels.memberCode.placeholder}
+                className="w-48 rounded-lg border border-border bg-surface-raised px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
+              />
+            </label>
+            <Button type="button" variant="secondary" disabled={applyingCode || !codeInput.trim()} onClick={() => void applyCode()}>
+              {applyingCode ? partnerLabels.memberCode.applying : partnerLabels.memberCode.apply}
+            </Button>
+          </div>
         )}
+        {codeError && <p className="mt-2 text-sm text-destructive">{codeError}</p>}
 
         <div className="mt-8 inline-flex items-center gap-1 rounded-xl border border-border bg-surface-raised p-1" aria-label={`${copy.monthly} / ${copy.yearly}`}>
           <button type="button" onClick={() => setYearly(false)} className={`rounded-lg px-4 py-2 text-sm font-semibold transition-colors ${!yearly ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>{copy.monthly}</button>

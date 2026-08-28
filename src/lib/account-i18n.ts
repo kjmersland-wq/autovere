@@ -96,6 +96,15 @@ export type AccountCopy = {
     deleteCancel: string;
   };
   help: { title: string; subtitle: string; faqTitle: string; faqBody: string; faqLink: string; contactTitle: string; contactBody: string; contactLink: string };
+  membership: {
+    sectionTitle: string;
+    discountLine: (percent: number) => string;
+    validUntil: string;
+    statusLabel: string;
+    statusActive: string;
+    statusExpired: string;
+    expiredNote: string;
+  };
 };
 
 const en: AccountCopy = {
@@ -118,6 +127,7 @@ const en: AccountCopy = {
   preferences: { title: "Settings", language: "Language", currency: "Currency", units: "Measurement units", unitsMetric: "Metric (km, litres)", unitsImperial: "Imperial (miles, gallons)", notifications: "Notifications", notificationsEmail: "Email me about my account and billing", save: "Save settings", saved: "Settings saved", more: "These apply as your defaults across AutoVere." },
   profile: { title: "Profile & Security", email: "Email", security: "Sign-in", securityBody: "AutoVere uses secure email sign-in links instead of a password — there's nothing to remember, and nothing that can be guessed.", exportData: "Export my data", exportDataBody: "Download a copy of everything linked to your account (profile, subscription, trips, vehicles, places).", dangerTitle: "Danger zone", deleteAccount: "Delete account", deleteConfirm: "This cancels your subscription, deletes your saved data and signs you out everywhere. Are you sure?", deleteCancel: "Cancel" },
   help: { title: "Help & Support", subtitle: "We're here if something isn't working the way it should.", faqTitle: "Frequently asked questions", faqBody: "Answers to the most common questions about routes, tolls, vignettes and charging.", faqLink: "Open Help & FAQ", contactTitle: "Contact support", contactBody: "Send us a message and we'll get back to you — this is also the right place to report a problem.", contactLink: "Send a message" },
+  membership: { sectionTitle: "Your member benefit", discountLine: (percent) => `${percent}% off AutoVere Pro`, validUntil: "Valid until", statusLabel: "Status", statusActive: "Active", statusExpired: "Expired", expiredNote: "Your member benefit has expired, but everything else on your account carries on as normal." },
 };
 
 const de: AccountCopy = {
@@ -140,6 +150,7 @@ const de: AccountCopy = {
   preferences: { title: "Einstellungen", language: "Sprache", currency: "Währung", units: "Maßeinheiten", unitsMetric: "Metrisch (km, Liter)", unitsImperial: "Imperial (Meilen, Gallonen)", notifications: "Benachrichtigungen", notificationsEmail: "Per E-Mail über Konto und Abrechnung informieren", save: "Einstellungen speichern", saved: "Einstellungen gespeichert", more: "Diese gelten als deine Standardwerte in ganz AutoVere." },
   profile: { title: "Profil & Sicherheit", email: "E-Mail", security: "Anmeldung", securityBody: "AutoVere verwendet sichere Anmelde-Links per E-Mail statt eines Passworts — nichts zu merken, nichts zu erraten.", exportData: "Meine Daten exportieren", exportDataBody: "Lade eine Kopie aller mit deinem Konto verknüpften Daten herunter (Profil, Abo, Reisen, Fahrzeuge, Orte).", dangerTitle: "Gefahrenzone", deleteAccount: "Konto löschen", deleteConfirm: "Dies kündigt dein Abo, löscht deine gespeicherten Daten und meldet dich überall ab. Bist du sicher?", deleteCancel: "Abbrechen" },
   help: { title: "Hilfe & Support", subtitle: "Wir sind da, wenn etwas nicht wie erwartet funktioniert.", faqTitle: "Häufig gestellte Fragen", faqBody: "Antworten auf die häufigsten Fragen zu Routen, Maut, Vignetten und Laden.", faqLink: "Hilfe & FAQ öffnen", contactTitle: "Support kontaktieren", contactBody: "Schick uns eine Nachricht — hier meldest du auch Probleme.", contactLink: "Nachricht senden" },
+  membership: { sectionTitle: "Dein Mitgliedervorteil", discountLine: (percent) => `${percent}% Rabatt auf AutoVere Pro`, validUntil: "Gültig bis", statusLabel: "Status", statusActive: "Aktiv", statusExpired: "Abgelaufen", expiredNote: "Dein Mitgliedervorteil ist abgelaufen, aber alles andere an deinem Konto läuft ganz normal weiter." },
 };
 
 const nl: AccountCopy = {
@@ -162,6 +173,7 @@ const nl: AccountCopy = {
   preferences: { title: "Instellingen", language: "Taal", currency: "Valuta", units: "Meeteenheden", unitsMetric: "Metrisch (km, liter)", unitsImperial: "Imperiaal (mijlen, gallons)", notifications: "Meldingen", notificationsEmail: "Mail me over mijn account en facturering", save: "Instellingen opslaan", saved: "Instellingen opgeslagen", more: "Dit zijn je standaardwaarden in heel AutoVere." },
   profile: { title: "Profiel & Beveiliging", email: "E-mail", security: "Inloggen", securityBody: "AutoVere gebruikt beveiligde inloglinks via e-mail in plaats van een wachtwoord — niets om te onthouden, niets te raden.", exportData: "Mijn gegevens exporteren", exportDataBody: "Download een kopie van alles wat aan je account gekoppeld is (profiel, abonnement, reizen, voertuigen, plekken).", dangerTitle: "Gevarenzone", deleteAccount: "Account verwijderen", deleteConfirm: "Dit zegt je abonnement op, verwijdert je opgeslagen gegevens en logt je overal uit. Weet je het zeker?", deleteCancel: "Annuleren" },
   help: { title: "Help & Ondersteuning", subtitle: "We staan klaar als iets niet werkt zoals het hoort.", faqTitle: "Veelgestelde vragen", faqBody: "Antwoorden op de meest gestelde vragen over routes, tol, vignetten en laden.", faqLink: "Open Help & FAQ", contactTitle: "Contact met support", contactBody: "Stuur ons een bericht — dit is ook de juiste plek om een probleem te melden.", contactLink: "Bericht sturen" },
+  membership: { sectionTitle: "Jouw ledenvoordeel", discountLine: (percent) => `${percent}% korting op AutoVere Pro`, validUntil: "Geldig tot", statusLabel: "Status", statusActive: "Actief", statusExpired: "Verlopen", expiredNote: "Je ledenvoordeel is verlopen, maar de rest van je account werkt gewoon door." },
 };
 
 const no: AccountCopy = {
@@ -184,6 +196,7 @@ const no: AccountCopy = {
   preferences: { title: "Innstillinger", language: "Språk", currency: "Valuta", units: "Måleenheter", unitsMetric: "Metrisk (km, liter)", unitsImperial: "Imperisk (miles, gallons)", notifications: "Varsler", notificationsEmail: "Send meg e-post om konto og fakturering", save: "Lagre innstillinger", saved: "Innstillinger lagret", more: "Disse gjelder som standardvalgene dine i hele AutoVere." },
   profile: { title: "Profil og sikkerhet", email: "E-post", security: "Innlogging", securityBody: "AutoVere bruker sikre innloggingslenker på e-post i stedet for passord — ingenting å huske, ingenting å gjette.", exportData: "Eksporter dataene mine", exportDataBody: "Last ned en kopi av alt som er knyttet til kontoen din (profil, abonnement, reiser, kjøretøy, steder).", dangerTitle: "Faresone", deleteAccount: "Slett konto", deleteConfirm: "Dette avslutter abonnementet ditt, sletter lagrede data og logger deg ut overalt. Er du sikker?", deleteCancel: "Avbryt" },
   help: { title: "Hjelp og support", subtitle: "Vi er her hvis noe ikke fungerer som det skal.", faqTitle: "Ofte stilte spørsmål", faqBody: "Svar på de vanligste spørsmålene om ruter, bompenger, vignetter og lading.", faqLink: "Åpne hjelp og FAQ", contactTitle: "Kontakt support", contactBody: "Send oss en melding, så svarer vi deg — dette er også riktig sted å melde fra om et problem.", contactLink: "Send melding" },
+  membership: { sectionTitle: "Din medlemsfordel", discountLine: (percent) => `${percent} % rabatt på AutoVere Pro`, validUntil: "Gyldig til", statusLabel: "Status", statusActive: "Aktivt", statusExpired: "Utløpt", expiredNote: "Medlemsfordelen din er utløpt, men resten av kontoen din fungerer helt som normalt." },
 };
 
 const pl: AccountCopy = {
@@ -206,6 +219,7 @@ const pl: AccountCopy = {
   preferences: { title: "Ustawienia", language: "Język", currency: "Waluta", units: "Jednostki miary", unitsMetric: "Metryczne (km, litry)", unitsImperial: "Imperialne (mile, galony)", notifications: "Powiadomienia", notificationsEmail: "Wysyłaj e-mail o koncie i płatnościach", save: "Zapisz ustawienia", saved: "Ustawienia zapisane", more: "Te ustawienia obowiązują jako domyślne w całym AutoVere." },
   profile: { title: "Profil i bezpieczeństwo", email: "E-mail", security: "Logowanie", securityBody: "AutoVere używa bezpiecznych linków logowania e-mail zamiast hasła — nic do zapamiętania, nic do odgadnięcia.", exportData: "Eksportuj moje dane", exportDataBody: "Pobierz kopię wszystkiego powiązanego z Twoim kontem (profil, subskrypcja, podróże, pojazdy, miejsca).", dangerTitle: "Strefa zagrożenia", deleteAccount: "Usuń konto", deleteConfirm: "To anuluje Twoją subskrypcję, usunie zapisane dane i wyloguje Cię wszędzie. Czy na pewno?", deleteCancel: "Anuluj" },
   help: { title: "Pomoc i wsparcie", subtitle: "Jesteśmy tutaj, jeśli coś nie działa tak, jak powinno.", faqTitle: "Najczęściej zadawane pytania", faqBody: "Odpowiedzi na najczęstsze pytania o trasy, opłaty drogowe, winiety i ładowanie.", faqLink: "Otwórz pomoc i FAQ", contactTitle: "Kontakt z pomocą", contactBody: "Napisz do nas, a odpowiemy — to też właściwe miejsce, aby zgłosić problem.", contactLink: "Wyślij wiadomość" },
+  membership: { sectionTitle: "Twoja korzyść członkowska", discountLine: (percent) => `${percent}% zniżki na AutoVere Pro`, validUntil: "Ważne do", statusLabel: "Status", statusActive: "Aktywne", statusExpired: "Wygasło", expiredNote: "Twoja korzyść członkowska wygasła, ale reszta konta działa zupełnie normalnie." },
 };
 
 const sv: AccountCopy = {
@@ -228,6 +242,7 @@ const sv: AccountCopy = {
   preferences: { title: "Inställningar", language: "Språk", currency: "Valuta", units: "Måttenheter", unitsMetric: "Metriskt (km, liter)", unitsImperial: "Brittiskt (miles, gallons)", notifications: "Notiser", notificationsEmail: "Mejla mig om konto och fakturering", save: "Spara inställningar", saved: "Inställningar sparade", more: "Dessa gäller som dina standardval i hela AutoVere." },
   profile: { title: "Profil och säkerhet", email: "E-post", security: "Inloggning", securityBody: "AutoVere använder säkra inloggningslänkar via e-post istället för lösenord — inget att komma ihåg, inget att gissa.", exportData: "Exportera mina data", exportDataBody: "Ladda ner en kopia av allt som är kopplat till ditt konto (profil, prenumeration, resor, fordon, platser).", dangerTitle: "Farlig zon", deleteAccount: "Ta bort konto", deleteConfirm: "Det här avslutar din prenumeration, tar bort dina sparade data och loggar ut dig överallt. Är du säker?", deleteCancel: "Avbryt" },
   help: { title: "Hjälp och support", subtitle: "Vi finns här om något inte fungerar som det ska.", faqTitle: "Vanliga frågor", faqBody: "Svar på de vanligaste frågorna om rutter, vägavgifter, vinjetter och laddning.", faqLink: "Öppna hjälp och FAQ", contactTitle: "Kontakta support", contactBody: "Skicka ett meddelande till oss — det är också rätt ställe att rapportera ett problem.", contactLink: "Skicka meddelande" },
+  membership: { sectionTitle: "Din medlemsförmån", discountLine: (percent) => `${percent}% rabatt på AutoVere Pro`, validUntil: "Giltig till", statusLabel: "Status", statusActive: "Aktiv", statusExpired: "Utgången", expiredNote: "Din medlemsförmån har gått ut, men resten av ditt konto fungerar som vanligt." },
 };
 
 const fr: AccountCopy = {
@@ -250,6 +265,7 @@ const fr: AccountCopy = {
   preferences: { title: "Paramètres", language: "Langue", currency: "Devise", units: "Unités de mesure", unitsMetric: "Métrique (km, litres)", unitsImperial: "Impérial (miles, gallons)", notifications: "Notifications", notificationsEmail: "M'envoyer des e-mails sur mon compte et ma facturation", save: "Enregistrer les paramètres", saved: "Paramètres enregistrés", more: "Ces réglages s'appliquent par défaut dans tout AutoVere." },
   profile: { title: "Profil et sécurité", email: "E-mail", security: "Connexion", securityBody: "AutoVere utilise des liens de connexion sécurisés par e-mail plutôt qu'un mot de passe — rien à retenir, rien à deviner.", exportData: "Exporter mes données", exportDataBody: "Téléchargez une copie de tout ce qui est lié à votre compte (profil, abonnement, voyages, véhicules, lieux).", dangerTitle: "Zone sensible", deleteAccount: "Supprimer le compte", deleteConfirm: "Cela résilie votre abonnement, supprime vos données enregistrées et vous déconnecte partout. Êtes-vous sûr ?", deleteCancel: "Annuler" },
   help: { title: "Aide et assistance", subtitle: "Nous sommes là si quelque chose ne fonctionne pas comme prévu.", faqTitle: "Questions fréquentes", faqBody: "Réponses aux questions les plus courantes sur les itinéraires, péages, vignettes et recharge.", faqLink: "Ouvrir l'aide et la FAQ", contactTitle: "Contacter le support", contactBody: "Envoyez-nous un message, nous vous répondrons — c'est aussi l'endroit pour signaler un problème.", contactLink: "Envoyer un message" },
+  membership: { sectionTitle: "Votre avantage membre", discountLine: (percent) => `${percent}% de réduction sur AutoVere Pro`, validUntil: "Valable jusqu'au", statusLabel: "Statut", statusActive: "Actif", statusExpired: "Expiré", expiredNote: "Votre avantage membre a expiré, mais le reste de votre compte continue de fonctionner normalement." },
 };
 
 const da: AccountCopy = {
@@ -272,6 +288,7 @@ const da: AccountCopy = {
   preferences: { title: "Indstillinger", language: "Sprog", currency: "Valuta", units: "Måleenheder", unitsMetric: "Metrisk (km, liter)", unitsImperial: "Imperial (miles, gallons)", notifications: "Notifikationer", notificationsEmail: "Send mig e-mail om min konto og fakturering", save: "Gem indstillinger", saved: "Indstillinger gemt", more: "Disse gælder som dine standardvalg i hele AutoVere." },
   profile: { title: "Profil og sikkerhed", email: "E-mail", security: "Log ind", securityBody: "AutoVere bruger sikre login-links via e-mail i stedet for en adgangskode — intet at huske, intet at gætte.", exportData: "Eksporter mine data", exportDataBody: "Download en kopi af alt, der er knyttet til din konto (profil, abonnement, rejser, køretøjer, steder).", dangerTitle: "Farezone", deleteAccount: "Slet konto", deleteConfirm: "Dette opsiger dit abonnement, sletter dine gemte data og logger dig ud alle steder. Er du sikker?", deleteCancel: "Annuller" },
   help: { title: "Hjælp og support", subtitle: "Vi er her, hvis noget ikke fungerer, som det skal.", faqTitle: "Ofte stillede spørgsmål", faqBody: "Svar på de mest almindelige spørgsmål om ruter, vejafgifter, vignetter og opladning.", faqLink: "Åbn hjælp og FAQ", contactTitle: "Kontakt support", contactBody: "Send os en besked, så svarer vi dig — det er også det rette sted at rapportere et problem.", contactLink: "Send besked" },
+  membership: { sectionTitle: "Din medlemsfordel", discountLine: (percent) => `${percent}% rabat på AutoVere Pro`, validUntil: "Gyldig til", statusLabel: "Status", statusActive: "Aktiv", statusExpired: "Udløbet", expiredNote: "Din medlemsfordel er udløbet, men resten af din konto fungerer helt som normalt." },
 };
 
 export const accountCopy: Record<Locale, AccountCopy> = { en, de, nl, no, pl, sv, fr, da };

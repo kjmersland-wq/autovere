@@ -39,6 +39,17 @@ export async function fetchPartner(id: string): Promise<PartnerRecord | null> {
   }
 }
 
+export async function fetchPartnerByCode(code: string): Promise<PartnerRecord | null> {
+  try {
+    const response = await fetch(`/api/partners?code=${encodeURIComponent(code)}`);
+    if (!response.ok) return null;
+    const data = (await response.json()) as { partner?: PartnerRecord };
+    return data.partner ?? null;
+  } catch {
+    return null;
+  }
+}
+
 export async function fetchActivePartners(): Promise<PartnerRecord[]> {
   try {
     const response = await fetch("/api/partners");

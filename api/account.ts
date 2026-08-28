@@ -64,23 +64,54 @@ function planForPriceId(priceId: string | undefined): { label: string; tier: "pr
   return null;
 }
 
+type MembershipRow = { partner_id: string; discount_percent: number; valid_until: string; name: string; logo: string | null; website: string };
+
+async function getMembership(email: string): Promise<{ partnerId: string; partnerName: string; partnerLogo: string | null; partnerWebsite: string; discountPercent: number; validUntil: string; status: "active" | "expired" } | null> {
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (!databaseUrl) return null;
+  try {
+    const sql = neon(databaseUrl);
+    const rows = (await sql`
+      SELECT m.partner_id, m.discount_percent, m.valid_until, p.name, p.logo, p.website
+      FROM partner_memberships m JOIN partners p ON p.id = m.partner_id
+      WHERE m.user_email = ${email}
+    `) as MembershipRow[];
+    const row = rows[0];
+    if (!row) return null;
+    const today = new Date().toISOString().slice(0, 10);
+    return {
+      partnerId: row.partner_id,
+      partnerName: row.name,
+      partnerLogo: row.logo,
+      partnerWebsite: row.website,
+      discountPercent: row.discount_percent,
+      validUntil: row.valid_until,
+      status: today <= row.valid_until ? "active" : "expired",
+    };
+  } catch (error) {
+    console.error("Fetching partner membership failed", error);
+    return null;
+  }
+}
+
 async function handleMe(email: string, response: Response) {
+  const membership = await getMembership(email);
   const stripe = getStripe();
   if (!stripe) {
-    response.status(200).json({ email, subscription: null });
+    response.status(200).json({ email, subscription: null, membership });
     return;
   }
   try {
     const customers = await stripe.customers.list({ email, limit: 1 });
     const customer = customers.data[0];
     if (!customer) {
-      response.status(200).json({ email, subscription: null });
+      response.status(200).json({ email, subscription: null, membership });
       return;
     }
     const subscriptions = await stripe.subscriptions.list({ customer: customer.id, status: "all", limit: 5 });
     const active = subscriptions.data.find((s) => s.status === "active" || s.status === "trialing");
     if (!active) {
-      response.status(200).json({ email, subscription: null });
+      response.status(200).json({ email, subscription: null, membership });
       return;
     }
     const price = active.items.data[0]?.price;
@@ -127,10 +158,11 @@ async function handleMe(email: string, response: Response) {
         paymentMethod,
         invoices,
       },
+      membership,
     });
   } catch (error) {
     console.error("Fetching subscription status failed", error);
-    response.status(200).json({ email, subscription: null });
+    response.status(200).json({ email, subscription: null, membership });
   }
 }
 
