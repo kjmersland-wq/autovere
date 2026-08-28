@@ -1,5 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowLeft, ExternalLink, Handshake } from "lucide-react";
+import { ArrowLeft, ExternalLink, Gift, Handshake, Percent, Route as RouteIcon, Share2, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -12,10 +12,10 @@ import { fetchActivePartners, type PartnerRecord } from "@/lib/partners";
 export const Route = createFileRoute("/partners")({
   head: () => ({
     meta: [
-      { title: "AutoVere Organisation Partners — 25% Off AutoVere Pro for Members" },
+      { title: "AutoVere Organisation Partners — Give Your Members 25% Off" },
       {
         name: "description",
-        content: "AutoVere partners with European touring, EV, motorhome and mobility organisations to give their members 25% off AutoVere Pro.",
+        content: "Partner with AutoVere to give your members a genuine travel benefit: 25% off AutoVere Pro's real toll, vignette, fuel and EV charging cost planning. Simple to offer, no technical work required.",
       },
     ],
   }),
@@ -50,7 +50,6 @@ function PartnersPage() {
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">{copy.page.title}</h1>
           <p className="mt-4 text-base leading-relaxed text-muted-foreground sm:text-lg">{copy.page.intro}</p>
           <p className="mt-4 text-base font-semibold leading-relaxed text-foreground">{copy.page.proudStatement}</p>
-          <p className="mt-4 text-sm leading-relaxed text-muted-foreground">{copy.page.body}</p>
         </header>
 
         <section className="mt-10">
@@ -64,6 +63,40 @@ function PartnersPage() {
               partnerLabel={copy.header.partnerLabel}
               demoNote={copy.page.previewCaption}
             />
+          </div>
+        </section>
+
+        <section className="mt-12">
+          <h2 className="text-xl font-bold">{copy.page.whyTitle}</h2>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {[
+              { icon: Gift, title: copy.page.why1Title, body: copy.page.why1Body },
+              { icon: Zap, title: copy.page.why2Title, body: copy.page.why2Body },
+              { icon: RouteIcon, title: copy.page.why3Title, body: copy.page.why3Body },
+            ].map(({ icon: Icon, title, body }) => (
+              <div key={title} className="panel bg-gradient-to-br from-surface/90 via-surface/70 to-primary/5 p-4 backdrop-blur-sm transition-colors hover:border-primary/30">
+                <Icon className="size-5 text-primary" aria-hidden />
+                <h3 className="mt-3 text-sm font-bold text-foreground">{title}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{body}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-xl font-bold">{copy.page.stepsTitle}</h2>
+          <div className="mt-5 grid gap-3 sm:grid-cols-3">
+            {[
+              { icon: Handshake, title: copy.page.step1Title, body: copy.page.step1Body },
+              { icon: Share2, title: copy.page.step2Title, body: copy.page.step2Body },
+              { icon: Percent, title: copy.page.step3Title, body: copy.page.step3Body },
+            ].map(({ icon: Icon, title, body }) => (
+              <div key={title} className="panel p-4">
+                <Icon className="size-5 text-primary" aria-hidden />
+                <h3 className="mt-3 text-sm font-bold text-foreground">{title}</h3>
+                <p className="mt-1 text-xs leading-relaxed text-muted-foreground">{body}</p>
+              </div>
+            ))}
           </div>
         </section>
 
