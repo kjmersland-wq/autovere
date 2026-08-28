@@ -3,11 +3,15 @@ import { ArrowLeft, Check, Sparkles } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { AnchorLink } from "@/components/AnchorLink";
 import { useLocale } from "@/lib/i18n";
 import { annualLabels, checkoutLabels, comparisonStateLabels, marketingCopy } from "@/lib/marketing-i18n";
 import { usePartner } from "@/lib/partner-context";
 import { partnerCopy } from "@/lib/partner-i18n";
+import { shareLinkCopy } from "@/lib/share-i18n";
 import { fetchPartnerByCode, storePartner, type PartnerRecord } from "@/lib/partners";
+
+const PLAN_ANCHORS = ["free", "pro", "business"];
 
 function PricingPage() {
   const { locale } = useLocale();
@@ -19,6 +23,7 @@ function PricingPage() {
     const [codeError, setCodeError] = useState("");
     const partner = manualPartner ?? urlPartner;
     const partnerLabels = partnerCopy[locale] ?? partnerCopy.en;
+    const share = shareLinkCopy[locale] ?? shareLinkCopy.en;
   const [freePlan, proPlan, businessPlan] = copy.plans;
   const [yearly, setYearly] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState<number>(1);
@@ -103,9 +108,12 @@ function PricingPage() {
 
         <section className="mt-6 grid gap-4 lg:grid-cols-3" aria-label={copy.pricingTitle}>
           {copy.plans.map((plan, planIndex) => (
-            <article key={plan.name} onClick={() => setSelectedPlan(planIndex)} className={`panel flex flex-col p-5 sm:p-6 ${selectedPlan === planIndex ? "border-primary/60 panel-glow" : ""}`}>
+            <article key={plan.name} id={PLAN_ANCHORS[planIndex]} onClick={() => setSelectedPlan(planIndex)} className={`panel flex scroll-mt-6 flex-col p-5 sm:p-6 ${selectedPlan === planIndex ? "border-primary/60 panel-glow" : ""}`}>
               {planIndex === 1 && selectedPlan === 1 && <span className="mb-4 inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary"><Sparkles className="size-3.5" /> AUTOVERE Pro</span>}
-              <h2 className="text-xl font-bold">{plan.name}</h2>
+              <div className="flex items-center gap-2">
+                <h2 className="text-xl font-bold">{plan.name}</h2>
+                {PLAN_ANCHORS[planIndex] && <AnchorLink id={PLAN_ANCHORS[planIndex]} label={share.copyLink} copiedLabel={share.linkCopied} />}
+              </div>
               <p className="mt-2 min-h-12 text-sm leading-relaxed text-muted-foreground">{plan.description}</p>
               <div className="mt-5 flex items-baseline gap-1">
                 <span className="text-3xl font-extrabold">{yearly ? plan.yearlyPrice : plan.price}</span>
@@ -120,8 +128,11 @@ function PricingPage() {
         </section>
         {checkoutError && <p className="mt-4 text-sm text-destructive" role="alert">{checkoutError}</p>}
 
-        <section className="mt-12 panel overflow-hidden p-5 sm:p-7">
-          <h2 className="text-xl font-bold">{copy.compareTitle}</h2>
+        <section id="compare" className="mt-12 panel scroll-mt-6 overflow-hidden p-5 sm:p-7">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold">{copy.compareTitle}</h2>
+            <AnchorLink id="compare" label={share.copyLink} copiedLabel={share.linkCopied} />
+          </div>
           <div className="mt-5 overflow-x-auto">
             <table className="w-full min-w-[620px] border-collapse text-left text-sm">
               <thead><tr className="border-b border-border text-muted-foreground"><th className="px-3 py-3 font-semibold">{copy.compareFeature}</th><th className="px-3 py-3 font-semibold">{freePlan?.name}</th><th className="px-3 py-3 font-semibold">{proPlan?.name}</th><th className="px-3 py-3 font-semibold">{businessPlan?.name}</th></tr></thead>

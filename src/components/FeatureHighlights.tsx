@@ -13,7 +13,7 @@ export function FeatureHighlights() {
     { icon: Globe2, title: coverage.title, description: coverage.description },
   ];
   return (
-    <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+    <div id="features" className="mt-4 grid scroll-mt-6 gap-3 md:grid-cols-2 xl:grid-cols-4">
       {features.map(({ icon: Icon, title, description }) => (
         <div key={title} className="panel bg-gradient-to-br from-surface/90 via-surface/70 to-primary/5 p-4 backdrop-blur-sm transition-colors hover:border-primary/30">
           <Icon className="size-5 text-primary" aria-hidden />

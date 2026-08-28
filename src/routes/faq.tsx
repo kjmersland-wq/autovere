@@ -1,12 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { ArrowLeft, Search } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { ContactModal } from "@/components/ContactModal";
+import { AnchorLink } from "@/components/AnchorLink";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { faqCopy, useLocale } from "@/lib/i18n";
 import { marketingCopy } from "@/lib/marketing-i18n";
+import { shareLinkCopy } from "@/lib/share-i18n";
 import { faqSchema } from "@/lib/seo";
 
 export const Route = createFileRoute("/faq")({
@@ -27,8 +29,10 @@ function FaqPage() {
   const { locale } = useLocale();
   const copy = faqCopy[locale] ?? faqCopy.en;
   const marketing = marketingCopy[locale] ?? marketingCopy.en;
+  const share = shareLinkCopy[locale] ?? shareLinkCopy.en;
   const [query, setQuery] = useState("");
   const [contactOpen, setContactOpen] = useState(false);
+  const [openValue, setOpenValue] = useState("");
   const filteredCategories = useMemo(() => {
     const search = query.trim().toLocaleLowerCase();
     if (!search) return copy.categories;
@@ -37,6 +41,16 @@ function FaqPage() {
       questions: category.questions.filter((item) => `${item.question} ${item.answer}`.toLocaleLowerCase().includes(search)),
     })).filter((category) => category.questions.length > 0);
   }, [copy.categories, query]);
+
+  useEffect(() => {
+    const hash = window.location.hash.replace("#", "");
+    if (!hash) return;
+    setQuery("");
+    if (/^q-\d+-\d+$/.test(hash)) setOpenValue(hash);
+    requestAnimationFrame(() => {
+      document.getElementById(hash)?.scrollIntoView({ behavior: "smooth", block: "start" });
+    });
+  }, []);
 
   return (
     <main className="min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
@@ -55,10 +69,24 @@ function FaqPage() {
 
         <div className="mt-8 space-y-4">
           {filteredCategories.map((category, categoryIndex) => (
-            <section key={category.title} className="panel px-5 sm:px-7">
-              <h2 className="pt-5 text-lg font-bold">{category.title}</h2>
-              <Accordion type="single" collapsible className="mt-2">
-                {category.questions.map((item, questionIndex) => <AccordionItem key={item.question} value={`${categoryIndex}-${questionIndex}`}><AccordionTrigger>{item.question}</AccordionTrigger><AccordionContent className="leading-relaxed text-muted-foreground">{item.answer}</AccordionContent></AccordionItem>)}
+            <section key={category.title} id={`cat-${categoryIndex}`} className="panel scroll-mt-6 px-5 sm:px-7">
+              <div className="flex items-center gap-2 pt-5">
+                <h2 className="text-lg font-bold">{category.title}</h2>
+                <AnchorLink id={`cat-${categoryIndex}`} label={share.copyLink} copiedLabel={share.linkCopied} />
+              </div>
+              <Accordion type="single" collapsible value={openValue} onValueChange={setOpenValue} className="mt-2">
+                {category.questions.map((item, questionIndex) => {
+                  const itemId = `q-${categoryIndex}-${questionIndex}`;
+                  return (
+                    <AccordionItem key={item.question} id={itemId} value={itemId} className="scroll-mt-6">
+                      <AccordionTrigger>{item.question}</AccordionTrigger>
+                      <AccordionContent className="leading-relaxed text-muted-foreground">
+                        <p>{item.answer}</p>
+                        <AnchorLink id={itemId} label={share.copyLink} copiedLabel={share.linkCopied} className="mt-2" />
+                      </AccordionContent>
+                    </AccordionItem>
+                  );
+                })}
               </Accordion>
             </section>
           ))}
@@ -75,4 +103,3 @@ function FaqPage() {
     </main>
   );
 }
-

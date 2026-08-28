@@ -5,8 +5,10 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ContactModal } from "@/components/ContactModal";
 import { PartnerHeader } from "@/components/partner/PartnerHeader";
+import { AnchorLink } from "@/components/AnchorLink";
 import { useLocale } from "@/lib/i18n";
 import { partnerCopy } from "@/lib/partner-i18n";
+import { shareLinkCopy } from "@/lib/share-i18n";
 import { fetchActivePartners, type PartnerRecord } from "@/lib/partners";
 
 export const Route = createFileRoute("/partners")({
@@ -25,6 +27,7 @@ export const Route = createFileRoute("/partners")({
 function PartnersPage() {
   const { locale } = useLocale();
   const copy = partnerCopy[locale] ?? partnerCopy.en;
+  const share = shareLinkCopy[locale] ?? shareLinkCopy.en;
   const [partners, setPartners] = useState<PartnerRecord[] | null>(null);
   const [contactOpen, setContactOpen] = useState(false);
 
@@ -66,8 +69,11 @@ function PartnersPage() {
           </div>
         </section>
 
-        <section className="mt-12">
-          <h2 className="text-xl font-bold">{copy.page.whyTitle}</h2>
+        <section id="why" className="mt-12 scroll-mt-6">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold">{copy.page.whyTitle}</h2>
+            <AnchorLink id="why" label={share.copyLink} copiedLabel={share.linkCopied} />
+          </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
             {[
               { icon: Gift, title: copy.page.why1Title, body: copy.page.why1Body },
@@ -83,8 +89,11 @@ function PartnersPage() {
           </div>
         </section>
 
-        <section className="mt-10">
-          <h2 className="text-xl font-bold">{copy.page.stepsTitle}</h2>
+        <section id="how-it-works" className="mt-10 scroll-mt-6">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold">{copy.page.stepsTitle}</h2>
+            <AnchorLink id="how-it-works" label={share.copyLink} copiedLabel={share.linkCopied} />
+          </div>
           <div className="mt-5 grid gap-3 sm:grid-cols-3">
             {[
               { icon: Handshake, title: copy.page.step1Title, body: copy.page.step1Body },
@@ -100,8 +109,11 @@ function PartnersPage() {
           </div>
         </section>
 
-        <section className="mt-10 panel p-5 sm:p-7">
-          <h2 className="text-xl font-bold">{copy.page.directoryTitle}</h2>
+        <section id="our-partners" className="mt-10 panel scroll-mt-6 p-5 sm:p-7">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold">{copy.page.directoryTitle}</h2>
+            <AnchorLink id="our-partners" label={share.copyLink} copiedLabel={share.linkCopied} />
+          </div>
           {partners === null && <p className="mt-4 text-sm text-muted-foreground">…</p>}
           {partners !== null && partners.length === 0 && (
             <div className="mt-6 flex flex-col items-center rounded-lg border border-dashed border-border py-12 text-center">
@@ -135,8 +147,11 @@ function PartnersPage() {
           )}
         </section>
 
-        <section className="mt-10 border-t border-border pt-8">
-          <h2 className="text-xl font-bold">{copy.page.ctaTitle}</h2>
+        <section id="become-a-partner" className="mt-10 scroll-mt-6 border-t border-border pt-8">
+          <div className="flex items-center gap-2">
+            <h2 className="text-xl font-bold">{copy.page.ctaTitle}</h2>
+            <AnchorLink id="become-a-partner" label={share.copyLink} copiedLabel={share.linkCopied} />
+          </div>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">{copy.page.ctaText}</p>
           <Button className="mt-5" onClick={() => setContactOpen(true)}>{copy.page.ctaButton}</Button>
         </section>
