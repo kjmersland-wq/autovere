@@ -9,6 +9,14 @@ export const Route = createFileRoute("/admin")({
   component: AdminPage,
 });
 
+type PartnerType = "member_organisation" | "car_dealer" | "motorhome_dealer";
+
+const PARTNER_TYPE_LABELS: Record<PartnerType, string> = {
+  member_organisation: "Medlemsorganisasjon",
+  car_dealer: "Bilforhandler",
+  motorhome_dealer: "Bobilforhandler",
+};
+
 type AdminPartner = {
   id: string;
   name: string;
@@ -21,6 +29,7 @@ type AdminPartner = {
   startDate: string | null;
   endDate: string | null;
   notes: string | null;
+  type: PartnerType;
   referralCount: number;
 };
 
@@ -36,6 +45,7 @@ type PartnerForm = {
   startDate: string;
   endDate: string;
   notes: string;
+  type: PartnerType;
 };
 
 type Metrics = {
@@ -58,6 +68,7 @@ const emptyForm: PartnerForm = {
   startDate: "",
   endDate: "",
   notes: "",
+  type: "member_organisation",
 };
 
 const inputClass = "mt-1 w-full rounded-lg border border-border bg-surface-raised px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60";
@@ -152,6 +163,7 @@ function AdminPage() {
       startDate: partner.startDate ?? "",
       endDate: partner.endDate ?? "",
       notes: partner.notes ?? "",
+      type: partner.type,
     });
     setFormError("");
     setEditing(partner.id);
@@ -183,11 +195,12 @@ function AdminPage() {
         logo: form.logo || null,
         website: form.website,
         discountPercent: Number(form.discountPercent),
-        discountCode: form.discountCode,
+        discountCode: form.discountCode || (form.type !== "member_organisation" ? form.partnerId : ""),
         active: form.active,
         startDate: form.startDate || null,
         endDate: form.endDate || null,
         notes: form.notes || null,
+        type: form.type,
       }),
     });
     setSaving(false);
@@ -216,6 +229,7 @@ function AdminPage() {
         startDate: partner.startDate,
         endDate: partner.endDate,
         notes: partner.notes,
+        type: partner.type,
       }),
     });
     void loadPartners();
@@ -251,7 +265,7 @@ function AdminPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-primary">AUTOVERE ADMIN</p>
-            <h1 className="mt-2 text-2xl font-bold sm:text-3xl">{tab === "metrics" ? "Nøkkeltall" : "Partnerorganisasjoner"}</h1>
+            <h1 className="mt-2 text-2xl font-bold sm:text-3xl">{tab === "metrics" ? "Nøkkeltall" : "Partnere"}</h1>
           </div>
           <div className="flex gap-2">
             <div className="flex rounded-lg border border-border bg-surface-raised p-1">
@@ -309,7 +323,7 @@ function AdminPage() {
                   <table className="mt-5 w-full min-w-[560px] border-collapse text-left text-sm">
                     <thead>
                       <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
-                        <th className="px-3 py-3 font-semibold">Organisasjon</th>
+                        <th className="px-3 py-3 font-semibold">Partner</th>
                         <th className="px-3 py-3 font-semibold">Land</th>
                         <th className="px-3 py-3 font-semibold">Status</th>
                         <th className="px-3 py-3 font-semibold">Medlemmer</th>
@@ -344,14 +358,15 @@ function AdminPage() {
         {tab === "partners" && (
           <>
             <div className="mt-8 flex justify-end">
-              <Button size="sm" onClick={openNew}><Plus className="mr-1.5 size-4" /> Legg til organisasjon</Button>
+              <Button size="sm" onClick={openNew}><Plus className="mr-1.5 size-4" /> Legg til partner</Button>
             </div>
 
             <section className="panel mt-4 overflow-x-auto p-5 sm:p-7">
-              <table className="w-full min-w-[720px] border-collapse text-left text-sm">
+              <table className="w-full min-w-[820px] border-collapse text-left text-sm">
                 <thead>
                   <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
-                    <th className="px-3 py-3 font-semibold">Organisasjon</th>
+                    <th className="px-3 py-3 font-semibold">Partner</th>
+                    <th className="px-3 py-3 font-semibold">Type</th>
                     <th className="px-3 py-3 font-semibold">Land</th>
                     <th className="px-3 py-3 font-semibold">Rabatt</th>
                     <th className="px-3 py-3 font-semibold">Kode</th>
@@ -367,6 +382,7 @@ function AdminPage() {
                         <p className="font-semibold">{partner.name}</p>
                         <p className="text-xs text-muted-foreground">{partner.id}</p>
                       </td>
+                      <td className="px-3 py-4 text-muted-foreground">{PARTNER_TYPE_LABELS[partner.type]}</td>
                       <td className="px-3 py-4 text-muted-foreground">{partner.country ?? "—"}</td>
                       <td className="px-3 py-4">{partner.discountPercent}%</td>
                       <td className="px-3 py-4 font-mono text-xs">{partner.discountCode}</td>
@@ -388,7 +404,7 @@ function AdminPage() {
                   ))}
                   {partners.length === 0 && (
                     <tr>
-                      <td colSpan={7} className="px-3 py-10 text-center text-sm text-muted-foreground">Ingen partnere ennå. Legg til den første organisasjonen over.</td>
+                      <td colSpan={8} className="px-3 py-10 text-center text-sm text-muted-foreground">Ingen partnere ennå. Legg til den første over.</td>
                     </tr>
                   )}
                 </tbody>
@@ -397,10 +413,18 @@ function AdminPage() {
 
             {editing && (
               <section className="panel mt-8 p-5 sm:p-7">
-                <h2 className="text-lg font-bold">{editing === "new" ? "Legg til organisasjon" : `Rediger ${form.name}`}</h2>
+                <h2 className="text-lg font-bold">{editing === "new" ? "Legg til partner" : `Rediger ${form.name}`}</h2>
                 <form onSubmit={handleSave} className="mt-5 grid gap-5 sm:grid-cols-2">
                   <label>
-                    <span className={labelClass}>Organisasjonsnavn</span>
+                    <span className={labelClass}>Partnertype</span>
+                    <select value={form.type} onChange={(event) => setForm({ ...form, type: event.target.value as PartnerType })} className={inputClass}>
+                      {(Object.entries(PARTNER_TYPE_LABELS) as [PartnerType, string][]).map(([value, label]) => (
+                        <option key={value} value={value}>{label}</option>
+                      ))}
+                    </select>
+                  </label>
+                  <label>
+                    <span className={labelClass}>{form.type === "member_organisation" ? "Organisasjonsnavn" : "Forhandlernavn"}</span>
                     <input required value={form.name} onChange={(event) => setForm({ ...form, name: event.target.value })} className={inputClass} />
                   </label>
                   <label>
@@ -422,12 +446,18 @@ function AdminPage() {
                     <input required type="url" placeholder="https://" value={form.website} onChange={(event) => setForm({ ...form, website: event.target.value })} className={inputClass} />
                   </label>
                   <label>
-                    <span className={labelClass}>Medlemsrabatt %</span>
+                    <span className={labelClass}>Rabatt %</span>
                     <input required type="number" min={1} max={100} value={form.discountPercent} onChange={(event) => setForm({ ...form, discountPercent: Number(event.target.value) })} className={inputClass} />
                   </label>
                   <label>
-                    <span className={labelClass}>Medlemskode</span>
-                    <input required value={form.discountCode} onChange={(event) => setForm({ ...form, discountCode: event.target.value.toUpperCase() })} className={inputClass} />
+                    <span className={labelClass}>{form.type === "member_organisation" ? "Medlemskode" : "Kode (valgfritt — bruker partner-ID hvis tom)"}</span>
+                    <input
+                      required={form.type === "member_organisation"}
+                      placeholder={form.type !== "member_organisation" ? form.partnerId : undefined}
+                      value={form.discountCode}
+                      onChange={(event) => setForm({ ...form, discountCode: event.target.value.toUpperCase() })}
+                      className={inputClass}
+                    />
                   </label>
                   <label>
                     <span className={labelClass}>Startdato (valgfritt)</span>
@@ -447,7 +477,8 @@ function AdminPage() {
                     <textarea value={form.notes} onChange={(event) => setForm({ ...form, notes: event.target.value })} className={`${inputClass} min-h-20`} />
                   </label>
                   <label className="flex items-center gap-2 text-sm sm:col-span-2">
-                    <input type="checkbox" checked={form.active} onChange={(event) => setForm({ ...form, active: event.target.checked })} /> Aktiv — synlig på partnersiden og gir rett på rabatt
+                    <input type="checkbox" checked={form.active} onChange={(event) => setForm({ ...form, active: event.target.checked })} /> Aktiv — gir rett på rabatt
+                    {form.type === "member_organisation" ? " og er synlig på partnersiden" : " via partnerlenken (vises ikke på den offentlige partnersiden)"}
                   </label>
 
                   {formError && <p className="text-sm text-destructive sm:col-span-2">{formError}</p>}

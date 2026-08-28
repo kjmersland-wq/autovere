@@ -70,6 +70,9 @@ function isAdmin(request: Request): boolean {
   return verifyAdminToken(readCookie(request, "autovere_admin"));
 }
 
+type PartnerType = "member_organisation" | "car_dealer" | "motorhome_dealer";
+const PARTNER_TYPES: PartnerType[] = ["member_organisation", "car_dealer", "motorhome_dealer"];
+
 type PartnerRow = {
   id: string;
   name: string;
@@ -82,6 +85,7 @@ type PartnerRow = {
   start_date: string | null;
   end_date: string | null;
   notes: string | null;
+  type: PartnerType;
   created_at: string;
   updated_at: string;
 };
@@ -95,6 +99,7 @@ function toPublic(row: PartnerRow) {
     website: row.website,
     discountPercent: row.discount_percent,
     discountCode: row.discount_code,
+    type: row.type,
   };
 }
 
@@ -129,13 +134,17 @@ const CODE_RE = /^[A-Z0-9-]{3,32}$/;
 
 function validatePartnerInput(body: Record<string, unknown>): { error: string } | {
   id: string; name: string; country: string | null; logo: string | null; website: string;
-  discountPercent: number; discountCode: string; active: boolean; startDate: string | null; endDate: string | null; notes: string | null;
+  discountPercent: number; discountCode: string; active: boolean; startDate: string | null; endDate: string | null; notes: string | null; type: PartnerType;
 } {
   const id = typeof body["partnerId"] === "string" ? body["partnerId"].trim().toUpperCase() : "";
   const name = typeof body["name"] === "string" ? body["name"].trim() : "";
   const website = typeof body["website"] === "string" ? body["website"].trim() : "";
   const discountPercent = Number(body["discountPercent"]);
-  const discountCode = typeof body["discountCode"] === "string" ? body["discountCode"].trim().toUpperCase() : "";
+  const type: PartnerType = typeof body["type"] === "string" && PARTNER_TYPES.includes(body["type"] as PartnerType) ? (body["type"] as PartnerType) : "member_organisation";
+  // Dealer partners are reached via their partner-ID link, so a manual discount code is
+  // optional for them — default it to the partner ID rather than requiring admin input.
+  const rawCode = typeof body["discountCode"] === "string" ? body["discountCode"].trim().toUpperCase() : "";
+  const discountCode = rawCode || (type !== "member_organisation" ? id : "");
 
   if (!PARTNER_ID_RE.test(id)) return { error: "Partner ID must be 2-24 uppercase letters/numbers." };
   if (!name) return { error: "Organisation name is required." };
@@ -155,6 +164,7 @@ function validatePartnerInput(body: Record<string, unknown>): { error: string } 
     startDate: typeof body["startDate"] === "string" && body["startDate"] ? body["startDate"] : null,
     endDate: typeof body["endDate"] === "string" && body["endDate"] ? body["endDate"] : null,
     notes: typeof body["notes"] === "string" && body["notes"].trim() ? body["notes"].trim() : null,
+    type,
   };
 }
 
@@ -193,7 +203,9 @@ async function handlePublicList(response: Response) {
     response.status(200).json({ partners: [] });
     return;
   }
-  const rows = (await sql`SELECT * FROM partners WHERE active = true ORDER BY created_at ASC`) as PartnerRow[];
+  // The public directory on /partners is the organisation-partner recruitment page —
+  // dealer partners are only ever reached via their private partner-ID link, never listed here.
+  const rows = (await sql`SELECT * FROM partners WHERE active = true AND type = 'member_organisation' ORDER BY created_at ASC`) as PartnerRow[];
   response.status(200).json({ partners: rows.filter(isActiveNow).map(toPublic) });
 }
 
@@ -363,8 +375,8 @@ async function handleCreate(request: Request, response: Response) {
   }
   try {
     await sql`
-      INSERT INTO partners (id, name, country, logo, website, discount_percent, discount_code, active, start_date, end_date, notes)
-      VALUES (${parsed.id}, ${parsed.name}, ${parsed.country}, ${parsed.logo}, ${parsed.website}, ${parsed.discountPercent}, ${parsed.discountCode}, ${parsed.active}, ${parsed.startDate}, ${parsed.endDate}, ${parsed.notes})
+      INSERT INTO partners (id, name, country, logo, website, discount_percent, discount_code, active, start_date, end_date, notes, type)
+      VALUES (${parsed.id}, ${parsed.name}, ${parsed.country}, ${parsed.logo}, ${parsed.website}, ${parsed.discountPercent}, ${parsed.discountCode}, ${parsed.active}, ${parsed.startDate}, ${parsed.endDate}, ${parsed.notes}, ${parsed.type})
     `;
     response.status(201).json({ ok: true });
   } catch (error) {
@@ -396,7 +408,7 @@ async function handleUpdate(id: string, request: Request, response: Response) {
       UPDATE partners SET
         name = ${parsed.name}, country = ${parsed.country}, logo = ${parsed.logo}, website = ${parsed.website},
         discount_percent = ${parsed.discountPercent}, discount_code = ${parsed.discountCode}, active = ${parsed.active},
-        start_date = ${parsed.startDate}, end_date = ${parsed.endDate}, notes = ${parsed.notes}, updated_at = now()
+        start_date = ${parsed.startDate}, end_date = ${parsed.endDate}, notes = ${parsed.notes}, type = ${parsed.type}, updated_at = now()
       WHERE id = ${id}
     `;
     response.status(200).json({ ok: true });
