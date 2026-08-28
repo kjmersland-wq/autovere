@@ -1,9 +1,10 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import nodemailer from "nodemailer";
+import { neon } from "@neondatabase/serverless";
 
 type Request = IncomingMessage & { url?: string; body?: { email?: unknown } | string; query?: Record<string, string | string[]> };
-type Response = ServerResponse & { status: (code: number) => Response; json: (body: unknown) => void; setHeader: (name: string, value: string) => Response };
+type Response = ServerResponse & { status: (code: number) => Response; json: (body: unknown) => void; setHeader: (name: string, value: string | string[]) => Response };
 
 const TOKEN_TTL_SECONDS = 15 * 60;
 
@@ -54,6 +55,33 @@ function parseBody(body: Request["body"]): { email?: unknown } {
   return body ?? {};
 }
 
+function adminEmail(): string | null {
+  const value = process.env["ADMIN_EMAIL"];
+  return value ? value.trim().toLowerCase() : null;
+}
+
+function signAdminToken(): string | null {
+  const secret = process.env["AUTH_TOKEN_SECRET"];
+  if (!secret) return null;
+  const payload = Buffer.from(JSON.stringify({ admin: true, exp: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 14 })).toString("base64url");
+  const signature = createHmac("sha256", secret).update(payload).digest("base64url");
+  return `${payload}.${signature}`;
+}
+
+async function recordUser(email: string) {
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (!databaseUrl) return;
+  try {
+    const sql = neon(databaseUrl);
+    await sql`
+      INSERT INTO users (email, first_seen_at, last_seen_at) VALUES (${email}, now(), now())
+      ON CONFLICT (email) DO UPDATE SET last_seen_at = now()
+    `;
+  } catch (error) {
+    console.error("Recording user login failed", error);
+  }
+}
+
 async function handleVerify(request: Request, response: Response) {
   const url = new URL(request.url ?? "", "http://localhost");
   const token = request.query?.["token"] as string | undefined ?? url.searchParams.get("token") ?? "";
@@ -67,7 +95,17 @@ async function handleVerify(request: Request, response: Response) {
     response.status(401).json({ error: "This login link is invalid or has expired." });
     return;
   }
-  response.setHeader("Set-Cookie", `autovere_user=${encodeURIComponent(email)}; Path=/; Max-Age=2592000; HttpOnly; Secure; SameSite=Lax`);
+  await recordUser(email);
+
+  const cookies = [`autovere_user=${encodeURIComponent(email)}; Path=/; Max-Age=2592000; HttpOnly; Secure; SameSite=Lax`];
+  // Admin status is granted only here, after the magic-link token itself has been
+  // cryptographically verified — never from a client-supplied claim or the plain
+  // session cookie, which is why this is a separate, independently signed cookie.
+  if (adminEmail() && email.toLowerCase() === adminEmail()) {
+    const adminToken = signAdminToken();
+    if (adminToken) cookies.push(`autovere_admin=${adminToken}; Path=/; Max-Age=1209600; HttpOnly; Secure; SameSite=Lax`);
+  }
+  response.setHeader("Set-Cookie", cookies);
   response.setHeader("Location", "/account");
   response.status(302).json({ ok: true });
 }

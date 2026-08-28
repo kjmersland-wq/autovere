@@ -102,6 +102,14 @@ async function main() {
     )
   `;
 
+  await sql`
+    CREATE TABLE IF NOT EXISTS users (
+      email TEXT PRIMARY KEY,
+      first_seen_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      last_seen_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+
   console.log("Migration complete.");
 }
 

@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { createHmac, timingSafeEqual } from "node:crypto";
 import { neon } from "@neondatabase/serverless";
+import Stripe from "stripe";
 
 type Request = IncomingMessage & { url?: string; body?: unknown; query?: Record<string, string | string[]> };
 type Response = ServerResponse & {
@@ -236,6 +237,117 @@ async function handleAdminList(response: Response) {
   const counts = (await sql`SELECT partner_id, COUNT(*)::int AS count FROM partner_referrals GROUP BY partner_id`) as { partner_id: string; count: number }[];
   const countByPartner = new Map(counts.map((c) => [c.partner_id, c.count]));
   response.status(200).json({ partners: rows.map((row) => toAdmin(row, countByPartner.get(row.id) ?? 0)) });
+  return;
+}
+
+function getStripe(): Stripe | null {
+  const secret = process.env["STRIPE_SECRET_KEY"];
+  return secret ? new Stripe(secret) : null;
+}
+
+const planTierByEnv: Record<string, "pro" | "business"> = {
+  STRIPE_PRO_MONTHLY_PRICE_ID: "pro",
+  STRIPE_PRO_YEARLY_PRICE_ID: "pro",
+  STRIPE_BUSINESS_MONTHLY_PRICE_ID: "business",
+  STRIPE_BUSINESS_YEARLY_PRICE_ID: "business",
+};
+
+function tierForPriceId(priceId: string | undefined): "pro" | "business" | null {
+  if (!priceId) return null;
+  for (const [envName, tier] of Object.entries(planTierByEnv)) {
+    if (process.env[envName] === priceId) return tier;
+  }
+  return null;
+}
+
+async function handleMetrics(response: Response) {
+  const sql = requireDb();
+
+  let totalUsers = 0;
+  let newUsers30d = 0;
+  let weeklySignups: { week: string; count: number }[] = [];
+  if (sql) {
+    try {
+      const totalRows = (await sql`SELECT COUNT(*)::int AS count FROM users`) as { count: number }[];
+      totalUsers = totalRows[0]?.count ?? 0;
+      const newRows = (await sql`SELECT COUNT(*)::int AS count FROM users WHERE first_seen_at > now() - interval '30 days'`) as { count: number }[];
+      newUsers30d = newRows[0]?.count ?? 0;
+      const weekRows = (await sql`
+        SELECT to_char(date_trunc('week', first_seen_at), 'YYYY-MM-DD') AS week, COUNT(*)::int AS count
+        FROM users GROUP BY 1 ORDER BY 1 DESC LIMIT 8
+      `) as { week: string; count: number }[];
+      weeklySignups = weekRows.reverse();
+    } catch (error) {
+      console.error("Fetching user metrics failed", error);
+    }
+  }
+
+  let proCount = 0;
+  let businessCount = 0;
+  let mrrEur = 0;
+  let recentPaidInvoicesEur = 0;
+  const stripe = getStripe();
+  if (stripe) {
+    try {
+      const subscriptions: Stripe.Subscription[] = [];
+      let startingAfter: string | undefined;
+      for (let page = 0; page < 5; page++) {
+        const result: Stripe.ApiList<Stripe.Subscription> = await stripe.subscriptions.list({ status: "active", limit: 100, ...(startingAfter ? { starting_after: startingAfter } : {}) });
+        subscriptions.push(...result.data);
+        if (!result.has_more) break;
+        startingAfter = result.data[result.data.length - 1]?.id;
+      }
+      for (const subscription of subscriptions) {
+        const price = subscription.items.data[0]?.price;
+        const tier = tierForPriceId(price?.id);
+        if (tier === "pro") proCount++;
+        else if (tier === "business") businessCount++;
+        const amount = price?.unit_amount ?? 0;
+        const monthly = price?.recurring?.interval === "year" ? amount / 12 : amount;
+        mrrEur += monthly / 100;
+      }
+    } catch (error) {
+      console.error("Fetching Stripe subscriptions for metrics failed", error);
+    }
+    try {
+      const since = Math.floor((Date.now() - 30 * 24 * 60 * 60 * 1000) / 1000);
+      const invoices = await stripe.invoices.list({ status: "paid", limit: 100, created: { gte: since } });
+      recentPaidInvoicesEur = invoices.data.reduce((sum, invoice) => sum + invoice.amount_paid / 100, 0);
+    } catch (error) {
+      console.error("Fetching Stripe invoices for metrics failed", error);
+    }
+  }
+  const activeSubscriptions = proCount + businessCount;
+  const freeCount = Math.max(totalUsers - activeSubscriptions, 0);
+
+  type PartnerStat = { id: string; name: string; country: string | null; active: boolean; memberCount: number; referralCount: number };
+  let partnerStats: PartnerStat[] = [];
+  if (sql) {
+    try {
+      const rows = (await sql`
+        SELECT p.id, p.name, p.country, p.active,
+          COALESCE(m.member_count, 0)::int AS member_count,
+          COALESCE(r.referral_count, 0)::int AS referral_count
+        FROM partners p
+        LEFT JOIN (SELECT partner_id, COUNT(*) AS member_count FROM partner_memberships GROUP BY partner_id) m ON m.partner_id = p.id
+        LEFT JOIN (SELECT partner_id, COUNT(*) AS referral_count FROM partner_referrals GROUP BY partner_id) r ON r.partner_id = p.id
+        ORDER BY member_count DESC
+      `) as { id: string; name: string; country: string | null; active: boolean; member_count: number; referral_count: number }[];
+      partnerStats = rows.map((row) => ({ id: row.id, name: row.name, country: row.country, active: row.active, memberCount: row.member_count, referralCount: row.referral_count }));
+    } catch (error) {
+      console.error("Fetching partner metrics failed", error);
+    }
+  }
+  const totalMembers = partnerStats.reduce((sum, partner) => sum + partner.memberCount, 0);
+  const totalReferrals = partnerStats.reduce((sum, partner) => sum + partner.referralCount, 0);
+
+  response.status(200).json({
+    users: { total: totalUsers, newLast30Days: newUsers30d, weeklySignups },
+    subscriptions: { free: freeCount, pro: proCount, business: businessCount, activeTotal: activeSubscriptions },
+    revenue: { mrrEur: Math.round(mrrEur), recentPaidInvoicesEur: Math.round(recentPaidInvoicesEur), recentPaidInvoicesWindowDays: 30 },
+    partners: partnerStats,
+    discountUsage: { totalMembers, totalReferrals },
+  });
 }
 
 async function handleCreate(request: Request, response: Response) {
@@ -308,6 +420,7 @@ export default async function handler(request: Request, response: Response) {
       response.status(401).json({ error: "Not authenticated." });
       return;
     }
+    if (queryParam(request, "view") === "metrics") return handleMetrics(response);
     return handleAdminList(response);
   }
 

@@ -1,4 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import Stripe from "stripe";
 import { neon } from "@neondatabase/serverless";
 
@@ -28,6 +29,31 @@ function parseBody(body: unknown): Record<string, unknown> {
     }
   }
   return (body as Record<string, unknown>) ?? {};
+}
+
+function verifyAdminCookie(request: Request): boolean {
+  const secret = process.env["AUTH_TOKEN_SECRET"];
+  const token = readCookie(request, "autovere_admin");
+  if (!secret || !token) return false;
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature) return false;
+  const expected = createHmac("sha256", secret).update(payload).digest();
+  const actual = Buffer.from(signature, "base64url");
+  if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return false;
+  try {
+    const value = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { admin?: unknown; exp?: unknown };
+    return value.admin === true && typeof value.exp === "number" && value.exp > Math.floor(Date.now() / 1000);
+  } catch {
+    return false;
+  }
+}
+
+function isAdminUser(request: Request, email: string): boolean {
+  const adminEmail = process.env["ADMIN_EMAIL"];
+  if (!adminEmail) return false;
+  // Both the claimed email AND the independently signed admin cookie must check out —
+  // the plain session cookie alone is not trusted for something as sensitive as free Pro access.
+  return email.toLowerCase() === adminEmail.trim().toLowerCase() && verifyAdminCookie(request);
 }
 
 function queryParam(request: Request, name: string): string | null {
@@ -94,7 +120,26 @@ async function getMembership(email: string): Promise<{ partnerId: string; partne
   }
 }
 
-async function handleMe(email: string, response: Response) {
+async function handleMe(email: string, request: Request, response: Response) {
+  if (isAdminUser(request, email)) {
+    // Free, permanent Pro access for the AutoVere admin account only — no Stripe customer or
+    // subscription is created or touched, so this can never affect real billing or other users.
+    response.status(200).json({
+      email,
+      subscription: {
+        status: "active",
+        plan: "AutoVere Pro — Admin",
+        tier: "pro",
+        interval: null,
+        cancelAtPeriodEnd: false,
+        renewsAt: null,
+        paymentMethod: null,
+        invoices: [],
+      },
+      membership: null,
+    });
+    return;
+  }
   const membership = await getMembership(email);
   const stripe = getStripe();
   if (!stripe) {
@@ -324,7 +369,7 @@ export default async function handler(request: Request, response: Response) {
   if (request.method === "GET" && view === "settings") return handleSettingsGet(email, response);
   if (request.method === "PUT" && view === "settings") return handleSettingsPut(email, request, response);
   if (request.method === "GET" && view === "export") return handleExport(email, response);
-  if (request.method === "GET" && !view && !action) return handleMe(email, response);
+  if (request.method === "GET" && !view && !action) return handleMe(email, request, response);
   if (request.method === "POST" && action === "logout") return handleLogout(response);
   if (request.method === "POST" && action === "delete") return handleDelete(email, response);
   if (request.method === "POST" && action === "billing-portal") return handleBillingPortal(email, response);
