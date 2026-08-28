@@ -41,6 +41,7 @@ type Subscription = {
   renewsAt: string | null;
   paymentMethod: PaymentMethod;
   invoices: Invoice[];
+  manageable: boolean;
 };
 type Membership = {
   partnerId: string;
@@ -234,11 +235,11 @@ function AccountPage() {
                     )}
                   </div>
                   <div className="flex shrink-0 flex-wrap gap-3">
-                    {subscription ? (
+                    {subscription?.manageable ? (
                       <Button variant="secondary" disabled={openingBilling} onClick={openBillingPortal}>
                         {copy.actions.manageBilling}
                       </Button>
-                    ) : (
+                    ) : subscription ? null : (
                       <Link to="/pricing">
                         <Button>{copy.actions.viewPlans}</Button>
                       </Link>
@@ -333,9 +334,13 @@ function AccountPage() {
                         </dd>
                       </div>
                     </dl>
-                    <Button disabled={openingBilling} onClick={openBillingPortal}>
-                      {copy.billing.manage}
-                    </Button>
+                    {subscription.manageable ? (
+                      <Button disabled={openingBilling} onClick={openBillingPortal}>
+                        {copy.billing.manage}
+                      </Button>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">{copy.billing.adminNote}</p>
+                    )}
                     <div>
                       <h3 className="text-sm font-bold">{copy.billing.history}</h3>
                       {subscription.invoices.length > 0 ? (

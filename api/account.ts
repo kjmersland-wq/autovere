@@ -135,6 +135,7 @@ async function handleMe(email: string, request: Request, response: Response) {
         renewsAt: null,
         paymentMethod: null,
         invoices: [],
+        manageable: false,
       },
       membership: null,
     });
@@ -202,6 +203,7 @@ async function handleMe(email: string, request: Request, response: Response) {
         renewsAt,
         paymentMethod,
         invoices,
+        manageable: true,
       },
       membership,
     });
@@ -351,6 +353,7 @@ async function handleExport(email: string, response: Response) {
       console.error("Fetching account data for export failed", error);
     }
   }
+  data["partnerMembership"] = await getMembership(email);
   response.setHeader("Content-Type", "application/json");
   response.setHeader("Content-Disposition", `attachment; filename="autovere-data-export.json"`);
   response.status(200).json(data);

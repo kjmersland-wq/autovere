@@ -110,7 +110,7 @@ function PricingPage() {
               <p className="mt-2 min-h-12 text-sm leading-relaxed text-muted-foreground">{plan.description}</p>
               <div className="mt-5 flex items-baseline gap-1">
                 <span className="text-3xl font-extrabold">{yearly ? plan.yearlyPrice : plan.price}</span>
-                {plan.price !== "Free" && plan.price !== "Gratis" && plan.price !== "Kostenlos" && <span className="text-sm text-muted-foreground">{yearly ? annualLabels[locale] : copy.perMonth}</span>}
+                {!plan.isFree && <span className="text-sm text-muted-foreground">{yearly ? annualLabels[locale] : copy.perMonth}</span>}
               </div>
               <ul className="mt-6 flex-1 space-y-3 text-sm text-muted-foreground">
                 {plan.features.map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" /> <span>{feature}</span></li>)}
