@@ -488,6 +488,32 @@ function AdminPage() {
                     <Button type="button" variant="secondary" onClick={() => setEditing(null)}>Avbryt</Button>
                   </div>
                 </form>
+
+                <details className="mt-6 rounded-lg border border-border bg-surface-raised px-4 py-3 text-xs text-muted-foreground">
+                  <summary className="cursor-pointer select-none font-semibold text-foreground">Eksempler og hjelp</summary>
+                  <div className="mt-3 space-y-1.5">
+                    <p><span className="font-semibold text-foreground">Partner-ID:</span> <span className="font-mono">NORDIC-CAMP-NO</span>, <span className="font-mono">ADRIA-DEALER-DE</span>, <span className="font-mono">CAMPING-SE</span> osv.</p>
+                    <p><span className="font-semibold text-foreground">Landkode:</span> <span className="font-mono">NO, SE, DK, EN, DE, NL, FR, PL</span></p>
+                    <p><span className="font-semibold text-foreground">Medlemskode:</span> f.eks. <span className="font-mono">NORDIC25</span></p>
+                    <p><span className="font-semibold text-foreground">Rabatt:</span> f.eks. <span className="font-mono">25</span></p>
+                    <p><span className="font-semibold text-foreground">Logo:</span> SVG anbefales, alternativt PNG/JPG, maks 250 KB — f.eks. <span className="font-mono">eksempel-dealer.svg</span></p>
+                    <p><span className="font-semibold text-foreground">Offisielt nettsted:</span> full URL, f.eks. <span className="font-mono">https://www.example.no</span></p>
+                    <p><span className="font-semibold text-foreground">Start-/sluttdato:</span> valgfritt — styrer kun hvor lenge avtalen (og dermed rabatten) er aktiv.</p>
+                    <p><span className="font-semibold text-foreground">Interne notater:</span> kun synlig for Admin, vises aldri for partneren eller kunden.</p>
+                  </div>
+                  <div className="mt-4 rounded-md border border-border/70 bg-surface px-3 py-2.5">
+                    <p className="font-semibold text-foreground">Eksempel — komplett forhandlerpartner</p>
+                    <dl className="mt-1.5 grid grid-cols-[auto_1fr] gap-x-2 gap-y-0.5">
+                      <dt className="text-muted-foreground">Partner</dt><dd>Eksempel Bil &amp; Bobil</dd>
+                      <dt className="text-muted-foreground">Type</dt><dd>Bil-/bobilforhandler</dd>
+                      <dt className="text-muted-foreground">Land</dt><dd className="font-mono">NO</dd>
+                      <dt className="text-muted-foreground">Partner-ID</dt><dd className="font-mono">EKSEMPEL-DEALER-NO</dd>
+                      <dt className="text-muted-foreground">Medlemskode</dt><dd className="font-mono">EKSEMPEL25</dd>
+                      <dt className="text-muted-foreground">Rabatt</dt><dd>25 %</dd>
+                      <dt className="text-muted-foreground">Logo</dt><dd className="font-mono">eksempel-dealer.svg</dd>
+                    </dl>
+                  </div>
+                </details>
               </section>
             )}
           </>
