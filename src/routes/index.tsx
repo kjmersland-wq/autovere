@@ -31,6 +31,7 @@ import { useTheme } from "@/hooks/use-theme";
 import { formatCurrency } from "@/lib/currency";
 import { marketingCopy } from "@/lib/marketing-i18n";
 import { partnerCopy } from "@/lib/partner-i18n";
+import { getAccountCopy } from "@/lib/account-i18n";
 import { chargerCopy } from "@/lib/charger-i18n";
 import { openPrintReport } from "@/lib/print-report";
 
@@ -225,6 +226,7 @@ function Index() {
   const { locale, setLocale } = useLocale();
   const marketing = marketingCopy[locale] ?? marketingCopy.en;
   const partnerNav = partnerCopy[locale] ?? partnerCopy.en;
+  const accountCopy = getAccountCopy(locale);
   const legalCopy = LEGAL_MODAL_COPY[locale as keyof typeof LEGAL_MODAL_COPY] ?? LEGAL_MODAL_COPY.no;
   const [form, setForm] = useState<TripFormState>({
     from: null,
@@ -252,7 +254,27 @@ function Index() {
   const [contactOpen, setContactOpen] = useState(false);
   const [legalOpen, setLegalOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
+  const [proTier, setProTier] = useState<"pro" | "business" | null>(null);
   const { theme, toggleTheme } = useTheme();
+
+  useEffect(() => {
+    let cancelled = false;
+    fetch("/api/account")
+      .then(async (response) => {
+        if (!response.ok || cancelled) return;
+        const body = (await response.json()) as { subscription?: { tier?: "pro" | "business" | null } | null };
+        const tier = body.subscription?.tier ?? null;
+        if (!cancelled && (tier === "pro" || tier === "business")) setProTier(tier);
+      })
+      .catch(() => {
+        /* not logged in, or account status unavailable — header simply shows the normal sign-in link */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const proTierName = proTier === "business" ? marketingCopy[locale]?.plans[2]?.name : marketingCopy[locale]?.plans[1]?.name;
 
   const run = useCallback(async (input = form) => {
     const { from, to } = input;
@@ -574,12 +596,21 @@ function Index() {
             >
               <Sparkles className="size-3.5" /> {t.exploreDemo}
             </Link>
-            <Link
-              to="/login"
-              className="rounded-lg border border-primary/40 bg-primary/10 px-2.5 py-2 text-xs font-bold text-primary transition-colors hover:border-primary/70 hover:bg-primary/15"
-            >
-              {loginLabels[locale]}
-            </Link>
+            {proTier ? (
+              <Link
+                to="/account"
+                className="flex items-center gap-1.5 rounded-lg border border-primary/40 bg-primary/10 px-2.5 py-2 text-xs font-bold text-primary transition-colors hover:border-primary/70 hover:bg-primary/15"
+              >
+                <Sparkles className="size-3.5" /> {accountCopy.title} · {proTierName}
+              </Link>
+            ) : (
+              <Link
+                to="/login"
+                className="rounded-lg border border-primary/40 bg-primary/10 px-2.5 py-2 text-xs font-bold text-primary transition-colors hover:border-primary/70 hover:bg-primary/15"
+              >
+                {loginLabels[locale]}
+              </Link>
+            )}
             <button
               type="button"
               onClick={toggleTheme}
