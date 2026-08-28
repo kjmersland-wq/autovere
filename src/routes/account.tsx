@@ -9,6 +9,7 @@ import {
   Download,
   HelpCircle,
   LayoutDashboard,
+  Lock,
   Pencil,
   Printer,
   Route as RouteIcon,
@@ -52,7 +53,7 @@ type Membership = {
   validUntil: string;
   status: "active" | "expired";
 };
-type MeResponse = { email: string; subscription: Subscription | null; membership: Membership | null } | { error: string };
+type MeResponse = { email: string; isAdmin: boolean; subscription: Subscription | null; membership: Membership | null } | { error: string };
 type Section = "overview" | "trips" | "vehicles" | "preferences" | "billing" | "places" | "profile" | "help";
 
 type Trip = { id: string; name: string; fromPlace: string | null; toPlace: string | null; vehicleType: string | null; currency: string | null; days: number | null; estimate: unknown; createdAt: string; updatedAt: string };
@@ -183,6 +184,7 @@ function AccountPage() {
   }
 
   const email = data.email;
+  const isAdmin = data.isAdmin;
   const subscription = data.subscription;
   const membership = data.membership;
   const partnerLabels = partnerCopy[locale] ?? partnerCopy.en;
@@ -207,6 +209,15 @@ function AccountPage() {
       eyebrow={copy.eyebrow}
       title={copy.welcome(firstName)}
       subtitle={subscription ? copy.subtitleActive : copy.subtitleFree}
+      badge={
+        isAdmin ? (
+          <Link to="/admin">
+            <Button variant="secondary" size="sm">
+              <Lock className="mr-1.5 size-3.5" /> {copy.adminLink}
+            </Button>
+          </Link>
+        ) : undefined
+      }
       nav={nav}
       active={section}
       onSelect={setSection}

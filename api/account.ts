@@ -121,11 +121,15 @@ async function getMembership(email: string): Promise<{ partnerId: string; partne
 }
 
 async function handleMe(email: string, request: Request, response: Response) {
-  if (isAdminUser(request, email)) {
+  // Same double-verified check used to grant free admin Pro access below — reused here as the
+  // sole source of truth for whether the client is told an "Admin" link should be shown at all.
+  const isAdmin = isAdminUser(request, email);
+  if (isAdmin) {
     // Free, permanent Pro access for the AutoVere admin account only — no Stripe customer or
     // subscription is created or touched, so this can never affect real billing or other users.
     response.status(200).json({
       email,
+      isAdmin: true,
       subscription: {
         status: "active",
         plan: "AutoVere Pro — Admin",
@@ -144,20 +148,20 @@ async function handleMe(email: string, request: Request, response: Response) {
   const membership = await getMembership(email);
   const stripe = getStripe();
   if (!stripe) {
-    response.status(200).json({ email, subscription: null, membership });
+    response.status(200).json({ email, isAdmin, subscription: null, membership });
     return;
   }
   try {
     const customers = await stripe.customers.list({ email, limit: 1 });
     const customer = customers.data[0];
     if (!customer) {
-      response.status(200).json({ email, subscription: null, membership });
+      response.status(200).json({ email, isAdmin, subscription: null, membership });
       return;
     }
     const subscriptions = await stripe.subscriptions.list({ customer: customer.id, status: "all", limit: 5 });
     const active = subscriptions.data.find((s) => s.status === "active" || s.status === "trialing");
     if (!active) {
-      response.status(200).json({ email, subscription: null, membership });
+      response.status(200).json({ email, isAdmin, subscription: null, membership });
       return;
     }
     const price = active.items.data[0]?.price;
@@ -194,6 +198,7 @@ async function handleMe(email: string, request: Request, response: Response) {
 
     response.status(200).json({
       email,
+      isAdmin,
       subscription: {
         status: active.status,
         plan: plan?.label ?? price?.nickname ?? price?.id ?? "AutoVere",
@@ -209,7 +214,7 @@ async function handleMe(email: string, request: Request, response: Response) {
     });
   } catch (error) {
     console.error("Fetching subscription status failed", error);
-    response.status(200).json({ email, subscription: null, membership });
+    response.status(200).json({ email, isAdmin, subscription: null, membership });
   }
 }
 

@@ -3,6 +3,7 @@ import type { Locale } from "./i18n";
 export type AccountCopy = {
   nav: { overview: string; trips: string; vehicles: string; preferences: string; billing: string; places: string; profile: string; help: string };
   backToPlanner: string;
+  adminLink: string;
   eyebrow: string;
   title: string;
   welcome: (name: string) => string;
@@ -110,6 +111,7 @@ export type AccountCopy = {
 const en: AccountCopy = {
   nav: { overview: "Overview", trips: "My Trips", vehicles: "My Vehicles", preferences: "Settings", billing: "Subscription & Billing", places: "Saved Places", profile: "Profile & Security", help: "Help & Support" },
   backToPlanner: "Back to AutoVere",
+  adminLink: "Admin",
   eyebrow: "AUTOVERE",
   title: "My AutoVere",
   welcome: (name) => `Welcome back, ${name}`,
@@ -133,6 +135,7 @@ const en: AccountCopy = {
 const de: AccountCopy = {
   nav: { overview: "Übersicht", trips: "Meine Reisen", vehicles: "Meine Fahrzeuge", preferences: "Einstellungen", billing: "Abo & Zahlung", places: "Gespeicherte Orte", profile: "Profil & Sicherheit", help: "Hilfe & Support" },
   backToPlanner: "Zurück zu AutoVere",
+  adminLink: "Admin",
   eyebrow: "AUTOVERE",
   title: "Mein AutoVere",
   welcome: (name) => `Willkommen zurück, ${name}`,
@@ -156,6 +159,7 @@ const de: AccountCopy = {
 const nl: AccountCopy = {
   nav: { overview: "Overzicht", trips: "Mijn Reizen", vehicles: "Mijn Voertuigen", preferences: "Instellingen", billing: "Abonnement & Facturatie", places: "Opgeslagen Plekken", profile: "Profiel & Beveiliging", help: "Help & Ondersteuning" },
   backToPlanner: "Terug naar AutoVere",
+  adminLink: "Beheer",
   eyebrow: "AUTOVERE",
   title: "Mijn AutoVere",
   welcome: (name) => `Welkom terug, ${name}`,
@@ -179,6 +183,7 @@ const nl: AccountCopy = {
 const no: AccountCopy = {
   nav: { overview: "Oversikt", trips: "Mine reiser", vehicles: "Mine kjøretøy", preferences: "Innstillinger", billing: "Abonnement og fakturering", places: "Lagrede steder", profile: "Profil og sikkerhet", help: "Hjelp og support" },
   backToPlanner: "Tilbake til AutoVere",
+  adminLink: "Admin",
   eyebrow: "AUTOVERE",
   title: "Min AutoVere",
   welcome: (name) => `Velkommen tilbake, ${name}`,
@@ -202,6 +207,7 @@ const no: AccountCopy = {
 const pl: AccountCopy = {
   nav: { overview: "Przegląd", trips: "Moje podróże", vehicles: "Moje pojazdy", preferences: "Ustawienia", billing: "Subskrypcja i płatności", places: "Zapisane miejsca", profile: "Profil i bezpieczeństwo", help: "Pomoc i wsparcie" },
   backToPlanner: "Powrót do AutoVere",
+  adminLink: "Panel administratora",
   eyebrow: "AUTOVERE",
   title: "Moje AutoVere",
   welcome: (name) => `Witaj ponownie, ${name}`,
@@ -225,6 +231,7 @@ const pl: AccountCopy = {
 const sv: AccountCopy = {
   nav: { overview: "Översikt", trips: "Mina resor", vehicles: "Mina fordon", preferences: "Inställningar", billing: "Prenumeration och fakturering", places: "Sparade platser", profile: "Profil och säkerhet", help: "Hjälp och support" },
   backToPlanner: "Tillbaka till AutoVere",
+  adminLink: "Admin",
   eyebrow: "AUTOVERE",
   title: "Mitt AutoVere",
   welcome: (name) => `Välkommen tillbaka, ${name}`,
@@ -248,6 +255,7 @@ const sv: AccountCopy = {
 const fr: AccountCopy = {
   nav: { overview: "Aperçu", trips: "Mes voyages", vehicles: "Mes véhicules", preferences: "Paramètres", billing: "Abonnement et facturation", places: "Lieux enregistrés", profile: "Profil et sécurité", help: "Aide et assistance" },
   backToPlanner: "Retour à AutoVere",
+  adminLink: "Administration",
   eyebrow: "AUTOVERE",
   title: "Mon AutoVere",
   welcome: (name) => `Bon retour, ${name}`,
@@ -271,6 +279,7 @@ const fr: AccountCopy = {
 const da: AccountCopy = {
   nav: { overview: "Oversigt", trips: "Mine rejser", vehicles: "Mine køretøjer", preferences: "Indstillinger", billing: "Abonnement og fakturering", places: "Gemte steder", profile: "Profil og sikkerhed", help: "Hjælp og support" },
   backToPlanner: "Tilbage til AutoVere",
+  adminLink: "Admin",
   eyebrow: "AUTOVERE",
   title: "Min AutoVere",
   welcome: (name) => `Velkommen tilbage, ${name}`,
