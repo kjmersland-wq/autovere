@@ -312,11 +312,13 @@ function Index() {
       const raw = sessionStorage.getItem("autovere-reopen-trip");
       if (!raw) return;
       sessionStorage.removeItem("autovere-reopen-trip");
-      const trip = JSON.parse(raw) as { estimate?: { form?: TripFormState } };
+      const trip = JSON.parse(raw) as { estimate?: { form?: TripFormState }; autoRun?: boolean };
       const savedForm = trip.estimate?.form;
       if (savedForm && savedForm.from && savedForm.to) {
         setForm(savedForm);
-        void run(savedForm);
+        // A saved trip's stored totals are a snapshot from when it was saved — repeating it
+        // always recalculates against current data rather than reusing old prices.
+        if (trip.autoRun !== false) void run(savedForm);
       }
     } catch {
       /* no reopened trip, or storage unavailable */

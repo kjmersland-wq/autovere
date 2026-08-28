@@ -494,14 +494,16 @@ function TripsSection({ copy, locale, dateFormatter }: CopyProps & { locale: str
     });
   }
 
-  function reopen(trip: Trip) {
+  function reopen(trip: Trip, autoRun: boolean) {
     try {
-      sessionStorage.setItem("autovere-reopen-trip", JSON.stringify(trip));
+      sessionStorage.setItem("autovere-reopen-trip", JSON.stringify({ ...trip, autoRun }));
     } catch {
       /* storage unavailable */
     }
     window.location.href = "/";
   }
+
+  const tripVehicleLabel: Record<string, string> = { petrol: copy.vehicles.typePetrol, diesel: copy.vehicles.typeDiesel, ev: copy.vehicles.typeEv };
 
   return (
     <section className="panel p-5 sm:p-7">
@@ -528,12 +530,17 @@ function TripsSection({ copy, locale, dateFormatter }: CopyProps & { locale: str
                   <p className="truncate font-semibold">{trip.name}</p>
                 )}
                 <p className="truncate text-xs text-muted-foreground">
-                  {[trip.fromPlace, trip.toPlace].filter(Boolean).join(" → ") || "—"} · {copy.trips.savedOn(dateFormatter.format(new Date(trip.updatedAt)))}
+                  {[trip.fromPlace, trip.toPlace].filter(Boolean).join(" → ") || "—"}
+                  {trip.vehicleType && tripVehicleLabel[trip.vehicleType] ? ` · ${tripVehicleLabel[trip.vehicleType]}` : ""}
+                  {trip.days ? ` · ${trip.days} ${copy.trips.days}` : ""} · {copy.trips.savedOn(dateFormatter.format(new Date(trip.updatedAt)))}
                 </p>
               </div>
               <div className="flex shrink-0 flex-wrap gap-2">
-                <Button size="sm" variant="secondary" disabled={busyId === trip.id} onClick={() => reopen(trip)}>
-                  {copy.trips.open}
+                <Button size="sm" variant="secondary" disabled={busyId === trip.id} onClick={() => reopen(trip, true)}>
+                  {copy.trips.repeat}
+                </Button>
+                <Button size="sm" variant="ghost" disabled={busyId === trip.id} onClick={() => reopen(trip, false)}>
+                  {copy.trips.useAsStart}
                 </Button>
                 <Button size="sm" variant="ghost" title={copy.trips.print} disabled={busyId === trip.id} onClick={() => print(trip)}>
                   <Printer className="size-4" />
