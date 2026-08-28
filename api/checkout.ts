@@ -65,7 +65,7 @@ async function resolvePartnerPromotionCode(stripe: Stripe, partnerId: string): P
     if (found) return found.id;
 
     const coupon = await stripe.coupons.create({ percent_off: partner.discount_percent, duration: "forever", name: `${partner.id} member benefit` });
-    const promotionCode = await stripe.promotionCodes.create({ coupon: coupon.id, code: partner.discount_code });
+    const promotionCode = await stripe.promotionCodes.create({ promotion: { type: "coupon", coupon: coupon.id }, code: partner.discount_code });
     return promotionCode.id;
   } catch (error) {
     console.error("Resolving partner discount failed", error);
