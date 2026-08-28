@@ -10,7 +10,7 @@ type VercelResponse = ServerResponse & {
   setHeader: (name: string, value: string) => VercelResponse;
 };
 
-const supportedLocales = new Set(["en", "de", "nl", "no", "pl"]);
+const supportedLocales = new Set(["en", "de", "nl", "no", "pl", "sv", "fr", "da"]);
 const priceEnvByKey: Record<string, string> = {
   "pro-monthly": "STRIPE_PRO_MONTHLY_PRICE_ID",
   "pro-yearly": "STRIPE_PRO_YEARLY_PRICE_ID",

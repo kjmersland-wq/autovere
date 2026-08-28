@@ -15,6 +15,7 @@ export const seoCopy: Record<Locale, SeoCopy> = {
   pl: { title: "AutoVere — Europejski planer tras, opłat drogowych, winiet i ładowania EV", description: "Zaplanuj podróż po Europie. Oblicz opłaty drogowe, winiety, paliwo oraz stacje ładowania Tesla i Ionity.", keywords: "opłaty drogowe Europa, winiety Europa, planer tras EV, ładowarki Tesla, Ionity", ogLocale: "pl_PL" },
   sv: { title: "AutoVere — Europeisk resruttplanerare för tullar, vinjetter och elbilsladdning", description: "Planera din bilresa i Europa. Beräkna vägavgifter, vinjetter, drivmedel och laddstopp för Tesla och Ionity.", keywords: "vägavgifter Europa, motorvägsvinjett, elbil resruttplanerare, Tesla laddning, Ionity", ogLocale: "sv_SE" },
   fr: { title: "AutoVere — Planificateur européen de trajets, péages, vignettes et recharge VE", description: "Planifiez votre trajet en Europe. Calculez les péages, vignettes, coûts de carburant et arrêts de recharge Tesla et Ionity.", keywords: "calcul péage Europe, vignette Europe, planificateur trajet voiture électrique, recharge Tesla, Ionity", ogLocale: "fr_FR" },
+  da: { title: "AutoVere — Europæisk vejafgifts-, vignet- og elbilberegner", description: "Planlæg din bilferie i Europa. Beregn nøjagtige vejafgifter, obligatoriske vignetter, brændstof og Tesla/Ionity-ladestop.", keywords: "vejafgiftsberegner, vignetter Europa, elbilberegner, Tesla ladestop, Ionity ladestop", ogLocale: "da_DK" },
 };
 
 export const seoAlternates = [
@@ -25,6 +26,7 @@ export const seoAlternates = [
   { lang: "pl", locale: "pl_PL", path: "pl" },
   { lang: "sv", locale: "sv_SE", path: "sv" },
   { lang: "fr", locale: "fr_FR", path: "fr" },
+  { lang: "da", locale: "da_DK", path: "da" },
 ] as const;
 
 export const siteUrl = "https://www.autovere.com";

@@ -19,4 +19,5 @@ export const chargerCopy: Record<Locale, ChargerCopy> = {
   pl: { all: "Pokaż wszystkie", tesla: "Tylko Tesla", highPower: ">150 kW", operator: "Operator", outlets: "Złącza", status: "Status", addStop: "Dodaj jako przystanek", added: "Dodano do trasy" },
   sv: { all: "Visa alla", tesla: "Endast Tesla", highPower: ">150 kW", operator: "Operatör", outlets: "Uttag", status: "Status", addStop: "Lägg till som laddstopp", added: "Tillagd på rutten" },
   fr: { all: "Tout afficher", tesla: "Tesla uniquement", highPower: ">150 kW", operator: "Opérateur", outlets: "Prises", status: "État", addStop: "Ajouter comme arrêt de recharge", added: "Ajouté à l'itinéraire" },
+  da: { all: "Vis alle", tesla: "Kun Tesla", highPower: ">150 kW", operator: "Operatør", outlets: "Stik", status: "Status", addStop: "Tilføj som ladestop", added: "Tilføjet til ruten" },
 };
