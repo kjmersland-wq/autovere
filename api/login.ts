@@ -1,9 +1,9 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { createHmac } from "node:crypto";
+import { createHmac, timingSafeEqual } from "node:crypto";
 import nodemailer from "nodemailer";
 
-type Request = IncomingMessage & { body?: { email?: unknown } | string };
-type Response = ServerResponse & { status: (code: number) => Response; json: (body: unknown) => void };
+type Request = IncomingMessage & { url?: string; body?: { email?: unknown } | string; query?: Record<string, string | string[]> };
+type Response = ServerResponse & { status: (code: number) => Response; json: (body: unknown) => void; setHeader: (name: string, value: string) => Response };
 
 const TOKEN_TTL_SECONDS = 15 * 60;
 
@@ -17,6 +17,20 @@ function createMagicToken(email: string): string {
   const payload = Buffer.from(JSON.stringify({ email, exp: Math.floor(Date.now() / 1000) + TOKEN_TTL_SECONDS })).toString("base64url");
   const signature = createHmac("sha256", authSecret()).update(payload).digest("base64url");
   return `${payload}.${signature}`;
+}
+
+function verifyMagicToken(token: string): string | null {
+  const [payload, encodedSignature] = token.split(".");
+  if (!payload || !encodedSignature) return null;
+  const expected = createHmac("sha256", authSecret()).update(payload).digest();
+  const actual = Buffer.from(encodedSignature, "base64url");
+  if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
+  try {
+    const value = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { email?: unknown; exp?: unknown };
+    return typeof value.email === "string" && typeof value.exp === "number" && value.exp > Math.floor(Date.now() / 1000) ? value.email : null;
+  } catch {
+    return null;
+  }
 }
 
 function authBaseUrl(): string {
@@ -40,7 +54,26 @@ function parseBody(body: Request["body"]): { email?: unknown } {
   return body ?? {};
 }
 
+async function handleVerify(request: Request, response: Response) {
+  const url = new URL(request.url ?? "", "http://localhost");
+  const token = request.query?.["token"] as string | undefined ?? url.searchParams.get("token") ?? "";
+  let email: string | null = null;
+  try {
+    email = verifyMagicToken(token);
+  } catch {
+    email = null;
+  }
+  if (!email) {
+    response.status(401).json({ error: "This login link is invalid or has expired." });
+    return;
+  }
+  response.setHeader("Set-Cookie", `autovere_user=${encodeURIComponent(email)}; Path=/; Max-Age=2592000; HttpOnly; Secure; SameSite=Lax`);
+  response.setHeader("Location", "/account");
+  response.status(302).json({ ok: true });
+}
+
 export default async function handler(request: Request, response: Response) {
+  if (request.method === "GET") return handleVerify(request, response);
   if (request.method !== "POST") {
     response.status(405).json({ error: "Method not allowed" });
     return;
@@ -55,7 +88,7 @@ export default async function handler(request: Request, response: Response) {
     response.status(500).json({ error: "Login email is not configured." });
     return;
   }
-  const link = `${authBaseUrl()}/api/verify-login?token=${encodeURIComponent(createMagicToken(email))}`;
+  const link = `${authBaseUrl()}/api/login?token=${encodeURIComponent(createMagicToken(email))}`;
   try {
     await nodemailer.createTransport({ service: "gmail", auth: { user: process.env["GMAIL_USER"], pass: process.env["GMAIL_APP_PASSWORD"] } }).sendMail({
       from: process.env["GMAIL_USER"],

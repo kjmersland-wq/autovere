@@ -21,10 +21,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
-import { Route as ApiLoginRouteImport } from './routes/api.login'
 import { Route as ApiVerifyLoginRouteImport } from './routes/api.verify-login'
-import { Route as ApiAuthLoginRouteImport } from './routes/api.auth.login'
-import { Route as ApiAuthVerifyRouteImport } from './routes/api.auth.verify'
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api/webhooks/stripe'
 
 const IndexRoute = IndexRouteImport.update({
@@ -87,24 +84,9 @@ const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
   path: '/api/checkout',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiLoginRoute = ApiLoginRouteImport.update({
-  id: '/api/login',
-  path: '/api/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiVerifyLoginRoute = ApiVerifyLoginRouteImport.update({
   id: '/api/verify-login',
   path: '/api/verify-login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
-  id: '/api/auth/login',
-  path: '/api/auth/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiAuthVerifyRoute = ApiAuthVerifyRouteImport.update({
-  id: '/api/auth/verify',
-  path: '/api/auth/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
@@ -126,10 +108,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/api/checkout': typeof ApiCheckoutRoute
-  '/api/login': typeof ApiLoginRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
-  '/api/auth/login': typeof ApiAuthLoginRoute
-  '/api/auth/verify': typeof ApiAuthVerifyRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
 }
 export interface FileRoutesByTo {
@@ -145,10 +124,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/api/checkout': typeof ApiCheckoutRoute
-  '/api/login': typeof ApiLoginRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
-  '/api/auth/login': typeof ApiAuthLoginRoute
-  '/api/auth/verify': typeof ApiAuthVerifyRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
 }
 export interface FileRoutesById {
@@ -165,10 +141,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/terms': typeof TermsRoute
   '/api/checkout': typeof ApiCheckoutRoute
-  '/api/login': typeof ApiLoginRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
-  '/api/auth/login': typeof ApiAuthLoginRoute
-  '/api/auth/verify': typeof ApiAuthVerifyRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
 }
 export interface FileRouteTypes {
@@ -186,10 +159,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/terms'
     | '/api/checkout'
-    | '/api/login'
     | '/api/verify-login'
-    | '/api/auth/login'
-    | '/api/auth/verify'
     | '/api/webhooks/stripe'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -205,10 +175,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/terms'
     | '/api/checkout'
-    | '/api/login'
     | '/api/verify-login'
-    | '/api/auth/login'
-    | '/api/auth/verify'
     | '/api/webhooks/stripe'
   id:
     | '__root__'
@@ -224,10 +191,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/terms'
     | '/api/checkout'
-    | '/api/login'
     | '/api/verify-login'
-    | '/api/auth/login'
-    | '/api/auth/verify'
     | '/api/webhooks/stripe'
   fileRoutesById: FileRoutesById
 }
@@ -244,10 +208,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   TermsRoute: typeof TermsRoute
   ApiCheckoutRoute: typeof ApiCheckoutRoute
-  ApiLoginRoute: typeof ApiLoginRoute
   ApiVerifyLoginRoute: typeof ApiVerifyLoginRoute
-  ApiAuthLoginRoute: typeof ApiAuthLoginRoute
-  ApiAuthVerifyRoute: typeof ApiAuthVerifyRoute
   ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
 }
 
@@ -337,32 +298,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiCheckoutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/login': {
-      id: '/api/login'
-      path: '/api/login'
-      fullPath: '/api/login'
-      preLoaderRoute: typeof ApiLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/verify-login': {
       id: '/api/verify-login'
       path: '/api/verify-login'
       fullPath: '/api/verify-login'
       preLoaderRoute: typeof ApiVerifyLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/login': {
-      id: '/api/auth/login'
-      path: '/api/auth/login'
-      fullPath: '/api/auth/login'
-      preLoaderRoute: typeof ApiAuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/verify': {
-      id: '/api/auth/verify'
-      path: '/api/auth/verify'
-      fullPath: '/api/auth/verify'
-      preLoaderRoute: typeof ApiAuthVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/webhooks/stripe': {
@@ -388,10 +328,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   TermsRoute: TermsRoute,
   ApiCheckoutRoute: ApiCheckoutRoute,
-  ApiLoginRoute: ApiLoginRoute,
   ApiVerifyLoginRoute: ApiVerifyLoginRoute,
-  ApiAuthLoginRoute: ApiAuthLoginRoute,
-  ApiAuthVerifyRoute: ApiAuthVerifyRoute,
   ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,
 }
 export const routeTree = rootRouteImport
