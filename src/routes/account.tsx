@@ -258,10 +258,10 @@ function AccountPage() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={partnerLabels.header.visitWebsite(membership.partnerName)}
-                      className="mt-4 flex w-fit items-center gap-3 rounded-lg border border-border bg-surface-raised p-3 transition-colors hover:border-primary/50"
+                      className="mt-4 flex max-w-full w-fit min-w-0 items-center gap-3 rounded-lg border border-border bg-surface-raised p-3 transition-colors hover:border-primary/50"
                     >
-                      {membership.partnerLogo && <img src={membership.partnerLogo} alt={membership.partnerName} className="h-6 w-auto max-w-[100px] object-contain" />}
-                      <span className="text-sm font-semibold">{membership.partnerName}</span>
+                      {membership.partnerLogo && <img src={membership.partnerLogo} alt={membership.partnerName} className="h-6 w-auto max-w-[100px] shrink-0 object-contain" />}
+                      <span className="min-w-0 truncate text-sm font-semibold">{membership.partnerName}</span>
                     </a>
                     <p className="mt-3 text-lg font-bold text-primary">{copy.membership.discountLine(membership.discountPercent)}</p>
                     <dl className="mt-4 grid gap-4 sm:grid-cols-2">

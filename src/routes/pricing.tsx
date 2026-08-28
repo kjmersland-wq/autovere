@@ -49,7 +49,6 @@ function PricingPage() {
         body: JSON.stringify({ priceId, locale, ...(partner ? { partnerId: partner.id } : {}) }),
       });
       const data = (await result.json()) as { url?: string; error?: string };
-      console.log("API Response:", data);
       if (!result.ok || !data.url) throw new Error(data.error || checkoutLabels[locale].error);
       if (data.url) {
         window.location.href = data.url;

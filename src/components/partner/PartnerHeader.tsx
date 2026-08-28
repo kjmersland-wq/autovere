@@ -9,7 +9,7 @@ type PartnerHeaderProps = {
 
 export function PartnerHeader({ name, logo, website, visitLabel, partnerLabel, demoNote }: PartnerHeaderProps) {
   return (
-    <div className="border-b border-border bg-surface/70">
+    <div className="animate-in fade-in slide-in-from-top-1 border-b border-border bg-surface/70 duration-300">
       <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-center gap-2.5 px-4 py-2.5 sm:justify-start sm:gap-3 sm:px-8">
         <span className="font-display text-xs font-extrabold uppercase tracking-[0.15em] text-foreground">AutoVere</span>
         <span className="select-none text-sm text-muted-foreground/50" aria-hidden="true">×</span>
