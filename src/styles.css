@@ -215,11 +215,12 @@
 
 /*
  * Fixed European road-trip background photograph (mountains, lake, scenic road, motorhome),
- * layered behind the existing dark surface with a strong overlay so real content always stays
- * fully readable. The same image and the same overlay strength are used on every page and in
- * every language — no per-page or per-locale variation. Dark-mode only: a moody photo doesn't
- * suit the light theme, so it's suppressed there entirely and the page falls back to its plain
- * background colour.
+ * layered behind the existing dark surface. A left-to-right gradient keeps the left edge (where
+ * page headlines and intro text typically sit) darker and clearly readable, while the image
+ * reads much more strongly toward the right. The same image and treatment are used on every
+ * page and in every language — no per-page or per-locale variation. Dark-mode only: a moody
+ * photo doesn't suit the light theme, so it's suppressed there entirely and the page falls back
+ * to its plain background colour.
  */
 .bg-scenic {
   position: relative;
@@ -232,9 +233,10 @@
   z-index: -1;
   background-image:
     linear-gradient(
-      180deg,
-      color-mix(in oklch, var(--color-background) 82%, transparent) 0%,
-      color-mix(in oklch, var(--color-background) 88%, transparent) 100%
+      100deg,
+      color-mix(in oklch, var(--color-background) 58%, transparent) 0%,
+      color-mix(in oklch, var(--color-background) 32%, transparent) 45%,
+      color-mix(in oklch, var(--color-background) 18%, transparent) 100%
     ),
     url("/backgrounds/bg-scenic.jpg");
   background-size: cover;
