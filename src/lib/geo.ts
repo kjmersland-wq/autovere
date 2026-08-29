@@ -484,6 +484,116 @@ export async function fetchSmartFuelAndCharging(
   return { chargers, fuelStations };
 }
 
+// --- Motorhome & Camping (AutoVere Pro) -----------------------------------------------------
+// OpenStreetMap via Overpass, corridor-scoped exactly like Smart Fuel & Charging above — the
+// same whole-Europe-query timeout applies here, so this is never bulk-cached. Tags verified
+// against the OSM wiki rather than assumed. Dump station and grey-water disposal are the SAME
+// underlying tag (amenity=sanitary_dump_station covers both black and grey/chemical-toilet
+// waste per its wiki definition) — offered as one category rather than two that would always
+// return identical results.
+
+export type MotorhomeCategory = "dump_station" | "fresh_water" | "camping" | "parking" | "lpg" | "workshop" | "tyre_service" | "washing";
+
+export const MOTORHOME_CATEGORIES: MotorhomeCategory[] = ["dump_station", "fresh_water", "camping", "parking", "lpg", "workshop", "tyre_service", "washing"];
+
+export type MotorhomePoi = {
+  id: string;
+  name: string;
+  categories: MotorhomeCategory[];
+  lat: number;
+  lon: number;
+  country: string | null;
+  address: string | null;
+  openingHours: string | null;
+  website: string | null;
+  phone: string | null;
+  fee: boolean | null;
+  source: string;
+  atKm: number;
+  detourKm: number;
+};
+
+const MOTORHOME_OVERPASS_CLAUSES: Record<MotorhomeCategory, string> = {
+  dump_station: `["amenity"="sanitary_dump_station"]`,
+  fresh_water: `["amenity"="drinking_water"]`,
+  camping: `["tourism"="camp_site"]`,
+  parking: `["tourism"="caravan_site"]`,
+  lpg: `["amenity"="fuel"]["fuel:lpg"="yes"]`,
+  workshop: `["shop"="car_repair"]`,
+  tyre_service: `["shop"="tyres"]`,
+  washing: `["shop"="car_wash"]`,
+};
+
+function motorhomeCategoriesFromTags(tags: Record<string, string>): MotorhomeCategory[] {
+  const cats: MotorhomeCategory[] = [];
+  if (tags["amenity"] === "sanitary_dump_station") cats.push("dump_station");
+  if (tags["amenity"] === "drinking_water") cats.push("fresh_water");
+  if (tags["tourism"] === "camp_site") cats.push("camping");
+  if (tags["tourism"] === "caravan_site") cats.push("parking");
+  if (tags["amenity"] === "fuel" && tags["fuel:lpg"] === "yes") cats.push("lpg");
+  if (tags["shop"] === "car_repair") cats.push("workshop");
+  if (tags["shop"] === "tyres") cats.push("tyre_service");
+  if (tags["shop"] === "car_wash") cats.push("washing");
+  return cats;
+}
+
+export async function fetchMotorhomeCamping(
+  coords: LatLng[],
+  maxDistanceKm: number,
+  categories: MotorhomeCategory[],
+  signal?: AbortSignal,
+): Promise<MotorhomePoi[]> {
+  if (!categories.length) return [];
+  const cum = cumulativeKm(coords);
+  // Overpass cost scales with anchors × categories, not just anchors — tested live: 40 clauses
+  // (5 anchors × 8 categories) reliably completes in ~30s, while 80 clauses reliably times out
+  // empty. Cap the anchor count so the total stays in the range that's actually been verified.
+  const maxAnchors = Math.max(3, Math.floor(40 / categories.length));
+  const anchors = samplePolyline(coords, 150).slice(0, maxAnchors);
+  if (!anchors.length) return [];
+  const radius = Math.max(8000, Math.min(maxDistanceKm, 50) * 1000);
+  const clauses = anchors
+    .flatMap(({ pt }) => categories.map((c) => `nwr(around:${radius},${pt[0].toFixed(4)},${pt[1].toFixed(4)})${MOTORHOME_OVERPASS_CLAUSES[c]};`))
+    .join("");
+  const query = `[out:json][timeout:40];(${clauses});out center tags 1500;`;
+  const res = await fetch(OVERPASS, { method: "POST", body: "data=" + encodeURIComponent(query), signal: signal ?? null });
+  if (!res.ok) throw new Error("Motorhome & camping data unavailable");
+  const data = (await res.json()) as { elements?: OverpassEl[] };
+  const seen = new Map<string, MotorhomePoi>();
+  for (const el of data.elements ?? []) {
+    const lat = el.lat ?? el.center?.lat;
+    const lon = el.lon ?? el.center?.lon;
+    const tags = el.tags ?? {};
+    if (lat == null || lon == null) continue;
+    const elCategories = motorhomeCategoriesFromTags(tags);
+    if (!elCategories.length) continue;
+    const { atKm, distanceKm } = nearestAtKm(coords, cum, [lat, lon]);
+    if (distanceKm > maxDistanceKm) continue;
+    const id = String(el.id);
+    const existing = seen.get(id);
+    if (existing) {
+      existing.categories = [...new Set([...existing.categories, ...elCategories])];
+      continue;
+    }
+    seen.set(id, {
+      id,
+      name: tags["name"] || tags["operator"] || tags["brand"] || "—",
+      categories: elCategories,
+      lat, lon,
+      country: countryAt([lat, lon]),
+      address: tags["addr:street"] ? `${tags["addr:street"]}${tags["addr:housenumber"] ? " " + tags["addr:housenumber"] : ""}` : null,
+      openingHours: tags["opening_hours"] ?? null,
+      website: tags["website"] ?? tags["contact:website"] ?? null,
+      phone: tags["phone"] ?? tags["contact:phone"] ?? null,
+      fee: tags["fee"] === "yes" ? true : tags["fee"] === "no" ? false : null,
+      source: "OpenStreetMap",
+      atKm,
+      detourKm: Math.round(distanceKm * 10) / 10,
+    });
+  }
+  return [...seen.values()].sort((a, b) => a.atKm - b.atKm);
+}
+
 const scenicCache = new Map<string, ScenicHighlight[]>();
 
 const SCENIC_FALLBACKS: ScenicHighlight[] = [
