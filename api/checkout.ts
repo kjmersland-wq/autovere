@@ -11,6 +11,15 @@ type VercelResponse = ServerResponse & {
 };
 
 const supportedLocales = new Set(["en", "de", "nl", "no", "pl", "sv", "fr", "da"]);
+
+// AutoVere's multilingual URL scheme: English lives at the root, every other language has a
+// dedicated path segment (matching src/lib/i18n.tsx exactly).
+const LOCALE_TO_URL_LANG: Record<string, string | null> = { en: null, no: "no", sv: "se", da: "dk", de: "de", nl: "nl", fr: "fr", pl: "pl" };
+
+function pricingPathForLocale(locale: string): string {
+  const urlLang = LOCALE_TO_URL_LANG[locale];
+  return urlLang ? `/${urlLang}/pricing` : "/pricing";
+}
 const priceEnvByKey: Record<string, string> = {
   "pro-monthly": "STRIPE_PRO_MONTHLY_PRICE_ID",
   "pro-yearly": "STRIPE_PRO_YEARLY_PRICE_ID",
@@ -73,9 +82,16 @@ async function resolvePartnerPromotionCode(stripe: Stripe, partnerId: string): P
   }
 }
 
+// NEXT_PUBLIC_SITE_URL / NEXTAUTH_URL are known to sometimes be stored without a scheme (e.g.
+// "www.autovere.com" instead of "https://www.autovere.com") — Stripe's success_url/cancel_url
+// require a fully-qualified, valid URL and will reject a schemeless one outright, so this must
+// defensively normalize rather than trust the raw value. Mirrors api/webhooks/stripe.ts's
+// authBaseUrl(), which already handles this same class of misconfiguration for email links.
 function siteUrl(request: VercelRequest): string {
-  const configuredUrl = process.env["NEXT_PUBLIC_SITE_URL"] ?? process.env["NEXTAUTH_URL"];
-  if (configuredUrl) return configuredUrl.replace(/\/$/, "");
+  const raw = (process.env["NEXT_PUBLIC_SITE_URL"] || process.env["NEXTAUTH_URL"] || "").trim();
+  const embedded = raw.match(/https?:\/\/[^\s\])'"]+/);
+  const configured = (embedded ? embedded[0] : raw.replace(/^['"]|['"]$/g, "").trim()).replace(/\/$/, "");
+  if (configured) return /^https?:\/\//.test(configured) ? configured : `https://${configured}`;
   const host = request.headers.host ?? process.env["VERCEL_URL"] ?? "localhost:3000";
   return `${host.includes("localhost") ? "http" : "https"}://${host}`;
 }
@@ -108,13 +124,15 @@ export default async function handler(request: VercelRequest, response: VercelRe
     const partnerId = typeof body.partnerId === "string" ? body.partnerId.trim() : "";
     const promotionCodeId = partnerId ? await resolvePartnerPromotionCode(stripe, partnerId) : null;
 
+    const base = siteUrl(request);
+    const pricingPath = pricingPathForLocale(locale);
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ["card"],
       mode: "subscription",
       line_items: [{ price: priceId, quantity: 1 }],
       locale: stripeLocale as Stripe.Checkout.SessionCreateParams.Locale,
-      success_url: "https://autovere.com/pricing?success=true",
-      cancel_url: "https://autovere.com/pricing?canceled=true",
+      success_url: `${base}${pricingPath}?success=true`,
+      cancel_url: `${base}${pricingPath}?canceled=true`,
       billing_address_collection: "auto",
       metadata: { locale, plan: requestedPrice || "configured-price", ...(promotionCodeId ? { partnerId: partnerId.toUpperCase() } : {}) },
       ...(promotionCodeId ? { discounts: [{ promotion_code: promotionCodeId }] } : { allow_promotion_codes: true }),

@@ -11,6 +11,15 @@ const priceEnvByKey: Record<string, string> = {
   "business-yearly": "STRIPE_BUSINESS_YEARLY_PRICE_ID",
 };
 
+// AutoVere's multilingual URL scheme: English lives at the root, every other language has a
+// dedicated path segment (matching src/lib/i18n.tsx exactly).
+const LOCALE_TO_URL_LANG: Record<string, string | null> = { en: null, no: "no", sv: "se", da: "dk", de: "de", nl: "nl", fr: "fr", pl: "pl" };
+
+function pricingPathForLocale(locale: string): string {
+  const urlLang = LOCALE_TO_URL_LANG[locale];
+  return urlLang ? `/${urlLang}/pricing` : "/pricing";
+}
+
 export const Route = createFileRoute("/api/checkout")({
   server: {
     handlers: {
@@ -40,8 +49,10 @@ export const Route = createFileRoute("/api/checkout")({
           const stripe = new Stripe(secret);
           await stripe.prices.retrieve(priceId);
           const stripeLocale = locale === "no" ? "nb" : locale;
-          const success_url = "https://autovere.com/pricing?success=true";
-          const cancel_url = "https://autovere.com/pricing?canceled=true";
+          const base = new URL(request.url).origin;
+          const pricingPath = pricingPathForLocale(locale);
+          const success_url = `${base}${pricingPath}?success=true`;
+          const cancel_url = `${base}${pricingPath}?canceled=true`;
           const session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "subscription",
