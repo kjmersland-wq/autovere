@@ -21,7 +21,7 @@ export function AnchorLink({ id, label, copiedLabel, className = "" }: { id: str
       }}
       aria-label={label}
       title={label}
-      className={`inline-flex items-center text-muted-foreground/50 transition-colors hover:text-primary ${className}`}
+      className={`inline-flex shrink-0 items-center gap-1 rounded-full border border-primary/30 bg-primary/10 px-2 py-1 text-primary transition-colors hover:border-primary/60 hover:bg-primary/20 ${className}`}
     >
       <LinkIcon className="size-3.5" aria-hidden />
     </button>
