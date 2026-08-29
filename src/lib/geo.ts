@@ -216,32 +216,10 @@ export async function fetchFastChargers(
   coords: LatLng[],
   signal?: AbortSignal,
 ): Promise<Charger[]> {
-  try {
-    const cached = await fetch("/api/chargers", { signal: signal ?? null });
-    if (cached.ok) {
-      const data = (await cached.json()) as { stations?: Array<Omit<Charger, "atKm" | "operator"> & { operator?: string | null; atKm?: number }> };
-      const cum = cumulativeKm(coords);
-      const stations = (data.stations ?? []).map((station) => {
-        let best = 0;
-        let bestD = Infinity;
-        for (let i = 0; i < coords.length; i += 5) {
-          const distance = haversineKm([station.lat, station.lon], coords[i]!);
-          if (distance < bestD) {
-            bestD = distance;
-            best = i;
-          }
-        }
-        return { ...station, operator: station.operator ?? undefined, atKm: cum[best] ?? 0, _distanceKm: bestD };
-      });
-      return stations
-        .filter((station) => station._distanceKm <= 15)
-        .sort((a, b) => a.atKm - b.atKm)
-        .map(({ _distanceKm: _ignored, ...station }) => station);
-    }
-  } catch {
-    // Fall back to the live open-data query below.
-  }
-
+  // No server-side cache: a whole-Europe Overpass query for charging stations was tested live
+  // and reliably times out server-side (50s+, 0 results) — the public Overpass instance can't
+  // serve that in one request. Every AutoVere charger lookup is a route-corridor-scoped live
+  // query instead, which is fast (~14s for a 6-anchor corridor) and needs no cache to populate.
   // Query a set of corridor points instead of a huge bbox to stay fast & polite.
   const anchors = samplePolyline(coords, 120).filter((_, idx) => idx % 1 === 0);
   const limited = anchors.slice(0, 25);
@@ -326,12 +304,71 @@ export type FuelStation = {
   atKm: number;
 };
 
-type ChargerAndFuelCache = {
-  syncedAt: string;
-  stations: unknown[];
-  smartChargers: Omit<SmartCharger, "atKm">[];
-  fuelStations: Omit<FuelStation, "atKm">[];
-};
+// Mirrors the OSM charging-station tagging convention verified in the Smart Fuel & Charging
+// audit: a "_cable"/"_combo"/"_ccs"/"chademo" key means a permanently attached cable (DC
+// fast-charging standards are always captive by design); a bare "type1"/"type2" key without that
+// suffix is a socket only — the driver brings their own cable.
+const CONNECTOR_DEFS: { key: string; connectorType: string; currentType: "AC" | "DC"; cableStatus: "attached" | "bring_own" }[] = [
+  { key: "socket:type2_combo", connectorType: "CCS (Combo 2)", currentType: "DC", cableStatus: "attached" },
+  { key: "socket:type2_ccs", connectorType: "CCS (Combo 2)", currentType: "DC", cableStatus: "attached" },
+  { key: "socket:chademo", connectorType: "CHAdeMO", currentType: "DC", cableStatus: "attached" },
+  { key: "socket:type2_cable", connectorType: "Type 2", currentType: "AC", cableStatus: "attached" },
+  { key: "socket:type2", connectorType: "Type 2", currentType: "AC", cableStatus: "bring_own" },
+  { key: "socket:type1_combo", connectorType: "CCS (Combo 1)", currentType: "DC", cableStatus: "attached" },
+  { key: "socket:type1_cable", connectorType: "Type 1", currentType: "AC", cableStatus: "attached" },
+  { key: "socket:type1", connectorType: "Type 1", currentType: "AC", cableStatus: "bring_own" },
+  { key: "socket:tesla_supercharger", connectorType: "Tesla Supercharger", currentType: "DC", cableStatus: "attached" },
+];
+
+function parseConnectorPowerKw(raw: string | undefined): number | null {
+  if (!raw) return null;
+  const m = raw.match(/([\d.]+)\s*(kw|w)?/i);
+  if (!m) return null;
+  let value = Number(m[1]);
+  if (m[2]?.toLowerCase() === "w" && value > 2000) value = value / 1000;
+  return Number.isFinite(value) ? value : null;
+}
+
+function parseSmartConnections(tags: Record<string, string>): SmartConnection[] {
+  const out: SmartConnection[] = [];
+  for (const def of CONNECTOR_DEFS) {
+    if (!(def.key in tags)) continue;
+    out.push({ connectorType: def.connectorType, currentType: def.currentType, cableStatus: def.cableStatus, powerKw: parseConnectorPowerKw(tags[`${def.key}:output`]) });
+  }
+  return out;
+}
+
+async function fetchSmartChargers(coords: LatLng[], cum: number[], maxDistanceKm: number, signal?: AbortSignal): Promise<SmartCharger[]> {
+  const anchors = samplePolyline(coords, 100).slice(0, 20);
+  if (!anchors.length) return [];
+  const radius = Math.max(8000, Math.min(maxDistanceKm, 50) * 1000);
+  const clauses = anchors.map(({ pt }) => `node(around:${radius},${pt[0].toFixed(4)},${pt[1].toFixed(4)})["amenity"="charging_station"];`).join("");
+  const query = `[out:json][timeout:25];(${clauses});out center 1500;`;
+  const res = await fetch(OVERPASS, { method: "POST", body: "data=" + encodeURIComponent(query), signal: signal ?? null });
+  if (!res.ok) throw new Error("Charging data unavailable");
+  const data = (await res.json()) as { elements?: OverpassEl[] };
+  const chargers: SmartCharger[] = [];
+  for (const el of data.elements ?? []) {
+    const lat = el.lat ?? el.center?.lat;
+    const lon = el.lon ?? el.center?.lon;
+    const tags = el.tags ?? {};
+    if (lat == null || lon == null) continue;
+    const connections = parseSmartConnections(tags);
+    const { atKm, distanceKm } = nearestAtKm(coords, cum, [lat, lon]);
+    if (distanceKm > maxDistanceKm) continue;
+    chargers.push({
+      id: String(el.id),
+      name: tags["name"] || tags["operator"] || "EV charging station",
+      operator: tags["operator"] ?? null,
+      lat, lon,
+      country: countryAt([lat, lon]),
+      connections,
+      source: "OpenStreetMap",
+      atKm,
+    });
+  }
+  return chargers.sort((a, b) => a.atKm - b.atKm);
+}
 
 function nearestAtKm(coords: LatLng[], cum: number[], point: LatLng): { atKm: number; distanceKm: number } {
   let best = 0;
@@ -346,7 +383,51 @@ function nearestAtKm(coords: LatLng[], cum: number[], point: LatLng): { atKm: nu
   return { atKm: cum[best] ?? 0, distanceKm: bestD };
 }
 
-async function fetchAustriaFuelStations(coords: LatLng[], cum: number[], signal?: AbortSignal): Promise<FuelStation[]> {
+type FranceRecord = {
+  fields: {
+    geom?: [number, number];
+    ville?: string; adresse?: string;
+    gazole_prix?: number; gazole_maj?: string;
+    sp95_prix?: number; sp95_maj?: string;
+    sp98_prix?: number; sp98_maj?: string;
+  };
+};
+
+async function fetchFranceFuelStations(coords: LatLng[], cum: number[], maxDistanceKm: number, signal?: AbortSignal): Promise<FuelStation[]> {
+  const frenchAnchors = samplePolyline(coords, 80).filter(({ pt }) => countryAt(pt) === "FR");
+  if (!frenchAnchors.length) return [];
+  const sampled = frenchAnchors.filter((_, i) => i % Math.max(1, Math.ceil(frenchAnchors.length / 4)) === 0).slice(0, 4);
+  const byId = new Map<string, FuelStation>();
+  const radiusMeters = Math.max(8000, Math.min(maxDistanceKm, 50) * 1000);
+  for (const { pt } of sampled) {
+    try {
+      const url = `https://data.economie.gouv.fr/api/records/1.0/search/?dataset=prix-des-carburants-en-france-flux-instantane-v2&rows=100&geofilter.distance=${pt[0]},${pt[1]},${radiusMeters}`;
+      const res = await fetch(url, { signal: signal ?? null });
+      if (!res.ok) continue;
+      const data = (await res.json()) as { records?: FranceRecord[] };
+      for (const record of data.records ?? []) {
+        const { fields } = record;
+        const [lat, lon] = fields.geom ?? [];
+        if (lat == null || lon == null) continue;
+        const id = `fr-${lat}-${lon}`;
+        if (byId.has(id)) continue;
+        const { atKm, distanceKm } = nearestAtKm(coords, cum, [lat, lon]);
+        if (distanceKm > maxDistanceKm) continue;
+        const prices: FuelPrice[] = [];
+        if (fields.gazole_prix && fields.gazole_maj) prices.push({ fuelType: "diesel", amount: fields.gazole_prix, currency: "EUR", updatedAt: fields.gazole_maj });
+        if (fields.sp98_prix && fields.sp98_maj) prices.push({ fuelType: "petrol", amount: fields.sp98_prix, currency: "EUR", updatedAt: fields.sp98_maj });
+        else if (fields.sp95_prix && fields.sp95_maj) prices.push({ fuelType: "petrol", amount: fields.sp95_prix, currency: "EUR", updatedAt: fields.sp95_maj });
+        if (!prices.length) continue;
+        byId.set(id, { id, name: fields.adresse || fields.ville || "Station-service", brand: null, lat, lon, country: "FR", prices, source: "data.economie.gouv.fr", atKm });
+      }
+    } catch {
+      // Best-effort — one anchor failing shouldn't block the rest of Smart Fuel & Charging.
+    }
+  }
+  return [...byId.values()];
+}
+
+async function fetchAustriaFuelStations(coords: LatLng[], cum: number[], maxDistanceKm: number, signal?: AbortSignal): Promise<FuelStation[]> {
   const austrianAnchors = samplePolyline(coords, 80).filter(({ pt }) => countryAt(pt) === "AT");
   if (!austrianAnchors.length) return [];
   const sampled = austrianAnchors.filter((_, i) => i % Math.max(1, Math.ceil(austrianAnchors.length / 3)) === 0).slice(0, 3);
@@ -367,7 +448,7 @@ async function fetchAustriaFuelStations(coords: LatLng[], cum: number[], signal?
           if (amount == null) continue;
           const id = `at-${station.id}`;
           const { atKm, distanceKm } = nearestAtKm(coords, cum, [station.location.latitude, station.location.longitude]);
-          if (distanceKm > 15) continue;
+          if (distanceKm > maxDistanceKm) continue;
           const existing = byId.get(id);
           const price: FuelPrice = { fuelType, amount, currency: "EUR", updatedAt: new Date().toISOString() };
           if (existing) existing.prices.push(price);
@@ -387,39 +468,18 @@ export async function fetchSmartFuelAndCharging(
   signal?: AbortSignal,
 ): Promise<{ chargers: SmartCharger[]; fuelStations: FuelStation[] }> {
   const cum = cumulativeKm(coords);
-  let chargers: SmartCharger[] = [];
-  let fuelStations: FuelStation[] = [];
 
-  try {
-    const cached = await fetch("/api/chargers", { signal: signal ?? null });
-    if (cached.ok) {
-      const data = (await cached.json()) as ChargerAndFuelCache;
-      chargers = (data.smartChargers ?? [])
-        .map((charger) => {
-          const { atKm, distanceKm } = nearestAtKm(coords, cum, [charger.lat, charger.lon]);
-          return { ...charger, atKm, _distanceKm: distanceKm };
-        })
-        .filter((c) => c._distanceKm <= maxDistanceKm)
-        .sort((a, b) => a.atKm - b.atKm)
-        .map(({ _distanceKm: _ignored, ...c }) => c);
-      fuelStations = (data.fuelStations ?? [])
-        .map((station) => {
-          const { atKm, distanceKm } = nearestAtKm(coords, cum, [station.lat, station.lon]);
-          return { ...station, atKm, _distanceKm: distanceKm };
-        })
-        .filter((s) => s._distanceKm <= maxDistanceKm)
-        .sort((a, b) => a.atKm - b.atKm)
-        .map(({ _distanceKm: _ignored, ...s }) => s);
-    }
-  } catch {
-    // No server cache available yet — Smart Fuel & Charging simply shows nothing for this trip
-    // rather than falling back to a slow whole-route live query for every connector/price source.
-  }
-
-  const austria = await fetchAustriaFuelStations(coords, cum, signal).catch(() => []);
-  const seen = new Set(fuelStations.map((s) => s.id));
-  for (const station of austria) if (!seen.has(station.id)) fuelStations.push(station);
-  fuelStations.sort((a, b) => a.atKm - b.atKm);
+  // Every source here is queried live, client-side, scoped to whichever route anchors actually
+  // fall inside the relevant country — France and Austria only publish per-station prices this
+  // way (no bulk export both no-key and no-registration), and it avoids depending on any
+  // server-side cache existing at all. See the Smart Fuel & Charging audit for why only these
+  // two countries have live per-station prices today.
+  const [chargers, france, austria] = await Promise.all([
+    fetchSmartChargers(coords, cum, maxDistanceKm, signal).catch(() => []),
+    fetchFranceFuelStations(coords, cum, maxDistanceKm, signal).catch(() => []),
+    fetchAustriaFuelStations(coords, cum, maxDistanceKm, signal).catch(() => []),
+  ]);
+  const fuelStations = [...france, ...austria].sort((a, b) => a.atKm - b.atKm);
 
   return { chargers, fuelStations };
 }
