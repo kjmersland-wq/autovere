@@ -233,10 +233,16 @@ export async function fetchFastChargers(
         }
         return { ...station, operator: station.operator ?? undefined, atKm: cum[best] ?? 0, _distanceKm: bestD };
       });
-      return stations
-        .filter((station) => station._distanceKm <= 15)
-        .sort((a, b) => a.atKm - b.atKm)
-        .map(({ _distanceKm: _ignored, ...station }) => station);
+      // An empty cache is treated the same as a cache miss below — the server currently doesn't
+      // bulk-sync chargers at all (a whole-Europe Overpass query reliably times out server-side),
+      // so trusting an empty array here would silently show no fast chargers forever instead of
+      // falling back to the corridor query that actually works.
+      if (stations.length) {
+        return stations
+          .filter((station) => station._distanceKm <= 15)
+          .sort((a, b) => a.atKm - b.atKm)
+          .map(({ _distanceKm: _ignored, ...station }) => station);
+      }
     }
   } catch {
     // Fall back to the live open-data query below.
@@ -329,9 +335,74 @@ export type FuelStation = {
 type ChargerAndFuelCache = {
   syncedAt: string;
   stations: unknown[];
-  smartChargers: Omit<SmartCharger, "atKm">[];
   fuelStations: Omit<FuelStation, "atKm">[];
 };
+
+// Mirrors the OSM charging-station tagging convention verified in the Smart Fuel & Charging
+// audit: a "_cable"/"_combo"/"_ccs"/"chademo" key means a permanently attached cable (DC
+// fast-charging standards are always captive by design); a bare "type1"/"type2" key without that
+// suffix is a socket only — the driver brings their own cable.
+const CONNECTOR_DEFS: { key: string; connectorType: string; currentType: "AC" | "DC"; cableStatus: "attached" | "bring_own" }[] = [
+  { key: "socket:type2_combo", connectorType: "CCS (Combo 2)", currentType: "DC", cableStatus: "attached" },
+  { key: "socket:type2_ccs", connectorType: "CCS (Combo 2)", currentType: "DC", cableStatus: "attached" },
+  { key: "socket:chademo", connectorType: "CHAdeMO", currentType: "DC", cableStatus: "attached" },
+  { key: "socket:type2_cable", connectorType: "Type 2", currentType: "AC", cableStatus: "attached" },
+  { key: "socket:type2", connectorType: "Type 2", currentType: "AC", cableStatus: "bring_own" },
+  { key: "socket:type1_combo", connectorType: "CCS (Combo 1)", currentType: "DC", cableStatus: "attached" },
+  { key: "socket:type1_cable", connectorType: "Type 1", currentType: "AC", cableStatus: "attached" },
+  { key: "socket:type1", connectorType: "Type 1", currentType: "AC", cableStatus: "bring_own" },
+  { key: "socket:tesla_supercharger", connectorType: "Tesla Supercharger", currentType: "DC", cableStatus: "attached" },
+];
+
+function parseConnectorPowerKw(raw: string | undefined): number | null {
+  if (!raw) return null;
+  const m = raw.match(/([\d.]+)\s*(kw|w)?/i);
+  if (!m) return null;
+  let value = Number(m[1]);
+  if (m[2]?.toLowerCase() === "w" && value > 2000) value = value / 1000;
+  return Number.isFinite(value) ? value : null;
+}
+
+function parseSmartConnections(tags: Record<string, string>): SmartConnection[] {
+  const out: SmartConnection[] = [];
+  for (const def of CONNECTOR_DEFS) {
+    if (!(def.key in tags)) continue;
+    out.push({ connectorType: def.connectorType, currentType: def.currentType, cableStatus: def.cableStatus, powerKw: parseConnectorPowerKw(tags[`${def.key}:output`]) });
+  }
+  return out;
+}
+
+async function fetchSmartChargers(coords: LatLng[], cum: number[], maxDistanceKm: number, signal?: AbortSignal): Promise<SmartCharger[]> {
+  const anchors = samplePolyline(coords, 100).slice(0, 20);
+  if (!anchors.length) return [];
+  const radius = Math.max(8000, Math.min(maxDistanceKm, 50) * 1000);
+  const clauses = anchors.map(({ pt }) => `node(around:${radius},${pt[0].toFixed(4)},${pt[1].toFixed(4)})["amenity"="charging_station"];`).join("");
+  const query = `[out:json][timeout:25];(${clauses});out center 1500;`;
+  const res = await fetch(OVERPASS, { method: "POST", body: "data=" + encodeURIComponent(query), signal: signal ?? null });
+  if (!res.ok) throw new Error("Charging data unavailable");
+  const data = (await res.json()) as { elements?: OverpassEl[] };
+  const chargers: SmartCharger[] = [];
+  for (const el of data.elements ?? []) {
+    const lat = el.lat ?? el.center?.lat;
+    const lon = el.lon ?? el.center?.lon;
+    const tags = el.tags ?? {};
+    if (lat == null || lon == null) continue;
+    const connections = parseSmartConnections(tags);
+    const { atKm, distanceKm } = nearestAtKm(coords, cum, [lat, lon]);
+    if (distanceKm > maxDistanceKm) continue;
+    chargers.push({
+      id: String(el.id),
+      name: tags["name"] || tags["operator"] || "EV charging station",
+      operator: tags["operator"] ?? null,
+      lat, lon,
+      country: countryAt([lat, lon]),
+      connections,
+      source: "OpenStreetMap",
+      atKm,
+    });
+  }
+  return chargers.sort((a, b) => a.atKm - b.atKm);
+}
 
 function nearestAtKm(coords: LatLng[], cum: number[], point: LatLng): { atKm: number; distanceKm: number } {
   let best = 0;
@@ -346,7 +417,7 @@ function nearestAtKm(coords: LatLng[], cum: number[], point: LatLng): { atKm: nu
   return { atKm: cum[best] ?? 0, distanceKm: bestD };
 }
 
-async function fetchAustriaFuelStations(coords: LatLng[], cum: number[], signal?: AbortSignal): Promise<FuelStation[]> {
+async function fetchAustriaFuelStations(coords: LatLng[], cum: number[], maxDistanceKm: number, signal?: AbortSignal): Promise<FuelStation[]> {
   const austrianAnchors = samplePolyline(coords, 80).filter(({ pt }) => countryAt(pt) === "AT");
   if (!austrianAnchors.length) return [];
   const sampled = austrianAnchors.filter((_, i) => i % Math.max(1, Math.ceil(austrianAnchors.length / 3)) === 0).slice(0, 3);
@@ -367,7 +438,7 @@ async function fetchAustriaFuelStations(coords: LatLng[], cum: number[], signal?
           if (amount == null) continue;
           const id = `at-${station.id}`;
           const { atKm, distanceKm } = nearestAtKm(coords, cum, [station.location.latitude, station.location.longitude]);
-          if (distanceKm > 15) continue;
+          if (distanceKm > maxDistanceKm) continue;
           const existing = byId.get(id);
           const price: FuelPrice = { fuelType, amount, currency: "EUR", updatedAt: new Date().toISOString() };
           if (existing) existing.prices.push(price);
@@ -387,21 +458,12 @@ export async function fetchSmartFuelAndCharging(
   signal?: AbortSignal,
 ): Promise<{ chargers: SmartCharger[]; fuelStations: FuelStation[] }> {
   const cum = cumulativeKm(coords);
-  let chargers: SmartCharger[] = [];
   let fuelStations: FuelStation[] = [];
 
   try {
     const cached = await fetch("/api/chargers", { signal: signal ?? null });
     if (cached.ok) {
       const data = (await cached.json()) as ChargerAndFuelCache;
-      chargers = (data.smartChargers ?? [])
-        .map((charger) => {
-          const { atKm, distanceKm } = nearestAtKm(coords, cum, [charger.lat, charger.lon]);
-          return { ...charger, atKm, _distanceKm: distanceKm };
-        })
-        .filter((c) => c._distanceKm <= maxDistanceKm)
-        .sort((a, b) => a.atKm - b.atKm)
-        .map(({ _distanceKm: _ignored, ...c }) => c);
       fuelStations = (data.fuelStations ?? [])
         .map((station) => {
           const { atKm, distanceKm } = nearestAtKm(coords, cum, [station.lat, station.lon]);
@@ -412,11 +474,14 @@ export async function fetchSmartFuelAndCharging(
         .map(({ _distanceKm: _ignored, ...s }) => s);
     }
   } catch {
-    // No server cache available yet — Smart Fuel & Charging simply shows nothing for this trip
-    // rather than falling back to a slow whole-route live query for every connector/price source.
+    // No server-cached fuel prices available yet (cron hasn't run) — France simply won't show
+    // live prices for this trip; Austria below is unaffected since it's always fetched live.
   }
 
-  const austria = await fetchAustriaFuelStations(coords, cum, signal).catch(() => []);
+  const [chargers, austria] = await Promise.all([
+    fetchSmartChargers(coords, cum, maxDistanceKm, signal).catch(() => []),
+    fetchAustriaFuelStations(coords, cum, maxDistanceKm, signal).catch(() => []),
+  ]);
   const seen = new Set(fuelStations.map((s) => s.id));
   for (const station of austria) if (!seen.has(station.id)) fuelStations.push(station);
   fuelStations.sort((a, b) => a.atKm - b.atKm);
