@@ -221,6 +221,7 @@ function AccountPage() {
   const membership = data.membership;
   const partnerLabels = partnerCopy[locale] ?? partnerCopy.en;
   const firstName = email.split("@")[0] ?? email;
+  const friendlyName = displayName.trim() || firstName;
   const features = featuresForTier(subscription?.tier ?? null);
   const dateFormatter = new Intl.DateTimeFormat(locale, { dateStyle: "long" });
 
@@ -239,7 +240,7 @@ function AccountPage() {
     <AccountShell
       backLabel={copy.backToPlanner}
       eyebrow={copy.eyebrow}
-      title={copy.welcome(firstName)}
+      title={copy.welcome(friendlyName)}
       subtitle={subscription ? copy.subtitleActive : copy.subtitleFree}
       nav={nav}
       navExtra={
@@ -264,7 +265,7 @@ function AccountPage() {
                     ) : (
                       <span className="mb-3 inline-flex w-fit items-center gap-1.5 rounded-full bg-muted px-3 py-1 text-xs font-bold text-muted-foreground">{copy.plan.free}</span>
                     )}
-                    <p className="text-lg font-bold">{email}</p>
+                    <p className="text-lg font-bold">{friendlyName}</p>
                     {subscription ? (
                       <p className="mt-1 text-sm text-muted-foreground">
                         {subscription.status === "trialing" ? copy.plan.trialing : copy.plan.active}
