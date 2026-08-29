@@ -1,4 +1,4 @@
-import type { Locale } from "./i18n";
+import { pathForLocale, type Locale } from "./i18n";
 
 export type SeoCopy = {
   title: string;
@@ -18,18 +18,41 @@ export const seoCopy: Record<Locale, SeoCopy> = {
   da: { title: "AutoVere — Europæisk vejafgifts-, vignet- og elbilberegner", description: "Planlæg din bilferie i Europa. Beregn nøjagtige vejafgifter, obligatoriske vignetter, brændstof og Tesla/Ionity-ladestop.", keywords: "vejafgiftsberegner, vignetter Europa, elbilberegner, Tesla ladestop, Ionity ladestop", ogLocale: "da_DK" },
 };
 
-export const seoAlternates = [
-  { lang: "en", locale: "en_GB", path: "en" },
-  { lang: "nb", locale: "nb_NO", path: "no" },
-  { lang: "de", locale: "de_DE", path: "de" },
-  { lang: "nl", locale: "nl_NL", path: "nl" },
-  { lang: "pl", locale: "pl_PL", path: "pl" },
-  { lang: "sv", locale: "sv_SE", path: "sv" },
-  { lang: "fr", locale: "fr_FR", path: "fr" },
-  { lang: "da", locale: "da_DK", path: "da" },
-] as const;
+// hreflang: the ISO alternate-language code search engines expect. locale: AutoVere's own
+// internal locale, used to compute this page's real URL for that language via pathForLocale.
+// ogLocale: the og:locale meta value. Swedish/Danish deliberately use country-style URL
+// segments ("se"/"dk") that don't match their language codes ("sv"/"da") — see i18n.tsx.
+export const seoAlternates: { hreflang: string; locale: Locale; ogLocale: string }[] = [
+  { hreflang: "en", locale: "en", ogLocale: "en_GB" },
+  { hreflang: "nb", locale: "no", ogLocale: "nb_NO" },
+  { hreflang: "sv", locale: "sv", ogLocale: "sv_SE" },
+  { hreflang: "da", locale: "da", ogLocale: "da_DK" },
+  { hreflang: "de", locale: "de", ogLocale: "de_DE" },
+  { hreflang: "nl", locale: "nl", ogLocale: "nl_NL" },
+  { hreflang: "fr", locale: "fr", ogLocale: "fr_FR" },
+  { hreflang: "pl", locale: "pl", ogLocale: "pl_PL" },
+];
 
 export const siteUrl = "https://www.autovere.com";
+
+/**
+ * Correct, per-page canonical + hreflang <link> tags computed at render time (works during SSR,
+ * not just after client-side hydration) — every language version of a page is its own real
+ * canonical, and hreflang always lists the true equivalent URL for every language, never a
+ * "?lang=" query string. cleanPath is the page's own logical path with no language prefix,
+ * e.g. "/faq" or "/" for the homepage.
+ */
+export function localizedHeadLinks(cleanPath: string, locale: Locale) {
+  return [
+    { rel: "canonical", href: `${siteUrl}${pathForLocale(cleanPath, locale)}` },
+    ...seoAlternates.map((alternate) => ({
+      rel: "alternate",
+      hrefLang: alternate.hreflang,
+      href: `${siteUrl}${pathForLocale(cleanPath, alternate.locale)}`,
+    })),
+    { rel: "alternate", hrefLang: "x-default", href: `${siteUrl}${pathForLocale(cleanPath, "en" as Locale)}` },
+  ];
+}
 
 export function applicationSchema() {
   return {
@@ -79,18 +102,24 @@ export function applyLocalizedSeo(locale: Locale) {
   const copy = seoCopy[locale] ?? seoCopy.en;
   const pathname = window.location.pathname;
   document.title = copy.title;
+  document.documentElement.lang = locale;
   upsertMeta("name", "description", copy.description);
   upsertMeta("name", "keywords", copy.keywords);
   upsertMeta("property", "og:title", copy.title);
   upsertMeta("property", "og:description", copy.description);
   upsertMeta("property", "og:locale", copy.ogLocale);
+  // The canonical URL is this exact page in its own language — the root English page is its
+  // own canonical, /no is Norwegian's own canonical, and so on. Never point every language's
+  // canonical back at English, which would tell search engines the translations don't matter.
   upsertMeta("property", "og:url", `${siteUrl}${pathname}`);
   upsertMeta("name", "twitter:title", copy.title);
   upsertMeta("name", "twitter:description", copy.description);
   const canonical = document.head.querySelector<HTMLLinkElement>('link[rel="canonical"]');
   if (canonical) canonical.href = `${siteUrl}${pathname}`;
   for (const alternate of seoAlternates) {
-    const link = document.head.querySelector<HTMLLinkElement>(`link[rel="alternate"][hreflang="${alternate.lang}"]`);
-    if (link) link.href = `${siteUrl}${pathname}?lang=${alternate.path}`;
+    const link = document.head.querySelector<HTMLLinkElement>(`link[rel="alternate"][hreflang="${alternate.hreflang}"]`);
+    if (link) link.href = `${siteUrl}${pathForLocale(pathname, alternate.locale)}`;
   }
+  const defaultLink = document.head.querySelector<HTMLLinkElement>('link[rel="alternate"][hreflang="x-default"]');
+  if (defaultLink) defaultLink.href = `${siteUrl}${pathForLocale(pathname, "en")}`;
 }

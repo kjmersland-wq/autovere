@@ -1,7 +1,7 @@
 import { Caravan, CircleDot, Droplets, Flame, Lock, ParkingCircle, Sparkles, Tent, Trash2, Wrench, type LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
 import type { MotorhomeCopy } from "@/lib/motorhome-i18n";
 import type { MotorhomeCategory, MotorhomePoi } from "@/lib/geo";
 import { MOTORHOME_CATEGORIES } from "@/lib/geo";

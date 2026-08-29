@@ -9,86 +9,32 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as IndexRouteImport } from './routes/index'
-import { Route as AccountRouteImport } from './routes/account'
 import { Route as AdminRouteImport } from './routes/admin'
-import { Route as DemoRouteImport } from './routes/demo'
-import { Route as FaqRouteImport } from './routes/faq'
-import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
-import { Route as LegalRouteImport } from './routes/legal'
-import { Route as LoginRouteImport } from './routes/login'
-import { Route as PartnersRouteImport } from './routes/partners'
-import { Route as PricingRouteImport } from './routes/pricing'
-import { Route as PrivacyRouteImport } from './routes/privacy'
-import { Route as ResetPasswordRouteImport } from './routes/reset-password'
-import { Route as TermsRouteImport } from './routes/terms'
+import { Route as Char123LangChar125RouteImport } from './routes/{-$lang}'
 import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as ApiVerifyLoginRouteImport } from './routes/api.verify-login'
+import { Route as Char123LangChar125IndexRouteImport } from './routes/{-$lang}.index'
+import { Route as Char123LangChar125AccountRouteImport } from './routes/{-$lang}.account'
+import { Route as Char123LangChar125DemoRouteImport } from './routes/{-$lang}.demo'
+import { Route as Char123LangChar125FaqRouteImport } from './routes/{-$lang}.faq'
+import { Route as Char123LangChar125ForgotPasswordRouteImport } from './routes/{-$lang}.forgot-password'
+import { Route as Char123LangChar125LegalRouteImport } from './routes/{-$lang}.legal'
+import { Route as Char123LangChar125LoginRouteImport } from './routes/{-$lang}.login'
+import { Route as Char123LangChar125PartnersRouteImport } from './routes/{-$lang}.partners'
+import { Route as Char123LangChar125PricingRouteImport } from './routes/{-$lang}.pricing'
+import { Route as Char123LangChar125PrivacyRouteImport } from './routes/{-$lang}.privacy'
+import { Route as Char123LangChar125ResetPasswordRouteImport } from './routes/{-$lang}.reset-password'
+import { Route as Char123LangChar125TermsRouteImport } from './routes/{-$lang}.terms'
 import { Route as ApiWebhooksStripeRouteImport } from './routes/api/webhooks/stripe'
 
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AccountRoute = AccountRouteImport.update({
-  id: '/account',
-  path: '/account',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const AdminRoute = AdminRouteImport.update({
   id: '/admin',
   path: '/admin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const DemoRoute = DemoRouteImport.update({
-  id: '/demo',
-  path: '/demo',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FaqRoute = FaqRouteImport.update({
-  id: '/faq',
-  path: '/faq',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
-  id: '/forgot-password',
-  path: '/forgot-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LegalRoute = LegalRouteImport.update({
-  id: '/legal',
-  path: '/legal',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const LoginRoute = LoginRouteImport.update({
-  id: '/login',
-  path: '/login',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PartnersRoute = PartnersRouteImport.update({
-  id: '/partners',
-  path: '/partners',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PricingRoute = PricingRouteImport.update({
-  id: '/pricing',
-  path: '/pricing',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const PrivacyRoute = PrivacyRouteImport.update({
-  id: '/privacy',
-  path: '/privacy',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ResetPasswordRoute = ResetPasswordRouteImport.update({
-  id: '/reset-password',
-  path: '/reset-password',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const TermsRoute = TermsRouteImport.update({
-  id: '/terms',
-  path: '/terms',
+const Char123LangChar125Route = Char123LangChar125RouteImport.update({
+  id: '/{-$lang}',
+  path: '/{-$lang}',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiCheckoutRoute = ApiCheckoutRouteImport.update({
@@ -101,6 +47,72 @@ const ApiVerifyLoginRoute = ApiVerifyLoginRouteImport.update({
   path: '/api/verify-login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const Char123LangChar125IndexRoute = Char123LangChar125IndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => Char123LangChar125Route,
+} as any)
+const Char123LangChar125AccountRoute =
+  Char123LangChar125AccountRouteImport.update({
+    id: '/account',
+    path: '/account',
+    getParentRoute: () => Char123LangChar125Route,
+  } as any)
+const Char123LangChar125DemoRoute = Char123LangChar125DemoRouteImport.update({
+  id: '/demo',
+  path: '/demo',
+  getParentRoute: () => Char123LangChar125Route,
+} as any)
+const Char123LangChar125FaqRoute = Char123LangChar125FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => Char123LangChar125Route,
+} as any)
+const Char123LangChar125ForgotPasswordRoute =
+  Char123LangChar125ForgotPasswordRouteImport.update({
+    id: '/forgot-password',
+    path: '/forgot-password',
+    getParentRoute: () => Char123LangChar125Route,
+  } as any)
+const Char123LangChar125LegalRoute = Char123LangChar125LegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => Char123LangChar125Route,
+} as any)
+const Char123LangChar125LoginRoute = Char123LangChar125LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => Char123LangChar125Route,
+} as any)
+const Char123LangChar125PartnersRoute =
+  Char123LangChar125PartnersRouteImport.update({
+    id: '/partners',
+    path: '/partners',
+    getParentRoute: () => Char123LangChar125Route,
+  } as any)
+const Char123LangChar125PricingRoute =
+  Char123LangChar125PricingRouteImport.update({
+    id: '/pricing',
+    path: '/pricing',
+    getParentRoute: () => Char123LangChar125Route,
+  } as any)
+const Char123LangChar125PrivacyRoute =
+  Char123LangChar125PrivacyRouteImport.update({
+    id: '/privacy',
+    path: '/privacy',
+    getParentRoute: () => Char123LangChar125Route,
+  } as any)
+const Char123LangChar125ResetPasswordRoute =
+  Char123LangChar125ResetPasswordRouteImport.update({
+    id: '/reset-password',
+    path: '/reset-password',
+    getParentRoute: () => Char123LangChar125Route,
+  } as any)
+const Char123LangChar125TermsRoute = Char123LangChar125TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
+  getParentRoute: () => Char123LangChar125Route,
+} as any)
 const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
   id: '/api/webhooks/stripe',
   path: '/api/webhooks/stripe',
@@ -108,131 +120,124 @@ const ApiWebhooksStripeRoute = ApiWebhooksStripeRouteImport.update({
 } as any)
 
 export interface FileRoutesByFullPath {
-  '/': typeof IndexRoute
-  '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
-  '/demo': typeof DemoRoute
-  '/faq': typeof FaqRoute
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/legal': typeof LegalRoute
-  '/login': typeof LoginRoute
-  '/partners': typeof PartnersRoute
-  '/pricing': typeof PricingRoute
-  '/privacy': typeof PrivacyRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/terms': typeof TermsRoute
+  '/{-$lang}': typeof Char123LangChar125RouteWithChildren
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
+  '/{-$lang}/account': typeof Char123LangChar125AccountRoute
+  '/{-$lang}/demo': typeof Char123LangChar125DemoRoute
+  '/{-$lang}/faq': typeof Char123LangChar125FaqRoute
+  '/{-$lang}/forgot-password': typeof Char123LangChar125ForgotPasswordRoute
+  '/{-$lang}/legal': typeof Char123LangChar125LegalRoute
+  '/{-$lang}/login': typeof Char123LangChar125LoginRoute
+  '/{-$lang}/partners': typeof Char123LangChar125PartnersRoute
+  '/{-$lang}/pricing': typeof Char123LangChar125PricingRoute
+  '/{-$lang}/privacy': typeof Char123LangChar125PrivacyRoute
+  '/{-$lang}/reset-password': typeof Char123LangChar125ResetPasswordRoute
+  '/{-$lang}/terms': typeof Char123LangChar125TermsRoute
+  '/{-$lang}/': typeof Char123LangChar125IndexRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
 }
 export interface FileRoutesByTo {
-  '/': typeof IndexRoute
-  '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
-  '/demo': typeof DemoRoute
-  '/faq': typeof FaqRoute
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/legal': typeof LegalRoute
-  '/login': typeof LoginRoute
-  '/partners': typeof PartnersRoute
-  '/pricing': typeof PricingRoute
-  '/privacy': typeof PrivacyRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/terms': typeof TermsRoute
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
+  '/{-$lang}/account': typeof Char123LangChar125AccountRoute
+  '/{-$lang}/demo': typeof Char123LangChar125DemoRoute
+  '/{-$lang}/faq': typeof Char123LangChar125FaqRoute
+  '/{-$lang}/forgot-password': typeof Char123LangChar125ForgotPasswordRoute
+  '/{-$lang}/legal': typeof Char123LangChar125LegalRoute
+  '/{-$lang}/login': typeof Char123LangChar125LoginRoute
+  '/{-$lang}/partners': typeof Char123LangChar125PartnersRoute
+  '/{-$lang}/pricing': typeof Char123LangChar125PricingRoute
+  '/{-$lang}/privacy': typeof Char123LangChar125PrivacyRoute
+  '/{-$lang}/reset-password': typeof Char123LangChar125ResetPasswordRoute
+  '/{-$lang}/terms': typeof Char123LangChar125TermsRoute
+  '/{-$lang}': typeof Char123LangChar125IndexRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/': typeof IndexRoute
-  '/account': typeof AccountRoute
   '/admin': typeof AdminRoute
-  '/demo': typeof DemoRoute
-  '/faq': typeof FaqRoute
-  '/forgot-password': typeof ForgotPasswordRoute
-  '/legal': typeof LegalRoute
-  '/login': typeof LoginRoute
-  '/partners': typeof PartnersRoute
-  '/pricing': typeof PricingRoute
-  '/privacy': typeof PrivacyRoute
-  '/reset-password': typeof ResetPasswordRoute
-  '/terms': typeof TermsRoute
+  '/{-$lang}': typeof Char123LangChar125RouteWithChildren
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
+  '/{-$lang}/account': typeof Char123LangChar125AccountRoute
+  '/{-$lang}/demo': typeof Char123LangChar125DemoRoute
+  '/{-$lang}/faq': typeof Char123LangChar125FaqRoute
+  '/{-$lang}/forgot-password': typeof Char123LangChar125ForgotPasswordRoute
+  '/{-$lang}/legal': typeof Char123LangChar125LegalRoute
+  '/{-$lang}/login': typeof Char123LangChar125LoginRoute
+  '/{-$lang}/partners': typeof Char123LangChar125PartnersRoute
+  '/{-$lang}/pricing': typeof Char123LangChar125PricingRoute
+  '/{-$lang}/privacy': typeof Char123LangChar125PrivacyRoute
+  '/{-$lang}/reset-password': typeof Char123LangChar125ResetPasswordRoute
+  '/{-$lang}/terms': typeof Char123LangChar125TermsRoute
+  '/{-$lang}/': typeof Char123LangChar125IndexRoute
   '/api/webhooks/stripe': typeof ApiWebhooksStripeRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | '/'
-    | '/account'
     | '/admin'
-    | '/demo'
-    | '/faq'
-    | '/forgot-password'
-    | '/legal'
-    | '/login'
-    | '/partners'
-    | '/pricing'
-    | '/privacy'
-    | '/reset-password'
-    | '/terms'
+    | '/{-$lang}'
     | '/api/checkout'
     | '/api/verify-login'
+    | '/{-$lang}/account'
+    | '/{-$lang}/demo'
+    | '/{-$lang}/faq'
+    | '/{-$lang}/forgot-password'
+    | '/{-$lang}/legal'
+    | '/{-$lang}/login'
+    | '/{-$lang}/partners'
+    | '/{-$lang}/pricing'
+    | '/{-$lang}/privacy'
+    | '/{-$lang}/reset-password'
+    | '/{-$lang}/terms'
+    | '/{-$lang}/'
     | '/api/webhooks/stripe'
   fileRoutesByTo: FileRoutesByTo
   to:
-    | '/'
-    | '/account'
     | '/admin'
-    | '/demo'
-    | '/faq'
-    | '/forgot-password'
-    | '/legal'
-    | '/login'
-    | '/partners'
-    | '/pricing'
-    | '/privacy'
-    | '/reset-password'
-    | '/terms'
     | '/api/checkout'
     | '/api/verify-login'
+    | '/{-$lang}/account'
+    | '/{-$lang}/demo'
+    | '/{-$lang}/faq'
+    | '/{-$lang}/forgot-password'
+    | '/{-$lang}/legal'
+    | '/{-$lang}/login'
+    | '/{-$lang}/partners'
+    | '/{-$lang}/pricing'
+    | '/{-$lang}/privacy'
+    | '/{-$lang}/reset-password'
+    | '/{-$lang}/terms'
+    | '/{-$lang}'
     | '/api/webhooks/stripe'
   id:
     | '__root__'
-    | '/'
-    | '/account'
     | '/admin'
-    | '/demo'
-    | '/faq'
-    | '/forgot-password'
-    | '/legal'
-    | '/login'
-    | '/partners'
-    | '/pricing'
-    | '/privacy'
-    | '/reset-password'
-    | '/terms'
+    | '/{-$lang}'
     | '/api/checkout'
     | '/api/verify-login'
+    | '/{-$lang}/account'
+    | '/{-$lang}/demo'
+    | '/{-$lang}/faq'
+    | '/{-$lang}/forgot-password'
+    | '/{-$lang}/legal'
+    | '/{-$lang}/login'
+    | '/{-$lang}/partners'
+    | '/{-$lang}/pricing'
+    | '/{-$lang}/privacy'
+    | '/{-$lang}/reset-password'
+    | '/{-$lang}/terms'
+    | '/{-$lang}/'
     | '/api/webhooks/stripe'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute
-  AccountRoute: typeof AccountRoute
   AdminRoute: typeof AdminRoute
-  DemoRoute: typeof DemoRoute
-  FaqRoute: typeof FaqRoute
-  ForgotPasswordRoute: typeof ForgotPasswordRoute
-  LegalRoute: typeof LegalRoute
-  LoginRoute: typeof LoginRoute
-  PartnersRoute: typeof PartnersRoute
-  PricingRoute: typeof PricingRoute
-  PrivacyRoute: typeof PrivacyRoute
-  ResetPasswordRoute: typeof ResetPasswordRoute
-  TermsRoute: typeof TermsRoute
+  Char123LangChar125Route: typeof Char123LangChar125RouteWithChildren
   ApiCheckoutRoute: typeof ApiCheckoutRoute
   ApiVerifyLoginRoute: typeof ApiVerifyLoginRoute
   ApiWebhooksStripeRoute: typeof ApiWebhooksStripeRoute
@@ -240,20 +245,6 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/account': {
-      id: '/account'
-      path: '/account'
-      fullPath: '/account'
-      preLoaderRoute: typeof AccountRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/admin': {
       id: '/admin'
       path: '/admin'
@@ -261,74 +252,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/demo': {
-      id: '/demo'
-      path: '/demo'
-      fullPath: '/demo'
-      preLoaderRoute: typeof DemoRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/faq': {
-      id: '/faq'
-      path: '/faq'
-      fullPath: '/faq'
-      preLoaderRoute: typeof FaqRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/forgot-password': {
-      id: '/forgot-password'
-      path: '/forgot-password'
-      fullPath: '/forgot-password'
-      preLoaderRoute: typeof ForgotPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/legal': {
-      id: '/legal'
-      path: '/legal'
-      fullPath: '/legal'
-      preLoaderRoute: typeof LegalRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/login': {
-      id: '/login'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/partners': {
-      id: '/partners'
-      path: '/partners'
-      fullPath: '/partners'
-      preLoaderRoute: typeof PartnersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/pricing': {
-      id: '/pricing'
-      path: '/pricing'
-      fullPath: '/pricing'
-      preLoaderRoute: typeof PricingRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/privacy': {
-      id: '/privacy'
-      path: '/privacy'
-      fullPath: '/privacy'
-      preLoaderRoute: typeof PrivacyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/reset-password': {
-      id: '/reset-password'
-      path: '/reset-password'
-      fullPath: '/reset-password'
-      preLoaderRoute: typeof ResetPasswordRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/terms': {
-      id: '/terms'
-      path: '/terms'
-      fullPath: '/terms'
-      preLoaderRoute: typeof TermsRouteImport
+    '/{-$lang}': {
+      id: '/{-$lang}'
+      path: '/{-$lang}'
+      fullPath: '/{-$lang}'
+      preLoaderRoute: typeof Char123LangChar125RouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/checkout': {
@@ -345,6 +273,90 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiVerifyLoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/{-$lang}/': {
+      id: '/{-$lang}/'
+      path: '/'
+      fullPath: '/{-$lang}/'
+      preLoaderRoute: typeof Char123LangChar125IndexRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/account': {
+      id: '/{-$lang}/account'
+      path: '/account'
+      fullPath: '/{-$lang}/account'
+      preLoaderRoute: typeof Char123LangChar125AccountRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/demo': {
+      id: '/{-$lang}/demo'
+      path: '/demo'
+      fullPath: '/{-$lang}/demo'
+      preLoaderRoute: typeof Char123LangChar125DemoRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/faq': {
+      id: '/{-$lang}/faq'
+      path: '/faq'
+      fullPath: '/{-$lang}/faq'
+      preLoaderRoute: typeof Char123LangChar125FaqRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/forgot-password': {
+      id: '/{-$lang}/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/{-$lang}/forgot-password'
+      preLoaderRoute: typeof Char123LangChar125ForgotPasswordRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/legal': {
+      id: '/{-$lang}/legal'
+      path: '/legal'
+      fullPath: '/{-$lang}/legal'
+      preLoaderRoute: typeof Char123LangChar125LegalRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/login': {
+      id: '/{-$lang}/login'
+      path: '/login'
+      fullPath: '/{-$lang}/login'
+      preLoaderRoute: typeof Char123LangChar125LoginRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/partners': {
+      id: '/{-$lang}/partners'
+      path: '/partners'
+      fullPath: '/{-$lang}/partners'
+      preLoaderRoute: typeof Char123LangChar125PartnersRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/pricing': {
+      id: '/{-$lang}/pricing'
+      path: '/pricing'
+      fullPath: '/{-$lang}/pricing'
+      preLoaderRoute: typeof Char123LangChar125PricingRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/privacy': {
+      id: '/{-$lang}/privacy'
+      path: '/privacy'
+      fullPath: '/{-$lang}/privacy'
+      preLoaderRoute: typeof Char123LangChar125PrivacyRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/reset-password': {
+      id: '/{-$lang}/reset-password'
+      path: '/reset-password'
+      fullPath: '/{-$lang}/reset-password'
+      preLoaderRoute: typeof Char123LangChar125ResetPasswordRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
+    '/{-$lang}/terms': {
+      id: '/{-$lang}/terms'
+      path: '/terms'
+      fullPath: '/{-$lang}/terms'
+      preLoaderRoute: typeof Char123LangChar125TermsRouteImport
+      parentRoute: typeof Char123LangChar125Route
+    }
     '/api/webhooks/stripe': {
       id: '/api/webhooks/stripe'
       path: '/api/webhooks/stripe'
@@ -355,20 +367,42 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface Char123LangChar125RouteChildren {
+  Char123LangChar125AccountRoute: typeof Char123LangChar125AccountRoute
+  Char123LangChar125DemoRoute: typeof Char123LangChar125DemoRoute
+  Char123LangChar125FaqRoute: typeof Char123LangChar125FaqRoute
+  Char123LangChar125ForgotPasswordRoute: typeof Char123LangChar125ForgotPasswordRoute
+  Char123LangChar125LegalRoute: typeof Char123LangChar125LegalRoute
+  Char123LangChar125LoginRoute: typeof Char123LangChar125LoginRoute
+  Char123LangChar125PartnersRoute: typeof Char123LangChar125PartnersRoute
+  Char123LangChar125PricingRoute: typeof Char123LangChar125PricingRoute
+  Char123LangChar125PrivacyRoute: typeof Char123LangChar125PrivacyRoute
+  Char123LangChar125ResetPasswordRoute: typeof Char123LangChar125ResetPasswordRoute
+  Char123LangChar125TermsRoute: typeof Char123LangChar125TermsRoute
+  Char123LangChar125IndexRoute: typeof Char123LangChar125IndexRoute
+}
+
+const Char123LangChar125RouteChildren: Char123LangChar125RouteChildren = {
+  Char123LangChar125AccountRoute: Char123LangChar125AccountRoute,
+  Char123LangChar125DemoRoute: Char123LangChar125DemoRoute,
+  Char123LangChar125FaqRoute: Char123LangChar125FaqRoute,
+  Char123LangChar125ForgotPasswordRoute: Char123LangChar125ForgotPasswordRoute,
+  Char123LangChar125LegalRoute: Char123LangChar125LegalRoute,
+  Char123LangChar125LoginRoute: Char123LangChar125LoginRoute,
+  Char123LangChar125PartnersRoute: Char123LangChar125PartnersRoute,
+  Char123LangChar125PricingRoute: Char123LangChar125PricingRoute,
+  Char123LangChar125PrivacyRoute: Char123LangChar125PrivacyRoute,
+  Char123LangChar125ResetPasswordRoute: Char123LangChar125ResetPasswordRoute,
+  Char123LangChar125TermsRoute: Char123LangChar125TermsRoute,
+  Char123LangChar125IndexRoute: Char123LangChar125IndexRoute,
+}
+
+const Char123LangChar125RouteWithChildren =
+  Char123LangChar125Route._addFileChildren(Char123LangChar125RouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
-  IndexRoute: IndexRoute,
-  AccountRoute: AccountRoute,
   AdminRoute: AdminRoute,
-  DemoRoute: DemoRoute,
-  FaqRoute: FaqRoute,
-  ForgotPasswordRoute: ForgotPasswordRoute,
-  LegalRoute: LegalRoute,
-  LoginRoute: LoginRoute,
-  PartnersRoute: PartnersRoute,
-  PricingRoute: PricingRoute,
-  PrivacyRoute: PrivacyRoute,
-  ResetPasswordRoute: ResetPasswordRoute,
-  TermsRoute: TermsRoute,
+  Char123LangChar125Route: Char123LangChar125RouteWithChildren,
   ApiCheckoutRoute: ApiCheckoutRoute,
   ApiVerifyLoginRoute: ApiVerifyLoginRoute,
   ApiWebhooksStripeRoute: ApiWebhooksStripeRoute,

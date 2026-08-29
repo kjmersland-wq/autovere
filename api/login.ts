@@ -16,22 +16,35 @@ function authSecret(): string {
   return value;
 }
 
-function createPurposeToken(email: string, purpose: string, ttlSeconds: number): string {
-  const payload = Buffer.from(JSON.stringify({ email, purpose, exp: Math.floor(Date.now() / 1000) + ttlSeconds })).toString("base64url");
+// AutoVere's multilingual URL scheme: English lives at the root, every other language has a
+// dedicated path segment. Swedish/Danish deliberately use country-style codes ("se"/"dk") that
+// don't match their language codes, matching the exact scheme in src/lib/i18n.tsx.
+const LOCALE_TO_URL_LANG: Record<string, string | null> = { en: null, no: "no", sv: "se", da: "dk", de: "de", nl: "nl", fr: "fr", pl: "pl" };
+
+function pathForLocale(path: string, locale: string | null): string {
+  const urlLang = locale ? LOCALE_TO_URL_LANG[locale] : undefined;
+  return urlLang ? `/${urlLang}${path}` : path;
+}
+
+function createPurposeToken(email: string, purpose: string, ttlSeconds: number, locale?: string | null): string {
+  const payload = Buffer.from(JSON.stringify({ email, purpose, locale: locale ?? null, exp: Math.floor(Date.now() / 1000) + ttlSeconds })).toString("base64url");
   const signature = createHmac("sha256", authSecret()).update(payload).digest("base64url");
   return `${payload}.${signature}`;
 }
 
-function verifyPurposeToken(token: string, purpose: string): string | null {
+function verifyPurposeToken(token: string, purpose: string): { email: string; locale: string | null } | null {
   const [payload, encodedSignature] = token.split(".");
   if (!payload || !encodedSignature) return null;
   const expected = createHmac("sha256", authSecret()).update(payload).digest();
   const actual = Buffer.from(encodedSignature, "base64url");
   if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
   try {
-    const value = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { email?: unknown; purpose?: unknown; exp?: unknown };
+    const value = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { email?: unknown; purpose?: unknown; exp?: unknown; locale?: unknown };
     if (value.purpose !== purpose) return null;
-    return typeof value.email === "string" && typeof value.exp === "number" && value.exp > Math.floor(Date.now() / 1000) ? value.email : null;
+    if (typeof value.email === "string" && typeof value.exp === "number" && value.exp > Math.floor(Date.now() / 1000)) {
+      return { email: value.email, locale: typeof value.locale === "string" ? value.locale : null };
+    }
+    return null;
   } catch {
     return null;
   }
@@ -195,19 +208,19 @@ function mailer() {
 async function handleVerify(request: Request, response: Response) {
   const url = new URL(request.url ?? "", "http://localhost");
   const token = request.query?.["token"] as string | undefined ?? url.searchParams.get("token") ?? "";
-  let email: string | null = null;
+  let verified: { email: string; locale: string | null } | null = null;
   try {
-    email = verifyPurposeToken(token, "login");
+    verified = verifyPurposeToken(token, "login");
   } catch {
-    email = null;
+    verified = null;
   }
-  if (!email) {
+  if (!verified) {
     response.status(401).json({ error: "This login link is invalid or has expired." });
     return;
   }
-  await recordUser(email);
-  response.setHeader("Set-Cookie", sessionCookiesFor(email));
-  response.setHeader("Location", "/account");
+  await recordUser(verified.email);
+  response.setHeader("Set-Cookie", sessionCookiesFor(verified.email));
+  response.setHeader("Location", pathForLocale("/account", verified.locale));
   response.status(302).json({ ok: true });
 }
 
@@ -215,6 +228,7 @@ async function handleSendMagicLink(request: Request, response: Response) {
   const body = parseBody(request.body);
   const rawEmail = body["email"];
   const email = typeof rawEmail === "string" ? rawEmail.trim().toLowerCase() : "";
+  const locale = typeof body["locale"] === "string" ? body["locale"] : null;
   if (!/^\S+@\S+\.\S+$/.test(email) || email.length > 320) {
     response.status(400).json({ code: "invalid_email", error: "Enter a valid email address." });
     return;
@@ -228,7 +242,7 @@ async function handleSendMagicLink(request: Request, response: Response) {
     return;
   }
   await recordAttempt(email, "magic-link");
-  const link = `${authBaseUrl()}/api/login?token=${encodeURIComponent(createPurposeToken(email, "login", TOKEN_TTL_SECONDS))}`;
+  const link = `${authBaseUrl()}/api/login?token=${encodeURIComponent(createPurposeToken(email, "login", TOKEN_TTL_SECONDS, locale))}`;
   const transport = mailer();
   if (!transport) {
     response.status(500).json({ code: "not_configured", error: "Login email is not configured." });
@@ -278,6 +292,7 @@ async function handleForgotPassword(request: Request, response: Response) {
   const body = parseBody(request.body);
   const rawEmail = body["email"];
   const email = typeof rawEmail === "string" ? rawEmail.trim().toLowerCase() : "";
+  const locale = typeof body["locale"] === "string" ? body["locale"] : null;
   const genericOk = () => response.status(200).json({ ok: true });
   if (!/^\S+@\S+\.\S+$/.test(email) || email.length > 320) {
     response.status(400).json({ code: "invalid_email", error: "Enter a valid email address." });
@@ -299,7 +314,7 @@ async function handleForgotPassword(request: Request, response: Response) {
     genericOk();
     return;
   }
-  const link = `${authBaseUrl()}/reset-password?token=${encodeURIComponent(createPurposeToken(email, "reset", RESET_TTL_SECONDS))}`;
+  const link = `${authBaseUrl()}${pathForLocale("/reset-password", locale)}?token=${encodeURIComponent(createPurposeToken(email, "reset", RESET_TTL_SECONDS, locale))}`;
   try {
     await transport.sendMail({
       from: process.env["GMAIL_USER"],
@@ -320,16 +335,17 @@ async function handleResetPassword(request: Request, response: Response) {
   const rawPassword = body["newPassword"];
   const token = typeof rawToken === "string" ? rawToken : "";
   const newPassword = typeof rawPassword === "string" ? rawPassword : "";
-  let email: string | null = null;
+  let verified: { email: string; locale: string | null } | null = null;
   try {
-    email = verifyPurposeToken(token, "reset");
+    verified = verifyPurposeToken(token, "reset");
   } catch {
-    email = null;
+    verified = null;
   }
-  if (!email) {
+  if (!verified) {
     response.status(401).json({ code: "invalid_token", error: "This password reset link is invalid or has expired." });
     return;
   }
+  const email = verified.email;
   if (!isValidPassword(newPassword)) {
     response.status(400).json({ code: "weak_password", error: "Choose a password with at least 8 characters." });
     return;

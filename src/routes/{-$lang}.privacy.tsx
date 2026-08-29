@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useT } from "@/lib/i18n";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 function PrivacyPage() {
   const t = useT();
@@ -11,10 +13,13 @@ function PrivacyPage() {
     <main className="bg-scenic min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-3xl">
         <div className="panel rounded-[var(--radius-3xl)] border border-border/70 bg-surface/90 p-5 shadow-[var(--shadow-elevated)] backdrop-blur-md sm:p-8">
-          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
-            <ArrowLeft className="size-4" />
-            {t.brand}
-          </Link>
+          <div className="flex items-center justify-between gap-3">
+            <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
+              <ArrowLeft className="size-4" />
+              {t.brand}
+            </Link>
+            <LanguageSwitcher />
+          </div>
 
           <h1 className="mt-6 text-3xl font-semibold tracking-tight">{t.privacyPolicy}</h1>
 
@@ -37,6 +42,6 @@ function PrivacyPage() {
   );
 }
 
-export const Route = createFileRoute("/privacy")({
+export const Route = createFileRoute("/{-$lang}/privacy")({
   component: PrivacyPage,
 });

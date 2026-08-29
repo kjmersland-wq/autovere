@@ -8,7 +8,8 @@ export const durationLabels: Record<Locale, { custom: string; invalid: string }>
   fr: { custom: "Personnalisé", invalid: "Saisissez un nombre entier de jours entre 1 et 3650." },
   da: { custom: "Brugerdefineret", invalid: "Indtast et helt antal dage mellem 1 og 3650." },
 };
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import type { ReactNode } from "react";
+import { useNavigate, useParams } from "@tanstack/react-router";
 
 export const en = {
   addStop: "Add a stop", stop: "Stop", stopPlaceholder: "A place along the way", remove: "Remove",
@@ -21,6 +22,54 @@ export const en = {
 
 export type Dict = typeof en;
 export type Locale = "en" | "de" | "nl" | "no" | "pl" | "sv" | "fr" | "da";
+
+// English lives at the site root (no URL segment). Every other language has a dedicated path
+// segment — note this is a COUNTRY-style code for Swedish/Danish ("se"/"dk", matching the
+// explicit AutoVere URL spec) rather than their ISO language codes ("sv"/"da"), so the two
+// mappings below are not simple mirrors of each other.
+export const LOCALE_TO_URL_LANG: Record<Locale, string | null> = {
+  en: null,
+  no: "no",
+  sv: "se",
+  da: "dk",
+  de: "de",
+  nl: "nl",
+  fr: "fr",
+  pl: "pl",
+};
+
+export const URL_LANG_TO_LOCALE: Record<string, Locale> = {
+  no: "no",
+  se: "sv",
+  dk: "da",
+  de: "de",
+  nl: "nl",
+  fr: "fr",
+  pl: "pl",
+};
+
+export const URL_LANG_CODES = Object.keys(URL_LANG_TO_LOCALE);
+
+/** Removes a leading language segment from a pathname, if present, returning the "logical"
+ * page path (e.g. "/no/faq" -> "/faq", "/faq" -> "/faq", "/no" -> "/", "/" -> "/"). */
+export function stripLangPrefix(pathname: string): string {
+  const segments = pathname.split("/").filter(Boolean);
+  const first = segments[0];
+  if (first && first in URL_LANG_TO_LOCALE) {
+    const rest = segments.slice(1).join("/");
+    return rest ? `/${rest}` : "/";
+  }
+  return pathname || "/";
+}
+
+/** Computes the equivalent URL for the given page path in the given language — the inverse
+ * pairing of stripLangPrefix, used for SEO hreflang/canonical generation. */
+export function pathForLocale(pathname: string, locale: Locale): string {
+  const clean = stripLangPrefix(pathname);
+  const urlLang = LOCALE_TO_URL_LANG[locale];
+  if (!urlLang) return clean;
+  return clean === "/" ? `/${urlLang}` : `/${urlLang}${clean}`;
+}
 
 export const loginLabels: Record<Locale, string> = {
   en: "Sign in",
@@ -129,29 +178,29 @@ export const locales: Record<Locale, Dict> = {
   fr,
   da,
 };
-const Context = createContext<{ t: Dict; locale: Locale; setLocale: (locale: string) => void }>({ t: en, locale: "en", setLocale: () => {} });
-
+// The URL is the sole source of truth for language — no localStorage, no browser-language
+// detection. I18nProvider is kept as a no-op passthrough so callers (e.g. __root.tsx) don't
+// need to change; locale itself is derived fresh from the current route's optional `lang`
+// path param wherever useLocale()/useT() is called.
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>("en");
-  useEffect(() => {
-    const saved = window.localStorage.getItem("autovere-locale");
-    const browser = navigator.language.toLowerCase();
-    const requested = new URLSearchParams(window.location.search).get("lang");
-    const detected: Locale = browser.startsWith("de") ? "de" : browser.startsWith("nl") ? "nl" : browser.startsWith("no") || browser.startsWith("nb") || browser.startsWith("nn") ? "no" : browser.startsWith("pl") ? "pl" : browser.startsWith("sv") ? "sv" : browser.startsWith("fr") ? "fr" : browser.startsWith("da") ? "da" : "en";
-    const next = requested && requested in locales ? requested as Locale : saved && saved in locales ? saved as Locale : detected;
-    setLocaleState(next);
-    document.documentElement.lang = next;
-  }, []);
+  return <>{children}</>;
+}
+
+export function useLocale(): { locale: Locale; setLocale: (locale: string) => void } {
+  const params = useParams({ strict: false }) as { lang?: string };
+  const navigate = useNavigate();
+  const locale: Locale = (params.lang ? URL_LANG_TO_LOCALE[params.lang] : undefined) ?? "en";
   const setLocale = (next: string) => {
     if (!(next in locales)) return;
-    setLocaleState(next as Locale);
-    window.localStorage.setItem("autovere-locale", next);
-    document.documentElement.lang = next;
+    const urlLang = LOCALE_TO_URL_LANG[next as Locale];
+    void navigate({ to: (urlLang ? `/${urlLang}` : "/") as never });
   };
-  const value = useMemo(() => ({ t: locales[locale], locale, setLocale }), [locale]);
-  return <Context.Provider value={value}>{children}</Context.Provider>;
+  return { locale, setLocale };
 }
-export function useT(): Dict { return useContext(Context).t; }
-export function useLocale() { const context = useContext(Context); return { locale: context.locale, setLocale: context.setLocale }; }
+
+export function useT(): Dict {
+  const { locale } = useLocale();
+  return locales[locale];
+}
 export function countryName(code: string, locale: Locale, fallback: string): string { return locale === "de" ? ({ DE: "Deutschland", AT: "Österreich", CH: "Schweiz", IT: "Italien", FR: "Frankreich", DK: "Dänemark", SE: "Schweden", NO: "Norwegen", SI: "Slowenien", CZ: "Tschechien", HR: "Kroatien", SK: "Slowakei", PL: "Polen" }[code] ?? fallback) : fallback; }
 export function dynamicText(text: string, locale: Locale): string { return locale === "de" ? text.replace(/motorway tolls/gi, "Streckenmaut").replace(/motorway/gi, "Autobahn").replace(/tolled/gi, "mautpflichtig").replace(/Toll booths \/ electronic tolling/gi, "Mautstellen / elektronische Maut").replace(/Annual/gi, "Jahres").replace(/Monthly/gi, "Monatliche").replace(/1-day/gi, "1-Tages").replace(/10-day/gi, "10-Tages") : text; }

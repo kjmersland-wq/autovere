@@ -1,13 +1,14 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
-  Link,
   createRootRouteWithContext,
   useRouter,
+  useRouterState,
   HeadContent,
   Scripts,
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
+import { AppLink as Link } from "../components/AppLink";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
@@ -106,7 +107,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { property: "og:site_name", content: "AutoVere" },
       { property: "og:locale", content: "en_GB" },
-      ...seoAlternates.map((alternate) => ({ property: "og:locale:alternate", content: alternate.locale })),
+      ...seoAlternates.filter((alternate) => alternate.locale !== "en").map((alternate) => ({ property: "og:locale:alternate", content: alternate.ogLocale })),
       { property: "og:image", content: "https://www.autovere.com/og-image.png" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
@@ -130,13 +131,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "manifest", href: "/manifest.webmanifest" },
       { rel: "icon", type: "image/png", href: "/favicon.png" },
       { rel: "apple-touch-icon", href: "/icons/icon-192.png" },
-      { rel: "canonical", href: siteUrl },
-      ...seoAlternates.map((alternate) => ({
-        rel: "alternate",
-        hrefLang: alternate.lang,
-        href: `${siteUrl}/?lang=${alternate.path}`,
-      })),
-      { rel: "alternate", hrefLang: "x-default", href: siteUrl },
+      // Canonical + hreflang are intentionally NOT set here — the {-$lang} layout route computes
+      // them per-page (via localizedHeadLinks) for every real, indexable page, correctly at SSR
+      // time. Setting a second, generic copy here would risk duplicate <link> tags. Routes
+      // outside that layout (currently only /admin) are noindex/nofollow and don't need either.
     ],
     scripts: [{ type: "application/ld+json", children: JSON.stringify(applicationSchema()) }],
   }),
@@ -183,10 +181,11 @@ function RootComponent() {
 
 function LocalizedSeo() {
   const { locale } = useLocale();
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
 
   useEffect(() => {
     applyLocalizedSeo(locale);
-  }, [locale]);
+  }, [locale, pathname]);
 
   return null;
 }

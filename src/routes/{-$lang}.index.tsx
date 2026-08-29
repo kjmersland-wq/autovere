@@ -1,4 +1,6 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Check, ChevronDown, Sparkles, Zap, Tent, Coins } from "lucide-react";
@@ -39,7 +41,7 @@ import { smartFuelCopy } from "@/lib/smart-fuel-i18n";
 import { motorhomeCopy } from "@/lib/motorhome-i18n";
 import { openPrintReport } from "@/lib/print-report";
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute("/{-$lang}/")({
   head: () => ({
     meta: [
       { title: "AutoVere — European Toll, Vignette & EV Charging Planner" },
@@ -67,36 +69,12 @@ const COLORS: Record<RouteVariantKey, string> = {
 
 const VARIANTS: RouteVariantKey[] = ["fastest", "bypass", "tollfree"];
 
-const LANGUAGE_OPTIONS = [
-  { locale: "en", code: "GB" },
-  { locale: "no", code: "NO" },
-  { locale: "sv", code: "SE" },
-  { locale: "da", code: "DK" },
-  { locale: "de", code: "DE" },
-  { locale: "nl", code: "NL" },
-  { locale: "fr", code: "FR" },
-  { locale: "pl", code: "PL" },
-] as const;
-
 function currencyDisplayName(code: CurrencyCode, locale: string): string {
   try {
     return new Intl.DisplayNames([locale], { type: "currency" }).of(code) ?? code;
   } catch {
     return code;
   }
-}
-
-function CountryFlag({ code }: { code: (typeof LANGUAGE_OPTIONS)[number]["code"] }) {
-  const common = { width: 18, height: 12, viewBox: "0 0 18 12", className: "shrink-0 rounded-[2px]" };
-  if (code === "GB") return <svg {...common} aria-hidden><rect width="18" height="12" fill="#1b3f8f" /><path d="M0 0 18 12M18 0 0 12" stroke="#fff" strokeWidth="3" /><path d="M0 0 18 12M18 0 0 12" stroke="#d71920" strokeWidth="1" /><path d="M9 0v12M0 6h18" stroke="#fff" strokeWidth="4" /><path d="M9 0v12M0 6h18" stroke="#d71920" strokeWidth="2" /></svg>;
-  const colors: Record<string, string> = { NO: "#ba0c2f", SE: "#006aa7", DK: "#c8102e", DE: "#000", NL: "#ae1c28", FR: "#0055a4", PL: "#fff" };
-  if (code === "SE") return <svg {...common} aria-hidden><rect width="18" height="12" fill="#006aa7" /><path d="M6 0v12M0 4h18" stroke="#fecc00" strokeWidth="2" /></svg>;
-  if (code === "NO") return <svg {...common} aria-hidden><rect width="18" height="12" fill="#ba0c2f" /><path d="M5 0v12M0 6h18" stroke="#fff" strokeWidth="4" /><path d="M5 0v12M0 6h18" stroke="#00205b" strokeWidth="2" /></svg>;
-  if (code === "DK") return <svg {...common} aria-hidden><rect width="18" height="12" fill="#c8102e" /><path d="M6 0v12M0 6h18" stroke="#fff" strokeWidth="2" /></svg>;
-  if (code === "DE") return <svg {...common} aria-hidden><rect width="18" height="4" fill="#000" /><rect y="4" width="18" height="4" fill="#d00" /><rect y="8" width="18" height="4" fill="#ffce00" /></svg>;
-  if (code === "NL") return <svg {...common} aria-hidden><rect width="18" height="4" fill="#ae1c28" /><rect y="4" width="18" height="4" fill="#fff" /><rect y="8" width="18" height="4" fill="#21468b" /></svg>;
-  if (code === "FR") return <svg {...common} aria-hidden><rect width="6" height="12" fill="#0055a4" /><rect x="6" width="6" height="12" fill="#fff" /><rect x="12" width="6" height="12" fill="#ef4135" /></svg>;
-  return <svg {...common} aria-hidden><rect width="18" height="6" fill="#fff" /><rect y="6" width="18" height="6" fill="#dc143c" /></svg>;
 }
 
 const LEGAL_MODAL_COPY = {
@@ -288,7 +266,6 @@ function Index() {
   const [savingTrip, setSavingTrip] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [legalOpen, setLegalOpen] = useState(false);
-  const [languageOpen, setLanguageOpen] = useState(false);
   const [proTier, setProTier] = useState<"pro" | "business" | null>(null);
   const [smartMaxKm, setSmartMaxKm] = useState(25);
   const [smartLoading, setSmartLoading] = useState(false);
@@ -606,7 +583,6 @@ function Index() {
   const wazeLink = submitted?.to ? wazeUrl([submitted.to.lat, submitted.to.lon]) : "https://www.waze.com";
   const gpx = selectedRoute ? buildGpx({ name: routeName, coords: selectedRoute.coords, waypoints: navigationWaypoints }) : "";
   const kml = selectedRoute ? buildKml({ name: routeName, coords: selectedRoute.coords, waypoints: navigationWaypoints }) : "";
-  const activeLanguage = LANGUAGE_OPTIONS.find((option) => option.locale === locale) ?? LANGUAGE_OPTIONS[0];
 
   async function shareRoute() {
     if (!selectedEst) return;
@@ -678,42 +654,7 @@ function Index() {
                 </div>
               )}
             </div>
-            <div className="relative">
-              <span className="sr-only">{t.language}</span>
-              <button
-                type="button"
-                onClick={() => setLanguageOpen((open) => !open)}
-                className="flex items-center gap-2 rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:border-primary/60 focus:border-primary/60"
-                aria-label={t.language}
-                aria-expanded={languageOpen}
-                aria-haspopup="listbox"
-              >
-                <CountryFlag code={activeLanguage.code} />
-                <span>{activeLanguage.code === "GB" ? "GB" : activeLanguage.code}</span>
-                <ChevronDown className="size-3.5 text-muted-foreground" aria-hidden />
-              </button>
-              {languageOpen && (
-                <div className="absolute right-0 top-full z-50 mt-2 w-36 rounded-xl border border-border bg-popover p-1 shadow-[var(--shadow-elevated)]" role="listbox" aria-label={t.language}>
-                  {LANGUAGE_OPTIONS.map((option) => (
-                    <button
-                      key={option.locale}
-                      type="button"
-                      role="option"
-                      aria-selected={locale === option.locale}
-                      onClick={() => {
-                        setLocale(option.locale);
-                        setLanguageOpen(false);
-                      }}
-                      className={`flex w-full items-center gap-2 rounded-lg px-2.5 py-2 text-left text-xs font-bold transition-colors ${locale === option.locale ? "bg-primary/12 text-primary" : "text-foreground hover:bg-accent"}`}
-                    >
-                      <CountryFlag code={option.code} />
-                      <span className="flex-1">{option.code}</span>
-                      {locale === option.locale && <Check className="size-3.5" aria-hidden />}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+            <LanguageSwitcher />
             <Link
               to="/demo"
               className="flex items-center gap-1.5 rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground transition-colors hover:border-primary/60 hover:text-primary"

@@ -1,4 +1,5 @@
-import { Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { ArrowLeft, type LucideIcon } from "lucide-react";
 import { Fragment as ReactFragment, type ReactNode } from "react";
 
@@ -66,7 +67,10 @@ export function AccountShell<Section extends string>({
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
             <ArrowLeft className="size-4" /> {backLabel}
           </Link>
-          {badge}
+          <div className="flex items-center gap-2">
+            {badge}
+            <LanguageSwitcher />
+          </div>
         </div>
 
         <header className="mt-10 max-w-3xl">

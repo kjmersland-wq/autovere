@@ -1,9 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
 import { ArrowLeft, ExternalLink, Gift, Handshake, Percent, Route as RouteIcon, Share2, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ContactModal } from "@/components/ContactModal";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { PartnerApplicationModal } from "@/components/partner/PartnerApplicationModal";
 import { PartnerHeader } from "@/components/partner/PartnerHeader";
 import { AnchorLink } from "@/components/AnchorLink";
@@ -12,7 +14,7 @@ import { partnerCopy } from "@/lib/partner-i18n";
 import { shareLinkCopy } from "@/lib/share-i18n";
 import { fetchActivePartners, type PartnerRecord } from "@/lib/partners";
 
-export const Route = createFileRoute("/partners")({
+export const Route = createFileRoute("/{-$lang}/partners")({
   head: () => ({
     meta: [
       { title: "AutoVere Organisation Partners — Give Your Members 25% Off" },
@@ -46,9 +48,12 @@ function PartnersPage() {
   return (
     <main className="bg-scenic min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-5xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
-          <ArrowLeft className="size-4" /> {copy.page.back}
-        </Link>
+        <div className="flex items-center justify-between gap-3">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <ArrowLeft className="size-4" /> {copy.page.back}
+          </Link>
+          <LanguageSwitcher />
+        </div>
 
         <header className="mt-10 max-w-3xl">
           <p className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-primary">{copy.page.eyebrow}</p>

@@ -1,10 +1,12 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { AppLink as Link, localizedPath } from "@/components/AppLink";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
 import { resetPasswordCopy } from "@/lib/login-i18n";
 
-export const Route = createFileRoute("/reset-password")({ component: ResetPasswordPage });
+export const Route = createFileRoute("/{-$lang}/reset-password")({ component: ResetPasswordPage });
 
 function ResetPasswordPage() {
   const { locale } = useLocale();
@@ -45,7 +47,10 @@ function ResetPasswordPage() {
     return (
       <main className="bg-scenic flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
         <div className="panel w-full max-w-md p-6 text-center">
-          <p className="text-sm text-muted-foreground">{copy.invalidLink}</p>
+          <div className="flex justify-end">
+            <LanguageSwitcher />
+          </div>
+          <p className="mt-4 text-sm text-muted-foreground">{copy.invalidLink}</p>
           <Link to="/forgot-password" className="mt-4 inline-block">
             <Button>{copy.requestNewLink}</Button>
           </Link>
@@ -57,7 +62,10 @@ function ResetPasswordPage() {
   return (
     <main className="bg-scenic flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
       <div className="panel w-full max-w-md p-6">
-        <h1 className="text-3xl font-extrabold">{copy.title}</h1>
+        <div className="flex justify-end">
+          <LanguageSwitcher />
+        </div>
+        <h1 className="mt-2 text-3xl font-extrabold">{copy.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{copy.subtitle}</p>
         {!success ? (
           <form onSubmit={submit} className="mt-6 space-y-4">
@@ -90,7 +98,7 @@ function ResetPasswordPage() {
             </Button>
           </form>
         ) : (
-          <Button className="mt-6 w-full" onClick={() => navigate({ to: "/account" })}>
+          <Button className="mt-6 w-full" onClick={() => navigate({ to: localizedPath("/account", locale) as never })}>
             {copy.goToAccount}
           </Button>
         )}

@@ -129,6 +129,15 @@ const WELCOME_COPY: Record<string, WelcomeCopy> = {
 
 const DEFAULT_WELCOME_COPY = WELCOME_COPY["en"] as WelcomeCopy;
 
+// AutoVere's multilingual URL scheme: English lives at the root, every other language has a
+// dedicated path segment (matching src/lib/i18n.tsx exactly).
+const LOCALE_TO_URL_LANG: Record<string, string | null> = { en: null, no: "no", sv: "se", da: "dk", de: "de", nl: "nl", fr: "fr", pl: "pl" };
+
+function loginPathForLocale(locale: string | undefined): string {
+  const urlLang = locale ? LOCALE_TO_URL_LANG[locale] : undefined;
+  return urlLang ? `/${urlLang}/login` : "/login";
+}
+
 function welcomeCopyFor(locale: string | undefined): WelcomeCopy {
   return WELCOME_COPY[locale ?? ""] ?? DEFAULT_WELCOME_COPY;
 }
@@ -154,7 +163,7 @@ async function provisionPasswordAccount(email: string, locale: string | undefine
     `;
     if (!process.env["GMAIL_USER"] || !process.env["GMAIL_APP_PASSWORD"]) return;
     const copy = welcomeCopyFor(locale);
-    const loginUrl = `${authBaseUrl()}/login`;
+    const loginUrl = `${authBaseUrl()}${loginPathForLocale(locale)}`;
     const transport = nodemailer.createTransport({ service: "gmail", auth: { user: process.env["GMAIL_USER"], pass: process.env["GMAIL_APP_PASSWORD"] } });
     await transport.sendMail({
       from: process.env["GMAIL_USER"],

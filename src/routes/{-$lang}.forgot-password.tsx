@@ -1,10 +1,12 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
 import { forgotPasswordCopy } from "@/lib/login-i18n";
 
-export const Route = createFileRoute("/forgot-password")({ component: ForgotPasswordPage });
+export const Route = createFileRoute("/{-$lang}/forgot-password")({ component: ForgotPasswordPage });
 
 function ForgotPasswordPage() {
   const { locale } = useLocale();
@@ -19,7 +21,7 @@ function ForgotPasswordPage() {
     setLoading(true);
     setMessage("");
     try {
-      const response = await fetch("/api/login?action=forgot-password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
+      const response = await fetch("/api/login?action=forgot-password", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, locale }) });
       const data = (await response.json().catch(() => ({}))) as { code?: string };
       if (!response.ok && data.code === "rate_limited") {
         setMessage(copy.errorRateLimited);
@@ -41,9 +43,12 @@ function ForgotPasswordPage() {
   return (
     <main className="bg-scenic flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
       <div className="panel w-full max-w-md p-6">
-        <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground">
-          {copy.back}
-        </Link>
+        <div className="flex items-center justify-between gap-3">
+          <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground">
+            {copy.back}
+          </Link>
+          <LanguageSwitcher />
+        </div>
         <h1 className="mt-8 text-3xl font-extrabold">{copy.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{copy.subtitle}</p>
         {!sent && (

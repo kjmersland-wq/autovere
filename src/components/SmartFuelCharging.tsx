@@ -1,7 +1,7 @@
 import { Fuel, Lock, Plug, Zap } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { Link } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
 import { formatCurrency, type CurrencyCode } from "@/lib/currency";
 import type { SmartFuelCopy } from "@/lib/smart-fuel-i18n";
 import type { FuelStation, SmartCharger } from "@/lib/geo";

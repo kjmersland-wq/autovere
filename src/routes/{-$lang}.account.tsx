@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { AppLink as Link, localizedPath } from "@/components/AppLink";
 import { useEffect, useState } from "react";
 import {
   ArrowLeft,
@@ -22,14 +23,14 @@ import {
 import { Button } from "@/components/ui/button";
 import { ContactModal } from "@/components/ContactModal";
 import { marketingCopy, type PricingFeature } from "@/lib/marketing-i18n";
-import { useLocale } from "@/lib/i18n";
+import { useLocale, type Locale } from "@/lib/i18n";
 import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { getAccountCopy } from "@/lib/account-i18n";
 import { partnerCopy } from "@/lib/partner-i18n";
 import { openPrintReport } from "@/lib/print-report";
 import { AccountShell, EmptyState, type AccountNavItem } from "@/components/account/AccountFrame";
 
-export const Route = createFileRoute("/account")({ component: AccountPage });
+export const Route = createFileRoute("/{-$lang}/account")({ component: AccountPage });
 
 type Invoice = { id: string; amount: number; currency: string; date: string; url: string | null; pdfUrl: string | null };
 type PaymentMethod = { brand: string; last4: string } | null;
@@ -78,8 +79,15 @@ async function jsonFetch<T>(url: string, init?: RequestInit): Promise<T> {
 }
 
 function AccountPage() {
-  const { locale, setLocale } = useLocale();
+  const { locale } = useLocale();
   const copy = getAccountCopy(locale);
+  const navigate = useNavigate();
+  // Unlike the top-nav language switcher (which always goes to the language root), changing
+  // language here should keep the user on /account in the new language — it's a settings
+  // control, not a "start over" action.
+  function changeAccountLanguage(next: string) {
+    navigate({ to: localizedPath("/account", next as Locale) as never });
+  }
   const [state, setState] = useState<"loading" | "loggedOut" | "loggedIn">("loading");
   const [data, setData] = useState<MeResponse | null>(null);
   const [loggingOut, setLoggingOut] = useState(false);
@@ -187,7 +195,7 @@ function AccountPage() {
     try {
       await fetch("/api/account?action=logout", { method: "POST" });
     } finally {
-      window.location.href = "/";
+      window.location.href = localizedPath("/", locale);
     }
   }
 
@@ -210,7 +218,7 @@ function AccountPage() {
     try {
       await fetch("/api/account?action=delete", { method: "POST" });
     } finally {
-      window.location.href = "/";
+      window.location.href = localizedPath("/", locale);
     }
   }
 
@@ -479,7 +487,7 @@ function AccountPage() {
             {section === "vehicles" && <VehiclesSection copy={copy} />}
             {section === "places" && <PlacesSection copy={copy} />}
 
-            {section === "preferences" && <PreferencesSection copy={copy} locale={locale} setLocale={setLocale} />}
+            {section === "preferences" && <PreferencesSection copy={copy} locale={locale} setLocale={changeAccountLanguage} />}
 
             {section === "profile" && (
               <section className="space-y-6">
@@ -694,7 +702,7 @@ function TripsSection({ copy, locale, dateFormatter }: CopyProps & { locale: str
     } catch {
       /* storage unavailable */
     }
-    window.location.href = "/";
+    window.location.href = localizedPath("/", locale as Locale);
   }
 
   const tripVehicleLabel: Record<string, string> = { petrol: copy.vehicles.typePetrol, diesel: copy.vehicles.typeDiesel, ev: copy.vehicles.typeEv };
@@ -1073,6 +1081,7 @@ function PreferencesSection({ copy, locale, setLocale }: CopyProps & { locale: s
             <option value="pl">Polski</option>
             <option value="sv">Svenska</option>
             <option value="fr">Français</option>
+            <option value="da">Dansk</option>
           </select>
         </div>
         <div>

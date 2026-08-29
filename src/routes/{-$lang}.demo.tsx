@@ -1,4 +1,5 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
 import { useState } from "react";
 import {
   Bookmark,
@@ -24,7 +25,7 @@ import { marketingCopy } from "@/lib/marketing-i18n";
 import { openPrintReport } from "@/lib/print-report";
 import { AccountShell, EmptyState, type AccountNavItem } from "@/components/account/AccountFrame";
 
-export const Route = createFileRoute("/demo")({
+export const Route = createFileRoute("/{-$lang}/demo")({
   component: DemoPage,
   head: () => ({ meta: [{ title: "AutoVere Demo — the full Pro experience" }, { name: "robots", content: "noindex" }] }),
 });

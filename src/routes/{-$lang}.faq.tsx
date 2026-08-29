@@ -1,8 +1,10 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
 import { ArrowLeft, Search } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 
 import { ContactModal } from "@/components/ContactModal";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { AnchorLink } from "@/components/AnchorLink";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
@@ -11,7 +13,7 @@ import { marketingCopy } from "@/lib/marketing-i18n";
 import { shareLinkCopy } from "@/lib/share-i18n";
 import { faqSchema } from "@/lib/seo";
 
-export const Route = createFileRoute("/faq")({
+export const Route = createFileRoute("/{-$lang}/faq")({
   head: () => ({
     meta: [
       { title: "AutoVere Help & FAQ — Tolls, Vignettes, EV Charging & Accounts" },
@@ -55,7 +57,10 @@ function FaqPage() {
   return (
     <main className="bg-scenic min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-4xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"><ArrowLeft className="size-4" /> {copy.back}</Link>
+        <div className="flex items-center justify-between gap-3">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"><ArrowLeft className="size-4" /> {copy.back}</Link>
+          <LanguageSwitcher />
+        </div>
         <header className="mt-10 max-w-3xl">
           <p className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-primary">AUTOVERE</p>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">{copy.title}</h1>

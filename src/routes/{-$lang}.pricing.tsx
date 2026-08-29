@@ -1,9 +1,11 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute } from "@tanstack/react-router";
+import { AppLink as Link } from "@/components/AppLink";
 import { ArrowLeft, Check, Sparkles } from "lucide-react";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { AnchorLink } from "@/components/AnchorLink";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useLocale } from "@/lib/i18n";
 import { annualLabels, checkoutLabels, comparisonStateLabels, marketingCopy } from "@/lib/marketing-i18n";
 import { usePartner } from "@/lib/partner-context";
@@ -68,9 +70,12 @@ function PricingPage() {
   return (
     <main className="bg-scenic min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-6xl">
-        <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
-          <ArrowLeft className="size-4" /> {copy.back}
-        </Link>
+        <div className="flex items-center justify-between gap-3">
+          <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <ArrowLeft className="size-4" /> {copy.back}
+          </Link>
+          <LanguageSwitcher />
+        </div>
         <header className="mt-10 max-w-3xl">
           <p className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-primary">AUTOVERE</p>
           <h1 className="mt-3 text-3xl font-extrabold tracking-tight sm:text-5xl">{copy.pricingTitle}</h1>
@@ -157,7 +162,7 @@ function PricingPage() {
   );
 }
 
-export const Route = createFileRoute("/pricing")({
+export const Route = createFileRoute("/{-$lang}/pricing")({
   head: () => ({
     meta: [
       { title: "AutoVere Pricing — Free, Pro & Business Road-Trip Planning" },

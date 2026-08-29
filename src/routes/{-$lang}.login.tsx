@@ -1,10 +1,12 @@
-import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { AppLink as Link, localizedPath } from "@/components/AppLink";
+import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { FormEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
 import { loginCopy } from "@/lib/login-i18n";
 
-export const Route = createFileRoute("/login")({ component: LoginPage });
+export const Route = createFileRoute("/{-$lang}/login")({ component: LoginPage });
 
 function LoginPage() {
   const { locale } = useLocale();
@@ -29,7 +31,7 @@ function LoginPage() {
         else setMessage(copy.errorGeneric);
         return;
       }
-      navigate({ to: "/account" });
+      navigate({ to: localizedPath("/account", locale) as never });
     } catch {
       setMessage(copy.errorGeneric);
     } finally {
@@ -42,7 +44,7 @@ function LoginPage() {
     setLoading(true);
     setMessage("");
     try {
-      const response = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email }) });
+      const response = await fetch("/api/login", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email, locale }) });
       if (!response.ok) throw new Error(copy.errorGeneric);
       setMessage(copy.checkEmail);
     } catch {
@@ -55,9 +57,12 @@ function LoginPage() {
   return (
     <main className="bg-scenic flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
       <div className="panel w-full max-w-md p-6">
-        <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
-          {copy.back}
-        </Link>
+        <div className="flex items-center justify-between gap-3">
+          <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
+            {copy.back}
+          </Link>
+          <LanguageSwitcher />
+        </div>
         <h1 className="mt-8 text-3xl font-extrabold">{copy.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{mode === "password" ? copy.subtitle : copy.magicLinkSubtitle}</p>
 
