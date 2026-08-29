@@ -291,6 +291,18 @@ function AccountPage() {
       eyebrow={copy.eyebrow}
       title={copy.welcome(friendlyName)}
       subtitle={subscription ? copy.subtitleActive : copy.subtitleFree}
+      // Rendered in the shell's persistent header so admin access stays visible on every
+      // account tab, not just Overview (where the equivalent action button below also lives).
+      badge={
+        isAdmin ? (
+          <Link
+            to="/admin"
+            className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary transition-colors hover:bg-primary/25"
+          >
+            <Lock className="size-3.5" /> {copy.adminLink}
+          </Link>
+        ) : undefined
+      }
       nav={nav}
       active={section}
       onSelect={setSection}
@@ -339,7 +351,7 @@ function AccountPage() {
                     {isAdmin && (
                       <Link to="/admin">
                         <Button variant="secondary">
-                          <Lock className="mr-1.5 size-3.5" /> Admin
+                          <Lock className="mr-1.5 size-3.5" /> {copy.adminLink}
                         </Button>
                       </Link>
                     )}
