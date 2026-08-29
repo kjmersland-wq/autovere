@@ -217,10 +217,11 @@
  * Fixed European road-trip background photograph (mountains, lake, scenic road, motorhome),
  * layered behind the existing dark surface. A left-to-right gradient keeps the left edge (where
  * page headlines and intro text typically sit) darker and clearly readable, while the image
- * reads much more strongly toward the right. The same image and treatment are used on every
- * page and in every language — no per-page or per-locale variation. Dark-mode only: a moody
- * photo doesn't suit the light theme, so it's suppressed there entirely and the page falls back
- * to its plain background colour.
+ * reads much more strongly toward the right. The same image and positioning are used on every
+ * page and in every language — no per-page or per-locale variation. Shown in both themes, but
+ * with a different overlay per theme rather than one shared formula: light mode uses dark text
+ * on the bare page background, which is far more fragile against a busy photo than dark mode's
+ * light text is, so its veil stays noticeably more opaque to keep that text safely readable.
  */
 .bg-scenic {
   position: relative;
@@ -231,6 +232,13 @@
   position: fixed;
   inset: 0;
   z-index: -1;
+  background-size: cover;
+  background-position: 80% center;
+  background-repeat: no-repeat;
+  pointer-events: none;
+}
+
+:root:not(.light) .bg-scenic::before {
   background-image:
     linear-gradient(
       100deg,
@@ -239,14 +247,17 @@
       color-mix(in oklch, var(--color-background) 18%, transparent) 100%
     ),
     url("/backgrounds/bg-scenic.jpg");
-  background-size: cover;
-  background-position: 80% center;
-  background-repeat: no-repeat;
-  pointer-events: none;
 }
 
-.light .bg-scenic::before {
-  content: none;
+:root.light .bg-scenic::before {
+  background-image:
+    linear-gradient(
+      100deg,
+      color-mix(in oklch, var(--color-background) 88%, transparent) 0%,
+      color-mix(in oklch, var(--color-background) 78%, transparent) 45%,
+      color-mix(in oklch, var(--color-background) 70%, transparent) 100%
+    ),
+    url("/backgrounds/bg-scenic.jpg");
 }
 
 @media (max-width: 767px) {
