@@ -186,9 +186,10 @@ function DemoPage() {
           <section className="panel p-5 sm:p-7">
             <h2 className="text-xl font-bold">What's unlocked on this plan</h2>
             <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-              {proPlan.features.map((feature) => (
-                <li key={feature} className="flex gap-2 text-sm text-muted-foreground">
-                  <Check className="mt-0.5 size-4 shrink-0 text-primary" /> <span>{feature}</span>
+              {proPlan.features.map((feature, featureIndex) => (
+                <li key={featureIndex} className="flex gap-2 text-sm text-muted-foreground">
+                  <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                  {typeof feature === "string" ? <span>{feature}</span> : <span><span className="block font-semibold text-foreground">{feature.title}</span><span className="mt-0.5 block text-xs leading-relaxed">{feature.detail}</span></span>}
                 </li>
               ))}
             </ul>

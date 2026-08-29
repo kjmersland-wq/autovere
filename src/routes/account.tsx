@@ -21,7 +21,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ContactModal } from "@/components/ContactModal";
-import { marketingCopy } from "@/lib/marketing-i18n";
+import { marketingCopy, type PricingFeature } from "@/lib/marketing-i18n";
 import { useLocale } from "@/lib/i18n";
 import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
 import { getAccountCopy } from "@/lib/account-i18n";
@@ -64,7 +64,7 @@ type Settings = { language: string | null; currency: CurrencyCode | null; units:
 const proPlan = marketingCopy.en.plans[1]!;
 const businessPlan = marketingCopy.en.plans[2]!;
 
-function featuresForTier(tier: Subscription["tier"]): string[] {
+function featuresForTier(tier: Subscription["tier"]): PricingFeature[] {
   if (tier === "business") return [...proPlan.features, ...businessPlan.features];
   if (tier === "pro") return proPlan.features;
   return [];
@@ -297,9 +297,10 @@ function AccountPage() {
                   <section className="panel p-5 sm:p-7">
                     <h2 className="text-xl font-bold">{copy.unlocked.title}</h2>
                     <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-                      {features.map((feature) => (
-                        <li key={feature} className="flex gap-2 text-sm text-muted-foreground">
-                          <Check className="mt-0.5 size-4 shrink-0 text-primary" /> <span>{feature}</span>
+                      {features.map((feature, featureIndex) => (
+                        <li key={featureIndex} className="flex gap-2 text-sm text-muted-foreground">
+                          <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                          {typeof feature === "string" ? <span>{feature}</span> : <span><span className="block font-semibold text-foreground">{feature.title}</span><span className="mt-0.5 block text-xs leading-relaxed">{feature.detail}</span></span>}
                         </li>
                       ))}
                     </ul>
@@ -308,9 +309,10 @@ function AccountPage() {
                   <section className="panel p-5 sm:p-7">
                     <h2 className="text-xl font-bold">{copy.unlocked.upgradeTitle}</h2>
                     <ul className="mt-5 grid gap-3 sm:grid-cols-2">
-                      {proPlan.features.map((feature) => (
-                        <li key={feature} className="flex gap-2 text-sm text-muted-foreground">
-                          <Check className="mt-0.5 size-4 shrink-0 text-muted-foreground/40" /> <span>{feature}</span>
+                      {proPlan.features.map((feature, featureIndex) => (
+                        <li key={featureIndex} className="flex gap-2 text-sm text-muted-foreground">
+                          <Check className="mt-0.5 size-4 shrink-0 text-muted-foreground/40" />
+                          {typeof feature === "string" ? <span>{feature}</span> : <span><span className="block font-semibold text-foreground">{feature.title}</span><span className="mt-0.5 block text-xs leading-relaxed">{feature.detail}</span></span>}
                         </li>
                       ))}
                     </ul>
