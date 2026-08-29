@@ -8,7 +8,7 @@ function LegalPage() {
   const t = useT();
 
   return (
-    <main className="bg-scenic bg-scenic--minimal min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
+    <main className="bg-scenic min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-3xl">
         <div className="panel rounded-[var(--radius-3xl)] border border-border/70 bg-surface/90 p-5 shadow-[var(--shadow-elevated)] backdrop-blur-md sm:p-8">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">

@@ -232,7 +232,7 @@ function AccountPage() {
 
   if (state === "loading") {
     return (
-      <main className="bg-scenic bg-scenic--minimal flex min-h-screen items-center justify-center bg-background text-foreground">
+      <main className="bg-scenic flex min-h-screen items-center justify-center bg-background text-foreground">
         <p className="text-sm text-muted-foreground">{copy.loading}</p>
       </main>
     );
@@ -240,7 +240,7 @@ function AccountPage() {
 
   if (state === "loggedOut" || !data || "error" in data) {
     return (
-      <main className="bg-scenic bg-scenic--minimal flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
+      <main className="bg-scenic flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
         <div className="panel w-full max-w-md p-6">
           <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">
             <ArrowLeft className="mr-1 inline size-4" /> {copy.backToPlanner}

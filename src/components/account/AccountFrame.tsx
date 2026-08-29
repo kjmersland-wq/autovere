@@ -47,7 +47,6 @@ export function AccountShell<Section extends string>({
   active,
   onSelect,
   children,
-  bgIntensity = "minimal",
 }: {
   backLabel: string;
   eyebrow: string;
@@ -59,12 +58,9 @@ export function AccountShell<Section extends string>({
   active: Section;
   onSelect: (key: Section) => void;
   children: ReactNode;
-  // The real /account page (dense, functional) defaults to a barely-there background; the
-  // /demo showcase — which shares this exact shell — opts into the more visible "subtle" level.
-  bgIntensity?: "subtle" | "minimal";
 }) {
   return (
-    <main className={`bg-scenic bg-scenic--${bgIntensity} min-h-screen bg-background px-4 py-10 text-foreground md:px-8`}>
+    <main className="bg-scenic min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">

@@ -43,7 +43,7 @@ function ResetPasswordPage() {
 
   if (!token) {
     return (
-      <main className="bg-scenic bg-scenic--minimal flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
+      <main className="bg-scenic flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
         <div className="panel w-full max-w-md p-6 text-center">
           <p className="text-sm text-muted-foreground">{copy.invalidLink}</p>
           <Link to="/forgot-password" className="mt-4 inline-block">
@@ -55,7 +55,7 @@ function ResetPasswordPage() {
   }
 
   return (
-    <main className="bg-scenic bg-scenic--minimal flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
+    <main className="bg-scenic flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
       <div className="panel w-full max-w-md p-6">
         <h1 className="text-3xl font-extrabold">{copy.title}</h1>
         <p className="mt-3 text-sm text-muted-foreground">{copy.subtitle}</p>

@@ -165,7 +165,6 @@ function DemoPage() {
       nav={nav}
       active={section}
       onSelect={setSection}
-      bgIntensity="subtle"
     >
       {section === "overview" && (
         <>

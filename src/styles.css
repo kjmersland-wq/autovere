@@ -216,9 +216,10 @@
 /*
  * Fixed European road-trip background photograph (mountains, lake, scenic road, motorhome),
  * layered behind the existing dark surface with a strong overlay so real content always stays
- * fully readable. Applied per page via an intensity modifier — never redesigns a page, just
- * sits behind it. Dark-mode only: a moody photo doesn't suit the light theme, so it's suppressed
- * there entirely and the page falls back to its plain background colour.
+ * fully readable. The same image and the same overlay strength are used on every page and in
+ * every language — no per-page or per-locale variation. Dark-mode only: a moody photo doesn't
+ * suit the light theme, so it's suppressed there entirely and the page falls back to its plain
+ * background colour.
  */
 .bg-scenic {
   position: relative;
@@ -229,7 +230,13 @@
   position: fixed;
   inset: 0;
   z-index: -1;
-  background-image: url("/backgrounds/bg-scenic.jpg");
+  background-image:
+    linear-gradient(
+      180deg,
+      color-mix(in oklch, var(--color-background) 82%, transparent) 0%,
+      color-mix(in oklch, var(--color-background) 88%, transparent) 100%
+    ),
+    url("/backgrounds/bg-scenic.jpg");
   background-size: cover;
   background-position: 80% center;
   background-repeat: no-repeat;
@@ -238,42 +245,6 @@
 
 .light .bg-scenic::before {
   content: none;
-}
-
-/* Homepage / hero: the photo is most visible here, still fading to fully opaque background
-   colour behind the headline and form on the left. */
-.bg-scenic--hero::before {
-  background-image:
-    linear-gradient(
-      100deg,
-      var(--color-background) 8%,
-      color-mix(in oklch, var(--color-background) 45%, transparent) 55%,
-      color-mix(in oklch, var(--color-background) 20%, transparent) 100%
-    ),
-    url("/backgrounds/bg-scenic.jpg");
-}
-
-/* Content/marketing pages (FAQ, partners, demo, legal): a calm, mostly-uniform wash — present
-   but clearly secondary to the page's own text and cards. */
-.bg-scenic--subtle::before {
-  background-image:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, var(--color-background) 78%, transparent) 0%,
-      color-mix(in oklch, var(--color-background) 85%, transparent) 100%
-    ),
-    url("/backgrounds/bg-scenic.jpg");
-}
-
-/* Dense/functional pages (account, admin, pricing, auth forms): barely-there ambiance only. */
-.bg-scenic--minimal::before {
-  background-image:
-    linear-gradient(
-      180deg,
-      color-mix(in oklch, var(--color-background) 93%, transparent) 0%,
-      color-mix(in oklch, var(--color-background) 96%, transparent) 100%
-    ),
-    url("/backgrounds/bg-scenic.jpg");
 }
 
 @media (max-width: 767px) {

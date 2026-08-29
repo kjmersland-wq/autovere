@@ -53,7 +53,7 @@ function FaqPage() {
   }, []);
 
   return (
-    <main className="bg-scenic bg-scenic--subtle min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
+    <main className="bg-scenic min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-4xl">
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground"><ArrowLeft className="size-4" /> {copy.back}</Link>
         <header className="mt-10 max-w-3xl">

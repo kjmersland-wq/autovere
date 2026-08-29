@@ -622,7 +622,7 @@ function Index() {
   }
 
   return (
-    <main className="bg-scenic bg-scenic--hero min-h-screen overflow-x-hidden pb-24 md:pb-0">
+    <main className="bg-scenic min-h-screen overflow-x-hidden pb-24 md:pb-0">
       <section className="hero-glow border-b border-border print-hidden">
         <div className="mx-auto max-w-6xl px-5 pb-10 pt-12 sm:pt-16">
           <div className="flex flex-wrap items-center gap-x-3 gap-y-3">
