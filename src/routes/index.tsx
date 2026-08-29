@@ -7,6 +7,7 @@ import { ContactModal } from "@/components/ContactModal";
 import { ShareModal } from "@/components/ShareModal";
 import { FeatureHighlights } from "@/components/FeatureHighlights";
 import { RouteMap } from "@/components/RouteMap";
+import { SmartFuelCharging, SmartFuelChargingUpgrade } from "@/components/SmartFuelCharging";
 import { Breakdown, EvSavingsCard, RouteCard, TradeoffBanner } from "@/components/Comparison";
 import { VignetteChecklist } from "@/components/VignetteChecklist";
 import { SafetyRegulations } from "@/components/SafetyRegulations";
@@ -15,7 +16,7 @@ import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighligh
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
-import { fetchFastChargers, fetchMultiStopRoute, fetchScenicHighlights, type Charger, type Place, type RouteResult, type RouteVariantKey, type ScenicHighlight } from "@/lib/geo";
+import { fetchFastChargers, fetchMultiStopRoute, fetchScenicHighlights, fetchSmartFuelAndCharging, type Charger, type FuelStation, type Place, type RouteResult, type RouteVariantKey, type ScenicHighlight, type SmartCharger } from "@/lib/geo";
 import {
   appleMapsUrl,
   buildGpx,
@@ -33,6 +34,7 @@ import { marketingCopy } from "@/lib/marketing-i18n";
 import { partnerCopy } from "@/lib/partner-i18n";
 import { getAccountCopy } from "@/lib/account-i18n";
 import { chargerCopy } from "@/lib/charger-i18n";
+import { smartFuelCopy } from "@/lib/smart-fuel-i18n";
 import { openPrintReport } from "@/lib/print-report";
 
 export const Route = createFileRoute("/")({
@@ -255,6 +257,10 @@ function Index() {
   const [legalOpen, setLegalOpen] = useState(false);
   const [languageOpen, setLanguageOpen] = useState(false);
   const [proTier, setProTier] = useState<"pro" | "business" | null>(null);
+  const [smartMaxKm, setSmartMaxKm] = useState(25);
+  const [smartLoading, setSmartLoading] = useState(false);
+  const [smartChargers, setSmartChargers] = useState<SmartCharger[]>([]);
+  const [smartFuelStations, setSmartFuelStations] = useState<FuelStation[]>([]);
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -456,6 +462,37 @@ function Index() {
     ? evComparisonEstimates.find((e) => e.key === selectedEst.key)
     : undefined;
   const selectedRoute = selectedEst ? routes[selectedEst.key] : undefined;
+
+  useEffect(() => {
+    if (!proTier || !selectedRoute) {
+      setSmartChargers([]);
+      setSmartFuelStations([]);
+      return;
+    }
+    let cancelled = false;
+    const controller = new AbortController();
+    setSmartLoading(true);
+    fetchSmartFuelAndCharging(selectedRoute.coords, smartMaxKm, controller.signal)
+      .then(({ chargers: nearbyChargers, fuelStations }) => {
+        if (cancelled) return;
+        setSmartChargers(nearbyChargers);
+        setSmartFuelStations(fuelStations);
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setSmartChargers([]);
+          setSmartFuelStations([]);
+        }
+      })
+      .finally(() => {
+        if (!cancelled) setSmartLoading(false);
+      });
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [proTier, selectedRoute, smartMaxKm]);
+
   const cheapestKey = estimates.length
     ? estimates.reduce((a, b) => (a.total <= b.total ? a : b)).key
     : null;
@@ -744,6 +781,26 @@ function Index() {
               startCountry={submitted?.from?.country}
               endCountry={submitted?.to?.country}
             />
+          </div>
+          <div className="mt-8">
+            {proTier ? (
+              <SmartFuelCharging
+                copy={smartFuelCopy[locale] ?? smartFuelCopy.en}
+                locale={locale}
+                currency={currency}
+                chargers={smartChargers}
+                fuelStations={smartFuelStations}
+                loading={smartLoading}
+                maxDistanceKm={smartMaxKm}
+                onMaxDistanceChange={setSmartMaxKm}
+                onAddStop={(stop) => {
+                  setForm((current) => current.stops.some((item) => item?.id === stop.id) ? current : { ...current, stops: [...current.stops, stop] });
+                  toast.success(chargerCopy[locale].added);
+                }}
+              />
+            ) : (
+              <SmartFuelChargingUpgrade copy={smartFuelCopy[locale] ?? smartFuelCopy.en} />
+            )}
           </div>
           <div className="mt-8">
             <SafetyRegulations countryCodes={selectedEst.legs.map((leg) => leg.code)} />

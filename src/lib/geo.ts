@@ -1,4 +1,4 @@
-import type { LatLng } from "./countries";
+import { countryAt, type LatLng } from "./countries";
 
 export type Place = {
   id: string;
@@ -287,6 +287,141 @@ export async function fetchFastChargers(
     });
   }
   return chargers.sort((a, b) => a.atKm - b.atKm);
+}
+
+// --- Smart Fuel & Charging (AutoVere Pro) ---------------------------------------------------
+// Charging: served from the server cache (api/chargers.ts, synced from OpenStreetMap/Overpass).
+// Fuel: France's live per-station feed comes from the same server cache; Austria's API is a
+// per-location search service (not a bulk export), so it's queried live, client-side, only for
+// route points that actually fall inside Austria — the same on-demand pattern already used for
+// Nominatim/OSRM/Overpass elsewhere in this file. Every other country honestly reports no live
+// price data rather than showing an invented number — see the Smart Fuel & Charging audit for
+// which sources were verified and why the rest aren't wired up yet.
+
+export type SmartConnection = { connectorType: string; currentType: "AC" | "DC"; cableStatus: "attached" | "bring_own"; powerKw: number | null };
+
+export type SmartCharger = {
+  id: string;
+  name: string;
+  operator: string | null;
+  lat: number;
+  lon: number;
+  country: string | null;
+  connections: SmartConnection[];
+  source: string;
+  atKm: number;
+};
+
+export type FuelPrice = { fuelType: "petrol" | "diesel"; amount: number; currency: string; updatedAt: string };
+
+export type FuelStation = {
+  id: string;
+  name: string;
+  brand: string | null;
+  lat: number;
+  lon: number;
+  country: string;
+  prices: FuelPrice[];
+  source: string;
+  atKm: number;
+};
+
+type ChargerAndFuelCache = {
+  syncedAt: string;
+  stations: unknown[];
+  smartChargers: Omit<SmartCharger, "atKm">[];
+  fuelStations: Omit<FuelStation, "atKm">[];
+};
+
+function nearestAtKm(coords: LatLng[], cum: number[], point: LatLng): { atKm: number; distanceKm: number } {
+  let best = 0;
+  let bestD = Infinity;
+  for (let i = 0; i < coords.length; i += 5) {
+    const d = haversineKm(point, coords[i]!);
+    if (d < bestD) {
+      bestD = d;
+      best = i;
+    }
+  }
+  return { atKm: cum[best] ?? 0, distanceKm: bestD };
+}
+
+async function fetchAustriaFuelStations(coords: LatLng[], cum: number[], signal?: AbortSignal): Promise<FuelStation[]> {
+  const austrianAnchors = samplePolyline(coords, 80).filter(({ pt }) => countryAt(pt) === "AT");
+  if (!austrianAnchors.length) return [];
+  const sampled = austrianAnchors.filter((_, i) => i % Math.max(1, Math.ceil(austrianAnchors.length / 3)) === 0).slice(0, 3);
+  const byId = new Map<string, FuelStation>();
+  for (const { pt } of sampled) {
+    for (const [fuelType, code] of [["diesel", "DIE"], ["petrol", "SUP"]] as const) {
+      try {
+        const url = `https://api.e-control.at/sprit/1.0/search/gas-stations/by-address?latitude=${pt[0]}&longitude=${pt[1]}&fuelType=${code}`;
+        const res = await fetch(url, { signal: signal ?? null });
+        if (!res.ok) continue;
+        const data = (await res.json()) as Array<{
+          id: number; name: string;
+          location: { latitude: number; longitude: number; address?: string; city?: string };
+          prices?: Array<{ fuelType: string; amount: number }>;
+        }>;
+        for (const station of data) {
+          const amount = station.prices?.find((p) => p.fuelType === code)?.amount;
+          if (amount == null) continue;
+          const id = `at-${station.id}`;
+          const { atKm, distanceKm } = nearestAtKm(coords, cum, [station.location.latitude, station.location.longitude]);
+          if (distanceKm > 15) continue;
+          const existing = byId.get(id);
+          const price: FuelPrice = { fuelType, amount, currency: "EUR", updatedAt: new Date().toISOString() };
+          if (existing) existing.prices.push(price);
+          else byId.set(id, { id, name: station.name || station.location.address || "Tankstelle", brand: null, lat: station.location.latitude, lon: station.location.longitude, country: "AT", prices: [price], source: "e-control.at", atKm });
+        }
+      } catch {
+        // Best-effort — Austria fuel prices are a nice-to-have layer, never block the rest of Smart Fuel & Charging.
+      }
+    }
+  }
+  return [...byId.values()];
+}
+
+export async function fetchSmartFuelAndCharging(
+  coords: LatLng[],
+  maxDistanceKm: number,
+  signal?: AbortSignal,
+): Promise<{ chargers: SmartCharger[]; fuelStations: FuelStation[] }> {
+  const cum = cumulativeKm(coords);
+  let chargers: SmartCharger[] = [];
+  let fuelStations: FuelStation[] = [];
+
+  try {
+    const cached = await fetch("/api/chargers", { signal: signal ?? null });
+    if (cached.ok) {
+      const data = (await cached.json()) as ChargerAndFuelCache;
+      chargers = (data.smartChargers ?? [])
+        .map((charger) => {
+          const { atKm, distanceKm } = nearestAtKm(coords, cum, [charger.lat, charger.lon]);
+          return { ...charger, atKm, _distanceKm: distanceKm };
+        })
+        .filter((c) => c._distanceKm <= maxDistanceKm)
+        .sort((a, b) => a.atKm - b.atKm)
+        .map(({ _distanceKm: _ignored, ...c }) => c);
+      fuelStations = (data.fuelStations ?? [])
+        .map((station) => {
+          const { atKm, distanceKm } = nearestAtKm(coords, cum, [station.lat, station.lon]);
+          return { ...station, atKm, _distanceKm: distanceKm };
+        })
+        .filter((s) => s._distanceKm <= maxDistanceKm)
+        .sort((a, b) => a.atKm - b.atKm)
+        .map(({ _distanceKm: _ignored, ...s }) => s);
+    }
+  } catch {
+    // No server cache available yet — Smart Fuel & Charging simply shows nothing for this trip
+    // rather than falling back to a slow whole-route live query for every connector/price source.
+  }
+
+  const austria = await fetchAustriaFuelStations(coords, cum, signal).catch(() => []);
+  const seen = new Set(fuelStations.map((s) => s.id));
+  for (const station of austria) if (!seen.has(station.id)) fuelStations.push(station);
+  fuelStations.sort((a, b) => a.atKm - b.atKm);
+
+  return { chargers, fuelStations };
 }
 
 const scenicCache = new Map<string, ScenicHighlight[]>();
