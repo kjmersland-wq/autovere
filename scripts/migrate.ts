@@ -115,9 +115,23 @@ async function main() {
     CREATE TABLE IF NOT EXISTS users (
       email TEXT PRIMARY KEY,
       first_seen_at TIMESTAMPTZ NOT NULL DEFAULT now(),
-      last_seen_at TIMESTAMPTZ NOT NULL DEFAULT now()
+      last_seen_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+      password_hash TEXT,
+      must_change_password BOOLEAN NOT NULL DEFAULT false
     )
   `;
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT`;
+  await sql`ALTER TABLE users ADD COLUMN IF NOT EXISTS must_change_password BOOLEAN NOT NULL DEFAULT false`;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS auth_attempts (
+      id BIGSERIAL PRIMARY KEY,
+      email TEXT NOT NULL,
+      kind TEXT NOT NULL,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS auth_attempts_email_kind_idx ON auth_attempts(email, kind, created_at)`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS partner_applications (

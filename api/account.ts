@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { createHmac, timingSafeEqual } from "node:crypto";
+import { createHmac, timingSafeEqual, randomBytes, scryptSync } from "node:crypto";
 import Stripe from "stripe";
 import { neon } from "@neondatabase/serverless";
 
@@ -29,6 +29,43 @@ function parseBody(body: unknown): Record<string, unknown> {
     }
   }
   return (body as Record<string, unknown>) ?? {};
+}
+
+function verifySessionToken(token: string): string | null {
+  const secret = process.env["AUTH_TOKEN_SECRET"];
+  if (!secret) return null;
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature) return null;
+  const expected = createHmac("sha256", secret).update(payload).digest();
+  const actual = Buffer.from(signature, "base64url");
+  if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
+  try {
+    const value = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { email?: unknown; exp?: unknown };
+    return typeof value.email === "string" && typeof value.exp === "number" && value.exp > Math.floor(Date.now() / 1000) ? value.email : null;
+  } catch {
+    return null;
+  }
+}
+
+function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString("hex");
+  const hash = scryptSync(password, salt, 64).toString("hex");
+  return `scrypt:${salt}:${hash}`;
+}
+
+function verifyPassword(password: string, stored: string | null): boolean {
+  if (!stored) return false;
+  const parts = stored.split(":");
+  if (parts.length !== 3 || parts[0] !== "scrypt") return false;
+  const [, salt, hashHex] = parts;
+  if (!salt || !hashHex) return false;
+  try {
+    const hashBuffer = Buffer.from(hashHex, "hex");
+    const suppliedBuffer = scryptSync(password, salt, hashBuffer.length);
+    return hashBuffer.length === suppliedBuffer.length && timingSafeEqual(hashBuffer, suppliedBuffer);
+  } catch {
+    return false;
+  }
 }
 
 function verifyAdminCookie(request: Request): boolean {
@@ -120,6 +157,20 @@ async function getMembership(email: string): Promise<{ partnerId: string; partne
   }
 }
 
+async function getAuthInfo(email: string): Promise<{ hasPassword: boolean; mustChangePassword: boolean }> {
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (!databaseUrl) return { hasPassword: false, mustChangePassword: false };
+  try {
+    const sql = neon(databaseUrl);
+    const rows = (await sql`SELECT password_hash, must_change_password FROM users WHERE email = ${email}`) as { password_hash: string | null; must_change_password: boolean }[];
+    const row = rows[0];
+    return { hasPassword: !!row?.password_hash, mustChangePassword: row?.must_change_password ?? false };
+  } catch (error) {
+    console.error("Fetching auth info failed", error);
+    return { hasPassword: false, mustChangePassword: false };
+  }
+}
+
 async function handleMe(email: string, request: Request, response: Response) {
   // Same double-verified check used to grant free admin Pro access below — reused here as the
   // sole source of truth for whether the client is told an "Admin" link should be shown at all.
@@ -127,9 +178,12 @@ async function handleMe(email: string, request: Request, response: Response) {
   if (isAdmin) {
     // Free, permanent Pro access for the AutoVere admin account only — no Stripe customer or
     // subscription is created or touched, so this can never affect real billing or other users.
+    const authInfo = await getAuthInfo(email);
     response.status(200).json({
       email,
       isAdmin: true,
+      hasPassword: authInfo.hasPassword,
+      mustChangePassword: authInfo.mustChangePassword,
       subscription: {
         status: "active",
         plan: "AutoVere Pro — Admin",
@@ -146,22 +200,23 @@ async function handleMe(email: string, request: Request, response: Response) {
     return;
   }
   const membership = await getMembership(email);
+  const authInfo = await getAuthInfo(email);
   const stripe = getStripe();
   if (!stripe) {
-    response.status(200).json({ email, isAdmin, subscription: null, membership });
+    response.status(200).json({ email, isAdmin, hasPassword: authInfo.hasPassword, mustChangePassword: authInfo.mustChangePassword, subscription: null, membership });
     return;
   }
   try {
     const customers = await stripe.customers.list({ email, limit: 1 });
     const customer = customers.data[0];
     if (!customer) {
-      response.status(200).json({ email, isAdmin, subscription: null, membership });
+      response.status(200).json({ email, isAdmin, hasPassword: authInfo.hasPassword, mustChangePassword: authInfo.mustChangePassword, subscription: null, membership });
       return;
     }
     const subscriptions = await stripe.subscriptions.list({ customer: customer.id, status: "all", limit: 5 });
     const active = subscriptions.data.find((s) => s.status === "active" || s.status === "trialing");
     if (!active) {
-      response.status(200).json({ email, isAdmin, subscription: null, membership });
+      response.status(200).json({ email, isAdmin, hasPassword: authInfo.hasPassword, mustChangePassword: authInfo.mustChangePassword, subscription: null, membership });
       return;
     }
     const price = active.items.data[0]?.price;
@@ -199,6 +254,8 @@ async function handleMe(email: string, request: Request, response: Response) {
     response.status(200).json({
       email,
       isAdmin,
+      hasPassword: authInfo.hasPassword,
+      mustChangePassword: authInfo.mustChangePassword,
       subscription: {
         status: active.status,
         plan: plan?.label ?? price?.nickname ?? price?.id ?? "AutoVere",
@@ -214,7 +271,7 @@ async function handleMe(email: string, request: Request, response: Response) {
     });
   } catch (error) {
     console.error("Fetching subscription status failed", error);
-    response.status(200).json({ email, isAdmin, subscription: null, membership });
+    response.status(200).json({ email, isAdmin, hasPassword: authInfo.hasPassword, mustChangePassword: authInfo.mustChangePassword, subscription: null, membership });
   }
 }
 
@@ -266,6 +323,70 @@ async function handleSettingsPut(email: string, request: Request, response: Resp
       language = ${language}, currency = ${currency}, units = ${units}, notifications_email = ${notificationsEmail}, display_name = ${displayName}, updated_at = now()
   `;
   response.status(200).json({ settings: { language, currency, units, notificationsEmail, displayName } });
+}
+
+async function tooManyAttempts(email: string, kind: string, maxAttempts: number, windowMinutes: number): Promise<boolean> {
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (!databaseUrl) return false;
+  try {
+    const sql = neon(databaseUrl);
+    const rows = (await sql`
+      SELECT count(*)::int AS count FROM auth_attempts
+      WHERE email = ${email} AND kind = ${kind} AND created_at > now() - make_interval(mins => ${windowMinutes})
+    `) as { count: number }[];
+    return (rows[0]?.count ?? 0) >= maxAttempts;
+  } catch (error) {
+    console.error("Rate limit check failed", error);
+    return false;
+  }
+}
+
+async function recordAttempt(email: string, kind: string) {
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (!databaseUrl) return;
+  try {
+    const sql = neon(databaseUrl);
+    await sql`INSERT INTO auth_attempts (email, kind, created_at) VALUES (${email}, ${kind}, now())`;
+  } catch (error) {
+    console.error("Recording auth attempt failed", error);
+  }
+}
+
+async function handleChangePassword(email: string, request: Request, response: Response) {
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (!databaseUrl) {
+    response.status(500).json({ code: "not_configured", error: "Password storage is not configured." });
+    return;
+  }
+  const body = parseBody(request.body);
+  const currentPassword = typeof body["currentPassword"] === "string" ? body["currentPassword"] : "";
+  const newPassword = typeof body["newPassword"] === "string" ? body["newPassword"] : "";
+  if (newPassword.length < 8 || newPassword.length > 200) {
+    response.status(400).json({ code: "weak_password", error: "Choose a password with at least 8 characters." });
+    return;
+  }
+  if (await tooManyAttempts(email, "change-password", 8, 15)) {
+    response.status(429).json({ code: "rate_limited", error: "Too many attempts. Please wait a few minutes and try again." });
+    return;
+  }
+  await recordAttempt(email, "change-password");
+  const sql = neon(databaseUrl);
+  const rows = (await sql`SELECT password_hash FROM users WHERE email = ${email}`) as { password_hash: string | null }[];
+  const existingHash = rows[0]?.password_hash ?? null;
+  // A user who already has a password must confirm it before changing it (defense in depth
+  // against a hijacked session cookie); a user with no password yet (magic-link only) is
+  // setting one for the first time and has nothing to confirm.
+  if (existingHash && !verifyPassword(currentPassword, existingHash)) {
+    response.status(401).json({ code: "invalid_credentials", error: "Your current password is incorrect." });
+    return;
+  }
+  const newHash = hashPassword(newPassword);
+  await sql`
+    INSERT INTO users (email, first_seen_at, last_seen_at, password_hash, must_change_password)
+    VALUES (${email}, now(), now(), ${newHash}, false)
+    ON CONFLICT (email) DO UPDATE SET password_hash = ${newHash}, must_change_password = false
+  `;
+  response.status(200).json({ ok: true });
 }
 
 async function handleLogout(response: Response) {
@@ -371,7 +492,8 @@ async function handleExport(email: string, response: Response) {
 }
 
 export default async function handler(request: Request, response: Response) {
-  const email = readCookie(request, "autovere_user");
+  const sessionToken = readCookie(request, "autovere_user");
+  const email = sessionToken ? verifySessionToken(sessionToken) : null;
   if (!email) {
     response.status(401).json({ error: "Not logged in" });
     return;
@@ -387,6 +509,7 @@ export default async function handler(request: Request, response: Response) {
   if (request.method === "POST" && action === "logout") return handleLogout(response);
   if (request.method === "POST" && action === "delete") return handleDelete(email, response);
   if (request.method === "POST" && action === "billing-portal") return handleBillingPortal(email, response);
+  if (request.method === "POST" && action === "change-password") return handleChangePassword(email, request, response);
 
   response.status(405).json({ error: "Method not allowed" });
 }

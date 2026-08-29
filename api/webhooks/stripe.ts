@@ -1,6 +1,7 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { randomUUID } from "node:crypto";
+import { randomUUID, randomBytes, scryptSync } from "node:crypto";
 import Stripe from "stripe";
+import nodemailer from "nodemailer";
 import { neon } from "@neondatabase/serverless";
 
 type VercelRequest = IncomingMessage & { body?: unknown };
@@ -14,6 +15,157 @@ export const config = { api: { bodyParser: false } };
 function getStripe() {
   const secret = process.env["STRIPE_SECRET_KEY"];
   return secret ? new Stripe(secret) : null;
+}
+
+function authBaseUrl(): string {
+  const raw = (process.env["AUTH_BASE_URL"] || process.env["NEXT_PUBLIC_SITE_URL"] || "https://autovere.com").trim();
+  const embedded = raw.match(/https?:\/\/[^\s\])'"]+/);
+  const configured = (embedded ? embedded[0] : raw.replace(/^['"]|['"]$/g, "").trim()).replace(/\/$/, "");
+  return /^https?:\/\//.test(configured) ? configured : `https://${configured}`;
+}
+
+function escapeHtmlAttr(value: string): string {
+  return value.replace(/[&<>"']/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[character] ?? character);
+}
+
+function hashPassword(password: string): string {
+  const salt = randomBytes(16).toString("hex");
+  const hash = scryptSync(password, salt, 64).toString("hex");
+  return `scrypt:${salt}:${hash}`;
+}
+
+function generateTempPassword(): string {
+  const alphabet = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789";
+  const bytes = randomBytes(14);
+  let out = "";
+  for (const byte of bytes) out += alphabet[byte % alphabet.length];
+  return out;
+}
+
+type WelcomeCopy = { subject: string; heading: string; intro: string; emailLabel: string; passwordLabel: string; loginButton: string; changePasswordNote: string; footer: string };
+
+const WELCOME_COPY: Record<string, WelcomeCopy> = {
+  en: {
+    subject: "Welcome to AutoVere Pro — your login details",
+    heading: "Welcome to AutoVere Pro",
+    intro: "Your subscription is active. Here is your AutoVere account:",
+    emailLabel: "Email",
+    passwordLabel: "Temporary password",
+    loginButton: "Log in to AutoVere",
+    changePasswordNote: "For your security, please log in and set your own password under Account → Profile & Security.",
+    footer: "If you did not make this purchase, please contact support immediately.",
+  },
+  de: {
+    subject: "Willkommen bei AutoVere Pro — deine Zugangsdaten",
+    heading: "Willkommen bei AutoVere Pro",
+    intro: "Dein Abo ist aktiv. Hier sind deine AutoVere-Zugangsdaten:",
+    emailLabel: "E-Mail",
+    passwordLabel: "Temporäres Passwort",
+    loginButton: "Bei AutoVere anmelden",
+    changePasswordNote: "Bitte melde dich an und lege aus Sicherheitsgründen unter Konto → Profil & Sicherheit dein eigenes Passwort fest.",
+    footer: "Falls du diesen Kauf nicht getätigt hast, kontaktiere bitte umgehend den Support.",
+  },
+  nl: {
+    subject: "Welkom bij AutoVere Pro — je inloggegevens",
+    heading: "Welkom bij AutoVere Pro",
+    intro: "Je abonnement is actief. Dit zijn je AutoVere-inloggegevens:",
+    emailLabel: "E-mail",
+    passwordLabel: "Tijdelijk wachtwoord",
+    loginButton: "Inloggen bij AutoVere",
+    changePasswordNote: "Log voor je veiligheid in en stel je eigen wachtwoord in via Account → Profiel & beveiliging.",
+    footer: "Heb je deze aankoop niet gedaan, neem dan direct contact op met support.",
+  },
+  no: {
+    subject: "Velkommen til AutoVere Pro — innloggingen din",
+    heading: "Velkommen til AutoVere Pro",
+    intro: "Abonnementet ditt er aktivt. Her er AutoVere-kontoen din:",
+    emailLabel: "E-post",
+    passwordLabel: "Midlertidig passord",
+    loginButton: "Logg inn på AutoVere",
+    changePasswordNote: "Av sikkerhetshensyn bør du logge inn og sette ditt eget passord under Min side → Profil og sikkerhet.",
+    footer: "Hvis du ikke har gjort dette kjøpet, ta kontakt med support umiddelbart.",
+  },
+  pl: {
+    subject: "Witamy w AutoVere Pro — dane logowania",
+    heading: "Witamy w AutoVere Pro",
+    intro: "Twoja subskrypcja jest aktywna. Oto dane do Twojego konta AutoVere:",
+    emailLabel: "E-mail",
+    passwordLabel: "Hasło tymczasowe",
+    loginButton: "Zaloguj się do AutoVere",
+    changePasswordNote: "Dla bezpieczeństwa zaloguj się i ustaw własne hasło w sekcji Konto → Profil i bezpieczeństwo.",
+    footer: "Jeśli nie dokonałeś/aś tego zakupu, natychmiast skontaktuj się z pomocą techniczną.",
+  },
+  sv: {
+    subject: "Välkommen till AutoVere Pro — dina inloggningsuppgifter",
+    heading: "Välkommen till AutoVere Pro",
+    intro: "Din prenumeration är aktiv. Här är ditt AutoVere-konto:",
+    emailLabel: "E-post",
+    passwordLabel: "Tillfälligt lösenord",
+    loginButton: "Logga in på AutoVere",
+    changePasswordNote: "Av säkerhetsskäl bör du logga in och ange ett eget lösenord under Mitt konto → Profil och säkerhet.",
+    footer: "Om du inte gjorde det här köpet, kontakta supporten omedelbart.",
+  },
+  fr: {
+    subject: "Bienvenue sur AutoVere Pro — vos identifiants",
+    heading: "Bienvenue sur AutoVere Pro",
+    intro: "Votre abonnement est actif. Voici votre compte AutoVere :",
+    emailLabel: "E-mail",
+    passwordLabel: "Mot de passe temporaire",
+    loginButton: "Se connecter à AutoVere",
+    changePasswordNote: "Par sécurité, connectez-vous et définissez votre propre mot de passe dans Compte → Profil et sécurité.",
+    footer: "Si vous n'êtes pas à l'origine de cet achat, contactez immédiatement le support.",
+  },
+  da: {
+    subject: "Velkommen til AutoVere Pro — dine loginoplysninger",
+    heading: "Velkommen til AutoVere Pro",
+    intro: "Dit abonnement er aktivt. Her er din AutoVere-konto:",
+    emailLabel: "E-mail",
+    passwordLabel: "Midlertidig adgangskode",
+    loginButton: "Log ind på AutoVere",
+    changePasswordNote: "Af sikkerhedsmæssige årsager bør du logge ind og angive din egen adgangskode under Konto → Profil og sikkerhed.",
+    footer: "Hvis du ikke har foretaget dette køb, bedes du straks kontakte support.",
+  },
+};
+
+const DEFAULT_WELCOME_COPY = WELCOME_COPY["en"] as WelcomeCopy;
+
+function welcomeCopyFor(locale: string | undefined): WelcomeCopy {
+  return WELCOME_COPY[locale ?? ""] ?? DEFAULT_WELCOME_COPY;
+}
+
+async function provisionPasswordAccount(email: string, locale: string | undefined) {
+  const databaseUrl = process.env["DATABASE_URL"];
+  if (!databaseUrl) return;
+  try {
+    const sql = neon(databaseUrl);
+    const rows = (await sql`SELECT password_hash FROM users WHERE email = ${email}`) as { password_hash: string | null }[];
+    if (rows[0]?.password_hash) {
+      // An account with a password already exists (from an earlier purchase, or a self-service
+      // password set via the reset flow) — never overwrite it or re-send credentials.
+      await sql`UPDATE users SET last_seen_at = now() WHERE email = ${email}`;
+      return;
+    }
+    const tempPassword = generateTempPassword();
+    const tempHash = hashPassword(tempPassword);
+    await sql`
+      INSERT INTO users (email, first_seen_at, last_seen_at, password_hash, must_change_password)
+      VALUES (${email}, now(), now(), ${tempHash}, true)
+      ON CONFLICT (email) DO UPDATE SET password_hash = ${tempHash}, must_change_password = true, last_seen_at = now()
+    `;
+    if (!process.env["GMAIL_USER"] || !process.env["GMAIL_APP_PASSWORD"]) return;
+    const copy = welcomeCopyFor(locale);
+    const loginUrl = `${authBaseUrl()}/login`;
+    const transport = nodemailer.createTransport({ service: "gmail", auth: { user: process.env["GMAIL_USER"], pass: process.env["GMAIL_APP_PASSWORD"] } });
+    await transport.sendMail({
+      from: process.env["GMAIL_USER"],
+      to: email,
+      subject: copy.subject,
+      text: `${copy.heading}\n\n${copy.intro}\n\n${copy.emailLabel}: ${email}\n${copy.passwordLabel}: ${tempPassword}\n\n${copy.loginButton}: ${loginUrl}\n\n${copy.changePasswordNote}\n\n${copy.footer}`,
+      html: `<h2>${escapeHtmlAttr(copy.heading)}</h2><p>${escapeHtmlAttr(copy.intro)}</p><p><strong>${escapeHtmlAttr(copy.emailLabel)}:</strong> ${escapeHtmlAttr(email)}<br/><strong>${escapeHtmlAttr(copy.passwordLabel)}:</strong> ${escapeHtmlAttr(tempPassword)}</p><p><a href="${escapeHtmlAttr(loginUrl)}">${escapeHtmlAttr(copy.loginButton)}</a></p><p>${escapeHtmlAttr(copy.changePasswordNote)}</p><p style="color:#666;font-size:12px">${escapeHtmlAttr(copy.footer)}</p>`,
+    });
+  } catch (error) {
+    console.error("Provisioning password account failed", error);
+  }
 }
 
 async function rawBody(request: VercelRequest): Promise<Buffer> {
@@ -80,6 +232,7 @@ export default async function handler(request: VercelRequest, response: VercelRe
           console.error("Recording partner referral or membership failed", error);
         }
       }
+      if (email) await provisionPasswordAccount(email, session.metadata?.["locale"]);
       break;
     }
     case "customer.subscription.deleted": {

@@ -53,7 +53,7 @@ type Membership = {
   validUntil: string;
   status: "active" | "expired";
 };
-type MeResponse = { email: string; isAdmin: boolean; subscription: Subscription | null; membership: Membership | null } | { error: string };
+type MeResponse = { email: string; isAdmin: boolean; hasPassword: boolean; mustChangePassword: boolean; subscription: Subscription | null; membership: Membership | null } | { error: string };
 type Section = "overview" | "trips" | "vehicles" | "preferences" | "billing" | "places" | "profile" | "help";
 
 type Trip = { id: string; name: string; fromPlace: string | null; toPlace: string | null; vehicleType: string | null; currency: string | null; days: number | null; estimate: unknown; createdAt: string; updatedAt: string };
@@ -92,6 +92,12 @@ function AccountPage() {
   const [displayName, setDisplayName] = useState("");
   const [savingName, setSavingName] = useState(false);
   const [nameSaved, setNameSaved] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [changingPassword, setChangingPassword] = useState(false);
+  const [passwordChanged, setPasswordChanged] = useState(false);
+  const [passwordError, setPasswordError] = useState("");
 
   useEffect(() => {
     let cancelled = false;
@@ -119,6 +125,39 @@ function AccountPage() {
       setNameSaved(true);
     } finally {
       setSavingName(false);
+    }
+  }
+
+  async function changePassword() {
+    setPasswordError("");
+    setPasswordChanged(false);
+    if (newPassword.length < 8) {
+      setPasswordError(copy.profile.errorWeakPassword);
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setPasswordError(copy.profile.errorMismatch);
+      return;
+    }
+    setChangingPassword(true);
+    try {
+      const response = await fetch("/api/account?action=change-password", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ currentPassword, newPassword }),
+      });
+      const body = (await response.json().catch(() => ({}))) as { code?: string };
+      if (!response.ok) {
+        setPasswordError(body.code === "invalid_credentials" ? copy.profile.errorCurrentPassword : copy.profile.errorWeakPassword);
+        return;
+      }
+      setPasswordChanged(true);
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
+      setData((previous) => (previous && !("error" in previous) ? { ...previous, hasPassword: true, mustChangePassword: false } : previous));
+    } finally {
+      setChangingPassword(false);
     }
   }
 
@@ -217,6 +256,8 @@ function AccountPage() {
 
   const email = data.email;
   const isAdmin = data.isAdmin;
+  const hasPassword = data.hasPassword;
+  const mustChangePassword = data.mustChangePassword;
   const subscription = data.subscription;
   const membership = data.membership;
   const partnerLabels = partnerCopy[locale] ?? partnerCopy.en;
@@ -248,6 +289,14 @@ function AccountPage() {
     >
       {section === "overview" && (
               <>
+                {mustChangePassword && (
+                  <div className="panel flex flex-wrap items-center justify-between gap-3 border-primary/60 p-4 sm:p-5">
+                    <p className="text-sm font-semibold">{copy.profile.mustChangeBanner}</p>
+                    <Button size="sm" onClick={() => setSection("profile")}>
+                      {copy.profile.security}
+                    </Button>
+                  </div>
+                )}
                 <div className={`panel flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between sm:p-7 ${subscription ? "border-primary/60 panel-glow" : ""}`}>
                   <div>
                     {subscription ? (
@@ -459,7 +508,42 @@ function AccountPage() {
                   </div>
                   <div className="mt-5 rounded-lg border border-border bg-surface-raised p-4">
                     <p className="text-sm font-semibold">{copy.profile.security}</p>
-                    <p className="mt-1 text-sm text-muted-foreground">{copy.profile.securityBody}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{hasPassword ? copy.profile.securityBody : copy.profile.setPasswordBody}</p>
+                    <div className="mt-3 grid gap-3 sm:max-w-sm">
+                      {hasPassword && (
+                        <input
+                          type="password"
+                          autoComplete="current-password"
+                          value={currentPassword}
+                          onChange={(event) => setCurrentPassword(event.target.value)}
+                          placeholder={copy.profile.currentPasswordLabel}
+                          className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
+                        />
+                      )}
+                      <input
+                        type="password"
+                        autoComplete="new-password"
+                        value={newPassword}
+                        onChange={(event) => setNewPassword(event.target.value)}
+                        placeholder={copy.profile.newPasswordLabel}
+                        className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
+                      />
+                      <input
+                        type="password"
+                        autoComplete="new-password"
+                        value={confirmPassword}
+                        onChange={(event) => setConfirmPassword(event.target.value)}
+                        placeholder={copy.profile.confirmPasswordLabel}
+                        className="w-full rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
+                      />
+                      <div className="flex flex-wrap items-center gap-3">
+                        <Button size="sm" disabled={changingPassword} onClick={changePassword}>
+                          {changingPassword ? copy.profile.changingPassword : copy.profile.changePasswordButton}
+                        </Button>
+                        {passwordChanged && <span className="text-sm text-primary">{copy.profile.passwordChanged}</span>}
+                      </div>
+                      {passwordError && <p className="text-sm text-destructive">{passwordError}</p>}
+                    </div>
                   </div>
                   <div className="mt-5 rounded-lg border border-border bg-surface-raised p-4">
                     <p className="text-sm font-semibold">{copy.profile.exportData}</p>

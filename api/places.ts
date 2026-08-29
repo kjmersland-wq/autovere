@@ -1,5 +1,5 @@
 import type { IncomingMessage, ServerResponse } from "node:http";
-import { randomUUID } from "node:crypto";
+import { randomUUID, createHmac, timingSafeEqual } from "node:crypto";
 import { neon } from "@neondatabase/serverless";
 
 type Request = IncomingMessage & { body?: unknown; query?: Record<string, string | string[]> };
@@ -15,6 +15,22 @@ function readCookie(request: Request, name: string): string | null {
     if (key === name) return decodeURIComponent(rest.join("="));
   }
   return null;
+}
+
+function verifySessionToken(token: string): string | null {
+  const secret = process.env["AUTH_TOKEN_SECRET"];
+  if (!secret) return null;
+  const [payload, signature] = token.split(".");
+  if (!payload || !signature) return null;
+  const expected = createHmac("sha256", secret).update(payload).digest();
+  const actual = Buffer.from(signature, "base64url");
+  if (expected.length !== actual.length || !timingSafeEqual(expected, actual)) return null;
+  try {
+    const value = JSON.parse(Buffer.from(payload, "base64url").toString("utf8")) as { email?: unknown; exp?: unknown };
+    return typeof value.email === "string" && typeof value.exp === "number" && value.exp > Math.floor(Date.now() / 1000) ? value.email : null;
+  } catch {
+    return null;
+  }
 }
 
 function getSql() {
@@ -50,7 +66,8 @@ function toPlace(row: PlaceRow) {
 const CATEGORIES = new Set(["charging", "camping", "attraction", "other"]);
 
 export default async function handler(request: Request, response: Response) {
-  const email = readCookie(request, "autovere_user");
+  const sessionToken = readCookie(request, "autovere_user");
+  const email = sessionToken ? verifySessionToken(sessionToken) : null;
   if (!email) {
     response.status(401).json({ error: "Not logged in" });
     return;

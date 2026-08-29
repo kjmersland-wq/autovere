@@ -14,11 +14,13 @@ import { Route as AccountRouteImport } from './routes/account'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as DemoRouteImport } from './routes/demo'
 import { Route as FaqRouteImport } from './routes/faq'
+import { Route as ForgotPasswordRouteImport } from './routes/forgot-password'
 import { Route as LegalRouteImport } from './routes/legal'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as ApiCheckoutRouteImport } from './routes/api/checkout'
 import { Route as ApiVerifyLoginRouteImport } from './routes/api.verify-login'
@@ -49,6 +51,11 @@ const FaqRoute = FaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ForgotPasswordRoute = ForgotPasswordRouteImport.update({
+  id: '/forgot-password',
+  path: '/forgot-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LegalRoute = LegalRouteImport.update({
   id: '/legal',
   path: '/legal',
@@ -72,6 +79,11 @@ const PricingRoute = PricingRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -101,11 +113,13 @@ export interface FileRoutesByFullPath {
   '/admin': typeof AdminRoute
   '/demo': typeof DemoRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/partners': typeof PartnersRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/terms': typeof TermsRoute
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
@@ -117,11 +131,13 @@ export interface FileRoutesByTo {
   '/admin': typeof AdminRoute
   '/demo': typeof DemoRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/partners': typeof PartnersRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/terms': typeof TermsRoute
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
@@ -134,11 +150,13 @@ export interface FileRoutesById {
   '/admin': typeof AdminRoute
   '/demo': typeof DemoRoute
   '/faq': typeof FaqRoute
+  '/forgot-password': typeof ForgotPasswordRoute
   '/legal': typeof LegalRoute
   '/login': typeof LoginRoute
   '/partners': typeof PartnersRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/terms': typeof TermsRoute
   '/api/checkout': typeof ApiCheckoutRoute
   '/api/verify-login': typeof ApiVerifyLoginRoute
@@ -152,11 +170,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/demo'
     | '/faq'
+    | '/forgot-password'
     | '/legal'
     | '/login'
     | '/partners'
     | '/pricing'
     | '/privacy'
+    | '/reset-password'
     | '/terms'
     | '/api/checkout'
     | '/api/verify-login'
@@ -168,11 +188,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/demo'
     | '/faq'
+    | '/forgot-password'
     | '/legal'
     | '/login'
     | '/partners'
     | '/pricing'
     | '/privacy'
+    | '/reset-password'
     | '/terms'
     | '/api/checkout'
     | '/api/verify-login'
@@ -184,11 +206,13 @@ export interface FileRouteTypes {
     | '/admin'
     | '/demo'
     | '/faq'
+    | '/forgot-password'
     | '/legal'
     | '/login'
     | '/partners'
     | '/pricing'
     | '/privacy'
+    | '/reset-password'
     | '/terms'
     | '/api/checkout'
     | '/api/verify-login'
@@ -201,11 +225,13 @@ export interface RootRouteChildren {
   AdminRoute: typeof AdminRoute
   DemoRoute: typeof DemoRoute
   FaqRoute: typeof FaqRoute
+  ForgotPasswordRoute: typeof ForgotPasswordRoute
   LegalRoute: typeof LegalRoute
   LoginRoute: typeof LoginRoute
   PartnersRoute: typeof PartnersRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   TermsRoute: typeof TermsRoute
   ApiCheckoutRoute: typeof ApiCheckoutRoute
   ApiVerifyLoginRoute: typeof ApiVerifyLoginRoute
@@ -249,6 +275,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/forgot-password': {
+      id: '/forgot-password'
+      path: '/forgot-password'
+      fullPath: '/forgot-password'
+      preLoaderRoute: typeof ForgotPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/legal': {
       id: '/legal'
       path: '/legal'
@@ -282,6 +315,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -321,11 +361,13 @@ const rootRouteChildren: RootRouteChildren = {
   AdminRoute: AdminRoute,
   DemoRoute: DemoRoute,
   FaqRoute: FaqRoute,
+  ForgotPasswordRoute: ForgotPasswordRoute,
   LegalRoute: LegalRoute,
   LoginRoute: LoginRoute,
   PartnersRoute: PartnersRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   TermsRoute: TermsRoute,
   ApiCheckoutRoute: ApiCheckoutRoute,
   ApiVerifyLoginRoute: ApiVerifyLoginRoute,
