@@ -131,7 +131,7 @@ export function SmartFuelCharging({ copy, locale, currency, chargers, fuelStatio
                     <div className="mt-1.5 flex flex-wrap gap-2 text-xs text-muted-foreground">
                       {station.prices.length ? station.prices.map((price) => (
                         <span key={price.fuelType}>
-                          <span className="font-bold text-foreground">{formatCurrency(price.amount, currency)}</span> {price.fuelType}
+                          <span className="font-bold text-foreground">{formatCurrency(price.amount, currency, locale)}</span> {price.fuelType}
                         </span>
                       )) : <span>{copy.priceUnavailable}</span>}
                     </div>

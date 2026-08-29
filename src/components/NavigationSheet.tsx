@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/sheet";
 import type { CurrencyCode } from "@/lib/currency";
 import { formatCurrency } from "@/lib/currency";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 
 export type NavigationSheetProps = {
   totalEur: number;
@@ -48,6 +48,7 @@ export function NavigationSheet({
   onShare,
 }: NavigationSheetProps) {
   const t = useT();
+  const { locale } = useLocale();
   const [shared, setShared] = useState(false);
 
   async function share() {
@@ -111,7 +112,7 @@ export function NavigationSheet({
         </div>
 
         <p className="mt-5 text-xs text-muted-foreground">
-          {t.plannedTotal}: <span className="numeric font-bold text-foreground">{formatCurrency(totalEur, currency)}</span>
+          {t.plannedTotal}: <span className="numeric font-bold text-foreground">{formatCurrency(totalEur, currency, locale)}</span>
         </p>
       </SheetContent>
     </Sheet>

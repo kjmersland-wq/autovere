@@ -107,7 +107,7 @@ export function VignetteChecklist({
                   {i.note && <p className="mt-1 text-xs text-signal">{i.note}</p>}
                 </div>
                 <span className="numeric shrink-0 text-sm font-bold text-foreground">
-                  ≈ {formatCurrency(i.price, currency)}
+                  ≈ {formatCurrency(i.price, currency, locale)}
                 </span>
                 <ExternalLink className="size-4 shrink-0 text-muted-foreground transition-colors group-hover:text-primary" />
               </a>

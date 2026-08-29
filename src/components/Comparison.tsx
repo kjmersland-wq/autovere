@@ -62,14 +62,14 @@ export function EvSavingsCard({
           <Zap className="size-5" aria-hidden />
         </span>
         <div className="min-w-0 flex-1">
-          <h3 className="text-lg font-extrabold text-primary">{isEv ? copy.smart.replace("{savings}", formatCurrency(savings, currency)) : copy.heading}</h3>
+          <h3 className="text-lg font-extrabold text-primary">{isEv ? copy.smart.replace("{savings}", formatCurrency(savings, currency, locale)) : copy.heading}</h3>
           <p className="mt-3 text-sm leading-relaxed text-foreground">
-            {copy.evTotal}: <strong>{formatCurrency(evEstimate.total, currency)}</strong> {copy.compared} <strong>{formatCurrency(fossilEstimate.total, currency)}</strong> {copy.fossil} {fossilLabel}.
+            {copy.evTotal}: <strong>{formatCurrency(evEstimate.total, currency, locale)}</strong> {copy.compared} <strong>{formatCurrency(fossilEstimate.total, currency, locale)}</strong> {copy.fossil} {fossilLabel}.
           </p>
-          <p className="mt-3 text-base font-bold text-primary">{replaceCopy(copy.saved, { savings: formatCurrency(savings, currency) })}</p>
+          <p className="mt-3 text-base font-bold text-primary">{replaceCopy(copy.saved, { savings: formatCurrency(savings, currency, locale) })}</p>
           <ul className="mt-3 space-y-1.5 text-sm text-muted-foreground">
-            <li>• {copy.energy}: {formatCurrency(energySavings, currency)}</li>
-            <li>• {copy.tolls}: {formatCurrency(tollSavings, currency)}</li>
+            <li>• {copy.energy}: {formatCurrency(energySavings, currency, locale)}</li>
+            <li>• {copy.tolls}: {formatCurrency(tollSavings, currency, locale)}</li>
           </ul>
           {!isEv && evEstimate.ev && (
             <p className="mt-3 text-sm text-muted-foreground">{replaceCopy(copy.minutes, { time: String(evEstimate.ev.chargingMinutes) })}</p>
@@ -83,6 +83,7 @@ export function EvSavingsCard({
 
 export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[]; currency: CurrencyCode }) {
   const t = useT();
+  const { locale } = useLocale();
   const fastest = estimates.find((e) => e.key === "fastest");
   const others = estimates.filter((e) => e.key !== "fastest");
   if (!fastest || !others.length) return null;
@@ -101,15 +102,15 @@ export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[];
         {t.tradeoff(
           t.duration(extraMin),
           t[best.key].toLowerCase(),
-          formatCurrency(saving, currency),
-          formatCurrency(saving / Math.max(1, extraMin / 60), currency),
+          formatCurrency(saving, currency, locale),
+          formatCurrency(saving / Math.max(1, extraMin / 60), currency, locale),
         )}
       </p>
       <span className="numeric text-xs text-muted-foreground">
-        {formatCurrency(saving / Math.max(1, extraMin / 60), currency)} {t.earnedPerHour}
+        {formatCurrency(saving / Math.max(1, extraMin / 60), currency, locale)} {t.earnedPerHour}
       </span>
       <span className="numeric w-full text-xs text-muted-foreground">
-        {t.distance}: {distanceDelta >= 0 ? "+" : ""}{Math.round(distanceDelta)} km · {t.fuel}: {fuelDelta >= 0 ? "+" : ""}{formatCurrency(fuelDelta, currency)} · {t.tolls}: {tollDelta >= 0 ? "+" : ""}{formatCurrency(tollDelta, currency)}
+        {t.distance}: {distanceDelta >= 0 ? "+" : ""}{Math.round(distanceDelta)} km · {t.fuel}: {fuelDelta >= 0 ? "+" : ""}{formatCurrency(fuelDelta, currency, locale)} · {t.tolls}: {tollDelta >= 0 ? "+" : ""}{formatCurrency(tollDelta, currency, locale)}
       </span>
     </div>
   );
@@ -124,7 +125,7 @@ function Line({ label, detail, amount, currency }: { label: string; detail: stri
         <p className="truncate text-xs text-muted-foreground">{dynamicText(detail, locale)}</p>
       </div>
       <span className="numeric shrink-0 text-sm font-semibold text-foreground">
-        {formatCurrency(amount, currency)}
+        {formatCurrency(amount, currency, locale)}
       </span>
     </div>
   );
@@ -144,6 +145,7 @@ export function RouteCard({
   currency: CurrencyCode;
 }) {
   const t = useT();
+  const { locale } = useLocale();
   const isEv = !!est.ev;
 
   return (
@@ -175,7 +177,7 @@ export function RouteCard({
 
       <div className="mt-4 flex items-end justify-between">
         <span className="numeric text-3xl font-extrabold tracking-tight text-foreground">
-          {formatCurrency(est.total, currency)}
+          {formatCurrency(est.total, currency, locale)}
         </span>
         <div className="flex gap-4 text-right text-xs text-muted-foreground">
           <span className="numeric flex items-center gap-1.5">
@@ -272,11 +274,11 @@ export function Breakdown({ est, currency }: { est: Estimate; currency: Currency
         <span className="text-sm font-bold uppercase tracking-wider text-foreground">
           {t.total}
         </span>
-        <span className="numeric text-2xl font-extrabold text-primary">{formatCurrency(est.total, currency)}</span>
+        <span className="numeric text-2xl font-extrabold text-primary">{formatCurrency(est.total, currency, locale)}</span>
       </div>
       {est.ev && est.tollSavings && est.tollSavings > 0 && (
         <p className="mt-3 text-xs font-semibold text-success">
-          {savingsLocaleCopy.evTollSaving(formatCurrency(est.tollSavings, currency))}
+          {savingsLocaleCopy.evTollSaving(formatCurrency(est.tollSavings, currency, locale))}
         </p>
       )}
     </div>

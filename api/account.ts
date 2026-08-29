@@ -275,7 +275,7 @@ async function handleMe(email: string, request: Request, response: Response) {
   }
 }
 
-const CURRENCIES = new Set(["EUR", "NOK", "SEK", "DKK", "GBP", "CHF"]);
+const CURRENCIES = new Set(["EUR", "NOK", "SEK", "DKK", "CHF", "GBP", "PLN", "CZK", "HUF", "RON", "BGN", "ISK"]);
 const LOCALES = new Set(["en", "de", "nl", "no", "pl", "sv", "fr", "da"]);
 const UNIT_SYSTEMS = new Set(["metric", "imperial"]);
 

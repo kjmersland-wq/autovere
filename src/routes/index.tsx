@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon, Check, ChevronDown, Sparkles, Zap, Tent } from "lucide-react";
+import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon, Check, ChevronDown, Sparkles, Zap, Tent, Coins } from "lucide-react";
 import { TripForm, type DemoRoute, type TripFormState } from "@/components/TripForm";
 import { ContactModal } from "@/components/ContactModal";
 import { ShareModal } from "@/components/ShareModal";
@@ -28,9 +28,10 @@ import {
   wazeUrl,
 } from "@/lib/export";
 import { loginLabels, useLocale, useT } from "@/lib/i18n";
-import { CURRENCIES, type CurrencyCode } from "@/lib/currency";
+import { CURRENCIES, formatCurrency, type CurrencyCode } from "@/lib/currency";
+import { exchangeRatesNote } from "@/lib/currency-i18n";
 import { useTheme } from "@/hooks/use-theme";
-import { formatCurrency } from "@/lib/currency";
+import { useCurrency } from "@/hooks/use-currency";
 import { marketingCopy } from "@/lib/marketing-i18n";
 import { partnerCopy } from "@/lib/partner-i18n";
 import { getAccountCopy } from "@/lib/account-i18n";
@@ -77,6 +78,14 @@ const LANGUAGE_OPTIONS = [
   { locale: "fr", code: "FR" },
   { locale: "pl", code: "PL" },
 ] as const;
+
+function currencyDisplayName(code: CurrencyCode, locale: string): string {
+  try {
+    return new Intl.DisplayNames([locale], { type: "currency" }).of(code) ?? code;
+  } catch {
+    return code;
+  }
+}
 
 function CountryFlag({ code }: { code: (typeof LANGUAGE_OPTIONS)[number]["code"] }) {
   const common = { width: 18, height: 12, viewBox: "0 0 18 12", className: "shrink-0 rounded-[2px]" };
@@ -225,6 +234,17 @@ const LEGAL_MODAL_COPY = {
   },
 } as const;
 
+const SHARE_TEXT_SUFFIX = {
+  en: "Open in navigation:",
+  de: "In der Navigation öffnen:",
+  nl: "Openen in navigatie:",
+  no: "Åpne i navigasjon:",
+  pl: "Otwórz w nawigacji:",
+  sv: "Öppna i navigering:",
+  fr: "Ouvrir dans la navigation :",
+  da: "Åbn i navigation:",
+} as const;
+
 const WAYPOINT_NOTE_COPY = {
   en: "Waypoints are injected so navigation apps follow the bypass and charging stops exactly.",
   de: "Wegpunkte werden eingefügt, damit Navigations-Apps die Umgehungsroute und Ladestopps exakt befolgen.",
@@ -264,7 +284,8 @@ function Index() {
   const [scenicFilter, setScenicFilter] = useState<ScenicFilter>("all");
   const [selected, setSelected] = useState<RouteVariantKey>("bypass");
   const [submitted, setSubmitted] = useState<TripFormState | null>(null);
-  const [currency, setCurrency] = useState<CurrencyCode>("EUR");
+  const { currency, setCurrency, ratesMeta } = useCurrency(locale);
+  const [currencyOpen, setCurrencyOpen] = useState(false);
   const [savingTrip, setSavingTrip] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
   const [legalOpen, setLegalOpen] = useState(false);
@@ -389,10 +410,10 @@ function Index() {
             form: submitted,
             summary: {
               [t.distance]: `${Math.round(selectedEst.distanceKm)} km`,
-              [t.total]: formatCurrency(selectedEst.total, currency),
-              [t.tolls]: formatCurrency(selectedEst.tollCost, currency),
-              [t.vignettes]: formatCurrency(selectedEst.vignetteCost, currency),
-              [t.fuel]: formatCurrency(selectedEst.energyCost, currency),
+              [t.total]: formatCurrency(selectedEst.total, currency, locale),
+              [t.tolls]: formatCurrency(selectedEst.tollCost, currency, locale),
+              [t.vignettes]: formatCurrency(selectedEst.vignetteCost, currency, locale),
+              [t.fuel]: formatCurrency(selectedEst.energyCost, currency, locale),
             },
           },
         }),
@@ -429,10 +450,10 @@ function Index() {
         {
           heading: t.total,
           rows: [
-            { label: t.fuel, value: formatCurrency(selectedEst.energyCost, currency) },
-            { label: t.tolls, value: formatCurrency(selectedEst.tollCost, currency) },
-            { label: t.vignettes, value: formatCurrency(selectedEst.vignetteCost, currency) },
-            { label: t.total, value: formatCurrency(selectedEst.total, currency) },
+            { label: t.fuel, value: formatCurrency(selectedEst.energyCost, currency, locale) },
+            { label: t.tolls, value: formatCurrency(selectedEst.tollCost, currency, locale) },
+            { label: t.vignettes, value: formatCurrency(selectedEst.vignetteCost, currency, locale) },
+            { label: t.total, value: formatCurrency(selectedEst.total, currency, locale) },
           ],
         },
         ...(evStops.length > 0
@@ -593,7 +614,7 @@ function Index() {
     if (!selectedEst) return;
     const shareData = {
       title: routeName,
-      text: `${routeName} · ${formatCurrency(selectedEst.total, currency)} · Open in navigation:`,
+      text: `${routeName} · ${formatCurrency(selectedEst.total, currency, locale)} · ${SHARE_TEXT_SUFFIX[locale] ?? SHARE_TEXT_SUFFIX.en}`,
       url: googleUrl,
     };
     if (navigator.share) await navigator.share(shareData);
@@ -617,21 +638,48 @@ function Index() {
               </div>
             </div>
             <div className="ml-auto flex flex-wrap items-center gap-2">
-            <label className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
+            <div className="relative">
               <span className="sr-only">{t.currency}</span>
-              <select
-                value={currency}
-                onChange={(event) => setCurrency(event.target.value as CurrencyCode)}
-                className="rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground outline-none focus:border-primary/60"
+              <button
+                type="button"
+                onClick={() => setCurrencyOpen((open) => !open)}
+                className="flex items-center gap-2 rounded-lg border border-border bg-surface-raised px-2.5 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:border-primary/60 focus:border-primary/60"
                 aria-label={t.currency}
+                aria-expanded={currencyOpen}
+                aria-haspopup="listbox"
+                title={exchangeRatesNote[locale]?.(ratesMeta.date ?? "—") ?? ""}
               >
-                {CURRENCIES.map((code) => (
-                  <option key={code} value={code}>
-                    {code}
-                  </option>
-                ))}
-              </select>
-            </label>
+                <Coins className="size-3.5 text-muted-foreground" aria-hidden />
+                <span>{currency}</span>
+                <ChevronDown className="size-3.5 text-muted-foreground" aria-hidden />
+              </button>
+              {currencyOpen && (
+                <div className="absolute right-0 top-full z-50 mt-2 w-56 rounded-xl border border-border bg-popover p-1 shadow-[var(--shadow-elevated)]" role="listbox" aria-label={t.currency}>
+                  {CURRENCIES.map((code) => (
+                    <button
+                      key={code}
+                      type="button"
+                      role="option"
+                      aria-selected={currency === code}
+                      onClick={() => {
+                        setCurrency(code);
+                        setCurrencyOpen(false);
+                      }}
+                      className={`flex w-full items-center gap-2.5 rounded-lg px-2.5 py-2 text-left text-xs font-semibold transition-colors ${currency === code ? "bg-primary/12 text-primary" : "text-foreground hover:bg-accent"}`}
+                    >
+                      <span className="w-10 shrink-0 font-bold">{code}</span>
+                      <span className="min-w-0 flex-1 truncate text-muted-foreground">{currencyDisplayName(code, locale)}</span>
+                      {currency === code && <Check className="size-3.5 shrink-0" aria-hidden />}
+                    </button>
+                  ))}
+                  {ratesMeta.date && (
+                    <p className="border-t border-border px-2.5 pb-1 pt-2 text-[0.65rem] leading-snug text-muted-foreground">
+                      {exchangeRatesNote[locale]?.(ratesMeta.date) ?? exchangeRatesNote.en(ratesMeta.date)}
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
             <div className="relative">
               <span className="sr-only">{t.language}</span>
               <button
