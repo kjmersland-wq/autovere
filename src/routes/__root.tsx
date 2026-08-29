@@ -144,8 +144,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 });
 
 function RootShell({ children }: { children: ReactNode }) {
+  // Derived from the URL's own lang segment (via useLocale -> useParams), so the raw
+  // server-rendered HTML has the correct lang immediately — not just after client-side JS runs.
+  const { locale } = useLocale();
   return (
-    <html lang="en">
+    <html lang={locale}>
       <head>
         <HeadContent />
       </head>
