@@ -13,23 +13,33 @@ export function EmptyState({ title, body, icon: Icon }: { title: string; body: s
   );
 }
 
-export type AccountNavItem<Section extends string> = { key: Section; label: string; icon: LucideIcon };
+// A nav item is normally a Section tab (switches the panel shown below via onSelect). Passing
+// `href` instead turns it into a real navigation link styled identically — used for entries like
+// Admin that must leave the account page entirely rather than switch to an in-page section.
+export type AccountNavItem<Section extends string> =
+  | { key: Section; label: string; icon: LucideIcon; href?: undefined }
+  | { key: string; label: string; icon: LucideIcon; href: string };
 
 export function AccountNav<Section extends string>({ items, active, onSelect, extraAfterFirst }: { items: AccountNavItem<Section>[]; active: Section; onSelect: (key: Section) => void; extraAfterFirst?: ReactNode }) {
+  const itemClass = (isActive: boolean) =>
+    `flex shrink-0 items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-left text-sm font-semibold transition-colors ${
+      isActive ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-surface-raised hover:text-foreground"
+    }`;
   return (
     <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0">
-      {items.map(({ key, label, icon: Icon }, index) => (
-        <ReactFragment key={key}>
-          <button
-            type="button"
-            onClick={() => onSelect(key)}
-            className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-left text-sm font-semibold transition-colors ${
-              active === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-surface-raised hover:text-foreground"
-            }`}
-          >
-            <Icon className="size-4 shrink-0" />
-            <span className="whitespace-nowrap lg:whitespace-normal">{label}</span>
-          </button>
+      {items.map((item, index) => (
+        <ReactFragment key={item.key}>
+          {item.href ? (
+            <Link to={item.href} className={itemClass(false)}>
+              <item.icon className="size-4 shrink-0" />
+              <span className="whitespace-nowrap lg:whitespace-normal">{item.label}</span>
+            </Link>
+          ) : (
+            <button type="button" onClick={() => onSelect(item.key as Section)} className={itemClass(active === item.key)}>
+              <item.icon className="size-4 shrink-0" />
+              <span className="whitespace-nowrap lg:whitespace-normal">{item.label}</span>
+            </button>
+          )}
           {index === 0 && extraAfterFirst}
         </ReactFragment>
       ))}

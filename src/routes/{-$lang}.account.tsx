@@ -30,7 +30,11 @@ import { partnerCopy } from "@/lib/partner-i18n";
 import { openPrintReport } from "@/lib/print-report";
 import { AccountShell, EmptyState, type AccountNavItem } from "@/components/account/AccountFrame";
 
-export const Route = createFileRoute("/{-$lang}/account")({ component: AccountPage });
+export const Route = createFileRoute("/{-$lang}/account")({
+  // Authenticated, per-user content — never a page a search result should ever land a visitor on.
+  head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
+  component: AccountPage,
+});
 
 type Invoice = { id: string; amount: number; currency: string; date: string; url: string | null; pdfUrl: string | null };
 type PaymentMethod = { brand: string; last4: string } | null;
@@ -282,6 +286,9 @@ function AccountPage() {
     { key: "billing", label: copy.nav.billing, icon: CreditCard },
     { key: "places", label: copy.nav.places, icon: Bookmark },
     { key: "profile", label: copy.nav.profile, icon: ShieldCheck },
+    // Admin-only entry, positioned between Profile and Help per spec. A real link (via `href`),
+    // not a section tab — clicking it must leave the account page for the existing /admin area.
+    ...(isAdmin ? [{ key: "admin", label: copy.adminLink, icon: Lock, href: "/admin" }] : []),
     { key: "help", label: copy.nav.help, icon: HelpCircle },
   ];
 
@@ -291,18 +298,6 @@ function AccountPage() {
       eyebrow={copy.eyebrow}
       title={copy.welcome(friendlyName)}
       subtitle={subscription ? copy.subtitleActive : copy.subtitleFree}
-      // Rendered in the shell's persistent header so admin access stays visible on every
-      // account tab, not just Overview (where the equivalent action button below also lives).
-      badge={
-        isAdmin ? (
-          <Link
-            to="/admin"
-            className="inline-flex items-center gap-1.5 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold text-primary transition-colors hover:bg-primary/25"
-          >
-            <Lock className="size-3.5" /> {copy.adminLink}
-          </Link>
-        ) : undefined
-      }
       nav={nav}
       active={section}
       onSelect={setSection}
