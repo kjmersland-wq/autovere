@@ -149,7 +149,7 @@ export type Charger = {
   atKm: number;
 };
 
-export type ScenicCategory = "camping" | "lodging" | "food" | "sights";
+export type ScenicCategory = "camping" | "lodging" | "food" | "sights" | "viewpoint" | "historic" | "museum" | "family";
 
 export type ScenicHighlight = {
   id: string;
@@ -165,6 +165,11 @@ export type ScenicHighlight = {
   osmUrl: string;
   websiteUrl?: string;
   googleUrl: string;
+  // Derived, honest signals from the same OSM tags already fetched — never a separate
+  // data source. hiddenGem: no Wikipedia/Wikidata entry, i.e. not yet a mainstream pick.
+  // easyAccess: OSM's own wheelchair=yes tag, a reasonable proxy for "little walking, flat access".
+  hiddenGem?: boolean;
+  easyAccess?: boolean;
 };
 
 type OverpassEl = {
@@ -597,10 +602,10 @@ export async function fetchMotorhomeCamping(
 const scenicCache = new Map<string, ScenicHighlight[]>();
 
 const SCENIC_FALLBACKS: ScenicHighlight[] = [
-  { id: "fallback-chamonix", name: "Chamonix & Mont Blanc Viewpoint", country: "FR", category: "sights", lat: 45.9237, lon: 6.8694, atKm: 0, detourMinutes: 5, directlyOnRoute: true, amenities: [], osmUrl: "https://www.openstreetmap.org/node/123456", googleUrl: "https://www.google.com/maps/search/?api=1&query=45.9237,6.8694" },
-  { id: "fallback-neuschwanstein", name: "Neuschwanstein Castle", country: "DE", category: "sights", lat: 47.5576, lon: 10.7498, atKm: 0, detourMinutes: 12, directlyOnRoute: false, amenities: [], osmUrl: "https://www.openstreetmap.org/node/123457", googleUrl: "https://www.google.com/maps/search/?api=1&query=47.5576,10.7498" },
-  { id: "fallback-grossglockner", name: "Grossglockner High Alpine Road", country: "AT", category: "sights", lat: 47.0746, lon: 12.8427, atKm: 0, detourMinutes: 18, directlyOnRoute: false, amenities: [], osmUrl: "https://www.openstreetmap.org/node/123458", googleUrl: "https://www.google.com/maps/search/?api=1&query=47.0746,12.8427" },
-  { id: "fallback-lake-bled", name: "Lake Bled Viewpoint", country: "SI", category: "sights", lat: 46.3692, lon: 14.0956, atKm: 0, detourMinutes: 8, directlyOnRoute: false, amenities: [], osmUrl: "https://www.openstreetmap.org/node/123459", googleUrl: "https://www.google.com/maps/search/?api=1&query=46.3692,14.0956" },
+  { id: "fallback-chamonix", name: "Chamonix & Mont Blanc Viewpoint", country: "FR", category: "viewpoint", lat: 45.9237, lon: 6.8694, atKm: 0, detourMinutes: 5, directlyOnRoute: true, amenities: [], osmUrl: "https://www.openstreetmap.org/node/123456", googleUrl: "https://www.google.com/maps/search/?api=1&query=45.9237,6.8694" },
+  { id: "fallback-neuschwanstein", name: "Neuschwanstein Castle", country: "DE", category: "historic", lat: 47.5576, lon: 10.7498, atKm: 0, detourMinutes: 12, directlyOnRoute: false, amenities: [], osmUrl: "https://www.openstreetmap.org/node/123457", googleUrl: "https://www.google.com/maps/search/?api=1&query=47.5576,10.7498" },
+  { id: "fallback-grossglockner", name: "Grossglockner High Alpine Road", country: "AT", category: "viewpoint", lat: 47.0746, lon: 12.8427, atKm: 0, detourMinutes: 18, directlyOnRoute: false, amenities: [], osmUrl: "https://www.openstreetmap.org/node/123458", googleUrl: "https://www.google.com/maps/search/?api=1&query=47.0746,12.8427" },
+  { id: "fallback-lake-bled", name: "Lake Bled Viewpoint", country: "SI", category: "viewpoint", lat: 46.3692, lon: 14.0956, atKm: 0, detourMinutes: 8, directlyOnRoute: false, amenities: [], osmUrl: "https://www.openstreetmap.org/node/123459", googleUrl: "https://www.google.com/maps/search/?api=1&query=46.3692,14.0956" },
   { id: "fallback-aire", name: "Aire de la Côte d'Azur", country: "FR", category: "camping", lat: 43.65, lon: 6.95, atKm: 0, detourMinutes: 3, directlyOnRoute: true, amenities: ["Electricity", "Water"], osmUrl: "https://www.openstreetmap.org/node/123460", googleUrl: "https://www.google.com/maps/search/?api=1&query=43.65,6.95" },
   { id: "fallback-stellplatz", name: "Alpine Motorhome Stellplatz", country: "AT", category: "camping", lat: 47.27, lon: 11.4, atKm: 0, detourMinutes: 5, directlyOnRoute: false, amenities: ["Electricity", "Water", "WiFi"], osmUrl: "https://www.openstreetmap.org/node/123461", googleUrl: "https://www.google.com/maps/search/?api=1&query=47.27,11.4" },
   { id: "fallback-hotel", name: "Brenner Pass Lodge", country: "AT", category: "lodging", lat: 47.0, lon: 11.5, atKm: 0, detourMinutes: 2, directlyOnRoute: true, amenities: ["Parking"], osmUrl: "https://www.openstreetmap.org/node/123462", googleUrl: "https://www.google.com/maps/search/?api=1&query=47.0,11.5" },
@@ -626,7 +631,11 @@ function scenicCategory(tags: Record<string, string>): ScenicCategory | null {
   if (tags.tourism === "camp_site" || tags.tourism === "caravan_site") return "camping";
   if (tags.tourism === "hotel" || tags.tourism === "motel" || tags.tourism === "guest_house") return "lodging";
   if (tags.amenity === "restaurant" || tags.amenity === "cafe") return "food";
-  if (tags.tourism === "viewpoint" || tags.historic === "castle" || tags.historic === "monument" || tags.heritage || tags.natural === "peak" || tags.highway === "rest_area") return "sights";
+  if (tags.tourism === "museum") return "museum";
+  if (tags.tourism === "zoo" || tags.tourism === "theme_park") return "family";
+  if (tags.historic === "castle" || tags.historic === "monument" || tags.heritage) return "historic";
+  if (tags.tourism === "viewpoint" || tags.natural === "peak") return "viewpoint";
+  if (tags.highway === "rest_area") return "sights";
   return null;
 }
 
@@ -641,7 +650,7 @@ export async function fetchScenicHighlights(
   try {
     const anchors = [...samplePolyline(coords, 100).map(({ pt }) => pt), ...chargers.slice(0, 8).map((charger) => [charger.lat, charger.lon] as LatLng)].slice(0, 28);
     const clauses = anchors.flatMap(([lat, lon]) => [
-      `nwr(around:8000,${lat.toFixed(4)},${lon.toFixed(4)})["tourism"~"camp_site|caravan_site|hotel|motel|guest_house|viewpoint"];`,
+      `nwr(around:8000,${lat.toFixed(4)},${lon.toFixed(4)})["tourism"~"camp_site|caravan_site|hotel|motel|guest_house|viewpoint|museum|zoo|theme_park"];`,
       `nwr(around:8000,${lat.toFixed(4)},${lon.toFixed(4)})["amenity"~"restaurant|cafe"];`,
       `nwr(around:8000,${lat.toFixed(4)},${lon.toFixed(4)})["historic"~"castle|monument"];`,
       `nwr(around:8000,${lat.toFixed(4)},${lon.toFixed(4)})["heritage"];`,
@@ -672,16 +681,21 @@ export async function fetchScenicHighlights(
       if (nearest > 10) continue;
       seen.add(id);
       const name = tags.name || tags["name:en"] || `${category} stop`;
+      const isHiddenGem = (category === "viewpoint" || category === "historic" || category === "sights") && !tags.wikipedia && !tags.wikidata;
+      const isEasyAccess = tags.wheelchair === "yes";
+      const websiteUrl = tags.website || tags["contact:website"];
       highlights.push({
         id: String(element.id), name, country: countryAt([lat, lon]) ?? "EU", category, lat, lon, atKm,
         detourMinutes: nearest <= 1 ? 0 : Math.max(3, Math.round(nearest * 2)), directlyOnRoute: nearest <= 1,
         amenities: [tags.electricity === "yes" ? "Electricity" : "", tags.drinking_water === "yes" ? "Water" : "", tags.internet_access === "wlan" ? "WiFi" : "", tags.amenity === "restaurant" || tags.amenity === "cafe" ? "Open now" : ""].filter(Boolean),
         osmUrl: `https://www.openstreetmap.org/node/${element.id}`,
-        websiteUrl: tags.website || tags["contact:website"],
         googleUrl: `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`,
+        ...(websiteUrl ? { websiteUrl } : {}),
+        ...(isHiddenGem ? { hiddenGem: true } : {}),
+        ...(isEasyAccess ? { easyAccess: true } : {}),
       });
     }
-    const categoryScore: Record<ScenicCategory, number> = { sights: 4, camping: 3, lodging: 2, food: 1 };
+    const categoryScore: Record<ScenicCategory, number> = { museum: 6, historic: 5, viewpoint: 5, family: 4, sights: 4, camping: 3, lodging: 2, food: 1 };
     const result = highlights.sort((a, b) => categoryScore[b.category] - categoryScore[a.category] || a.atKm - b.atKm).slice(0, 6);
     const finalResult = result.length ? result : scenicFallback(coords);
     scenicCache.set(key, finalResult);

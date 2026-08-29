@@ -23,6 +23,21 @@ function chargerCableStatus(charger: SmartCharger): "attached" | "bring_own" | "
   return "bring_own";
 }
 
+type ConnectorSummary = { type: string; currentType: "AC" | "DC"; powerKw: number | null };
+
+function chargerConnectorSummaries(charger: SmartCharger): ConnectorSummary[] {
+  const byType = new Map<string, ConnectorSummary>();
+  for (const connection of charger.connections) {
+    const existing = byType.get(connection.connectorType);
+    if (!existing) {
+      byType.set(connection.connectorType, { type: connection.connectorType, currentType: connection.currentType, powerKw: connection.powerKw });
+    } else if (connection.powerKw != null && (existing.powerKw == null || connection.powerKw > existing.powerKw)) {
+      existing.powerKw = connection.powerKw;
+    }
+  }
+  return [...byType.values()];
+}
+
 type SmartFuelChargingProps = {
   copy: SmartFuelCopy;
   locale: string;
@@ -75,8 +90,12 @@ export function SmartFuelCharging({ copy, locale, currency, chargers, fuelStatio
                   <div className="min-w-0">
                     <p className="truncate text-sm font-semibold">{charger.name}</p>
                     <div className="mt-1.5 flex flex-wrap gap-1.5">
-                      {[...new Set(charger.connections.map((c) => c.connectorType))].map((type) => (
-                        <span key={type} className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">{type}</span>
+                      {chargerConnectorSummaries(charger).map((connector) => (
+                        <span key={connector.type} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">
+                          {connector.currentType === "DC" && <Zap className="size-2.5" aria-hidden />}
+                          {connector.type} · {connector.currentType}
+                          {connector.powerKw ? ` · ${Math.round(connector.powerKw)} kW` : ""}
+                        </span>
                       ))}
                       <CableBadge status={chargerCableStatus(charger)} copy={copy} />
                     </div>
@@ -113,7 +132,7 @@ export function SmartFuelCharging({ copy, locale, currency, chargers, fuelStatio
                         </span>
                       )) : <span>{copy.priceUnavailable}</span>}
                     </div>
-                    {station.prices[0] && <p className="mt-1 text-[11px] text-muted-foreground/70">{copy.updated(dateFormatter.format(new Date(station.prices[0].updatedAt)))}</p>}
+                    {station.prices[0] && <p className="mt-1 text-xs text-muted-foreground">{copy.updated(dateFormatter.format(new Date(station.prices[0].updatedAt)))}</p>}
                   </div>
                   <Button
                     size="sm"
@@ -129,7 +148,7 @@ export function SmartFuelCharging({ copy, locale, currency, chargers, fuelStatio
         </div>
       </div>
 
-      <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground/70">{copy.attribution}</p>
+      <p className="mt-5 text-xs leading-relaxed text-muted-foreground">{copy.attribution}</p>
     </section>
   );
 }

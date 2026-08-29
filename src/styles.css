@@ -181,6 +181,14 @@
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
+
+  /* Safety-net focus ring: every focusable element gets a clearly visible outline,
+     even custom buttons/links that don't declare their own focus-visible classes. */
+  :focus-visible {
+    outline: 2.5px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
 }
 
 @utility hero-glow {

@@ -1,4 +1,4 @@
-import { Lock, Sparkles } from "lucide-react";
+import { CircleDot, Droplets, Flame, Lock, ParkingCircle, Sparkles, Tent, Trash2, Wrench, type LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
@@ -8,15 +8,15 @@ import { MOTORHOME_CATEGORIES } from "@/lib/geo";
 
 const DISTANCE_OPTIONS = [5, 10, 25, 50] as const;
 
-const CATEGORY_EMOJI: Record<MotorhomeCategory, string> = {
-  dump_station: "🚐",
-  fresh_water: "💧",
-  camping: "🏕️",
-  parking: "🅿️",
-  lpg: "🔥",
-  workshop: "🔧",
-  tyre_service: "🛞",
-  washing: "🧼",
+const CATEGORY_ICON: Record<MotorhomeCategory, LucideIcon> = {
+  dump_station: Trash2,
+  fresh_water: Droplets,
+  camping: Tent,
+  parking: ParkingCircle,
+  lpg: Flame,
+  workshop: Wrench,
+  tyre_service: CircleDot,
+  washing: Sparkles,
 };
 
 type MotorhomeCampingProps = {
@@ -59,6 +59,7 @@ export function MotorhomeCamping({ copy, pois, loading, maxDistanceKm, onMaxDist
       <div className="mt-4 flex flex-wrap items-center gap-2">
         {MOTORHOME_CATEGORIES.map((category) => {
           const active = selectedCategories.has(category);
+          const Icon = CATEGORY_ICON[category];
           return (
             <button
               key={category}
@@ -67,7 +68,7 @@ export function MotorhomeCamping({ copy, pois, loading, maxDistanceKm, onMaxDist
               aria-pressed={active}
               className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${active ? "border-primary/60 bg-primary/10 text-primary" : "border-border bg-surface-raised text-muted-foreground hover:text-foreground"}`}
             >
-              <span aria-hidden>{CATEGORY_EMOJI[category]}</span> {copy.categories[category]}
+              <Icon className="size-3.5" aria-hidden /> {copy.categories[category]}
             </button>
           );
         })}
@@ -86,11 +87,14 @@ export function MotorhomeCamping({ copy, pois, loading, maxDistanceKm, onMaxDist
               <div className="min-w-0">
                 <p className="truncate text-sm font-semibold">{poi.name}</p>
                 <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
-                  {poi.categories.map((category) => (
-                    <span key={category} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">
-                      <span aria-hidden>{CATEGORY_EMOJI[category]}</span> {copy.categories[category]}
-                    </span>
-                  ))}
+                  {poi.categories.map((category) => {
+                    const Icon = CATEGORY_ICON[category];
+                    return (
+                      <span key={category} className="inline-flex items-center gap-1 rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-bold text-primary">
+                        <Icon className="size-3" aria-hidden /> {copy.categories[category]}
+                      </span>
+                    );
+                  })}
                   {poi.fee != null && (
                     <span className="rounded-full bg-surface px-2 py-0.5 text-[11px] font-semibold text-muted-foreground">{poi.fee ? copy.feeYes : copy.feeNo}</span>
                   )}
@@ -109,7 +113,7 @@ export function MotorhomeCamping({ copy, pois, loading, maxDistanceKm, onMaxDist
         ))}
       </div>
 
-      <p className="mt-5 text-[11px] leading-relaxed text-muted-foreground/70">{copy.attribution}</p>
+      <p className="mt-5 text-xs leading-relaxed text-muted-foreground">{copy.attribution}</p>
     </section>
   );
 }
