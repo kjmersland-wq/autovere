@@ -66,7 +66,7 @@ function PricingPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
+    <main className="bg-scenic bg-scenic--minimal min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-6xl">
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-foreground">
           <ArrowLeft className="size-4" /> {copy.back}

@@ -334,7 +334,7 @@ function AdminPage() {
 
   if (!authed) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
+      <main className="bg-scenic bg-scenic--minimal flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
         <form onSubmit={handleLogin} className="panel w-full max-w-sm p-6">
           <p className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-primary">AUTOVERE ADMIN</p>
           <h1 className="mt-2 text-xl font-bold">Logg inn</h1>
@@ -353,7 +353,7 @@ function AdminPage() {
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
+    <main className="bg-scenic bg-scenic--minimal min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
       <div className="mx-auto max-w-6xl">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>

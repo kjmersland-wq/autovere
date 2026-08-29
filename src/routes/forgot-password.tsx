@@ -39,7 +39,7 @@ function ForgotPasswordPage() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
+    <main className="bg-scenic bg-scenic--minimal flex min-h-screen items-center justify-center bg-background px-4 text-foreground">
       <div className="panel w-full max-w-md p-6">
         <Link to="/login" className="text-sm text-muted-foreground hover:text-foreground">
           {copy.back}
