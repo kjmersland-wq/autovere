@@ -37,6 +37,28 @@ export type PartnerCopy = {
   };
   demo: { name: string; country: string; note: string };
   memberCode: { label: string; placeholder: string; apply: string; applying: string; invalid: string };
+  application: {
+    title: string;
+    intro: string;
+    orgName: string;
+    orgNamePlaceholder: string;
+    country: string;
+    countryPlaceholder: string;
+    website: string;
+    websitePlaceholder: string;
+    contactName: string;
+    contactNamePlaceholder: string;
+    contactEmail: string;
+    contactEmailPlaceholder: string;
+    message: string;
+    messagePlaceholder: string;
+    submit: string;
+    submitting: string;
+    success: string;
+    successBody: string;
+    close: string;
+    error: string;
+  };
 };
 
 export const en: PartnerCopy = {
@@ -76,6 +98,28 @@ export const en: PartnerCopy = {
   },
   demo: { name: "European Touring Association", country: "Norway", note: "Fictional example organisation, for demonstration only." },
   memberCode: { label: "Organisation member code", placeholder: "e.g. ETA25", apply: "Apply", applying: "Checking…", invalid: "We couldn't recognise that code — check it and try again." },
+  application: {
+    title: "Apply to become a partner",
+    intro: "Tell us about your organisation and we'll be in touch. Once approved, your member code and link are ready immediately — nothing for you to configure.",
+    orgName: "Organisation name",
+    orgNamePlaceholder: "e.g. European Touring Association",
+    country: "Country",
+    countryPlaceholder: "e.g. Norway",
+    website: "Official website",
+    websitePlaceholder: "https://",
+    contactName: "Your name",
+    contactNamePlaceholder: "Full name",
+    contactEmail: "Your email",
+    contactEmailPlaceholder: "name@organisation.org",
+    message: "Tell us a bit about your members (optional)",
+    messagePlaceholder: "Who are your members, and roughly how many?",
+    submit: "Submit application",
+    submitting: "Submitting…",
+    success: "Application received!",
+    successBody: "Thanks — we'll review it and email you as soon as it's approved.",
+    close: "Close",
+    error: "We couldn't submit your application. Please check the form and try again.",
+  },
 };
 
 export const de: PartnerCopy = {
@@ -115,6 +159,28 @@ export const de: PartnerCopy = {
   },
   demo: { name: "European Touring Association", country: "Norwegen", note: "Fiktive Beispielorganisation, nur zu Demonstrationszwecken." },
   memberCode: { label: "Mitgliedscode deiner Organisation", placeholder: "z. B. ETA25", apply: "Anwenden", applying: "Wird geprüft…", invalid: "Diesen Code konnten wir nicht erkennen — bitte überprüfe ihn und versuche es erneut." },
+  application: {
+    title: "Partner werden",
+    intro: "Erzähl uns von deiner Organisation, wir melden uns bei dir. Nach der Freigabe stehen dein Mitgliedscode und -link sofort bereit — du musst nichts einrichten.",
+    orgName: "Name der Organisation",
+    orgNamePlaceholder: "z. B. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "z. B. Norwegen",
+    website: "Offizielle Website",
+    websitePlaceholder: "https://",
+    contactName: "Dein Name",
+    contactNamePlaceholder: "Vollständiger Name",
+    contactEmail: "Deine E-Mail",
+    contactEmailPlaceholder: "name@organisation.org",
+    message: "Erzähl uns kurz von deinen Mitgliedern (optional)",
+    messagePlaceholder: "Wer sind eure Mitglieder, und ungefähr wie viele?",
+    submit: "Antrag senden",
+    submitting: "Wird gesendet…",
+    success: "Antrag eingegangen!",
+    successBody: "Danke — wir prüfen ihn und melden uns per E-Mail, sobald er freigegeben ist.",
+    close: "Schließen",
+    error: "Dein Antrag konnte nicht gesendet werden. Bitte prüfe das Formular und versuche es erneut.",
+  },
 };
 
 export const nl: PartnerCopy = {
@@ -154,6 +220,28 @@ export const nl: PartnerCopy = {
   },
   demo: { name: "European Touring Association", country: "Noorwegen", note: "Fictieve voorbeeldorganisatie, uitsluitend ter demonstratie." },
   memberCode: { label: "Ledencode van je organisatie", placeholder: "bijv. ETA25", apply: "Toepassen", applying: "Controleren…", invalid: "We herkennen deze code niet — controleer hem en probeer het opnieuw." },
+  application: {
+    title: "Word partner",
+    intro: "Vertel ons over je organisatie, dan nemen we contact op. Na goedkeuring staan je ledencode en -link meteen klaar — er is niets voor je in te stellen.",
+    orgName: "Naam van de organisatie",
+    orgNamePlaceholder: "bijv. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "bijv. Noorwegen",
+    website: "Officiële website",
+    websitePlaceholder: "https://",
+    contactName: "Jouw naam",
+    contactNamePlaceholder: "Volledige naam",
+    contactEmail: "Jouw e-mail",
+    contactEmailPlaceholder: "naam@organisatie.org",
+    message: "Vertel ons kort over je leden (optioneel)",
+    messagePlaceholder: "Wie zijn jullie leden, en hoeveel ongeveer?",
+    submit: "Aanvraag versturen",
+    submitting: "Versturen…",
+    success: "Aanvraag ontvangen!",
+    successBody: "Bedankt — we bekijken hem en mailen je zodra hij is goedgekeurd.",
+    close: "Sluiten",
+    error: "We konden je aanvraag niet versturen. Controleer het formulier en probeer het opnieuw.",
+  },
 };
 
 export const no: PartnerCopy = {
@@ -193,6 +281,28 @@ export const no: PartnerCopy = {
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv eksempelorganisasjon, kun til demonstrasjon." },
   memberCode: { label: "Medlemskode fra organisasjonen din", placeholder: "f.eks. ETA25", apply: "Bruk kode", applying: "Sjekker…", invalid: "Vi kjente ikke igjen denne koden — sjekk den og prøv igjen." },
+  application: {
+    title: "Søk om å bli partner",
+    intro: "Fortell oss om organisasjonen deres, så tar vi kontakt. Når søknaden er godkjent, er medlemskoden og -lenken klare med en gang — dere trenger ikke sette opp noe selv.",
+    orgName: "Organisasjonens navn",
+    orgNamePlaceholder: "f.eks. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "f.eks. Norge",
+    website: "Offisiell nettside",
+    websitePlaceholder: "https://",
+    contactName: "Ditt navn",
+    contactNamePlaceholder: "Fullt navn",
+    contactEmail: "Din e-post",
+    contactEmailPlaceholder: "navn@organisasjon.no",
+    message: "Fortell oss litt om medlemmene deres (valgfritt)",
+    messagePlaceholder: "Hvem er medlemmene deres, og omtrent hvor mange?",
+    submit: "Send søknad",
+    submitting: "Sender…",
+    success: "Søknad mottatt!",
+    successBody: "Takk — vi går gjennom den og sender deg en e-post så snart den er godkjent.",
+    close: "Lukk",
+    error: "Vi klarte ikke å sende søknaden. Sjekk skjemaet og prøv igjen.",
+  },
 };
 
 export const pl: PartnerCopy = {
@@ -232,6 +342,28 @@ export const pl: PartnerCopy = {
   },
   demo: { name: "European Touring Association", country: "Norwegia", note: "Fikcyjna organizacja przykładowa, wyłącznie do demonstracji." },
   memberCode: { label: "Kod członkowski Twojej organizacji", placeholder: "np. ETA25", apply: "Zastosuj", applying: "Sprawdzanie…", invalid: "Nie rozpoznaliśmy tego kodu — sprawdź go i spróbuj ponownie." },
+  application: {
+    title: "Zostań partnerem",
+    intro: "Opowiedz nam o swojej organizacji, a odezwiemy się do was. Po zatwierdzeniu kod i link członkowski są od razu gotowe — nie musicie niczego konfigurować.",
+    orgName: "Nazwa organizacji",
+    orgNamePlaceholder: "np. European Touring Association",
+    country: "Kraj",
+    countryPlaceholder: "np. Norwegia",
+    website: "Oficjalna strona",
+    websitePlaceholder: "https://",
+    contactName: "Twoje imię i nazwisko",
+    contactNamePlaceholder: "Imię i nazwisko",
+    contactEmail: "Twój e-mail",
+    contactEmailPlaceholder: "imie@organizacja.pl",
+    message: "Opowiedz nam krótko o swoich członkach (opcjonalnie)",
+    messagePlaceholder: "Kim są wasi członkowie i ile ich mniej więcej jest?",
+    submit: "Wyślij zgłoszenie",
+    submitting: "Wysyłanie…",
+    success: "Zgłoszenie przyjęte!",
+    successBody: "Dziękujemy — sprawdzimy je i napiszemy do was, gdy tylko zostanie zatwierdzone.",
+    close: "Zamknij",
+    error: "Nie udało się wysłać zgłoszenia. Sprawdź formularz i spróbuj ponownie.",
+  },
 };
 
 export const sv: PartnerCopy = {
@@ -271,6 +403,28 @@ export const sv: PartnerCopy = {
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv exempelorganisation, endast för demonstration." },
   memberCode: { label: "Medlemskod från din organisation", placeholder: "t.ex. ETA25", apply: "Använd", applying: "Kontrollerar…", invalid: "Vi kände inte igen den koden — kontrollera den och försök igen." },
+  application: {
+    title: "Ansök om att bli partner",
+    intro: "Berätta om er organisation, så hör vi av oss. När ansökan är godkänd är medlemskoden och länken klara direkt — ni behöver inte ställa in något själva.",
+    orgName: "Organisationens namn",
+    orgNamePlaceholder: "t.ex. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "t.ex. Norge",
+    website: "Officiell webbplats",
+    websitePlaceholder: "https://",
+    contactName: "Ditt namn",
+    contactNamePlaceholder: "Fullständigt namn",
+    contactEmail: "Din e-post",
+    contactEmailPlaceholder: "namn@organisation.se",
+    message: "Berätta lite om era medlemmar (valfritt)",
+    messagePlaceholder: "Vilka är era medlemmar, och ungefär hur många?",
+    submit: "Skicka ansökan",
+    submitting: "Skickar…",
+    success: "Ansökan mottagen!",
+    successBody: "Tack — vi går igenom den och mejlar er så snart den är godkänd.",
+    close: "Stäng",
+    error: "Vi kunde inte skicka ansökan. Kontrollera formuläret och försök igen.",
+  },
 };
 
 export const fr: PartnerCopy = {
@@ -310,6 +464,28 @@ export const fr: PartnerCopy = {
   },
   demo: { name: "European Touring Association", country: "Norvège", note: "Organisation fictive d'exemple, à des fins de démonstration uniquement." },
   memberCode: { label: "Code membre de votre organisation", placeholder: "ex. ETA25", apply: "Appliquer", applying: "Vérification…", invalid: "Nous n'avons pas reconnu ce code — vérifiez-le et réessayez." },
+  application: {
+    title: "Devenir partenaire",
+    intro: "Parlez-nous de votre organisation, nous vous répondrons rapidement. Une fois approuvés, votre code et lien membre sont prêts immédiatement — vous n'avez rien à configurer.",
+    orgName: "Nom de l'organisation",
+    orgNamePlaceholder: "ex. European Touring Association",
+    country: "Pays",
+    countryPlaceholder: "ex. Norvège",
+    website: "Site officiel",
+    websitePlaceholder: "https://",
+    contactName: "Votre nom",
+    contactNamePlaceholder: "Nom complet",
+    contactEmail: "Votre e-mail",
+    contactEmailPlaceholder: "nom@organisation.fr",
+    message: "Parlez-nous un peu de vos membres (facultatif)",
+    messagePlaceholder: "Qui sont vos membres, et environ combien sont-ils ?",
+    submit: "Envoyer la demande",
+    submitting: "Envoi…",
+    success: "Demande reçue !",
+    successBody: "Merci — nous l'examinerons et vous enverrons un e-mail dès qu'elle sera approuvée.",
+    close: "Fermer",
+    error: "Nous n'avons pas pu envoyer votre demande. Vérifiez le formulaire et réessayez.",
+  },
 };
 
 export const da: PartnerCopy = {
@@ -349,6 +525,28 @@ export const da: PartnerCopy = {
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv eksempelorganisation, kun til demonstration." },
   memberCode: { label: "Medlemskode fra din organisation", placeholder: "f.eks. ETA25", apply: "Anvend", applying: "Tjekker…", invalid: "Vi kunne ikke genkende den kode — tjek den, og prøv igen." },
+  application: {
+    title: "Ansøg om at blive partner",
+    intro: "Fortæl os om jeres organisation, så kontakter vi jer. Når ansøgningen er godkendt, er medlemskoden og linket klar med det samme — I skal ikke opsætte noget selv.",
+    orgName: "Organisationens navn",
+    orgNamePlaceholder: "f.eks. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "f.eks. Norge",
+    website: "Officiel hjemmeside",
+    websitePlaceholder: "https://",
+    contactName: "Dit navn",
+    contactNamePlaceholder: "Fulde navn",
+    contactEmail: "Din e-mail",
+    contactEmailPlaceholder: "navn@organisation.dk",
+    message: "Fortæl os lidt om jeres medlemmer (valgfrit)",
+    messagePlaceholder: "Hvem er jeres medlemmer, og cirka hvor mange?",
+    submit: "Send ansøgning",
+    submitting: "Sender…",
+    success: "Ansøgning modtaget!",
+    successBody: "Tak — vi gennemgår den og skriver til jer, så snart den er godkendt.",
+    close: "Luk",
+    error: "Vi kunne ikke sende ansøgningen. Tjek formularen, og prøv igen.",
+  },
 };
 
 export const partnerCopy: Record<Locale, PartnerCopy> = { en, de, nl, no, pl, sv, fr, da };

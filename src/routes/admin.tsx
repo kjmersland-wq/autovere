@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useState, type FormEvent } from "react";
-import { Pencil, Plus, Power } from "lucide-react";
+import { Fragment, useEffect, useState, type FormEvent } from "react";
+import { Check, Pencil, Plus, Power, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 
@@ -48,6 +48,37 @@ type PartnerForm = {
   type: PartnerType;
 };
 
+type ApplicationStatus = "pending" | "approved" | "rejected";
+
+type AdminApplication = {
+  id: string;
+  type: PartnerType;
+  organisationName: string;
+  country: string | null;
+  website: string;
+  contactName: string;
+  contactEmail: string;
+  message: string | null;
+  locale: string;
+  status: ApplicationStatus;
+  partnerId: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+};
+
+type ApprovalForm = {
+  discountPercent: number;
+  startDate: string;
+  endDate: string;
+  partnerId: string;
+  discountCode: string;
+  notes: string;
+};
+
+const emptyApprovalForm: ApprovalForm = { discountPercent: 25, startDate: "", endDate: "", partnerId: "", discountCode: "", notes: "" };
+
+const STATUS_LABELS: Record<ApplicationStatus, string> = { pending: "Venter", approved: "Godkjent", rejected: "Avslått" };
+
 type Metrics = {
   users: { total: number; newLast30Days: number; weeklySignups: { week: string; count: number }[] };
   subscriptions: { free: number; pro: number; business: number; activeTotal: number };
@@ -79,13 +110,19 @@ function AdminPage() {
   const [secret, setSecret] = useState("");
   const [loginError, setLoginError] = useState("");
   const [loggingIn, setLoggingIn] = useState(false);
-  const [tab, setTab] = useState<"metrics" | "partners">("metrics");
+  const [tab, setTab] = useState<"metrics" | "partners" | "applications">("metrics");
   const [partners, setPartners] = useState<AdminPartner[]>([]);
   const [metrics, setMetrics] = useState<Metrics | null>(null);
   const [editing, setEditing] = useState<string | null>(null);
   const [form, setForm] = useState<PartnerForm>(emptyForm);
   const [formError, setFormError] = useState("");
   const [saving, setSaving] = useState(false);
+  const [applications, setApplications] = useState<AdminApplication[]>([]);
+  const [reviewing, setReviewing] = useState<string | null>(null);
+  const [approvalForm, setApprovalForm] = useState<ApprovalForm>(emptyApprovalForm);
+  const [approvalError, setApprovalError] = useState("");
+  const [approving, setApproving] = useState(false);
+  const pendingCount = applications.filter((application) => application.status === "pending").length;
 
   async function loadPartners() {
     const response = await fetch("/api/partners?admin=1");
@@ -112,9 +149,23 @@ function AdminPage() {
     }
   }
 
+  async function loadApplications() {
+    const response = await fetch("/api/partners?admin=1&view=applications");
+    if (response.status === 401) {
+      setAuthed(false);
+      return;
+    }
+    if (response.ok) {
+      const data = (await response.json()) as { applications?: AdminApplication[] };
+      setApplications(data.applications ?? []);
+      setAuthed(true);
+    }
+  }
+
   useEffect(() => {
     void loadMetrics();
     void loadPartners();
+    void loadApplications();
   }, []);
 
   async function handleLogin(event: FormEvent) {
@@ -135,6 +186,7 @@ function AdminPage() {
     setSecret("");
     void loadMetrics();
     void loadPartners();
+    void loadApplications();
   }
 
   async function handleLogout() {
@@ -142,6 +194,7 @@ function AdminPage() {
     setAuthed(false);
     setPartners([]);
     setMetrics(null);
+    setApplications([]);
   }
 
   function openNew() {
@@ -235,6 +288,45 @@ function AdminPage() {
     void loadPartners();
   }
 
+  function openReview(applicationId: string) {
+    setApprovalForm(emptyApprovalForm);
+    setApprovalError("");
+    setReviewing(applicationId);
+  }
+
+  async function handleApprove(event: FormEvent, applicationId: string) {
+    event.preventDefault();
+    setApproving(true);
+    setApprovalError("");
+    const response = await fetch(`/api/partners?action=approve&id=${encodeURIComponent(applicationId)}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        discountPercent: Number(approvalForm.discountPercent),
+        startDate: approvalForm.startDate || null,
+        endDate: approvalForm.endDate || null,
+        partnerId: approvalForm.partnerId || null,
+        discountCode: approvalForm.discountCode || null,
+        notes: approvalForm.notes || null,
+      }),
+    });
+    setApproving(false);
+    if (!response.ok) {
+      const data = (await response.json().catch(() => ({}))) as { error?: string };
+      setApprovalError(data.error ?? "Kunne ikke godkjenne søknaden.");
+      return;
+    }
+    setReviewing(null);
+    void loadApplications();
+    void loadPartners();
+    void loadMetrics();
+  }
+
+  async function handleReject(applicationId: string) {
+    await fetch(`/api/partners?action=reject&id=${encodeURIComponent(applicationId)}`, { method: "POST" });
+    void loadApplications();
+  }
+
   if (authed === null) {
     return <main className="flex min-h-screen items-center justify-center bg-background text-foreground" />;
   }
@@ -265,12 +357,18 @@ function AdminPage() {
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="font-display text-xs font-extrabold uppercase tracking-[0.2em] text-primary">AUTOVERE ADMIN</p>
-            <h1 className="mt-2 text-2xl font-bold sm:text-3xl">{tab === "metrics" ? "Nøkkeltall" : "Partnere"}</h1>
+            <h1 className="mt-2 text-2xl font-bold sm:text-3xl">{tab === "metrics" ? "Nøkkeltall" : tab === "partners" ? "Partnere" : "Søknader"}</h1>
           </div>
           <div className="flex gap-2">
             <div className="flex rounded-lg border border-border bg-surface-raised p-1">
               <button type="button" onClick={() => setTab("metrics")} className={`rounded-md px-3 py-1.5 text-sm font-semibold transition-colors ${tab === "metrics" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>Nøkkeltall</button>
               <button type="button" onClick={() => setTab("partners")} className={`rounded-md px-3 py-1.5 text-sm font-semibold transition-colors ${tab === "partners" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>Partnere</button>
+              <button type="button" onClick={() => setTab("applications")} className={`flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-semibold transition-colors ${tab === "applications" ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:text-foreground"}`}>
+                Søknader
+                {pendingCount > 0 && (
+                  <span className={`rounded-full px-1.5 py-0.5 text-[11px] font-bold ${tab === "applications" ? "bg-primary-foreground/20" : "bg-primary/15 text-primary"}`}>{pendingCount}</span>
+                )}
+              </button>
             </div>
             <Button variant="secondary" size="sm" onClick={() => void handleLogout()}>Logg ut</Button>
           </div>
@@ -517,6 +615,107 @@ function AdminPage() {
               </section>
             )}
           </>
+        )}
+
+        {tab === "applications" && (
+          <section className="panel mt-8 overflow-x-auto p-5 sm:p-7">
+            <table className="w-full min-w-[900px] border-collapse text-left text-sm">
+              <thead>
+                <tr className="border-b border-border text-xs uppercase tracking-wide text-muted-foreground">
+                  <th className="px-3 py-3 font-semibold">Organisasjon</th>
+                  <th className="px-3 py-3 font-semibold">Type</th>
+                  <th className="px-3 py-3 font-semibold">Land</th>
+                  <th className="px-3 py-3 font-semibold">Kontakt</th>
+                  <th className="px-3 py-3 font-semibold">Nettsted</th>
+                  <th className="px-3 py-3 font-semibold">Innsendt</th>
+                  <th className="px-3 py-3 font-semibold">Status</th>
+                  <th className="px-3 py-3 font-semibold" />
+                </tr>
+              </thead>
+              <tbody>
+                {applications.map((application) => (
+                  <Fragment key={application.id}>
+                    <tr className="border-b border-border/60 last:border-0 align-top">
+                      <td className="px-3 py-4">
+                        <p className="font-semibold">{application.organisationName}</p>
+                        {application.message && <p className="mt-1 max-w-xs text-xs text-muted-foreground">{application.message}</p>}
+                      </td>
+                      <td className="px-3 py-4 text-muted-foreground">{PARTNER_TYPE_LABELS[application.type]}</td>
+                      <td className="px-3 py-4 text-muted-foreground">{application.country ?? "—"}</td>
+                      <td className="px-3 py-4">
+                        <p>{application.contactName}</p>
+                        <p className="text-xs text-muted-foreground">{application.contactEmail}</p>
+                      </td>
+                      <td className="px-3 py-4">
+                        <a href={application.website} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">{application.website.replace(/^https?:\/\//, "")}</a>
+                      </td>
+                      <td className="px-3 py-4 text-muted-foreground">{new Date(application.createdAt).toLocaleDateString("no-NO")}</td>
+                      <td className="px-3 py-4">
+                        <span className={`rounded-full px-2.5 py-1 text-xs font-bold ${application.status === "pending" ? "bg-primary/15 text-primary" : application.status === "approved" ? "bg-primary/15 text-primary" : "bg-muted text-muted-foreground"}`}>
+                          {STATUS_LABELS[application.status]}
+                        </span>
+                      </td>
+                      <td className="px-3 py-4">
+                        {application.status === "pending" && (
+                          <div className="flex justify-end gap-2">
+                            <Button size="sm" onClick={() => openReview(application.id)}><Check className="size-4" /></Button>
+                            <Button size="sm" variant="ghost" onClick={() => void handleReject(application.id)} title="Avslå">
+                              <X className="size-4 text-destructive" />
+                            </Button>
+                          </div>
+                        )}
+                      </td>
+                    </tr>
+                    {reviewing === application.id && (
+                      <tr>
+                        <td colSpan={8} className="bg-surface-raised px-3 py-5">
+                          <form onSubmit={(event) => void handleApprove(event, application.id)} className="grid gap-4 sm:grid-cols-3">
+                            <label>
+                              <span className={labelClass}>Rabatt %</span>
+                              <input required type="number" min={1} max={100} value={approvalForm.discountPercent} onChange={(event) => setApprovalForm({ ...approvalForm, discountPercent: Number(event.target.value) })} className={inputClass} />
+                            </label>
+                            <label>
+                              <span className={labelClass}>Startdato (valgfritt)</span>
+                              <input type="date" value={approvalForm.startDate} onChange={(event) => setApprovalForm({ ...approvalForm, startDate: event.target.value })} className={inputClass} />
+                            </label>
+                            <label>
+                              <span className={labelClass}>Sluttdato (valgfritt)</span>
+                              <input type="date" value={approvalForm.endDate} onChange={(event) => setApprovalForm({ ...approvalForm, endDate: event.target.value })} className={inputClass} />
+                            </label>
+                            <label>
+                              <span className={labelClass}>Partner-ID (valgfritt — genereres automatisk fra navnet hvis tom)</span>
+                              <input value={approvalForm.partnerId} onChange={(event) => setApprovalForm({ ...approvalForm, partnerId: event.target.value.toUpperCase() })} className={inputClass} />
+                            </label>
+                            <label>
+                              <span className={labelClass}>Medlemskode (valgfritt — bruker Partner-ID hvis tom)</span>
+                              <input value={approvalForm.discountCode} onChange={(event) => setApprovalForm({ ...approvalForm, discountCode: event.target.value.toUpperCase() })} className={inputClass} />
+                            </label>
+                            <label>
+                              <span className={labelClass}>Interne notater (valgfritt)</span>
+                              <input value={approvalForm.notes} onChange={(event) => setApprovalForm({ ...approvalForm, notes: event.target.value })} className={inputClass} />
+                            </label>
+                            {approvalError && <p className="text-sm text-destructive sm:col-span-3">{approvalError}</p>}
+                            <div className="flex gap-3 sm:col-span-3">
+                              <Button type="submit" disabled={approving}>{approving ? "Godkjenner…" : "Bekreft godkjenning"}</Button>
+                              <Button type="button" variant="secondary" onClick={() => setReviewing(null)}>Avbryt</Button>
+                            </div>
+                            <p className="text-xs text-muted-foreground sm:col-span-3">
+                              Ved godkjenning opprettes partneren automatisk, koden genereres og kobles til rabattlogikken, og en bekreftelse sendes til {application.contactEmail} på {application.locale.toUpperCase()}.
+                            </p>
+                          </form>
+                        </td>
+                      </tr>
+                    )}
+                  </Fragment>
+                ))}
+                {applications.length === 0 && (
+                  <tr>
+                    <td colSpan={8} className="px-3 py-10 text-center text-sm text-muted-foreground">Ingen søknader ennå.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </section>
         )}
       </div>
     </main>

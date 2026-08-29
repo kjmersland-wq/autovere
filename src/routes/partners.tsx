@@ -3,7 +3,7 @@ import { ArrowLeft, ExternalLink, Gift, Handshake, Percent, Route as RouteIcon, 
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
-import { ContactModal } from "@/components/ContactModal";
+import { PartnerApplicationModal } from "@/components/partner/PartnerApplicationModal";
 import { PartnerHeader } from "@/components/partner/PartnerHeader";
 import { AnchorLink } from "@/components/AnchorLink";
 import { useLocale } from "@/lib/i18n";
@@ -29,7 +29,7 @@ function PartnersPage() {
   const copy = partnerCopy[locale] ?? partnerCopy.en;
   const share = shareLinkCopy[locale] ?? shareLinkCopy.en;
   const [partners, setPartners] = useState<PartnerRecord[] | null>(null);
-  const [contactOpen, setContactOpen] = useState(false);
+  const [applicationOpen, setApplicationOpen] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
@@ -153,10 +153,10 @@ function PartnersPage() {
             <AnchorLink id="become-a-partner" label={share.copyLink} copiedLabel={share.linkCopied} />
           </div>
           <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">{copy.page.ctaText}</p>
-          <Button className="mt-5" onClick={() => setContactOpen(true)}>{copy.page.ctaButton}</Button>
+          <Button className="mt-5" onClick={() => setApplicationOpen(true)}>{copy.page.ctaButton}</Button>
         </section>
       </div>
-      <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
+      <PartnerApplicationModal open={applicationOpen} onOpenChange={setApplicationOpen} />
     </main>
   );
 }

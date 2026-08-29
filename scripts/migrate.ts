@@ -117,6 +117,27 @@ async function main() {
     )
   `;
 
+  await sql`
+    CREATE TABLE IF NOT EXISTS partner_applications (
+      id TEXT PRIMARY KEY,
+      type TEXT NOT NULL DEFAULT 'member_organisation',
+      organisation_name TEXT NOT NULL,
+      country TEXT,
+      website TEXT NOT NULL,
+      contact_name TEXT NOT NULL,
+      contact_email TEXT NOT NULL,
+      message TEXT,
+      locale TEXT NOT NULL DEFAULT 'en',
+      status TEXT NOT NULL DEFAULT 'pending',
+      partner_id TEXT REFERENCES partners(id),
+      reviewed_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+  await sql`CREATE INDEX IF NOT EXISTS partner_applications_status_idx ON partner_applications(status)`;
+  await sql`ALTER TABLE partner_applications DROP CONSTRAINT IF EXISTS partner_applications_status_check`;
+  await sql`ALTER TABLE partner_applications ADD CONSTRAINT partner_applications_status_check CHECK (status IN ('pending', 'approved', 'rejected'))`;
+
   console.log("Migration complete.");
 }
 
