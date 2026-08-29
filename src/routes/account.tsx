@@ -243,14 +243,6 @@ function AccountPage() {
       title={copy.welcome(friendlyName)}
       subtitle={subscription ? copy.subtitleActive : copy.subtitleFree}
       nav={nav}
-      navExtra={
-        isAdmin ? (
-          <Link to="/admin" className="flex shrink-0 items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-left text-sm font-semibold text-muted-foreground transition-colors hover:bg-surface-raised hover:text-foreground">
-            <Lock className="size-4 shrink-0" />
-            <span className="whitespace-nowrap lg:whitespace-normal">Admin</span>
-          </Link>
-        ) : undefined
-      }
       active={section}
       onSelect={setSection}
     >
@@ -285,6 +277,13 @@ function AccountPage() {
                     ) : subscription ? null : (
                       <Link to="/pricing">
                         <Button>{copy.actions.viewPlans}</Button>
+                      </Link>
+                    )}
+                    {isAdmin && (
+                      <Link to="/admin">
+                        <Button variant="secondary">
+                          <Lock className="mr-1.5 size-3.5" /> Admin
+                        </Button>
                       </Link>
                     )}
                     <Button variant="secondary" disabled={loggingOut} onClick={logout}>
