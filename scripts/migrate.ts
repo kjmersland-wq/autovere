@@ -126,6 +126,7 @@ async function main() {
       website TEXT NOT NULL,
       contact_name TEXT NOT NULL,
       contact_email TEXT NOT NULL,
+      logo TEXT,
       message TEXT,
       locale TEXT NOT NULL DEFAULT 'en',
       status TEXT NOT NULL DEFAULT 'pending',
@@ -134,6 +135,9 @@ async function main() {
       created_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
+  // Same lesson as partners.type: CREATE TABLE IF NOT EXISTS is a no-op once the table already
+  // exists in production, so a column added after the table's first deploy needs its own ALTER.
+  await sql`ALTER TABLE partner_applications ADD COLUMN IF NOT EXISTS logo TEXT`;
   await sql`CREATE INDEX IF NOT EXISTS partner_applications_status_idx ON partner_applications(status)`;
   await sql`ALTER TABLE partner_applications DROP CONSTRAINT IF EXISTS partner_applications_status_check`;
   await sql`ALTER TABLE partner_applications ADD CONSTRAINT partner_applications_status_check CHECK (status IN ('pending', 'approved', 'rejected'))`;

@@ -13,7 +13,7 @@ import {
 import { useLocale } from "@/lib/i18n";
 import { partnerCopy } from "@/lib/partner-i18n";
 
-const initialForm = { organisationName: "", country: "", website: "", contactName: "", contactEmail: "", message: "" };
+const initialForm = { organisationName: "", country: "", website: "", contactName: "", contactEmail: "", logo: "", message: "" };
 
 type PartnerApplicationModalProps = {
   open: boolean;
@@ -31,6 +31,16 @@ export function PartnerApplicationModal({ open, onOpenChange }: PartnerApplicati
   function updateField(field: keyof typeof form, value: string) {
     setForm((current) => ({ ...current, [field]: value }));
     setError("");
+  }
+
+  function handleLogoFile(file: File) {
+    if (file.size > 250_000) {
+      setError(copy.logoTooLarge);
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => setForm((current) => ({ ...current, logo: String(reader.result) }));
+    reader.readAsDataURL(file);
   }
 
   function handleOpenChange(nextOpen: boolean) {
@@ -143,6 +153,17 @@ export function PartnerApplicationModal({ open, onOpenChange }: PartnerApplicati
                 />
               </label>
             </div>
+            <label className="mt-4 grid gap-2 text-sm font-semibold">
+              {copy.logo}
+              <input
+                type="file"
+                accept="image/svg+xml,image/png,image/jpeg,image/webp"
+                onChange={(event) => { const file = event.target.files?.[0]; if (file) handleLogoFile(file); }}
+                className="text-sm font-normal file:mr-3 file:rounded-lg file:border-0 file:bg-surface-raised file:px-3 file:py-2 file:text-xs file:font-semibold file:text-foreground"
+              />
+              <span className="text-xs font-normal text-muted-foreground">{copy.logoHint}</span>
+              {form.logo && <img src={form.logo} alt="" className="mt-1 h-10 w-auto max-w-[160px] object-contain" />}
+            </label>
             <label className="mt-4 grid gap-2 text-sm font-semibold">
               {copy.message}
               <textarea

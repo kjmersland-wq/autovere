@@ -206,6 +206,7 @@ type PartnerApplicationRow = {
   website: string;
   contact_name: string;
   contact_email: string;
+  logo: string | null;
   message: string | null;
   locale: Locale;
   status: ApplicationStatus;
@@ -223,6 +224,7 @@ function toApplicationPublic(row: PartnerApplicationRow) {
     website: row.website,
     contactName: row.contact_name,
     contactEmail: row.contact_email,
+    logo: row.logo,
     message: row.message,
     locale: row.locale,
     status: row.status,
@@ -234,14 +236,18 @@ function toApplicationPublic(row: PartnerApplicationRow) {
 
 const EMAIL_RE = /^\S+@\S+\.\S+$/;
 
+// 250KB image, base64-encoded (~1.37x expansion) plus the "data:image/...;base64," prefix.
+const MAX_LOGO_DATA_URL_LENGTH = 350_000;
+
 function validateApplicationInput(body: Record<string, unknown>): { error: string } | {
   organisationName: string; country: string | null; website: string; contactName: string;
-  contactEmail: string; message: string | null; locale: Locale; type: PartnerType;
+  contactEmail: string; logo: string | null; message: string | null; locale: Locale; type: PartnerType;
 } {
   const organisationName = typeof body["organisationName"] === "string" ? body["organisationName"].trim() : "";
   const website = typeof body["website"] === "string" ? body["website"].trim() : "";
   const contactName = typeof body["contactName"] === "string" ? body["contactName"].trim() : "";
   const contactEmail = typeof body["contactEmail"] === "string" ? body["contactEmail"].trim().toLowerCase() : "";
+  const logo = typeof body["logo"] === "string" && body["logo"].trim() ? body["logo"].trim() : "";
   const message = typeof body["message"] === "string" ? body["message"].trim() : "";
   const locale: Locale = typeof body["locale"] === "string" && APPLICATION_LOCALES.includes(body["locale"] as Locale) ? (body["locale"] as Locale) : "en";
   const type: PartnerType = typeof body["type"] === "string" && PARTNER_TYPES.includes(body["type"] as PartnerType) ? (body["type"] as PartnerType) : "member_organisation";
@@ -250,6 +256,7 @@ function validateApplicationInput(body: Record<string, unknown>): { error: strin
   if (!/^https?:\/\/.+/.test(website)) return { error: "Official website must be a valid URL." };
   if (!contactName || contactName.length > 160) return { error: "Contact name is required." };
   if (!EMAIL_RE.test(contactEmail) || contactEmail.length > 320) return { error: "Enter a valid contact email address." };
+  if (logo && (!/^data:image\/(svg\+xml|png|jpeg|webp);base64,/.test(logo) || logo.length > MAX_LOGO_DATA_URL_LENGTH)) return { error: "Logo must be an SVG, PNG, JPEG or WebP image under 250 KB." };
   if (message.length > 2000) return { error: "Message is too long." };
 
   return {
@@ -258,6 +265,7 @@ function validateApplicationInput(body: Record<string, unknown>): { error: strin
     website,
     contactName,
     contactEmail,
+    logo: logo || null,
     message: message || null,
     locale,
     type,
@@ -534,8 +542,8 @@ async function handleApplicationSubmit(request: Request, response: Response) {
   try {
     const id = randomBytes(12).toString("hex");
     await sql`
-      INSERT INTO partner_applications (id, type, organisation_name, country, website, contact_name, contact_email, message, locale)
-      VALUES (${id}, ${parsed.type}, ${parsed.organisationName}, ${parsed.country}, ${parsed.website}, ${parsed.contactName}, ${parsed.contactEmail}, ${parsed.message}, ${parsed.locale})
+      INSERT INTO partner_applications (id, type, organisation_name, country, website, contact_name, contact_email, logo, message, locale)
+      VALUES (${id}, ${parsed.type}, ${parsed.organisationName}, ${parsed.country}, ${parsed.website}, ${parsed.contactName}, ${parsed.contactEmail}, ${parsed.logo}, ${parsed.message}, ${parsed.locale})
     `;
     response.status(201).json({ ok: true });
   } catch (error) {
@@ -773,7 +781,7 @@ async function handleApprove(applicationId: string, request: Request, response: 
     id: partnerId,
     name: application.organisation_name,
     country: application.country,
-    logo: null,
+    logo: application.logo,
     website: application.website,
     discountPercent,
     discountCode: overrideCode ?? partnerId,

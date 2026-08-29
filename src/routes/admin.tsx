@@ -58,6 +58,7 @@ type AdminApplication = {
   website: string;
   contactName: string;
   contactEmail: string;
+  logo: string | null;
   message: string | null;
   locale: string;
   status: ApplicationStatus;
@@ -637,7 +638,10 @@ function AdminPage() {
                   <Fragment key={application.id}>
                     <tr className="border-b border-border/60 last:border-0 align-top">
                       <td className="px-3 py-4">
-                        <p className="font-semibold">{application.organisationName}</p>
+                        <div className="flex items-center gap-2">
+                          {application.logo && <img src={application.logo} alt="" className="h-6 w-auto max-w-[64px] shrink-0 object-contain" />}
+                          <p className="font-semibold">{application.organisationName}</p>
+                        </div>
                         {application.message && <p className="mt-1 max-w-xs text-xs text-muted-foreground">{application.message}</p>}
                       </td>
                       <td className="px-3 py-4 text-muted-foreground">{PARTNER_TYPE_LABELS[application.type]}</td>

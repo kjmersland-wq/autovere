@@ -32,6 +32,10 @@ export type PartnerCopy = {
     ctaTitle: string;
     ctaText: string;
     ctaButton: string;
+    ctaPrimaryTitle: string;
+    ctaPrimaryText: string;
+    ctaPrimaryButton: string;
+    ctaExplanation: string;
     back: string;
     checkoutBanner: (code: string, percent: number) => string;
   };
@@ -50,6 +54,9 @@ export type PartnerCopy = {
     contactNamePlaceholder: string;
     contactEmail: string;
     contactEmailPlaceholder: string;
+    logo: string;
+    logoHint: string;
+    logoTooLarge: string;
     message: string;
     messagePlaceholder: string;
     submit: string;
@@ -93,6 +100,10 @@ export const en: PartnerCopy = {
     ctaTitle: "Interested in becoming a partner?",
     ctaText: "We'd love to hear from you and explore how AutoVere could become a useful benefit for your members.",
     ctaButton: "Let's talk",
+    ctaPrimaryTitle: "Become an AutoVere Partner",
+    ctaPrimaryText: "Register your organisation directly with AutoVere. It only takes a few minutes.",
+    ctaPrimaryButton: "Become an AutoVere Partner →",
+    ctaExplanation: "You provide your organisation details, logo, country, contact information and member benefit information. Once approved, AutoVere automatically sends your partner code and partner link by email.",
     back: "Back to AutoVere",
     checkoutBanner: (code, percent) => `Organisation member code ${code} → ${percent}% member discount applied`,
   },
@@ -111,6 +122,9 @@ export const en: PartnerCopy = {
     contactNamePlaceholder: "Full name",
     contactEmail: "Your email",
     contactEmailPlaceholder: "name@organisation.org",
+    logo: "Logo (optional)",
+    logoHint: "SVG or a small image, max 250 KB",
+    logoTooLarge: "That logo file is too large (max 250 KB). Try an SVG or a smaller image.",
     message: "Tell us a bit about your members (optional)",
     messagePlaceholder: "Who are your members, and roughly how many?",
     submit: "Submit application",
@@ -154,6 +168,10 @@ export const de: PartnerCopy = {
     ctaTitle: "Interesse an einer Partnerschaft?",
     ctaText: "Wir freuen uns, von Ihnen zu hören und gemeinsam zu prüfen, wie AutoVere ein nützlicher Vorteil für Ihre Mitglieder werden kann.",
     ctaButton: "Lassen Sie uns sprechen",
+    ctaPrimaryTitle: "AutoVere-Partner werden",
+    ctaPrimaryText: "Registriere deine Organisation direkt bei AutoVere. Das dauert nur wenige Minuten.",
+    ctaPrimaryButton: "AutoVere-Partner werden →",
+    ctaExplanation: "Du gibst die Angaben zu deiner Organisation an — Logo, Land, Kontaktdaten und Informationen zum Mitgliedervorteil. Nach der Freigabe sendet AutoVere deinen Partnercode und -link automatisch per E-Mail.",
     back: "Zurück zu AutoVere",
     checkoutBanner: (code, percent) => `Mitgliedscode ${code} → ${percent} % Mitgliederrabatt angewendet`,
   },
@@ -172,6 +190,9 @@ export const de: PartnerCopy = {
     contactNamePlaceholder: "Vollständiger Name",
     contactEmail: "Deine E-Mail",
     contactEmailPlaceholder: "name@organisation.org",
+    logo: "Logo (optional)",
+    logoHint: "SVG oder ein kleines Bild, max. 250 KB",
+    logoTooLarge: "Diese Logodatei ist zu groß (max. 250 KB). Versuche es mit einer SVG- oder einer kleineren Bilddatei.",
     message: "Erzähl uns kurz von deinen Mitgliedern (optional)",
     messagePlaceholder: "Wer sind eure Mitglieder, und ungefähr wie viele?",
     submit: "Antrag senden",
@@ -215,6 +236,10 @@ export const nl: PartnerCopy = {
     ctaTitle: "Interesse om partner te worden?",
     ctaText: "We horen graag van u en verkennen samen hoe AutoVere een nuttig voordeel kan worden voor uw leden.",
     ctaButton: "Laten we praten",
+    ctaPrimaryTitle: "Word AutoVere-partner",
+    ctaPrimaryText: "Registreer je organisatie direct bij AutoVere. Dit duurt maar een paar minuten.",
+    ctaPrimaryButton: "Word AutoVere-partner →",
+    ctaExplanation: "Je geeft de gegevens van je organisatie op — logo, land, contactgegevens en informatie over het ledenvoordeel. Na goedkeuring stuurt AutoVere automatisch je partnercode en -link per e-mail.",
     back: "Terug naar AutoVere",
     checkoutBanner: (code, percent) => `Ledencode van organisatie ${code} → ${percent}% ledenkorting toegepast`,
   },
@@ -233,6 +258,9 @@ export const nl: PartnerCopy = {
     contactNamePlaceholder: "Volledige naam",
     contactEmail: "Jouw e-mail",
     contactEmailPlaceholder: "naam@organisatie.org",
+    logo: "Logo (optioneel)",
+    logoHint: "SVG of een klein bestand, max. 250 KB",
+    logoTooLarge: "Dit logobestand is te groot (max. 250 KB). Probeer een SVG of een kleinere afbeelding.",
     message: "Vertel ons kort over je leden (optioneel)",
     messagePlaceholder: "Wie zijn jullie leden, en hoeveel ongeveer?",
     submit: "Aanvraag versturen",
@@ -276,6 +304,10 @@ export const no: PartnerCopy = {
     ctaTitle: "Interessert i å bli partner?",
     ctaText: "Vi hører gjerne fra dere, så finner vi sammen ut hvordan AutoVere kan bli en nyttig fordel for medlemmene deres.",
     ctaButton: "La oss snakke sammen",
+    ctaPrimaryTitle: "Bli AutoVere-partner",
+    ctaPrimaryText: "Registrer organisasjonen deres direkte hos AutoVere. Det tar bare noen minutter.",
+    ctaPrimaryButton: "Bli AutoVere-partner →",
+    ctaExplanation: "Dere oppgir organisasjonens opplysninger — logo, land, kontaktinformasjon og informasjon om medlemsfordelen. Når søknaden er godkjent, sender AutoVere automatisk partnerkoden og -lenken deres på e-post.",
     back: "Tilbake til AutoVere",
     checkoutBanner: (code, percent) => `Medlemskode ${code} → ${percent} % medlemsrabatt er lagt til`,
   },
@@ -294,6 +326,9 @@ export const no: PartnerCopy = {
     contactNamePlaceholder: "Fullt navn",
     contactEmail: "Din e-post",
     contactEmailPlaceholder: "navn@organisasjon.no",
+    logo: "Logo (valgfritt)",
+    logoHint: "SVG eller et lite bilde, maks 250 KB",
+    logoTooLarge: "Logofilen er for stor (maks 250 KB). Prøv en SVG eller et mindre bilde.",
     message: "Fortell oss litt om medlemmene deres (valgfritt)",
     messagePlaceholder: "Hvem er medlemmene deres, og omtrent hvor mange?",
     submit: "Send søknad",
@@ -337,6 +372,10 @@ export const pl: PartnerCopy = {
     ctaTitle: "Chcecie zostać partnerem?",
     ctaText: "Chętnie się z wami skontaktujemy i wspólnie sprawdzimy, jak AutoVere może stać się przydatną korzyścią dla waszych członków.",
     ctaButton: "Porozmawiajmy",
+    ctaPrimaryTitle: "Zostań partnerem AutoVere",
+    ctaPrimaryText: "Zarejestruj swoją organizację bezpośrednio w AutoVere. Zajmuje to tylko kilka minut.",
+    ctaPrimaryButton: "Zostań partnerem AutoVere →",
+    ctaExplanation: "Podajesz dane swojej organizacji — logo, kraj, dane kontaktowe oraz informacje o korzyści dla członków. Po zatwierdzeniu AutoVere automatycznie wyśle Twój kod partnera i link e-mailem.",
     back: "Powrót do AutoVere",
     checkoutBanner: (code, percent) => `Kod członkowski organizacji ${code} → zastosowano ${percent}% zniżki dla członków`,
   },
@@ -355,6 +394,9 @@ export const pl: PartnerCopy = {
     contactNamePlaceholder: "Imię i nazwisko",
     contactEmail: "Twój e-mail",
     contactEmailPlaceholder: "imie@organizacja.pl",
+    logo: "Logo (opcjonalnie)",
+    logoHint: "SVG lub mały plik graficzny, maks. 250 KB",
+    logoTooLarge: "Ten plik logo jest za duży (maks. 250 KB). Spróbuj pliku SVG lub mniejszego obrazu.",
     message: "Opowiedz nam krótko o swoich członkach (opcjonalnie)",
     messagePlaceholder: "Kim są wasi członkowie i ile ich mniej więcej jest?",
     submit: "Wyślij zgłoszenie",
@@ -398,6 +440,10 @@ export const sv: PartnerCopy = {
     ctaTitle: "Intresserad av att bli partner?",
     ctaText: "Vi hör gärna av oss och utforskar tillsammans hur AutoVere kan bli en användbar förmån för era medlemmar.",
     ctaButton: "Låt oss prata",
+    ctaPrimaryTitle: "Bli AutoVere-partner",
+    ctaPrimaryText: "Registrera er organisation direkt hos AutoVere. Det tar bara några minuter.",
+    ctaPrimaryButton: "Bli AutoVere-partner →",
+    ctaExplanation: "Ni anger er organisations uppgifter — logotyp, land, kontaktinformation och information om medlemsförmånen. När ansökan är godkänd skickar AutoVere automatiskt er partnerkod och -länk via e-post.",
     back: "Tillbaka till AutoVere",
     checkoutBanner: (code, percent) => `Medlemskod ${code} → ${percent} % medlemsrabatt tillämpad`,
   },
@@ -416,6 +462,9 @@ export const sv: PartnerCopy = {
     contactNamePlaceholder: "Fullständigt namn",
     contactEmail: "Din e-post",
     contactEmailPlaceholder: "namn@organisation.se",
+    logo: "Logotyp (valfritt)",
+    logoHint: "SVG eller en liten bildfil, max 250 KB",
+    logoTooLarge: "Den logotypfilen är för stor (max 250 KB). Prova en SVG eller en mindre bild.",
     message: "Berätta lite om era medlemmar (valfritt)",
     messagePlaceholder: "Vilka är era medlemmar, och ungefär hur många?",
     submit: "Skicka ansökan",
@@ -459,6 +508,10 @@ export const fr: PartnerCopy = {
     ctaTitle: "Intéressé à devenir partenaire ?",
     ctaText: "Nous serions ravis d'échanger avec vous pour voir comment AutoVere pourrait devenir un avantage utile pour vos membres.",
     ctaButton: "Discutons-en",
+    ctaPrimaryTitle: "Devenez partenaire AutoVere",
+    ctaPrimaryText: "Inscrivez votre organisation directement auprès d'AutoVere. Cela ne prend que quelques minutes.",
+    ctaPrimaryButton: "Devenir partenaire AutoVere →",
+    ctaExplanation: "Vous indiquez les informations de votre organisation — logo, pays, coordonnées et informations sur l'avantage membre. Une fois approuvée, AutoVere envoie automatiquement votre code et lien partenaire par e-mail.",
     back: "Retour à AutoVere",
     checkoutBanner: (code, percent) => `Code membre ${code} → réduction membre de ${percent} % appliquée`,
   },
@@ -477,6 +530,9 @@ export const fr: PartnerCopy = {
     contactNamePlaceholder: "Nom complet",
     contactEmail: "Votre e-mail",
     contactEmailPlaceholder: "nom@organisation.fr",
+    logo: "Logo (facultatif)",
+    logoHint: "SVG ou une petite image, 250 Ko maximum",
+    logoTooLarge: "Ce fichier logo est trop volumineux (250 Ko maximum). Essayez un SVG ou une image plus petite.",
     message: "Parlez-nous un peu de vos membres (facultatif)",
     messagePlaceholder: "Qui sont vos membres, et environ combien sont-ils ?",
     submit: "Envoyer la demande",
@@ -520,6 +576,10 @@ export const da: PartnerCopy = {
     ctaTitle: "Interesseret i at blive partner?",
     ctaText: "Vi hører meget gerne fra jer og undersøger sammen, hvordan AutoVere kan blive en nyttig fordel for jeres medlemmer.",
     ctaButton: "Lad os tale sammen",
+    ctaPrimaryTitle: "Bliv AutoVere-partner",
+    ctaPrimaryText: "Registrer jeres organisation direkte hos AutoVere. Det tager kun et par minutter.",
+    ctaPrimaryButton: "Bliv AutoVere-partner →",
+    ctaExplanation: "I angiver jeres organisations oplysninger — logo, land, kontaktinformation og information om medlemsfordelen. Når ansøgningen er godkendt, sender AutoVere automatisk jeres partnerkode og -link på e-mail.",
     back: "Tilbage til AutoVere",
     checkoutBanner: (code, percent) => `Medlemskode ${code} → ${percent} % medlemsrabat tilføjet`,
   },
@@ -538,6 +598,9 @@ export const da: PartnerCopy = {
     contactNamePlaceholder: "Fulde navn",
     contactEmail: "Din e-mail",
     contactEmailPlaceholder: "navn@organisation.dk",
+    logo: "Logo (valgfrit)",
+    logoHint: "SVG eller et lille billede, maks. 250 KB",
+    logoTooLarge: "Den logofil er for stor (maks. 250 KB). Prøv en SVG eller et mindre billede.",
     message: "Fortæl os lidt om jeres medlemmer (valgfrit)",
     messagePlaceholder: "Hvem er jeres medlemmer, og cirka hvor mange?",
     submit: "Send ansøgning",
