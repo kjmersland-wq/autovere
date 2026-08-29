@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon, Check, ChevronDown, Sparkles, Zap, Tent, Coins } from "lucide-react";
+import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Check, ChevronDown, Sparkles, Zap, Tent, Coins } from "lucide-react";
 import { TripForm, type DemoRoute, type TripFormState } from "@/components/TripForm";
 import { ContactModal } from "@/components/ContactModal";
 import { ShareModal } from "@/components/ShareModal";
@@ -30,7 +30,6 @@ import {
 import { loginLabels, useLocale, useT } from "@/lib/i18n";
 import { CURRENCIES, formatCurrency, type CurrencyCode } from "@/lib/currency";
 import { exchangeRatesNote } from "@/lib/currency-i18n";
-import { useTheme } from "@/hooks/use-theme";
 import { useCurrency } from "@/hooks/use-currency";
 import { marketingCopy } from "@/lib/marketing-i18n";
 import { partnerCopy } from "@/lib/partner-i18n";
@@ -299,7 +298,6 @@ function Index() {
   const [motorhomeLoading, setMotorhomeLoading] = useState(false);
   const [motorhomePois, setMotorhomePois] = useState<MotorhomePoi[]>([]);
   const [motorhomeCategories, setMotorhomeCategories] = useState<Set<MotorhomeCategory>>(new Set(MOTORHOME_CATEGORIES));
-  const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
     let cancelled = false;
@@ -737,15 +735,6 @@ function Index() {
                 {loginLabels[locale]}
               </Link>
             )}
-            <button
-              type="button"
-              onClick={toggleTheme}
-              className="rounded-lg border border-border bg-surface-raised p-2 text-muted-foreground transition-colors hover:text-foreground"
-              aria-label={theme === "dark" ? "Switch to day mode" : "Switch to night mode"}
-              title={theme === "dark" ? "Switch to day mode" : "Switch to night mode"}
-            >
-              {theme === "dark" ? <Sun className="size-4" /> : <Moon className="size-4" />}
-            </button>
             </div>
           </div>
 
@@ -803,7 +792,6 @@ function Index() {
                 borders={borders}
                 chargers={evStops.length ? evStops : chargers.slice(0, 40)}
                 showChargers={submitted?.vehicle === "ev"}
-                theme={theme}
                 scenic={visibleScenic}
                 onAddCharger={(charger) => {
                   const stop: Place = { id: `charger-${charger.id}`, name: charger.name, label: `${charger.name}, ${charger.operator ?? "EV charging"}`, lat: charger.lat, lon: charger.lon };

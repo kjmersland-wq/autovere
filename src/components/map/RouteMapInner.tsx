@@ -6,7 +6,6 @@ import type { LatLng } from "@/lib/countries";
 import { FLAGS, COUNTRY_NAMES } from "@/lib/countries";
 import type { Charger, ScenicHighlight } from "@/lib/geo";
 import type { RouteVariantKey } from "@/lib/geo";
-import type { Theme } from "@/hooks/use-theme";
 import { countryName, useLocale, useT } from "@/lib/i18n";
 import { chargerCopy } from "@/lib/charger-i18n";
 
@@ -67,7 +66,6 @@ export default function RouteMapInner({
   borders,
   chargers,
   showChargers,
-  theme,
   scenic,
   onAddCharger,
 }: {
@@ -77,7 +75,6 @@ export default function RouteMapInner({
   borders: BorderMarker[];
   chargers: Charger[];
   showChargers: boolean;
-  theme: Theme;
   scenic: ScenicHighlight[];
   onAddCharger?: (charger: Charger) => void;
 }) {
@@ -94,12 +91,8 @@ export default function RouteMapInner({
       attributionControl
     >
       <TileLayer
-        url={theme === "dark"
-          ? "https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
-          : "https://tile.openstreetmap.org/{z}/{x}/{y}.png"}
-        attribution={theme === "dark"
-          ? '&copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>'
-          : '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a> contributors'}
+        url="https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png"
+        attribution='&copy; <a href="https://carto.com/attributions" target="_blank" rel="noopener noreferrer">CARTO</a> &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">OpenStreetMap</a>'
         maxZoom={19}
       />
       <MapSizeSync />

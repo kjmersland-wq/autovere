@@ -4,7 +4,6 @@ import { Loader2 } from "lucide-react";
 import { useState } from "react";
 import type { LatLng } from "@/lib/countries";
 import type { Charger, RouteVariantKey, ScenicHighlight } from "@/lib/geo";
-import type { Theme } from "@/hooks/use-theme";
 import { useLocale } from "@/lib/i18n";
 import { chargerCopy } from "@/lib/charger-i18n";
 
@@ -62,7 +61,6 @@ export function RouteMap(props: {
   borders: BorderMarker[];
   chargers: Charger[];
   showChargers: boolean;
-  theme: Theme;
   scenic: ScenicHighlight[];
   onAddCharger?: (charger: Charger) => void;
 }) {
