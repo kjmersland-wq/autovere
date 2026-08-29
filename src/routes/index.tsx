@@ -8,6 +8,7 @@ import { ShareModal } from "@/components/ShareModal";
 import { FeatureHighlights } from "@/components/FeatureHighlights";
 import { RouteMap } from "@/components/RouteMap";
 import { SmartFuelCharging, SmartFuelChargingUpgrade } from "@/components/SmartFuelCharging";
+import { MotorhomeCamping, MotorhomeCampingUpgrade } from "@/components/MotorhomeCamping";
 import { Breakdown, EvSavingsCard, RouteCard, TradeoffBanner } from "@/components/Comparison";
 import { VignetteChecklist } from "@/components/VignetteChecklist";
 import { SafetyRegulations } from "@/components/SafetyRegulations";
@@ -16,7 +17,7 @@ import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighligh
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
-import { fetchFastChargers, fetchMultiStopRoute, fetchScenicHighlights, fetchSmartFuelAndCharging, type Charger, type FuelStation, type Place, type RouteResult, type RouteVariantKey, type ScenicHighlight, type SmartCharger } from "@/lib/geo";
+import { fetchFastChargers, fetchMotorhomeCamping, fetchMultiStopRoute, fetchScenicHighlights, fetchSmartFuelAndCharging, MOTORHOME_CATEGORIES, type Charger, type FuelStation, type MotorhomeCategory, type MotorhomePoi, type Place, type RouteResult, type RouteVariantKey, type ScenicHighlight, type SmartCharger } from "@/lib/geo";
 import {
   appleMapsUrl,
   buildGpx,
@@ -35,6 +36,7 @@ import { partnerCopy } from "@/lib/partner-i18n";
 import { getAccountCopy } from "@/lib/account-i18n";
 import { chargerCopy } from "@/lib/charger-i18n";
 import { smartFuelCopy } from "@/lib/smart-fuel-i18n";
+import { motorhomeCopy } from "@/lib/motorhome-i18n";
 import { openPrintReport } from "@/lib/print-report";
 
 export const Route = createFileRoute("/")({
@@ -261,6 +263,10 @@ function Index() {
   const [smartLoading, setSmartLoading] = useState(false);
   const [smartChargers, setSmartChargers] = useState<SmartCharger[]>([]);
   const [smartFuelStations, setSmartFuelStations] = useState<FuelStation[]>([]);
+  const [motorhomeMaxKm, setMotorhomeMaxKm] = useState(25);
+  const [motorhomeLoading, setMotorhomeLoading] = useState(false);
+  const [motorhomePois, setMotorhomePois] = useState<MotorhomePoi[]>([]);
+  const [motorhomeCategories, setMotorhomeCategories] = useState<Set<MotorhomeCategory>>(new Set(MOTORHOME_CATEGORIES));
   const { theme, toggleTheme } = useTheme();
 
   useEffect(() => {
@@ -492,6 +498,30 @@ function Index() {
       controller.abort();
     };
   }, [proTier, selectedRoute, smartMaxKm]);
+
+  useEffect(() => {
+    if (!proTier || !selectedRoute || motorhomeCategories.size === 0) {
+      setMotorhomePois([]);
+      return;
+    }
+    let cancelled = false;
+    const controller = new AbortController();
+    setMotorhomeLoading(true);
+    fetchMotorhomeCamping(selectedRoute.coords, motorhomeMaxKm, [...motorhomeCategories], controller.signal)
+      .then((pois) => {
+        if (!cancelled) setMotorhomePois(pois);
+      })
+      .catch(() => {
+        if (!cancelled) setMotorhomePois([]);
+      })
+      .finally(() => {
+        if (!cancelled) setMotorhomeLoading(false);
+      });
+    return () => {
+      cancelled = true;
+      controller.abort();
+    };
+  }, [proTier, selectedRoute, motorhomeMaxKm, motorhomeCategories]);
 
   const cheapestKey = estimates.length
     ? estimates.reduce((a, b) => (a.total <= b.total ? a : b)).key
@@ -800,6 +830,31 @@ function Index() {
               />
             ) : (
               <SmartFuelChargingUpgrade copy={smartFuelCopy[locale] ?? smartFuelCopy.en} />
+            )}
+          </div>
+          <div className="mt-8">
+            {proTier ? (
+              <MotorhomeCamping
+                copy={motorhomeCopy[locale] ?? motorhomeCopy.en}
+                pois={motorhomePois}
+                loading={motorhomeLoading}
+                maxDistanceKm={motorhomeMaxKm}
+                onMaxDistanceChange={setMotorhomeMaxKm}
+                selectedCategories={motorhomeCategories}
+                onToggleCategory={(category) => setMotorhomeCategories((current) => {
+                  const next = new Set(current);
+                  if (next.has(category)) next.delete(category); else next.add(category);
+                  return next;
+                })}
+                onSelectAll={() => setMotorhomeCategories(new Set(MOTORHOME_CATEGORIES))}
+                onClearAll={() => setMotorhomeCategories(new Set())}
+                onAddStop={(stop) => {
+                  setForm((current) => current.stops.some((item) => item?.id === stop.id) ? current : { ...current, stops: [...current.stops, stop] });
+                  toast.success(chargerCopy[locale].added);
+                }}
+              />
+            ) : (
+              <MotorhomeCampingUpgrade copy={motorhomeCopy[locale] ?? motorhomeCopy.en} />
             )}
           </div>
           <div className="mt-8">
