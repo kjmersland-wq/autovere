@@ -32,11 +32,40 @@ export type PartnerCopy = {
     ctaTitle: string;
     ctaText: string;
     ctaButton: string;
+    ctaPrimaryTitle: string;
+    ctaPrimaryText: string;
+    ctaPrimaryButton: string;
+    ctaExplanation: string;
     back: string;
     checkoutBanner: (code: string, percent: number) => string;
   };
   demo: { name: string; country: string; note: string };
   memberCode: { label: string; placeholder: string; apply: string; applying: string; invalid: string };
+  application: {
+    title: string;
+    intro: string;
+    orgName: string;
+    orgNamePlaceholder: string;
+    country: string;
+    countryPlaceholder: string;
+    website: string;
+    websitePlaceholder: string;
+    contactName: string;
+    contactNamePlaceholder: string;
+    contactEmail: string;
+    contactEmailPlaceholder: string;
+    logo: string;
+    logoHint: string;
+    logoTooLarge: string;
+    message: string;
+    messagePlaceholder: string;
+    submit: string;
+    submitting: string;
+    success: string;
+    successBody: string;
+    close: string;
+    error: string;
+  };
 };
 
 export const en: PartnerCopy = {
@@ -71,11 +100,40 @@ export const en: PartnerCopy = {
     ctaTitle: "Interested in becoming a partner?",
     ctaText: "We'd love to hear from you and explore how AutoVere could become a useful benefit for your members.",
     ctaButton: "Let's talk",
+    ctaPrimaryTitle: "Become an AutoVere Partner",
+    ctaPrimaryText: "Register your organisation directly with AutoVere. It only takes a few minutes.",
+    ctaPrimaryButton: "Become an AutoVere Partner →",
+    ctaExplanation: "You provide your organisation details, logo, country, contact information and member benefit information. Once approved, AutoVere automatically sends your partner code and partner link by email.",
     back: "Back to AutoVere",
     checkoutBanner: (code, percent) => `Organisation member code ${code} → ${percent}% member discount applied`,
   },
   demo: { name: "European Touring Association", country: "Norway", note: "Fictional example organisation, for demonstration only." },
   memberCode: { label: "Organisation member code", placeholder: "e.g. ETA25", apply: "Apply", applying: "Checking…", invalid: "We couldn't recognise that code — check it and try again." },
+  application: {
+    title: "Apply to become a partner",
+    intro: "Tell us about your organisation and we'll be in touch. Once approved, your member code and link are ready immediately — nothing for you to configure.",
+    orgName: "Organisation name",
+    orgNamePlaceholder: "e.g. European Touring Association",
+    country: "Country",
+    countryPlaceholder: "e.g. Norway",
+    website: "Official website",
+    websitePlaceholder: "https://",
+    contactName: "Your name",
+    contactNamePlaceholder: "Full name",
+    contactEmail: "Your email",
+    contactEmailPlaceholder: "name@organisation.org",
+    logo: "Logo (optional)",
+    logoHint: "SVG or a small image, max 250 KB",
+    logoTooLarge: "That logo file is too large (max 250 KB). Try an SVG or a smaller image.",
+    message: "Tell us a bit about your members (optional)",
+    messagePlaceholder: "Who are your members, and roughly how many?",
+    submit: "Submit application",
+    submitting: "Submitting…",
+    success: "Application received!",
+    successBody: "Thanks — we'll review it and email you as soon as it's approved.",
+    close: "Close",
+    error: "We couldn't submit your application. Please check the form and try again.",
+  },
 };
 
 export const de: PartnerCopy = {
@@ -110,11 +168,40 @@ export const de: PartnerCopy = {
     ctaTitle: "Interesse an einer Partnerschaft?",
     ctaText: "Wir freuen uns, von Ihnen zu hören und gemeinsam zu prüfen, wie AutoVere ein nützlicher Vorteil für Ihre Mitglieder werden kann.",
     ctaButton: "Lassen Sie uns sprechen",
+    ctaPrimaryTitle: "AutoVere-Partner werden",
+    ctaPrimaryText: "Registriere deine Organisation direkt bei AutoVere. Das dauert nur wenige Minuten.",
+    ctaPrimaryButton: "AutoVere-Partner werden →",
+    ctaExplanation: "Du gibst die Angaben zu deiner Organisation an — Logo, Land, Kontaktdaten und Informationen zum Mitgliedervorteil. Nach der Freigabe sendet AutoVere deinen Partnercode und -link automatisch per E-Mail.",
     back: "Zurück zu AutoVere",
     checkoutBanner: (code, percent) => `Mitgliedscode ${code} → ${percent} % Mitgliederrabatt angewendet`,
   },
   demo: { name: "European Touring Association", country: "Norwegen", note: "Fiktive Beispielorganisation, nur zu Demonstrationszwecken." },
   memberCode: { label: "Mitgliedscode deiner Organisation", placeholder: "z. B. ETA25", apply: "Anwenden", applying: "Wird geprüft…", invalid: "Diesen Code konnten wir nicht erkennen — bitte überprüfe ihn und versuche es erneut." },
+  application: {
+    title: "Partner werden",
+    intro: "Erzähl uns von deiner Organisation, wir melden uns bei dir. Nach der Freigabe stehen dein Mitgliedscode und -link sofort bereit — du musst nichts einrichten.",
+    orgName: "Name der Organisation",
+    orgNamePlaceholder: "z. B. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "z. B. Norwegen",
+    website: "Offizielle Website",
+    websitePlaceholder: "https://",
+    contactName: "Dein Name",
+    contactNamePlaceholder: "Vollständiger Name",
+    contactEmail: "Deine E-Mail",
+    contactEmailPlaceholder: "name@organisation.org",
+    logo: "Logo (optional)",
+    logoHint: "SVG oder ein kleines Bild, max. 250 KB",
+    logoTooLarge: "Diese Logodatei ist zu groß (max. 250 KB). Versuche es mit einer SVG- oder einer kleineren Bilddatei.",
+    message: "Erzähl uns kurz von deinen Mitgliedern (optional)",
+    messagePlaceholder: "Wer sind eure Mitglieder, und ungefähr wie viele?",
+    submit: "Antrag senden",
+    submitting: "Wird gesendet…",
+    success: "Antrag eingegangen!",
+    successBody: "Danke — wir prüfen ihn und melden uns per E-Mail, sobald er freigegeben ist.",
+    close: "Schließen",
+    error: "Dein Antrag konnte nicht gesendet werden. Bitte prüfe das Formular und versuche es erneut.",
+  },
 };
 
 export const nl: PartnerCopy = {
@@ -149,11 +236,40 @@ export const nl: PartnerCopy = {
     ctaTitle: "Interesse om partner te worden?",
     ctaText: "We horen graag van u en verkennen samen hoe AutoVere een nuttig voordeel kan worden voor uw leden.",
     ctaButton: "Laten we praten",
+    ctaPrimaryTitle: "Word AutoVere-partner",
+    ctaPrimaryText: "Registreer je organisatie direct bij AutoVere. Dit duurt maar een paar minuten.",
+    ctaPrimaryButton: "Word AutoVere-partner →",
+    ctaExplanation: "Je geeft de gegevens van je organisatie op — logo, land, contactgegevens en informatie over het ledenvoordeel. Na goedkeuring stuurt AutoVere automatisch je partnercode en -link per e-mail.",
     back: "Terug naar AutoVere",
     checkoutBanner: (code, percent) => `Ledencode van organisatie ${code} → ${percent}% ledenkorting toegepast`,
   },
   demo: { name: "European Touring Association", country: "Noorwegen", note: "Fictieve voorbeeldorganisatie, uitsluitend ter demonstratie." },
   memberCode: { label: "Ledencode van je organisatie", placeholder: "bijv. ETA25", apply: "Toepassen", applying: "Controleren…", invalid: "We herkennen deze code niet — controleer hem en probeer het opnieuw." },
+  application: {
+    title: "Word partner",
+    intro: "Vertel ons over je organisatie, dan nemen we contact op. Na goedkeuring staan je ledencode en -link meteen klaar — er is niets voor je in te stellen.",
+    orgName: "Naam van de organisatie",
+    orgNamePlaceholder: "bijv. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "bijv. Noorwegen",
+    website: "Officiële website",
+    websitePlaceholder: "https://",
+    contactName: "Jouw naam",
+    contactNamePlaceholder: "Volledige naam",
+    contactEmail: "Jouw e-mail",
+    contactEmailPlaceholder: "naam@organisatie.org",
+    logo: "Logo (optioneel)",
+    logoHint: "SVG of een klein bestand, max. 250 KB",
+    logoTooLarge: "Dit logobestand is te groot (max. 250 KB). Probeer een SVG of een kleinere afbeelding.",
+    message: "Vertel ons kort over je leden (optioneel)",
+    messagePlaceholder: "Wie zijn jullie leden, en hoeveel ongeveer?",
+    submit: "Aanvraag versturen",
+    submitting: "Versturen…",
+    success: "Aanvraag ontvangen!",
+    successBody: "Bedankt — we bekijken hem en mailen je zodra hij is goedgekeurd.",
+    close: "Sluiten",
+    error: "We konden je aanvraag niet versturen. Controleer het formulier en probeer het opnieuw.",
+  },
 };
 
 export const no: PartnerCopy = {
@@ -188,11 +304,40 @@ export const no: PartnerCopy = {
     ctaTitle: "Interessert i å bli partner?",
     ctaText: "Vi hører gjerne fra dere, så finner vi sammen ut hvordan AutoVere kan bli en nyttig fordel for medlemmene deres.",
     ctaButton: "La oss snakke sammen",
+    ctaPrimaryTitle: "Bli AutoVere-partner",
+    ctaPrimaryText: "Registrer organisasjonen deres direkte hos AutoVere. Det tar bare noen minutter.",
+    ctaPrimaryButton: "Bli AutoVere-partner →",
+    ctaExplanation: "Dere oppgir organisasjonens opplysninger — logo, land, kontaktinformasjon og informasjon om medlemsfordelen. Når søknaden er godkjent, sender AutoVere automatisk partnerkoden og -lenken deres på e-post.",
     back: "Tilbake til AutoVere",
     checkoutBanner: (code, percent) => `Medlemskode ${code} → ${percent} % medlemsrabatt er lagt til`,
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv eksempelorganisasjon, kun til demonstrasjon." },
   memberCode: { label: "Medlemskode fra organisasjonen din", placeholder: "f.eks. ETA25", apply: "Bruk kode", applying: "Sjekker…", invalid: "Vi kjente ikke igjen denne koden — sjekk den og prøv igjen." },
+  application: {
+    title: "Søk om å bli partner",
+    intro: "Fortell oss om organisasjonen deres, så tar vi kontakt. Når søknaden er godkjent, er medlemskoden og -lenken klare med en gang — dere trenger ikke sette opp noe selv.",
+    orgName: "Organisasjonens navn",
+    orgNamePlaceholder: "f.eks. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "f.eks. Norge",
+    website: "Offisiell nettside",
+    websitePlaceholder: "https://",
+    contactName: "Ditt navn",
+    contactNamePlaceholder: "Fullt navn",
+    contactEmail: "Din e-post",
+    contactEmailPlaceholder: "navn@organisasjon.no",
+    logo: "Logo (valgfritt)",
+    logoHint: "SVG eller et lite bilde, maks 250 KB",
+    logoTooLarge: "Logofilen er for stor (maks 250 KB). Prøv en SVG eller et mindre bilde.",
+    message: "Fortell oss litt om medlemmene deres (valgfritt)",
+    messagePlaceholder: "Hvem er medlemmene deres, og omtrent hvor mange?",
+    submit: "Send søknad",
+    submitting: "Sender…",
+    success: "Søknad mottatt!",
+    successBody: "Takk — vi går gjennom den og sender deg en e-post så snart den er godkjent.",
+    close: "Lukk",
+    error: "Vi klarte ikke å sende søknaden. Sjekk skjemaet og prøv igjen.",
+  },
 };
 
 export const pl: PartnerCopy = {
@@ -227,11 +372,40 @@ export const pl: PartnerCopy = {
     ctaTitle: "Chcecie zostać partnerem?",
     ctaText: "Chętnie się z wami skontaktujemy i wspólnie sprawdzimy, jak AutoVere może stać się przydatną korzyścią dla waszych członków.",
     ctaButton: "Porozmawiajmy",
+    ctaPrimaryTitle: "Zostań partnerem AutoVere",
+    ctaPrimaryText: "Zarejestruj swoją organizację bezpośrednio w AutoVere. Zajmuje to tylko kilka minut.",
+    ctaPrimaryButton: "Zostań partnerem AutoVere →",
+    ctaExplanation: "Podajesz dane swojej organizacji — logo, kraj, dane kontaktowe oraz informacje o korzyści dla członków. Po zatwierdzeniu AutoVere automatycznie wyśle Twój kod partnera i link e-mailem.",
     back: "Powrót do AutoVere",
     checkoutBanner: (code, percent) => `Kod członkowski organizacji ${code} → zastosowano ${percent}% zniżki dla członków`,
   },
   demo: { name: "European Touring Association", country: "Norwegia", note: "Fikcyjna organizacja przykładowa, wyłącznie do demonstracji." },
   memberCode: { label: "Kod członkowski Twojej organizacji", placeholder: "np. ETA25", apply: "Zastosuj", applying: "Sprawdzanie…", invalid: "Nie rozpoznaliśmy tego kodu — sprawdź go i spróbuj ponownie." },
+  application: {
+    title: "Zostań partnerem",
+    intro: "Opowiedz nam o swojej organizacji, a odezwiemy się do was. Po zatwierdzeniu kod i link członkowski są od razu gotowe — nie musicie niczego konfigurować.",
+    orgName: "Nazwa organizacji",
+    orgNamePlaceholder: "np. European Touring Association",
+    country: "Kraj",
+    countryPlaceholder: "np. Norwegia",
+    website: "Oficjalna strona",
+    websitePlaceholder: "https://",
+    contactName: "Twoje imię i nazwisko",
+    contactNamePlaceholder: "Imię i nazwisko",
+    contactEmail: "Twój e-mail",
+    contactEmailPlaceholder: "imie@organizacja.pl",
+    logo: "Logo (opcjonalnie)",
+    logoHint: "SVG lub mały plik graficzny, maks. 250 KB",
+    logoTooLarge: "Ten plik logo jest za duży (maks. 250 KB). Spróbuj pliku SVG lub mniejszego obrazu.",
+    message: "Opowiedz nam krótko o swoich członkach (opcjonalnie)",
+    messagePlaceholder: "Kim są wasi członkowie i ile ich mniej więcej jest?",
+    submit: "Wyślij zgłoszenie",
+    submitting: "Wysyłanie…",
+    success: "Zgłoszenie przyjęte!",
+    successBody: "Dziękujemy — sprawdzimy je i napiszemy do was, gdy tylko zostanie zatwierdzone.",
+    close: "Zamknij",
+    error: "Nie udało się wysłać zgłoszenia. Sprawdź formularz i spróbuj ponownie.",
+  },
 };
 
 export const sv: PartnerCopy = {
@@ -266,11 +440,40 @@ export const sv: PartnerCopy = {
     ctaTitle: "Intresserad av att bli partner?",
     ctaText: "Vi hör gärna av oss och utforskar tillsammans hur AutoVere kan bli en användbar förmån för era medlemmar.",
     ctaButton: "Låt oss prata",
+    ctaPrimaryTitle: "Bli AutoVere-partner",
+    ctaPrimaryText: "Registrera er organisation direkt hos AutoVere. Det tar bara några minuter.",
+    ctaPrimaryButton: "Bli AutoVere-partner →",
+    ctaExplanation: "Ni anger er organisations uppgifter — logotyp, land, kontaktinformation och information om medlemsförmånen. När ansökan är godkänd skickar AutoVere automatiskt er partnerkod och -länk via e-post.",
     back: "Tillbaka till AutoVere",
     checkoutBanner: (code, percent) => `Medlemskod ${code} → ${percent} % medlemsrabatt tillämpad`,
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv exempelorganisation, endast för demonstration." },
   memberCode: { label: "Medlemskod från din organisation", placeholder: "t.ex. ETA25", apply: "Använd", applying: "Kontrollerar…", invalid: "Vi kände inte igen den koden — kontrollera den och försök igen." },
+  application: {
+    title: "Ansök om att bli partner",
+    intro: "Berätta om er organisation, så hör vi av oss. När ansökan är godkänd är medlemskoden och länken klara direkt — ni behöver inte ställa in något själva.",
+    orgName: "Organisationens namn",
+    orgNamePlaceholder: "t.ex. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "t.ex. Norge",
+    website: "Officiell webbplats",
+    websitePlaceholder: "https://",
+    contactName: "Ditt namn",
+    contactNamePlaceholder: "Fullständigt namn",
+    contactEmail: "Din e-post",
+    contactEmailPlaceholder: "namn@organisation.se",
+    logo: "Logotyp (valfritt)",
+    logoHint: "SVG eller en liten bildfil, max 250 KB",
+    logoTooLarge: "Den logotypfilen är för stor (max 250 KB). Prova en SVG eller en mindre bild.",
+    message: "Berätta lite om era medlemmar (valfritt)",
+    messagePlaceholder: "Vilka är era medlemmar, och ungefär hur många?",
+    submit: "Skicka ansökan",
+    submitting: "Skickar…",
+    success: "Ansökan mottagen!",
+    successBody: "Tack — vi går igenom den och mejlar er så snart den är godkänd.",
+    close: "Stäng",
+    error: "Vi kunde inte skicka ansökan. Kontrollera formuläret och försök igen.",
+  },
 };
 
 export const fr: PartnerCopy = {
@@ -305,11 +508,40 @@ export const fr: PartnerCopy = {
     ctaTitle: "Intéressé à devenir partenaire ?",
     ctaText: "Nous serions ravis d'échanger avec vous pour voir comment AutoVere pourrait devenir un avantage utile pour vos membres.",
     ctaButton: "Discutons-en",
+    ctaPrimaryTitle: "Devenez partenaire AutoVere",
+    ctaPrimaryText: "Inscrivez votre organisation directement auprès d'AutoVere. Cela ne prend que quelques minutes.",
+    ctaPrimaryButton: "Devenir partenaire AutoVere →",
+    ctaExplanation: "Vous indiquez les informations de votre organisation — logo, pays, coordonnées et informations sur l'avantage membre. Une fois approuvée, AutoVere envoie automatiquement votre code et lien partenaire par e-mail.",
     back: "Retour à AutoVere",
     checkoutBanner: (code, percent) => `Code membre ${code} → réduction membre de ${percent} % appliquée`,
   },
   demo: { name: "European Touring Association", country: "Norvège", note: "Organisation fictive d'exemple, à des fins de démonstration uniquement." },
   memberCode: { label: "Code membre de votre organisation", placeholder: "ex. ETA25", apply: "Appliquer", applying: "Vérification…", invalid: "Nous n'avons pas reconnu ce code — vérifiez-le et réessayez." },
+  application: {
+    title: "Devenir partenaire",
+    intro: "Parlez-nous de votre organisation, nous vous répondrons rapidement. Une fois approuvés, votre code et lien membre sont prêts immédiatement — vous n'avez rien à configurer.",
+    orgName: "Nom de l'organisation",
+    orgNamePlaceholder: "ex. European Touring Association",
+    country: "Pays",
+    countryPlaceholder: "ex. Norvège",
+    website: "Site officiel",
+    websitePlaceholder: "https://",
+    contactName: "Votre nom",
+    contactNamePlaceholder: "Nom complet",
+    contactEmail: "Votre e-mail",
+    contactEmailPlaceholder: "nom@organisation.fr",
+    logo: "Logo (facultatif)",
+    logoHint: "SVG ou une petite image, 250 Ko maximum",
+    logoTooLarge: "Ce fichier logo est trop volumineux (250 Ko maximum). Essayez un SVG ou une image plus petite.",
+    message: "Parlez-nous un peu de vos membres (facultatif)",
+    messagePlaceholder: "Qui sont vos membres, et environ combien sont-ils ?",
+    submit: "Envoyer la demande",
+    submitting: "Envoi…",
+    success: "Demande reçue !",
+    successBody: "Merci — nous l'examinerons et vous enverrons un e-mail dès qu'elle sera approuvée.",
+    close: "Fermer",
+    error: "Nous n'avons pas pu envoyer votre demande. Vérifiez le formulaire et réessayez.",
+  },
 };
 
 export const da: PartnerCopy = {
@@ -344,11 +576,40 @@ export const da: PartnerCopy = {
     ctaTitle: "Interesseret i at blive partner?",
     ctaText: "Vi hører meget gerne fra jer og undersøger sammen, hvordan AutoVere kan blive en nyttig fordel for jeres medlemmer.",
     ctaButton: "Lad os tale sammen",
+    ctaPrimaryTitle: "Bliv AutoVere-partner",
+    ctaPrimaryText: "Registrer jeres organisation direkte hos AutoVere. Det tager kun et par minutter.",
+    ctaPrimaryButton: "Bliv AutoVere-partner →",
+    ctaExplanation: "I angiver jeres organisations oplysninger — logo, land, kontaktinformation og information om medlemsfordelen. Når ansøgningen er godkendt, sender AutoVere automatisk jeres partnerkode og -link på e-mail.",
     back: "Tilbage til AutoVere",
     checkoutBanner: (code, percent) => `Medlemskode ${code} → ${percent} % medlemsrabat tilføjet`,
   },
   demo: { name: "European Touring Association", country: "Norge", note: "Fiktiv eksempelorganisation, kun til demonstration." },
   memberCode: { label: "Medlemskode fra din organisation", placeholder: "f.eks. ETA25", apply: "Anvend", applying: "Tjekker…", invalid: "Vi kunne ikke genkende den kode — tjek den, og prøv igen." },
+  application: {
+    title: "Ansøg om at blive partner",
+    intro: "Fortæl os om jeres organisation, så kontakter vi jer. Når ansøgningen er godkendt, er medlemskoden og linket klar med det samme — I skal ikke opsætte noget selv.",
+    orgName: "Organisationens navn",
+    orgNamePlaceholder: "f.eks. European Touring Association",
+    country: "Land",
+    countryPlaceholder: "f.eks. Norge",
+    website: "Officiel hjemmeside",
+    websitePlaceholder: "https://",
+    contactName: "Dit navn",
+    contactNamePlaceholder: "Fulde navn",
+    contactEmail: "Din e-mail",
+    contactEmailPlaceholder: "navn@organisation.dk",
+    logo: "Logo (valgfrit)",
+    logoHint: "SVG eller et lille billede, maks. 250 KB",
+    logoTooLarge: "Den logofil er for stor (maks. 250 KB). Prøv en SVG eller et mindre billede.",
+    message: "Fortæl os lidt om jeres medlemmer (valgfrit)",
+    messagePlaceholder: "Hvem er jeres medlemmer, og cirka hvor mange?",
+    submit: "Send ansøgning",
+    submitting: "Sender…",
+    success: "Ansøgning modtaget!",
+    successBody: "Tak — vi gennemgår den og skriver til jer, så snart den er godkendt.",
+    close: "Luk",
+    error: "Vi kunne ikke sende ansøgningen. Tjek formularen, og prøv igen.",
+  },
 };
 
 export const partnerCopy: Record<Locale, PartnerCopy> = { en, de, nl, no, pl, sv, fr, da };

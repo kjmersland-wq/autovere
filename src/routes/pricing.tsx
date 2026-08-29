@@ -120,7 +120,19 @@ function PricingPage() {
                 {!plan.isFree && <span className="text-sm text-muted-foreground">{yearly ? annualLabels[locale] : copy.perMonth}</span>}
               </div>
               <ul className="mt-6 flex-1 space-y-3 text-sm text-muted-foreground">
-                {plan.features.map((feature) => <li key={feature} className="flex gap-2"><Check className="mt-0.5 size-4 shrink-0 text-primary" /> <span>{feature}</span></li>)}
+                {plan.features.map((feature, featureIndex) => (
+                  <li key={featureIndex} className="flex gap-2">
+                    <Check className="mt-0.5 size-4 shrink-0 text-primary" />
+                    {typeof feature === "string" ? (
+                      <span>{feature}</span>
+                    ) : (
+                      <span>
+                        <span className="block font-semibold text-foreground">{feature.title}</span>
+                        <span className="mt-0.5 block text-xs leading-relaxed">{feature.detail}</span>
+                      </span>
+                    )}
+                  </li>
+                ))}
               </ul>
               {planIndex === 0 ? <Link to="/" onClick={() => setSelectedPlan(planIndex)}><Button className="mt-7 w-full">{plan.action}</Button></Link> : <Button className="mt-7 w-full" variant={selectedPlan === planIndex ? "default" : "secondary"} disabled={checkoutPlan !== null} onClick={() => { setSelectedPlan(planIndex); void startCheckout(`${planIndex === 2 ? "business" : "pro"}-${yearly ? "yearly" : "monthly"}`); }}>{checkoutPlan ? checkoutLabels[locale].starting : plan.action}</Button>}
             </article>

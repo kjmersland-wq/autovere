@@ -74,10 +74,17 @@ async function main() {
       start_date DATE,
       end_date DATE,
       notes TEXT,
+      type TEXT NOT NULL DEFAULT 'member_organisation',
       created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
       updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
+  // CREATE TABLE IF NOT EXISTS is a no-op on a table that already exists in production,
+  // so the "type" column above only takes effect on a brand-new database — add it
+  // explicitly for the already-existing production table.
+  await sql`ALTER TABLE partners ADD COLUMN IF NOT EXISTS type TEXT NOT NULL DEFAULT 'member_organisation'`;
+  await sql`ALTER TABLE partners DROP CONSTRAINT IF EXISTS partners_type_check`;
+  await sql`ALTER TABLE partners ADD CONSTRAINT partners_type_check CHECK (type IN ('member_organisation', 'car_dealer', 'motorhome_dealer'))`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS partner_referrals (
@@ -109,6 +116,31 @@ async function main() {
       last_seen_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
+
+  await sql`
+    CREATE TABLE IF NOT EXISTS partner_applications (
+      id TEXT PRIMARY KEY,
+      type TEXT NOT NULL DEFAULT 'member_organisation',
+      organisation_name TEXT NOT NULL,
+      country TEXT,
+      website TEXT NOT NULL,
+      contact_name TEXT NOT NULL,
+      contact_email TEXT NOT NULL,
+      logo TEXT,
+      message TEXT,
+      locale TEXT NOT NULL DEFAULT 'en',
+      status TEXT NOT NULL DEFAULT 'pending',
+      partner_id TEXT REFERENCES partners(id),
+      reviewed_at TIMESTAMPTZ,
+      created_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    )
+  `;
+  // Same lesson as partners.type: CREATE TABLE IF NOT EXISTS is a no-op once the table already
+  // exists in production, so a column added after the table's first deploy needs its own ALTER.
+  await sql`ALTER TABLE partner_applications ADD COLUMN IF NOT EXISTS logo TEXT`;
+  await sql`CREATE INDEX IF NOT EXISTS partner_applications_status_idx ON partner_applications(status)`;
+  await sql`ALTER TABLE partner_applications DROP CONSTRAINT IF EXISTS partner_applications_status_check`;
+  await sql`ALTER TABLE partner_applications ADD CONSTRAINT partner_applications_status_check CHECK (status IN ('pending', 'approved', 'rejected'))`;
 
   console.log("Migration complete.");
 }

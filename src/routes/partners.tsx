@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
 import { ContactModal } from "@/components/ContactModal";
+import { PartnerApplicationModal } from "@/components/partner/PartnerApplicationModal";
 import { PartnerHeader } from "@/components/partner/PartnerHeader";
 import { AnchorLink } from "@/components/AnchorLink";
 import { useLocale } from "@/lib/i18n";
@@ -29,6 +30,7 @@ function PartnersPage() {
   const copy = partnerCopy[locale] ?? partnerCopy.en;
   const share = shareLinkCopy[locale] ?? shareLinkCopy.en;
   const [partners, setPartners] = useState<PartnerRecord[] | null>(null);
+  const [applicationOpen, setApplicationOpen] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
 
   useEffect(() => {
@@ -152,10 +154,21 @@ function PartnersPage() {
             <h2 className="text-xl font-bold">{copy.page.ctaTitle}</h2>
             <AnchorLink id="become-a-partner" label={share.copyLink} copiedLabel={share.linkCopied} />
           </div>
-          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">{copy.page.ctaText}</p>
-          <Button className="mt-5" onClick={() => setContactOpen(true)}>{copy.page.ctaButton}</Button>
+
+          <div className="panel mt-5 bg-gradient-to-br from-primary/10 via-surface/80 to-surface/80 p-5 sm:p-7">
+            <h3 className="text-lg font-bold text-foreground">{copy.page.ctaPrimaryTitle}</h3>
+            <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">{copy.page.ctaPrimaryText}</p>
+            <Button size="lg" className="mt-5" onClick={() => setApplicationOpen(true)}>{copy.page.ctaPrimaryButton}</Button>
+            <p className="mt-4 max-w-xl text-xs leading-relaxed text-muted-foreground">{copy.page.ctaExplanation}</p>
+          </div>
+
+          <div className="mt-6">
+            <p className="max-w-xl text-sm leading-relaxed text-muted-foreground">{copy.page.ctaText}</p>
+            <Button variant="secondary" className="mt-3" onClick={() => setContactOpen(true)}>{copy.page.ctaButton}</Button>
+          </div>
         </section>
       </div>
+      <PartnerApplicationModal open={applicationOpen} onOpenChange={setApplicationOpen} />
       <ContactModal open={contactOpen} onOpenChange={setContactOpen} />
     </main>
   );
