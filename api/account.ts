@@ -222,21 +222,21 @@ const CURRENCIES = new Set(["EUR", "NOK", "SEK", "DKK", "GBP", "CHF"]);
 const LOCALES = new Set(["en", "de", "nl", "no", "pl", "sv", "fr", "da"]);
 const UNIT_SYSTEMS = new Set(["metric", "imperial"]);
 
-type SettingsRow = { language: string | null; currency: string | null; units: string | null; notifications_email: boolean };
+type SettingsRow = { language: string | null; currency: string | null; units: string | null; notifications_email: boolean; display_name: string | null };
 
 async function handleSettingsGet(email: string, response: Response) {
   const databaseUrl = process.env["DATABASE_URL"];
   if (!databaseUrl) {
-    response.status(200).json({ settings: { language: null, currency: null, units: null, notificationsEmail: true } });
+    response.status(200).json({ settings: { language: null, currency: null, units: null, notificationsEmail: true, displayName: null } });
     return;
   }
   const sql = neon(databaseUrl);
-  const rows = (await sql`SELECT language, currency, units, notifications_email FROM user_settings WHERE user_email = ${email}`) as SettingsRow[];
+  const rows = (await sql`SELECT language, currency, units, notifications_email, display_name FROM user_settings WHERE user_email = ${email}`) as SettingsRow[];
   const row = rows[0];
   response.status(200).json({
     settings: row
-      ? { language: row.language, currency: row.currency, units: row.units, notificationsEmail: row.notifications_email }
-      : { language: null, currency: null, units: null, notificationsEmail: true },
+      ? { language: row.language, currency: row.currency, units: row.units, notificationsEmail: row.notifications_email, displayName: row.display_name }
+      : { language: null, currency: null, units: null, notificationsEmail: true, displayName: null },
   });
 }
 
@@ -246,20 +246,26 @@ async function handleSettingsPut(email: string, request: Request, response: Resp
     response.status(500).json({ error: "Settings storage is not configured." });
     return;
   }
-  const body = parseBody(request.body);
-  const language = typeof body["language"] === "string" && LOCALES.has(body["language"]) ? body["language"] : null;
-  const currency = typeof body["currency"] === "string" && CURRENCIES.has(body["currency"]) ? body["currency"] : null;
-  const units = typeof body["units"] === "string" && UNIT_SYSTEMS.has(body["units"]) ? body["units"] : null;
-  const notificationsEmail = typeof body["notificationsEmail"] === "boolean" ? body["notificationsEmail"] : true;
-
   const sql = neon(databaseUrl);
+  const body = parseBody(request.body);
+  // Only the fields actually present in the request are changed — a partial save (e.g. just the
+  // display name from the Profile tab) must never silently reset the other saved preferences.
+  const existingRows = (await sql`SELECT language, currency, units, notifications_email, display_name FROM user_settings WHERE user_email = ${email}`) as SettingsRow[];
+  const existing = existingRows[0];
+
+  const language = "language" in body ? (typeof body["language"] === "string" && LOCALES.has(body["language"]) ? body["language"] : null) : (existing?.language ?? null);
+  const currency = "currency" in body ? (typeof body["currency"] === "string" && CURRENCIES.has(body["currency"]) ? body["currency"] : null) : (existing?.currency ?? null);
+  const units = "units" in body ? (typeof body["units"] === "string" && UNIT_SYSTEMS.has(body["units"]) ? body["units"] : null) : (existing?.units ?? null);
+  const notificationsEmail = "notificationsEmail" in body ? (typeof body["notificationsEmail"] === "boolean" ? body["notificationsEmail"] : true) : (existing?.notifications_email ?? true);
+  const displayName = "displayName" in body ? (typeof body["displayName"] === "string" ? body["displayName"].trim().slice(0, 80) || null : null) : (existing?.display_name ?? null);
+
   await sql`
-    INSERT INTO user_settings (user_email, language, currency, units, notifications_email, updated_at)
-    VALUES (${email}, ${language}, ${currency}, ${units}, ${notificationsEmail}, now())
+    INSERT INTO user_settings (user_email, language, currency, units, notifications_email, display_name, updated_at)
+    VALUES (${email}, ${language}, ${currency}, ${units}, ${notificationsEmail}, ${displayName}, now())
     ON CONFLICT (user_email) DO UPDATE SET
-      language = ${language}, currency = ${currency}, units = ${units}, notifications_email = ${notificationsEmail}, updated_at = now()
+      language = ${language}, currency = ${currency}, units = ${units}, notifications_email = ${notificationsEmail}, display_name = ${displayName}, updated_at = now()
   `;
-  response.status(200).json({ settings: { language, currency, units, notificationsEmail } });
+  response.status(200).json({ settings: { language, currency, units, notificationsEmail, displayName } });
 }
 
 async function handleLogout(response: Response) {

@@ -57,9 +57,11 @@ async function main() {
       currency TEXT,
       units TEXT,
       notifications_email BOOLEAN NOT NULL DEFAULT true,
+      display_name TEXT,
       updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     )
   `;
+  await sql`ALTER TABLE user_settings ADD COLUMN IF NOT EXISTS display_name TEXT`;
 
   await sql`
     CREATE TABLE IF NOT EXISTS partners (

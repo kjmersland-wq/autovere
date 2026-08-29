@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, type LucideIcon } from "lucide-react";
-import { ReactNode } from "react";
+import { Fragment as ReactFragment, type ReactNode } from "react";
 
 export function EmptyState({ title, body, icon: Icon }: { title: string; body: string; icon: LucideIcon }) {
   return (
@@ -14,21 +14,23 @@ export function EmptyState({ title, body, icon: Icon }: { title: string; body: s
 
 export type AccountNavItem<Section extends string> = { key: Section; label: string; icon: LucideIcon };
 
-export function AccountNav<Section extends string>({ items, active, onSelect }: { items: AccountNavItem<Section>[]; active: Section; onSelect: (key: Section) => void }) {
+export function AccountNav<Section extends string>({ items, active, onSelect, extraAfterFirst }: { items: AccountNavItem<Section>[]; active: Section; onSelect: (key: Section) => void; extraAfterFirst?: ReactNode }) {
   return (
     <nav className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-2 lg:mx-0 lg:flex-col lg:overflow-visible lg:px-0 lg:pb-0">
-      {items.map(({ key, label, icon: Icon }) => (
-        <button
-          key={key}
-          type="button"
-          onClick={() => onSelect(key)}
-          className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-left text-sm font-semibold transition-colors ${
-            active === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-surface-raised hover:text-foreground"
-          }`}
-        >
-          <Icon className="size-4 shrink-0" />
-          <span className="whitespace-nowrap lg:whitespace-normal">{label}</span>
-        </button>
+      {items.map(({ key, label, icon: Icon }, index) => (
+        <ReactFragment key={key}>
+          <button
+            type="button"
+            onClick={() => onSelect(key)}
+            className={`flex shrink-0 items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-left text-sm font-semibold transition-colors ${
+              active === key ? "bg-primary text-primary-foreground" : "text-muted-foreground hover:bg-surface-raised hover:text-foreground"
+            }`}
+          >
+            <Icon className="size-4 shrink-0" />
+            <span className="whitespace-nowrap lg:whitespace-normal">{label}</span>
+          </button>
+          {index === 0 && extraAfterFirst}
+        </ReactFragment>
       ))}
     </nav>
   );
@@ -41,6 +43,7 @@ export function AccountShell<Section extends string>({
   subtitle,
   badge,
   nav,
+  navExtra,
   active,
   onSelect,
   children,
@@ -51,6 +54,7 @@ export function AccountShell<Section extends string>({
   subtitle: string;
   badge?: ReactNode;
   nav: AccountNavItem<Section>[];
+  navExtra?: ReactNode;
   active: Section;
   onSelect: (key: Section) => void;
   children: ReactNode;
@@ -72,7 +76,7 @@ export function AccountShell<Section extends string>({
         </header>
 
         <div className="mt-8 grid gap-6 lg:grid-cols-[240px_1fr]">
-          <AccountNav items={nav} active={active} onSelect={onSelect} />
+          <AccountNav items={nav} active={active} onSelect={onSelect} extraAfterFirst={navExtra} />
           <div className="min-w-0 space-y-6">{children}</div>
         </div>
       </div>

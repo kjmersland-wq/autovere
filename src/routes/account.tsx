@@ -59,7 +59,7 @@ type Section = "overview" | "trips" | "vehicles" | "preferences" | "billing" | "
 type Trip = { id: string; name: string; fromPlace: string | null; toPlace: string | null; vehicleType: string | null; currency: string | null; days: number | null; estimate: unknown; createdAt: string; updatedAt: string };
 type Vehicle = { id: string; name: string; vehicleType: "petrol" | "diesel" | "ev"; consumption: number | null; rangeKm: number | null; isDefault: boolean; createdAt: string };
 type SavedPlace = { id: string; name: string; category: "charging" | "camping" | "attraction" | "other"; lat: number | null; lon: number | null; notes: string | null; createdAt: string };
-type Settings = { language: string | null; currency: CurrencyCode | null; units: "metric" | "imperial" | null; notificationsEmail: boolean };
+type Settings = { language: string | null; currency: CurrencyCode | null; units: "metric" | "imperial" | null; notificationsEmail: boolean; displayName: string | null };
 
 const proPlan = marketingCopy.en.plans[1]!;
 const businessPlan = marketingCopy.en.plans[2]!;
@@ -89,6 +89,38 @@ function AccountPage() {
   const [deleting, setDeleting] = useState(false);
   const [exporting, setExporting] = useState(false);
   const [contactOpen, setContactOpen] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [savingName, setSavingName] = useState(false);
+  const [nameSaved, setNameSaved] = useState(false);
+
+  useEffect(() => {
+    let cancelled = false;
+    jsonFetch<{ settings: Settings }>("/api/account?view=settings")
+      .then((body) => {
+        if (!cancelled) setDisplayName(body.settings.displayName ?? "");
+      })
+      .catch(() => {
+        /* no saved display name yet */
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  async function saveDisplayName() {
+    setSavingName(true);
+    setNameSaved(false);
+    try {
+      await jsonFetch("/api/account?view=settings", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ displayName: displayName.trim() }),
+      });
+      setNameSaved(true);
+    } finally {
+      setSavingName(false);
+    }
+  }
 
   useEffect(() => {
     let cancelled = false;
@@ -209,16 +241,15 @@ function AccountPage() {
       eyebrow={copy.eyebrow}
       title={copy.welcome(firstName)}
       subtitle={subscription ? copy.subtitleActive : copy.subtitleFree}
-      badge={
+      nav={nav}
+      navExtra={
         isAdmin ? (
-          <Link to="/admin">
-            <Button variant="secondary" size="sm">
-              <Lock className="mr-1.5 size-3.5" /> {copy.adminLink}
-            </Button>
+          <Link to="/admin" className="flex shrink-0 items-center gap-2.5 rounded-lg px-3.5 py-2.5 text-left text-sm font-semibold text-muted-foreground transition-colors hover:bg-surface-raised hover:text-foreground">
+            <Lock className="size-4 shrink-0" />
+            <span className="whitespace-nowrap lg:whitespace-normal">Admin</span>
           </Link>
         ) : undefined
       }
-      nav={nav}
       active={section}
       onSelect={setSection}
     >
@@ -408,6 +439,23 @@ function AccountPage() {
                   <div className="mt-5">
                     <p className="text-xs uppercase tracking-wide text-muted-foreground">{copy.profile.email}</p>
                     <p className="mt-1 text-sm font-semibold">{email}</p>
+                  </div>
+                  <div className="mt-5 rounded-lg border border-border bg-surface-raised p-4">
+                    <p className="text-sm font-semibold">{copy.profile.displayNameLabel}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{copy.profile.displayNameBody}</p>
+                    <div className="mt-3 flex flex-wrap items-center gap-3">
+                      <input
+                        value={displayName}
+                        onChange={(event) => setDisplayName(event.target.value)}
+                        placeholder={copy.profile.displayNamePlaceholder}
+                        maxLength={80}
+                        className="w-full max-w-xs rounded-md border border-border bg-background px-3 py-2 text-sm text-foreground outline-none focus:border-primary/60"
+                      />
+                      <Button size="sm" disabled={savingName} onClick={saveDisplayName}>
+                        {savingName ? copy.profile.savingName : copy.profile.saveName}
+                      </Button>
+                      {nameSaved && <span className="text-sm text-primary">{copy.profile.nameSaved}</span>}
+                    </div>
                   </div>
                   <div className="mt-5 rounded-lg border border-border bg-surface-raised p-4">
                     <p className="text-sm font-semibold">{copy.profile.security}</p>
@@ -901,7 +949,7 @@ function PreferencesSection({ copy, locale, setLocale }: CopyProps & { locale: s
   useEffect(() => {
     jsonFetch<{ settings: Settings }>("/api/account?view=settings")
       .then((body) => setSettings(body.settings))
-      .catch(() => setSettings({ language: null, currency: null, units: null, notificationsEmail: true }));
+      .catch(() => setSettings({ language: null, currency: null, units: null, notificationsEmail: true, displayName: null }));
   }, []);
 
   async function save() {
