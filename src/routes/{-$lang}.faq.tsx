@@ -8,23 +8,26 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { AnchorLink } from "@/components/AnchorLink";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { faqCopy, useLocale } from "@/lib/i18n";
+import { faqCopy, URL_LANG_TO_LOCALE, useLocale } from "@/lib/i18n";
 import { marketingCopy } from "@/lib/marketing-i18n";
 import { shareLinkCopy } from "@/lib/share-i18n";
-import { faqSchema } from "@/lib/seo";
+import { faqSchema, faqSeoCopy } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$lang}/faq")({
-  head: () => ({
-    meta: [
-      { title: "AutoVere Help & FAQ — Tolls, Vignettes, EV Charging & Accounts" },
-      {
-        name: "description",
-        content:
-          "Answers on how AutoVere calculates tolls and vignettes, EV charging and weather-adjusted range, what needs an account, and how your data is handled.",
-      },
-    ],
-    scripts: [{ type: "application/ld+json", children: JSON.stringify(faqSchema(faqCopy.en.categories)) }],
-  }),
+  head: (ctx) => {
+    const lang = (ctx.params as { lang?: string }).lang;
+    const locale = lang ? (URL_LANG_TO_LOCALE[lang] ?? "en") : "en";
+    const copy = faqSeoCopy[locale] ?? faqSeoCopy.en;
+    return {
+      meta: [
+        { title: copy.title },
+        { name: "description", content: copy.description },
+        { property: "og:title", content: copy.title },
+        { property: "og:description", content: copy.description },
+      ],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(faqSchema((faqCopy[locale] ?? faqCopy.en).categories)) }],
+    };
+  },
   component: FaqPage,
 });
 function FaqPage() {

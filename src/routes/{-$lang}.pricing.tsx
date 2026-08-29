@@ -6,12 +6,13 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { AnchorLink } from "@/components/AnchorLink";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { useLocale } from "@/lib/i18n";
+import { URL_LANG_TO_LOCALE, useLocale } from "@/lib/i18n";
 import { annualLabels, checkoutLabels, comparisonStateLabels, marketingCopy } from "@/lib/marketing-i18n";
 import { usePartner } from "@/lib/partner-context";
 import { partnerCopy } from "@/lib/partner-i18n";
 import { shareLinkCopy } from "@/lib/share-i18n";
 import { fetchPartnerByCode, storePartner, type PartnerRecord } from "@/lib/partners";
+import { pricingSeoCopy } from "@/lib/seo";
 
 const PLAN_ANCHORS = ["free", "pro", "business"];
 
@@ -163,15 +164,18 @@ function PricingPage() {
 }
 
 export const Route = createFileRoute("/{-$lang}/pricing")({
-  head: () => ({
-    meta: [
-      { title: "AutoVere Pricing — Free, Pro & Business Road-Trip Planning" },
-      {
-        name: "description",
-        content:
-          "Compare AutoVere Free, Pro and Business plans: toll and vignette calculations, EV charging routes, weather-adjusted charging buffers and fleet tools for European road trips.",
-      },
-    ],
-  }),
+  head: (ctx) => {
+    const lang = (ctx.params as { lang?: string }).lang;
+    const locale = lang ? (URL_LANG_TO_LOCALE[lang] ?? "en") : "en";
+    const copy = pricingSeoCopy[locale] ?? pricingSeoCopy.en;
+    return {
+      meta: [
+        { title: copy.title },
+        { name: "description", content: copy.description },
+        { property: "og:title", content: copy.title },
+        { property: "og:description", content: copy.description },
+      ],
+    };
+  },
   component: PricingPage,
 });

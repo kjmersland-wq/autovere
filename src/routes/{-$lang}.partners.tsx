@@ -9,21 +9,26 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { PartnerApplicationModal } from "@/components/partner/PartnerApplicationModal";
 import { PartnerHeader } from "@/components/partner/PartnerHeader";
 import { AnchorLink } from "@/components/AnchorLink";
-import { useLocale } from "@/lib/i18n";
+import { URL_LANG_TO_LOCALE, useLocale } from "@/lib/i18n";
 import { partnerCopy } from "@/lib/partner-i18n";
 import { shareLinkCopy } from "@/lib/share-i18n";
 import { fetchActivePartners, type PartnerRecord } from "@/lib/partners";
+import { partnersSeoCopy } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$lang}/partners")({
-  head: () => ({
-    meta: [
-      { title: "AutoVere Organisation Partners — Give Your Members 25% Off" },
-      {
-        name: "description",
-        content: "Partner with AutoVere to give your members a genuine travel benefit: 25% off AutoVere Pro's real toll, vignette, fuel and EV charging cost planning. Simple to offer, no technical work required.",
-      },
-    ],
-  }),
+  head: (ctx) => {
+    const lang = (ctx.params as { lang?: string }).lang;
+    const locale = lang ? (URL_LANG_TO_LOCALE[lang] ?? "en") : "en";
+    const copy = partnersSeoCopy[locale] ?? partnersSeoCopy.en;
+    return {
+      meta: [
+        { title: copy.title },
+        { name: "description", content: copy.description },
+        { property: "og:title", content: copy.title },
+        { property: "og:description", content: copy.description },
+      ],
+    };
+  },
   component: PartnersPage,
 });
 

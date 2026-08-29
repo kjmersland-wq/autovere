@@ -24,10 +24,16 @@ import { ContactModal } from "@/components/ContactModal";
 import { marketingCopy } from "@/lib/marketing-i18n";
 import { openPrintReport } from "@/lib/print-report";
 import { AccountShell, EmptyState, type AccountNavItem } from "@/components/account/AccountFrame";
+import { URL_LANG_TO_LOCALE } from "@/lib/i18n";
+import { demoSeoTitles } from "@/lib/seo";
 
 export const Route = createFileRoute("/{-$lang}/demo")({
   component: DemoPage,
-  head: () => ({ meta: [{ title: "AutoVere Demo — the full Pro experience" }, { name: "robots", content: "noindex" }] }),
+  head: (ctx) => {
+    const lang = (ctx.params as { lang?: string }).lang;
+    const locale = lang ? (URL_LANG_TO_LOCALE[lang] ?? "en") : "en";
+    return { meta: [{ title: demoSeoTitles[locale] ?? demoSeoTitles.en }, { name: "robots", content: "noindex" }] };
+  },
 });
 
 type Section = "overview" | "trips" | "vehicles" | "preferences" | "billing" | "places" | "profile" | "help";

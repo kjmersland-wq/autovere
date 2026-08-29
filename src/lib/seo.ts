@@ -35,6 +35,52 @@ export const seoAlternates: { hreflang: string; locale: Locale; ogLocale: string
 
 export const siteUrl = "https://www.autovere.com";
 
+export type PageSeoCopy = { title: string; description: string };
+
+export const pricingSeoCopy: Record<Locale, PageSeoCopy> = {
+  en: { title: "AutoVere Pricing — Free, Pro & Business Road-Trip Planning", description: "Compare AutoVere Free, Pro and Business plans: toll and vignette calculations, EV charging routes, weather-adjusted charging buffers and fleet tools for European road trips." },
+  no: { title: "AutoVere Priser — Gratis, Pro og Business bilferieplanlegging", description: "Sammenlign AutoVere Gratis, Pro og Business: bompenge- og vignettberegning, elbil-ladeplanlegging, værjusterte ladebuffere og flåteverktøy for europeiske bilferier." },
+  de: { title: "AutoVere Preise — Kostenlos, Pro & Business für Roadtrip-Planung", description: "Vergleichen Sie AutoVere Kostenlos, Pro und Business: Maut- und Vignettenberechnung, E-Auto-Laderouten, wetterangepasste Ladepuffer und Flottentools für Europareisen." },
+  nl: { title: "AutoVere Prijzen — Gratis, Pro & Business voor je Roadtrip", description: "Vergelijk AutoVere Gratis, Pro en Business: tol- en vignetberekening, EV-laadroutes, weersafhankelijke laadbuffers en wagenparktools voor Europese roadtrips." },
+  fr: { title: "Tarifs AutoVere — Gratuit, Pro et Business pour vos road trips", description: "Comparez les offres AutoVere Gratuit, Pro et Business : calcul des péages et vignettes, itinéraires de recharge VE, marges de recharge ajustées à la météo et outils de flotte pour vos road trips européens." },
+  pl: { title: "Cennik AutoVere — Free, Pro i Business do planowania podróży", description: "Porównaj plany AutoVere Free, Pro i Business: obliczanie opłat drogowych i winiet, trasy ładowania EV, bufory ładowania dostosowane do pogody oraz narzędzia flotowe na podróże po Europie." },
+  sv: { title: "AutoVere Priser — Free, Pro och Business för bilresor", description: "Jämför AutoVere Free, Pro och Business: beräkning av vägavgifter och vinjetter, elbilsladdningsrutter, väderjusterade laddbuffertar och flottverktyg för europeiska bilresor." },
+  da: { title: "AutoVere Priser — Free, Pro og Business til roadtrip-planlægning", description: "Sammenlign AutoVere Free, Pro og Business: beregning af vejafgifter og vignetter, elbil-laderuter, vejrjusterede ladebuffere og flådeværktøjer til europæiske roadtrips." },
+};
+
+export const faqSeoCopy: Record<Locale, PageSeoCopy> = {
+  en: { title: "AutoVere Help & FAQ — Tolls, Vignettes, EV Charging & Accounts", description: "Answers on how AutoVere calculates tolls and vignettes, EV charging and weather-adjusted range, what needs an account, and how your data is handled." },
+  no: { title: "AutoVere Hjelp og ofte stilte spørsmål — Bompenger, vignetter, elbillading og konto", description: "Svar på hvordan AutoVere beregner bompenger og vignetter, elbillading og værjustert rekkevidde, hva som krever konto, og hvordan dine data behandles." },
+  de: { title: "AutoVere Hilfe & FAQ — Maut, Vignetten, E-Auto-Laden & Konto", description: "Antworten dazu, wie AutoVere Maut und Vignetten berechnet, E-Auto-Laden und wetterangepasste Reichweite, was ein Konto erfordert und wie mit Ihren Daten umgegangen wird." },
+  nl: { title: "AutoVere Hulp & Veelgestelde vragen — Tol, vignetten, EV-laden & account", description: "Antwoorden over hoe AutoVere tol en vignetten berekent, EV-laden en weersafhankelijke actieradius, wat een account vereist en hoe met je gegevens wordt omgegaan." },
+  fr: { title: "Aide & FAQ AutoVere — Péages, vignettes, recharge VE et compte", description: "Réponses sur la façon dont AutoVere calcule les péages et vignettes, la recharge VE et l'autonomie ajustée à la météo, ce qui nécessite un compte, et la gestion de vos données." },
+  pl: { title: "Pomoc i FAQ AutoVere — Opłaty drogowe, winiety, ładowanie EV i konto", description: "Odpowiedzi na temat obliczania opłat drogowych i winiet, ładowania EV i zasięgu dostosowanego do pogody, kiedy potrzebne jest konto oraz jak przetwarzane są Twoje dane." },
+  sv: { title: "AutoVere Hjälp och Vanliga frågor — Vägavgifter, vinjetter, elbilsladdning och konto", description: "Svar på hur AutoVere beräknar vägavgifter och vinjetter, elbilsladdning och väderjusterad räckvidd, vad som kräver ett konto och hur dina uppgifter hanteras." },
+  da: { title: "AutoVere Hjælp og Ofte stillede spørgsmål — Vejafgifter, vignetter, elbilopladning og konto", description: "Svar på, hvordan AutoVere beregner vejafgifter og vignetter, elbilopladning og vejrjusteret rækkevidde, hvad der kræver en konto, og hvordan dine data behandles." },
+};
+
+export const partnersSeoCopy: Record<Locale, PageSeoCopy> = {
+  en: { title: "AutoVere Organisation Partners — Give Your Members 25% Off", description: "Partner with AutoVere to give your members a genuine travel benefit: 25% off AutoVere Pro's real toll, vignette, fuel and EV charging cost planning. Simple to offer, no technical work required." },
+  no: { title: "AutoVere Organisasjonspartnere — Gi medlemmene dine 25 % rabatt", description: "Bli partner med AutoVere og gi medlemmene dine en reell reisefordel: 25 % rabatt på AutoVere Pro sin ekte bompenge-, vignett-, drivstoff- og elbilladeplanlegging. Enkelt å tilby, ingen teknisk arbeid kreves." },
+  de: { title: "AutoVere Organisationspartner — 25 % Rabatt für Ihre Mitglieder", description: "Werden Sie Partner von AutoVere und bieten Sie Ihren Mitgliedern einen echten Reisevorteil: 25 % Rabatt auf AutoVere Pros echte Maut-, Vignetten-, Kraftstoff- und E-Auto-Ladeplanung. Einfach anzubieten, keine technische Arbeit erforderlich." },
+  nl: { title: "AutoVere Organisatiepartners — Geef je leden 25% korting", description: "Word partner van AutoVere en geef je leden een écht reisvoordeel: 25% korting op AutoVere Pro's tol-, vignet-, brandstof- en EV-laadplanning. Eenvoudig aan te bieden, geen technisch werk nodig." },
+  fr: { title: "Partenaires organisations AutoVere — 25 % de réduction pour vos membres", description: "Devenez partenaire d'AutoVere et offrez à vos membres un vrai avantage voyage : 25 % de réduction sur la planification réelle des péages, vignettes, carburant et recharge VE d'AutoVere Pro. Simple à proposer, aucun travail technique requis." },
+  pl: { title: "Partnerzy organizacyjni AutoVere — 25% zniżki dla Twoich członków", description: "Zostań partnerem AutoVere i daj swoim członkom prawdziwą korzyść podróżniczą: 25% zniżki na rzeczywiste planowanie opłat drogowych, winiet, paliwa i ładowania EV w AutoVere Pro. Proste do zaoferowania, bez pracy technicznej." },
+  sv: { title: "AutoVere Organisationspartner — Ge dina medlemmar 25 % rabatt", description: "Bli partner med AutoVere och ge dina medlemmar en verklig reseförmån: 25 % rabatt på AutoVere Pros verkliga beräkning av vägavgifter, vinjetter, drivmedel och elbilsladdning. Enkelt att erbjuda, inget tekniskt arbete krävs." },
+  da: { title: "AutoVere Organisationspartnere — Giv dine medlemmer 25 % rabat", description: "Bliv partner med AutoVere, og giv dine medlemmer en reel rejsefordel: 25 % rabat på AutoVere Pros reelle beregning af vejafgifter, vignetter, brændstof og elbilopladning. Nemt at tilbyde, intet teknisk arbejde krævet." },
+};
+
+export const demoSeoTitles: Record<Locale, string> = {
+  en: "AutoVere Demo — the full Pro experience",
+  no: "AutoVere Demo — hele Pro-opplevelsen",
+  de: "AutoVere Demo — das vollständige Pro-Erlebnis",
+  nl: "AutoVere Demo — de volledige Pro-ervaring",
+  fr: "Démo AutoVere — l'expérience Pro complète",
+  pl: "Demo AutoVere — pełne doświadczenie Pro",
+  sv: "AutoVere Demo — hela Pro-upplevelsen",
+  da: "AutoVere Demo — hele Pro-oplevelsen",
+};
+
 /**
  * Correct, per-page canonical + hreflang <link> tags computed at render time (works during SSR,
  * not just after client-side hydration) — every language version of a page is its own real

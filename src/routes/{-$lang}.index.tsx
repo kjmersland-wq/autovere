@@ -42,22 +42,10 @@ import { motorhomeCopy } from "@/lib/motorhome-i18n";
 import { openPrintReport } from "@/lib/print-report";
 
 export const Route = createFileRoute("/{-$lang}/")({
-  head: () => ({
-    meta: [
-      { title: "AutoVere — European Toll, Vignette & EV Charging Planner" },
-      {
-        name: "description",
-        content:
-          "Instantly compare fastest, toll-bypass and toll-free routes across Europe. Real fuel, charging, toll and vignette costs with official purchase links.",
-      },
-      { property: "og:title", content: "AutoVere — Know your real European road-trip cost" },
-      {
-        property: "og:description",
-        content:
-          "Deterministic toll, vignette, fuel and EV charging estimates for any European route. Free, instant, built on open data.",
-      },
-    ],
-  }),
+  // No head() override here: the {-$lang} layout route already provides fully localized
+  // title/description/og/twitter tags per language via seoCopy (see src/lib/seo.ts). A static
+  // English-only override here would win over the layout's per-language copy for every visitor,
+  // regardless of URL language — which is exactly the bug this route previously had.
   component: Index,
 });
 
