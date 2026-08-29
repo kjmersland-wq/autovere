@@ -1,4 +1,4 @@
-import { CircleDot, Droplets, Flame, Lock, ParkingCircle, Sparkles, Tent, Trash2, Wrench, type LucideIcon } from "lucide-react";
+import { Caravan, CircleDot, Droplets, Flame, Lock, ParkingCircle, Sparkles, Tent, Trash2, Wrench, type LucideIcon } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Link } from "@tanstack/react-router";
@@ -38,7 +38,10 @@ export function MotorhomeCamping({ copy, pois, loading, maxDistanceKm, onMaxDist
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
           <h2 className="flex items-center gap-2 text-xl font-bold">
-            <Sparkles className="size-4 text-primary" aria-hidden /> {copy.title}
+            <span className="flex size-8 items-center justify-center rounded-lg bg-primary/12 text-primary">
+              <Caravan className="size-4" aria-hidden />
+            </span>
+            {copy.title}
           </h2>
           <p className="mt-1 text-sm text-muted-foreground">{copy.subtitle}</p>
         </div>

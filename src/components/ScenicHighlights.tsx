@@ -40,12 +40,15 @@ export function ScenicHighlights({
   const visibleHighlights = (filter === "all" ? highlights : highlights.filter((highlight) => highlight.category === filter)).slice(0, 8);
   const presentCategories = new Set(highlights.map((h) => h.category));
   return (
-    <section className="mt-8">
+    <section className="panel mt-8 p-5 sm:p-7">
       <div className="flex items-end justify-between gap-4">
         <div>
-          <p className="text-sm font-bold uppercase tracking-[0.16em] text-muted-foreground">
+          <h2 className="flex items-center gap-2 text-xl font-bold">
+            <span className="flex size-8 items-center justify-center rounded-lg bg-primary/12 text-primary">
+              <Mountain className="size-4" aria-hidden />
+            </span>
             {t.scenicTitle}
-          </p>
+          </h2>
           <p className="mt-1 text-sm text-muted-foreground">{t.scenicSub}</p>
         </div>
         <span className="hidden text-xs text-muted-foreground sm:block">{t.scenicPicks}</span>

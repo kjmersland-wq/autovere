@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
-import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon, Check, ChevronDown, Sparkles } from "lucide-react";
+import { Map as MapIcon, Navigation, Gauge, WifiOff, ShieldCheck, Sun, Moon, Check, ChevronDown, Sparkles, Zap, Tent } from "lucide-react";
 import { TripForm, type DemoRoute, type TripFormState } from "@/components/TripForm";
 import { ContactModal } from "@/components/ContactModal";
 import { ShareModal } from "@/components/ShareModal";
@@ -223,6 +223,17 @@ const LEGAL_MODAL_COPY = {
       "Föraren ansvarar själv för att följa aktuell skyltning, hastighetsbegränsningar, trafikregler och officiella avgifter.",
     ],
   },
+} as const;
+
+const WAYPOINT_NOTE_COPY = {
+  en: "Waypoints are injected so navigation apps follow the bypass and charging stops exactly.",
+  de: "Wegpunkte werden eingefügt, damit Navigations-Apps die Umgehungsroute und Ladestopps exakt befolgen.",
+  nl: "Waypoints worden toegevoegd zodat navigatie-apps de omleiding en laadstops precies volgen.",
+  no: "Veipunkter legges inn slik at navigasjonsapper følger omkjøringen og ladestoppene nøyaktig.",
+  pl: "Punkty pośrednie są dodawane, aby aplikacje nawigacyjne dokładnie podążały objazdem i przystankami ładowania.",
+  sv: "Waypoints läggs till så att navigeringsappar följer omvägen och laddstoppen exakt.",
+  fr: "Des points de passage sont ajoutés pour que les applications de navigation suivent exactement l'itinéraire de contournement et les arrêts de recharge.",
+  da: "Waypoints indsættes, så navigationsapps følger omkørslen og ladestoppene præcist.",
 } as const;
 
 function Index() {
@@ -698,9 +709,15 @@ function Index() {
           </p>
 
           <div className="mt-6 flex flex-wrap gap-2" aria-label="Corridor stats">
-            <span className="rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">⚡ {t.statEvHubs}</span>
-            <span className="rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">🛡️ {t.statTollSystems}</span>
-            <span className="rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">🏕️ {t.statScenicSpots}</span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">
+              <Zap className="size-3.5 text-primary" aria-hidden /> {t.statEvHubs}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">
+              <ShieldCheck className="size-3.5 text-primary" aria-hidden /> {t.statTollSystems}
+            </span>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-border/60 bg-surface/70 px-3 py-2 text-xs font-semibold text-muted-foreground">
+              <Tent className="size-3.5 text-primary" aria-hidden /> {t.statScenicSpots}
+            </span>
           </div>
 
           <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-xs font-semibold text-muted-foreground">
@@ -789,8 +806,7 @@ function Index() {
             />
           </div>
           <p className="mt-2 flex items-center gap-2 text-xs text-muted-foreground">
-            <MapIcon className="size-3.5" /> Waypoints are injected so navigation apps follow the
-            bypass and charging stops exactly.
+            <MapIcon className="size-3.5 shrink-0" /> {WAYPOINT_NOTE_COPY[locale] ?? WAYPOINT_NOTE_COPY.en}
           </p>
 
           <div className="mt-4 flex flex-wrap gap-3">
