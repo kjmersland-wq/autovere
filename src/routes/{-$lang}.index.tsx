@@ -40,6 +40,7 @@ import { chargerCopy } from "@/lib/charger-i18n";
 import { smartFuelCopy } from "@/lib/smart-fuel-i18n";
 import { motorhomeCopy } from "@/lib/motorhome-i18n";
 import { openPrintReport } from "@/lib/print-report";
+import { legalCopy as LEGAL_MODAL_COPY } from "@/lib/legal-i18n";
 
 export const Route = createFileRoute("/{-$lang}/")({
   // No head() override here: the {-$lang} layout route already provides fully localized
@@ -64,140 +65,6 @@ function currencyDisplayName(code: CurrencyCode, locale: string): string {
     return code;
   }
 }
-
-const LEGAL_MODAL_COPY = {
-  no: {
-    legalTitle: "Juridisk informasjon",
-    privacyTitle: "Personvern",
-    termsTitle: "Vilkår og ansvarsfraskrivelse",
-    close: "Lukk",
-    legal: [
-      "Utviklet og driftes av: KM TECH LABS",
-      "Sted: Kristiansand, Norge",
-      "Organisasjonsnummer: 934 044 029",
-      "E-post: contact@autovere.com",
-      "Formål: Uavhengig ruteøkonomi, bompenge- og ladekalkulator for europeiske veier.",
-    ],
-    privacy: [
-      "100 % lokal beregning på klientsiden i nettleseren.",
-      "Ingen lagring eller sporing av din eksakte posisjonshistorikk.",
-      "Ingen salg av data eller tredjeparts-annonsesporing. Fullt GDPR-kompatibel.",
-    ],
-    terms: [
-      "Bompenge-, vignett-, lade- og drivstoffberegninger er veiledende estimater basert på åpne kilder (OpenStreetMap, OSRM, Overpass).",
-      "Sjåføren er selv fullt ansvarlig for å overholde gjeldende skilting, fartsgrenser og offisielle takster.",
-    ],
-  },
-  en: {
-    legalTitle: "Legal Notice",
-    privacyTitle: "Privacy Policy",
-    termsTitle: "Terms & Disclaimer",
-    close: "Close",
-    legal: [
-      "Developed and operated by: KM TECH LABS",
-      "Location: Kristiansand, Norway",
-      "Organization no.: 934 044 029",
-      "Email: contact@autovere.com",
-      "Purpose: Independent route cost, toll and charging calculator for European roads.",
-    ],
-    privacy: [
-      "100% local calculation in the browser.",
-      "No storage or tracking of your exact position history.",
-      "No data resale or third-party ad tracking. Fully GDPR-compliant.",
-    ],
-    terms: [
-      "Toll, vignette, charging and fuel estimates are indicative and based on open sources (OpenStreetMap, OSRM, Overpass).",
-      "The driver is solely responsible for complying with current road signs, speed limits and official tariffs.",
-    ],
-  },
-  de: {
-    legalTitle: "Impressum",
-    privacyTitle: "Datenschutzerklärung",
-    termsTitle: "Allgemeine Geschäftsbedingungen",
-    close: "Schließen",
-    legal: [
-      "Entwickelt und betrieben von: KM TECH LABS",
-      "Ort: Kristiansand, Norwegen",
-      "Organisationsnummer: 934 044 029",
-      "E-Mail: contact@autovere.com",
-      "Zweck: Unabhängiger Routen-, Maut- und Lade-Rechner für europäische Straßen.",
-    ],
-    privacy: [
-      "100 % lokale Berechnung direkt im Browser.",
-      "Keine Speicherung oder Verfolgung Ihrer genauen Standorthistorie.",
-      "Kein Datenverkauf oder Tracking durch Drittanbieter. Vollständig DSGVO-konform.",
-    ],
-    terms: [
-      "Maut-, Vignette-, Lade- und Kraftstoffschätzungen sind orientierende Berechnungen auf Basis offener Datenquellen (OpenStreetMap, OSRM, Overpass).",
-      "Der Fahrer ist allein verantwortlich für die Einhaltung aktueller Beschilderung, Geschwindigkeitsbegrenzungen und offizieller Tarife.",
-    ],
-  },
-  nl: {
-    legalTitle: "Juridische informatie",
-    privacyTitle: "Privacybeleid",
-    termsTitle: "Voorwaarden en disclaimer",
-    close: "Sluiten",
-    legal: [
-      "Ontwikkeld en beheerd door: KM TECH LABS",
-      "Locatie: Kristiansand, Noorwegen",
-      "Organisatienummer: 934 044 029",
-      "E-mail: contact@autovere.com",
-      "Doel: een onafhankelijke route-, tol- en laadcalculator voor Europese wegen.",
-    ],
-    privacy: [
-      "Alle berekeningen worden lokaal in je browser uitgevoerd.",
-      "We slaan je exacte locatiegeschiedenis niet op en volgen die niet.",
-      "We verkopen geen gegevens en gebruiken geen tracking voor advertenties van derden.",
-    ],
-    terms: [
-      "Schattingen voor tol, vignetten, laden en brandstof zijn indicatief en gebaseerd op open bronnen zoals OpenStreetMap, OSRM en Overpass.",
-      "De bestuurder blijft zelf verantwoordelijk voor actuele verkeersborden, snelheidslimieten en officiële tarieven.",
-    ],
-  },
-  pl: {
-    legalTitle: "Nota prawna",
-    privacyTitle: "Polityka prywatności",
-    termsTitle: "Warunki i wyłączenie odpowiedzialności",
-    close: "Zamknij",
-    legal: [
-      "Opracowane i prowadzone przez: KM TECH LABS",
-      "Lokalizacja: Kristiansand, Norwegia",
-      "Numer organizacji: 934 044 029",
-      "E-mail: contact@autovere.com",
-      "Cel: Niezależny kalkulator tras, opłat i ładowania dla europejskich dróg.",
-    ],
-    privacy: [
-      "100% lokalne obliczenia w przeglądarce.",
-      "Brak przechowywania ani śledzenia dokładnej historii położenia.",
-      "Brak sprzedaży danych ani reklamowych śledzeń firm trzecich. W pełni zgodne z RODO.",
-    ],
-    terms: [
-      "Szacunki opłat, winiet, ładowania i paliwa są orientacyjne i opierają się na otwartych źródłach (OpenStreetMap, OSRM, Overpass).",
-      "Kierowca jest wyłącznie odpowiedzialny za przestrzeganie aktualnych znaków drogowych, limitów prędkości i oficjalnych stawek.",
-    ],
-  },
-  sv: {
-    legalTitle: "Juridisk information",
-    privacyTitle: "Integritetspolicy",
-    termsTitle: "Villkor och ansvarsfriskrivning",
-    close: "Stäng",
-    legal: [
-      "AutoVere utvecklas och drivs av KM TECH LABS i Kristiansand, Norge.",
-      "Org.nr: 934 044 029",
-      "E-post: contact@autovere.com",
-      "Syfte: Oberoende beräkning av resrutter, vägavgifter och laddning för europeiska vägar.",
-    ],
-    privacy: [
-      "100 % lokal beräkning på klientsidan i webbläsaren.",
-      "Ingen lagring eller spårning av din exakta positionshistorik.",
-      "Ingen försäljning av data eller tredjeparts annonsspårning. Fullt GDPR-kompatibel.",
-    ],
-    terms: [
-      "Beräkningar av vägavgifter, vinjetter, laddning och drivmedel är vägledande uppskattningar baserade på öppna källor som OpenStreetMap, OSRM och Overpass.",
-      "Föraren ansvarar själv för att följa aktuell skyltning, hastighetsbegränsningar, trafikregler och officiella avgifter.",
-    ],
-  },
-} as const;
 
 const SHARE_TEXT_SUFFIX = {
   en: "Open in navigation:",

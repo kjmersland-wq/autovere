@@ -3,11 +3,16 @@ import { AppLink as Link } from "@/components/AppLink";
 import { ArrowLeft } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { useT } from "@/lib/i18n";
+import { URL_LANG_TO_LOCALE, useT, useLocale } from "@/lib/i18n";
+import { getAccountCopy } from "@/lib/account-i18n";
+import { legalCopy } from "@/lib/legal-i18n";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 
 function LegalPage() {
   const t = useT();
+  const { locale } = useLocale();
+  const copy = legalCopy[locale] ?? legalCopy.en;
+  const backLabel = getAccountCopy(locale).backToPlanner;
 
   return (
     <main className="bg-scenic min-h-screen bg-background px-4 py-10 text-foreground md:px-8">
@@ -24,17 +29,15 @@ function LegalPage() {
           <h1 className="mt-6 text-3xl font-semibold tracking-tight">{t.legalNotice}</h1>
 
           <div className="mt-6 space-y-3 text-sm leading-relaxed text-muted-foreground">
-            <p>Utviklet og driftes av: KM TECH LABS</p>
-            <p>Sted: Kristiansand, Norge</p>
-            <p>Organisasjonsnummer: 934 044 029</p>
-            <p>E-post: contact@autovere.com</p>
-            <p>Formål: Uavhengig ruteøkonomi, bompenge- og ladekalkulator for europeiske veier.</p>
+            {copy.legal.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
           </div>
 
           <div className="mt-8">
             <Link to="/">
               <Button size="lg" className="rounded-xl px-6">
-                Tilbake til kalkulatoren
+                {backLabel}
               </Button>
             </Link>
           </div>
@@ -45,5 +48,16 @@ function LegalPage() {
 }
 
 export const Route = createFileRoute("/{-$lang}/legal")({
+  head: (ctx) => {
+    const lang = (ctx.params as { lang?: string }).lang;
+    const locale = lang ? (URL_LANG_TO_LOCALE[lang] ?? "en") : "en";
+    const copy = legalCopy[locale] ?? legalCopy.en;
+    return {
+      meta: [
+        { title: `${copy.legalTitle} — AutoVere` },
+        { name: "description", content: copy.legal.join(" ") },
+      ],
+    };
+  },
   component: LegalPage,
 });

@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
 import { forgotPasswordCopy } from "@/lib/login-i18n";
 
-export const Route = createFileRoute("/{-$lang}/forgot-password")({ component: ForgotPasswordPage });
+export const Route = createFileRoute("/{-$lang}/forgot-password")({
+  head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
+  component: ForgotPasswordPage,
+});
 
 function ForgotPasswordPage() {
   const { locale } = useLocale();

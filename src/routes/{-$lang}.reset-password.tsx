@@ -6,7 +6,10 @@ import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
 import { resetPasswordCopy } from "@/lib/login-i18n";
 
-export const Route = createFileRoute("/{-$lang}/reset-password")({ component: ResetPasswordPage });
+export const Route = createFileRoute("/{-$lang}/reset-password")({
+  head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
+  component: ResetPasswordPage,
+});
 
 function ResetPasswordPage() {
   const { locale } = useLocale();

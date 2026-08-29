@@ -6,7 +6,12 @@ import { Button } from "@/components/ui/button";
 import { useLocale } from "@/lib/i18n";
 import { loginCopy } from "@/lib/login-i18n";
 
-export const Route = createFileRoute("/{-$lang}/login")({ component: LoginPage });
+export const Route = createFileRoute("/{-$lang}/login")({
+  // Auth utility page — no search-relevant content of its own, and indexing it risks a thin,
+  // near-duplicate result across all 8 languages competing with the pages users actually want.
+  head: () => ({ meta: [{ name: "robots", content: "noindex" }] }),
+  component: LoginPage,
+});
 
 function LoginPage() {
   const { locale } = useLocale();
