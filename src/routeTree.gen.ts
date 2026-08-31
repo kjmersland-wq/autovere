@@ -23,6 +23,7 @@ import { Route as ScenicRouteImport } from './routes/scenic'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TollsRouteImport } from './routes/tolls'
 import { Route as UsRouteImport } from './routes/us'
+import { Route as LangIndexRouteImport } from './routes/$lang.index'
 import { Route as CaIndexRouteImport } from './routes/ca.index'
 import { Route as CaFaqRouteImport } from './routes/ca.faq'
 import { Route as CaHowItWorksRouteImport } from './routes/ca.how-it-works'
@@ -119,6 +120,11 @@ const TollsRoute = TollsRouteImport.update({
 const UsRoute = UsRouteImport.update({
   id: '/us',
   path: '/us',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LangIndexRoute = LangIndexRouteImport.update({
+  id: '/$lang/',
+  path: '/$lang/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CaIndexRoute = CaIndexRouteImport.update({
@@ -292,6 +298,7 @@ export interface FileRoutesByFullPath {
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
+  '/$lang/': typeof LangIndexRoute
   '/ca/': typeof CaIndexRoute
   '/no/': typeof NoIndexRoute
   '/us/': typeof UsIndexRoute
@@ -333,6 +340,7 @@ export interface FileRoutesByTo {
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
+  '/$lang': typeof LangIndexRoute
   '/ca': typeof CaIndexRoute
   '/no': typeof NoIndexRoute
   '/us': typeof UsIndexRoute
@@ -377,6 +385,7 @@ export interface FileRoutesById {
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
+  '/$lang/': typeof LangIndexRoute
   '/ca/': typeof CaIndexRoute
   '/no/': typeof NoIndexRoute
   '/us/': typeof UsIndexRoute
@@ -422,6 +431,7 @@ export interface FileRouteTypes {
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
+    | '/$lang/'
     | '/ca/'
     | '/no/'
     | '/us/'
@@ -463,6 +473,7 @@ export interface FileRouteTypes {
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
+    | '/$lang'
     | '/ca'
     | '/no'
     | '/us'
@@ -506,6 +517,7 @@ export interface FileRouteTypes {
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
+    | '/$lang/'
     | '/ca/'
     | '/no/'
     | '/us/'
@@ -542,6 +554,7 @@ export interface RootRouteChildren {
   NoScenicRoute: typeof NoScenicRoute
   NoTermsRoute: typeof NoTermsRoute
   NoTollsRoute: typeof NoTollsRoute
+  LangIndexRoute: typeof LangIndexRoute
   NoIndexRoute: typeof NoIndexRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -644,6 +657,13 @@ declare module '@tanstack/react-router' {
       path: '/us'
       fullPath: '/us'
       preLoaderRoute: typeof UsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$lang/': {
+      id: '/$lang/'
+      path: '/$lang'
+      fullPath: '/$lang/'
+      preLoaderRoute: typeof LangIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ca/': {
@@ -908,6 +928,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoScenicRoute: NoScenicRoute,
   NoTermsRoute: NoTermsRoute,
   NoTollsRoute: NoTollsRoute,
+  LangIndexRoute: LangIndexRoute,
   NoIndexRoute: NoIndexRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
