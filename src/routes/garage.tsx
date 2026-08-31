@@ -68,7 +68,7 @@ const EMPTY_VEHICLE: GarageVehicle = {
   tags: [],
 };
 
-function GaragePage() {
+export function GaragePage() {
   const [vehicles, setVehicles] = useState<GarageVehicle[]>([]);
   const [trips, setTrips] = useState<SavedTrip[]>([]);
   const [draft, setDraft] = useState<GarageVehicle | null>(null);
