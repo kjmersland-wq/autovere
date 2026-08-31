@@ -128,7 +128,7 @@ export function RouteExportPanel({
 }) {
   const from = origin || "Start";
   const to = destination || "Destination";
-  const base = slug(`${origin}-${destination}`, "autovere-trip");
+  const base = `autovere-${slug(`${origin}-${destination}`, "road-trip")}`;
 
   const exportGpx = () => {
     downloadFile(buildGpx(trip, origin, destination), `${base}.gpx`, "application/gpx+xml");
