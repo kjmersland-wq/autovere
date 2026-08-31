@@ -33,6 +33,7 @@ import { Route as NoIndexRouteImport } from './routes/no.index'
 import { Route as NoFaqRouteImport } from './routes/no.faq'
 import { Route as NoHowItWorksRouteImport } from './routes/no.how-it-works'
 import { Route as NoPartnersRouteImport } from './routes/no.partners'
+import { Route as NoPlannerRouteImport } from './routes/no.planner'
 import { Route as NoPricingRouteImport } from './routes/no.pricing'
 import { Route as NoPrivacyRouteImport } from './routes/no.privacy'
 import { Route as NoTermsRouteImport } from './routes/no.terms'
@@ -167,6 +168,11 @@ const NoPartnersRoute = NoPartnersRouteImport.update({
   path: '/no/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NoPlannerRoute = NoPlannerRouteImport.update({
+  id: '/no/planner',
+  path: '/no/planner',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NoPricingRoute = NoPricingRouteImport.update({
   id: '/no/pricing',
   path: '/no/pricing',
@@ -257,6 +263,7 @@ export interface FileRoutesByFullPath {
   '/no/faq': typeof NoFaqRoute
   '/no/how-it-works': typeof NoHowItWorksRoute
   '/no/partners': typeof NoPartnersRoute
+  '/no/planner': typeof NoPlannerRoute
   '/no/pricing': typeof NoPricingRoute
   '/no/privacy': typeof NoPrivacyRoute
   '/no/terms': typeof NoTermsRoute
@@ -294,6 +301,7 @@ export interface FileRoutesByTo {
   '/no/faq': typeof NoFaqRoute
   '/no/how-it-works': typeof NoHowItWorksRoute
   '/no/partners': typeof NoPartnersRoute
+  '/no/planner': typeof NoPlannerRoute
   '/no/pricing': typeof NoPricingRoute
   '/no/privacy': typeof NoPrivacyRoute
   '/no/terms': typeof NoTermsRoute
@@ -334,6 +342,7 @@ export interface FileRoutesById {
   '/no/faq': typeof NoFaqRoute
   '/no/how-it-works': typeof NoHowItWorksRoute
   '/no/partners': typeof NoPartnersRoute
+  '/no/planner': typeof NoPlannerRoute
   '/no/pricing': typeof NoPricingRoute
   '/no/privacy': typeof NoPrivacyRoute
   '/no/terms': typeof NoTermsRoute
@@ -375,6 +384,7 @@ export interface FileRouteTypes {
     | '/no/faq'
     | '/no/how-it-works'
     | '/no/partners'
+    | '/no/planner'
     | '/no/pricing'
     | '/no/privacy'
     | '/no/terms'
@@ -412,6 +422,7 @@ export interface FileRouteTypes {
     | '/no/faq'
     | '/no/how-it-works'
     | '/no/partners'
+    | '/no/planner'
     | '/no/pricing'
     | '/no/privacy'
     | '/no/terms'
@@ -451,6 +462,7 @@ export interface FileRouteTypes {
     | '/no/faq'
     | '/no/how-it-works'
     | '/no/partners'
+    | '/no/planner'
     | '/no/pricing'
     | '/no/privacy'
     | '/no/terms'
@@ -487,6 +499,7 @@ export interface RootRouteChildren {
   NoFaqRoute: typeof NoFaqRoute
   NoHowItWorksRoute: typeof NoHowItWorksRoute
   NoPartnersRoute: typeof NoPartnersRoute
+  NoPlannerRoute: typeof NoPlannerRoute
   NoPricingRoute: typeof NoPricingRoute
   NoPrivacyRoute: typeof NoPrivacyRoute
   NoTermsRoute: typeof NoTermsRoute
@@ -664,6 +677,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NoPartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/no/planner': {
+      id: '/no/planner'
+      path: '/no/planner'
+      fullPath: '/no/planner'
+      preLoaderRoute: typeof NoPlannerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/no/pricing': {
       id: '/no/pricing'
       path: '/no/pricing'
@@ -821,6 +841,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoFaqRoute: NoFaqRoute,
   NoHowItWorksRoute: NoHowItWorksRoute,
   NoPartnersRoute: NoPartnersRoute,
+  NoPlannerRoute: NoPlannerRoute,
   NoPricingRoute: NoPricingRoute,
   NoPrivacyRoute: NoPrivacyRoute,
   NoTermsRoute: NoTermsRoute,
