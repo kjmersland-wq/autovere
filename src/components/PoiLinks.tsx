@@ -30,14 +30,14 @@ export function PoiLinks({
 }: {
   kind: PoiKind;
   name: string;
-  where?: string;
-  region?: RegionKey;
-  website?: string;
-  booking?: string;
-  className?: string;
+  where?: string | undefined;
+  region?: RegionKey | undefined;
+  website?: string | undefined;
+  booking?: string | undefined;
+  className?: string | undefined;
 }) {
   const locale = useLocale();
-  const l = LABELS[locale] ?? LABELS.en!;
+  const l = LABELS[locale] ?? LABELS['en']!;
   const links = poiLinks({ kind, name, where, region, website, booking });
 
   return (

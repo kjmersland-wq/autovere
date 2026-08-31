@@ -74,10 +74,10 @@ export function poiLinks({
 }: {
   kind: PoiKind;
   name: string;
-  where?: string;
-  region?: RegionKey;
-  website?: string;
-  booking?: string;
+  where?: string | undefined;
+  region?: RegionKey | undefined;
+  website?: string | undefined;
+  booking?: string | undefined;
 }) {
   return {
     map: poiMapUrl(name, where),
