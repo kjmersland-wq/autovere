@@ -649,9 +649,7 @@ export function estimateTrip(
         amount: isMoto && l.freeForMotorcycle ? 0 : round2(l.amount * factor * returnFactor),
         badge: isMoto && l.freeForMotorcycle
           ? "Free for motorcycles"
-          : returnFactor === 2
-            ? "Return trip ×2"
-            : l.badge,
+          : (l.badge ?? (returnFactor === 2 ? "Return trip ×2" : undefined)),
       };
     });
 
