@@ -5,6 +5,8 @@ import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 
 export type Locale = "en" | "no";
 
+import { CONTENT_NO } from "@/lib/content-no";
+
 export function localeFromPath(pathname: string): Locale {
   return pathname === "/no" || pathname.startsWith("/no/") ? "no" : "en";
 }
@@ -182,6 +184,36 @@ const en = {
       mercedes: "Push the route to MBUX navigation",
       phone: "Opens the maps hand-off link on your phone",
     } as Record<string, string>,
+  },
+  compliance: {
+    clearanceTitle: "🚐 Motorhome weight & clearance radar",
+    clearanceIntro:
+      "Confirm your plated weight and travelling height — the rules change sharply above 3.5 t and 3.2 m.",
+    heavyToggle: "My motorhome is over 3.5 t",
+    heavyHint: "Maximum permissible mass on the registration plate, not the kerb weight.",
+    heightLabel: "Travelling height",
+    heightAria: "Vehicle height in metres",
+    heightHint: "Measure to the highest fixed point including solar panels and roof boxes.",
+    heavyWarning:
+      "⚠️ Over 3.5 t your standard car vignette is not valid. Switch to the heavy-vehicle system in each country below before your first motorway kilometre.",
+    appliesAt: (h: string) => `Applies at ${h} m`,
+    speedTitle: "Speed limits & overtaking bans",
+    officialPortal: "Official portal",
+    lezTitle: "Urban low emission zone monitor",
+    lezDetected: (n: number) => `${n} detected on this corridor`,
+    lezOverview: "Regional overview",
+    lezIntro:
+      "Order badges and register plates before you travel — most zones are camera-enforced with no on-site payment.",
+    tagTitle: "My toll transponders & tags",
+    tagIntro:
+      "Tick the tags you already carry — we mark the matching booths as auto-detected lanes and re-price your tolls.",
+    tagAuto: "🟢 Auto-detected lane / no cash stop required",
+    tagSaving: (p: number) => `Typical saving on covered tolls: ${p}%`,
+    tagNone: (amount: string) => `No tags selected — tolls stay at ${amount} with cash/card booth stops.`,
+    tagActivePrefix: (n: number) => `With ${n} tag${n > 1 ? "s" : ""} active your tolls drop from`,
+    tagTo: "to",
+    tagSavingTail: (amount: string, pct: number) =>
+      `— saving ${amount} (${pct}% on covered booths) and skipping every cash lane.`,
   },
   footer: {
     tagline:
@@ -380,6 +412,37 @@ const no: Strings = {
       phone: "Åpner overføringslenken til kart på mobilen din",
     },
   },
+  compliance: {
+    clearanceTitle: "🚐 Vekt- og høyderadar for bobil",
+    clearanceIntro:
+      "Bekreft totalvekt og reisehøyde — reglene endrer seg markant over 3,5 tonn og 3,2 meter.",
+    heavyToggle: "Bobilen min veier over 3,5 tonn",
+    heavyHint: "Tillatt totalvekt i vognkortet, ikke egenvekten.",
+    heightLabel: "Reisehøyde",
+    heightAria: "Kjøretøyets høyde i meter",
+    heightHint: "Mål til høyeste faste punkt, inkludert solcellepanel og takboks.",
+    heavyWarning:
+      "⚠️ Over 3,5 tonn gjelder ikke den vanlige personbilvignetten. Bytt til tungbilsystemet i hvert land under før din første motorveikilometer.",
+    appliesAt: (h: string) => `Gjelder ved ${h} m`,
+    speedTitle: "Fartsgrenser og forbikjøringsforbud",
+    officialPortal: "Offisiell portal",
+    lezTitle: "Overvåking av lavutslippssoner i byer",
+    lezDetected: (n: number) => `${n} funnet langs denne ruten`,
+    lezOverview: "Regional oversikt",
+    lezIntro:
+      "Bestill miljømerker og registrer skiltnummer før avreise — de fleste sonene kontrolleres med kamera, uten betaling på stedet.",
+    tagTitle: "Mine bombrikker og betalingsbrikker",
+    tagIntro:
+      "Huk av for brikkene du allerede har — vi merker bomstasjonene som automatiske felt og regner om bompengene.",
+    tagAuto: "🟢 Automatisk felt / ingen kontantstopp",
+    tagSaving: (p: number) => `Vanlig rabatt på dekkede bompenger: ${p} %`,
+    tagNone: (amount: string) =>
+      `Ingen brikker valgt — bompengene blir ${amount} med stopp for kort/kontant.`,
+    tagActivePrefix: (n: number) => `Med ${n} ${n > 1 ? "brikker" : "brikke"} aktivert faller bompengene fra`,
+    tagTo: "til",
+    tagSavingTail: (amount: string, pct: number) =>
+      `— du sparer ${amount} (${pct} % på dekkede bomstasjoner) og slipper alle kontantfelt.`,
+  },
   footer: {
     tagline: "Sømløs ruteplanlegging og kostnadskontroll på tvers av landegrenser.",
     productBy: "Utviklet av",
@@ -403,4 +466,10 @@ export const STRINGS: Record<Locale, Strings> = { en, no };
 
 export function useT(): Strings {
   return STRINGS[useLocale()];
+}
+
+/** Translator for copy that lives in data modules, keyed by the English source string. */
+export function useTr(): (value: string) => string {
+  const locale = useLocale();
+  return (value: string) => (locale === "no" ? (CONTENT_NO[value] ?? value) : value);
 }
