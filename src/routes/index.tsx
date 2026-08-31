@@ -40,8 +40,8 @@ function Index() {
         title="Know the true cost of every kilometre."
         subtitle="Smart cross-border toll, vignette, fuel, charging, and ferry intelligence for cars, motorhomes, and touring motorcycles. Plan with total peace of mind."
       />
-      <div className="mx-auto flex w-full max-w-6xl justify-end px-4 pb-10">
-        <ShareButton lang="en" url="https://www.autovere.com/" />
+      <div className="mx-auto w-full max-w-6xl px-4 pb-14">
+        <ShareButton variant="bar" lang="en" url="https://www.autovere.com/" />
       </div>
     </main>
   );
