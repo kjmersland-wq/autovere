@@ -27,16 +27,8 @@ const FLAGS: Record<FlagCode, { label: string; svg: React.ReactNode }> = {
     svg: (
       <>
         <rect width="60" height="40" fill="#012169" />
-        <path d="M0 0 L60 40 M60 0 L0 40" stroke="#FFFFFF" strokeWidth="8" />
-        <path
-          d="M0 0 L60 40 M60 0 L0 40"
-          stroke="#C8102E"
-          strokeWidth="4"
-          clipPath="url(#gb-clip)"
-        />
-        <clipPath id="gb-clip">
-          <path d="M30 20 L60 20 L60 40 Z M30 20 L30 40 L0 40 Z M30 20 L0 20 L0 0 Z M30 20 L30 0 L60 0 Z" />
-        </clipPath>
+        <path d="M0 0 L60 40 M60 0 L0 40" stroke="#FFFFFF" strokeWidth="9" />
+        <path d="M0 0 L60 40 M60 0 L0 40" stroke="#C8102E" strokeWidth="4" />
         <path d="M30 0 V40 M0 20 H60" stroke="#FFFFFF" strokeWidth="13" />
         <path d="M30 0 V40 M0 20 H60" stroke="#C8102E" strokeWidth="8" />
       </>
