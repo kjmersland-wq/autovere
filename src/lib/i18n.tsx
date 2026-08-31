@@ -542,7 +542,33 @@ export function useT(): Strings {
 }
 
 /** Translator for copy that lives in data modules, keyed by the English source string. */
+const NO_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [
+    /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
+    (m) => `Kom fram med ca. 25 % batteri og lad til 80 % på omtrent ${m[1]} minutter.`,
+  ],
+  [
+    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
+    (m) => `Anbefalt fylling — holder deg over 25 % reserve med en rekkevidde på ${m[1]}.`,
+  ],
+  [/^(.+) full battery range$/, (m) => `${m[1]} rekkevidde med fullt batteri`],
+  [/^(.+) full tank range$/, (m) => `${m[1]} rekkevidde med full tank`],
+  [
+    /^Planned at 75% safety buffer — (.+) between stops$/,
+    (m) => `Planlagt med 75 % sikkerhetsmargin — ${m[1]} mellom stoppene`,
+  ],
+];
+
 export function useTr(): (value: string) => string {
   const locale = useLocale();
-  return (value: string) => (locale === "no" ? (CONTENT_NO[value] ?? value) : value);
+  return (value: string) => {
+    if (locale !== "no") return value;
+    const direct = CONTENT_NO[value];
+    if (direct) return direct;
+    for (const [re, fn] of NO_PATTERNS) {
+      const m = value.match(re);
+      if (m) return fn(m);
+    }
+    return value;
+  };
 }

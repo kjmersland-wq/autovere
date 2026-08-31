@@ -98,6 +98,7 @@ export function TripResults({
   onAddStop?: (name: string) => void;
 }) {
   const t = useT();
+  const tr = useTr();
   const locale = useLocale();
   const [active, setActive] = useState<RouteVariantKey>("fastest");
   const [printing, setPrinting] = useState(false);
@@ -281,12 +282,12 @@ export function TripResults({
               <article key={f.id} className="rounded-2xl border border-border bg-background/40 p-5">
                 <div className="flex flex-wrap items-start justify-between gap-2">
                   <div>
-                    <p className="text-sm font-semibold">{f.corridor}</p>
+                    <p className="text-sm font-semibold">{tr(f.corridor)}</p>
                     <p className="mt-1 text-xs text-muted-foreground">{f.route}</p>
                   </div>
                   {f.badge && (
                     <span className="rounded-full bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary">
-                      {f.badge}
+                      {tr(f.badge)}
                     </span>
                   )}
                 </div>
@@ -305,11 +306,11 @@ export function TripResults({
                 <dl className="mt-4 grid gap-3 sm:grid-cols-3">
                   <div>
                     <dt className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{t.results.duration}</dt>
-                    <dd className="mt-0.5 text-sm font-medium">{f.duration}</dd>
+                    <dd className="mt-0.5 text-sm font-medium">{tr(f.duration)}</dd>
                   </div>
                   <div>
                     <dt className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{t.results.frequency}</dt>
-                    <dd className="mt-0.5 text-sm font-medium">{f.frequency}</dd>
+                    <dd className="mt-0.5 text-sm font-medium">{tr(f.frequency)}</dd>
                   </div>
                   <div>
                     <dt className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{t.results.indicative}</dt>
@@ -319,7 +320,7 @@ export function TripResults({
                   </div>
                 </dl>
 
-                <p className="mt-4 text-sm text-foreground/80">{f.note}</p>
+                <p className="mt-4 text-sm text-foreground/80">{tr(f.note)}</p>
 
                 <a
                   href={f.booking.url}
@@ -348,7 +349,7 @@ export function TripResults({
               <AccordionItem key={segment.country} value={segment.country}>
                 <AccordionTrigger className="text-left">
                   <span className="flex w-full items-center justify-between gap-4 pr-3">
-                    <span className="font-medium">{segment.country}</span>
+                    <span className="font-medium">{tr(segment.country)}</span>
                     <span className="text-primary">{m.fmt(segment.total)}</span>
                   </span>
                 </AccordionTrigger>
@@ -361,12 +362,12 @@ export function TripResults({
                       >
                         <span>
                           <span className="block text-sm font-medium">{line.place}</span>
-                          <span className="block text-xs text-muted-foreground">{line.detail}</span>
+                          <span className="block text-xs text-muted-foreground">{tr(line.detail)}</span>
                         </span>
                         <span className="flex items-center gap-2">
                           {line.badge && (
                             <span className="rounded-full bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary">
-                              {line.badge}
+                              {tr(line.badge)}
                             </span>
                           )}
                           {line.portal && (
@@ -394,13 +395,13 @@ export function TripResults({
         <div className="glass-panel rounded-2xl p-5 sm:p-6">
           <div className="flex items-center gap-2">
             <ShieldCheck className="size-5 text-primary" />
-            <h3 className="text-lg font-semibold tracking-tight">🛡️ {trip.safety.title}</h3>
+            <h3 className="text-lg font-semibold tracking-tight">🛡️ {tr(trip.safety.title)}</h3>
           </div>
           <div className="mt-4 grid gap-5">
             {trip.safety.sections.map((section) => (
               <div key={section.heading}>
                 <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-                  {section.heading}
+                  {tr(section.heading)}
                 </p>
                 <ul className="mt-2 grid gap-2">
                   {section.items.map((item) => (
@@ -408,7 +409,7 @@ export function TripResults({
                       key={item}
                       className="rounded-xl border border-border bg-background/40 px-4 py-3 text-sm text-foreground/85"
                     >
-                      {item}
+                      {tr(item)}
                     </li>
                   ))}
                 </ul>
@@ -485,12 +486,12 @@ export function TripResults({
 
       <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h3 className="text-lg font-semibold tracking-tight">{trip.optimizer.title}</h3>
+          <h3 className="text-lg font-semibold tracking-tight">{tr(trip.optimizer.title)}</h3>
           <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-            {trip.optimizer.rangeLabel}
+            {tr(trip.optimizer.rangeLabel)}
           </span>
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">{trip.optimizer.bufferLabel}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{tr(trip.optimizer.bufferLabel)}</p>
 
         {trip.optimizer.networks.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
@@ -517,8 +518,8 @@ export function TripResults({
                 </p>
                 <span className="shrink-0 text-xs text-muted-foreground">{t.results.at} {stop.atLabel}</span>
               </div>
-              <p className="mt-1 text-xs font-medium text-primary">{stop.power}</p>
-              <p className="mt-2 text-sm text-foreground/80">{stop.note}</p>
+              <p className="mt-1 text-xs font-medium text-primary">{tr(stop.power)}</p>
+              <p className="mt-2 text-sm text-foreground/80">{tr(stop.note)}</p>
               {stop.networks.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {stop.networks.map((n) => (
