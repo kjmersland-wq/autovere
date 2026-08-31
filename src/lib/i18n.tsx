@@ -5,8 +5,13 @@ import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 
 export type Locale = "en" | "no" | "sv" | "da" | "de" | "nl" | "fr" | "pl";
 
+import { CONTENT_DA, DA_PATTERNS } from "@/lib/content-da";
+import { CONTENT_DE, DE_PATTERNS } from "@/lib/content-de";
+import { CONTENT_FR, FR_PATTERNS } from "@/lib/content-fr";
+import { CONTENT_NL, NL_PATTERNS } from "@/lib/content-nl";
 import { CONTENT_NO } from "@/lib/content-no";
 import { CONTENT_PL } from "@/lib/content-pl";
+import { CONTENT_SV, SV_PATTERNS } from "@/lib/content-sv";
 import { codeFromPath } from "@/lib/locales";
 import { PARTIAL_DICTS } from "@/lib/dictionaries";
 
