@@ -1,13 +1,19 @@
 import { useState } from "react";
-import { Check, Sparkles } from "lucide-react";
+import { Check, ExternalLink, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { useStripeCheckout } from "@/hooks/useStripeCheckout";
+import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
+import { getStripeEnvironment, PRICE_IDS, type PlanTier } from "@/lib/stripe";
 import { cn } from "@/lib/utils";
+import { createPortalSession } from "@/utils/payments.functions";
 
 type Tier = {
-  id: "free" | "pro" | "fleet";
+  id: PlanTier;
   name: string;
   emoji: string;
   tagline: string;
@@ -41,7 +47,7 @@ export const TIERS: Tier[] = [
     tagline: "For the traveller who lives for the next pass.",
     monthly: "€4.99",
     yearly: "€39",
-    cta: "Upgrade with Stripe",
+    cta: "Upgrade to Pro",
     highlight: true,
     features: [
       "Multi-vehicle garage (car, motorhome, motorcycle)",
@@ -58,7 +64,7 @@ export const TIERS: Tier[] = [
     emoji: "🚛",
     tagline: "Cross-border operations, consolidated.",
     monthly: "€19",
-    cta: "Upgrade with Stripe",
+    cta: "Upgrade to Business",
     features: [
       "Multi-country toll invoice consolidation",
       "Team routing with shared trip libraries",
@@ -71,7 +77,17 @@ export const TIERS: Tier[] = [
 
 export function PricingTiers() {
   const { user, openAuth } = useAuth();
+  const { tier: currentTier, isActive, cancelAtPeriodEnd, periodEnd, pastDue } = useSubscription();
+  const { openCheckout, closeCheckout, isOpen, checkoutElement } = useStripeCheckout();
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  const priceIdFor = (tier: Tier) =>
+    tier.id === "fleet"
+      ? PRICE_IDS.businessMonthly
+      : cycle === "yearly"
+        ? PRICE_IDS.proYearly
+        : PRICE_IDS.proMonthly;
 
   const upgrade = (tier: Tier) => {
     if (tier.id === "free") {
@@ -80,15 +96,57 @@ export function PricingTiers() {
     }
     if (!user) {
       openAuth("signup");
-      toast.info("Create your account first, then we'll take you to secure checkout.");
+      toast.info("Create your account first, then we'll take you straight to secure checkout.");
       return;
     }
-    toast.info("Secure Stripe checkout is being finalised — you'll be first in line.");
+    openCheckout({
+      priceId: priceIdFor(tier),
+      returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+    });
+  };
+
+  const manageBilling = async () => {
+    setPortalLoading(true);
+    try {
+      const result = await createPortalSession({
+        data: { returnUrl: `${window.location.origin}/pricing`, environment: getStripeEnvironment() },
+      });
+      if ("error" in result) throw new Error(result.error);
+      window.open(result.url, "_blank", "noopener");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "Could not open the billing portal.");
+    } finally {
+      setPortalLoading(false);
+    }
   };
 
   return (
     <div>
-      <div className="mx-auto mb-10 flex w-fit items-center gap-1 rounded-full border border-border bg-background/50 p-1">
+      <PaymentTestModeBanner />
+
+      {isActive && (
+        <div className="glass-panel mx-auto mb-8 mt-6 flex max-w-2xl flex-col items-center gap-3 rounded-2xl p-5 text-center sm:flex-row sm:justify-between sm:text-left">
+          <div>
+            <p className="text-sm font-medium">
+              You're on <span className="text-amber-300">{TIERS.find((t) => t.id === currentTier)?.name}</span>
+              {pastDue && " — payment retrying"}
+            </p>
+            <p className="text-xs text-muted-foreground">
+              {cancelAtPeriodEnd
+                ? `Access stays open until ${periodEnd?.toLocaleDateString()}.`
+                : periodEnd
+                  ? `Renews ${periodEnd.toLocaleDateString()}.`
+                  : "Active subscription."}
+            </p>
+          </div>
+          <Button variant="outline" size="sm" onClick={manageBilling} disabled={portalLoading}>
+            {portalLoading ? <Loader2 className="mr-2 size-4 animate-spin" /> : <ExternalLink className="mr-2 size-4" />}
+            Manage billing
+          </Button>
+        </div>
+      )}
+
+      <div className="mx-auto mb-10 mt-6 flex w-fit items-center gap-1 rounded-full border border-border bg-background/50 p-1">
         {(["monthly", "yearly"] as const).map((c) => (
           <button
             key={c}
@@ -108,6 +166,7 @@ export function PricingTiers() {
         {TIERS.map((tier) => {
           const price = cycle === "yearly" && tier.yearly ? tier.yearly : tier.monthly;
           const unit = tier.id === "free" ? "forever" : cycle === "yearly" && tier.yearly ? "per year" : "per month";
+          const isCurrent = isActive ? currentTier === tier.id : tier.id === "free";
           return (
             <article
               key={tier.id}
@@ -142,20 +201,39 @@ export function PricingTiers() {
               </ul>
               <Button
                 className="mt-7 w-full"
-                variant={tier.id === "free" ? "outline" : "default"}
-                onClick={() => upgrade(tier)}
+                variant={tier.id === "free" || isCurrent ? "outline" : "default"}
+                disabled={isCurrent && tier.id !== "free"}
+                onClick={() => (isCurrent && tier.id !== "free" ? undefined : upgrade(tier))}
               >
-                {tier.cta}
+                {isCurrent && tier.id !== "free" ? "Your current plan" : tier.cta}
               </Button>
+              {isActive && !isCurrent && tier.id !== "free" && (
+                <button
+                  type="button"
+                  onClick={manageBilling}
+                  className="mt-2 text-xs text-muted-foreground underline-offset-4 hover:underline"
+                >
+                  Switch plan in billing portal
+                </button>
+              )}
             </article>
           );
         })}
       </div>
 
       <p className="mt-8 text-center text-xs text-muted-foreground">
-        Prices in EUR incl. applicable VAT. Payments handled securely by Stripe. Cost estimates remain indicative —
-        always verify with official toll portals.
+        Prices in EUR incl. applicable VAT. Payments and tax handled securely by Stripe. Cost estimates remain
+        indicative — always verify with official toll portals.
       </p>
+
+      <Dialog open={isOpen} onOpenChange={(open) => !open && closeCheckout()}>
+        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Secure checkout</DialogTitle>
+          </DialogHeader>
+          {checkoutElement}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

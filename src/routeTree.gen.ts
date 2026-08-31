@@ -28,6 +28,7 @@ import { Route as CaFaqRouteImport } from './routes/ca.faq'
 import { Route as CaHowItWorksRouteImport } from './routes/ca.how-it-works'
 import { Route as CaLegalRouteImport } from './routes/ca.legal'
 import { Route as CaPartnersRouteImport } from './routes/ca.partners'
+import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as UsIndexRouteImport } from './routes/us.index'
 import { Route as UsFaqRouteImport } from './routes/us.faq'
 import { Route as UsHowItWorksRouteImport } from './routes/us.how-it-works'
@@ -134,6 +135,11 @@ const CaPartnersRoute = CaPartnersRouteImport.update({
   path: '/partners',
   getParentRoute: () => CaRoute,
 } as any)
+const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
+  id: '/checkout/return',
+  path: '/checkout/return',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsIndexRoute = UsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -205,6 +211,7 @@ export interface FileRoutesByFullPath {
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -234,6 +241,7 @@ export interface FileRoutesByTo {
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -266,6 +274,7 @@ export interface FileRoutesById {
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/checkout/return': typeof CheckoutReturnRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -299,6 +308,7 @@ export interface FileRouteTypes {
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/checkout/return'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -328,6 +338,7 @@ export interface FileRouteTypes {
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/checkout/return'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -359,6 +370,7 @@ export interface FileRouteTypes {
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/checkout/return'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -387,6 +399,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TollsRoute: typeof TollsRoute
   UsRoute: typeof UsRouteWithChildren
+  CheckoutReturnRoute: typeof CheckoutReturnRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -525,6 +538,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaPartnersRouteImport
       parentRoute: typeof CaRoute
     }
+    '/checkout/return': {
+      id: '/checkout/return'
+      path: '/checkout/return'
+      fullPath: '/checkout/return'
+      preLoaderRoute: typeof CheckoutReturnRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/us/': {
       id: '/us/'
       path: '/'
@@ -657,6 +677,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TollsRoute: TollsRoute,
   UsRoute: UsRouteWithChildren,
+  CheckoutReturnRoute: CheckoutReturnRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
