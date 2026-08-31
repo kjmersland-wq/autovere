@@ -16,6 +16,10 @@ export const Route = createFileRoute("/$lang/")({
   head: ({ params }) => {
     const c = landingFor(params.lang);
     if (!c) return { meta: [{ title: "AutoVere" }] };
+    const url = `https://www.autovere.com/${params.lang}`;
+    const image = `https://www.autovere.com/og/autovere-og-${
+      params.lang === "pl" || params.lang === "no" ? params.lang : "en"
+    }.jpg`;
     return {
       meta: [
         { title: c.metaTitle },
@@ -23,8 +27,14 @@ export const Route = createFileRoute("/$lang/")({
         { property: "og:title", content: c.metaTitle },
         { property: "og:description", content: c.metaDescription },
         { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: image },
       ],
+      links: [{ rel: "canonical", href: url }],
     };
   },
   component: LocaleHome,
