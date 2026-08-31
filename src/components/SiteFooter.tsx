@@ -78,22 +78,22 @@ export function SiteFooter() {
           <p className="text-sm font-semibold text-foreground">{t.footer.quickLinks}</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             <li>
-              <Link to={locale === "no" ? "/no/planner" : "/planner"} className="transition-colors hover:text-foreground">
+              <Link to={`${noPrefix}/planner` as "/planner"} className="transition-colors hover:text-foreground">
                 {t.header.nav["/planner"]}
               </Link>
             </li>
             <li>
-              <Link to={locale === "no" ? "/no/tolls" : "/tolls"} className="transition-colors hover:text-foreground">
+              <Link to={`${noPrefix}/tolls` as "/tolls"} className="transition-colors hover:text-foreground">
                 {t.header.nav["/tolls"]}
               </Link>
             </li>
             <li>
-              <Link to={locale === "no" ? "/no/scenic" : "/scenic"} className="transition-colors hover:text-foreground">
+              <Link to={`${noPrefix}/scenic` as "/scenic"} className="transition-colors hover:text-foreground">
                 {t.header.nav["/scenic"]}
               </Link>
             </li>
             <li>
-              <Link to={locale === "no" ? "/no/garage" : "/garage"} className="transition-colors hover:text-foreground">
+              <Link to={`${noPrefix}/garage` as "/garage"} className="transition-colors hover:text-foreground">
                 {t.header.nav["/garage"]}
               </Link>
             </li>
