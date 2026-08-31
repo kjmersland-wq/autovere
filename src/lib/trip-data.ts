@@ -668,15 +668,17 @@ export function estimateTrip(
     ? `${Math.round(distanceKm * 0.621371).toLocaleString("en-US")} mi`
     : `${distanceKm.toLocaleString("en-GB")} km`;
 
-  const hours = distanceKm / (scenic ? 78 : 98);
+  const hours = distanceKm / (scenic ? tuning.speed * 0.82 : tuning.speed);
   const driveTime = `${Math.floor(hours)}h ${Math.round((hours % 1) * 60)}m`;
 
   return {
     currency,
     units: defaults.units,
+    variant: activeVariant,
     distanceLabel,
     budget: round2(tolls + ferries + energyCost + distanceKm * 0.04),
     distanceKm,
+    driveHours: hours,
     driveTime,
     tolls,
     ferries,
@@ -691,6 +693,39 @@ export function estimateTrip(
       : undefined,
   };
 }
+
+export function estimateAllVariants(
+  region: RegionKey,
+  vehicle: VehicleKey,
+  fuel: FuelKey,
+  avoidTolls: boolean,
+  includeFerries: boolean,
+  scenic: boolean,
+): Record<RouteVariantKey, TripEstimate> {
+  return {
+    fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest"),
+    smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart"),
+    tollfree: estimateTrip(region, vehicle, fuel, avoidTolls, includeFerries, scenic, "tollfree"),
+  };
+}
+
+export function variantComparison(
+  base: TripEstimate,
+  candidate: TripEstimate,
+): { saved: number; hoursAdded: number; savedLabel: string; timeLabel: string } {
+  const saved = Math.round((base.tolls + base.ferries - candidate.tolls - candidate.ferries) * 100) / 100;
+  const hoursAdded = candidate.driveHours - base.driveHours;
+  const h = Math.floor(Math.abs(hoursAdded));
+  const m = Math.round((Math.abs(hoursAdded) % 1) * 60);
+  const sign = hoursAdded >= 0 ? "+" : "−";
+  return {
+    saved,
+    hoursAdded,
+    savedLabel: `${saved >= 0 ? "" : "−"}${money(base.currency, Math.abs(saved))}`,
+    timeLabel: `${sign}${h}h ${m}m`,
+  };
+}
+
 
 
 export function money(currency: string, value: number) {
