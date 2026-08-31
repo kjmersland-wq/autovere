@@ -378,9 +378,9 @@ export function GaragePage() {
                       <p className="mt-1 text-xs text-muted-foreground">{t.when}</p>
                       {(t.tolls !== undefined || t.energyCost !== undefined) && (
                         <dl className="mt-4 grid grid-cols-3 gap-3 rounded-xl border border-border bg-background/40 p-3 text-center">
-                          <Cell label={t("Bom")} value={fmt(t.currency, t.tolls)} />
-                          <Cell label={t("Ferjer")} value={fmt(t.currency, t.ferries)} />
-                          <Cell label={t("Energi")} value={fmt(t.currency, t.energyCost)} />
+                          <Cell label={t("Bom")} value={fmt(t.currency, t.tolls, isNo ? "nb-NO" : "en-US")} />
+                          <Cell label={t("Ferjer")} value={fmt(t.currency, t.ferries, isNo ? "nb-NO" : "en-US")} />
+                          <Cell label={t("Energi")} value={fmt(t.currency, t.energyCost, isNo ? "nb-NO" : "en-US")} />
                         </dl>
                       )}
                       <div className="mt-4 flex flex-wrap gap-2">
@@ -560,7 +560,7 @@ export function GaragePage() {
                 </p>
                 {!isAdmin && (
                   <Button className="mt-4" asChild>
-                    <Link to="/no/pricing">{t("Se abonnementene")}</Link>
+                    <Link to={isNo ? "/no/pricing" : "/pricing"}>{t("Se abonnementene")}</Link>
                   </Button>
                 )}
               </Panel>
@@ -665,7 +665,7 @@ export function GaragePage() {
                     {t("Svar på de vanligste spørsmålene om ruter, bompenger, vignetter og lading.")}
                   </p>
                   <Button className="mt-4" asChild>
-                    <Link to="/no/faq">
+                    <Link to={isNo ? "/no/faq" : "/faq"}>
                       <HelpCircle className="size-4" /> {t("Åpne hjelp og FAQ")}
                     </Link>
                   </Button>
