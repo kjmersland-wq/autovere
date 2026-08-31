@@ -345,8 +345,6 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
   ],
 };
 
-const SAFETY: Record<RegionKey, Record<VehicleKey, { title: string; sections: SafetySection[] }>> =
-  {} as never;
 
 const PASSES: Record<RegionKey, string[]> = {
   eu: [
