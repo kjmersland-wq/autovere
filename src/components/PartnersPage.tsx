@@ -437,8 +437,8 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
               <Textarea id="members" name="members" rows={4} placeholder={c.fields.membersPh} />
             </div>
             <div className="flex justify-end">
-              <Button type="submit">
-                <Send className="size-4" /> {c.fields.submit}
+              <Button type="submit" disabled={sending}>
+                <Send className="size-4" /> {sending ? t.sending : c.fields.submit}
               </Button>
             </div>
           </form>
@@ -475,8 +475,8 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
               <Textarea id="c-message" name="message" rows={5} required placeholder={c.fields.messagePh} />
             </div>
             <div className="flex justify-end">
-              <Button type="submit">
-                <Send className="size-4" /> {c.fields.send}
+              <Button type="submit" disabled={sending}>
+                <Send className="size-4" /> {sending ? t.sending : c.fields.send}
               </Button>
             </div>
           </form>
