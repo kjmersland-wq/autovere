@@ -1,5 +1,25 @@
-import { useEffect, useState } from "react";
-import { Copy, Download, MapPin, Navigation, Pencil, Plus, Printer, Trash2 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
+import { Link } from "@tanstack/react-router";
+import {
+  Bookmark,
+  Car,
+  Copy,
+  CreditCard,
+  Download,
+  HelpCircle,
+  LayoutGrid,
+  LifeBuoy,
+  Lock,
+  MapPin,
+  Navigation,
+  Pencil,
+  Plus,
+  Printer,
+  Route as RouteIcon,
+  ShieldCheck,
+  SlidersHorizontal,
+  Trash2,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import { SiteHeader } from "@/components/SiteHeader";
@@ -14,9 +34,11 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useAdmin } from "@/hooks/useAdmin";
+import { useSubscription } from "@/hooks/useSubscription";
+import { useAuth } from "@/lib/auth";
+import { CURRENCIES, useCurrency } from "@/lib/currency";
 import {
-
   FUEL_LABEL,
   TOLL_TAGS,
   VEHICLE_META,
@@ -35,7 +57,6 @@ import {
   type VehicleKind,
 } from "@/lib/garage";
 
-
 const EMPTY_VEHICLE: GarageVehicle = {
   id: "",
   kind: "car",
@@ -47,42 +68,135 @@ const EMPTY_VEHICLE: GarageVehicle = {
   tags: [],
 };
 
+const VEHICLE_NO: Record<VehicleKind, string> = {
+  car: "Bil",
+  motorhome: "Bobil",
+  motorcycle: "Motorsykkel",
+};
+
+const FUEL_NO: Record<keyof typeof FUEL_LABEL, string> = {
+  petrol: "⛽ Bensin",
+  diesel: "🛢️ Diesel",
+  ev: "⚡ Elektrisk (EV)",
+};
+
+type SectionId =
+  | "overview"
+  | "trips"
+  | "vehicles"
+  | "settings"
+  | "billing"
+  | "places"
+  | "profile"
+  | "admin"
+  | "support";
+
+type SavedPlace = { id: string; name: string; note: string };
+
+const PLACES_KEY = "autovere.savedPlaces";
+const SETTINGS_KEY = "autovere.accountSettings";
+
 export function GaragePage() {
+  const { user, openAuth, signOut } = useAuth();
+  const { isAdmin } = useAdmin();
+  const { tier, isActive } = useSubscription();
+  const { currency, setCurrency } = useCurrency();
+
+  const [section, setSection] = useState<SectionId>("overview");
   const [vehicles, setVehicles] = useState<GarageVehicle[]>([]);
   const [trips, setTrips] = useState<SavedTrip[]>([]);
+  const [places, setPlaces] = useState<SavedPlace[]>([]);
   const [draft, setDraft] = useState<GarageVehicle | null>(null);
   const [renaming, setRenaming] = useState<SavedTrip | null>(null);
   const [renameValue, setRenameValue] = useState("");
+  const [placeDraft, setPlaceDraft] = useState<SavedPlace | null>(null);
+  const [units, setUnits] = useState<"metric" | "imperial">("metric");
+  const [displayName, setDisplayName] = useState("");
 
   useEffect(() => {
     setVehicles(loadVehicles());
     setTrips(loadTrips());
+    try {
+      const raw = localStorage.getItem(PLACES_KEY);
+      if (raw) setPlaces(JSON.parse(raw) as SavedPlace[]);
+      const s = localStorage.getItem(SETTINGS_KEY);
+      if (s) {
+        const parsed = JSON.parse(s) as { units?: "metric" | "imperial"; displayName?: string };
+        if (parsed.units) setUnits(parsed.units);
+        if (parsed.displayName) setDisplayName(parsed.displayName);
+      }
+    } catch {
+      /* storage unavailable */
+    }
   }, []);
+
+  useEffect(() => {
+    if (!displayName && user) {
+      const meta = (user.user_metadata ?? {}) as { full_name?: string; name?: string };
+      setDisplayName(meta.full_name ?? meta.name ?? user.email?.split("@")[0] ?? "");
+    }
+  }, [user, displayName]);
+
+  const planLabel = isAdmin
+    ? "AutoVere Pro — Admin"
+    : tier === "fleet"
+      ? "AutoVere Business"
+      : tier === "pro"
+        ? "AutoVere Pro"
+        : "AutoVere Free";
+
+  const nav = useMemo(
+    () =>
+      [
+        { id: "overview" as const, label: "Oversikt", icon: LayoutGrid },
+        { id: "trips" as const, label: "Mine reiser", icon: RouteIcon },
+        { id: "vehicles" as const, label: "Mine kjøretøy", icon: Car },
+        { id: "settings" as const, label: "Innstillinger", icon: SlidersHorizontal },
+        { id: "billing" as const, label: "Abonnement og fakturering", icon: CreditCard },
+        { id: "places" as const, label: "Lagrede steder", icon: Bookmark },
+        { id: "profile" as const, label: "Profil og sikkerhet", icon: ShieldCheck },
+        ...(isAdmin ? [{ id: "admin" as const, label: "Admin", icon: Lock }] : []),
+        { id: "support" as const, label: "Hjelp og support", icon: LifeBuoy },
+      ].filter(Boolean),
+    [isAdmin],
+  );
 
   const commitVehicles = (next: GarageVehicle[]) => {
     setVehicles(next);
     saveVehicles(next);
   };
 
+  const commitTrips = (next: SavedTrip[]) => {
+    setTrips(next);
+    persistTrips(next);
+  };
+
+  const commitPlaces = (next: SavedPlace[]) => {
+    setPlaces(next);
+    try {
+      localStorage.setItem(PLACES_KEY, JSON.stringify(next));
+    } catch {
+      /* storage unavailable */
+    }
+  };
+
   const submitDraft = () => {
     if (!draft) return;
     if (!draft.name.trim()) {
-      toast.error("Give your vehicle a name so you can spot it later.");
+      toast.error("Gi kjøretøyet et navn så du kjenner det igjen.");
       return;
     }
     const exists = vehicles.some((v) => v.id === draft.id);
     commitVehicles(
-      exists
-        ? vehicles.map((v) => (v.id === draft.id ? draft : v))
-        : [...vehicles, { ...draft, id: newId() }],
+      exists ? vehicles.map((v) => (v.id === draft.id ? draft : v)) : [...vehicles, { ...draft, id: newId() }],
     );
-    toast.success(exists ? "Vehicle updated." : "Vehicle added to your garage.");
+    toast.success(exists ? "Kjøretøyet er oppdatert." : "Kjøretøyet er lagt til i garasjen.");
     setDraft(null);
   };
 
   const removeVehicle = (id: string) => {
     commitVehicles(vehicles.filter((v) => v.id !== id));
-    toast.success("Vehicle removed.");
+    toast.success("Kjøretøyet er fjernet.");
   };
 
   const downloadGpx = (trip: SavedTrip) => {
@@ -93,48 +207,33 @@ export function GaragePage() {
     a.download = `autovere-${trip.name.toLowerCase().replace(/\W+/g, "-")}.gpx`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("GPX exported — load it straight into your sat-nav.");
-  };
-
-  const commitTrips = (next: SavedTrip[]) => {
-    setTrips(next);
-    persistTrips(next);
+    toast.success("GPX eksportert — last den rett inn i navigasjonen.");
   };
 
   const duplicate = (trip: SavedTrip) => {
-    const copy = duplicateTrip(trip);
-    commitTrips([copy, ...trips]);
-    toast.success("Trip duplicated — tweak it and roll again.");
-  };
-
-  const startRename = (trip: SavedTrip) => {
-    setRenaming(trip);
-    setRenameValue(trip.name);
+    commitTrips([duplicateTrip(trip), ...trips]);
+    toast.success("Turen er duplisert.");
   };
 
   const submitRename = () => {
     if (!renaming) return;
     const name = renameValue.trim();
     if (!name) {
-      toast.error("Give the trip a name you'll recognise.");
+      toast.error("Gi turen et navn du kjenner igjen.");
       return;
     }
     commitTrips(trips.map((t) => (t.id === renaming.id ? { ...t, name } : t)));
     setRenaming(null);
-    toast.success("Trip renamed.");
-  };
-
-  const printTrip = (trip: SavedTrip) => {
-    if (!printTripSummary(trip)) {
-      toast.error("Allow pop-ups to print your itinerary.");
-    }
+    toast.success("Turen er omdøpt.");
   };
 
   const deleteTrip = (id: string) => {
-    const next = trips.filter((t) => t.id !== id);
-    setTrips(next);
-    persistTrips(next);
-    toast.success("Trip removed from your garage.");
+    commitTrips(trips.filter((t) => t.id !== id));
+    toast.success("Turen er fjernet fra garasjen.");
+  };
+
+  const printTrip = (trip: SavedTrip) => {
+    if (!printTripSummary(trip)) toast.error("Tillat popup-vinduer for å skrive ut reiseoversikten.");
   };
 
   const toggleTag = (tag: string) => {
@@ -145,167 +244,513 @@ export function GaragePage() {
     });
   };
 
+  const saveSettings = () => {
+    try {
+      localStorage.setItem(SETTINGS_KEY, JSON.stringify({ units, displayName }));
+    } catch {
+      /* storage unavailable */
+    }
+    toast.success("Innstillingene er lagret.");
+  };
+
+  const exportData = () => {
+    const blob = new Blob(
+      [JSON.stringify({ profil: { displayName, epost: user?.email ?? null }, vehicles, trips, places }, null, 2)],
+      { type: "application/json" },
+    );
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "autovere-mine-data.json";
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("Dataene dine er lastet ned.");
+  };
+
   return (
     <main className="min-h-screen">
       <SiteHeader />
       <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-          My Garage &amp; Trips
-        </p>
+        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">AutoVere</p>
         <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          Welcome back — your road is ready.
+          Velkommen tilbake{displayName ? `, ${displayName}` : ""}.
         </h1>
         <p className="mt-4 max-w-2xl text-foreground/75">
-          Your vehicles, toll tags and every adventure you've costed, saved and ready to roll again.
+          Kjøretøyene dine, reisene og alt abonnementet ditt låser opp — samlet på ett sted.
         </p>
 
-        <Tabs defaultValue="vehicles" className="mt-10">
-          <TabsList className="bg-background/50">
-            <TabsTrigger value="vehicles">🏍️ Vehicle garage</TabsTrigger>
-            <TabsTrigger value="trips">🗺️ Saved trips</TabsTrigger>
-          </TabsList>
+        <div className="mt-10 grid gap-6 md:grid-cols-[16rem_1fr]">
+          <nav className="flex flex-col gap-1">
+            {nav.map((item) => {
+              const Icon = item.icon;
+              const active = section === item.id;
+              return (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => setSection(item.id)}
+                  className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
+                    active
+                      ? "bg-primary text-primary-foreground shadow-sm"
+                      : "text-foreground/75 hover:bg-background/60"
+                  }`}
+                >
+                  <Icon className="size-4" />
+                  {item.label}
+                </button>
+              );
+            })}
+          </nav>
 
-          <TabsContent value="vehicles" className="mt-6">
-            <div className="flex items-center justify-between gap-4">
-              <h2 className="text-lg font-semibold tracking-tight">My vehicle profiles</h2>
-              <Button size="sm" onClick={() => setDraft({ ...EMPTY_VEHICLE, id: "" })}>
-                <Plus className="size-4" /> Add vehicle
-              </Button>
-            </div>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              {vehicles.map((v) => (
-                <article key={v.id} className="glass-panel flex gap-4 rounded-2xl p-5">
-                  <span className="text-3xl">{VEHICLE_META[v.kind].emoji}</span>
-                  <div className="min-w-0 flex-1">
-                    <div className="flex items-start justify-between gap-3">
-                      <div>
-                        <h3 className="font-semibold tracking-tight">{v.name}</h3>
-                        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
-                          {VEHICLE_META[v.kind].label}
-                        </p>
-                      </div>
-                      <div className="flex gap-1">
-                        <Button size="icon" variant="ghost" onClick={() => setDraft(v)} aria-label="Edit vehicle">
-                          <Pencil className="size-4" />
-                        </Button>
-                        <Button
-                          size="icon"
-                          variant="ghost"
-                          onClick={() => removeVehicle(v.id)}
-                          aria-label="Delete vehicle"
-                        >
-                          <Trash2 className="size-4" />
-                        </Button>
-                      </div>
+          <div className="min-w-0 space-y-6">
+            {section === "overview" && (
+              <>
+                <div className="glass-panel rounded-2xl p-6">
+                  <div className="flex flex-wrap items-start justify-between gap-4">
+                    <div>
+                      <span className="inline-flex items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-xs font-semibold text-primary">
+                        {planLabel}
+                      </span>
+                      <h2 className="mt-3 text-xl font-semibold tracking-tight">
+                        {displayName || user?.email || "Gjest"}
+                      </h2>
+                      <p className="text-sm text-muted-foreground">
+                        {user ? (isAdmin || isActive ? "Aktivt" : "Free-konto") : "Ikke innlogget"}
+                      </p>
                     </div>
-                    <p className="mt-2 text-sm text-foreground/70">
-                      {FUEL_LABEL[v.fuel]}
-                      {v.tank ? ` · ${v.tank}` : ""}
-                      {v.consumption ? ` · ${v.consumption}` : ""}
-                      {v.height ? ` · ${v.height}` : ""}
-                    </p>
-                    <div className="mt-3 flex flex-wrap gap-2">
-                      {v.tags.map((t) => (
-                        <span
-                          key={t}
-                          className="rounded-full bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary"
-                        >
-                          {t}
-                        </span>
-                      ))}
-                      {v.tags.length === 0 && (
-                        <span className="text-xs text-muted-foreground">No toll tags linked yet</span>
+                    <div className="flex gap-2">
+                      {isAdmin && (
+                        <Button variant="outline" size="sm" asChild>
+                          <Link to="/admin">
+                            <Lock className="size-4" /> Admin
+                          </Link>
+                        </Button>
+                      )}
+                      {user ? (
+                        <Button variant="ghost" size="sm" onClick={() => void signOut()}>
+                          Logg ut
+                        </Button>
+                      ) : (
+                        <Button size="sm" onClick={() => openAuth("signin")}>
+                          Logg inn
+                        </Button>
                       )}
                     </div>
                   </div>
-                </article>
-              ))}
-            </div>
-          </TabsContent>
+                </div>
 
-          <TabsContent value="trips" className="mt-6">
-            <h2 className="text-lg font-semibold tracking-tight">Saved adventures</h2>
-            <div className="mt-4 grid gap-4 md:grid-cols-2">
-              {trips.map((t) => (
-                <article key={t.id} className="glass-panel rounded-2xl p-5">
-                  <h3 className="font-semibold tracking-tight">{t.name}</h3>
-                  <p className="text-sm text-foreground/70">{t.detail}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">{t.when}</p>
-                  {(t.tolls !== undefined || t.energyCost !== undefined) && (
-                    <dl className="mt-4 grid grid-cols-3 gap-3 rounded-xl border border-border bg-background/40 p-3 text-center">
-                      <div>
-                        <dt className="text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground">Tolls</dt>
-                        <dd className="text-sm font-semibold">{fmt(t.currency, t.tolls)}</dd>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  <Stat label="Lagrede reiser" value={String(trips.length)} />
+                  <Stat label="Kjøretøy" value={String(vehicles.length)} />
+                  <Stat label="Lagrede steder" value={String(places.length)} />
+                </div>
+
+                <div className="glass-panel rounded-2xl p-6">
+                  <h3 className="text-lg font-semibold tracking-tight">Dette låser abonnementet ditt opp</h3>
+                  <ul className="mt-4 grid gap-3 sm:grid-cols-2">
+                    {[
+                      ["Smart drivstoff og lading", "Finn stopp basert på kjøretøy, rute og forbruk."],
+                      ["Bom, vignetter og ferjer", "Full oversikt over kostnader før du kjører."],
+                      ["Bobil og camping", "Tømmestasjoner, vann, overnatting og verksted."],
+                      ["Veiarbeid og hendelser", "Se stengninger og omkjøringer som påvirker turen."],
+                      ["Personlig kjøretøyprofil", "Vi bruker dine data i hver beregning."],
+                      ["Tilgjengelig på alle språk", "Hele AutoVere på ditt språk."],
+                    ].map(([title, body]) => (
+                      <li key={title} className="rounded-xl border border-border bg-background/40 p-4">
+                        <p className="text-sm font-semibold">{title}</p>
+                        <p className="mt-1 text-sm text-foreground/70">{body}</p>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </>
+            )}
+
+            {section === "trips" && (
+              <Panel title="Mine reiser">
+                <div className="grid gap-4">
+                  {trips.map((t) => (
+                    <article key={t.id} className="rounded-xl border border-border bg-background/40 p-5">
+                      <h3 className="font-semibold tracking-tight">{t.name}</h3>
+                      <p className="text-sm text-foreground/70">{t.detail}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{t.when}</p>
+                      {(t.tolls !== undefined || t.energyCost !== undefined) && (
+                        <dl className="mt-4 grid grid-cols-3 gap-3 rounded-xl border border-border bg-background/40 p-3 text-center">
+                          <Cell label="Bom" value={fmt(t.currency, t.tolls)} />
+                          <Cell label="Ferjer" value={fmt(t.currency, t.ferries)} />
+                          <Cell label="Energi" value={fmt(t.currency, t.energyCost)} />
+                        </dl>
+                      )}
+                      <div className="mt-4 flex flex-wrap gap-2">
+                        <Button size="sm" variant="outline" onClick={() => duplicate(t)}>
+                          <Copy className="size-4" /> Dupliser
+                        </Button>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            setRenaming(t);
+                            setRenameValue(t.name);
+                          }}
+                        >
+                          <Pencil className="size-4" /> Gi nytt navn
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => printTrip(t)}>
+                          <Printer className="size-4" /> Skriv ut
+                        </Button>
+                        <Button size="sm" variant="outline" onClick={() => downloadGpx(t)}>
+                          <Download className="size-4" /> GPX
+                        </Button>
+                        <Button size="sm" variant="outline" asChild>
+                          <a href={googleMapsUrl(t)} target="_blank" rel="noreferrer">
+                            <MapPin className="size-4" /> Google Maps
+                          </a>
+                        </Button>
+                        <Button size="sm" variant="outline" asChild>
+                          <a href={wazeUrl(t)} target="_blank" rel="noreferrer">
+                            <Navigation className="size-4" /> Waze
+                          </a>
+                        </Button>
+                        <Button size="sm" variant="ghost" onClick={() => deleteTrip(t.id)}>
+                          <Trash2 className="size-4" /> Slett
+                        </Button>
                       </div>
-                      <div>
-                        <dt className="text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground">Ferries</dt>
-                        <dd className="text-sm font-semibold">{fmt(t.currency, t.ferries)}</dd>
-                      </div>
-                      <div>
-                        <dt className="text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground">Energy</dt>
-                        <dd className="text-sm font-semibold">{fmt(t.currency, t.energyCost)}</dd>
-                      </div>
-                    </dl>
+                    </article>
+                  ))}
+                  {trips.length === 0 && (
+                    <p className="text-sm text-muted-foreground">
+                      Ingen lagrede reiser ennå — planlegg en tur og trykk «Lagre i Min garasje».
+                    </p>
                   )}
-                  <div className="mt-4 flex flex-wrap gap-2">
-                    <Button size="sm" variant="outline" onClick={() => duplicate(t)}>
-                      <Copy className="size-4" /> Duplicate
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => startRename(t)}>
-                      <Pencil className="size-4" /> Rename
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => printTrip(t)}>
-                      <Printer className="size-4" /> Print summary
-                    </Button>
-                    <Button size="sm" variant="outline" onClick={() => downloadGpx(t)}>
-                      <Download className="size-4" /> GPX
-                    </Button>
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={googleMapsUrl(t)} target="_blank" rel="noreferrer">
-                        <MapPin className="size-4" /> Google Maps
-                      </a>
-                    </Button>
-                    <Button size="sm" variant="outline" asChild>
-                      <a href={wazeUrl(t)} target="_blank" rel="noreferrer">
-                        <Navigation className="size-4" /> Waze
-                      </a>
-                    </Button>
-                    <Button size="sm" variant="ghost" onClick={() => deleteTrip(t.id)}>
-                      <Trash2 className="size-4" /> Delete
-                    </Button>
+                </div>
+              </Panel>
+            )}
+
+            {section === "vehicles" && (
+              <Panel
+                title="Mine kjøretøy"
+                action={
+                  <Button size="sm" onClick={() => setDraft({ ...EMPTY_VEHICLE, id: "" })}>
+                    <Plus className="size-4" /> Legg til kjøretøy
+                  </Button>
+                }
+              >
+                <div className="grid gap-4 lg:grid-cols-2">
+                  {vehicles.map((v) => (
+                    <article key={v.id} className="flex gap-4 rounded-xl border border-border bg-background/40 p-5">
+                      <span className="text-3xl">{VEHICLE_META[v.kind].emoji}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-start justify-between gap-3">
+                          <div>
+                            <h3 className="font-semibold tracking-tight">{v.name}</h3>
+                            <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+                              {VEHICLE_NO[v.kind]}
+                            </p>
+                          </div>
+                          <div className="flex gap-1">
+                            <Button size="icon" variant="ghost" onClick={() => setDraft(v)} aria-label="Rediger kjøretøy">
+                              <Pencil className="size-4" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => removeVehicle(v.id)}
+                              aria-label="Slett kjøretøy"
+                            >
+                              <Trash2 className="size-4" />
+                            </Button>
+                          </div>
+                        </div>
+                        <p className="mt-2 text-sm text-foreground/70">
+                          {FUEL_NO[v.fuel]}
+                          {v.tank ? ` · ${v.tank}` : ""}
+                          {v.consumption ? ` · ${v.consumption}` : ""}
+                          {v.height ? ` · ${v.height}` : ""}
+                        </p>
+                        <div className="mt-3 flex flex-wrap gap-2">
+                          {v.tags.map((t) => (
+                            <span
+                              key={t}
+                              className="rounded-full bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary"
+                            >
+                              {t}
+                            </span>
+                          ))}
+                          {v.tags.length === 0 && (
+                            <span className="text-xs text-muted-foreground">Ingen bombrikker koblet ennå</span>
+                          )}
+                        </div>
+                      </div>
+                    </article>
+                  ))}
+                </div>
+              </Panel>
+            )}
+
+            {section === "settings" && (
+              <Panel title="Innstillinger">
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div className="grid gap-2">
+                    <Label htmlFor="set-currency">Valuta</Label>
+                    <select
+                      id="set-currency"
+                      value={currency}
+                      onChange={(e) => setCurrency(e.target.value as typeof currency)}
+                      className="h-10 rounded-lg border border-border bg-background/60 px-3 text-sm"
+                    >
+                      {CURRENCIES.map((c) => (
+                        <option key={c.code} value={c.code}>
+                          {c.code}
+                        </option>
+                      ))}
+                    </select>
                   </div>
-                </article>
-              ))}
-              {trips.length === 0 && (
-                <p className="text-sm text-muted-foreground">
-                  No saved trips yet — plan one and hit “Save to My Garage”.
+                  <div className="grid gap-2">
+                    <Label>Måleenheter</Label>
+                    <div className="flex gap-2">
+                      {(
+                        [
+                          ["metric", "Metrisk (km, liter)"],
+                          ["imperial", "Imperisk (miles, gallons)"],
+                        ] as const
+                      ).map(([id, label]) => (
+                        <button
+                          key={id}
+                          type="button"
+                          onClick={() => setUnits(id)}
+                          className={`rounded-full border px-3 py-1.5 text-sm transition ${
+                            units === id
+                              ? "border-primary bg-primary/15 text-primary"
+                              : "border-border text-foreground/75 hover:bg-background/60"
+                          }`}
+                        >
+                          {label}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <Button className="mt-6" onClick={saveSettings}>
+                  Lagre innstillinger
+                </Button>
+                <p className="mt-3 text-sm text-muted-foreground">
+                  Disse gjelder som standardvalgene dine i hele AutoVere.
                 </p>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs>
+              </Panel>
+            )}
+
+            {section === "billing" && (
+              <Panel title="Abonnement og fakturering">
+                <div className="grid gap-6 sm:grid-cols-2">
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Abonnement</p>
+                    <p className="mt-1 font-semibold">{planLabel}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">Betalingsmetode</p>
+                    <p className="mt-1 font-semibold">Ingen betalingsmetode registrert.</p>
+                  </div>
+                </div>
+                <p className="mt-5 text-sm text-foreground/70">
+                  {isAdmin
+                    ? "Dette er gratis admin-tilgang, så det er ingenting å administrere her."
+                    : "Oppgrader når du vil — du kan alltid si opp fra denne siden."}
+                </p>
+                {!isAdmin && (
+                  <Button className="mt-4" asChild>
+                    <Link to="/no/pricing">Se abonnementene</Link>
+                  </Button>
+                )}
+              </Panel>
+            )}
+
+            {section === "places" && (
+              <Panel
+                title="Lagrede steder"
+                action={
+                  <Button size="sm" onClick={() => setPlaceDraft({ id: "", name: "", note: "" })}>
+                    <Plus className="size-4" /> Legg til sted
+                  </Button>
+                }
+              >
+                {places.length === 0 ? (
+                  <div className="rounded-xl border border-dashed border-border p-10 text-center">
+                    <Bookmark className="mx-auto size-6 text-muted-foreground" />
+                    <p className="mt-3 font-semibold">Ingen lagrede steder ennå</p>
+                    <p className="mt-1 text-sm text-muted-foreground">
+                      Lagre ladestasjoner, overnattinger og stopp du vil finne igjen.
+                    </p>
+                  </div>
+                ) : (
+                  <ul className="grid gap-3">
+                    {places.map((p) => (
+                      <li
+                        key={p.id}
+                        className="flex items-start justify-between gap-4 rounded-xl border border-border bg-background/40 p-4"
+                      >
+                        <div>
+                          <p className="font-semibold">{p.name}</p>
+                          <p className="text-sm text-foreground/70">{p.note}</p>
+                        </div>
+                        <Button
+                          size="icon"
+                          variant="ghost"
+                          aria-label="Slett sted"
+                          onClick={() => commitPlaces(places.filter((x) => x.id !== p.id))}
+                        >
+                          <Trash2 className="size-4" />
+                        </Button>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </Panel>
+            )}
+
+            {section === "profile" && (
+              <Panel title="Profil og sikkerhet">
+                <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">E-post</p>
+                <p className="mt-1 font-semibold">{user?.email ?? "Ikke innlogget"}</p>
+
+                <div className="mt-6 rounded-xl border border-border bg-background/40 p-5">
+                  <p className="font-semibold">Visningsnavn</p>
+                  <p className="mt-1 text-sm text-foreground/70">
+                    Dette er navnet som vises på kontoen din — sett det til det du vil bli kalt.
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-2">
+                    <Input
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      className="max-w-xs"
+                      placeholder="Ditt navn"
+                    />
+                    <Button onClick={saveSettings}>Lagre navn</Button>
+                  </div>
+                </div>
+
+                <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
+                  <p className="font-semibold">Eksporter dataene mine</p>
+                  <p className="mt-1 text-sm text-foreground/70">
+                    Last ned en kopi av alt som er knyttet til kontoen din (profil, reiser, kjøretøy, steder).
+                  </p>
+                  <Button variant="outline" className="mt-3" onClick={exportData}>
+                    <Download className="size-4" /> Eksporter dataene mine
+                  </Button>
+                </div>
+              </Panel>
+            )}
+
+            {section === "admin" && isAdmin && (
+              <Panel title="Admin">
+                <p className="text-sm text-foreground/70">
+                  Full oversikt over trafikk, abonnementer, markeder og økonomi.
+                </p>
+                <Button className="mt-4" asChild>
+                  <Link to="/admin">
+                    <Lock className="size-4" /> Åpne admin-panelet
+                  </Link>
+                </Button>
+              </Panel>
+            )}
+
+            {section === "support" && (
+              <>
+                <Panel title="Hjelp og support">
+                  <p className="text-sm text-foreground/70">Vi er her hvis noe ikke fungerer som det skal.</p>
+                </Panel>
+                <Panel title="Ofte stilte spørsmål">
+                  <p className="text-sm text-foreground/70">
+                    Svar på de vanligste spørsmålene om ruter, bompenger, vignetter og lading.
+                  </p>
+                  <Button className="mt-4" asChild>
+                    <Link to="/no/faq">
+                      <HelpCircle className="size-4" /> Åpne hjelp og FAQ
+                    </Link>
+                  </Button>
+                </Panel>
+                <Panel title="Kontakt support">
+                  <p className="text-sm text-foreground/70">
+                    Send oss en melding, så svarer vi deg — dette er også riktig sted å melde fra om et problem.
+                  </p>
+                  <Button className="mt-4" asChild>
+                    <a href="mailto:support@autovere.com">Send melding</a>
+                  </Button>
+                </Panel>
+              </>
+            )}
+          </div>
+        </div>
       </section>
 
       <Dialog open={renaming !== null} onOpenChange={(open) => !open && setRenaming(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Rename trip</DialogTitle>
-            <DialogDescription>Give this adventure a name that feels like the road ahead.</DialogDescription>
+            <DialogTitle>Gi turen nytt navn</DialogTitle>
+            <DialogDescription>Gi denne turen et navn som føles som veien foran deg.</DialogDescription>
           </DialogHeader>
           <div className="grid gap-2">
-            <Label htmlFor="trip-name">Trip name</Label>
+            <Label htmlFor="trip-name">Turnavn</Label>
             <Input
               id="trip-name"
               value={renameValue}
               onChange={(e) => setRenameValue(e.target.value)}
-              placeholder="Oslo → Lofoten midnight sun"
+              placeholder="Oslo → Lofoten midnattssol"
             />
           </div>
           <DialogFooter>
             <Button variant="ghost" onClick={() => setRenaming(null)}>
-              Cancel
+              Avbryt
             </Button>
-            <Button onClick={submitRename}>Save name</Button>
+            <Button onClick={submitRename}>Lagre navn</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={placeDraft !== null} onOpenChange={(open) => !open && setPlaceDraft(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Legg til sted</DialogTitle>
+            <DialogDescription>Lagre et stopp du vil finne igjen på neste tur.</DialogDescription>
+          </DialogHeader>
+          {placeDraft && (
+            <div className="grid gap-4">
+              <div className="grid gap-2">
+                <Label htmlFor="place-name">Navn</Label>
+                <Input
+                  id="place-name"
+                  value={placeDraft.name}
+                  placeholder="Ionity Dombås"
+                  onChange={(e) => setPlaceDraft({ ...placeDraft, name: e.target.value })}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="place-note">Notat</Label>
+                <Input
+                  id="place-note"
+                  value={placeDraft.note}
+                  placeholder="Lynlading · kafé · døgnåpent"
+                  onChange={(e) => setPlaceDraft({ ...placeDraft, note: e.target.value })}
+                />
+              </div>
+            </div>
+          )}
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setPlaceDraft(null)}>
+              Avbryt
+            </Button>
+            <Button
+              onClick={() => {
+                if (!placeDraft?.name.trim()) {
+                  toast.error("Gi stedet et navn.");
+                  return;
+                }
+                commitPlaces([...places, { ...placeDraft, id: newId() }]);
+                setPlaceDraft(null);
+                toast.success("Stedet er lagret.");
+              }}
+            >
+              Lagre sted
+            </Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -313,15 +758,15 @@ export function GaragePage() {
       <Dialog open={draft !== null} onOpenChange={(open) => !open && setDraft(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>{draft?.id ? "Edit vehicle" : "Add a vehicle"}</DialogTitle>
+            <DialogTitle>{draft?.id ? "Rediger kjøretøy" : "Legg til kjøretøy"}</DialogTitle>
             <DialogDescription>
-              Tank size, consumption and toll tags make every estimate sharper.
+              Tankvolum, forbruk og bombrikker gjør hvert estimat skarpere.
             </DialogDescription>
           </DialogHeader>
           {draft && (
             <div className="grid gap-4">
               <div className="grid gap-2">
-                <Label>Vehicle type</Label>
+                <Label>Kjøretøytype</Label>
                 <div className="flex flex-wrap gap-2">
                   {(Object.keys(VEHICLE_META) as VehicleKind[]).map((k) => (
                     <button
@@ -334,24 +779,24 @@ export function GaragePage() {
                           : "border-border text-foreground/75 hover:bg-background/60"
                       }`}
                     >
-                      {VEHICLE_META[k].emoji} {VEHICLE_META[k].label}
+                      {VEHICLE_META[k].emoji} {VEHICLE_NO[k]}
                     </button>
                   ))}
                 </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="v-name">Name</Label>
+                <Label htmlFor="v-name">Navn</Label>
                 <Input
                   id="v-name"
                   value={draft.name}
-                  placeholder="e.g. BMW R 1250 GS Adventure"
+                  placeholder="f.eks. BMW R 1250 GS Adventure"
                   onChange={(e) => setDraft({ ...draft, name: e.target.value })}
                 />
               </div>
               <div className="grid gap-2">
-                <Label>Fuel / power type</Label>
+                <Label>Drivstoff / energitype</Label>
                 <div className="flex flex-wrap gap-2">
-                  {(Object.keys(FUEL_LABEL) as (keyof typeof FUEL_LABEL)[]).map((f) => (
+                  {(Object.keys(FUEL_NO) as (keyof typeof FUEL_NO)[]).map((f) => (
                     <button
                       key={f}
                       type="button"
@@ -362,14 +807,14 @@ export function GaragePage() {
                           : "border-border text-foreground/75 hover:bg-background/60"
                       }`}
                     >
-                      {FUEL_LABEL[f]}
+                      {FUEL_NO[f]}
                     </button>
                   ))}
                 </div>
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <div className="grid gap-2">
-                  <Label htmlFor="v-tank">{draft.fuel === "ev" ? "Battery size" : "Tank capacity"}</Label>
+                  <Label htmlFor="v-tank">{draft.fuel === "ev" ? "Batteristørrelse" : "Tankvolum"}</Label>
                   <Input
                     id="v-tank"
                     value={draft.tank}
@@ -378,28 +823,28 @@ export function GaragePage() {
                   />
                 </div>
                 <div className="grid gap-2">
-                  <Label htmlFor="v-cons">Average consumption</Label>
+                  <Label htmlFor="v-cons">Gjennomsnittsforbruk</Label>
                   <Input
                     id="v-cons"
                     value={draft.consumption}
-                    placeholder={draft.fuel === "ev" ? "18 kWh/100 km" : "6.4 L/100 km"}
+                    placeholder={draft.fuel === "ev" ? "18 kWh/100 km" : "0,64 L/mil"}
                     onChange={(e) => setDraft({ ...draft, consumption: e.target.value })}
                   />
                 </div>
               </div>
               {draft.kind === "motorhome" && (
                 <div className="grid gap-2">
-                  <Label htmlFor="v-height">Height &amp; weight</Label>
+                  <Label htmlFor="v-height">Høyde og vekt</Label>
                   <Input
                     id="v-height"
                     value={draft.height ?? ""}
-                    placeholder="3.05 m · 3.5 t"
+                    placeholder="3,05 m · 3,5 t"
                     onChange={(e) => setDraft({ ...draft, height: e.target.value })}
                   />
                 </div>
               )}
               <div className="grid gap-2">
-                <Label>Linked electronic toll tags</Label>
+                <Label>Koblede bombrikker</Label>
                 <div className="flex flex-wrap gap-2">
                   {TOLL_TAGS.map((tag) => (
                     <button
@@ -421,9 +866,9 @@ export function GaragePage() {
           )}
           <DialogFooter>
             <Button variant="ghost" onClick={() => setDraft(null)}>
-              Cancel
+              Avbryt
             </Button>
-            <Button onClick={submitDraft}>Save vehicle</Button>
+            <Button onClick={submitDraft}>Lagre kjøretøy</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -431,10 +876,48 @@ export function GaragePage() {
   );
 }
 
+function Panel({
+  title,
+  action,
+  children,
+}: {
+  title: string;
+  action?: React.ReactNode;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="glass-panel rounded-2xl p-6">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <h2 className="text-xl font-semibold tracking-tight">{title}</h2>
+        {action}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function Stat({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="glass-panel rounded-2xl p-5">
+      <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{label}</p>
+      <p className="mt-2 text-2xl font-semibold">{value}</p>
+    </div>
+  );
+}
+
+function Cell({ label, value }: { label: string; value: string }) {
+  return (
+    <div>
+      <dt className="text-[0.65rem] uppercase tracking-[0.14em] text-muted-foreground">{label}</dt>
+      <dd className="text-sm font-semibold">{value}</dd>
+    </div>
+  );
+}
+
 function fmt(currency: string | undefined, value: number | undefined) {
   if (value === undefined) return "—";
   try {
-    return new Intl.NumberFormat("en-GB", {
+    return new Intl.NumberFormat("nb-NO", {
       style: "currency",
       currency: currency ?? "EUR",
       maximumFractionDigits: 0,
@@ -443,4 +926,3 @@ function fmt(currency: string | undefined, value: number | undefined) {
     return `${value}`;
   }
 }
-
