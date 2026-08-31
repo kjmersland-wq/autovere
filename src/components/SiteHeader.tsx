@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 
 import { CurrencySelector } from "@/components/CurrencySelector";
@@ -23,8 +23,33 @@ const NO_NAV = {
   "/garage": "/no/garage",
 } as const;
 
+/** Norwegian pages that exist under /no. */
+const NO_PAGES = [
+  "planner",
+  "tolls",
+  "scenic",
+  "garage",
+  "faq",
+  "how-it-works",
+  "pricing",
+  "privacy",
+  "terms",
+  "partners",
+] as const;
+
+/** Map the current path to its counterpart in the requested language. */
+function pathForLang(pathname: string, code: string): string {
+  const stripped =
+    pathname === "/no" ? "/" : pathname.startsWith("/no/") ? pathname.slice(3) : pathname;
+  if (code !== "no") return stripped;
+  const slug = stripped.replace(/^\/+/, "").split("/")[0] ?? "";
+  if (!slug) return "/no";
+  return (NO_PAGES as readonly string[]).includes(slug) ? `/no/${slug}` : "/no";
+}
+
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
   const activeRegion = region ?? regionFromPath(pathname);
   const t = useT();
   const locale = useLocale();
@@ -89,7 +114,11 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               return (
                 <DropdownMenuItem
                   key={l.code}
-                  onSelect={() => setLang(l)}
+                  onSelect={() => {
+                    setLang(l);
+                    const target = pathForLang(pathname, l.code);
+                    if (target !== pathname) void navigate({ to: target });
+                  }}
                   aria-label={l.label}
                   className={cn(
                     "flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-semibold tracking-wide transition-colors",
