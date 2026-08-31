@@ -40,8 +40,8 @@ function NorwayPage() {
         title="Planlegg én gang. Nyt hver eneste kilometer."
         subtitle="Fortell oss hvor du starter og hvor du drømmer deg bort – vi ordner bompenger, vignetter, drivstoff, lading og ferjer, så du kan nyte turen."
       />
-      <div className="mx-auto flex w-full max-w-6xl justify-end px-4 pb-10">
-        <ShareButton lang="no" url="https://www.autovere.com/no" />
+      <div className="mx-auto w-full max-w-6xl px-4 pb-14">
+        <ShareButton variant="bar" lang="no" url="https://www.autovere.com/no" />
       </div>
     </main>
   );
