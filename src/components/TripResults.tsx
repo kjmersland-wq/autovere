@@ -13,6 +13,7 @@ import { Switch } from "@/components/ui/switch";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { PassBorderIntel } from "@/components/PassBorderIntel";
+import { CorridorMap } from "@/components/CorridorMap";
 import { cn } from "@/lib/utils";
 import {
   money,
@@ -24,6 +25,7 @@ import {
   variantComparison,
   type EmissionBadge,
   type FerryCrossing,
+  type FuelKey,
   type RegionKey,
   type RouteVariantKey,
   type TripEstimate,
@@ -77,6 +79,7 @@ export function TripResults({
   emissionBadges = [],
   region = "eu",
   isMotorhome = false,
+  fuel = "petrol",
   onAddStop,
 }: {
   trips: Record<RouteVariantKey, TripEstimate>;
@@ -87,6 +90,7 @@ export function TripResults({
   emissionBadges?: EmissionBadge[];
   region?: RegionKey;
   isMotorhome?: boolean;
+  fuel?: FuelKey;
   onAddStop?: (name: string) => void;
 }) {
   const [active, setActive] = useState<RouteVariantKey>("fastest");
@@ -577,6 +581,17 @@ export function TripResults({
           </div>
         </div>
       )}
+
+      <CorridorMap
+        region={region}
+        trip={trip}
+        origin={origin}
+        destination={destination}
+        ferryCrossings={ferryCrossings}
+        isMotorhome={isMotorhome}
+        fuel={fuel}
+        {...(onAddStop ? { onAddStop } : {})}
+      />
 
       <PassBorderIntel
         region={region}

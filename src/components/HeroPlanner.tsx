@@ -500,6 +500,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             ferryCrossings={ferryCrossings}
             isMotorcycle={vehicle === "motorcycle"}
             isMotorhome={vehicle === "motorhome"}
+            fuel={fuel}
             region={region}
             emissionBadges={badges}
             onAddStop={(name) => {
