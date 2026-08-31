@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { PoiLinks } from "@/components/PoiLinks";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { PassBorderIntel } from "@/components/PassBorderIntel";
@@ -321,6 +322,14 @@ export function TripResults({
                 </dl>
 
                 <p className="mt-4 text-sm text-foreground/80">{tr(f.note)}</p>
+
+                <PoiLinks
+                  kind="ferry"
+                  name={f.route}
+                  where={f.corridor}
+                  region={region}
+                  booking={f.booking.url}
+                />
 
                 <a
                   href={f.booking.url}

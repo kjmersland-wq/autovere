@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { PoiLinks } from "@/components/PoiLinks";
 import { cn } from "@/lib/utils";
 import {
   MAP_LAYERS,
