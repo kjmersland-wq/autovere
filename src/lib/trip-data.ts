@@ -707,11 +707,12 @@ export function estimateAllVariants(
   avoidTolls: boolean,
   includeFerries: boolean,
   scenic: boolean,
+  extraStops = 0,
 ): Record<RouteVariantKey, TripEstimate> {
   return {
-    fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest"),
-    smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart"),
-    tollfree: estimateTrip(region, vehicle, fuel, avoidTolls, includeFerries, scenic, "tollfree"),
+    fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", extraStops),
+    smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", extraStops),
+    tollfree: estimateTrip(region, vehicle, fuel, avoidTolls, includeFerries, scenic, "tollfree", extraStops),
   };
 }
 
