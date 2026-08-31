@@ -18,7 +18,7 @@ import { LezMonitor, MotorhomeClearanceRadar, TransponderSelector } from "@/comp
 import { CurrencyPills } from "@/components/CurrencySelector";
 import { PrintItinerary } from "@/components/PrintItinerary";
 import { RATES_UPDATED, useMoney } from "@/lib/currency";
-import { useLocale, useT } from "@/lib/i18n";
+import { useLocale, useT, useTr } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import {
   ROUTE_VARIANTS,
