@@ -44,7 +44,7 @@ import {
   type TripEstimate,
   type VehicleKey,
 } from "@/lib/trip-data";
-import { useLocale, useT } from "@/lib/i18n";
+import { useLocale, useT, useTr } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 
@@ -59,6 +59,7 @@ type HeroPlannerProps = {
 
 export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerProps) {
   const t = useT();
+  const tr = useTr();
   const locale = useLocale();
   const copy = REGION_COPY[region];
   const originHint = locale === "no" ? t.hero.originHint : copy.originHint;
@@ -432,7 +433,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                         )}
                       >
                         {on ? <Check className="size-4 text-primary" /> : <Tag className="size-4 text-muted-foreground" />}
-                        <span className="font-medium">{t.label}</span>
+                        <span className="font-medium">{tr(t.label)}</span>
                         <span className="text-xs text-muted-foreground">{t.scope}</span>
                       </button>
                     );
@@ -486,7 +487,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
             <p className="mt-5 text-xs text-muted-foreground">
               {t.hero.regionalDefaults}: {defaults.units === "imperial" ? t.hero.imperial : t.hero.metric} ·{" "}
-              {defaults.currencyCode} · {defaults.tollSystems.join(" · ")}
+              {defaults.currencyCode} · {defaults.tollSystems.map(tr).join(" · ")}
             </p>
 
             <p className="mt-2 text-xs text-muted-foreground">

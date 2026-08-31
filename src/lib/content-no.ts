@@ -482,4 +482,17 @@ export const CONTENT_NO: Record<string, string> = {
   "⚡ Smart EV Charging Optimizer": "⚡ Smart ladeplanlegger for elbil",
   "⛽ Smart Fuel Stop Optimizer": "⛽ Smart planlegger for drivstoffstopp",
   "24/7 forecourt": "Døgnåpen stasjon",
+
+  "I have AutoPASS / EPASS24": "Jeg har AutoPASS / EPASS24",
+  "I have Telepass / Bip&Go / Fulli": "Jeg har Telepass / Bip&Go / Fulli",
+  "I have SunPass / E-ZPass": "Jeg har SunPass / E-ZPass",
+  "Vignettes & e-vignettes": "Vignetter og e-vignetter",
+  "Ticket-based motorway tolls": "Billettbaserte motorveibommer",
+  "Urban low-emission zones": "Miljøsoner i byene",
+  "State toll roads & turnpikes": "Delstatlige bomveier og turnpikes",
+  "HOV / Express lanes": "HOV- og ekspressfelt",
+  "Bridge & tunnel tolls": "Bro- og tunnelavgifter",
+  "Highway 407 ETR": "Highway 407 ETR",
+  "Provincial tolls & bridges": "Provinsielle bommer og broer",
+  "BC Ferries crossings": "BC Ferries-overfarter",
 };
