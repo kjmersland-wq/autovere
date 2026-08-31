@@ -70,15 +70,15 @@ const EMPTY_VEHICLE: GarageVehicle = {
 };
 
 const VEHICLE_NO: Record<VehicleKind, string> = {
-  car: "Bil",
-  motorhome: "Bobil",
-  motorcycle: "Motorsykkel",
+  car: t("Bil"),
+  motorhome: t("Bobil"),
+  motorcycle: t("Motorsykkel"),
 };
 
 const FUEL_NO: Record<keyof typeof FUEL_LABEL, string> = {
-  petrol: "⛽ Bensin",
-  diesel: "🛢️ Diesel",
-  ev: "⚡ Elektrisk (EV)",
+  petrol: t("⛽ Bensin"),
+  diesel: t("🛢️ Diesel"),
+  ev: t("⚡ Elektrisk (EV)"),
 };
 
 type SectionId =
@@ -185,20 +185,20 @@ export function GaragePage() {
   const submitDraft = () => {
     if (!draft) return;
     if (!draft.name.trim()) {
-      toast.error("Gi kjøretøyet et navn så du kjenner det igjen.");
+      toast.error(t("Gi kjøretøyet et navn så du kjenner det igjen."));
       return;
     }
     const exists = vehicles.some((v) => v.id === draft.id);
     commitVehicles(
       exists ? vehicles.map((v) => (v.id === draft.id ? draft : v)) : [...vehicles, { ...draft, id: newId() }],
     );
-    toast.success(exists ? t("Kjøretøyet er oppdatert.") : "Kjøretøyet er lagt til i garasjen.");
+    toast.success(exists ? t("Kjøretøyet er oppdatert.") : t("Kjøretøyet er lagt til i garasjen."));
     setDraft(null);
   };
 
   const removeVehicle = (id: string) => {
     commitVehicles(vehicles.filter((v) => v.id !== id));
-    toast.success("Kjøretøyet er fjernet.");
+    toast.success(t("Kjøretøyet er fjernet."));
   };
 
   const downloadGpx = (trip: SavedTrip) => {
@@ -209,33 +209,33 @@ export function GaragePage() {
     a.download = `autovere-${trip.name.toLowerCase().replace(/\W+/g, "-")}.gpx`;
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("GPX eksportert — last den rett inn i navigasjonen.");
+    toast.success(t("GPX eksportert — last den rett inn i navigasjonen."));
   };
 
   const duplicate = (trip: SavedTrip) => {
     commitTrips([duplicateTrip(trip), ...trips]);
-    toast.success("Turen er duplisert.");
+    toast.success(t("Turen er duplisert."));
   };
 
   const submitRename = () => {
     if (!renaming) return;
     const name = renameValue.trim();
     if (!name) {
-      toast.error("Gi turen et navn du kjenner igjen.");
+      toast.error(t("Gi turen et navn du kjenner igjen."));
       return;
     }
     commitTrips(trips.map((t) => (t.id === renaming.id ? { ...t, name } : t)));
     setRenaming(null);
-    toast.success("Turen er omdøpt.");
+    toast.success(t("Turen er omdøpt."));
   };
 
   const deleteTrip = (id: string) => {
     commitTrips(trips.filter((t) => t.id !== id));
-    toast.success("Turen er fjernet fra garasjen.");
+    toast.success(t("Turen er fjernet fra garasjen."));
   };
 
   const printTrip = (trip: SavedTrip) => {
-    if (!printTripSummary(trip)) toast.error("Tillat popup-vinduer for å skrive ut reiseoversikten.");
+    if (!printTripSummary(trip)) toast.error(t("Tillat popup-vinduer for å skrive ut reiseoversikten."));
   };
 
   const toggleTag = (tag: string) => {
@@ -252,7 +252,7 @@ export function GaragePage() {
     } catch {
       /* storage unavailable */
     }
-    toast.success("Innstillingene er lagret.");
+    toast.success(t("Innstillingene er lagret."));
   };
 
   const exportData = () => {
@@ -266,7 +266,7 @@ export function GaragePage() {
     a.download = "autovere-mine-data.json";
     a.click();
     URL.revokeObjectURL(url);
-    toast.success("Dataene dine er lastet ned.");
+    toast.success(t("Dataene dine er lastet ned."));
   };
 
   return (
@@ -317,7 +317,7 @@ export function GaragePage() {
                         {displayName || user?.email || t("Gjest")}
                       </h2>
                       <p className="text-sm text-muted-foreground">
-                        {user ? (isAdmin || isActive ? t("Aktivt") : "Free-konto") : t("Ikke innlogget")}
+                        {user ? (isAdmin || isActive ? t("Aktivt") : t("Free-konto")) : t("Ikke innlogget")}
                       </p>
                     </div>
                     <div className="flex gap-2">
@@ -743,12 +743,12 @@ export function GaragePage() {
             <Button
               onClick={() => {
                 if (!placeDraft?.name.trim()) {
-                  toast.error("Gi stedet et navn.");
+                  toast.error(t("Gi stedet et navn."));
                   return;
                 }
                 commitPlaces([...places, { ...placeDraft, id: newId() }]);
                 setPlaceDraft(null);
-                toast.success("Stedet er lagret.");
+                toast.success(t("Stedet er lagret."));
               }}
             >
               {t("Lagre sted")}
@@ -916,10 +916,10 @@ function Cell({ label, value }: { label: string; value: string }) {
   );
 }
 
-function fmt(currency: string | undefined, value: number | undefined) {
+function fmt(currency: string | undefined, value: number | undefined, locale = "en-US") {
   if (value === undefined) return "—";
   try {
-    return new Intl.NumberFormat("nb-NO", {
+    return new Intl.NumberFormat(locale, {
       style: "currency",
       currency: currency ?? "EUR",
       maximumFractionDigits: 0,
