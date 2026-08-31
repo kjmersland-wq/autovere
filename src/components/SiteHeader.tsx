@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
+const NO_NAV = {
+  "/planner": "/no/planner",
+  "/tolls": "/no/tolls",
+  "/scenic": "/no/scenic",
+  "/garage": "/no/garage",
+} as const;
+
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const activeRegion = region ?? regionFromPath(pathname);
@@ -30,7 +37,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-5 py-3 sm:px-8">
-        <Link to="/" className="text-lg font-semibold tracking-tight">
+        <Link to={locale === "no" ? "/no" : "/"} className="text-lg font-semibold tracking-tight">
           Auto<span className="text-primary">Vere</span>
         </Link>
 
@@ -56,7 +63,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           {NAV_LINKS.map((l) => (
             <Link
               key={l.to}
-              to={l.to}
+              to={locale === "no" ? NO_NAV[l.to] : l.to}
               activeProps={{ className: "text-primary" }}
               className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
             >
@@ -107,10 +114,10 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52 rounded-xl border-border bg-popover p-1.5">
               <DropdownMenuItem asChild className="cursor-pointer rounded-lg">
-                <Link to="/garage">{t.header.garageMenu}</Link>
+                <Link to={locale === "no" ? "/no/garage" : "/garage"}>{t.header.garageMenu}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer rounded-lg">
-                <Link to="/pricing">{t.header.plansMenu}</Link>
+                <Link to={locale === "no" ? "/no/pricing" : "/pricing"}>{t.header.plansMenu}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer rounded-lg"
@@ -165,7 +172,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             {NAV_LINKS.map((l) => (
               <Link
                 key={l.to}
-                to={l.to}
+                to={locale === "no" ? NO_NAV[l.to] : l.to}
                 onClick={() => setOpen(false)}
                 className="text-sm font-medium text-foreground/85"
               >

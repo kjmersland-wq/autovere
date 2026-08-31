@@ -2,34 +2,33 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
 
-export const Route = createFileRoute("/no")({
+export const Route = createFileRoute("/no/planner")({
   head: () => ({
     meta: [
-      { title: "AutoVere Norge — Bompenger, vignetter og reisekostnader" },
+      { title: "Ruteplanlegger — Se kostnaden før du kjører | AutoVere" },
       {
         name: "description",
         content:
-          "Planlegg bilferien med nøyaktige bompenger, vignetter, drivstoff, lading og ferjer for bil, bobil og motorsykkel.",
+          "Planlegg ruten og se bompenger, vignetter, drivstoff, lading og ferjer i ett tydelig budsjett for bil, bobil og motorsykkel.",
       },
-      { property: "og:title", content: "AutoVere Norge — Planlegg reisekostnaden din" },
+      { property: "og:title", content: "AutoVere Ruteplanlegger" },
       {
         property: "og:description",
-        content:
-          "Bompenger, vignetter, drivstoff, lading og ferjer – nøyaktig beregnet for din rute gjennom Europa.",
+        content: "Ett tydelig budsjett for bom, drivstoff, lading og ferjer — før du vrir om nøkkelen.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: NorwayPage,
+  component: NoPlannerPage,
 });
 
-function NorwayPage() {
+function NoPlannerPage() {
   return (
     <main>
       <HeroPlanner
         region="eu"
-        eyebrow="Europa · 30+ land"
+        eyebrow="Ruteplanlegger"
         title="Planlegg én gang. Nyt hver eneste kilometer."
         subtitle="Fortell oss hvor du starter og hvor du drømmer deg bort – vi ordner bompenger, vignetter, drivstoff, lading og ferjer, så du kan nyte turen."
       />
