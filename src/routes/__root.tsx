@@ -9,6 +9,8 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { AuthModal } from "@/components/AuthModal";
+import { AuthProvider } from "@/lib/auth";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
