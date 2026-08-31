@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { AuthModal } from "@/components/AuthModal";
 import { AuthProvider } from "@/lib/auth";
+import { CurrencyProvider } from "@/lib/currency";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
@@ -123,11 +124,13 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
+        <CurrencyProvider>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <SiteFooter />
         <AuthModal />
         <Toaster position="bottom-right" />
+        </CurrencyProvider>
       </AuthProvider>
     </QueryClientProvider>
   );

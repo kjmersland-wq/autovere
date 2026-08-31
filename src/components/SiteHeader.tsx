@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 
+import { CurrencySelector } from "@/components/CurrencySelector";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useAuth } from "@/lib/auth";
 
@@ -59,8 +60,10 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           ))}
         </nav>
 
+        <CurrencySelector className="ml-auto lg:ml-0" />
+
         <DropdownMenu>
-          <DropdownMenuTrigger className="ml-auto inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-3 py-1.5 text-sm font-semibold tracking-wide transition-colors hover:bg-background/80 lg:ml-0">
+          <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-3 py-1.5 text-sm font-semibold tracking-wide transition-colors hover:bg-background/80 lg:ml-0">
             <FlagIcon code={lang.flag} />
             <span>{lang.flag}</span>
             <ChevronDown className="size-4 text-muted-foreground" />

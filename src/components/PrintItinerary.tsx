@@ -1,7 +1,8 @@
+import { Fragment } from "react";
 import { Printer, X } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { CURRENCY_BY_CODE, nativeCurrencyFor, useMoney, useCurrency, RATES_UPDATED, rateNote } from "@/lib/currency";
+import { CURRENCY_BY_CODE, RATES_UPDATED, rateNote, useCurrency, useMoney } from "@/lib/currency";
 import type { FuelKey, TripEstimate, VehicleKey } from "@/lib/trip-data";
 
 const VEHICLE_LABEL: Record<VehicleKey, string> = {
@@ -145,8 +146,8 @@ export function PrintItinerary({
             </thead>
             <tbody>
               {trip.segments.map((segment) => (
-                <>
-                  <tr key={segment.country} className="print-section-row">
+                <Fragment key={segment.country}>
+                  <tr className="print-section-row">
                     <td colSpan={3} className="font-semibold">{segment.country}</td>
                     <td className="text-right font-semibold">{m.fmt(segment.total)}</td>
                   </tr>
@@ -161,7 +162,7 @@ export function PrintItinerary({
                       </tr>
                     );
                   })}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>
