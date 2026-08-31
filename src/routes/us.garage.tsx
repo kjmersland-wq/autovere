@@ -5,7 +5,7 @@ import { GaragePage } from "@/components/GaragePage";
 export const Route = createFileRoute("/us/garage")({
   head: () => ({
     meta: [
-      { title: "My Garage & Trips — Vehicles, Tags and Saved Routes | AutoVere" },
+      { title: "My Garage & Trips — RVs, Transponders and Saved Routes | AutoVere USA" },
       {
         name: "description",
         content:
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/us/garage")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/us/garage" }],
+    links: [{ rel: "canonical", href: "https://www.autovere.com/us/garage" }],
   }),
   component: GaragePage,
 });

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
+import { absUrl, faqScript } from "@/lib/seo";
 import { NO_FAQ } from "@/lib/global-content-no";
 
 const content = NO_FAQ;
@@ -14,7 +15,10 @@ export const Route = createFileRoute("/no/faq")({
       { property: "og:description", content: content.meta.description },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { property: "og:url", content: absUrl("/no/faq") },
     ],
+    links: [{ rel: "canonical", href: absUrl("/no/faq") }],
+    scripts: faqScript(content.sections),
   }),
   component: NoInfoPage,
 });
