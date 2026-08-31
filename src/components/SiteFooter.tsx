@@ -13,6 +13,7 @@ export function SiteFooter() {
   const euHome = locale === "no" ? "/no" : "/";
   const isFrench = pathname.startsWith("/ca/fr");
 
+  const noPrefix = locale === "no" ? "/no" : "";
   const base = region === "us" ? "/us" : "/ca";
   const infoBase = region === "ca" && isFrench ? "/ca/fr" : base;
 
@@ -31,21 +32,21 @@ export function SiteFooter() {
 
   const companyLinks = [
     {
-      to: region === "eu" ? "/how-it-works" : `${infoBase}/how-it-works`,
+      to: region === "eu" ? `${noPrefix}/how-it-works` : `${infoBase}/how-it-works`,
       label: isFrench ? "Comment ça marche" : t.footer.howItWorks,
     },
-    { to: "/pricing", label: isFrench ? "Tarifs" : t.footer.pricing },
-    { to: region === "eu" ? "/faq" : `${infoBase}/faq`, label: t.footer.faq },
+    { to: `${noPrefix}/pricing`, label: isFrench ? "Tarifs" : t.footer.pricing },
+    { to: region === "eu" ? `${noPrefix}/faq` : `${infoBase}/faq`, label: t.footer.faq },
     {
-      to: region === "eu" ? "/partners" : `${infoBase}/partners`,
+      to: region === "eu" ? `${noPrefix}/partners` : `${infoBase}/partners`,
       label: isFrench ? "Partenaires" : t.footer.partners,
     },
     {
-      to: region === "eu" ? "/privacy" : `${infoBase}/legal`,
+      to: region === "eu" ? `${noPrefix}/privacy` : `${infoBase}/legal`,
       label: isFrench ? "Politique de confidentialité" : t.footer.privacy,
     },
     {
-      to: region === "eu" ? "/terms" : `${infoBase}/legal`,
+      to: region === "eu" ? `${noPrefix}/terms` : `${infoBase}/legal`,
       label: isFrench ? "Conditions d'utilisation" : t.footer.terms,
     },
   ];
@@ -75,22 +76,22 @@ export function SiteFooter() {
           <p className="text-sm font-semibold text-foreground">{t.footer.quickLinks}</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             <li>
-              <Link to="/planner" className="transition-colors hover:text-foreground">
+              <Link to={locale === "no" ? "/no/planner" : "/planner"} className="transition-colors hover:text-foreground">
                 {t.header.nav["/planner"]}
               </Link>
             </li>
             <li>
-              <Link to="/tolls" className="transition-colors hover:text-foreground">
+              <Link to={locale === "no" ? "/no/tolls" : "/tolls"} className="transition-colors hover:text-foreground">
                 {t.header.nav["/tolls"]}
               </Link>
             </li>
             <li>
-              <Link to="/scenic" className="transition-colors hover:text-foreground">
+              <Link to={locale === "no" ? "/no/scenic" : "/scenic"} className="transition-colors hover:text-foreground">
                 {t.header.nav["/scenic"]}
               </Link>
             </li>
             <li>
-              <Link to="/garage" className="transition-colors hover:text-foreground">
+              <Link to={locale === "no" ? "/no/garage" : "/garage"} className="transition-colors hover:text-foreground">
                 {t.header.nav["/garage"]}
               </Link>
             </li>
