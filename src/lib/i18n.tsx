@@ -6,6 +6,7 @@ import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 export type Locale = "en" | "no" | "sv" | "da" | "de" | "nl" | "fr" | "pl";
 
 import { CONTENT_NO } from "@/lib/content-no";
+import { CONTENT_PL } from "@/lib/content-pl";
 import { codeFromPath } from "@/lib/locales";
 import { PARTIAL_DICTS } from "@/lib/dictionaries";
 
