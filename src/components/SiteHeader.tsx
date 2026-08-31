@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ChevronDown, Menu } from "lucide-react";
+import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 
 import { FlagIcon } from "@/components/FlagIcon";
+import { useAuth } from "@/lib/auth";
 
 import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
@@ -18,6 +19,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
   const activeRegion = region ?? regionFromPath(pathname);
   const [lang, setLang] = useState(LANGUAGES[0]!);
   const [open, setOpen] = useState(false);
+  const { user, openAuth, signOut } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/70 backdrop-blur-xl">
