@@ -31,6 +31,7 @@ import { Route as CaPartnersRouteImport } from './routes/ca.partners'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as NoIndexRouteImport } from './routes/no.index'
 import { Route as NoFaqRouteImport } from './routes/no.faq'
+import { Route as NoGarageRouteImport } from './routes/no.garage'
 import { Route as NoHowItWorksRouteImport } from './routes/no.how-it-works'
 import { Route as NoPartnersRouteImport } from './routes/no.partners'
 import { Route as NoPlannerRouteImport } from './routes/no.planner'
@@ -160,6 +161,11 @@ const NoFaqRoute = NoFaqRouteImport.update({
   path: '/no/faq',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NoGarageRoute = NoGarageRouteImport.update({
+  id: '/no/garage',
+  path: '/no/garage',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const NoHowItWorksRoute = NoHowItWorksRouteImport.update({
   id: '/no/how-it-works',
   path: '/no/how-it-works',
@@ -273,6 +279,7 @@ export interface FileRoutesByFullPath {
   '/ca/partners': typeof CaPartnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
+  '/no/garage': typeof NoGarageRoute
   '/no/how-it-works': typeof NoHowItWorksRoute
   '/no/partners': typeof NoPartnersRoute
   '/no/planner': typeof NoPlannerRoute
@@ -313,6 +320,7 @@ export interface FileRoutesByTo {
   '/ca/partners': typeof CaPartnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
+  '/no/garage': typeof NoGarageRoute
   '/no/how-it-works': typeof NoHowItWorksRoute
   '/no/partners': typeof NoPartnersRoute
   '/no/planner': typeof NoPlannerRoute
@@ -356,6 +364,7 @@ export interface FileRoutesById {
   '/ca/partners': typeof CaPartnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
+  '/no/garage': typeof NoGarageRoute
   '/no/how-it-works': typeof NoHowItWorksRoute
   '/no/partners': typeof NoPartnersRoute
   '/no/planner': typeof NoPlannerRoute
@@ -400,6 +409,7 @@ export interface FileRouteTypes {
     | '/ca/partners'
     | '/checkout/return'
     | '/no/faq'
+    | '/no/garage'
     | '/no/how-it-works'
     | '/no/partners'
     | '/no/planner'
@@ -440,6 +450,7 @@ export interface FileRouteTypes {
     | '/ca/partners'
     | '/checkout/return'
     | '/no/faq'
+    | '/no/garage'
     | '/no/how-it-works'
     | '/no/partners'
     | '/no/planner'
@@ -482,6 +493,7 @@ export interface FileRouteTypes {
     | '/ca/partners'
     | '/checkout/return'
     | '/no/faq'
+    | '/no/garage'
     | '/no/how-it-works'
     | '/no/partners'
     | '/no/planner'
@@ -521,6 +533,7 @@ export interface RootRouteChildren {
   UsRoute: typeof UsRouteWithChildren
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   NoFaqRoute: typeof NoFaqRoute
+  NoGarageRoute: typeof NoGarageRoute
   NoHowItWorksRoute: typeof NoHowItWorksRoute
   NoPartnersRoute: typeof NoPartnersRoute
   NoPlannerRoute: typeof NoPlannerRoute
@@ -687,6 +700,13 @@ declare module '@tanstack/react-router' {
       path: '/no/faq'
       fullPath: '/no/faq'
       preLoaderRoute: typeof NoFaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no/garage': {
+      id: '/no/garage'
+      path: '/no/garage'
+      fullPath: '/no/garage'
+      preLoaderRoute: typeof NoGarageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/no/how-it-works': {
@@ -879,6 +899,7 @@ const rootRouteChildren: RootRouteChildren = {
   UsRoute: UsRouteWithChildren,
   CheckoutReturnRoute: CheckoutReturnRoute,
   NoFaqRoute: NoFaqRoute,
+  NoGarageRoute: NoGarageRoute,
   NoHowItWorksRoute: NoHowItWorksRoute,
   NoPartnersRoute: NoPartnersRoute,
   NoPlannerRoute: NoPlannerRoute,
