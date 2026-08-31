@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF" | "ISK";
+export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF" | "ISK" | "PLN";
 
 export type CurrencyDef = {
   code: CurrencyCode;
@@ -22,6 +22,7 @@ export const CURRENCIES: CurrencyDef[] = [
   { code: "GBP", emoji: "🇬🇧", symbol: "£", label: "Pound Sterling", decimals: 2 },
   { code: "CHF", emoji: "🇨🇭", symbol: "CHF", label: "Swiss Franc", decimals: 2 },
   { code: "ISK", emoji: "🇮🇸", symbol: "kr", label: "Icelandic Króna", suffix: true, decimals: 0 },
+  { code: "PLN", emoji: "🇵🇱", symbol: "zł", label: "Polish Złoty", suffix: true, decimals: 2 },
 ];
 
 export const CURRENCY_BY_CODE: Record<CurrencyCode, CurrencyDef> = Object.fromEntries(
@@ -39,6 +40,7 @@ export const RATES: Record<CurrencyCode, number> = {
   GBP: 0.85,
   CHF: 0.94,
   ISK: 150,
+  PLN: 4.31,
 };
 
 export const RATES_UPDATED = "Indicative reference rates — refreshed for planning, not for settlement.";
@@ -76,6 +78,7 @@ export function nativeCurrencyFor(countryLabel: string, fallback: CurrencyCode):
   if (s.includes("canada") || s.includes("ontario") || s.includes("québec") || s.includes("quebec"))
     return "CAD";
   if (s.includes("united states") || s.includes("usa")) return "USD";
+  if (s.includes("poland") || s.includes("polska") || s.includes("polen")) return "PLN";
   return fallback;
 }
 
@@ -88,6 +91,7 @@ export function currencyFromSymbol(symbol: string): CurrencyCode {
   if (symbol === "DKK") return "DKK";
   if (symbol === "CHF") return "CHF";
   if (symbol === "ISK") return "ISK";
+  if (symbol === "zł" || symbol === "PLN") return "PLN";
   return "EUR";
 }
 
