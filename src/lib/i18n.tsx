@@ -537,10 +537,34 @@ const no: Strings = {
   },
 };
 
-export const STRINGS: Record<Locale, Strings> = { en, no };
+/** Deep-merge a partial dictionary over the English base. */
+function mergeDict(base: unknown, patch: unknown): unknown {
+  if (!patch || typeof patch !== "object" || Array.isArray(patch)) return patch ?? base;
+  if (!base || typeof base !== "object") return patch;
+  const out: Record<string, unknown> = { ...(base as Record<string, unknown>) };
+  for (const [k, v] of Object.entries(patch as Record<string, unknown>)) {
+    out[k] = mergeDict((base as Record<string, unknown>)[k], v);
+  }
+  return out;
+}
+
+function withFallback(code: string): Strings {
+  return mergeDict(en, PARTIAL_DICTS[code] ?? {}) as Strings;
+}
+
+export const STRINGS: Record<Locale, Strings> = {
+  en,
+  no,
+  sv: withFallback("sv"),
+  da: withFallback("da"),
+  de: withFallback("de"),
+  nl: withFallback("nl"),
+  fr: withFallback("fr"),
+  pl: withFallback("pl"),
+};
 
 export function useT(): Strings {
-  return STRINGS[useLocale()];
+  return STRINGS[useLocale()] ?? STRINGS.en;
 }
 
 /** Translator for copy that lives in data modules, keyed by the English source string. */
