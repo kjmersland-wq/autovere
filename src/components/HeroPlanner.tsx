@@ -75,6 +75,30 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [tags, setTags] = useState<TransponderKey[]>([]);
   const [tankSize, setTankSize] = useState(imperial ? "16" : "60");
   const [consumption, setConsumption] = useState(imperial ? "28" : "7.4");
+  const [waypoints, setWaypoints] = useState<{ id: string; value: string }[]>([]);
+  const [tripType, setTripType] = useState<TripType>("oneway");
+  const [durationDays, setDurationDays] = useState(7);
+
+  const viaCount = waypoints.filter((w) => w.value.trim()).length;
+
+  const addWaypoint = () => {
+    if (waypoints.length >= 3) {
+      toast.info("You can add up to 3 via-stops per route.");
+      return;
+    }
+    setWaypoints((prev) => [...prev, { id: Math.random().toString(36).slice(2, 9), value: "" }]);
+  };
+  const updateWaypoint = (id: string, value: string) =>
+    setWaypoints((prev) => prev.map((w) => (w.id === id ? { ...w, value } : w)));
+  const removeWaypoint = (id: string) => setWaypoints((prev) => prev.filter((w) => w.id !== id));
+  const moveWaypoint = (index: number, dir: -1 | 1) =>
+    setWaypoints((prev) => {
+      const next = [...prev];
+      const target = index + dir;
+      if (target < 0 || target >= next.length) return prev;
+      [next[index], next[target]] = [next[target]!, next[index]!];
+      return next;
+    });
 
   const quickRoutes = useMemo(
     () => QUICK_ROUTES.filter((r) => r.regions.includes(region)),
@@ -104,16 +128,31 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       document.getElementById("trip-results")?.scrollIntoView({ behavior: "smooth" }),
     );
 
+  const effectiveDuration = tripType === "return" ? durationDays : 1;
+
   const runQuickRoute = (r: QuickRoute) => {
     setOrigin(r.origin);
     setDestination(r.destination);
     setActiveQuick(r.key);
     setStops([]);
-    setTrip(estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic));
+    setTrip(
+      estimateAllVariants(
+        region,
+        vehicle,
+        fuel,
+        avoidTolls,
+        ferries,
+        scenic,
+        viaCount,
+        tripType,
+        effectiveDuration,
+      ),
+    );
     setFerryCrossings(ferries ? detectFerryCrossings(region, r.origin, r.destination) : []);
     setBadges(detectEmissionBadges(region, r.origin, r.destination));
     scrollToResults();
   };
+
 
 
   return (
