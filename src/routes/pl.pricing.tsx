@@ -17,7 +17,7 @@ export const Route = createFileRoute("/pl/pricing")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "/pl/pricing" }],
+    links: [{ rel: "canonical", href: "https://www.autovere.com/pl/pricing" }],
   }),
   component: PlPricingPage,
 });

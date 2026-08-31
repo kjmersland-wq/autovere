@@ -82,12 +82,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "AutoVere — Road Trip Cost Intelligence for Europe, USA & Canada" },
-      { name: "description", content: "Calculate tolls, vignettes, fuel, EV charging and ferry costs for cars, motorhomes and motorcycles across 30+ countries — before you drive." },
       { name: "author", content: "KM TECH LABS" },
       { property: "og:site_name", content: "AutoVere" },
-      { property: "og:title", content: "AutoVere — Road Trip Cost Intelligence" },
-      { property: "og:description", content: "Plan cross-border road trips with exact toll, vignette, fuel, charging and ferry costs." },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_GB" },
       { name: "twitter:card", content: "summary_large_image" },
