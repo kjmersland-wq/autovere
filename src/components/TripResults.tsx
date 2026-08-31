@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ExternalLink, Mountain, Save, Share2, ShieldCheck, Ship } from "lucide-react";
+import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -15,9 +15,11 @@ import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { PassBorderIntel } from "@/components/PassBorderIntel";
 import { CorridorMap } from "@/components/CorridorMap";
 import { LezMonitor, MotorhomeClearanceRadar, TransponderSelector } from "@/components/ComplianceModules";
+import { CurrencyPills } from "@/components/CurrencySelector";
+import { PrintItinerary } from "@/components/PrintItinerary";
+import { RATES_UPDATED, useMoney } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 import {
-  money,
   ROUTE_VARIANTS,
   RV_POIS,
   SCENIC_HIGHLIGHTS,
@@ -95,10 +97,12 @@ export function TripResults({
   onAddStop?: (name: string) => void;
 }) {
   const [active, setActive] = useState<RouteVariantKey>("fastest");
+  const [printing, setPrinting] = useState(false);
   const [rvMode, setRvMode] = useState(isMotorhome);
   const highlights = SCENIC_HIGHLIGHTS[region];
   const rvPois = RV_POIS[region];
   const trip = trips[active];
+  const m = useMoney(trip.currency);
   const comparison = variantComparison(trips.fastest, trip);
   const title = `${origin || "Your start"} → ${destination || "Your destination"}`;
   const showNorway = region === "eu" && routeTouchesNorway(origin, destination);
@@ -204,7 +208,19 @@ export function TripResults({
 
 
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="glass-panel mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl px-5 py-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            Display currency
+          </p>
+          <p className="mt-1 text-xs text-foreground/70">
+            {m.rateNote() || "Costs shown in the local base currency."} · {RATES_UPDATED}
+          </p>
+        </div>
+        <CurrencyPills />
+      </div>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           accent
           label="Total Trip Budget"
@@ -238,6 +254,9 @@ export function TripResults({
         </Button>
         <Button size="lg" variant="outline" onClick={shareTrip}>
           <Share2 className="size-4" /> 🔗 Share Trip
+        </Button>
+        <Button size="lg" variant="outline" onClick={() => setPrinting(true)}>
+          <Printer className="size-4" /> 🖨️ Print Turn-by-Turn Cost Itinerary
         </Button>
       </div>
 
@@ -360,7 +379,7 @@ export function TripResults({
                               <ExternalLink className="size-3" />
                             </a>
                           )}
-                          <span className="text-sm font-semibold">{money(trip.currency, line.amount)}</span>
+
                         </span>
                       </li>
                     ))}
@@ -690,6 +709,16 @@ export function TripResults({
         )}
       </div>
 
+      {printing && (
+        <PrintItinerary
+          trip={trip}
+          origin={origin}
+          destination={destination}
+          vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"}
+          fuel={fuel}
+          onClose={() => setPrinting(false)}
+        />
+      )}
     </section>
   );
 }
