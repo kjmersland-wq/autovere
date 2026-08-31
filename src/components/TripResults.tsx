@@ -158,6 +158,53 @@ export function TripResults({
         so you can enjoy the drive.
       </p>
 
+      <div className="mt-8 grid gap-3">
+        <div className="flex flex-wrap gap-2">
+          {ROUTE_VARIANTS.map((v) => {
+            const t = trips[v.key];
+            const on = active === v.key;
+            return (
+              <button
+                key={v.key}
+                type="button"
+                onClick={() => setActive(v.key)}
+                aria-pressed={on}
+                className={cn(
+                  "flex-1 min-w-[200px] rounded-2xl border px-4 py-3 text-left transition-colors",
+                  on
+                    ? "border-primary bg-primary/15 text-foreground"
+                    : "border-border bg-background/40 text-foreground/75 hover:border-primary/50 hover:bg-background/60",
+                )}
+              >
+                <span className="block text-sm font-semibold">
+                  {v.emoji} {v.label}
+                </span>
+                <span className="mt-1 block text-xs text-muted-foreground">
+                  {money(t.currency, t.tolls + t.ferries)} tolls · {t.driveTime} · {t.distanceLabel}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+        <div className="glass-panel flex flex-wrap items-center gap-x-6 gap-y-2 rounded-2xl px-5 py-4">
+          <p className="text-sm text-foreground/80">
+            {ROUTE_VARIANTS.find((v) => v.key === active)?.blurb}
+          </p>
+          {active !== "fastest" && (
+            <span className="flex flex-wrap items-center gap-3 text-sm">
+              <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 font-semibold text-primary">
+                Money saved: {comparison.savedLabel}
+              </span>
+              <span className="rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 font-semibold text-amber-300">
+                Time added: {comparison.timeLabel}
+              </span>
+            </span>
+          )}
+        </div>
+      </div>
+
+
+
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           accent
