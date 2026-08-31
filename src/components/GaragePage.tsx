@@ -70,15 +70,15 @@ const EMPTY_VEHICLE: GarageVehicle = {
 };
 
 const VEHICLE_NO: Record<VehicleKind, string> = {
-  car: tx("Bil"),
-  motorhome: tx("Bobil"),
-  motorcycle: tx("Motorsykkel"),
+  car: "Bil",
+  motorhome: "Bobil",
+  motorcycle: "Motorsykkel",
 };
 
 const FUEL_NO: Record<keyof typeof FUEL_LABEL, string> = {
-  petrol: tx("⛽ Bensin"),
-  diesel: tx("🛢️ Diesel"),
-  ev: tx("⚡ Elektrisk (EV)"),
+  petrol: "⛽ Bensin",
+  diesel: "🛢️ Diesel",
+  ev: "⚡ Elektrisk (EV)",
 };
 
 type SectionId =
