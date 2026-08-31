@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
+import { PassBorderIntel } from "@/components/PassBorderIntel";
 import { cn } from "@/lib/utils";
 import {
   money,
