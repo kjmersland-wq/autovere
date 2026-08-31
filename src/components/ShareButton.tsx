@@ -12,7 +12,18 @@ import {
 
 type Lang = "en" | "no" | "pl";
 
-const COPY: Record<Lang, Record<string, string>> = {
+type Copy = {
+  button: string;
+  heading: string;
+  native: string;
+  copy: string;
+  copied: string;
+  email: string;
+  title: string;
+  text: string;
+};
+
+const COPY: Record<Lang, Copy> = {
   en: {
     button: "Share",
     heading: "Share AutoVere",
@@ -54,7 +65,7 @@ export function ShareButton({
   url?: string;
   className?: string;
 }) {
-  const t = COPY[lang] ?? COPY.en;
+  const t: Copy = COPY[lang] ?? COPY.en;
   const [copied, setCopied] = useState(false);
 
   const shareUrl = () =>
