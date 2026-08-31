@@ -351,12 +351,12 @@ export function GaragePage() {
                   <h3 className="text-lg font-semibold tracking-tight">{tx("Dette låser abonnementet ditt opp")}</h3>
                   <ul className="mt-4 grid gap-3 sm:grid-cols-2">
                     {[
-                      ["Smart drivstoff og lading", tx("Finn stopp basert på kjøretøy, rute og forbruk.")],
-                      ["Bom, vignetter og ferjer", tx("Full oversikt over kostnader før du kjører.")],
-                      ["Bobil og camping", tx("Tømmestasjoner, vann, overnatting og verksted.")],
-                      ["Veiarbeid og hendelser", tx("Se stengninger og omkjøringer som påvirker turen.")],
-                      ["Personlig kjøretøyprofil", tx("Vi bruker dine data i hver beregning.")],
-                      ["Tilgjengelig på alle språk", tx("Hele AutoVere på ditt språk.")],
+                      [tx("Smart drivstoff og lading"), tx("Finn stopp basert på kjøretøy, rute og forbruk.")],
+                      [tx("Bom, vignetter og ferjer"), tx("Full oversikt over kostnader før du kjører.")],
+                      [tx("Bobil og camping"), tx("Tømmestasjoner, vann, overnatting og verksted.")],
+                      [tx("Veiarbeid og hendelser"), tx("Se stengninger og omkjøringer som påvirker turen.")],
+                      [tx("Personlig kjøretøyprofil"), tx("Vi bruker dine data i hver beregning.")],
+                      [tx("Tilgjengelig på alle språk"), tx("Hele AutoVere på ditt språk.")],
                     ].map(([title, body]) => (
                       <li key={title} className="rounded-xl border border-border bg-background/40 p-4">
                         <p className="text-sm font-semibold">{title}</p>
