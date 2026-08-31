@@ -87,14 +87,25 @@ export function TripResults({
   destination,
   ferryCrossings,
   isMotorcycle,
+  emissionBadges = [],
+  region = "eu",
+  isMotorhome = false,
+  onAddStop,
 }: {
   trips: Record<RouteVariantKey, TripEstimate>;
   origin: string;
   destination: string;
   ferryCrossings: FerryCrossing[];
   isMotorcycle: boolean;
+  emissionBadges?: EmissionBadge[];
+  region?: RegionKey;
+  isMotorhome?: boolean;
+  onAddStop?: (name: string) => void;
 }) {
   const [active, setActive] = useState<RouteVariantKey>("fastest");
+  const [rvMode, setRvMode] = useState(isMotorhome);
+  const highlights = SCENIC_HIGHLIGHTS[region];
+  const rvPois = RV_POIS[region];
   const trip = trips[active];
   const comparison = variantComparison(trips.fastest, trip);
   const title = `${origin || "Your start"} → ${destination || "Your destination"}`;
