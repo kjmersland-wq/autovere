@@ -1,4 +1,5 @@
 import { ExternalLink, Landmark, Waypoints } from "lucide-react";
+import { PoiLinks } from "@/components/PoiLinks";
 
 import {
   NORWAY_CITY_RINGS,
