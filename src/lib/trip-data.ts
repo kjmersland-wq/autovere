@@ -567,6 +567,40 @@ function safetyFor(region: RegionKey, vehicle: VehicleKey) {
 }
 
 
+export type RouteVariantKey = "fastest" | "smart" | "tollfree";
+
+export const ROUTE_VARIANTS: {
+  key: RouteVariantKey;
+  emoji: string;
+  label: string;
+  blurb: string;
+}[] = [
+  {
+    key: "fastest",
+    emoji: "⚡",
+    label: "Fastest Route",
+    blurb: "The standard optimal driving route — motorways all the way.",
+  },
+  {
+    key: "smart",
+    emoji: "✨",
+    label: "Smart Bypass",
+    blurb: "Balances toll cost against driving time — skips expensive corridors when the detour is cheap in minutes.",
+  },
+  {
+    key: "tollfree",
+    emoji: "🚫",
+    label: "100% Toll-Free",
+    blurb: "Strictly avoids every toll road, gantry and vignette zone.",
+  },
+];
+
+const VARIANT_TUNING: Record<RouteVariantKey, { toll: number; distance: number; speed: number }> = {
+  fastest: { toll: 1, distance: 1, speed: 98 },
+  smart: { toll: 0.55, distance: 1.04, speed: 90 },
+  tollfree: { toll: 0, distance: 1.14, speed: 74 },
+};
+
 export function estimateTrip(
   region: RegionKey,
   vehicle: VehicleKey,
@@ -574,12 +608,15 @@ export function estimateTrip(
   avoidTolls: boolean,
   includeFerries: boolean,
   scenic: boolean,
+  variant: RouteVariantKey = "fastest",
 ): TripEstimate {
+  const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
+  const tuning = VARIANT_TUNING[activeVariant];
   const defaults = REGION_DEFAULTS[region];
   const currency = defaults.currency;
   const imperial = defaults.units === "imperial";
   const baseDistance = region === "eu" ? 1420 : region === "us" ? 1890 : 1640;
-  const distanceKm = Math.round(baseDistance * (scenic ? 1.08 : 1));
+  const distanceKm = Math.round(baseDistance * (scenic ? 1.08 : 1) * tuning.distance);
 
   const isMoto = vehicle === "motorcycle";
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -595,9 +632,10 @@ export function estimateTrip(
 
   const motoFactor = isMoto ? 0.6 : 1;
   segments = segments.map((s) => {
-    const tollFactor = s.country.includes("Ferries") || !avoidTolls ? 1 : 0.25;
+    const tollFactor = s.country.includes("Ferries") ? 1 : tuning.toll;
     const lines = mapLines(s.lines, tollFactor * motoFactor);
     return { ...s, lines, total: round2(lines.reduce((sum, l) => sum + l.amount, 0)) };
+
   });
 
   const ferries = round2(
