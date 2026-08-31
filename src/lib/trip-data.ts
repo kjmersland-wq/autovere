@@ -820,3 +820,151 @@ export const TRANSPONDERS: {
     regions: ["us", "ca"],
   },
 ];
+
+/* ---------------------------------------------------------------------------
+ * Ferry & marine corridor detection
+ * ------------------------------------------------------------------------- */
+
+export type FerryCrossing = {
+  id: string;
+  corridor: string;
+  route: string;
+  operators: string[];
+  duration: string;
+  frequency: string;
+  price: string;
+  motoPrice?: string;
+  note: string;
+  badge?: string;
+  booking: { label: string; url: string };
+  /** Lowercase keywords that trigger this crossing */
+  match: string[];
+  regions: RegionKey[];
+};
+
+export const FERRY_CROSSINGS: FerryCrossing[] = [
+  {
+    id: "no-fjord",
+    corridor: "🇳🇴 Norway · Fjord ferries",
+    route: "Lauvvik–Oanes · Mortavika–Arsvågen · Halhjem–Sandvikvåg",
+    operators: ["Norled", "Fjord1", "Torghatten"],
+    duration: "10–45 min per crossing",
+    frequency: "Every 20–40 min, most run 24/7",
+    price: "NOK 120–290 per car",
+    motoPrice: "NOK 55–120 per motorcycle",
+    note: "Register an AutoPASS ferjekort for an automatic ~50% discount — no cash, no queue at the booth.",
+    badge: "AutoPASS ferjekort −50%",
+    booking: { label: "autopassferje.no", url: "https://www.autopassferje.no/" },
+    match: ["norway", "norge", "oslo", "bergen", "stavanger", "trondheim", "ålesund", "alesund", "lofoten", "geiranger", "trollstigen"],
+    regions: ["eu"],
+  },
+  {
+    id: "scandi-baltic",
+    corridor: "🌊 Scandinavia & Baltic",
+    route: "Oslo–Kiel · Hirtshals–Kristiansand · Puttgarden–Rødby · Helsinki–Tallinn",
+    operators: ["Color Line", "Fjord Line", "Scandlines", "DFDS", "Stena Line", "Tallink Silja", "Viking Line"],
+    duration: "45 min – 20 h depending on crossing",
+    frequency: "Scandlines every 30 min; overnight lines 1–2 sailings a day",
+    price: "€45–210 car + driver",
+    motoPrice: "€28–120 motorcycle + rider",
+    note: "Book overnight cabins early in July and August — the Oslo–Kiel and Tallinn routes sell out weeks ahead.",
+    badge: "Cabins book out early",
+    booking: { label: "Color Line", url: "https://www.colorline.com/" },
+    match: ["sweden", "sverige", "denmark", "danmark", "copenhagen", "københavn", "kiel", "hirtshals", "gothenburg", "göteborg", "stockholm", "helsinki", "tallinn", "estonia", "finland", "baltic", "malmö", "malmo"],
+    regions: ["eu"],
+  },
+  {
+    id: "channel",
+    corridor: "🇬🇧 English Channel",
+    route: "Dover–Calais · Dover–Dunkirk · Folkestone–Coquelles (LeShuttle)",
+    operators: ["DFDS", "P&O Ferries", "Irish Ferries", "LeShuttle"],
+    duration: "35 min (LeShuttle) · 90–120 min (ferry)",
+    frequency: "Up to 4 departures an hour at peak",
+    price: "£70–190 car + passengers",
+    motoPrice: "£45–95 motorcycle + rider",
+    note: "LeShuttle keeps you in your vehicle — the fastest option with a roof box or a loaded bike.",
+    badge: "Flexi tickets recommended",
+    booking: { label: "LeShuttle", url: "https://www.leshuttle.com/" },
+    match: ["london", "united kingdom", "england", "uk", "dover", "calais", "paris", "folkestone", "brighton", "kent"],
+    regions: ["eu"],
+  },
+  {
+    id: "irish-sea",
+    corridor: "☘️ Irish Sea",
+    route: "Holyhead–Dublin · Cairnryan–Belfast · Fishguard–Rosslare",
+    operators: ["Irish Ferries", "Stena Line", "P&O Ferries"],
+    duration: "2 h (fast craft) – 3 h 30 min",
+    frequency: "4–8 sailings a day per route",
+    price: "€95–230 car + driver",
+    motoPrice: "€60–130 motorcycle + rider",
+    note: "Wild Atlantic Way traffic peaks at weekends — a midweek morning sailing is calmer and cheaper.",
+    booking: { label: "Irish Ferries", url: "https://www.irishferries.com/" },
+    match: ["ireland", "dublin", "belfast", "cork", "galway", "holyhead", "wales", "rosslare", "northern ireland"],
+    regions: ["eu"],
+  },
+  {
+    id: "med-adriatic",
+    corridor: "☀️ Mediterranean & Adriatic",
+    route: "Split–Supetar · Ancona–Split · Genoa–Barcelona · Piraeus–Crete · Bari–Patras",
+    operators: ["Jadrolinija", "Moby", "GNV", "Minoan Lines", "Superfast Ferries", "Grimaldi Lines"],
+    duration: "50 min (island hops) – 20 h (overnight)",
+    frequency: "Island hops hourly; long crossings daily",
+    price: "€55–260 car + driver",
+    motoPrice: "€30–140 motorcycle + rider",
+    note: "Motorcycles usually board first and pay roughly 40% less — arrive 45 min before departure.",
+    badge: "Bikes board first",
+    booking: { label: "Jadrolinija", url: "https://www.jadrolinija.hr/en" },
+    match: ["croatia", "split", "dubrovnik", "italy", "italia", "rome", "naples", "genoa", "ancona", "bari", "greece", "athens", "patras", "crete", "sardinia", "sicily", "corsica", "barcelona", "spain", "lake garda", "amalfi"],
+    regions: ["eu"],
+  },
+  {
+    id: "us-marine",
+    corridor: "🇺🇸 US marine highways",
+    route: "Anacortes–Friday Harbor · Bellingham–Alaska · Cape May–Lewes",
+    operators: ["Washington State Ferries", "Alaska Marine Highway", "Cape May–Lewes Ferry"],
+    duration: "60 min – 38 h (Alaska)",
+    frequency: "San Juans hourly; Alaska weekly",
+    price: "$62–180 vehicle + driver",
+    motoPrice: "$28–70 motorcycle + rider",
+    note: "Vehicle reservations open two months ahead on Washington State Ferries and are essential in summer.",
+    badge: "Reserve ahead",
+    booking: { label: "WA State Ferries", url: "https://wsdot.com/travel/washington-state-ferries" },
+    match: ["seattle", "washington", "anacortes", "san juan", "alaska", "bellingham", "cape may"],
+    regions: ["us"],
+  },
+  {
+    id: "ca-marine",
+    corridor: "🇨🇦 Canadian coastal ferries",
+    route: "Tsawwassen–Swartz Bay · Horseshoe Bay–Nanaimo · North Sydney–Port aux Basques",
+    operators: ["BC Ferries", "Marine Atlantic", "Société des traversiers du Québec"],
+    duration: "1 h 35 min – 7 h (Newfoundland)",
+    frequency: "Every 1–2 h on the Vancouver Island runs",
+    price: "C$96–150 vehicle + 2 adults",
+    motoPrice: "C$45–70 motorcycle + rider",
+    note: "Book a Saver fare on BC Ferries — cheapest sailings are before 09:00 and after 19:00.",
+    badge: "Saver fares available",
+    booking: { label: "BC Ferries", url: "https://www.bcferries.com/" },
+    match: ["vancouver", "victoria", "tofino", "british columbia", "nanaimo", "newfoundland", "halifax", "nova scotia", "québec", "quebec", "gaspésie"],
+    regions: ["ca"],
+  },
+];
+
+const DEFAULT_FERRIES: Record<RegionKey, string[]> = {
+  eu: ["no-fjord", "scandi-baltic", "channel"],
+  us: ["us-marine"],
+  ca: ["ca-marine"],
+};
+
+export function detectFerryCrossings(
+  region: RegionKey,
+  origin: string,
+  destination: string,
+): FerryCrossing[] {
+  const text = `${origin} ${destination}`.toLowerCase();
+  const matched = FERRY_CROSSINGS.filter(
+    (f) => f.regions.includes(region) && f.match.some((m) => text.includes(m)),
+  );
+  if (matched.length > 0) return matched;
+  const fallback = DEFAULT_FERRIES[region];
+  return FERRY_CROSSINGS.filter((f) => fallback.includes(f.id));
+}
