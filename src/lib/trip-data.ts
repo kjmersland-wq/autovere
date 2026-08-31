@@ -108,7 +108,7 @@ export type TollLine = {
   place: string;
   detail: string;
   amount: number;
-  badge?: string;
+  badge?: string | undefined;
   /** Official purchase / payment portal */
   portal?: { label: string; url: string };
   /** Motorcycles ride free (e.g. Norwegian city rings) */
@@ -131,7 +131,7 @@ export type TripEstimate = {
   energyAmount: string;
   segments: { country: string; total: number; lines: TollLine[] }[];
   safety: { title: string; sections: SafetySection[] };
-  discountNote?: string;
+  discountNote?: string | undefined;
 };
 
 const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
