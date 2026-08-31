@@ -99,7 +99,7 @@ const SETTINGS_KEY = "autovere.accountSettings";
 
 export function GaragePage() {
   const { user, openAuth, signOut } = useAuth();
-  const { t: tx, isNo } = useGarageText();
+  const { t: tx, isNo, meta: tmeta } = useGarageText();
   const { isAdmin } = useAdmin();
   const { tier, isActive } = useSubscription();
   const { currency, setCurrency } = useCurrency();
@@ -374,8 +374,8 @@ export function GaragePage() {
                   {trips.map((t) => (
                     <article key={t.id} className="rounded-xl border border-border bg-background/40 p-5">
                       <h3 className="font-semibold tracking-tight">{t.name}</h3>
-                      <p className="text-sm text-foreground/70">{t.detail}</p>
-                      <p className="mt-1 text-xs text-muted-foreground">{t.when}</p>
+                      <p className="text-sm text-foreground/70">{tmeta(t.detail)}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">{tmeta(t.when)}</p>
                       {(t.tolls !== undefined || t.energyCost !== undefined) && (
                         <dl className="mt-4 grid grid-cols-3 gap-3 rounded-xl border border-border bg-background/40 p-3 text-center">
                           <Cell label={tx("Bom")} value={fmt(t.currency, t.tolls, isNo ? "nb-NO" : "en-US")} />
