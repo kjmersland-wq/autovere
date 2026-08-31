@@ -3,6 +3,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { GaragePage } from "@/components/GaragePage";
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { InfoPage } from "@/components/InfoPage";
+import { PartnersPage } from "@/components/PartnersPage";
 import { ScenicGuide } from "@/components/ScenicGuide";
 import { TollsGuide } from "@/components/TollsGuide";
 import { LOCALE_LANDING } from "@/lib/dictionaries";
@@ -14,6 +15,14 @@ import {
   GLOBAL_PRIVACY,
   GLOBAL_TERMS,
 } from "@/lib/global-content";
+import {
+  PL_FAQ,
+  PL_HOW_IT_WORKS,
+  PL_PARTNERS,
+  PL_PRICING,
+  PL_PRIVACY,
+  PL_TERMS,
+} from "@/lib/global-content-pl";
 import { isLocalePage, isLocalePrefix, LOCALE_ROUTES } from "@/lib/locales";
 
 const INFO = {
@@ -25,12 +34,26 @@ const INFO = {
   terms: GLOBAL_TERMS,
 } as const;
 
+const INFO_PL = {
+  faq: PL_FAQ,
+  "how-it-works": PL_HOW_IT_WORKS,
+  pricing: PL_PRICING,
+  partners: PL_PARTNERS,
+  privacy: PL_PRIVACY,
+  terms: PL_TERMS,
+} as const;
+
+function infoFor(lang: string, page: string) {
+  if (lang === "pl") return INFO_PL[page as keyof typeof INFO_PL] ?? null;
+  return INFO[page as keyof typeof INFO] ?? null;
+}
+
 export const Route = createFileRoute("/$lang/$page")({
   beforeLoad: ({ params }) => {
     if (!isLocalePrefix(params.lang) || !isLocalePage(params.page)) throw notFound();
   },
   head: ({ params }) => {
-    const info = INFO[params.page as keyof typeof INFO];
+    const info = infoFor(params.lang, params.page);
     if (info) {
       return {
         meta: [
@@ -66,7 +89,9 @@ function LocalePage() {
   const entry = LOCALE_ROUTES.find((l) => l.prefix === lang);
   const landing = entry ? LOCALE_LANDING[entry.code] : null;
 
-  const info = INFO[page as keyof typeof INFO];
+  if (page === "partners" && lang === "pl") return <PartnersPage lang="pl" />;
+
+  const info = infoFor(lang, page);
   if (info) {
     return (
       <InfoPage

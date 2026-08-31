@@ -3,6 +3,8 @@
  * Anything not translated here falls back to English at merge time.
  */
 
+import { PL_DICT } from "@/lib/dict-pl";
+
 type Dict = Record<string, unknown>;
 
 export const PARTIAL_DICTS: Record<string, Dict> = {
@@ -221,49 +223,8 @@ export const PARTIAL_DICTS: Record<string, Dict> = {
       disclaimer: "Estimations indicatives — vérifiez auprès des portails officiels.",
     },
   },
-  pl: {
-    header: {
-      regions: { eu: "Europa", us: "USA", ca: "Kanada" },
-      nav: {
-        "/planner": "Planer podróży",
-        "/tolls": "Opłaty i winiety",
-        "/scenic": "Przełęcze i promy",
-        "/garage": "Mój garaż",
-      },
-      signIn: "Zaloguj się",
-      garageMenu: "🗺️ Mój garaż i podróże",
-      plansMenu: "✨ Plany i ulepszenie",
-      signOut: "Wyloguj się",
-      toggleNav: "Pokaż/ukryj menu",
-    },
-    hero: {
-      vehicles: { car: "Samochód", motorhome: "Kamper", motorcycle: "Motocykl" },
-      fuels: { petrol: "Benzyna", diesel: "Diesel", electric: "Elektryczny (EV)" },
-      origin: "Skąd",
-      destination: "Dokąd",
-      originHint: "Miasto startowe lub punkt orientacyjny (np. Kraków, Monachium)",
-      destinationHint: "Dokąd jedziesz? (np. Wybrzeże Amalfi, Lofoty)",
-      submit: "Oblicz koszt podróży →",
-      oneway: "Podróż w jedną stronę",
-      returnTrip: "Tam i z powrotem / wakacje",
-      duration: "Długość podróży",
-      fuelType: "Paliwo / napęd",
-      footnote: "Opłaty, winiety, paliwo, ładowanie i promy — wyliczone dla Twojej trasy.",
-    },
-    footer: {
-      quickLinks: "Szybkie linki",
-      company: "Firma",
-      regions: "Regiony",
-      howItWorks: "Jak to działa",
-      pricing: "Cennik",
-      faq: "Najczęstsze pytania",
-      partners: "Partnerzy",
-      privacy: "Polityka prywatności",
-      terms: "Regulamin",
-      rights: "Wszelkie prawa zastrzeżone.",
-      disclaimer: "Szacunki orientacyjne — sprawdź oficjalne portale.",
-    },
-  },
+  pl: PL_DICT,
+
 };
 
 /** Hero copy per language for the localized landing page. */

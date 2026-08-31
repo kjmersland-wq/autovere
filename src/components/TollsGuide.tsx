@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/SiteHeader";
+import { useTr } from "@/lib/i18n";
 
 
 const GUIDES = [
@@ -31,30 +32,30 @@ const GUIDES = [
 ];
 
 export function TollsGuide() {
+  const tr = useTr();
   return (
     <main className="min-h-screen">
       <SiteHeader />
       <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-          Tolls &amp; vignettes
+          {tr("Tolls & vignettes")}
         </p>
         <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          Every barrier, badge and sticker — made simple.
+          {tr("Every barrier, badge and sticker — made simple.")}
         </h1>
         <p className="mt-4 max-w-2xl text-foreground/75">
-          No guesswork, no fines. Here's what you need in each country, and how to get it before you
-          set off.
+          {tr("No guesswork, no fines. Here's what you need in each country, and how to get it before you set off.")}
         </p>
 
         <div className="mt-10 grid gap-6 lg:grid-cols-3">
           {GUIDES.map((g) => (
             <div key={g.region} className="glass-panel rounded-2xl p-6">
-              <h2 className="text-lg font-semibold tracking-tight">{g.region}</h2>
+              <h2 className="text-lg font-semibold tracking-tight">{tr(g.region)}</h2>
               <ul className="mt-4 grid gap-3">
                 {g.items.map((i) => (
                   <li key={i.name} className="rounded-xl border border-border bg-background/40 p-4">
-                    <p className="text-sm font-medium">{i.name}</p>
-                    <p className="mt-1 text-sm text-foreground/70">{i.detail}</p>
+                    <p className="text-sm font-medium">{tr(i.name)}</p>
+                    <p className="mt-1 text-sm text-foreground/70">{tr(i.detail)}</p>
                   </li>
                 ))}
               </ul>

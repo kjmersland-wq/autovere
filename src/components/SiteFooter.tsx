@@ -65,7 +65,7 @@ export function SiteFooter() {
             {t.footer.productBy}
           </p>
           <p className="text-sm font-semibold text-foreground">KM TECH LABS</p>
-          <p className="text-sm text-muted-foreground">{locale === "no" ? "Kristiansand, Norge" : "Kristiansand, Norway"}</p>
+          <p className="text-sm text-muted-foreground">{locale === "no" ? "Kristiansand, Norge" : locale === "pl" ? "Kristiansand, Norwegia" : "Kristiansand, Norway"}</p>
           <p className="mt-5 inline-flex max-w-xs items-start gap-2 rounded-xl border border-amber-300/25 bg-amber-300/10 px-3 py-2 text-xs leading-relaxed text-amber-200">
             <span aria-hidden="true">🛡️</span>
             <span>
