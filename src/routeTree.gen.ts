@@ -45,9 +45,14 @@ import { Route as NoTermsRouteImport } from './routes/no.terms'
 import { Route as NoTollsRouteImport } from './routes/no.tolls'
 import { Route as UsIndexRouteImport } from './routes/us.index'
 import { Route as UsFaqRouteImport } from './routes/us.faq'
+import { Route as UsGarageRouteImport } from './routes/us.garage'
 import { Route as UsHowItWorksRouteImport } from './routes/us.how-it-works'
 import { Route as UsLegalRouteImport } from './routes/us.legal'
 import { Route as UsPartnersRouteImport } from './routes/us.partners'
+import { Route as UsPlannerRouteImport } from './routes/us.planner'
+import { Route as UsPricingRouteImport } from './routes/us.pricing'
+import { Route as UsScenicRouteImport } from './routes/us.scenic'
+import { Route as UsTollsRouteImport } from './routes/us.tolls'
 import { Route as CaFrFaqRouteImport } from './routes/ca.fr.faq'
 import { Route as CaFrHowItWorksRouteImport } from './routes/ca.fr.how-it-works'
 import { Route as CaFrLegalRouteImport } from './routes/ca.fr.legal'
@@ -234,6 +239,11 @@ const UsFaqRoute = UsFaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => UsRoute,
 } as any)
+const UsGarageRoute = UsGarageRouteImport.update({
+  id: '/garage',
+  path: '/garage',
+  getParentRoute: () => UsRoute,
+} as any)
 const UsHowItWorksRoute = UsHowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
@@ -247,6 +257,26 @@ const UsLegalRoute = UsLegalRouteImport.update({
 const UsPartnersRoute = UsPartnersRouteImport.update({
   id: '/partners',
   path: '/partners',
+  getParentRoute: () => UsRoute,
+} as any)
+const UsPlannerRoute = UsPlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => UsRoute,
+} as any)
+const UsPricingRoute = UsPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => UsRoute,
+} as any)
+const UsScenicRoute = UsScenicRouteImport.update({
+  id: '/scenic',
+  path: '/scenic',
+  getParentRoute: () => UsRoute,
+} as any)
+const UsTollsRoute = UsTollsRouteImport.update({
+  id: '/tolls',
+  path: '/tolls',
   getParentRoute: () => UsRoute,
 } as any)
 const CaFrFaqRoute = CaFrFaqRouteImport.update({
@@ -309,9 +339,14 @@ export interface FileRoutesByFullPath {
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
+  '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
+  '/us/planner': typeof UsPlannerRoute
+  '/us/pricing': typeof UsPricingRoute
+  '/us/scenic': typeof UsScenicRoute
+  '/us/tolls': typeof UsTollsRoute
   '/$lang/': typeof LangIndexRoute
   '/ca/': typeof CaIndexRoute
   '/no/': typeof NoIndexRoute
@@ -353,9 +388,14 @@ export interface FileRoutesByTo {
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
+  '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
+  '/us/planner': typeof UsPlannerRoute
+  '/us/pricing': typeof UsPricingRoute
+  '/us/scenic': typeof UsScenicRoute
+  '/us/tolls': typeof UsTollsRoute
   '/$lang': typeof LangIndexRoute
   '/ca': typeof CaIndexRoute
   '/no': typeof NoIndexRoute
@@ -400,9 +440,14 @@ export interface FileRoutesById {
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
+  '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
+  '/us/planner': typeof UsPlannerRoute
+  '/us/pricing': typeof UsPricingRoute
+  '/us/scenic': typeof UsScenicRoute
+  '/us/tolls': typeof UsTollsRoute
   '/$lang/': typeof LangIndexRoute
   '/ca/': typeof CaIndexRoute
   '/no/': typeof NoIndexRoute
@@ -448,9 +493,14 @@ export interface FileRouteTypes {
     | '/no/terms'
     | '/no/tolls'
     | '/us/faq'
+    | '/us/garage'
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
+    | '/us/planner'
+    | '/us/pricing'
+    | '/us/scenic'
+    | '/us/tolls'
     | '/$lang/'
     | '/ca/'
     | '/no/'
@@ -492,9 +542,14 @@ export interface FileRouteTypes {
     | '/no/terms'
     | '/no/tolls'
     | '/us/faq'
+    | '/us/garage'
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
+    | '/us/planner'
+    | '/us/pricing'
+    | '/us/scenic'
+    | '/us/tolls'
     | '/$lang'
     | '/ca'
     | '/no'
@@ -538,9 +593,14 @@ export interface FileRouteTypes {
     | '/no/terms'
     | '/no/tolls'
     | '/us/faq'
+    | '/us/garage'
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
+    | '/us/planner'
+    | '/us/pricing'
+    | '/us/scenic'
+    | '/us/tolls'
     | '/$lang/'
     | '/ca/'
     | '/no/'
@@ -839,6 +899,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsFaqRouteImport
       parentRoute: typeof UsRoute
     }
+    '/us/garage': {
+      id: '/us/garage'
+      path: '/garage'
+      fullPath: '/us/garage'
+      preLoaderRoute: typeof UsGarageRouteImport
+      parentRoute: typeof UsRoute
+    }
     '/us/how-it-works': {
       id: '/us/how-it-works'
       path: '/how-it-works'
@@ -858,6 +925,34 @@ declare module '@tanstack/react-router' {
       path: '/partners'
       fullPath: '/us/partners'
       preLoaderRoute: typeof UsPartnersRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/us/planner': {
+      id: '/us/planner'
+      path: '/planner'
+      fullPath: '/us/planner'
+      preLoaderRoute: typeof UsPlannerRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/us/pricing': {
+      id: '/us/pricing'
+      path: '/pricing'
+      fullPath: '/us/pricing'
+      preLoaderRoute: typeof UsPricingRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/us/scenic': {
+      id: '/us/scenic'
+      path: '/scenic'
+      fullPath: '/us/scenic'
+      preLoaderRoute: typeof UsScenicRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/us/tolls': {
+      id: '/us/tolls'
+      path: '/tolls'
+      fullPath: '/us/tolls'
+      preLoaderRoute: typeof UsTollsRouteImport
       parentRoute: typeof UsRoute
     }
     '/ca/fr/faq': {
@@ -926,17 +1021,27 @@ const CaRouteWithChildren = CaRoute._addFileChildren(CaRouteChildren)
 
 interface UsRouteChildren {
   UsFaqRoute: typeof UsFaqRoute
+  UsGarageRoute: typeof UsGarageRoute
   UsHowItWorksRoute: typeof UsHowItWorksRoute
   UsLegalRoute: typeof UsLegalRoute
   UsPartnersRoute: typeof UsPartnersRoute
+  UsPlannerRoute: typeof UsPlannerRoute
+  UsPricingRoute: typeof UsPricingRoute
+  UsScenicRoute: typeof UsScenicRoute
+  UsTollsRoute: typeof UsTollsRoute
   UsIndexRoute: typeof UsIndexRoute
 }
 
 const UsRouteChildren: UsRouteChildren = {
   UsFaqRoute: UsFaqRoute,
+  UsGarageRoute: UsGarageRoute,
   UsHowItWorksRoute: UsHowItWorksRoute,
   UsLegalRoute: UsLegalRoute,
   UsPartnersRoute: UsPartnersRoute,
+  UsPlannerRoute: UsPlannerRoute,
+  UsPricingRoute: UsPricingRoute,
+  UsScenicRoute: UsScenicRoute,
+  UsTollsRoute: UsTollsRoute,
   UsIndexRoute: UsIndexRoute,
 }
 

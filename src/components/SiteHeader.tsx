@@ -18,6 +18,17 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
+const US_NAV_LABELS: Record<string, string> = {
+  "/planner": "Road Trip Planner",
+  "/tolls": "Tolls & Express Lanes",
+  "/scenic": "Scenic Byways & Ferries",
+  "/garage": "My Garage",
+};
+
+function usLabel(to: string, region: RegionKey) {
+  return region === "us" ? US_NAV_LABELS[to] : undefined;
+}
+
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
@@ -64,7 +75,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               activeClassName="text-primary"
               className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
             >
-              {t.header.nav[l.to] ?? l.label}
+              {usLabel(l.to, activeRegion) ?? t.header.nav[l.to] ?? l.label}
             </LocaleLink>
           ))}
         </nav>
@@ -177,7 +188,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                 onClick={() => setOpen(false)}
                 className="text-sm font-medium text-foreground/85"
               >
-                {t.header.nav[l.to] ?? l.label}
+                {usLabel(l.to, activeRegion) ?? t.header.nav[l.to] ?? l.label}
               </LocaleLink>
             ))}
           </div>
