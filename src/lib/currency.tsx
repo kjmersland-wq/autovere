@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
-export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF";
+export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF" | "ISK";
 
 export type CurrencyDef = {
   code: CurrencyCode;
@@ -21,6 +21,7 @@ export const CURRENCIES: CurrencyDef[] = [
   { code: "DKK", emoji: "🇩🇰", symbol: "kr", label: "Danish Krone", suffix: true, decimals: 0 },
   { code: "GBP", emoji: "🇬🇧", symbol: "£", label: "Pound Sterling", decimals: 2 },
   { code: "CHF", emoji: "🇨🇭", symbol: "CHF", label: "Swiss Franc", decimals: 2 },
+  { code: "ISK", emoji: "🇮🇸", symbol: "kr", label: "Icelandic Króna", suffix: true, decimals: 0 },
 ];
 
 export const CURRENCY_BY_CODE: Record<CurrencyCode, CurrencyDef> = Object.fromEntries(
@@ -37,6 +38,7 @@ export const RATES: Record<CurrencyCode, number> = {
   DKK: 7.46,
   GBP: 0.85,
   CHF: 0.94,
+  ISK: 150,
 };
 
 export const RATES_UPDATED = "Indicative reference rates — refreshed for planning, not for settlement.";
@@ -78,9 +80,14 @@ export function nativeCurrencyFor(countryLabel: string, fallback: CurrencyCode):
 }
 
 export function currencyFromSymbol(symbol: string): CurrencyCode {
-  if (symbol === "$") return "USD";
-  if (symbol === "C$") return "CAD";
-  if (symbol === "£") return "GBP";
+  if (symbol === "$" || symbol === "USD") return "USD";
+  if (symbol === "C$" || symbol === "CAD") return "CAD";
+  if (symbol === "£" || symbol === "GBP") return "GBP";
+  if (symbol === "NOK") return "NOK";
+  if (symbol === "SEK") return "SEK";
+  if (symbol === "DKK") return "DKK";
+  if (symbol === "CHF") return "CHF";
+  if (symbol === "ISK") return "ISK";
   return "EUR";
 }
 

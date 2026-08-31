@@ -18,7 +18,13 @@ import { CorridorMap } from "@/components/CorridorMap";
 import { LezMonitor, MotorhomeClearanceRadar, TransponderSelector } from "@/components/ComplianceModules";
 import { CurrencyPills } from "@/components/CurrencySelector";
 import { PrintItinerary } from "@/components/PrintItinerary";
-import { RATES_UPDATED, useMoney } from "@/lib/currency";
+import {
+  RATES_UPDATED,
+  convert,
+  currencyFromSymbol,
+  formatCurrency,
+  useMoney,
+} from "@/lib/currency";
 import { useLocale, useT, useTr } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import {
@@ -108,6 +114,8 @@ export function TripResults({
   const rvPois = RV_POIS[region];
   const trip = trips[active];
   const m = useMoney(trip.currency);
+  const nativePrice = (value: number, symbol: string) =>
+    formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
   const comparison = variantComparison(trips.fastest, trip);
   const title = `${origin || t.results.yourStart} → ${destination || t.results.yourDestination}`;
   const showNorway = region === "eu" && routeTouchesNorway(origin, destination);
@@ -454,7 +462,7 @@ export function TripResults({
                     <p className="text-xs text-muted-foreground">{v.system}</p>
                   </div>
                   <p className="text-right text-sm font-semibold text-primary">
-                    {v.exempt ? t.results.exempt : `${v.currency}${v.cost.toFixed(2)}`}
+                    {v.exempt ? t.results.exempt : nativePrice(v.cost, v.currency)}
                   </p>
                 </div>
 
@@ -463,7 +471,7 @@ export function TripResults({
                 </p>
                 {v.saved > 0 && (
                   <p className="mt-2 text-xs font-medium text-emerald-400">
-                    💡 {t.results.savesVs(`${v.currency}${v.saved.toFixed(2)}`, `${v.baselineLabel} (${v.currency}${v.baselineCost.toFixed(2)})`)}
+                    💡 {t.results.savesVs(nativePrice(v.saved, v.currency), `${v.baselineLabel} (${nativePrice(v.baselineCost, v.currency)})`)}
                   </p>
                 )}
                 <p className="mt-2 text-sm text-foreground/80">{tr(v.note)}</p>
