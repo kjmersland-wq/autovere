@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
 import { Download, Plus } from "lucide-react";
 
 import { SiteHeader } from "@/components/SiteHeader";
@@ -54,6 +55,16 @@ const TRIPS = [
 ];
 
 function GaragePage() {
+  const [saved, setSaved] = useState<typeof TRIPS>([]);
+  useEffect(() => {
+    try {
+      setSaved(JSON.parse(localStorage.getItem("autovere.savedTrips") ?? "[]"));
+    } catch {
+      setSaved([]);
+    }
+  }, []);
+  const trips = [...saved, ...TRIPS];
+
   return (
     <main className="min-h-screen">
       <SiteHeader />
@@ -102,7 +113,7 @@ function GaragePage() {
           <div>
             <h2 className="text-lg font-semibold tracking-tight">🗺️ Saved Adventures</h2>
             <div className="mt-4 grid gap-4">
-              {TRIPS.map((t) => (
+              {trips.map((t) => (
                 <article
                   key={t.name}
                   className="glass-panel flex flex-wrap items-center justify-between gap-4 rounded-2xl p-5"

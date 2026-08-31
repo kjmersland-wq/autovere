@@ -108,8 +108,14 @@ export type TollLine = {
   place: string;
   detail: string;
   amount: number;
-  badge?: string;
+  badge?: string | undefined;
+  /** Official purchase / payment portal */
+  portal?: { label: string; url: string };
+  /** Motorcycles ride free (e.g. Norwegian city rings) */
+  freeForMotorcycle?: boolean;
 };
+
+export type SafetySection = { heading: string; items: string[] };
 
 export type TripEstimate = {
   currency: string;
@@ -119,11 +125,13 @@ export type TripEstimate = {
   distanceKm: number;
   driveTime: string;
   tolls: number;
+  ferries: number;
   energyCost: number;
   energyLabel: string;
   energyAmount: string;
   segments: { country: string; total: number; lines: TollLine[] }[];
-  safety: { title: string; tips: string[] };
+  safety: { title: string; sections: SafetySection[] };
+  discountNote?: string | undefined;
 };
 
 const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
@@ -139,41 +147,113 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
       country: "🇦🇹 Austria",
       total: 34.6,
       lines: [
-        { place: "Digital vignette", detail: "10-day pass, valid nationwide", amount: 12.4, badge: "Buy online" },
-        { place: "Brenner Pass A13", detail: "Section toll, one way", amount: 11.1, badge: "Buy online" },
-        { place: "Tauern tunnel", detail: "Section toll, one way", amount: 11.1 },
+        {
+          place: "Digital vignette",
+          detail: "10-day pass, valid nationwide",
+          amount: 12.4,
+          badge: "Buy online",
+          portal: { label: "ASFINAG", url: "https://shop.asfinag.at/" },
+        },
+        {
+          place: "Brenner Pass A13",
+          detail: "Section toll, one way",
+          amount: 11.1,
+          badge: "Buy online",
+          portal: { label: "ASFINAG", url: "https://shop.asfinag.at/" },
+        },
+        {
+          place: "Tauern tunnel",
+          detail: "Section toll, one way",
+          amount: 11.1,
+          portal: { label: "ASFINAG", url: "https://www.asfinag.at/maut-vignette/streckenmaut/" },
+        },
       ],
     },
     {
       country: "🇨🇭 Switzerland",
       total: 42.5,
-      lines: [{ place: "E-vignette", detail: "Annual e-vignette, plate-linked", amount: 42.5, badge: "Buy online" }],
+      lines: [
+        {
+          place: "E-vignette",
+          detail: "Annual e-vignette, plate-linked",
+          amount: 42.5,
+          badge: "Buy online",
+          portal: { label: "via.admin.ch", url: "https://via.admin.ch/shop/dashboard" },
+        },
+      ],
     },
     {
       country: "🇮🇹 Italy",
       total: 61.8,
       lines: [
-        { place: "A22 Brennero → Modena", detail: "Ticket system, 8 checkpoints", amount: 38.9 },
-        { place: "A1 Firenze → Roma", detail: "Ticket system, 5 checkpoints", amount: 22.9 },
+        {
+          place: "A22 Brennero → Modena",
+          detail: "Ticket system, 8 checkpoints",
+          amount: 38.9,
+          badge: "Telepass",
+          portal: { label: "Telepass", url: "https://www.telepass.com/en/" },
+        },
+        {
+          place: "A1 Firenze → Roma",
+          detail: "Ticket system, 5 checkpoints",
+          amount: 22.9,
+          portal: { label: "Telepass", url: "https://www.telepass.com/en/" },
+        },
+      ],
+    },
+    {
+      country: "🇳🇴 Norway",
+      total: 18.4,
+      lines: [
+        {
+          place: "Oslo & Bergen city rings",
+          detail: "AutoPASS gantries — motorcycles pass free",
+          amount: 18.4,
+          badge: "AutoPASS",
+          freeForMotorcycle: true,
+          portal: { label: "AutoPASS", url: "https://www.autopass.no/en/" },
+        },
       ],
     },
     {
       country: "⛴️ Ferries",
       total: 78,
-      lines: [{ place: "Naples → Capri", detail: "Vehicle + 2 passengers", amount: 78, badge: "Reserve seat" }],
+      lines: [
+        {
+          place: "Naples → Capri",
+          detail: "Vehicle + 2 passengers",
+          amount: 78,
+          badge: "Reserve seat",
+          portal: { label: "Direct Ferries", url: "https://www.directferries.com/" },
+        },
+      ],
     },
   ],
   us: [
     {
       country: "🏙️ Illinois",
       total: 14.2,
-      lines: [{ place: "I-90 Jane Addams Tollway", detail: "6 gantries, I-PASS rate", amount: 14.2, badge: "I-PASS" }],
+      lines: [
+        {
+          place: "I-90 Jane Addams Tollway",
+          detail: "6 gantries, I-PASS rate",
+          amount: 14.2,
+          badge: "I-PASS",
+          portal: { label: "Illinois Tollway", url: "https://www.illinoistollway.com/" },
+        },
+      ],
     },
     {
       country: "🌄 Colorado",
       total: 21.5,
       lines: [
-        { place: "E-470 Express", detail: "Plate-pay surcharge included", amount: 15.5, badge: "ExpressToll" },
+        {
+          place: "E-470 Express",
+          detail: "Plate-pay surcharge included",
+          amount: 15.5,
+          badge: "ExpressToll",
+          portal: { label: "ExpressToll", url: "https://www.expresstoll.com/" },
+        },
         { place: "I-70 Mountain Express Lane", detail: "Peak weekend rate", amount: 6 },
       ],
     },
@@ -181,15 +261,42 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
       country: "🌉 California",
       total: 26,
       lines: [
-        { place: "Golden Gate Bridge", detail: "Southbound, FasTrak", amount: 9.75, badge: "FasTrak" },
+        {
+          place: "Golden Gate Bridge",
+          detail: "Southbound, FasTrak",
+          amount: 9.75,
+          badge: "FasTrak",
+          portal: { label: "FasTrak", url: "https://www.bayareafastrak.org/" },
+        },
         { place: "Bay Bridge", detail: "Weekday peak", amount: 8.25 },
         { place: "SR-91 Express Lanes", detail: "Evening rate", amount: 8 },
       ],
     },
     {
+      country: "🌴 Florida",
+      total: 18.6,
+      lines: [
+        {
+          place: "Florida Turnpike (Orlando → Miami)",
+          detail: "SunPass rate, 9 gantries",
+          amount: 18.6,
+          badge: "SunPass",
+          portal: { label: "SunPass", url: "https://www.sunpass.com/" },
+        },
+      ],
+    },
+    {
       country: "⛴️ Ferries",
       total: 62,
-      lines: [{ place: "Anacortes → Friday Harbor", detail: "Vehicle under 22ft + driver", amount: 62, badge: "Reserve" }],
+      lines: [
+        {
+          place: "Anacortes → Friday Harbor",
+          detail: "Vehicle under 22ft + driver",
+          amount: 62,
+          badge: "Reserve",
+          portal: { label: "WA State Ferries", url: "https://wsdot.com/travel/washington-state-ferries" },
+        },
+      ],
     },
   ],
   ca: [
@@ -197,8 +304,19 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
       country: "🍁 Ontario",
       total: 39.4,
       lines: [
-        { place: "Highway 407 ETR", detail: "Peak rate, transponder", amount: 31.4, badge: "407 tag" },
-        { place: "Video toll charge", detail: "Per-trip camera fee", amount: 8 },
+        {
+          place: "Highway 407 ETR",
+          detail: "Peak rate, transponder",
+          amount: 31.4,
+          badge: "407 tag",
+          portal: { label: "407 ETR", url: "https://www.407etr.com/" },
+        },
+        {
+          place: "Video toll charge",
+          detail: "Per-trip camera fee",
+          amount: 8,
+          portal: { label: "407 ETR", url: "https://www.407etr.com/en/tolls/tolls/toll-rates.html" },
+        },
       ],
     },
     {
@@ -215,38 +333,100 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
       country: "⛴️ Ferries",
       total: 96,
       lines: [
-        { place: "Tsawwassen → Swartz Bay", detail: "Vehicle under 20ft + 2 adults", amount: 96, badge: "Reserve" },
+        {
+          place: "Tsawwassen → Swartz Bay",
+          detail: "Vehicle under 20ft + 2 adults",
+          amount: 96,
+          badge: "Reserve",
+          portal: { label: "BC Ferries", url: "https://www.bcferries.com/" },
+        },
       ],
     },
   ],
 };
 
-const SAFETY: Record<VehicleKey, { title: string; tips: string[] }> = {
-  motorcycle: {
-    title: "Rider Safety Radar",
-    tips: [
-      "Rider Tip: High-vis vest and CE-approved gloves are required across French borders — pack them on top.",
-      "Alpine pass alert: Furka Pass is clear and open today, with dry tarmac forecast until early evening.",
-      "Fuel stops are spaced under 180 km the whole way, so your tank range is comfortably covered.",
-    ],
-  },
-  motorhome: {
-    title: "Camper Safety Radar",
-    tips: [
-      "Camper Tip: Route fully verified for vehicles under 3.5t and 3.2 m height clearance.",
-      "Three overnight-friendly service areas with fresh water and grey-water disposal sit along the way.",
-      "One narrow village bypass was swapped for a wider valley road — smoother and calmer driving.",
-    ],
-  },
-  car: {
-    title: "Driver Safety Radar",
-    tips: [
-      "Driver Tip: Winter equipment rules apply on the alpine section between October and April.",
-      "Rest stops are mapped every 2 hours so the drive stays fresh and relaxed.",
-      "Toll gantries on this route all accept contactless cards — no cash needed.",
-    ],
-  },
+
+const PASSES: Record<RegionKey, string[]> = {
+  eu: [
+    "Stelvio Pass (2,757 m) — 48 hairpins, open, dry tarmac forecast until early evening.",
+    "Grossglockner High Alpine Road — toll road, gates close at 21:00; ride it before dusk.",
+    "Furka Pass — clear and open today, light crosswinds on the western ramp.",
+    "Trollstigen — single-lane sections with tourist traffic; take the early morning slot.",
+  ],
+  us: ["Tail of the Dragon (US-129) — 318 curves in 11 miles; watch for gravel on the inside lines."],
+  ca: ["Icefields Parkway — stunning but exposed; wildlife on the road at dawn and dusk."],
 };
+
+function safetyFor(region: RegionKey, vehicle: VehicleKey) {
+  if (vehicle === "motorcycle") {
+    return {
+      title: "Rider Safety & Gear Radar",
+      sections: [
+        {
+          heading: "🧤 Gear & legal kit",
+          items: [
+            "France: CE-approved gloves are mandatory for rider and pillion, and a high-vis vest must be carried within reach.",
+            "Austria & Germany: carry a first-aid kit meeting DIN 13167 (motorcycle standard) — small, and checked at roadside stops.",
+            "Keep your vest, kit and documents on top of the pannier so a check takes seconds.",
+          ],
+        },
+        {
+          heading: "🏔️ Mountain pass alerts",
+          items: [...PASSES[region], ...(region === "eu" ? [] : PASSES.eu.slice(0, 2))],
+        },
+        {
+          heading: "⛽ Long-stretch fuel alerts",
+          items: [
+            "Two stretches exceed 180 km between open stations — top up before the pass climbs.",
+            "Night-time pumps on the alpine leg are card-only; carry a backup card.",
+          ],
+        },
+      ],
+    };
+  }
+  if (vehicle === "motorhome") {
+    return {
+      title: "Camper Clearance & Weight Radar",
+      sections: [
+        {
+          heading: "📏 Clearance warnings",
+          items: [
+            "Two tunnels on this route cap height at 3.2 m — your 3.05 m profile clears with margin.",
+            "One low village archway (2.9 m) was bypassed via the valley road automatically.",
+          ],
+        },
+        {
+          heading: "⚖️ Weight & axle limits",
+          items: [
+            "Route verified for vehicles up to 3.5 t; a 7.5 t restriction on the old pass road is avoided.",
+            "Crosswind advisory on the coastal bridge section — reduce speed with a high side profile.",
+          ],
+        },
+        {
+          heading: "🛠️ Services",
+          items: [
+            "Three overnight-friendly service areas with fresh water and grey-water disposal along the way.",
+          ],
+        },
+      ],
+    };
+  }
+  return {
+    title: "Driver Safety Radar",
+    sections: [
+      {
+        heading: "🚗 On the road",
+        items: [
+          "Winter equipment rules apply on the alpine section between October and April.",
+          "Rest stops are mapped every 2 hours so the drive stays fresh and relaxed.",
+          "Every toll gantry on this route accepts contactless cards — no cash needed.",
+        ],
+      },
+      { heading: "🏔️ Pass conditions", items: PASSES[region] },
+    ],
+  };
+}
+
 
 export function estimateTrip(
   region: RegionKey,
@@ -262,16 +442,31 @@ export function estimateTrip(
   const baseDistance = region === "eu" ? 1420 : region === "us" ? 1890 : 1640;
   const distanceKm = Math.round(baseDistance * (scenic ? 1.08 : 1));
 
+  const isMoto = vehicle === "motorcycle";
+  const round2 = (n: number) => Math.round(n * 100) / 100;
+  const mapLines = (lines: TollLine[], factor: number) =>
+    lines.map((l) => ({
+      ...l,
+      amount: isMoto && l.freeForMotorcycle ? 0 : round2(l.amount * factor),
+      badge: isMoto && l.freeForMotorcycle ? "Free for motorcycles" : l.badge,
+    }));
+
   let segments = SEGMENTS[region];
   if (!includeFerries) segments = segments.filter((s) => !s.country.includes("Ferries"));
-  if (avoidTolls)
-    segments = segments.map((s) =>
-      s.country.includes("Ferries")
-        ? s
-        : { ...s, total: Math.round(s.total * 0.25 * 10) / 10, lines: s.lines.map((l) => ({ ...l, amount: Math.round(l.amount * 0.25 * 100) / 100 })) },
-    );
 
-  const tolls = Math.round(segments.reduce((sum, s) => sum + s.total, 0) * 100) / 100;
+  const motoFactor = isMoto ? 0.6 : 1;
+  segments = segments.map((s) => {
+    const tollFactor = s.country.includes("Ferries") || !avoidTolls ? 1 : 0.25;
+    const lines = mapLines(s.lines, tollFactor * motoFactor);
+    return { ...s, lines, total: round2(lines.reduce((sum, l) => sum + l.amount, 0)) };
+  });
+
+  const ferries = round2(
+    segments.filter((s) => s.country.includes("Ferries")).reduce((sum, s) => sum + s.total, 0),
+  );
+  const tolls = round2(
+    segments.filter((s) => !s.country.includes("Ferries")).reduce((sum, s) => sum + s.total, 0),
+  );
 
   const consumption =
     vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
@@ -281,8 +476,8 @@ export function estimateTrip(
 
   const energyCost =
     fuel === "electric"
-      ? Math.round(((distanceKm / 100) * kwhPer100 * pricePerKwh) * 100) / 100
-      : Math.round(((distanceKm / 100) * consumption * pricePerL) * 100) / 100;
+      ? round2((distanceKm / 100) * kwhPer100 * pricePerKwh)
+      : round2((distanceKm / 100) * consumption * pricePerL);
 
   const litres = (distanceKm / 100) * consumption;
   const energyAmount =
@@ -303,17 +498,22 @@ export function estimateTrip(
     currency,
     units: defaults.units,
     distanceLabel,
-    budget: Math.round((tolls + energyCost + distanceKm * 0.04) * 100) / 100,
+    budget: round2(tolls + ferries + energyCost + distanceKm * 0.04),
     distanceKm,
     driveTime,
     tolls,
+    ferries,
     energyCost,
     energyLabel: fuel === "electric" ? "EV Charging" : "Fuel",
     energyAmount,
     segments,
-    safety: SAFETY[vehicle],
+    safety: safetyFor(region, vehicle),
+    discountNote: isMoto
+      ? "Motorcycle rates applied: ~40% indicative discount on distance tolls, vignettes and ferries — and 0 in Norwegian city rings."
+      : undefined,
   };
 }
+
 
 export function money(currency: string, value: number) {
   return `${currency}${value.toLocaleString("en-GB", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;

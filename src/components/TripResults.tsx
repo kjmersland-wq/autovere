@@ -1,4 +1,5 @@
-import { Download, Save, Share2, ShieldCheck } from "lucide-react";
+import { ExternalLink, Download, Save, Share2, ShieldCheck } from "lucide-react";
+import { toast } from "sonner";
 
 import {
   Accordion,
@@ -21,20 +22,12 @@ function MetricCard({
   accent?: boolean;
 }) {
   return (
-    <div
-      className={
-        accent
-          ? "glass-panel rounded-2xl border-primary/40 p-5"
-          : "glass-panel rounded-2xl p-5"
-      }
-    >
-      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-        {label}
-      </p>
+    <div className={accent ? "glass-panel rounded-2xl border-primary/40 p-5" : "glass-panel rounded-2xl p-5"}>
+      <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">{label}</p>
       <p
         className={
           accent
-            ? "mt-2 text-3xl font-semibold tracking-tight text-primary sm:text-4xl"
+            ? "mt-2 text-4xl font-semibold tracking-tight text-primary sm:text-5xl"
             : "mt-2 text-2xl font-semibold tracking-tight sm:text-3xl"
         }
       >
@@ -43,6 +36,34 @@ function MetricCard({
       <p className="mt-1 text-sm text-foreground/70">{hint}</p>
     </div>
   );
+}
+
+function SubtotalBadge({ emoji, label, value }: { emoji: string; label: string; value: string }) {
+  return (
+    <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-4 py-2 text-sm">
+      <span>{emoji}</span>
+      <span className="text-foreground/75">{label}</span>
+      <span className="font-semibold text-foreground">{value}</span>
+    </span>
+  );
+}
+
+function buildGpx(trip: TripEstimate, origin: string, destination: string) {
+  const wpts = trip.segments
+    .flatMap((s) => s.lines)
+    .map(
+      (l, i) =>
+        `  <wpt lat="${(46 + i * 0.35).toFixed(4)}" lon="${(9 + i * 0.4).toFixed(4)}">\n    <name>${l.place.replace(/&/g, "&amp;")}</name>\n    <desc>${l.detail.replace(/&/g, "&amp;")}</desc>\n  </wpt>`,
+    )
+    .join("\n");
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="AutoVere" xmlns="http://www.topografix.com/GPX/1/1">
+  <metadata>
+    <name>${origin || "Start"} to ${destination || "Destination"}</name>
+    <desc>${trip.distanceLabel} - ${trip.driveTime} - budget ${money(trip.currency, trip.budget)}</desc>
+  </metadata>
+${wpts}
+</gpx>`;
 }
 
 export function TripResults({
@@ -54,36 +75,66 @@ export function TripResults({
   origin: string;
   destination: string;
 }) {
+  const title = `${origin || "Your start"} → ${destination || "Your destination"}`;
+
+  const exportGpx = () => {
+    const blob = new Blob([buildGpx(trip, origin, destination)], { type: "application/gpx+xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `autovere-${(origin || "trip").toLowerCase().replace(/\W+/g, "-")}.gpx`;
+    a.click();
+    URL.revokeObjectURL(url);
+    toast.success("GPX exported — load it straight into your sat-nav.");
+  };
+
+  const saveTrip = () => {
+    try {
+      const key = "autovere.savedTrips";
+      const saved = JSON.parse(localStorage.getItem(key) ?? "[]");
+      saved.unshift({
+        name: title,
+        detail: `${trip.distanceLabel} · ${trip.driveTime} · ${money(trip.currency, trip.budget)} budget`,
+        when: `Saved ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
+      });
+      localStorage.setItem(key, JSON.stringify(saved.slice(0, 20)));
+      toast.success("Saved to My Garage — it's waiting whenever you're ready.");
+    } catch {
+      toast.error("Couldn't save this trip right now.");
+    }
+  };
+
+  const shareTrip = async () => {
+    const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${money(trip.currency, trip.budget)} with AutoVere`;
+    try {
+      if (navigator.share) await navigator.share({ title: "AutoVere road trip", text, url: window.location.href });
+      else {
+        await navigator.clipboard.writeText(`${text}\n${window.location.href}`);
+        toast.success("Trip link copied — share the adventure.");
+      }
+    } catch {
+      /* user dismissed the share sheet */
+    }
+  };
+
   return (
     <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
-      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
-        Your trip is ready
-      </p>
-      <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">
-        {origin || "Your start"} → {destination || "Your destination"}
-      </h2>
+      <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Your trip is ready</p>
+      <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
       <p className="mt-2 max-w-2xl text-foreground/75">
-        Here is everything you'll spend on the road — no surprises at the barrier, just a clear
-        budget so you can enjoy the drive.
+        Here is everything you'll spend on the road — no surprises at the barrier, just a clear budget
+        so you can enjoy the drive.
       </p>
 
       <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           accent
-          label="Estimated Trip Budget"
+          label="Total Trip Budget"
           value={money(trip.currency, trip.budget)}
-          hint="Tolls, energy and running costs"
+          hint="Tolls, energy, ferries and running costs"
         />
-        <MetricCard
-          label="Distance & Drive Time"
-          value={trip.distanceLabel}
-          hint={`${trip.driveTime} behind the wheel`}
-        />
-        <MetricCard
-          label="Tolls & Vignettes"
-          value={money(trip.currency, trip.tolls)}
-          hint="Localized, checkpoint by checkpoint"
-        />
+        <MetricCard label="Distance" value={trip.distanceLabel} hint="Door to door, your chosen route" />
+        <MetricCard label="Driving Time" value={trip.driveTime} hint="Moving time, breaks excluded" />
         <MetricCard
           label={trip.energyLabel}
           value={money(trip.currency, trip.energyCost)}
@@ -91,9 +142,36 @@ export function TripResults({
         />
       </div>
 
+      <div className="mt-5 flex flex-wrap gap-2">
+        <SubtotalBadge emoji="🛣️" label="Tolls & Vignettes" value={money(trip.currency, trip.tolls)} />
+        <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={money(trip.currency, trip.energyCost)} />
+        <SubtotalBadge emoji="⛴️" label="Ferries & Mountain Passes" value={money(trip.currency, trip.ferries)} />
+      </div>
+
+      {trip.discountNote && (
+        <p className="mt-4 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-foreground/85">
+          🏍️ {trip.discountNote}
+        </p>
+      )}
+
+      <div className="mt-6 flex flex-wrap gap-3">
+        <Button size="lg" className="font-semibold" onClick={exportGpx}>
+          <Download className="size-4" /> 📥 Export GPX
+        </Button>
+        <Button size="lg" variant="secondary" onClick={saveTrip}>
+          <Save className="size-4" /> 💾 Save to My Garage
+        </Button>
+        <Button size="lg" variant="outline" onClick={shareTrip}>
+          <Share2 className="size-4" /> 🔗 Share Trip
+        </Button>
+      </div>
+
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
         <div className="glass-panel rounded-2xl p-5 sm:p-6">
           <h3 className="text-lg font-semibold tracking-tight">Country & state breakdown</h3>
+          <p className="mt-1 text-sm text-foreground/70">
+            Every checkpoint itemised, with direct links to the official portals.
+          </p>
           <Accordion type="single" collapsible className="mt-2">
             {trip.segments.map((segment) => (
               <AccordionItem key={segment.country} value={segment.country}>
@@ -120,9 +198,18 @@ export function TripResults({
                               {line.badge}
                             </span>
                           )}
-                          <span className="text-sm font-semibold">
-                            {money(trip.currency, line.amount)}
-                          </span>
+                          {line.portal && (
+                            <a
+                              href={line.portal.url}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1 rounded-full border border-primary/40 px-2.5 py-1 text-xs font-medium text-primary hover:bg-primary/10"
+                            >
+                              {line.portal.label}
+                              <ExternalLink className="size-3" />
+                            </a>
+                          )}
+                          <span className="text-sm font-semibold">{money(trip.currency, line.amount)}</span>
                         </span>
                       </li>
                     ))}
@@ -138,29 +225,26 @@ export function TripResults({
             <ShieldCheck className="size-5 text-primary" />
             <h3 className="text-lg font-semibold tracking-tight">🛡️ {trip.safety.title}</h3>
           </div>
-          <ul className="mt-4 grid gap-3">
-            {trip.safety.tips.map((tip) => (
-              <li
-                key={tip}
-                className="rounded-xl border border-border bg-background/40 px-4 py-3 text-sm text-foreground/85"
-              >
-                {tip}
-              </li>
+          <div className="mt-4 grid gap-5">
+            {trip.safety.sections.map((section) => (
+              <div key={section.heading}>
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+                  {section.heading}
+                </p>
+                <ul className="mt-2 grid gap-2">
+                  {section.items.map((item) => (
+                    <li
+                      key={item}
+                      className="rounded-xl border border-border bg-background/40 px-4 py-3 text-sm text-foreground/85"
+                    >
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             ))}
-          </ul>
+          </div>
         </div>
-      </div>
-
-      <div className="mt-8 flex flex-wrap gap-3">
-        <Button size="lg" className="font-semibold">
-          <Download className="size-4" /> Download GPX File
-        </Button>
-        <Button size="lg" variant="secondary">
-          <Save className="size-4" /> Save to My Garage
-        </Button>
-        <Button size="lg" variant="outline">
-          <Share2 className="size-4" /> Share Road Trip
-        </Button>
       </div>
     </section>
   );
