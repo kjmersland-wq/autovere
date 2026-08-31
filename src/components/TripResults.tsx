@@ -11,12 +11,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
+import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { cn } from "@/lib/utils";
 import {
   money,
   ROUTE_VARIANTS,
   RV_POIS,
   SCENIC_HIGHLIGHTS,
+  detectScandiBridges,
+  routeTouchesNorway,
   variantComparison,
   type EmissionBadge,
   type FerryCrossing,
@@ -92,6 +95,8 @@ export function TripResults({
   const trip = trips[active];
   const comparison = variantComparison(trips.fastest, trip);
   const title = `${origin || "Your start"} → ${destination || "Your destination"}`;
+  const showNorway = region === "eu" && routeTouchesNorway(origin, destination);
+  const bridges = detectScandiBridges(region, origin, destination);
 
 
   const saveTrip = () => {
@@ -231,6 +236,9 @@ export function TripResults({
       </div>
 
       <RouteExportPanel trip={trip} origin={origin} destination={destination} />
+
+      {showNorway && <NorwayAutoPassCard isMotorcycle={isMotorcycle} />}
+      <ScandiBridgeCard bridges={bridges} isMotorcycle={isMotorcycle} />
 
       {ferryCrossings.length > 0 && (
         <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
