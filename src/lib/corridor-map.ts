@@ -173,6 +173,7 @@ export function buildCorridorPois({
       atKm,
       atLabel: kmLabel(trip.units, atKm),
       progress,
+      icon: brandIcon(name, layer),
       ...extra,
     });
   };
@@ -200,12 +201,21 @@ export function buildCorridorPois({
     push("rv", p, base, "Dump station · fresh water · overnight pitches");
   }
 
+  const viewCount = Math.min(4, Math.max(2, Math.round(total / 260)));
+  for (let i = 0; i < viewCount; i += 1) {
+    const p = (i + 0.35) / (viewCount + 0.3);
+    const spot = VIEWPOINTS[region][Math.floor(rnd() * VIEWPOINTS[region].length)]!;
+    push("view", p, spot.name, spot.detail, { icon: "🌄" });
+  }
+
   passes.slice(0, 4).forEach((pass, i) => {
-    push("pass", 0.25 + i * 0.18, pass.name, pass.detail, { status: pass.status });
+    push("pass", 0.25 + i * 0.18, pass.name, pass.detail, { status: pass.status, icon: "🏔️" });
   });
 
   ferryNames.slice(0, 3).forEach((name, i) => {
-    push("ferry", 0.35 + i * 0.22, name, "Ferry terminal · check-in 30 min before departure");
+    push("ferry", 0.35 + i * 0.22, name, "Ferry terminal · check-in 30 min before departure", {
+      icon: "⛴️",
+    });
   });
 
   return pois.sort((a, b) => a.atKm - b.atKm);
