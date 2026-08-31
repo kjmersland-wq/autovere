@@ -510,6 +510,17 @@ export function TripResults({
         </div>
       )}
 
+      <PassBorderIntel
+        region={region}
+        origin={origin}
+        destination={destination}
+        vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"}
+        {...(onAddStop ? { onAddStop } : {})}
+        onUseSmartBypass={() => setActive("smart")}
+      />
+
+
+
       <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
