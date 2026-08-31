@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { Check, Gauge, MapPin, Route as RouteIcon, Tag } from "lucide-react";
 
 import heroImage from "@/assets/hero-roadtrip.jpg";
+import { CountryCostDrawer } from "@/components/CountryCostDrawer";
+
 import { SiteHeader } from "@/components/SiteHeader";
 import { TripResults } from "@/components/TripResults";
 import { Button } from "@/components/ui/button";
@@ -314,6 +316,16 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       <div id="trip-results">
         {trip && <TripResults trip={trip} origin={origin} destination={destination} />}
       </div>
+
+      <CountryCostDrawer
+        defaultGroup={region === "us" ? "us" : region === "ca" ? "ca" : "western"}
+        onPlanRoute={(c) => {
+          setDestination(c.name);
+          setActiveQuick(null);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      />
+
     </>
   );
 }
