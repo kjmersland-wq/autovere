@@ -1,4 +1,8 @@
 import type { FlagCode } from "@/components/FlagIcon";
+import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
+
+export type { TripType };
+
 
 export type RegionKey = "eu" | "us" | "ca";
 
