@@ -77,15 +77,23 @@ ${wpts}
 }
 
 export function TripResults({
-  trip,
+  trips,
   origin,
   destination,
+  ferryCrossings,
+  isMotorcycle,
 }: {
-  trip: TripEstimate;
+  trips: Record<RouteVariantKey, TripEstimate>;
   origin: string;
   destination: string;
+  ferryCrossings: FerryCrossing[];
+  isMotorcycle: boolean;
 }) {
+  const [active, setActive] = useState<RouteVariantKey>("fastest");
+  const trip = trips[active];
+  const comparison = variantComparison(trips.fastest, trip);
   const title = `${origin || "Your start"} → ${destination || "Your destination"}`;
+
 
   const exportGpx = () => {
     const blob = new Blob([buildGpx(trip, origin, destination)], { type: "application/gpx+xml" });
