@@ -84,7 +84,7 @@ export function CorridorMap({
         trip,
         origin: from,
         destination: to,
-        ferryNames: ferryCrossings.map((f) => `⛴️ ${f.name}`),
+        ferryNames: ferryCrossings.map((f) => `⛴️ ${f.route}`),
         passes,
       }),
     [region, trip, from, to, ferryCrossings, passes],
