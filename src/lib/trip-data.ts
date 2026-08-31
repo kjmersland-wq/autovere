@@ -612,6 +612,7 @@ export function estimateTrip(
   includeFerries: boolean,
   scenic: boolean,
   variant: RouteVariantKey = "fastest",
+  extraStops = 0,
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -619,7 +620,9 @@ export function estimateTrip(
   const currency = defaults.currency;
   const imperial = defaults.units === "imperial";
   const baseDistance = region === "eu" ? 1420 : region === "us" ? 1890 : 1640;
-  const distanceKm = Math.round(baseDistance * (scenic ? 1.08 : 1) * tuning.distance);
+  const distanceKm = Math.round(
+    baseDistance * (scenic ? 1.08 : 1) * tuning.distance * (1 + 0.035 * extraStops),
+  );
 
   const isMoto = vehicle === "motorcycle";
   const round2 = (n: number) => Math.round(n * 100) / 100;
