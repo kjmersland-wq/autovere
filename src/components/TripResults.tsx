@@ -250,9 +250,6 @@ export function TripResults({
       )}
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Button size="lg" className="font-semibold" onClick={exportGpx}>
-          <Download className="size-4" /> 📥 Export GPX
-        </Button>
         <Button size="lg" variant="secondary" onClick={saveTrip}>
           <Save className="size-4" /> 💾 Save to My Garage
         </Button>
@@ -260,6 +257,8 @@ export function TripResults({
           <Share2 className="size-4" /> 🔗 Share Trip
         </Button>
       </div>
+
+      <RouteExportPanel trip={trip} origin={origin} destination={destination} />
 
       {ferryCrossings.length > 0 && (
         <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
