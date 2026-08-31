@@ -114,7 +114,11 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               return (
                 <DropdownMenuItem
                   key={l.code}
-                  onSelect={() => setLang(l)}
+                  onSelect={() => {
+                    setLang(l);
+                    const target = pathForLang(pathname, l.code);
+                    if (target !== pathname) void navigate({ to: target });
+                  }}
                   aria-label={l.label}
                   className={cn(
                     "flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-semibold tracking-wide transition-colors",
