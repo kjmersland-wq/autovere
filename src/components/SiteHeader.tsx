@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 
 import { CurrencySelector } from "@/components/CurrencySelector";
