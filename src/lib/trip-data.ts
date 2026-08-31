@@ -1,3 +1,5 @@
+import type { FlagCode } from "@/components/FlagIcon";
+
 export type RegionKey = "eu" | "us" | "ca";
 
 export const REGIONS: { key: RegionKey; label: string; flag: string; to: "/" | "/us" | "/ca" }[] = [
@@ -6,14 +8,15 @@ export const REGIONS: { key: RegionKey; label: string; flag: string; to: "/" | "
   { key: "ca", label: "Canada", flag: "🇨🇦", to: "/ca" },
 ];
 
-export const LANGUAGES = [
-  { code: "en", flag: "🇬🇧", label: "English" },
-  { code: "no", flag: "🇳🇴", label: "Norsk" },
-  { code: "de", flag: "🇩🇪", label: "Deutsch" },
-  { code: "fr", flag: "🇫🇷", label: "Français" },
-  { code: "nl", flag: "🇳🇱", label: "Nederlands" },
-  { code: "sv", flag: "🇸🇪", label: "Svenska" },
-  { code: "da", flag: "🇩🇰", label: "Dansk" },
+export const LANGUAGES: { code: string; flag: FlagCode; label: string }[] = [
+  { code: "en", flag: "GB", label: "English" },
+  { code: "no", flag: "NO", label: "Norsk" },
+  { code: "sv", flag: "SE", label: "Svenska" },
+  { code: "da", flag: "DK", label: "Dansk" },
+  { code: "de", flag: "DE", label: "Deutsch" },
+  { code: "nl", flag: "NL", label: "Nederlands" },
+  { code: "fr", flag: "FR", label: "Français" },
+  { code: "pl", flag: "PL", label: "Polski" },
 ];
 
 export const NAV_LINKS = [
