@@ -232,6 +232,25 @@ const en = {
     yourStart: "Your start",
     yourDestination: "Your destination",
   },
+  intel: {
+    passTitle: "🏔️ Iconic mountain pass radar",
+    passIntro:
+      "Seasonal windows, tolls and live-status pointers for the great passes on your corridor — so you arrive at the summit on a day it's genuinely open.",
+    elevation: "Elevation",
+    season: "Season",
+    toll: "Toll",
+    addStop: "+ Add as Stop",
+    liveStatus: "Live status",
+    tipsTitle: "💡 Cross-border fuel & cost arbitrage",
+    tipsIntro: "Small timing choices at the border add up to a very nice dinner at the other end.",
+    tipPrefix: "Border tip:",
+    crossTitle: "🛂 Border crossing checkpoints",
+    crossIntro:
+      "What to expect at each frontier on this route — have the paperwork ready and the crossing is a formality.",
+    wait: "Wait:",
+    schengen: "Schengen",
+    strict: "Passport & customs",
+  },
   footer: {
     tagline:
       "Cross-border road trip intelligence — tolls, vignettes, fuel, charging and ferries for cars, motorhomes and touring motorcycles.",
@@ -477,6 +496,25 @@ const no: Strings = {
     addItinerary: "Legg til i reiseplanen",
     yourStart: "Startstedet ditt",
     yourDestination: "Reisemålet ditt",
+  },
+  intel: {
+    passTitle: "🏔️ Radar for de store fjellovergangene",
+    passIntro:
+      "Sesong, bompenger og statuslenker for fjellovergangene på ruten din — slik at du kommer til toppen på en dag den faktisk er åpen.",
+    elevation: "Høyde",
+    season: "Sesong",
+    toll: "Avgift",
+    addStop: "+ Legg til som stopp",
+    liveStatus: "Oppdatert status",
+    tipsTitle: "💡 Smarte grensetips for drivstoff og kostnader",
+    tipsIntro: "Små valg ved grensen blir fort til en riktig god middag på andre siden.",
+    tipPrefix: "Grensetips:",
+    crossTitle: "🛂 Grensepasseringer",
+    crossIntro:
+      "Slik er det på hver grense på denne ruten — har du papirene klare, er passeringen en formalitet.",
+    wait: "Ventetid:",
+    schengen: "Schengen",
+    strict: "Pass og toll",
   },
   footer: {
     tagline: "Sømløs ruteplanlegging og kostnadskontroll på tvers av landegrenser.",

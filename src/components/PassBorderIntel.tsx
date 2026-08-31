@@ -8,6 +8,7 @@ import {
   passStatus,
   passTollForVehicle,
 } from "@/lib/pass-intel";
+import { useT, useTr } from "@/lib/i18n";
 import type { RegionKey, VehicleKey } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
 
@@ -38,6 +39,8 @@ export function PassBorderIntel({
   onAddStop?: (name: string) => void;
   onUseSmartBypass?: () => void;
 }) {
+  const t = useT();
+  const tr = useTr();
   const passes = detectMountainPasses(region, origin, destination);
   const tips = detectBorderTips(region, origin, destination);
   const crossings = detectBorderCrossings(region, origin, destination);
@@ -49,12 +52,11 @@ export function PassBorderIntel({
         <div className="flex items-center gap-2">
           <Mountain className="size-5 text-primary" />
           <h3 className="text-lg font-semibold tracking-tight">
-            🏔️ Iconic mountain pass radar
+            {t.intel.passTitle}
           </h3>
         </div>
         <p className="mt-1 text-sm text-foreground/70">
-          Seasonal windows, tolls and live-status pointers for the great passes on your corridor — so
-          you arrive at the summit on a day it's genuinely open.
+          {t.intel.passIntro}
         </p>
 
         <div className="mt-5 grid gap-4 lg:grid-cols-2">
@@ -65,9 +67,9 @@ export function PassBorderIntel({
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold">
-                      {p.emoji} {p.name}
+                      {p.emoji} {tr(p.name)}
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground">{p.where}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{tr(p.where)}</p>
                   </div>
                   <span
                     className={cn(
@@ -76,41 +78,41 @@ export function PassBorderIntel({
                     )}
                   >
                     <span className={cn("size-1.5 rounded-full", TONE_DOT[status.tone])} />
-                    {status.label}
+                    {tr(status.label)}
                   </span>
                 </div>
 
                 <dl className="mt-4 grid gap-2 text-sm">
                   <div className="flex gap-2">
                     <dt className="w-24 shrink-0 text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                      Elevation
+                      {t.intel.elevation}
                     </dt>
-                    <dd className="text-foreground/85">{p.elevation}</dd>
+                    <dd className="text-foreground/85">{tr(p.elevation)}</dd>
                   </div>
                   <div className="flex gap-2">
                     <dt className="w-24 shrink-0 text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                      Season
+                      {t.intel.season}
                     </dt>
-                    <dd className="text-foreground/85">{p.seasonLabel}</dd>
+                    <dd className="text-foreground/85">{tr(p.seasonLabel)}</dd>
                   </div>
                   <div className="flex gap-2">
                     <dt className="w-24 shrink-0 text-xs uppercase tracking-[0.12em] text-muted-foreground">
-                      Toll
+                      {t.intel.toll}
                     </dt>
-                    <dd className="font-medium text-amber-300">{passTollForVehicle(p, vehicle)}</dd>
+                    <dd className="font-medium text-amber-300">{tr(passTollForVehicle(p, vehicle))}</dd>
                   </div>
                 </dl>
 
-                <p className="mt-3 text-sm text-foreground/80">{p.advisory}</p>
+                <p className="mt-3 text-sm text-foreground/80">{tr(p.advisory)}</p>
                 {vehicle === "motorcycle" && p.motoNote && (
                   <p className="mt-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-foreground/90">
-                    🏍️ {p.motoNote}
+                    🏍️ {tr(p.motoNote)}
                   </p>
                 )}
 
                 <div className="mt-4 flex flex-wrap items-center gap-3">
                   <Button size="sm" variant="secondary" onClick={() => onAddStop?.(p.name)}>
-                    + Add as Stop
+                    {t.intel.addStop}
                   </Button>
                   <a
                     href={p.portalUrl}
@@ -118,7 +120,7 @@ export function PassBorderIntel({
                     rel="noopener noreferrer"
                     className="inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
                   >
-                    Live status · {p.portalLabel}
+                    {t.intel.liveStatus} · {p.portalLabel}
                     <ExternalLink className="size-3.5" />
                   </a>
                 </div>
@@ -134,34 +136,34 @@ export function PassBorderIntel({
           <div className="flex items-center gap-2">
             <Fuel className="size-5 text-primary" />
             <h3 className="text-lg font-semibold tracking-tight">
-              💡 Cross-border fuel &amp; cost arbitrage
+              {t.intel.tipsTitle}
             </h3>
           </div>
           <p className="mt-1 text-sm text-foreground/70">
-            Small timing choices at the border add up to a very nice dinner at the other end.
+            {t.intel.tipsIntro}
           </p>
 
           <div className="mt-5 grid gap-3 lg:grid-cols-2">
-            {tips.map((t) => (
+            {tips.map((tip) => (
               <article
-                key={t.id}
+                key={tip.id}
                 className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-5"
               >
                 <p className="text-sm font-semibold">
-                  {t.emoji} Border tip: {t.title}
+                  {tip.emoji} {t.intel.tipPrefix} {tr(tip.title)}
                 </p>
-                <p className="mt-2 text-sm text-foreground/85">{t.body}</p>
-                <p className="mt-3 text-sm font-semibold text-amber-300">{t.saving}</p>
-                {t.action && (
+                <p className="mt-2 text-sm text-foreground/85">{tr(tip.body)}</p>
+                <p className="mt-3 text-sm font-semibold text-amber-300">{tr(tip.saving)}</p>
+                {tip.action && (
                   <Button
                     size="sm"
                     variant="secondary"
                     className="mt-4"
                     onClick={() =>
-                      t.id === "ch-vignette" ? onUseSmartBypass?.() : onAddStop?.(t.title)
+                      tip.id === "ch-vignette" ? onUseSmartBypass?.() : onAddStop?.(tip.title)
                     }
                   >
-                    {t.action}
+                    {tr(tip.action)}
                   </Button>
                 )}
               </article>
@@ -175,12 +177,11 @@ export function PassBorderIntel({
         <div className="flex items-center gap-2">
           <ShieldCheck className="size-5 text-primary" />
           <h3 className="text-lg font-semibold tracking-tight">
-            🛂 Border crossing checkpoints
+            {t.intel.crossTitle}
           </h3>
         </div>
         <p className="mt-1 text-sm text-foreground/70">
-          What to expect at each frontier on this route — have the paperwork ready and the crossing is
-          a formality.
+          {t.intel.crossIntro}
         </p>
 
         <div className="mt-5 grid gap-4 lg:grid-cols-2">
@@ -197,9 +198,9 @@ export function PassBorderIntel({
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
                     <p className="text-sm font-semibold">
-                      {c.flags} {c.name}
+                      {c.flags} {tr(c.name)}
                     </p>
-                    <p className="mt-1 text-xs text-muted-foreground">Wait: {c.waitLabel}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{t.intel.wait} {tr(c.waitLabel)}</p>
                   </div>
                   <span
                     className={cn(
@@ -210,18 +211,18 @@ export function PassBorderIntel({
                     <span
                       className={cn("size-1.5 rounded-full", schengen ? TONE_DOT.open : TONE_DOT.warn)}
                     />
-                    {schengen ? "Schengen" : "Passport & customs"}
+                    {schengen ? t.intel.schengen : t.intel.strict}
                   </span>
                 </div>
 
-                <p className="mt-3 text-sm font-medium text-foreground/90">{c.statusLabel}</p>
-                <p className="mt-2 text-sm text-foreground/80">{c.body}</p>
+                <p className="mt-3 text-sm font-medium text-foreground/90">{tr(c.statusLabel)}</p>
+                <p className="mt-2 text-sm text-foreground/80">{tr(c.body)}</p>
 
                 <ul className="mt-4 grid gap-2 text-sm">
                   {c.requirements.map((r) => (
                     <li key={r} className="flex gap-2 text-foreground/85">
                       <span className="mt-0.5 text-primary">✓</span>
-                      <span>{r}</span>
+                      <span>{tr(r)}</span>
                     </li>
                   ))}
                 </ul>
