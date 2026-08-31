@@ -209,6 +209,98 @@ const COPY = {
       send: "Send message",
     },
   },
+  pl: {
+    eyebrow: "Partnerzy AutoVere",
+    title: "Daj swoim członkom 25% zniżki na AutoVere Pro.",
+    intro:
+      "AutoVere daje klubom motoryzacyjnym, organizacjom EV, kamperowym, karawaningowym i turystycznym prosty sposób, by zaoferować członkom coś naprawdę przydatnego: realne koszty podróży jeszcze przed wyjazdem — oraz 25% zniżki na AutoVere Pro, dzięki czemu decyzja jest łatwa.",
+    lead: "Z dumą współpracujemy z organizacjami, które pomagają swoim członkom podróżować dalej, mądrzej i bez przykrych niespodzianek.",
+    howItLooks: "TAK TO WYGLĄDA",
+    demoOrg: "European Touring Association",
+    demoBadge: "PARTNER",
+    demoNote: "Demonstracja — wyłącznie przykład. Ta organizacja jest fikcyjna.",
+    whyTitle: "Dlaczego warto zostać partnerem AutoVere?",
+    why: [
+      {
+        icon: Gift,
+        heading: "Realna korzyść dla członków",
+        body: "Dajesz członkom narzędzie, z którego naprawdę skorzystają przy planowaniu i w trasie — prawdziwe koszty opłat, winiet, paliwa i ładowania, bez zgadywania.",
+      },
+      {
+        icon: Zap,
+        heading: "Proste dla Twojej organizacji",
+        body: "AutoVere zajmuje się technologią, subskrypcjami i obsługą członków. Nie musisz niczego programować ani rozliczać.",
+      },
+      {
+        icon: RouteIcon,
+        heading: "Stworzone dla ludzi w podróży",
+        body: "AutoVere pokazuje, ile naprawdę kosztuje trasa — od opłat i winiet po paliwo i ładowanie — zanim ktokolwiek wyjedzie z domu.",
+      },
+    ],
+    howTitle: "Jak to działa",
+    how: [
+      {
+        icon: Handshake,
+        heading: "1. Przygotowujemy korzyść dla członków",
+        body: "AutoVere tworzy umowę partnerską i dostęp dla członków — po Waszej stronie nie ma żadnej pracy.",
+      },
+      {
+        icon: Share2,
+        heading: "2. Udostępniacie ją członkom",
+        body: "Otrzymujecie link i kod dla członków, a udostępniacie je tak, jak najlepiej pasuje Waszej organizacji.",
+      },
+      {
+        icon: BadgePercent,
+        heading: "3. Członkowie dostają 25% zniżki na AutoVere Pro",
+        body: "Prosto, praktycznie i gotowe do użycia od pierwszego dnia.",
+      },
+    ],
+    partnersTitle: "Nasi partnerzy organizacyjni",
+    partnersEmpty:
+      "Loga partnerów pojawią się tutaj wraz z podpisywaniem umów. Chcecie być wśród pierwszych?",
+    trustTitle: "Bezpiecznie, przejrzyście i nigdy w odsprzedaży",
+    trust: [
+      "Każdy zakup opłaty i winiety odbywa się u oficjalnego operatora — nigdy nie jesteśmy pośrednikiem.",
+      "Żadne dane członków nie trafiają do stron trzecich w celach marketingowych.",
+      "Europa, USA i Kanada w jednej usłudze.",
+      "Tworzone przez KM TECH LABS, Norwegia.",
+    ],
+    ctaTitle: "Chcecie zostać partnerem?",
+    ctaHeading: "Zostań partnerem AutoVere",
+    ctaBody: "Zarejestrujcie organizację bezpośrednio w AutoVere. To tylko kilka minut.",
+    ctaButton: "Zostań partnerem AutoVere",
+    ctaFine:
+      "Podajecie dane organizacji, logo, kraj, dane kontaktowe oraz informacje o korzyści dla członków. Po akceptacji AutoVere wyśle kod i link partnerski e-mailem.",
+    talkBody:
+      "Chętnie Was poznamy i wspólnie sprawdzimy, jak AutoVere może stać się realną korzyścią dla Waszych członków.",
+    talkButton: "Porozmawiajmy",
+    applyTitle: "Zgłoś się na partnera",
+    applyBody:
+      "Opowiedzcie nam o swojej organizacji, a my się odezwiemy. Po akceptacji kod i link dla członków są gotowe od razu — nic nie musicie konfigurować.",
+    fields: {
+      org: "Nazwa organizacji",
+      orgPh: "np. Polski Związek Motorowy",
+      country: "Kraj",
+      countryPh: "np. Polska",
+      site: "Oficjalna strona",
+      name: "Twoje imię i nazwisko",
+      namePh: "Imię i nazwisko",
+      email: "Twój e-mail",
+      emailPh: "imie@organizacja.pl",
+      members: "Opowiedz krótko o członkach (opcjonalnie)",
+      membersPh: "Kim są członkowie i mniej więcej ilu ich jest?",
+      submit: "Wyślij zgłoszenie",
+      msgTitle: "Napisz do nas",
+      msgBody:
+        "Masz pytanie albo pomysł, co moglibyśmy poprawić? Napisz — odpowiemy tak szybko, jak to możliwe.",
+      yourName: "Imię i nazwisko",
+      subject: "Temat",
+      subjectPh: "Czego dotyczy wiadomość?",
+      message: "Wiadomość",
+      messagePh: "Napisz, co Ci chodzi po głowie …",
+      send: "Wyślij wiadomość",
+    },
+  },
 } as const;
 
 export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
