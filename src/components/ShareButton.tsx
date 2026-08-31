@@ -135,7 +135,6 @@ export function ShareButton({
     },
   ];
 
-  return (
   if (variant === "bar") {
     return (
       <div
