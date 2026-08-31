@@ -1,0 +1,38 @@
+import { createFileRoute } from "@tanstack/react-router";
+
+import { HeroPlanner } from "@/components/HeroPlanner";
+
+export const Route = createFileRoute("/us/planner")({
+  head: () => ({
+    meta: [
+      { title: "US Road Trip Planner — Tolls, Gas & Charging Mapped | AutoVere" },
+      {
+        name: "description",
+        content:
+          "Plan your American road trip and see interstate tolls, express lanes, gas, EV charging and ferries in one clear budget for cars, RVs and motorcycles.",
+      },
+      { property: "og:title", content: "AutoVere US Road Trip Planner" },
+      {
+        property: "og:description",
+        content: "One honest budget for tolls, gas, charging and ferries — before you hit the on-ramp.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/us/planner" }],
+  }),
+  component: UsPlannerPage,
+});
+
+function UsPlannerPage() {
+  return (
+    <main>
+      <HeroPlanner
+        region="us"
+        eyebrow="US road trip planner"
+        title="Plan it once. Enjoy every mile."
+        subtitle="Tell us where you're rolling out from and where you're dreaming of — we'll handle tolls, express lanes, gas, charging and ferries so you can just enjoy the drive."
+      />
+    </main>
+  );
+}
