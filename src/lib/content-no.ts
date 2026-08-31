@@ -6,6 +6,19 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_NO: Record<string, string> = {
+  /* ---------------- Map layer: viewpoints ---------------- */
+  "Scenic Viewpoints & Photo Stops": "Utsiktspunkter og fotostopp",
+  "Panorama rest area": "Panorama-rasteplass",
+  "Lakeside viewpoint": "Utsiktspunkt ved vannet",
+  "Alpine summit overlook": "Utsikt fra alpetoppen",
+  "Coastal cliff lookout": "Utsiktspunkt på kystklippen",
+  "Valley overlook · picnic tables · photo spot":
+    "Utsikt over dalen · piknikbord · fotostopp",
+  "Free parking · short walk to the shoreline":
+    "Gratis parkering · kort gange ned til vannkanten",
+  "Glacier panorama · café · restrooms": "Breutsikt · kafé · toaletter",
+  "Sunset viewpoint · motorhome-friendly parking":
+    "Solnedgangsutsikt · bobilvennlig parkering",
   /* ---------------- Compliance: heavy motorhome systems ---------------- */
   Austria: "Østerrike",
   Switzerland: "Sveits",
