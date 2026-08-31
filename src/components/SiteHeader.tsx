@@ -16,6 +16,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
+const NO_NAV = {
+  "/planner": "/no/planner",
+  "/tolls": "/no/tolls",
+  "/scenic": "/no/scenic",
+  "/garage": "/no/garage",
+} as const;
+
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const activeRegion = region ?? regionFromPath(pathname);
