@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CaRouteImport } from './routes/ca'
 import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as TollsRouteImport } from './routes/tolls'
 import { Route as UsRouteImport } from './routes/us'
 
 const IndexRoute = IndexRouteImport.update({
@@ -29,6 +30,11 @@ const PlannerRoute = PlannerRouteImport.update({
   path: '/planner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const TollsRoute = TollsRouteImport.update({
+  id: '/tolls',
+  path: '/tolls',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsRoute = UsRouteImport.update({
   id: '/us',
   path: '/us',
@@ -39,12 +45,14 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ca': typeof CaRoute
   '/planner': typeof PlannerRoute
+  '/tolls': typeof TollsRoute
   '/us': typeof UsRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ca': typeof CaRoute
   '/planner': typeof PlannerRoute
+  '/tolls': typeof TollsRoute
   '/us': typeof UsRoute
 }
 export interface FileRoutesById {
@@ -52,20 +60,22 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/ca': typeof CaRoute
   '/planner': typeof PlannerRoute
+  '/tolls': typeof TollsRoute
   '/us': typeof UsRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ca' | '/planner' | '/us'
+  fullPaths: '/' | '/ca' | '/planner' | '/tolls' | '/us'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ca' | '/planner' | '/us'
-  id: '__root__' | '/' | '/ca' | '/planner' | '/us'
+  to: '/' | '/ca' | '/planner' | '/tolls' | '/us'
+  id: '__root__' | '/' | '/ca' | '/planner' | '/tolls' | '/us'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CaRoute: typeof CaRoute
   PlannerRoute: typeof PlannerRoute
+  TollsRoute: typeof TollsRoute
   UsRoute: typeof UsRoute
 }
 
@@ -92,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/tolls': {
+      id: '/tolls'
+      path: '/tolls'
+      fullPath: '/tolls'
+      preLoaderRoute: typeof TollsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/us': {
       id: '/us'
       path: '/us'
@@ -106,6 +123,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CaRoute: CaRoute,
   PlannerRoute: PlannerRoute,
+  TollsRoute: TollsRoute,
   UsRoute: UsRoute,
 }
 export const routeTree = rootRouteImport
