@@ -324,7 +324,7 @@ export function TripResults({
                   <div>
                     <dt className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">{t.results.indicative}</dt>
                     <dd className="mt-0.5 text-sm font-semibold text-primary">
-                      {isMotorcycle && f.motoPrice ? f.motoPrice : f.price}
+                      {tr(isMotorcycle && f.motoPrice ? f.motoPrice : f.price)}
                     </dd>
                   </div>
                 </dl>
