@@ -61,7 +61,7 @@ export function pointAt(line: MapPoint[], t: number): MapPoint {
 /* Layers                                                              */
 /* ------------------------------------------------------------------ */
 
-export type LayerKey = "ev" | "fuel" | "rv" | "pass" | "ferry";
+export type LayerKey = "ev" | "fuel" | "rv" | "pass" | "ferry" | "view";
 
 export const MAP_LAYERS: { key: LayerKey; emoji: string; label: string; color: string }[] = [
   { key: "ev", emoji: "⚡", label: "EV Fast Chargers", color: "#34d399" },
@@ -69,6 +69,7 @@ export const MAP_LAYERS: { key: LayerKey; emoji: string; label: string; color: s
   { key: "rv", emoji: "🚐", label: "RV Campgrounds & Service Areas", color: "#60a5fa" },
   { key: "pass", emoji: "🏔️", label: "Mountain Passes", color: "#f87171" },
   { key: "ferry", emoji: "⛴️", label: "Ferry Terminals", color: "#22d3ee" },
+  { key: "view", emoji: "🌄", label: "Scenic Viewpoints & Photo Stops", color: "#c084fc" },
 ];
 
 export type CorridorPoi = {
@@ -81,7 +82,24 @@ export type CorridorPoi = {
   progress: number;
   status?: "open" | "closed" | "chains";
   price?: string;
+  /** Brand/point specific symbol shown on the map instead of the generic layer emoji. */
+  icon?: string;
 };
+
+/** Brand-aware symbol so Tesla, Ionity, Shell, KOA … are recognisable on the map. */
+export function brandIcon(name: string, layer: LayerKey): string {
+  const n = name.toLowerCase();
+  if (/tesla/.test(n)) return "🚘";
+  if (/ionity/.test(n)) return "🟦";
+  if (/fastned/.test(n)) return "🟨";
+  if (/electrify america/.test(n)) return "🟩";
+  if (/evgo|chargepoint|flo|circuit électrique|recharge|allego|petro-canada ev/.test(n)) return "🔌";
+  if (/buc-ee/.test(n)) return "🦫";
+  if (/shell/.test(n)) return "🐚";
+  if (/koa|camping|campground|stellplatz|aire|bobil|halte/.test(n)) return "🏕️";
+  if (/ferry|ferje|ferje|shuttle/.test(n)) return "⛴️";
+  return MAP_LAYERS.find((l) => l.key === layer)?.emoji ?? "📍";
+}
 
 const EV_NETWORKS: Record<RegionKey, string[]> = {
   eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego", "Recharge"],
@@ -99,6 +117,27 @@ const RV_NAMES: Record<RegionKey, string[]> = {
   eu: ["Aire de camping-car", "Stellplatz", "Camping municipal", "Bobilparkering"],
   us: ["KOA Holiday", "State Park Campground", "RV Resort", "Truck & RV Plaza"],
   ca: ["Provincial Park Campground", "KOA Campground", "Halte routière VR", "RV Park"],
+};
+
+const VIEWPOINTS: Record<RegionKey, { name: string; detail: string }[]> = {
+  eu: [
+    { name: "Panorama rest area", detail: "Valley overlook · picnic tables · photo spot" },
+    { name: "Lakeside viewpoint", detail: "Free parking · short walk to the shoreline" },
+    { name: "Alpine summit overlook", detail: "Glacier panorama · café · restrooms" },
+    { name: "Coastal cliff lookout", detail: "Sunset viewpoint · motorhome-friendly parking" },
+  ],
+  us: [
+    { name: "Scenic Overlook", detail: "Pull-through parking · interpretive signage" },
+    { name: "Canyon Rim Viewpoint", detail: "Sunrise photo stop · vault restrooms" },
+    { name: "State Scenic Byway Pullout", detail: "RV-length parking · trailhead" },
+    { name: "Lake Vista Point", detail: "Picnic area · boat ramp" },
+  ],
+  ca: [
+    { name: "Belvédère panoramique", detail: "Halte routière · vue sur la vallée" },
+    { name: "Rocky Mountain Lookout", detail: "Wildlife viewing · big-rig parking" },
+    { name: "Lakeshore Viewpoint", detail: "Picnic shelter · washrooms" },
+    { name: "Fjord & Coast Lookout", detail: "Whale-watching season · photo deck" },
+  ],
 };
 
 function kmLabel(units: "metric" | "imperial", km: number) {
