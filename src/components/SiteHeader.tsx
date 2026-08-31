@@ -5,6 +5,7 @@ import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 import { CurrencySelector } from "@/components/CurrencySelector";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useAuth } from "@/lib/auth";
+import { useLocale, useT } from "@/lib/i18n";
 
 import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
@@ -18,7 +19,11 @@ import { cn } from "@/lib/utils";
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const activeRegion = region ?? regionFromPath(pathname);
-  const [lang, setLang] = useState(LANGUAGES[0]!);
+  const t = useT();
+  const locale = useLocale();
+  const [lang, setLang] = useState(
+    () => LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0]!,
+  );
   const [open, setOpen] = useState(false);
   const { user, openAuth, signOut } = useAuth();
 
@@ -33,7 +38,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           {REGIONS.map((r) => (
             <Link
               key={r.key}
-              to={r.to}
+              to={r.key === "eu" && locale === "no" ? "/no" : r.to}
               className={cn(
                 "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
                 activeRegion === r.key
@@ -42,7 +47,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               )}
             >
               <span className="mr-1.5">{r.flag}</span>
-              {r.label}
+              {t.header.regions[r.key]}
             </Link>
           ))}
         </nav>
@@ -55,7 +60,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               activeProps={{ className: "text-primary" }}
               className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
             >
-              {l.label}
+              {t.header.nav[l.to] ?? l.label}
             </Link>
           ))}
         </nav>
@@ -102,10 +107,10 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52 rounded-xl border-border bg-popover p-1.5">
               <DropdownMenuItem asChild className="cursor-pointer rounded-lg">
-                <Link to="/garage">🗺️ My Garage &amp; Trips</Link>
+                <Link to="/garage">{t.header.garageMenu}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer rounded-lg">
-                <Link to="/pricing">✨ Plans &amp; upgrade</Link>
+                <Link to="/pricing">{t.header.plansMenu}</Link>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer rounded-lg"
@@ -113,7 +118,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                   void signOut();
                 }}
               >
-                <LogOut className="size-4" /> Sign out
+                <LogOut className="size-4" /> {t.header.signOut}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -124,14 +129,14 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             className="inline-flex items-center gap-2 rounded-full bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
           >
             <UserRound className="size-4" />
-            <span className="hidden sm:inline">Sign in</span>
+            <span className="hidden sm:inline">{t.header.signIn}</span>
           </button>
         )}
 
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
-          aria-label="Toggle navigation"
+          aria-label={t.header.toggleNav}
           aria-expanded={open}
           className="rounded-full border border-border bg-background/50 p-2 lg:hidden"
         >
@@ -145,14 +150,14 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             {REGIONS.map((r) => (
               <Link
                 key={r.key}
-                to={r.to}
+                to={r.key === "eu" && locale === "no" ? "/no" : r.to}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-full border border-border px-3 py-1.5 text-sm",
                   activeRegion === r.key && "bg-primary text-primary-foreground",
                 )}
               >
-                {r.flag} {r.label}
+                {r.flag} {t.header.regions[r.key]}
               </Link>
             ))}
           </div>
@@ -164,7 +169,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                 onClick={() => setOpen(false)}
                 className="text-sm font-medium text-foreground/85"
               >
-                {l.label}
+                {t.header.nav[l.to] ?? l.label}
               </Link>
             ))}
           </div>

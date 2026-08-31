@@ -3,6 +3,7 @@ import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { useT } from "@/lib/i18n";
 import { money, type TripEstimate } from "@/lib/trip-data";
 
 function escapeXml(value: string) {
@@ -90,28 +91,28 @@ const CONNECTED_VEHICLES = [
   {
     emoji: "🔋",
     label: "Tesla",
-    hint: "Send destination via your Tesla account",
+    hintKey: "tesla",
     url: (o: string, d: string) =>
       `https://www.tesla.com/tesla_account/trips?origin=${encodeURIComponent(o)}&destination=${encodeURIComponent(d)}`,
   },
   {
     emoji: "🅱️",
     label: "BMW iDrive",
-    hint: "Send to Car via My BMW / Motorrad Connected",
+    hintKey: "bmw",
     url: (_o: string, d: string) =>
       `https://www.bmw-connecteddrive.com/app/index.html#/send-to-car?destination=${encodeURIComponent(d)}`,
   },
   {
     emoji: "⭐",
     label: "Mercedes me",
-    hint: "Push the route to MBUX navigation",
+    hintKey: "mercedes",
     url: (_o: string, d: string) =>
       `https://www.mercedes-benz.com/en/mercedes-me/?destination=${encodeURIComponent(d)}`,
   },
   {
     emoji: "📱",
     label: "Android Auto / CarPlay",
-    hint: "Opens the maps hand-off link on your phone",
+    hintKey: "phone",
     url: (o: string, d: string) =>
       `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(o)}&destination=${encodeURIComponent(d)}&travelmode=driving`,
   },
@@ -126,34 +127,35 @@ export function RouteExportPanel({
   origin: string;
   destination: string;
 }) {
+  const t = useT();
   const from = origin || "Start";
   const to = destination || "Destination";
   const base = `autovere-${slug(`${origin}-${destination}`, "road-trip")}`;
 
   const exportGpx = () => {
     downloadFile(buildGpx(trip, origin, destination), `${base}.gpx`, "application/gpx+xml");
-    toast.success("GPX ready — load it into Garmin, TomTom Rider or BMW Motorrad Connected.");
+    toast.success(t.export.gpxToast);
   };
 
   const exportKml = () => {
     downloadFile(buildKml(trip, origin, destination), `${base}.kml`, "application/vnd.google-earth.kml+xml");
-    toast.success("KML ready — open it in Google Earth or your mapping overlay.");
+    toast.success(t.export.kmlToast);
   };
 
   const navLinks = [
     {
       emoji: "🗺️",
-      label: "Open in Google Maps",
+      label: t.export.google,
       href: `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(from)}&destination=${encodeURIComponent(to)}&travelmode=driving`,
     },
     {
       emoji: "🍏",
-      label: "Open in Apple Maps",
+      label: t.export.apple,
       href: `https://maps.apple.com/?saddr=${encodeURIComponent(from)}&daddr=${encodeURIComponent(to)}&dirflg=d`,
     },
     {
       emoji: "🚗",
-      label: "Open in Waze",
+      label: t.export.waze,
       href: `https://www.waze.com/ul?q=${encodeURIComponent(to)}&navigate=yes`,
     },
   ];
@@ -215,7 +217,7 @@ export function RouteExportPanel({
 
     const w = window.open("", "_blank", "width=900,height=1000");
     if (!w) {
-      toast.error("Allow pop-ups to print your itinerary.");
+      toast.error(t.export.popupError);
       return;
     }
     w.document.write(html);
@@ -228,27 +230,27 @@ export function RouteExportPanel({
     <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
       <div className="flex items-center gap-2">
         <Download className="size-5 text-primary" />
-        <h3 className="text-lg font-semibold tracking-tight">Export &amp; navigate</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t.export.title}</h3>
       </div>
       <p className="mt-1 text-sm text-foreground/70">
-        Take this route with you — sat-nav files, one-tap navigation, or a clean printed cost summary for the glovebox.
+        {t.export.intro}
       </p>
 
       <div className="mt-5 flex flex-wrap gap-3">
         <Button size="lg" className="font-semibold" onClick={exportGpx}>
-          <Download className="size-4" /> 📥 Download GPX File
+          <Download className="size-4" /> {t.export.gpx}
         </Button>
         <Button size="lg" variant="secondary" onClick={exportKml}>
-          <FileText className="size-4" /> 📄 Download KML File
+          <FileText className="size-4" /> {t.export.kml}
         </Button>
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
-        GPX works with Garmin zūmo, TomTom Rider and BMW Motorrad Connected · KML opens in Google Earth.
+        {t.export.fileHint}
       </p>
 
       <div className="mt-6">
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-          1-click navigation
+          {t.export.navTitle}
         </p>
         <div className="mt-3 flex flex-wrap gap-3">
           {navLinks.map((l) => (
@@ -262,12 +264,12 @@ export function RouteExportPanel({
           <Popover>
             <PopoverTrigger asChild>
               <Button size="lg" variant="outline">
-                <Send className="size-4" /> 🚘 Send to Connected Vehicle
+                <Send className="size-4" /> {t.export.sendToCar}
               </Button>
             </PopoverTrigger>
             <PopoverContent align="start" className="w-80 space-y-1">
               <p className="px-1 pb-2 text-xs text-muted-foreground">
-                Quick hand-off to your car's built-in navigation.
+                {t.export.handoffHint}
               </p>
               {CONNECTED_VEHICLES.map((v) => (
                 <a
@@ -275,13 +277,13 @@ export function RouteExportPanel({
                   href={v.url(from, to)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={() => toast.success(`Route handed off to ${v.label}.`)}
+                  onClick={() => toast.success(t.export.handoffToast(v.label))}
                   className="flex items-start gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-primary/10"
                 >
                   <span className="text-lg leading-none">{v.emoji}</span>
                   <span>
                     <span className="block text-sm font-semibold">{v.label}</span>
-                    <span className="block text-xs text-muted-foreground">{v.hint}</span>
+                    <span className="block text-xs text-muted-foreground">{t.export.hints[v.hintKey]}</span>
                   </span>
                 </a>
               ))}
@@ -292,10 +294,10 @@ export function RouteExportPanel({
 
       <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-5">
         <Button size="lg" variant="secondary" onClick={printItinerary}>
-          <Printer className="size-4" /> 🖨️ Print Turn-by-Turn Cost Summary
+          <Printer className="size-4" /> {t.export.print}
         </Button>
         <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
-          <Car className="size-3.5" /> Paper-friendly PDF with every toll checkpoint and fuel stop.
+          <Car className="size-3.5" /> {t.export.printHint}
         </span>
       </div>
     </div>

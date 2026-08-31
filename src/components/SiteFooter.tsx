@@ -1,5 +1,6 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 
+import { useT, useLocale } from "@/lib/i18n";
 import { regionFromPath } from "@/lib/trip-data";
 
 const YEAR = new Date().getFullYear();
@@ -7,6 +8,9 @@ const YEAR = new Date().getFullYear();
 export function SiteFooter() {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const region = regionFromPath(pathname);
+  const t = useT();
+  const locale = useLocale();
+  const euHome = locale === "no" ? "/no" : "/";
   const isFrench = pathname.startsWith("/ca/fr");
 
   const base = region === "us" ? "/us" : "/ca";
@@ -16,33 +20,33 @@ export function SiteFooter() {
     region === "eu"
       ? []
       : [
-          { to: `${infoBase}/how-it-works`, label: isFrench ? "Comment ça marche" : "How it works" },
-          { to: `${infoBase}/faq`, label: "FAQ" },
-          { to: `${infoBase}/partners`, label: isFrench ? "Partenaires" : "Partners" },
+          { to: `${infoBase}/how-it-works`, label: isFrench ? "Comment ça marche" : t.footer.howItWorks },
+          { to: `${infoBase}/faq`, label: t.footer.faq },
+          { to: `${infoBase}/partners`, label: isFrench ? "Partenaires" : t.footer.partners },
           {
             to: `${infoBase}/legal`,
-            label: isFrench ? "Mentions légales & vie privée" : "Legal & privacy",
+            label: isFrench ? "Mentions légales & vie privée" : t.footer.privacy,
           },
         ];
 
   const companyLinks = [
     {
       to: region === "eu" ? "/how-it-works" : `${infoBase}/how-it-works`,
-      label: isFrench ? "Comment ça marche" : "How It Works",
+      label: isFrench ? "Comment ça marche" : t.footer.howItWorks,
     },
-    { to: "/pricing", label: isFrench ? "Tarifs" : "Pricing" },
-    { to: region === "eu" ? "/faq" : `${infoBase}/faq`, label: "FAQ" },
+    { to: "/pricing", label: isFrench ? "Tarifs" : t.footer.pricing },
+    { to: region === "eu" ? "/faq" : `${infoBase}/faq`, label: t.footer.faq },
     {
       to: region === "eu" ? "/partners" : `${infoBase}/partners`,
-      label: isFrench ? "Partenaires" : "Partners",
+      label: isFrench ? "Partenaires" : t.footer.partners,
     },
     {
       to: region === "eu" ? "/privacy" : `${infoBase}/legal`,
-      label: isFrench ? "Politique de confidentialité" : "Privacy Policy",
+      label: isFrench ? "Politique de confidentialité" : t.footer.privacy,
     },
     {
       to: region === "eu" ? "/terms" : `${infoBase}/legal`,
-      label: isFrench ? "Conditions d'utilisation" : "Terms of Service",
+      label: isFrench ? "Conditions d'utilisation" : t.footer.terms,
     },
   ];
 
@@ -52,50 +56,49 @@ export function SiteFooter() {
         <div className="md:col-span-1">
           <p className="text-lg font-semibold tracking-tight text-foreground">AutoVere</p>
           <p className="mt-3 max-w-sm text-sm text-muted-foreground">
-            Cross-border road trip intelligence — tolls, vignettes, fuel, charging and ferries for
-            cars, motorhomes and touring motorcycles.
+            {t.footer.tagline}
           </p>
           <p className="mt-6 text-xs uppercase tracking-[0.18em] text-muted-foreground">
-            A product by
+            {t.footer.productBy}
           </p>
           <p className="text-sm font-semibold text-foreground">KM TECH LABS</p>
-          <p className="text-sm text-muted-foreground">Kristiansand, Norway</p>
+          <p className="text-sm text-muted-foreground">{locale === "no" ? "Kristiansand, Norge" : "Kristiansand, Norway"}</p>
           <p className="mt-5 inline-flex max-w-xs items-start gap-2 rounded-xl border border-amber-300/25 bg-amber-300/10 px-3 py-2 text-xs leading-relaxed text-amber-200">
             <span aria-hidden="true">🛡️</span>
             <span>
-              Transparent cross-border road trip calculations. Official toll data links.
+              {t.footer.shield}
             </span>
           </p>
         </div>
 
         <div>
-          <p className="text-sm font-semibold text-foreground">Quick links</p>
+          <p className="text-sm font-semibold text-foreground">{t.footer.quickLinks}</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             <li>
               <Link to="/planner" className="transition-colors hover:text-foreground">
-                Road Trip Planner
+                {t.header.nav["/planner"]}
               </Link>
             </li>
             <li>
               <Link to="/tolls" className="transition-colors hover:text-foreground">
-                Tolls &amp; Vignettes
+                {t.header.nav["/tolls"]}
               </Link>
             </li>
             <li>
               <Link to="/scenic" className="transition-colors hover:text-foreground">
-                Scenic Passes &amp; Ferries
+                {t.header.nav["/scenic"]}
               </Link>
             </li>
             <li>
               <Link to="/garage" className="transition-colors hover:text-foreground">
-                My Garage
+                {t.header.nav["/garage"]}
               </Link>
             </li>
           </ul>
         </div>
 
         <div>
-          <p className="text-sm font-semibold text-foreground">Company</p>
+          <p className="text-sm font-semibold text-foreground">{t.footer.company}</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             {companyLinks.map((l) => (
               <li key={l.label}>
@@ -109,7 +112,7 @@ export function SiteFooter() {
 
         <div>
           <p className="text-sm font-semibold text-foreground">
-            {region === "us" ? "United States" : region === "ca" ? "Canada" : "Regions"}
+            {region === "us" ? "United States" : region === "ca" ? "Canada" : t.footer.regions}
           </p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
             {regionalLinks.length > 0 ? (
@@ -123,13 +126,13 @@ export function SiteFooter() {
             ) : (
               <>
                 <li>
-                  <Link to="/" className="transition-colors hover:text-foreground">
-                    🇪🇺 Europe
+                  <Link to={euHome} className="transition-colors hover:text-foreground">
+                    🇪🇺 {t.header.regions.eu}
                   </Link>
                 </li>
                 <li>
                   <a href="/us" className="transition-colors hover:text-foreground">
-                    🇺🇸 United States
+                    🇺🇸 USA
                   </a>
                 </li>
                 <li>
@@ -154,9 +157,9 @@ export function SiteFooter() {
 
       <div className="border-t border-white/10">
         <div className="mx-auto flex max-w-6xl flex-col gap-2 px-6 py-6 text-xs text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <p>© {YEAR} KM TECH LABS. All rights reserved.</p>
+          <p>© {YEAR} KM TECH LABS. {t.footer.rights}</p>
           <p className="font-medium text-amber-300/90">
-            Indicative estimates only — verify with official portals.
+            {t.footer.disclaimer}
           </p>
         </div>
       </div>

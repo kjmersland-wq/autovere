@@ -44,6 +44,7 @@ import {
   type TripEstimate,
   type VehicleKey,
 } from "@/lib/trip-data";
+import { useLocale, useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 
@@ -57,7 +58,11 @@ type HeroPlannerProps = {
 };
 
 export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerProps) {
+  const t = useT();
+  const locale = useLocale();
   const copy = REGION_COPY[region];
+  const originHint = locale === "no" ? t.hero.originHint : copy.originHint;
+  const destinationHint = locale === "no" ? t.hero.destinationHint : copy.destinationHint;
   const defaults = REGION_DEFAULTS[region];
   const imperial = defaults.units === "imperial";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
@@ -83,7 +88,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
   const addWaypoint = () => {
     if (waypoints.length >= 3) {
-      toast.info("You can add up to 3 via-stops per route.");
+      toast.info(t.hero.viaLimit);
       return;
     }
     setWaypoints((prev) => [...prev, { id: Math.random().toString(36).slice(2, 9), value: "" }]);
@@ -219,15 +224,15 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   )}
                 >
                   <span>{v.emoji}</span>
-                  {v.label}
+                  {t.hero.vehicles[v.key]}
                 </button>
               ))}
 
               <span aria-hidden className="mx-1 hidden h-6 w-px bg-border sm:block" />
 
               {([
-                { key: "oneway" as const, emoji: "➡️", label: "One-Way Transit" },
-                { key: "return" as const, emoji: "🔁", label: "Return Trip / Vacation" },
+                { key: "oneway" as const, emoji: "➡️", label: t.hero.oneway },
+                { key: "return" as const, emoji: "🔁", label: t.hero.returnTrip },
               ]).map((t) => (
                 <button
                   key={t.key}
@@ -248,7 +253,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
               {tripType === "return" && (
                 <label className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-4 py-1.5 text-sm">
-                  <span className="text-foreground/75">Trip duration</span>
+                  <span className="text-foreground/75">{t.hero.duration}</span>
                   <select
                     value={durationDays}
                     onChange={(e) => setDurationDays(Number(e.target.value))}
@@ -266,27 +271,27 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
             <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
               <label className="relative block">
-                <span className="sr-only">Origin</span>
+                <span className="sr-only">{t.hero.origin}</span>
                 <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value)}
                   className="h-12 border-border bg-background/60 pl-9 text-base placeholder:text-muted-foreground"
-                  placeholder={copy.originHint}
+                  placeholder={originHint}
                 />
               </label>
               <label className="relative block">
-                <span className="sr-only">Destination</span>
+                <span className="sr-only">{t.hero.destination}</span>
                 <RouteIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
                 <Input
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                   className="h-12 border-border bg-background/60 pl-9 text-base placeholder:text-muted-foreground"
-                  placeholder={copy.destinationHint}
+                  placeholder={destinationHint}
                 />
               </label>
               <Button type="submit" size="lg" className="h-12 px-8 text-base font-semibold">
-                Calculate My Trip Cost →
+                {t.hero.submit}
               </Button>
             </div>
 
@@ -318,7 +323,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                     value={w.value}
                     onChange={(e) => updateWaypoint(w.id, e.target.value)}
                     className="h-11 border-border bg-background/60 text-base placeholder:text-muted-foreground"
-                    placeholder={`Via stop ${i + 1} — e.g. Innsbruck`}
+                    placeholder={t.hero.viaPlaceholder(i + 1)}
                   />
                   <button
                     type="button"
@@ -339,10 +344,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/20 disabled:opacity-40"
                 >
                   <Plus className="size-4" />
-                  Add Via / Stop
+                  {t.hero.addVia}
                 </button>
                 <span className="text-xs text-muted-foreground">
-                  Up to 3 intermediate waypoints — drag order with the arrows.
+                  {t.hero.viaHint}
                 </span>
               </div>
             </div>
@@ -350,16 +355,16 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
             <div className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3">
               <Toggle
-                label="✨ Prefer scenic mountain & coastal bypasses"
+                label={t.hero.scenic}
                 checked={scenic}
                 onChange={setScenic}
               />
-              <Toggle label="🚫 Avoid paid toll roads" checked={avoidTolls} onChange={setAvoidTolls} />
-              <Toggle label="⛴️ Include ferry crossings" checked={ferries} onChange={setFerries} />
+              <Toggle label={t.hero.avoidTolls} checked={avoidTolls} onChange={setAvoidTolls} />
+              <Toggle label={t.hero.ferries} checked={ferries} onChange={setFerries} />
             </div>
 
             <div className="mt-5 flex flex-wrap items-center gap-2">
-              <span className="mr-1 text-sm text-foreground/70">Fuel / Power type</span>
+              <span className="mr-1 text-sm text-foreground/70">{t.hero.fuelType}</span>
               {FUELS.map((f) => (
                 <button
                   key={f.key}
@@ -374,13 +379,13 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   )}
                 >
                   <span>{f.emoji}</span>
-                  {f.label}
+                  {t.hero.fuels[f.key]}
                 </button>
               ))}
             </div>
 
             <div className="mt-6 border-t border-border pt-5">
-              <span className="text-sm text-foreground/70">Popular cross-border routes</span>
+              <span className="text-sm text-foreground/70">{t.hero.popularRoutes}</span>
               <div className="mt-3 flex flex-wrap gap-2">
                 {quickRoutes.map((r) => (
                   <button
@@ -405,7 +410,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
             <div className="mt-6 grid gap-4 border-t border-border pt-5 lg:grid-cols-[1fr_auto]">
               <div>
-                <span className="text-sm text-foreground/70">Transponder / toll tag</span>
+                <span className="text-sm text-foreground/70">{t.hero.transponder}</span>
                 <div className="mt-3 flex flex-wrap gap-2">
                   {transponders.map((t) => {
                     const on = tags.includes(t.key);
@@ -443,16 +448,16 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                     className="h-11 self-end border-border bg-background/50"
                   >
                     <Gauge className="size-4" />
-                    Fuel &amp; consumption
+                    {t.hero.consumption}
                   </Button>
                 </PopoverTrigger>
                 <PopoverContent align="end" className="w-72 border-border bg-card/95 backdrop-blur">
-                  <p className="text-sm font-semibold">Fine-tune consumption</p>
+                  <p className="text-sm font-semibold">{t.hero.fineTune}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Used to refine fuel &amp; charging estimates for your {vehicle}.
+                    {t.hero.fineTuneHint}
                   </p>
                   <label className="mt-4 block text-xs text-foreground/75">
-                    Tank / battery size ({volumeUnit})
+                    {t.hero.tankSize} ({volumeUnit})
                     <Input
                       type="number"
                       min={1}
@@ -462,7 +467,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                     />
                   </label>
                   <label className="mt-3 block text-xs text-foreground/75">
-                    Average consumption ({consumptionUnit})
+                    {t.hero.avgConsumption} ({consumptionUnit})
                     <Input
                       type="number"
                       step="0.1"
@@ -473,19 +478,19 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                     />
                   </label>
                   <p className="mt-3 text-xs text-muted-foreground">
-                    Range per fill: ~{range} {defaults.units === "imperial" ? "miles" : "km"}
+                    {t.hero.rangePerFill}: ~{range} {defaults.units === "imperial" ? "miles" : "km"}
                   </p>
                 </PopoverContent>
               </Popover>
             </div>
 
             <p className="mt-5 text-xs text-muted-foreground">
-              Regional defaults: {defaults.units === "imperial" ? "Imperial (miles, gallons)" : "Metric (km, litres)"} ·{" "}
+              {t.hero.regionalDefaults}: {defaults.units === "imperial" ? t.hero.imperial : t.hero.metric} ·{" "}
               {defaults.currencyCode} · {defaults.tollSystems.join(" · ")}
             </p>
 
             <p className="mt-2 text-xs text-muted-foreground">
-              Tolls, vignettes, fuel &amp; charging, ferries — priced to the exact route.
+              {t.hero.footnote}
             </p>
           </form>
         </div>
@@ -505,7 +510,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             emissionBadges={badges}
             onAddStop={(name) => {
               if (stops.includes(name)) {
-                toast.info(`${name} is already a stop on this trip.`);
+                toast.info(t.results.stopExists(name));
                 return;
               }
               const next = [...stops, name];
@@ -523,7 +528,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   effectiveDuration,
                 ),
               );
-              toast.success(`${name} added — trip re-routed via ${next.length} extra stop${next.length > 1 ? "s" : ""}.`);
+              toast.success(t.results.stopAdded(name, next.length));
             }}
           />
         )}

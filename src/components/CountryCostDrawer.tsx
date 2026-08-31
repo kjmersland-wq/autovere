@@ -9,6 +9,7 @@ import {
   type CostGroupKey,
   type CountryCost,
 } from "@/lib/country-costs";
+import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 type Props = {
@@ -19,6 +20,7 @@ type Props = {
 export function CountryCostDrawer({ defaultGroup = "western", onPlanRoute }: Props) {
   const [open, setOpen] = useState(false);
   const [group, setGroup] = useState<CostGroupKey>(defaultGroup);
+  const t = useT();
   const countries = COUNTRY_COSTS[group];
 
   return (
@@ -32,11 +34,10 @@ export function CountryCostDrawer({ defaultGroup = "western", onPlanRoute }: Pro
         >
           <span>
             <span className="block text-lg font-semibold sm:text-xl">
-              Tolls, Vignettes &amp; Fuel Costs by Country / State
+              {t.drawer.title}
             </span>
             <span className="mt-1 block text-sm text-muted-foreground">
-              Live-style reference for {COUNTRY_COUNT}+ countries and states — fuel, charging and
-              toll systems at a glance.
+              {t.drawer.subtitle(COUNTRY_COUNT)}
             </span>
           </span>
           <ChevronDown
@@ -60,7 +61,7 @@ export function CountryCostDrawer({ defaultGroup = "western", onPlanRoute }: Pro
                       : "border-border bg-background/50 text-foreground/85 hover:bg-background/70",
                   )}
                 >
-                  {g.label}
+                  {t.drawer.groups[g.key]}
                 </button>
               ))}
             </div>
@@ -82,9 +83,9 @@ export function CountryCostDrawer({ defaultGroup = "western", onPlanRoute }: Pro
                   </header>
 
                   <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
-                    <Stat icon={<Fuel className="size-3.5" />} label="Petrol" value={`${c.currency}${c.petrol.toFixed(2)}/L`} />
-                    <Stat icon={<Fuel className="size-3.5" />} label="Diesel" value={`${c.currency}${c.diesel.toFixed(2)}/L`} />
-                    <Stat icon={<Zap className="size-3.5" />} label="Fast DC" value={`${c.currency}${c.charging.toFixed(2)}/kWh`} />
+                    <Stat icon={<Fuel className="size-3.5" />} label={t.drawer.petrol} value={`${c.currency}${c.petrol.toFixed(2)}/L`} />
+                    <Stat icon={<Fuel className="size-3.5" />} label={t.drawer.diesel} value={`${c.currency}${c.diesel.toFixed(2)}/L`} />
+                    <Stat icon={<Zap className="size-3.5" />} label={t.drawer.fastDc} value={`${c.currency}${c.charging.toFixed(2)}/kWh`} />
                   </dl>
 
                   <p className="mt-4 text-sm text-foreground/75">{c.tollNote}</p>
@@ -106,14 +107,14 @@ export function CountryCostDrawer({ defaultGroup = "western", onPlanRoute }: Pro
                     className="mt-4 w-full border-border bg-background/50"
                     onClick={() => onPlanRoute?.(c)}
                   >
-                    🚀 Plan route to {c.name}
+                    {t.drawer.planRoute(c.name)}
                   </Button>
                 </article>
               ))}
             </div>
 
             <p className="mt-6 text-xs text-muted-foreground">
-              Indicative estimates only — verify with official portals before travelling.
+              {t.drawer.disclaimer}
             </p>
           </div>
         )}
