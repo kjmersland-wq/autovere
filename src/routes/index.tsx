@@ -1,24 +1,38 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
+import { HeroPlanner } from "@/components/HeroPlanner";
+
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "AutoVere — European Road Trip Toll & Cost Planner" },
+      {
+        name: "description",
+        content:
+          "Plan European road trips with exact toll, vignette, fuel, charging and ferry costs for cars, motorhomes and touring motorcycles.",
+      },
+      { property: "og:title", content: "AutoVere — European Road Trip Cost Planner" },
+      {
+        property: "og:description",
+        content:
+          "Exact tolls, vignettes, fuel, charging and ferry costs across Europe for cars, motorhomes and motorcycles.",
+      },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+    <main>
+      <HeroPlanner
+        region="eu"
+        eyebrow="Europe · 30+ countries"
+        title="Know the true cost of every kilometre."
+        subtitle="Cross-border toll, vignette, fuel, charging and ferry intelligence for cars, motorhomes and touring motorcycles."
       />
-    </div>
+    </main>
   );
 }
