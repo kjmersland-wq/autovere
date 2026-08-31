@@ -18,7 +18,13 @@ import { CorridorMap } from "@/components/CorridorMap";
 import { LezMonitor, MotorhomeClearanceRadar, TransponderSelector } from "@/components/ComplianceModules";
 import { CurrencyPills } from "@/components/CurrencySelector";
 import { PrintItinerary } from "@/components/PrintItinerary";
-import { RATES_UPDATED, useMoney } from "@/lib/currency";
+import {
+  RATES_UPDATED,
+  convert,
+  currencyFromSymbol,
+  formatCurrency,
+  useMoney,
+} from "@/lib/currency";
 import { useLocale, useT, useTr } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 import {
