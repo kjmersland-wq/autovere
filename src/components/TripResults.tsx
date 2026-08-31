@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ExternalLink, Download, Mountain, Save, Share2, ShieldCheck, Ship } from "lucide-react";
+import { ExternalLink, Mountain, Save, Share2, ShieldCheck, Ship } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
+import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { cn } from "@/lib/utils";
 import {
   money,
@@ -63,24 +64,6 @@ function SubtotalBadge({ emoji, label, value }: { emoji: string; label: string; 
   );
 }
 
-function buildGpx(trip: TripEstimate, origin: string, destination: string) {
-  const wpts = trip.segments
-    .flatMap((s) => s.lines)
-    .map(
-      (l, i) =>
-        `  <wpt lat="${(46 + i * 0.35).toFixed(4)}" lon="${(9 + i * 0.4).toFixed(4)}">\n    <name>${l.place.replace(/&/g, "&amp;")}</name>\n    <desc>${l.detail.replace(/&/g, "&amp;")}</desc>\n  </wpt>`,
-    )
-    .join("\n");
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="AutoVere" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata>
-    <name>${origin || "Start"} to ${destination || "Destination"}</name>
-    <desc>${trip.distanceLabel} - ${trip.driveTime} - budget ${money(trip.currency, trip.budget)}</desc>
-  </metadata>
-${wpts}
-</gpx>`;
-}
-
 export function TripResults({
   trips,
   origin,
@@ -110,17 +93,6 @@ export function TripResults({
   const comparison = variantComparison(trips.fastest, trip);
   const title = `${origin || "Your start"} → ${destination || "Your destination"}`;
 
-
-  const exportGpx = () => {
-    const blob = new Blob([buildGpx(trip, origin, destination)], { type: "application/gpx+xml" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `autovere-${(origin || "trip").toLowerCase().replace(/\W+/g, "-")}.gpx`;
-    a.click();
-    URL.revokeObjectURL(url);
-    toast.success("GPX exported — load it straight into your sat-nav.");
-  };
 
   const saveTrip = () => {
     try {
@@ -250,9 +222,6 @@ export function TripResults({
       )}
 
       <div className="mt-6 flex flex-wrap gap-3">
-        <Button size="lg" className="font-semibold" onClick={exportGpx}>
-          <Download className="size-4" /> 📥 Export GPX
-        </Button>
         <Button size="lg" variant="secondary" onClick={saveTrip}>
           <Save className="size-4" /> 💾 Save to My Garage
         </Button>
@@ -260,6 +229,8 @@ export function TripResults({
           <Share2 className="size-4" /> 🔗 Share Trip
         </Button>
       </div>
+
+      <RouteExportPanel trip={trip} origin={origin} destination={destination} />
 
       {ferryCrossings.length > 0 && (
         <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
