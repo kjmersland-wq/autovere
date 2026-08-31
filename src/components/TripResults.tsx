@@ -185,7 +185,7 @@ export function TripResults({
                   {v.emoji} {t.results.variants[v.key].label}
                 </span>
                 <span className="mt-1 block text-xs text-muted-foreground">
-                  {m.fmt(variantTrip.tolls + variantTrip.ferries)} {tt.results.tollsShort} · {variantTrip.driveTime} · {variantTrip.distanceLabel}
+                  {m.fmt(variantTrip.tolls + variantTrip.ferries)} {t.results.tollsShort} · {variantTrip.driveTime} · {variantTrip.distanceLabel}
                 </span>
               </button>
             );
