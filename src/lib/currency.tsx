@@ -78,9 +78,14 @@ export function nativeCurrencyFor(countryLabel: string, fallback: CurrencyCode):
 }
 
 export function currencyFromSymbol(symbol: string): CurrencyCode {
-  if (symbol === "$") return "USD";
-  if (symbol === "C$") return "CAD";
-  if (symbol === "£") return "GBP";
+  if (symbol === "$" || symbol === "USD") return "USD";
+  if (symbol === "C$" || symbol === "CAD") return "CAD";
+  if (symbol === "£" || symbol === "GBP") return "GBP";
+  if (symbol === "NOK") return "NOK";
+  if (symbol === "SEK") return "SEK";
+  if (symbol === "DKK") return "DKK";
+  if (symbol === "CHF") return "CHF";
+  if (symbol === "ISK") return "ISK";
   return "EUR";
 }
 
