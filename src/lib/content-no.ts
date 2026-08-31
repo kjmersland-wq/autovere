@@ -107,7 +107,7 @@ export const CONTENT_NO: Record<string, string> = {
   "Open-road tolling gantries, no cash booth": "Automatiske bomportaler, ingen kontantbod",
   "Ontario Highway 407 ETR and 412/418": "Ontario Highway 407 ETR og 412/418",
   "Transponder rate instead of camera video-toll charge":
-    "Brikkepris i stedet for kamerabasert videotakst",,
+    "Brikkepris i stedet for kamerabasert videotakst",
 
   /* ---------------- Corridor map ---------------- */
   "EV Fast Chargers": "Hurtigladere for elbil",
