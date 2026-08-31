@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import logoMark from "@/assets/autovere-logo.png";
 
 const US_NAV_LABELS: Record<string, string> = {
   "/planner": "Road Trip Planner",
@@ -45,7 +46,14 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-5 py-3 sm:px-8">
-        <LocaleLink to="/" className="text-lg font-semibold tracking-tight">
+        <LocaleLink to="/" className="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
+          <img
+            src={logoMark}
+            alt="AutoVere"
+            width={1024}
+            height={1024}
+            className="size-8 rounded-[0.55rem] shadow-lg shadow-black/30 ring-1 ring-border/60"
+          />
           Auto<span className="text-primary">Vere</span>
         </LocaleLink>
 
