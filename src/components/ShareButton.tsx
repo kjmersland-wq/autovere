@@ -136,6 +136,51 @@ export function ShareButton({
   ];
 
   return (
+  if (variant === "bar") {
+    return (
+      <div
+        className={`flex w-full flex-col items-center gap-4 rounded-2xl border border-border/60 bg-card/60 p-5 shadow-sm backdrop-blur sm:flex-row sm:justify-between ${className}`}
+      >
+        <div className="flex items-center gap-2 text-sm font-semibold text-foreground">
+          <Share2 className="h-4 w-4 text-primary" />
+          {t.heading}
+        </div>
+        <div className="flex flex-wrap items-center justify-center gap-2">
+          {items.map((i) => (
+            <button
+              key={i.key}
+              type="button"
+              onClick={() => i.run()}
+              aria-label={i.label}
+              title={i.label}
+              className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:border-primary/50 hover:bg-primary/10 hover:text-primary"
+            >
+              <span className="flex h-4 w-4 items-center justify-center">{i.icon}</span>
+              <span className="hidden sm:inline">{i.label}</span>
+            </button>
+          ))}
+          <button
+            type="button"
+            onClick={() => void copyLink()}
+            className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-2 text-xs font-semibold text-primary transition-colors hover:bg-primary/20"
+          >
+            {copied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
+            {copied ? t.copied : t.copy}
+          </button>
+          <button
+            type="button"
+            onClick={() => void nativeShare()}
+            className="inline-flex items-center gap-2 rounded-full border border-border bg-background px-3.5 py-2 text-xs font-semibold text-foreground transition-colors hover:border-primary/50 hover:text-primary sm:hidden"
+          >
+            <Link2 className="h-4 w-4" />
+            {t.native}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
     <DropdownMenu>
       <DropdownMenuTrigger
         aria-label={t.button}
