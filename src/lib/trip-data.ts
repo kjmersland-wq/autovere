@@ -717,6 +717,10 @@ export function estimateTrip(
     segments,
     safety: safetyFor(region, vehicle),
     optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial),
+    vignette:
+      activeVariant === "tollfree" ? null : optimizeVignettes(region, vehicle, tripType, durationDays),
+    tripType,
+    durationDays,
     discountNote: isMoto
       ? "Motorcycle rates applied: ~40% indicative discount on distance tolls, vignettes and ferries — and 0 in Norwegian city rings."
       : undefined,
@@ -731,13 +735,17 @@ export function estimateAllVariants(
   includeFerries: boolean,
   scenic: boolean,
   extraStops = 0,
+  tripType: TripType = "oneway",
+  durationDays = 1,
 ): Record<RouteVariantKey, TripEstimate> {
+  const args = [extraStops, tripType, durationDays] as const;
   return {
-    fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", extraStops),
-    smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", extraStops),
-    tollfree: estimateTrip(region, vehicle, fuel, avoidTolls, includeFerries, scenic, "tollfree", extraStops),
+    fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
+    smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
+    tollfree: estimateTrip(region, vehicle, fuel, avoidTolls, includeFerries, scenic, "tollfree", ...args),
   };
 }
+
 
 export function variantComparison(
   base: TripEstimate,
