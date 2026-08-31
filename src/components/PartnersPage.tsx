@@ -24,7 +24,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { sendContactMessage } from "@/lib/contact.functions";
 
-type Lang = "no" | "en";
+type Lang = "no" | "en" | "pl";
 
 const COPY = {
   no: {
