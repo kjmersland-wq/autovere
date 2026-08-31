@@ -1,4 +1,5 @@
-import { ExternalLink, Download, Save, Share2, ShieldCheck } from "lucide-react";
+import { useState } from "react";
+import { ExternalLink, Download, Save, Share2, ShieldCheck, Ship } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -8,7 +9,16 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { money, type TripEstimate } from "@/lib/trip-data";
+import { cn } from "@/lib/utils";
+import {
+  money,
+  ROUTE_VARIANTS,
+  variantComparison,
+  type FerryCrossing,
+  type RouteVariantKey,
+  type TripEstimate,
+} from "@/lib/trip-data";
+
 
 function MetricCard({
   label,
