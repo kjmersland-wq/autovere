@@ -15,6 +15,7 @@ import { Route as EuropeRouteImport } from './routes/europe'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GarageRouteImport } from './routes/garage'
 import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as NoRouteImport } from './routes/no'
 import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PricingRouteImport } from './routes/pricing'
@@ -68,6 +69,11 @@ const GarageRoute = GarageRouteImport.update({
 const HowItWorksRoute = HowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoRoute = NoRouteImport.update({
+  id: '/no',
+  path: '/no',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PartnersRoute = PartnersRouteImport.update({
@@ -199,6 +205,7 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/no': typeof NoRoute
   '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
@@ -230,6 +237,7 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/no': typeof NoRoute
   '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
@@ -262,6 +270,7 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
   '/how-it-works': typeof HowItWorksRoute
+  '/no': typeof NoRoute
   '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
@@ -296,6 +305,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/garage'
     | '/how-it-works'
+    | '/no'
     | '/partners'
     | '/planner'
     | '/pricing'
@@ -327,6 +337,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/garage'
     | '/how-it-works'
+    | '/no'
     | '/partners'
     | '/planner'
     | '/pricing'
@@ -358,6 +369,7 @@ export interface FileRouteTypes {
     | '/faq'
     | '/garage'
     | '/how-it-works'
+    | '/no'
     | '/partners'
     | '/planner'
     | '/pricing'
@@ -391,6 +403,7 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   GarageRoute: typeof GarageRoute
   HowItWorksRoute: typeof HowItWorksRoute
+  NoRoute: typeof NoRoute
   PartnersRoute: typeof PartnersRoute
   PlannerRoute: typeof PlannerRoute
   PricingRoute: typeof PricingRoute
@@ -445,6 +458,13 @@ declare module '@tanstack/react-router' {
       path: '/how-it-works'
       fullPath: '/how-it-works'
       preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no': {
+      id: '/no'
+      path: '/no'
+      fullPath: '/no'
+      preLoaderRoute: typeof NoRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/partners': {
@@ -669,6 +689,7 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   GarageRoute: GarageRoute,
   HowItWorksRoute: HowItWorksRoute,
+  NoRoute: NoRoute,
   PartnersRoute: PartnersRoute,
   PlannerRoute: PlannerRoute,
   PricingRoute: PricingRoute,
