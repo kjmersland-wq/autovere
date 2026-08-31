@@ -50,7 +50,7 @@ const TRIPS = [
   { name: "Munich → Amalfi Coast", detail: "1,420 km · 14h 30m · €318 budget", when: "Saved 12 Aug" },
   { name: "Oslo → Lofoten", detail: "1,380 km · 19h 05m · NOK 4,210 budget", when: "Saved 2 Jul" },
   { name: "Seattle → Big Sur", detail: "1,890 km · 20h 40m · $412 budget", when: "Saved 18 Jun" },
-  { name: "Toronto → Banff", detail: "3,420 km · 34h 10m · C$absolute 890 budget", when: "Saved 4 May" },
+  { name: "Toronto → Banff", detail: "3,420 km · 34h 10m · C$890 budget", when: "Saved 4 May" },
 ];
 
 function GaragePage() {

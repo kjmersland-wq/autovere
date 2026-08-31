@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CaRouteImport } from './routes/ca'
+import { Route as GarageRouteImport } from './routes/garage'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as ScenicRouteImport } from './routes/scenic'
 import { Route as TollsRouteImport } from './routes/tolls'
@@ -24,6 +25,11 @@ const IndexRoute = IndexRouteImport.update({
 const CaRoute = CaRouteImport.update({
   id: '/ca',
   path: '/ca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const GarageRoute = GarageRouteImport.update({
+  id: '/garage',
+  path: '/garage',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlannerRoute = PlannerRouteImport.update({
@@ -50,6 +56,7 @@ const UsRoute = UsRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ca': typeof CaRoute
+  '/garage': typeof GarageRoute
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
@@ -58,6 +65,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/ca': typeof CaRoute
+  '/garage': typeof GarageRoute
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
@@ -67,6 +75,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/ca': typeof CaRoute
+  '/garage': typeof GarageRoute
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
@@ -74,15 +83,24 @@ export interface FileRoutesById {
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/ca' | '/planner' | '/scenic' | '/tolls' | '/us'
+  fullPaths: '/' | '/ca' | '/garage' | '/planner' | '/scenic' | '/tolls' | '/us'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/ca' | '/planner' | '/scenic' | '/tolls' | '/us'
-  id: '__root__' | '/' | '/ca' | '/planner' | '/scenic' | '/tolls' | '/us'
+  to: '/' | '/ca' | '/garage' | '/planner' | '/scenic' | '/tolls' | '/us'
+  id:
+    | '__root__'
+    | '/'
+    | '/ca'
+    | '/garage'
+    | '/planner'
+    | '/scenic'
+    | '/tolls'
+    | '/us'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CaRoute: typeof CaRoute
+  GarageRoute: typeof GarageRoute
   PlannerRoute: typeof PlannerRoute
   ScenicRoute: typeof ScenicRoute
   TollsRoute: typeof TollsRoute
@@ -103,6 +121,13 @@ declare module '@tanstack/react-router' {
       path: '/ca'
       fullPath: '/ca'
       preLoaderRoute: typeof CaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/garage': {
+      id: '/garage'
+      path: '/garage'
+      fullPath: '/garage'
+      preLoaderRoute: typeof GarageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/planner': {
@@ -139,6 +164,7 @@ declare module '@tanstack/react-router' {
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CaRoute: CaRoute,
+  GarageRoute: GarageRoute,
   PlannerRoute: PlannerRoute,
   ScenicRoute: ScenicRoute,
   TollsRoute: TollsRoute,
