@@ -17,6 +17,20 @@ import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as ScenicRouteImport } from './routes/scenic'
 import { Route as TollsRouteImport } from './routes/tolls'
 import { Route as UsRouteImport } from './routes/us'
+import { Route as CaIndexRouteImport } from './routes/ca.index'
+import { Route as CaFaqRouteImport } from './routes/ca.faq'
+import { Route as CaHowItWorksRouteImport } from './routes/ca.how-it-works'
+import { Route as CaLegalRouteImport } from './routes/ca.legal'
+import { Route as CaPartnersRouteImport } from './routes/ca.partners'
+import { Route as UsIndexRouteImport } from './routes/us.index'
+import { Route as UsFaqRouteImport } from './routes/us.faq'
+import { Route as UsHowItWorksRouteImport } from './routes/us.how-it-works'
+import { Route as UsLegalRouteImport } from './routes/us.legal'
+import { Route as UsPartnersRouteImport } from './routes/us.partners'
+import { Route as CaFrFaqRouteImport } from './routes/ca.fr.faq'
+import { Route as CaFrHowItWorksRouteImport } from './routes/ca.fr.how-it-works'
+import { Route as CaFrLegalRouteImport } from './routes/ca.fr.legal'
+import { Route as CaFrPartnersRouteImport } from './routes/ca.fr.partners'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -58,37 +72,147 @@ const UsRoute = UsRouteImport.update({
   path: '/us',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CaIndexRoute = CaIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaFaqRoute = CaFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaHowItWorksRoute = CaHowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaLegalRoute = CaLegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaPartnersRoute = CaPartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
+  getParentRoute: () => CaRoute,
+} as any)
+const UsIndexRoute = UsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UsRoute,
+} as any)
+const UsFaqRoute = UsFaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => UsRoute,
+} as any)
+const UsHowItWorksRoute = UsHowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => UsRoute,
+} as any)
+const UsLegalRoute = UsLegalRouteImport.update({
+  id: '/legal',
+  path: '/legal',
+  getParentRoute: () => UsRoute,
+} as any)
+const UsPartnersRoute = UsPartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
+  getParentRoute: () => UsRoute,
+} as any)
+const CaFrFaqRoute = CaFrFaqRouteImport.update({
+  id: '/fr/faq',
+  path: '/fr/faq',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaFrHowItWorksRoute = CaFrHowItWorksRouteImport.update({
+  id: '/fr/how-it-works',
+  path: '/fr/how-it-works',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaFrLegalRoute = CaFrLegalRouteImport.update({
+  id: '/fr/legal',
+  path: '/fr/legal',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaFrPartnersRoute = CaFrPartnersRouteImport.update({
+  id: '/fr/partners',
+  path: '/fr/partners',
+  getParentRoute: () => CaRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/ca': typeof CaRoute
+  '/ca': typeof CaRouteWithChildren
   '/europe': typeof EuropeRoute
   '/garage': typeof GarageRoute
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
-  '/us': typeof UsRoute
+  '/us': typeof UsRouteWithChildren
+  '/ca/faq': typeof CaFaqRoute
+  '/ca/how-it-works': typeof CaHowItWorksRoute
+  '/ca/legal': typeof CaLegalRoute
+  '/ca/partners': typeof CaPartnersRoute
+  '/us/faq': typeof UsFaqRoute
+  '/us/how-it-works': typeof UsHowItWorksRoute
+  '/us/legal': typeof UsLegalRoute
+  '/us/partners': typeof UsPartnersRoute
+  '/ca/': typeof CaIndexRoute
+  '/us/': typeof UsIndexRoute
+  '/ca/fr/faq': typeof CaFrFaqRoute
+  '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
+  '/ca/fr/legal': typeof CaFrLegalRoute
+  '/ca/fr/partners': typeof CaFrPartnersRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/ca': typeof CaRoute
   '/europe': typeof EuropeRoute
   '/garage': typeof GarageRoute
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
-  '/us': typeof UsRoute
+  '/ca/faq': typeof CaFaqRoute
+  '/ca/how-it-works': typeof CaHowItWorksRoute
+  '/ca/legal': typeof CaLegalRoute
+  '/ca/partners': typeof CaPartnersRoute
+  '/us/faq': typeof UsFaqRoute
+  '/us/how-it-works': typeof UsHowItWorksRoute
+  '/us/legal': typeof UsLegalRoute
+  '/us/partners': typeof UsPartnersRoute
+  '/ca': typeof CaIndexRoute
+  '/us': typeof UsIndexRoute
+  '/ca/fr/faq': typeof CaFrFaqRoute
+  '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
+  '/ca/fr/legal': typeof CaFrLegalRoute
+  '/ca/fr/partners': typeof CaFrPartnersRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/ca': typeof CaRoute
+  '/ca': typeof CaRouteWithChildren
   '/europe': typeof EuropeRoute
   '/garage': typeof GarageRoute
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
-  '/us': typeof UsRoute
+  '/us': typeof UsRouteWithChildren
+  '/ca/faq': typeof CaFaqRoute
+  '/ca/how-it-works': typeof CaHowItWorksRoute
+  '/ca/legal': typeof CaLegalRoute
+  '/ca/partners': typeof CaPartnersRoute
+  '/us/faq': typeof UsFaqRoute
+  '/us/how-it-works': typeof UsHowItWorksRoute
+  '/us/legal': typeof UsLegalRoute
+  '/us/partners': typeof UsPartnersRoute
+  '/ca/': typeof CaIndexRoute
+  '/us/': typeof UsIndexRoute
+  '/ca/fr/faq': typeof CaFrFaqRoute
+  '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
+  '/ca/fr/legal': typeof CaFrLegalRoute
+  '/ca/fr/partners': typeof CaFrPartnersRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,16 +225,42 @@ export interface FileRouteTypes {
     | '/scenic'
     | '/tolls'
     | '/us'
+    | '/ca/faq'
+    | '/ca/how-it-works'
+    | '/ca/legal'
+    | '/ca/partners'
+    | '/us/faq'
+    | '/us/how-it-works'
+    | '/us/legal'
+    | '/us/partners'
+    | '/ca/'
+    | '/us/'
+    | '/ca/fr/faq'
+    | '/ca/fr/how-it-works'
+    | '/ca/fr/legal'
+    | '/ca/fr/partners'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/ca'
     | '/europe'
     | '/garage'
     | '/planner'
     | '/scenic'
     | '/tolls'
+    | '/ca/faq'
+    | '/ca/how-it-works'
+    | '/ca/legal'
+    | '/ca/partners'
+    | '/us/faq'
+    | '/us/how-it-works'
+    | '/us/legal'
+    | '/us/partners'
+    | '/ca'
     | '/us'
+    | '/ca/fr/faq'
+    | '/ca/fr/how-it-works'
+    | '/ca/fr/legal'
+    | '/ca/fr/partners'
   id:
     | '__root__'
     | '/'
@@ -121,17 +271,31 @@ export interface FileRouteTypes {
     | '/scenic'
     | '/tolls'
     | '/us'
+    | '/ca/faq'
+    | '/ca/how-it-works'
+    | '/ca/legal'
+    | '/ca/partners'
+    | '/us/faq'
+    | '/us/how-it-works'
+    | '/us/legal'
+    | '/us/partners'
+    | '/ca/'
+    | '/us/'
+    | '/ca/fr/faq'
+    | '/ca/fr/how-it-works'
+    | '/ca/fr/legal'
+    | '/ca/fr/partners'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CaRoute: typeof CaRoute
+  CaRoute: typeof CaRouteWithChildren
   EuropeRoute: typeof EuropeRoute
   GarageRoute: typeof GarageRoute
   PlannerRoute: typeof PlannerRoute
   ScenicRoute: typeof ScenicRoute
   TollsRoute: typeof TollsRoute
-  UsRoute: typeof UsRoute
+  UsRoute: typeof UsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -192,18 +356,160 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/ca/': {
+      id: '/ca/'
+      path: '/'
+      fullPath: '/ca/'
+      preLoaderRoute: typeof CaIndexRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/faq': {
+      id: '/ca/faq'
+      path: '/faq'
+      fullPath: '/ca/faq'
+      preLoaderRoute: typeof CaFaqRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/how-it-works': {
+      id: '/ca/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/ca/how-it-works'
+      preLoaderRoute: typeof CaHowItWorksRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/legal': {
+      id: '/ca/legal'
+      path: '/legal'
+      fullPath: '/ca/legal'
+      preLoaderRoute: typeof CaLegalRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/partners': {
+      id: '/ca/partners'
+      path: '/partners'
+      fullPath: '/ca/partners'
+      preLoaderRoute: typeof CaPartnersRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/us/': {
+      id: '/us/'
+      path: '/'
+      fullPath: '/us/'
+      preLoaderRoute: typeof UsIndexRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/us/faq': {
+      id: '/us/faq'
+      path: '/faq'
+      fullPath: '/us/faq'
+      preLoaderRoute: typeof UsFaqRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/us/how-it-works': {
+      id: '/us/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/us/how-it-works'
+      preLoaderRoute: typeof UsHowItWorksRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/us/legal': {
+      id: '/us/legal'
+      path: '/legal'
+      fullPath: '/us/legal'
+      preLoaderRoute: typeof UsLegalRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/us/partners': {
+      id: '/us/partners'
+      path: '/partners'
+      fullPath: '/us/partners'
+      preLoaderRoute: typeof UsPartnersRouteImport
+      parentRoute: typeof UsRoute
+    }
+    '/ca/fr/faq': {
+      id: '/ca/fr/faq'
+      path: '/fr/faq'
+      fullPath: '/ca/fr/faq'
+      preLoaderRoute: typeof CaFrFaqRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/fr/how-it-works': {
+      id: '/ca/fr/how-it-works'
+      path: '/fr/how-it-works'
+      fullPath: '/ca/fr/how-it-works'
+      preLoaderRoute: typeof CaFrHowItWorksRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/fr/legal': {
+      id: '/ca/fr/legal'
+      path: '/fr/legal'
+      fullPath: '/ca/fr/legal'
+      preLoaderRoute: typeof CaFrLegalRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/fr/partners': {
+      id: '/ca/fr/partners'
+      path: '/fr/partners'
+      fullPath: '/ca/fr/partners'
+      preLoaderRoute: typeof CaFrPartnersRouteImport
+      parentRoute: typeof CaRoute
+    }
   }
 }
 
+interface CaRouteChildren {
+  CaFaqRoute: typeof CaFaqRoute
+  CaHowItWorksRoute: typeof CaHowItWorksRoute
+  CaLegalRoute: typeof CaLegalRoute
+  CaPartnersRoute: typeof CaPartnersRoute
+  CaIndexRoute: typeof CaIndexRoute
+  CaFrFaqRoute: typeof CaFrFaqRoute
+  CaFrHowItWorksRoute: typeof CaFrHowItWorksRoute
+  CaFrLegalRoute: typeof CaFrLegalRoute
+  CaFrPartnersRoute: typeof CaFrPartnersRoute
+}
+
+const CaRouteChildren: CaRouteChildren = {
+  CaFaqRoute: CaFaqRoute,
+  CaHowItWorksRoute: CaHowItWorksRoute,
+  CaLegalRoute: CaLegalRoute,
+  CaPartnersRoute: CaPartnersRoute,
+  CaIndexRoute: CaIndexRoute,
+  CaFrFaqRoute: CaFrFaqRoute,
+  CaFrHowItWorksRoute: CaFrHowItWorksRoute,
+  CaFrLegalRoute: CaFrLegalRoute,
+  CaFrPartnersRoute: CaFrPartnersRoute,
+}
+
+const CaRouteWithChildren = CaRoute._addFileChildren(CaRouteChildren)
+
+interface UsRouteChildren {
+  UsFaqRoute: typeof UsFaqRoute
+  UsHowItWorksRoute: typeof UsHowItWorksRoute
+  UsLegalRoute: typeof UsLegalRoute
+  UsPartnersRoute: typeof UsPartnersRoute
+  UsIndexRoute: typeof UsIndexRoute
+}
+
+const UsRouteChildren: UsRouteChildren = {
+  UsFaqRoute: UsFaqRoute,
+  UsHowItWorksRoute: UsHowItWorksRoute,
+  UsLegalRoute: UsLegalRoute,
+  UsPartnersRoute: UsPartnersRoute,
+  UsIndexRoute: UsIndexRoute,
+}
+
+const UsRouteWithChildren = UsRoute._addFileChildren(UsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CaRoute: CaRoute,
+  CaRoute: CaRouteWithChildren,
   EuropeRoute: EuropeRoute,
   GarageRoute: GarageRoute,
   PlannerRoute: PlannerRoute,
   ScenicRoute: ScenicRoute,
   TollsRoute: TollsRoute,
-  UsRoute: UsRoute,
+  UsRoute: UsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
