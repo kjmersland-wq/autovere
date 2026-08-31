@@ -3,12 +3,14 @@ import { useRouterState } from "@tanstack/react-router";
 import type { CostGroupKey } from "@/lib/country-costs";
 import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 
-export type Locale = "en" | "no";
+export type Locale = "en" | "no" | "sv" | "da" | "de" | "nl" | "fr" | "pl";
 
 import { CONTENT_NO } from "@/lib/content-no";
+import { codeFromPath } from "@/lib/locales";
+import { PARTIAL_DICTS } from "@/lib/dictionaries";
 
 export function localeFromPath(pathname: string): Locale {
-  return pathname === "/no" || pathname.startsWith("/no/") ? "no" : "en";
+  return codeFromPath(pathname) as Locale;
 }
 
 export function useLocale(): Locale {
