@@ -12,9 +12,11 @@ import {
   tagSavings,
   tagsForRegion,
 } from "@/lib/compliance";
+import { useT, useTr } from "@/lib/i18n";
 import { money, type RegionKey, type TripEstimate } from "@/lib/trip-data";
 
 function Portal({ label, url }: { label: string; url: string }) {
+  const t = useT();
   return (
     <a
       href={url}
@@ -22,13 +24,15 @@ function Portal({ label, url }: { label: string; url: string }) {
       rel="noopener noreferrer"
       className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
     >
-      Official portal · {label}
+      {t.compliance.officialPortal} · {label}
       <ExternalLink className="size-3.5" />
     </a>
   );
 }
 
 export function MotorhomeClearanceRadar({ region }: { region: RegionKey }) {
+  const t = useT();
+  const tr = useTr();
   const [heavy, setHeavy] = useState(false);
   const [height, setHeight] = useState(3.2);
 
@@ -38,18 +42,18 @@ export function MotorhomeClearanceRadar({ region }: { region: RegionKey }) {
     <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
       <div className="flex items-center gap-2">
         <Ruler className="size-5 text-primary" />
-        <h3 className="text-lg font-semibold tracking-tight">🚐 Motorhome weight &amp; clearance radar</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t.compliance.clearanceTitle}</h3>
       </div>
       <p className="mt-1 text-sm text-foreground/70">
-        Confirm your plated weight and travelling height — the rules change sharply above 3.5 t and 3.2 m.
+        {t.compliance.clearanceIntro}
       </p>
 
       <div className="mt-5 grid gap-4 md:grid-cols-2">
         <label className="flex items-center justify-between gap-4 rounded-2xl border border-border bg-background/40 p-4">
           <span>
-            <span className="text-sm font-semibold">My motorhome is over 3.5 t</span>
+            <span className="text-sm font-semibold">{t.compliance.heavyToggle}</span>
             <span className="mt-1 block text-xs text-muted-foreground">
-              Maximum permissible mass on the registration plate, not the kerb weight.
+              {t.compliance.heavyHint}
             </span>
           </span>
           <Switch checked={heavy} onCheckedChange={setHeavy} />
@@ -57,7 +61,7 @@ export function MotorhomeClearanceRadar({ region }: { region: RegionKey }) {
 
         <div className="rounded-2xl border border-border bg-background/40 p-4">
           <div className="flex items-baseline justify-between">
-            <span className="text-sm font-semibold">Travelling height</span>
+            <span className="text-sm font-semibold">{t.compliance.heightLabel}</span>
             <span className="text-lg font-semibold text-primary">{height.toFixed(2)} m</span>
           </div>
           <input
@@ -68,10 +72,10 @@ export function MotorhomeClearanceRadar({ region }: { region: RegionKey }) {
             value={height}
             onChange={(e) => setHeight(Number(e.target.value))}
             className="mt-3 w-full accent-primary"
-            aria-label="Vehicle height in metres"
+            aria-label={t.compliance.heightAria}
           />
           <p className="mt-2 text-xs text-muted-foreground">
-            Measure to the highest fixed point including solar panels and roof boxes.
+            {t.compliance.heightHint}
           </p>
         </div>
       </div>
@@ -79,16 +83,15 @@ export function MotorhomeClearanceRadar({ region }: { region: RegionKey }) {
       {heavy && systems.length > 0 && (
         <div className="mt-6">
           <p className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-4 text-sm text-amber-100">
-            ⚠️ Over 3.5 t your standard car vignette is not valid. Switch to the heavy-vehicle system in each country
-            below before your first motorway kilometre.
+            {t.compliance.heavyWarning}
           </p>
           <div className="mt-4 grid gap-4 md:grid-cols-2">
             {systems.map((s) => (
               <article key={s.id} className="rounded-2xl border border-border bg-background/40 p-5">
                 <p className="text-sm font-semibold">
-                  {s.flag} {s.country} · {s.system}
+                  {s.flag} {tr(s.country)} · {tr(s.system)}
                 </p>
-                <p className="mt-2 text-sm text-foreground/80">{s.body}</p>
+                <p className="mt-2 text-sm text-foreground/80">{tr(s.body)}</p>
                 <Portal label={s.portalLabel} url={s.portalUrl} />
               </article>
             ))}
@@ -108,14 +111,14 @@ export function MotorhomeClearanceRadar({ region }: { region: RegionKey }) {
               )}
             >
               <p className="text-sm font-semibold">
-                {a.emoji} {a.title}
+                {a.emoji} {tr(a.title)}
                 {critical && (
                   <span className="ml-2 rounded-full border border-red-400/50 px-2 py-0.5 text-[11px] text-red-200">
-                    Applies at {height.toFixed(2)} m
+                    {t.compliance.appliesAt(height.toFixed(2))}
                   </span>
                 )}
               </p>
-              <p className="mt-2 text-sm text-foreground/80">{a.body}</p>
+              <p className="mt-2 text-sm text-foreground/80">{tr(a.body)}</p>
             </article>
           );
         })}
@@ -126,17 +129,17 @@ export function MotorhomeClearanceRadar({ region }: { region: RegionKey }) {
           <div className="flex items-center gap-2">
             <Gauge className="size-4 text-primary" />
             <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
-              Speed limits &amp; overtaking bans
+              {t.compliance.speedTitle}
             </p>
           </div>
           <div className="mt-3 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
             {MOTORHOME_SPEED_RULES.map((r) => (
               <article key={r.id} className="rounded-2xl border border-border bg-background/40 p-4">
                 <p className="text-sm font-semibold">
-                  {r.flag} {r.country}
+                  {r.flag} {tr(r.country)}
                 </p>
-                <p className="mt-1 text-sm font-medium text-primary">{r.motorway}</p>
-                <p className="mt-2 text-xs text-foreground/75">{r.note}</p>
+                <p className="mt-1 text-sm font-medium text-primary">{tr(r.motorway)}</p>
+                <p className="mt-2 text-xs text-foreground/75">{tr(r.note)}</p>
               </article>
             ))}
           </div>
@@ -157,6 +160,8 @@ export function LezMonitor({
   destination: string;
   isMotorcycle: boolean;
 }) {
+  const t = useT();
+  const tr = useTr();
   const { matched, all } = useMemo(
     () => detectLezZones(region, origin, destination),
     [region, origin, destination],
@@ -168,13 +173,13 @@ export function LezMonitor({
     <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
       <div className="flex flex-wrap items-center gap-2">
         <Wind className="size-5 text-primary" />
-        <h3 className="text-lg font-semibold tracking-tight">Urban low emission zone monitor</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t.compliance.lezTitle}</h3>
         <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-0.5 text-[11px] font-medium text-primary">
-          {matched.length > 0 ? `${matched.length} detected on this corridor` : "Regional overview"}
+          {matched.length > 0 ? t.compliance.lezDetected(matched.length) : t.compliance.lezOverview}
         </span>
       </div>
       <p className="mt-1 text-sm text-foreground/70">
-        Order badges and register plates before you travel — most zones are camera-enforced with no on-site payment.
+        {t.compliance.lezIntro}
       </p>
 
       <div className="mt-5 grid gap-4 md:grid-cols-2">
@@ -182,10 +187,10 @@ export function LezMonitor({
           <article key={z.id} className="rounded-2xl border border-border bg-background/40 p-5">
             <div className="flex flex-wrap items-center justify-between gap-2">
               <p className="text-sm font-semibold">
-                {z.flag} {z.country} · {z.scheme}
+                {z.flag} {tr(z.country)} · {tr(z.scheme)}
               </p>
               <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[11px] text-primary">
-                {z.cost}
+                {tr(z.cost)}
               </span>
             </div>
             <div className="mt-2 flex flex-wrap gap-1.5">
@@ -198,9 +203,9 @@ export function LezMonitor({
                 </span>
               ))}
             </div>
-            <p className="mt-3 text-sm text-foreground/80">{z.requirement}</p>
-            <p className="mt-2 text-xs text-muted-foreground">⏱️ {z.leadTime}</p>
-            {isMotorcycle && <p className="mt-2 text-xs text-amber-200">🏍️ {z.motorcycle}</p>}
+            <p className="mt-3 text-sm text-foreground/80">{tr(z.requirement)}</p>
+            <p className="mt-2 text-xs text-muted-foreground">⏱️ {tr(z.leadTime)}</p>
+            {isMotorcycle && <p className="mt-2 text-xs text-amber-200">🏍️ {tr(z.motorcycle)}</p>}
             <Portal label={z.portalLabel} url={z.portalUrl} />
           </article>
         ))}
@@ -216,6 +221,8 @@ export function TransponderSelector({
   region: RegionKey;
   trip: TripEstimate;
 }) {
+  const t2 = useT();
+  const tr = useTr();
   const tags = tagsForRegion(region);
   const [activeIds, setActiveIds] = useState<string[]>([]);
   const { savings, best, active } = tagSavings(trip.tolls, activeIds, region);
@@ -230,10 +237,10 @@ export function TransponderSelector({
     <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
       <div className="flex items-center gap-2">
         <Radio className="size-5 text-primary" />
-        <h3 className="text-lg font-semibold tracking-tight">My toll transponders &amp; tags</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t2.compliance.tagTitle}</h3>
       </div>
       <p className="mt-1 text-sm text-foreground/70">
-        Tick the tags you already carry — we mark the matching booths as auto-detected lanes and re-price your tolls.
+        {t2.compliance.tagIntro}
       </p>
 
       <div className="mt-5 grid gap-4 md:grid-cols-2">
@@ -252,15 +259,15 @@ export function TransponderSelector({
                   <p className="text-sm font-semibold">
                     {t.emoji} {t.label}
                   </p>
-                  <p className="mt-1 text-xs text-muted-foreground">{t.scope}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{tr(t.scope)}</p>
                 </div>
                 <Switch checked={on} onCheckedChange={() => toggle(t.id)} aria-label={t.label} />
               </div>
               <p className="mt-3 text-sm text-foreground/80">
-                {on ? "🟢 Auto-detected lane / no cash stop required" : t.lanes}
+                {on ? t2.compliance.tagAuto : tr(t.lanes)}
               </p>
               <p className="mt-2 text-xs text-primary">
-                Typical saving on covered tolls: {Math.round(t.discount * 100)}%
+                {t2.compliance.tagSaving(Math.round(t.discount * 100))}
               </p>
               <Portal label={t.portalLabel} url={t.portalUrl} />
             </article>
@@ -272,14 +279,15 @@ export function TransponderSelector({
         <BadgeCheck className={cn("size-5", active.length > 0 ? "text-emerald-400" : "text-muted-foreground")} />
         {active.length === 0 ? (
           <p className="text-sm text-foreground/75">
-            No tags selected — tolls stay at {money(trip.currency, trip.tolls)} with cash/card booth stops.
+            {t2.compliance.tagNone(money(trip.currency, trip.tolls))}
           </p>
         ) : (
           <p className="text-sm text-foreground/85">
-            With {active.length} tag{active.length > 1 ? "s" : ""} active your tolls drop from{" "}
-            <span className="line-through text-muted-foreground">{money(trip.currency, trip.tolls)}</span> to{" "}
-            <span className="font-semibold text-primary">{money(trip.currency, newTotal)}</span> — saving{" "}
-            {money(trip.currency, savings)} ({Math.round(best * 100)}% on covered booths) and skipping every cash lane.
+            {t2.compliance.tagActivePrefix(active.length)}{" "}
+            <span className="line-through text-muted-foreground">{money(trip.currency, trip.tolls)}</span>{" "}
+            {t2.compliance.tagTo}{" "}
+            <span className="font-semibold text-primary">{money(trip.currency, newTotal)}</span>{" "}
+            {t2.compliance.tagSavingTail(money(trip.currency, savings), Math.round(best * 100))}
           </p>
         )}
       </div>

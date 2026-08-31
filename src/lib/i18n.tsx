@@ -5,6 +5,8 @@ import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 
 export type Locale = "en" | "no";
 
+import { CONTENT_NO } from "@/lib/content-no";
+
 export function localeFromPath(pathname: string): Locale {
   return pathname === "/no" || pathname.startsWith("/no/") ? "no" : "en";
 }
@@ -182,6 +184,72 @@ const en = {
       mercedes: "Push the route to MBUX navigation",
       phone: "Opens the maps hand-off link on your phone",
     } as Record<string, string>,
+  },
+  compliance: {
+    clearanceTitle: "🚐 Motorhome weight & clearance radar",
+    clearanceIntro:
+      "Confirm your plated weight and travelling height — the rules change sharply above 3.5 t and 3.2 m.",
+    heavyToggle: "My motorhome is over 3.5 t",
+    heavyHint: "Maximum permissible mass on the registration plate, not the kerb weight.",
+    heightLabel: "Travelling height",
+    heightAria: "Vehicle height in metres",
+    heightHint: "Measure to the highest fixed point including solar panels and roof boxes.",
+    heavyWarning:
+      "⚠️ Over 3.5 t your standard car vignette is not valid. Switch to the heavy-vehicle system in each country below before your first motorway kilometre.",
+    appliesAt: (h: string) => `Applies at ${h} m`,
+    speedTitle: "Speed limits & overtaking bans",
+    officialPortal: "Official portal",
+    lezTitle: "Urban low emission zone monitor",
+    lezDetected: (n: number) => `${n} detected on this corridor`,
+    lezOverview: "Regional overview",
+    lezIntro:
+      "Order badges and register plates before you travel — most zones are camera-enforced with no on-site payment.",
+    tagTitle: "My toll transponders & tags",
+    tagIntro:
+      "Tick the tags you already carry — we mark the matching booths as auto-detected lanes and re-price your tolls.",
+    tagAuto: "🟢 Auto-detected lane / no cash stop required",
+    tagSaving: (p: number) => `Typical saving on covered tolls: ${p}%`,
+    tagNone: (amount: string) => `No tags selected — tolls stay at ${amount} with cash/card booth stops.`,
+    tagActivePrefix: (n: number) => `With ${n} tag${n > 1 ? "s" : ""} active your tolls drop from`,
+    tagTo: "to",
+    tagSavingTail: (amount: string, pct: number) =>
+      `— saving ${amount} (${pct}% on covered booths) and skipping every cash lane.`,
+  },
+  map: {
+    title: "Corridor radar map",
+    corridorBadge: (d: string) => `${d} corridor`,
+    intro: (from: string, to: string) => `Live service radar along ${from} → ${to}. Toggle the layers you care about.`,
+    tooltipIn: "in",
+    fuelTitle: "Fuel stops & live prices along the route",
+    stations: (n: number) => `${n} stations`,
+    source: "Source",
+    alongRoute: "along route",
+    addRefuel: "Add as Refuel Stop",
+    campTitle: "🚐 Motorhome & camping radar",
+    campIntro:
+      "Rated campsites, aires and service points along the active corridor — add any of them straight into your itinerary.",
+    addItinerary: "Add to itinerary",
+    yourStart: "Your start",
+    yourDestination: "Your destination",
+  },
+  intel: {
+    passTitle: "🏔️ Iconic mountain pass radar",
+    passIntro:
+      "Seasonal windows, tolls and live-status pointers for the great passes on your corridor — so you arrive at the summit on a day it's genuinely open.",
+    elevation: "Elevation",
+    season: "Season",
+    toll: "Toll",
+    addStop: "+ Add as Stop",
+    liveStatus: "Live status",
+    tipsTitle: "💡 Cross-border fuel & cost arbitrage",
+    tipsIntro: "Small timing choices at the border add up to a very nice dinner at the other end.",
+    tipPrefix: "Border tip:",
+    crossTitle: "🛂 Border crossing checkpoints",
+    crossIntro:
+      "What to expect at each frontier on this route — have the paperwork ready and the crossing is a formality.",
+    wait: "Wait:",
+    schengen: "Schengen",
+    strict: "Passport & customs",
   },
   footer: {
     tagline:
@@ -380,6 +448,74 @@ const no: Strings = {
       phone: "Åpner overføringslenken til kart på mobilen din",
     },
   },
+  compliance: {
+    clearanceTitle: "🚐 Vekt- og høyderadar for bobil",
+    clearanceIntro:
+      "Bekreft totalvekt og reisehøyde — reglene endrer seg markant over 3,5 tonn og 3,2 meter.",
+    heavyToggle: "Bobilen min veier over 3,5 tonn",
+    heavyHint: "Tillatt totalvekt i vognkortet, ikke egenvekten.",
+    heightLabel: "Reisehøyde",
+    heightAria: "Kjøretøyets høyde i meter",
+    heightHint: "Mål til høyeste faste punkt, inkludert solcellepanel og takboks.",
+    heavyWarning:
+      "⚠️ Over 3,5 tonn gjelder ikke den vanlige personbilvignetten. Bytt til tungbilsystemet i hvert land under før din første motorveikilometer.",
+    appliesAt: (h: string) => `Gjelder ved ${h} m`,
+    speedTitle: "Fartsgrenser og forbikjøringsforbud",
+    officialPortal: "Offisiell portal",
+    lezTitle: "Overvåking av lavutslippssoner i byer",
+    lezDetected: (n: number) => `${n} funnet langs denne ruten`,
+    lezOverview: "Regional oversikt",
+    lezIntro:
+      "Bestill miljømerker og registrer skiltnummer før avreise — de fleste sonene kontrolleres med kamera, uten betaling på stedet.",
+    tagTitle: "Mine bombrikker og betalingsbrikker",
+    tagIntro:
+      "Huk av for brikkene du allerede har — vi merker bomstasjonene som automatiske felt og regner om bompengene.",
+    tagAuto: "🟢 Automatisk felt / ingen kontantstopp",
+    tagSaving: (p: number) => `Vanlig rabatt på dekkede bompenger: ${p} %`,
+    tagNone: (amount: string) =>
+      `Ingen brikker valgt — bompengene blir ${amount} med stopp for kort/kontant.`,
+    tagActivePrefix: (n: number) => `Med ${n} ${n > 1 ? "brikker" : "brikke"} aktivert faller bompengene fra`,
+    tagTo: "til",
+    tagSavingTail: (amount: string, pct: number) =>
+      `— du sparer ${amount} (${pct} % på dekkede bomstasjoner) og slipper alle kontantfelt.`,
+  },
+  map: {
+    title: "Ruteradar med kart",
+    corridorBadge: (d: string) => `${d} korridor`,
+    intro: (from: string, to: string) =>
+      `Live servicekart langs ${from} → ${to}. Slå på lagene du er interessert i.`,
+    tooltipIn: "inn i ruten",
+    fuelTitle: "Drivstoffstopp og priser langs ruten",
+    stations: (n: number) => `${n} stasjoner`,
+    source: "Kilde",
+    alongRoute: "langs ruten",
+    addRefuel: "Legg til som fyllestopp",
+    campTitle: "🚐 Bobil- og campingradar",
+    campIntro:
+      "Campingplasser, bobilparkeringer og servicepunkter langs ruten — legg dem rett inn i reiseplanen din.",
+    addItinerary: "Legg til i reiseplanen",
+    yourStart: "Startstedet ditt",
+    yourDestination: "Reisemålet ditt",
+  },
+  intel: {
+    passTitle: "🏔️ Radar for de store fjellovergangene",
+    passIntro:
+      "Sesong, bompenger og statuslenker for fjellovergangene på ruten din — slik at du kommer til toppen på en dag den faktisk er åpen.",
+    elevation: "Høyde",
+    season: "Sesong",
+    toll: "Avgift",
+    addStop: "+ Legg til som stopp",
+    liveStatus: "Oppdatert status",
+    tipsTitle: "💡 Smarte grensetips for drivstoff og kostnader",
+    tipsIntro: "Små valg ved grensen blir fort til en riktig god middag på andre siden.",
+    tipPrefix: "Grensetips:",
+    crossTitle: "🛂 Grensepasseringer",
+    crossIntro:
+      "Slik er det på hver grense på denne ruten — har du papirene klare, er passeringen en formalitet.",
+    wait: "Ventetid:",
+    schengen: "Schengen",
+    strict: "Pass og toll",
+  },
   footer: {
     tagline: "Sømløs ruteplanlegging og kostnadskontroll på tvers av landegrenser.",
     productBy: "Utviklet av",
@@ -403,4 +539,52 @@ export const STRINGS: Record<Locale, Strings> = { en, no };
 
 export function useT(): Strings {
   return STRINGS[useLocale()];
+}
+
+/** Translator for copy that lives in data modules, keyed by the English source string. */
+const NO_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [
+    /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
+    (m) => `Kom fram med ca. 25 % batteri og lad til 80 % på omtrent ${m[1]} minutter.`,
+  ],
+  [
+    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
+    (m) => `Anbefalt fylling — holder deg over 25 % reserve med en rekkevidde på ${m[1]}.`,
+  ],
+  [/^(.+) full battery range$/, (m) => `${m[1]} rekkevidde med fullt batteri`],
+  [/^(.+) full tank range$/, (m) => `${m[1]} rekkevidde med full tank`],
+  [
+    /^Single transit leg: (.+) is the cheapest legal cover\.$/,
+    (m) => `Én gjennomkjøring: ${m[1]} er det rimeligste lovlige alternativet.`,
+  ],
+  [
+    /^Covers all (\d+) days? of your return trip within one validity window\.$/,
+    (m) => `Dekker alle ${m[1]} dagene av tur-retur-reisen innenfor én gyldighetsperiode.`,
+  ],
+  [
+    /^💡 AutoVere optimized your vignette cost: saved (.+) — (.+) in (.+) instead of the usual (.+)\.$/,
+    (m) => `💡 AutoVere optimaliserte vignettkostnaden: spart ${m[1]} — ${m[2]} i ${m[3]} i stedet for vanlig ${m[4]}.`,
+  ],
+  [
+    /^💡 AutoVere checked every validity window — the standard tiers are already the cheapest legal cover for (\d+) days?\.$/,
+    (m) => `💡 AutoVere sjekket alle gyldighetsperioder — standardvalgene er allerede det rimeligste lovlige alternativet for ${m[1]} dager.`,
+  ],
+  [
+    /^Planned at 75% safety buffer — (.+) between stops$/,
+    (m) => `Planlagt med 75 % sikkerhetsmargin — ${m[1]} mellom stoppene`,
+  ],
+];
+
+export function useTr(): (value: string) => string {
+  const locale = useLocale();
+  return (value: string) => {
+    if (locale !== "no") return value;
+    const direct = CONTENT_NO[value];
+    if (direct) return direct;
+    for (const [re, fn] of NO_PATTERNS) {
+      const m = value.match(re);
+      if (m) return fn(m);
+    }
+    return value;
+  };
 }
