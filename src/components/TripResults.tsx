@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ExternalLink, Mountain, Save, Share2, ShieldCheck, Ship } from "lucide-react";
+import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -15,9 +15,11 @@ import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { PassBorderIntel } from "@/components/PassBorderIntel";
 import { CorridorMap } from "@/components/CorridorMap";
 import { LezMonitor, MotorhomeClearanceRadar, TransponderSelector } from "@/components/ComplianceModules";
+import { CurrencyPills } from "@/components/CurrencySelector";
+import { PrintItinerary } from "@/components/PrintItinerary";
+import { RATES_UPDATED, useMoney } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 import {
-  money,
   ROUTE_VARIANTS,
   RV_POIS,
   SCENIC_HIGHLIGHTS,
@@ -95,10 +97,12 @@ export function TripResults({
   onAddStop?: (name: string) => void;
 }) {
   const [active, setActive] = useState<RouteVariantKey>("fastest");
+  const [printing, setPrinting] = useState(false);
   const [rvMode, setRvMode] = useState(isMotorhome);
   const highlights = SCENIC_HIGHLIGHTS[region];
   const rvPois = RV_POIS[region];
   const trip = trips[active];
+  const m = useMoney(trip.currency);
   const comparison = variantComparison(trips.fastest, trip);
   const title = `${origin || "Your start"} → ${destination || "Your destination"}`;
   const showNorway = region === "eu" && routeTouchesNorway(origin, destination);
@@ -114,7 +118,7 @@ export function TripResults({
         name: title,
         origin: origin || "Your start",
         destination: destination || "Your destination",
-        detail: `${trip.distanceLabel} · ${trip.driveTime} · ${money(trip.currency, trip.budget)} budget`,
+        detail: `${trip.distanceLabel} · ${trip.driveTime} · ${m.fmt(trip.budget, 0)} budget`,
         when: `Saved ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
         distanceLabel: trip.distanceLabel,
         driveTime: trip.driveTime,
@@ -136,7 +140,7 @@ export function TripResults({
 
 
   const shareTrip = async () => {
-    const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${money(trip.currency, trip.budget)} with AutoVere`;
+    const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)} with AutoVere`;
     try {
       if (navigator.share) await navigator.share({ title: "AutoVere road trip", text, url: window.location.href });
       else {
@@ -179,7 +183,7 @@ export function TripResults({
                   {v.emoji} {v.label}
                 </span>
                 <span className="mt-1 block text-xs text-muted-foreground">
-                  {money(t.currency, t.tolls + t.ferries)} tolls · {t.driveTime} · {t.distanceLabel}
+                  {m.fmt(t.tolls + t.ferries)} tolls · {t.driveTime} · {t.distanceLabel}
                 </span>
               </button>
             );
@@ -204,26 +208,38 @@ export function TripResults({
 
 
 
-      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="glass-panel mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl px-5 py-4">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+            Display currency
+          </p>
+          <p className="mt-1 text-xs text-foreground/70">
+            {m.rateNote() || "Costs shown in the local base currency."} · {RATES_UPDATED}
+          </p>
+        </div>
+        <CurrencyPills />
+      </div>
+
+      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <MetricCard
           accent
           label="Total Trip Budget"
-          value={money(trip.currency, trip.budget)}
+          value={m.fmt(trip.budget, 0)}
           hint="Tolls, energy, ferries and running costs"
         />
         <MetricCard label="Distance" value={trip.distanceLabel} hint="Door to door, your chosen route" />
         <MetricCard label="Driving Time" value={trip.driveTime} hint="Moving time, breaks excluded" />
         <MetricCard
           label={trip.energyLabel}
-          value={money(trip.currency, trip.energyCost)}
+          value={m.fmt(trip.energyCost)}
           hint={`Approx. ${trip.energyAmount} for the route`}
         />
       </div>
 
       <div className="mt-5 flex flex-wrap gap-2">
-        <SubtotalBadge emoji="🛣️" label="Tolls & Vignettes" value={money(trip.currency, trip.tolls)} />
-        <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={money(trip.currency, trip.energyCost)} />
-        <SubtotalBadge emoji="⛴️" label="Ferries & Mountain Passes" value={money(trip.currency, trip.ferries)} />
+        <SubtotalBadge emoji="🛣️" label="Tolls & Vignettes" value={m.fmt(trip.tolls)} />
+        <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={m.fmt(trip.energyCost)} />
+        <SubtotalBadge emoji="⛴️" label="Ferries & Mountain Passes" value={m.fmt(trip.ferries)} />
       </div>
 
       {trip.discountNote && (
@@ -238,6 +254,9 @@ export function TripResults({
         </Button>
         <Button size="lg" variant="outline" onClick={shareTrip}>
           <Share2 className="size-4" /> 🔗 Share Trip
+        </Button>
+        <Button size="lg" variant="outline" onClick={() => setPrinting(true)}>
+          <Printer className="size-4" /> 🖨️ Print Turn-by-Turn Cost Itinerary
         </Button>
       </div>
 
@@ -329,7 +348,7 @@ export function TripResults({
                 <AccordionTrigger className="text-left">
                   <span className="flex w-full items-center justify-between gap-4 pr-3">
                     <span className="font-medium">{segment.country}</span>
-                    <span className="text-primary">{money(trip.currency, segment.total)}</span>
+                    <span className="text-primary">{m.fmt(segment.total)}</span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
@@ -360,7 +379,7 @@ export function TripResults({
                               <ExternalLink className="size-3" />
                             </a>
                           )}
-                          <span className="text-sm font-semibold">{money(trip.currency, line.amount)}</span>
+
                         </span>
                       </li>
                     ))}
@@ -690,6 +709,16 @@ export function TripResults({
         )}
       </div>
 
+      {printing && (
+        <PrintItinerary
+          trip={trip}
+          origin={origin}
+          destination={destination}
+          vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"}
+          fuel={fuel}
+          onClose={() => setPrinting(false)}
+        />
+      )}
     </section>
   );
 }
