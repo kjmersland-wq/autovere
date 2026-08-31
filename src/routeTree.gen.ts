@@ -50,6 +50,7 @@ import { Route as UsHowItWorksRouteImport } from './routes/us.how-it-works'
 import { Route as UsLegalRouteImport } from './routes/us.legal'
 import { Route as UsPartnersRouteImport } from './routes/us.partners'
 import { Route as UsPlannerRouteImport } from './routes/us.planner'
+import { Route as UsPricingRouteImport } from './routes/us.pricing'
 import { Route as UsScenicRouteImport } from './routes/us.scenic'
 import { Route as UsTollsRouteImport } from './routes/us.tolls'
 import { Route as CaFrFaqRouteImport } from './routes/ca.fr.faq'
@@ -263,6 +264,11 @@ const UsPlannerRoute = UsPlannerRouteImport.update({
   path: '/planner',
   getParentRoute: () => UsRoute,
 } as any)
+const UsPricingRoute = UsPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => UsRoute,
+} as any)
 const UsScenicRoute = UsScenicRouteImport.update({
   id: '/scenic',
   path: '/scenic',
@@ -338,6 +344,7 @@ export interface FileRoutesByFullPath {
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
   '/us/planner': typeof UsPlannerRoute
+  '/us/pricing': typeof UsPricingRoute
   '/us/scenic': typeof UsScenicRoute
   '/us/tolls': typeof UsTollsRoute
   '/$lang/': typeof LangIndexRoute
@@ -386,6 +393,7 @@ export interface FileRoutesByTo {
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
   '/us/planner': typeof UsPlannerRoute
+  '/us/pricing': typeof UsPricingRoute
   '/us/scenic': typeof UsScenicRoute
   '/us/tolls': typeof UsTollsRoute
   '/$lang': typeof LangIndexRoute
@@ -437,6 +445,7 @@ export interface FileRoutesById {
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
   '/us/planner': typeof UsPlannerRoute
+  '/us/pricing': typeof UsPricingRoute
   '/us/scenic': typeof UsScenicRoute
   '/us/tolls': typeof UsTollsRoute
   '/$lang/': typeof LangIndexRoute
@@ -489,6 +498,7 @@ export interface FileRouteTypes {
     | '/us/legal'
     | '/us/partners'
     | '/us/planner'
+    | '/us/pricing'
     | '/us/scenic'
     | '/us/tolls'
     | '/$lang/'
@@ -537,6 +547,7 @@ export interface FileRouteTypes {
     | '/us/legal'
     | '/us/partners'
     | '/us/planner'
+    | '/us/pricing'
     | '/us/scenic'
     | '/us/tolls'
     | '/$lang'
@@ -587,6 +598,7 @@ export interface FileRouteTypes {
     | '/us/legal'
     | '/us/partners'
     | '/us/planner'
+    | '/us/pricing'
     | '/us/scenic'
     | '/us/tolls'
     | '/$lang/'
@@ -922,6 +934,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsPlannerRouteImport
       parentRoute: typeof UsRoute
     }
+    '/us/pricing': {
+      id: '/us/pricing'
+      path: '/pricing'
+      fullPath: '/us/pricing'
+      preLoaderRoute: typeof UsPricingRouteImport
+      parentRoute: typeof UsRoute
+    }
     '/us/scenic': {
       id: '/us/scenic'
       path: '/scenic'
@@ -1007,6 +1026,7 @@ interface UsRouteChildren {
   UsLegalRoute: typeof UsLegalRoute
   UsPartnersRoute: typeof UsPartnersRoute
   UsPlannerRoute: typeof UsPlannerRoute
+  UsPricingRoute: typeof UsPricingRoute
   UsScenicRoute: typeof UsScenicRoute
   UsTollsRoute: typeof UsTollsRoute
   UsIndexRoute: typeof UsIndexRoute
@@ -1019,6 +1039,7 @@ const UsRouteChildren: UsRouteChildren = {
   UsLegalRoute: UsLegalRoute,
   UsPartnersRoute: UsPartnersRoute,
   UsPlannerRoute: UsPlannerRoute,
+  UsPricingRoute: UsPricingRoute,
   UsScenicRoute: UsScenicRoute,
   UsTollsRoute: UsTollsRoute,
   UsIndexRoute: UsIndexRoute,

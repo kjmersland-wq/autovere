@@ -15,7 +15,7 @@ export function SiteFooter() {
   const euHome = langPrefix ? `/${langPrefix}` : "/";
   const isFrench = pathname.startsWith("/ca/fr");
 
-  const noPrefix = langPrefix ? `/${langPrefix}` : "";
+  const noPrefix = langPrefix ? `/${langPrefix}` : region === "us" ? "/us" : region === "ca" ? "/ca" : "";
   const base = region === "us" ? "/us" : "/ca";
   const infoBase = region === "ca" && isFrench ? "/ca/fr" : base;
 
