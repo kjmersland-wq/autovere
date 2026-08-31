@@ -252,7 +252,7 @@
   font-family: inherit;
 }
 .autovere-dark-tiles {
-  filter: invert(1) hue-rotate(180deg) brightness(0.92) contrast(0.9) saturate(0.75);
+  filter: invert(1) hue-rotate(180deg) grayscale(0.7) brightness(0.88) contrast(0.95);
 }
 .leaflet-container .leaflet-popup-content-wrapper,
 .leaflet-container .leaflet-popup-tip,
