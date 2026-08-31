@@ -18,6 +18,7 @@ import {
   pointAt,
   type LayerKey,
 } from "@/lib/corridor-map";
+import { useT, useTr } from "@/lib/i18n";
 import { detectMountainPasses, passStatus } from "@/lib/pass-intel";
 import type { FerryCrossing, FuelKey, RegionKey, TripEstimate } from "@/lib/trip-data";
 
@@ -47,6 +48,8 @@ export function CorridorMap({
   fuel?: FuelKey;
   onAddStop?: (name: string) => void;
 }) {
+  const t = useT();
+  const tr = useTr();
   const [layers, setLayers] = useState<Record<LayerKey, boolean>>({
     ev: true,
     fuel: true,
@@ -56,8 +59,8 @@ export function CorridorMap({
   });
   const [hover, setHover] = useState<string | null>(null);
 
-  const from = origin || "Your start";
-  const to = destination || "Your destination";
+  const from = origin || t.map.yourStart;
+  const to = destination || t.map.yourDestination;
 
   const line = useMemo(() => corridorPolyline(`${from}|${to}|${trip.variant}`), [from, to, trip.variant]);
 
@@ -117,13 +120,13 @@ export function CorridorMap({
     <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
       <div className="flex flex-wrap items-center gap-2">
         <MapIcon className="size-5 text-primary" />
-        <h3 className="text-lg font-semibold tracking-tight">Corridor radar map</h3>
+        <h3 className="text-lg font-semibold tracking-tight">{t.map.title}</h3>
         <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-0.5 text-[11px] font-medium text-primary">
-          {trip.distanceLabel} corridor
+          {t.map.corridorBadge(trip.distanceLabel)}
         </span>
       </div>
       <p className="mt-1 text-sm text-foreground/70">
-        Live service radar along {from} → {to}. Toggle the layers you care about.
+        {t.map.intro(from, to)}
       </p>
 
       {/* Layer toggles */}
@@ -148,7 +151,7 @@ export function CorridorMap({
                 style={{ background: on ? l.color : "transparent", boxShadow: on ? `0 0 8px ${l.color}` : "none", border: `1px solid ${l.color}` }}
               />
               <span>{l.emoji}</span>
-              {l.label}
+              {tr(l.label)}
             </button>
           );
         })}
@@ -202,9 +205,10 @@ export function CorridorMap({
         </span>
         {hover && (
           <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-xl border border-border bg-background/90 px-3 py-2 text-center text-xs shadow-lg">
-            <p className="font-semibold">{pois.find((p) => p.id === hover)?.name}</p>
+            <p className="font-semibold">{tr(pois.find((p) => p.id === hover)?.name ?? "")}</p>
             <p className="text-foreground/70">
-              {pois.find((p) => p.id === hover)?.detail} · {pois.find((p) => p.id === hover)?.atLabel} in
+              {tr(pois.find((p) => p.id === hover)?.detail ?? "")} ·{" "}
+              {pois.find((p) => p.id === hover)?.atLabel} {t.map.tooltipIn}
             </p>
           </div>
         )}
@@ -218,7 +222,7 @@ export function CorridorMap({
             className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background/40 px-3 py-2 text-xs"
           >
             <span className="truncate">
-              {MAP_LAYERS.find((l) => l.key === p.layer)!.emoji} {p.name}
+              {MAP_LAYERS.find((l) => l.key === p.layer)!.emoji} {tr(p.name)}
             </span>
             <span className="shrink-0 text-muted-foreground">{p.price ?? p.atLabel}</span>
           </div>
@@ -229,7 +233,7 @@ export function CorridorMap({
       <div className="mt-8">
         <div className="flex items-center gap-2">
           <Fuel className="size-5 text-primary" />
-          <h4 className="text-base font-semibold tracking-tight">Fuel stops &amp; live prices along the route</h4>
+          <h4 className="text-base font-semibold tracking-tight">{t.map.fuelTitle}</h4>
         </div>
         <Accordion type="multiple" className="mt-3" defaultValue={sourceGroups.map(([k]) => k)}>
           {sourceGroups.map(([key, stops]) => {
@@ -238,7 +242,7 @@ export function CorridorMap({
               <AccordionItem key={key} value={key} className="border-border">
                 <AccordionTrigger className="text-left">
                   <span className="flex flex-wrap items-center gap-2">
-                    <span className="font-medium">{stops.length} stations</span>
+                    <span className="font-medium">{t.map.stations(stops.length)}</span>
                     <span
                       className={cn(
                         "rounded-full px-2.5 py-0.5 text-[11px] font-medium",
@@ -247,15 +251,15 @@ export function CorridorMap({
                           : "border border-emerald-400/40 bg-emerald-400/10 text-emerald-300",
                       )}
                     >
-                      {source.key === "benchmark" ? "📊" : "🟢"} {source.badge}
+                      {source.key === "benchmark" ? "📊" : "🟢"} {tr(source.badge)}
                     </span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
                   <p className="mb-3 text-xs text-muted-foreground">
-                    {source.note}{" "}
+                    {tr(source.note)}{" "}
                     <a href={source.url} target="_blank" rel="noopener noreferrer" className="text-primary hover:underline">
-                      Source
+                      {t.map.source}
                     </a>
                   </p>
                   <div className="grid gap-3 md:grid-cols-2">
@@ -265,12 +269,12 @@ export function CorridorMap({
                           <div>
                             <p className="text-sm font-semibold">⛽ {s.brand}</p>
                             <p className="text-xs text-muted-foreground">
-                              {s.country} · {s.atLabel} along route
+                              {tr(s.country)} · {s.atLabel} {t.map.alongRoute}
                             </p>
                           </div>
                           <div className="text-right">
                             <p className="text-lg font-semibold text-primary">{s.price}</p>
-                            <p className="text-[11px] text-muted-foreground">{s.priceUnit}</p>
+                            <p className="text-[11px] text-muted-foreground">{tr(s.priceUnit)}</p>
                           </div>
                         </div>
                         <div className="mt-3 flex flex-wrap gap-1.5">
@@ -279,12 +283,12 @@ export function CorridorMap({
                               key={a}
                               className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
                             >
-                              {a}
+                              {tr(a)}
                             </span>
                           ))}
                         </div>
                         <Button size="sm" variant="secondary" className="mt-4" onClick={() => onAddStop?.(s.name)}>
-                          <Plus className="mr-1 size-3.5" /> Add as Refuel Stop
+                          <Plus className="mr-1 size-3.5" /> {t.map.addRefuel}
                         </Button>
                       </article>
                     ))}
@@ -301,22 +305,22 @@ export function CorridorMap({
         <div className="mt-8">
           <div className="flex items-center gap-2">
             <Radar className="size-5 text-primary" />
-            <h4 className="text-base font-semibold tracking-tight">🚐 Motorhome &amp; camping radar</h4>
+            <h4 className="text-base font-semibold tracking-tight">{t.map.campTitle}</h4>
           </div>
           <p className="mt-1 text-sm text-foreground/70">
-            Rated campsites, aires and service points along the active corridor — add any of them straight into your itinerary.
+            {t.map.campIntro}
           </p>
           <div className="mt-4 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             {campSpots.map((c) => (
               <article key={c.id} className="rounded-2xl border border-border bg-background/40 p-5">
                 <div className="flex items-start justify-between gap-3">
-                  <p className="text-sm font-semibold">{c.name}</p>
+                  <p className="text-sm font-semibold">{tr(c.name)}</p>
                   <span className="shrink-0 rounded-full border border-amber-400/40 bg-amber-400/10 px-2 py-0.5 text-[11px] text-amber-300">
                     ★ {c.rating}
                   </span>
                 </div>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  {c.kind} · {c.atLabel} along route
+                  {tr(c.kind)} · {c.atLabel} {t.map.alongRoute}
                 </p>
                 <p className="mt-2 text-sm font-medium text-primary">{c.price}</p>
                 <div className="mt-3 flex flex-wrap gap-1.5">
@@ -325,12 +329,12 @@ export function CorridorMap({
                       key={s}
                       className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
                     >
-                      {s}
+                      {tr(s)}
                     </span>
                   ))}
                 </div>
                 <Button size="sm" variant="secondary" className="mt-4" onClick={() => onAddStop?.(c.name)}>
-                  <Plus className="mr-1 size-3.5" /> Add to itinerary
+                  <Plus className="mr-1 size-3.5" /> {t.map.addItinerary}
                 </Button>
               </article>
             ))}
