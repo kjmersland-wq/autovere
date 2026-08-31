@@ -1,0 +1,643 @@
+/**
+ * Swedish translations for content that lives in data modules
+ * (compliance, pass intel, corridor map, trip data).
+ *
+ * Keyed by the exact English source string so components can wrap any
+ * data-driven label with `tr(...)` from `useTr()`.
+ */
+export const CONTENT_SV: Record<string, string> = {
+  /* ---------------- Map layer: viewpoints ---------------- */
+  "Scenic Viewpoints & Photo Stops": "Utsiktsplatser och fotostopp",
+  "Panorama rest area": "Rastplats med panoramautsikt",
+  "Lakeside viewpoint": "Utsiktsplats vid sjön",
+  "Alpine summit overlook": "Utsikt från alptopp",
+  "Coastal cliff lookout": "Utsiktsplats vid kustklippa",
+  "Valley overlook · picnic tables · photo spot":
+    "Dalutsikt · picknickbord · fotoplats",
+  "Free parking · short walk to the shoreline":
+    "Gratis parkering · kort promenad till strandkanten",
+  "Glacier panorama · café · restrooms": "Glaciärpanorama · café · toaletter",
+  "Sunset viewpoint · motorhome-friendly parking":
+    "Solnedgångsutsikt · husbilsvänlig parkering",
+  /* ---------------- Compliance: heavy motorhome systems ---------------- */
+  Austria: "Österrike",
+  Switzerland: "Schweiz",
+  Slovenia: "Slovenien",
+  Germany: "Tyskland",
+  France: "Frankrike",
+  Italy: "Italien",
+  Norway: "Norge",
+  Sweden: "Sverige",
+  Denmark: "Danmark",
+  Spain: "Spanien",
+  Portugal: "Portugal",
+  Netherlands: "Nederländerna",
+  Belgium: "Belgien",
+  "United Kingdom": "Storbritannien",
+  "Belgium & Netherlands": "Belgien och Nederländerna",
+  Ferries: "Färjor",
+
+  "GO-Box (ASFINAG)": "GO-Box (ASFINAG)",
+  "Motorhomes over 3.5 t maximum permissible weight may not use the car vignette. You need a GO-Box on-board unit, charged per kilometre by axle count and EURO class. Pick one up at a GO point near the border before your first motorway kilometre.":
+    "Husbilar med en tillåten totalvikt över 3,5 ton får inte använda bilvinjetten. Du behöver en GO-Box ombordenhet som debiteras per kilometer utifrån antal axlar och EURO-klass. Hämta en vid en GO-punkt nära gränsen innan din första motorvägskilometer.",
+  "LSVA / PSVA heavy vehicle charge": "Avgift för tunga fordon LSVA / PSVA",
+  "Above 3.5 t the Swiss motorway vignette no longer covers you. Foreign motorhomes normally pay the flat-rate PSVA (per-day or per-year) declared at the border customs post; ID-based LSVA applies to commercial units.":
+    "Över 3,5 ton täcker inte längre den schweiziska motorvägsvinjetten dig. Utländska husbilar betalar normalt den fasta avgiften PSVA (per dag eller per år) som deklareras vid gränstullen; ID-baserad LSVA gäller för kommersiella fordon.",
+  "DarsGo unit": "DarsGo-enhet",
+  "Slovenian motorways charge vehicles over 3.5 t through a DarsGo on-board unit with free-flow gantries. Register online or at a DarsGo service point; the e-vignette is invalid for your weight class.":
+    "Slovenska motorvägar tar ut avgift av fordon över 3,5 ton via en DarsGo-ombordenhet med kamerabaserade portaler. Registrera dig online eller vid en DarsGo-servicepunkt; e-vinjetten gäller inte för din viktklass.",
+  "No toll for private motorhomes": "Ingen avgift för privata husbilar",
+  "Privately used motorhomes are exempt from the German Lkw-Maut regardless of weight, but weight-based speed limits and overtaking bans still apply.":
+    "Privat använda husbilar är undantagna från den tyska Lkw-Maut oavsett vikt, men viktbaserade hastighetsbegränsningar och omkörningsförbud gäller fortfarande.",
+
+  /* ---------------- Compliance: clearance advisories ---------------- */
+  "Alpine underpasses & village arches": "Alpina underfarter och byportar",
+  "Several Alpine valley roads (Susa, Vinschgau, Maurienne) and old town gateways drop below 3.2 m. Trust posted signs over your navigation app and follow the signed HGV/camper diversion where offered.":
+    "Flera alpina dalvägar (Susa, Vinschgau, Maurienne) och gamla stadsportar har en fri höjd under 3,2 m. Lita på skyltade varningar snarare än din navigationsapp och följ skyltad omväg för tunga fordon/husbilar där det finns.",
+  "Tunnel height & LPG restrictions": "Tunnelhöjd och LPG-restriktioner",
+  "Mont Blanc, Fréjus and Gotthard road tunnels apply strict height, length and LPG-cylinder rules. Vehicles above 4.0 m are routed to dedicated lanes and may face convoy timing.":
+    "Vägtunnlarna Mont Blanc, Fréjus och Gotthard har strikta regler för höjd, längd och LPG-behållare. Fordon över 4,0 m dirigeras till särskilda filer och kan behöva vänta på konvojtider.",
+  "Ferry deck clearance": "Fri höjd på färjedäck",
+  "Book ferries in the correct height and length bracket. Under-declaring your height means a re-fare at the ramp or refused boarding.":
+    "Boka färjor i rätt höjd- och längdkategori. Om du anger för låg höjd riskerar du omtaxering vid rampen eller nekad ombordstigning.",
+  "Roof box, aerials & solar": "Takbox, antenner och solpaneler",
+  "Measure to the highest fixed point — solar panels, satellite domes and roof boxes typically add 15–25 cm over the plate height.":
+    "Mät till högsta fasta punkt — solpaneler, satellitantenner och takboxar lägger vanligtvis till 15–25 cm över höjden i registreringsbeviset.",
+
+  /* ---------------- Compliance: speed rules ---------------- */
+  "100 km/h (over 3.5 t)": "100 km/h (över 3,5 ton)",
+  "110 km/h (over 3.5 t)": "110 km/h (över 3,5 ton)",
+  "80 km/h with caravan/heavy load": "80 km/h med husvagn/tung last",
+  "Above 3.5 t you are capped at 100 km/h on the Autobahn and 80 km/h on rural roads, and overtaking bans for heavy vehicles apply to you.":
+    "Över 3,5 ton är hastigheten begränsad till 100 km/h på Autobahn och 80 km/h på landsväg, och omkörningsförbud för tunga fordon gäller dig.",
+  "Over 3.5 t: 110 km/h motorway, 100 km/h dual carriageway, 80 km/h single carriageway. Keep 50 m from the vehicle ahead.":
+    "Över 3,5 ton: 110 km/h på motorväg, 100 km/h på mötesfri väg, 80 km/h på vanlig väg. Håll 50 m avstånd till fordonet framför.",
+  "100 km/h motorway and 80 km/h on main roads; the left-most lane of three is closed to vehicles over 3.5 t.":
+    "100 km/h på motorväg och 80 km/h på huvudvägar; det vänstra av tre körfält är stängt för fordon över 3,5 ton.",
+  "Motorhomes over 3.5 t are limited to 80 km/h; many fjord roads sign 60 km/h with passing places only.":
+    "Husbilar över 3,5 ton är begränsade till 80 km/h; många fjordvägar har skyltat 60 km/h med enbart mötesplatser.",
+  "Heavy motorhomes are limited to 100 km/h and must use the lorry lane in tunnels with lane separation.":
+    "Tunga husbilar är begränsade till 100 km/h och måste använda lastbilsfilen i tunnlar med filseparation.",
+
+  /* ---------------- Compliance: LEZ ---------------- */
+  "Crit'Air vignette": "Crit'Air-dekal",
+  "A Crit'Air sticker must be displayed inside the windscreen in every French ZFE. Classes are based on EURO standard and fuel; motorhomes are classed like the base vehicle.":
+    "En Crit'Air-dekal måste sitta synlig i vindrutan i varje fransk ZFE-zon. Klasserna baseras på EURO-standard och bränsletyp; husbilar klassas som sitt grundfordon.",
+  "€3.81 incl. postage": "3,81 € inkl. porto",
+  "Order 3–4 weeks ahead for delivery abroad": "Beställ 3–4 veckor i förväg för leverans utomlands",
+  "Required for motorcycles and scooters too.": "Krävs även för motorcyklar och mopeder.",
+  "Umweltplakette (green zone 4)": "Umweltplakette (grön zon 4)",
+  "A green sticker (Schadstoffgruppe 4) is required in ~50 Umweltzonen. Enforcement is by camera and patrol; a missing badge is a €100 fine.":
+    "En grön dekal (Schadstoffgruppe 4) krävs i cirka 50 Umweltzonen. Kontroll sker med kamera och patrull; en saknad dekal ger böter på 100 €.",
+  "€6–€30 depending on issuer": "6–30 € beroende på utfärdare",
+  "Order 2 weeks ahead or buy at a TÜV/DEKRA station on arrival":
+    "Beställ 2 veckor i förväg eller köp på plats hos en TÜV/DEKRA-station",
+  "Motorcycles are exempt from German Umweltzonen.": "Motorcyklar är undantagna från tyska Umweltzonen.",
+  "LEZ online registration": "Onlineregistrering för LEZ",
+  "No sticker — foreign plates must be registered online before the first entry into Brussels, Antwerp, Ghent, Rotterdam or Amsterdam. Cameras match plates automatically.":
+    "Ingen dekal — utländska skyltar måste registreras online innan första inresan till Bryssel, Antwerpen, Gent, Rotterdam eller Amsterdam. Kameror matchar skyltar automatiskt.",
+  "Free registration; fines from €150": "Gratis registrering; böter från 150 €",
+  "Register at least 24 hours before entry": "Registrera dig minst 24 timmar innan inresa",
+  "Motorcycles are currently outside the Belgian and Dutch LEZ scope.":
+    "Motorcyklar omfattas för närvarande inte av belgiska och nederländska LEZ-zoner.",
+  "ULEZ + Congestion Charge": "ULEZ + trängselskatt",
+  "Greater London's ULEZ charges non-compliant vehicles £12.50/day, plus £15 Congestion Charge in the central zone on weekdays. Pay online or by Auto Pay.":
+    "Storlondons ULEZ tar ut £12,50/dag av fordon som inte uppfyller kraven, plus £15 trängselskatt i centralzonen på vardagar. Betala online eller via Auto Pay.",
+  "£12.50/day ULEZ · £15/day Congestion Charge": "£12,50/dag ULEZ · £15/dag trängselskatt",
+  "Pay up to 3 days after travel": "Betala upp till 3 dagar efter resan",
+  "Pre-Euro 3 motorcycles pay ULEZ; Congestion Charge does not apply to motorcycles.":
+    "Motorcyklar äldre än Euro 3 betalar ULEZ; trängselskatt gäller inte motorcyklar.",
+
+  /* ---------------- Compliance: toll tags ---------------- */
+  "Norway, Sweden, Denmark — city rings, bridges, Øresund & Storebælt":
+    "Norge, Sverige, Danmark — stadsringar, broar, Öresund och Stora Bält",
+  "Free-flow gantries, no barrier stop": "Kamerabaserade portaler, inga bommar att stanna vid",
+  "France, Spain, Portugal, Italy — barrier motorways":
+    "Frankrike, Spanien, Portugal, Italien — motorvägar med bommar",
+  "Yellow 'T' / télépéage lanes, barrier lifts automatically":
+    "Gula ”T”-filer / télépéage, bommen öppnas automatiskt",
+  "US turnpikes, express lanes and bridges": "Amerikanska betalvägar, expressfiler och broar",
+  "Open-road tolling gantries, no cash booth": "Portaler för fri flödesavgift, ingen kontantkassa",
+  "Ontario Highway 407 ETR and 412/418": "Highway 407 ETR och 412/418 i Ontario",
+  "Transponder rate instead of camera video-toll charge":
+    "Transpondertaxa i stället för kamerabaserad avgift",
+
+  /* ---------------- Corridor map ---------------- */
+  "EV Fast Chargers": "Snabbladdare för elbil",
+  "Fuel Stations": "Bensinstationer",
+  "RV Campgrounds & Service Areas": "Husbilscamping och serviceplatser",
+  "Mountain Passes": "Bergspass",
+  "Ferry Terminals": "Färjeterminaler",
+  "Live Government Fuel Data (prix-carburants)": "Aktuella myndighetsdata om bränsle (prix-carburants)",
+  "Station prices published by the French Ministry of Economy open data feed.":
+    "Stationspriser publicerade i franska ekonomiministeriets öppna dataflöde.",
+  "Live E-Control Spritpreisrechner": "Aktuell prisberäknare från E-Control",
+  "Austrian regulator E-Control publishes station-level prices, updated through the day.":
+    "Den österrikiska tillsynsmyndigheten E-Control publicerar stationspriser, uppdaterade under dagen.",
+  "National Average Benchmark (EAFO / EU Bulletin)": "Nationellt genomsnittligt riktmärke (EAFO / EU-bulletin)",
+  "Indicative national averages from EAFO and the EU Weekly Oil Bulletin.":
+    "Vägledande nationella genomsnitt från EAFO och EU:s veckovisa oljebulletin.",
+  "per gallon": "per gallon",
+  "per litre": "per liter",
+  "24/7 · restrooms · café": "Öppet dygnet runt · toaletter · café",
+  "Dump station · fresh water · overnight pitches": "Tömningsstation · färskvatten · övernattningsplatser",
+  "Ferry terminal · check-in 30 min before departure": "Färjeterminal · incheckning 30 min före avgång",
+  "24/7": "Dygnet runt",
+  "HGV/RV lanes": "Filer för tunga fordon/husbilar",
+  "Café": "Café",
+  AdBlue: "AdBlue",
+  "Car wash": "Biltvätt",
+  Europe: "Europa",
+  "United States": "USA",
+  Canada: "Kanada",
+
+  /* Camp spots */
+  "Aire de camping-car municipale": "Kommunal husbilsplats (aire)",
+  "Aire · France": "Aire · Frankrike",
+  "Stellplatz am Fluss": "Stellplatz vid floden",
+  "Stellplatz · Germany/Austria": "Stellplatz · Tyskland/Österrike",
+  "Camping Alpenblick": "Camping Alpenblick",
+  "Rated campsite · Alps": "Betygsatt camping · Alperna",
+  "Bobilparkering Fjordsyn": "Husbilsparkering Fjordsyn",
+  "Bobil pitch · Norway": "Husbilsplats · Norge",
+  "Sosta camper Lago": "Sosta camper Lago",
+  "Sosta · Italy": "Sosta · Italien",
+  "KOA Holiday Resort": "KOA Holiday Resort",
+  "Full hook-up RV park": "Husbilspark med full anslutning",
+  "State Park Campground": "Camping i delstatspark",
+  "Public campground": "Allmän camping",
+  "Interstate Travel Plaza": "Interstate Travel Plaza",
+  "Overnight service area": "Servicestation för övernattning",
+  "Lakeside RV Resort": "Lakeside RV Resort",
+  "Premium RV resort": "Exklusiv husbilspark",
+  "Provincial Park Campground": "Camping i provinsiell park",
+  "Halte routière VR": "Halte routière VR",
+  "Roadside VR halt": "Vägkantsstopp för husbilar",
+  "KOA Campground": "KOA Campground",
+  "Mountain View RV Park": "Mountain View RV Park",
+  "Rated RV park": "Betygsatt husbilspark",
+  "Dump station": "Tömningsstation",
+  "Fresh water": "Färskvatten",
+  "Electric hook-up": "Elanslutning",
+  "Overnight pitches": "Övernattningsplatser",
+  "Grey water": "Gråvatten",
+  WiFi: "Wi-Fi",
+  Showers: "Duschar",
+  Laundry: "Tvättstuga",
+  Restaurant: "Restaurang",
+  "Fjord view": "Fjordutsikt",
+  Toilets: "Toaletter",
+  Shade: "Skugga",
+  "Walk to town": "Promenadavstånd till centrum",
+  "50-amp": "50 A",
+  "30/50-amp": "30/50 A",
+  Sewer: "Avlopp",
+  Pool: "Pool",
+  "Potable water": "Dricksvatten",
+  Trails: "Vandringsleder",
+  "RV dump": "Tömning för husbilar",
+  Propane: "Gasol",
+  "24/7 fuel": "Bränsle dygnet runt",
+  Firewood: "Ved",
+  "Full hook-up": "Full anslutning",
+  "Overnight parking": "Övernattningsparkering",
+
+  /* ---------------- Mountain passes ---------------- */
+  "Grossglockner High Alpine Road": "Grossglockner Hochalpenstrasse",
+  "🇦🇹 Austria · Salzburg ↔ Carinthia": "🇦🇹 Österrike · Salzburg ↔ Kärnten",
+  "2 504 m · Hochtor summit": "2 504 m · toppen Hochtor",
+  "Early May – late October (gates close nightly)":
+    "Tidigt maj – slutet av oktober (bommarna stängs varje kväll)",
+  "€40.00 car day ticket · €30.00 motorcycle · motorhomes €40.00 (over 3.5 t on request)":
+    "40,00 € dagsbiljett för bil · 30,00 € motorcykel · husbil 40,00 € (över 3,5 ton på förfrågan)",
+  "Toll road, not part of the Austrian vignette network. Gates open ~05:30–06:00 and close 19:30–21:30 depending on the month — plan to be through before dusk and enjoy the Edelweissspitze detour.":
+    "Avgiftsbelagd väg, ingår inte i det österrikiska vinjettnätverket. Bommarna öppnar ca 05:30–06:00 och stängs 19:30–21:30 beroende på månad — planera att vara igenom före skymningen och njut av omvägen till Edelweissspitze.",
+  "Riders get a reduced ticket and a dedicated Bikers Point at Fuschertörl.":
+    "Motorcyklister får en reducerad biljett och en egen Bikers Point vid Fuschertörl.",
+  "Passo dello Stelvio (Stelvio Pass)": "Passo dello Stelvio (Stelviopasset)",
+  "🇮🇹 Italy · Bormio ↔ Trafoi, South Tyrol": "🇮🇹 Italien · Bormio ↔ Trafoi, Sydtyrolen",
+  "2 758 m · 48 numbered hairpins on the north ramp":
+    "2 758 m · 48 numrerade hårnålskurvor på norra sidan",
+  "Usually late May/June – early November, snow dependent":
+    "Vanligtvis slutet av maj/juni – början av november, beroende på snö",
+  "Free of charge": "Kostnadsfritt",
+  "Europe's most photogenic hairpin ladder. Ride or drive it early — coaches and cyclists fill the switchbacks from 10:00. Expect 8–12 °C colder at the summit than in Bormio.":
+    "Europas mest fotogeniska serpentinväg. Kör tidigt — bussar och cyklister fyller kurvorna från kl. 10:00. Räkna med 8–12 °C kallare på toppen än i Bormio.",
+  "Tight, off-camber hairpins: stay wide on entry and watch for gravel after rain.":
+    "Trånga hårnålskurvor med fel lutning: håll dig ute i kurvan och se upp för grus efter regn.",
+  "Furka & Grimsel Passes": "Furka- och Grimselpassen",
+  "🇨🇭 Switzerland · Valais ↔ Uri ↔ Bern": "🇨🇭 Schweiz · Valais ↔ Uri ↔ Bern",
+  "Furka 2 429 m · Grimsel 2 164 m": "Furka 2 429 m · Grimsel 2 164 m",
+  "Roughly mid-June – late October": "Ungefär mitten av juni – slutet av oktober",
+  "Free passes · CHF 40 motorway vignette still required for Swiss motorways":
+    "Gratis pass · CHF 40 motorvägsvinjett krävs ändå för schweiziska motorvägar",
+  "Check the live pass board before committing — snow chains can be mandated at short notice even in summer. The Furka–Grimsel–Susten triangle is a perfect full-day loop.":
+    "Kontrollera aktuell status innan du åker — snökedjor kan krävas med kort varsel även sommartid. Triangeln Furka–Grimsel–Susten är en perfekt heldagsslinga.",
+  "Cool mornings at altitude: pack a thermal layer and waterproofs.":
+    "Kalla morgnar på höjd: packa ett termiskt lager och regnkläder.",
+  "Trollstigen & Sognefjellet": "Trollstigen och Sognefjellet",
+  "🇳🇴 Norway · Møre og Romsdal · Jotunheimen": "🇳🇴 Norge · Møre og Romsdal · Jotunheimen",
+  "Trollstigen 858 m · Sognefjellet 1 434 m (highest road in Northern Europe)":
+    "Trollstigen 858 m · Sognefjellet 1 434 m (Nordeuropas högsta väg)",
+  "Trollstigen late May – October · Sognefjellet May – November":
+    "Trollstigen slutet av maj – oktober · Sognefjellet maj – november",
+  "Free roads · parking fee at the Trollstigen viewpoint":
+    "Gratis vägar · parkeringsavgift vid Trollstigens utsiktsplats",
+  "Both are National Tourist Routes with hairpins and narrow shoulders. Trollstigen has periodic rockfall closures — check the live status the morning you travel. Vehicles over 12.4 m are not permitted on Trollstigen.":
+    "Båda är nationella turistvägar med hårnålskurvor och smala vägkanter. Trollstigen stängs periodvis vid stenras — kontrollera aktuell status på morgonen du reser. Fordon över 12,4 m är inte tillåtna på Trollstigen.",
+  "Wet granite and painted lines get slick in fjord drizzle — brake early into the hairpins.":
+    "Blöt granit och målade linjer blir hala i fjordens duggregn — bromsa i god tid inför kurvorna.",
+  "Icefields Parkway (Highway 93N)": "Icefields Parkway (Highway 93N)",
+  "🇨🇦 Alberta · Lake Louise ↔ Jasper": "🇨🇦 Alberta · Lake Louise ↔ Jasper",
+  "2 088 m · Bow Summit": "2 088 m · Bow Summit",
+  "Open year-round, with winter storm closures": "Öppen året runt, med avstängningar vid vinterstormar",
+  "Parks Canada pass required: C$11.00 adult/day or C$75.25 Discovery Pass (annual, per vehicle)":
+    "Parks Canada-pass krävs: 11,00 CAD för vuxen/dag eller 75,25 CAD Discovery Pass (årligt, per fordon)",
+  "232 km of glaciers with no fuel between Lake Louise and Saskatchewan River Crossing — top up before you start. From 1 Nov to 31 Mar winter tires or carried chains are mandatory on Highway 93N.":
+    "232 km bland glaciärer utan bränsle mellan Lake Louise och Saskatchewan River Crossing — tanka innan du kör iväg. Från 1 november till 31 mars är vinterdäck eller kedjor obligatoriskt på Highway 93N.",
+  "Wildlife on the shoulder at dawn and dusk — ride the centre of your lane and keep speed down.":
+    "Vilt vid vägkanten vid gryning och skymning — kör mitt i filen och håll ner farten.",
+  "Tail of the Dragon (US 129, Deals Gap)": "Tail of the Dragon (US 129, Deals Gap)",
+  "🇺🇸 North Carolina ↔ Tennessee": "🇺🇸 North Carolina ↔ Tennessee",
+  "318 curves in 11 miles (17.7 km)": "318 kurvor på 17,7 km",
+  "Open year-round · best March – November, ice risk in winter":
+    "Öppen året runt · bäst mars – november, isrisk vintertid",
+  "Free — no tolls": "Gratis — inga avgifter",
+  "Strictly enforced 30 mph (48 km/h) limit with unmarked patrols and roadside speed radar. No guardrails on many curves and zero fuel on the strip — fill up in Robbinsville or Tapoco.":
+    "Strikt övervakad hastighetsgräns på 48 km/h med civila patruller och fartkameror. Inga vägräcken vid många kurvor och inget bränsle på sträckan — tanka i Robbinsville eller Tapoco.",
+  "Photographers shoot every curve — ride your own pace, not the camera's. Trailers and RVs should use US 74 instead.":
+    "Fotografer bevakar varje kurva — kör i din egen takt, inte kamerans. Släp och husbilar bör i stället använda US 74.",
+  "Open · winter tyres / chains required": "Öppen · vinterdäck/kedjor krävs",
+  Open: "Öppen",
+  "Closed for the season": "Stängd för säsongen",
+  "Opening/closing window · check live status": "Öppnings-/stängningsperiod · kolla aktuell status",
+  "€30.00 motorcycle day ticket (reduced)": "30,00 € dagsbiljett för motorcykel (reducerad)",
+
+  /* ---------------- Border tips ---------------- */
+  "Refuel in Austria before the Brenner Pass": "Tanka i Österrike innan Brennerpasset",
+  "Diesel and petrol run roughly 15% cheaper in Austria than in Italy. Fill the tank around Innsbruck or Matrei am Brenner — the last Austrian stations before the border are the cheapest on the corridor.":
+    "Diesel och bensin är cirka 15 % billigare i Österrike än i Italien. Fyll tanken runt Innsbruck eller Matrei am Brenner — de sista österrikiska stationerna före gränsen är billigast på hela sträckan.",
+  "≈ €12–18 saved on a 60 L tank": "≈ 12–18 € sparat på en 60-literstank",
+  "Plan a fuel stop at Matrei am Brenner": "Planera ett tankstopp vid Matrei am Brenner",
+  "Swiss motorways need the CHF 40 annual vignette":
+    "Schweiziska motorvägar kräver den årliga vinjetten på CHF 40",
+  "Switzerland has no day or week option — one sticker (or the e-vignette) costs CHF 40 and is valid for the whole calendar year, even if you only transit for two hours. Motorcycles need their own vignette.":
+    "Schweiz har inget dags- eller veckoalternativ — en dekal (eller e-vinjetten) kostar CHF 40 och gäller hela kalenderåret, även om du bara transiterar i två timmar. Motorcyklar behöver en egen vinjett.",
+  "Switch to Smart Bypass to route around Swiss motorways on a short transit leg":
+    "Byt till Smart genväg för att kringgå schweiziska motorvägar på en kort transitsträcka",
+  "Try the 🧭 Smart Bypass variant": "Prova varianten 🧭 Smart genväg",
+  "Luxembourg fuel arbitrage on the Benelux corridor":
+    "Bränslearbitrage i Luxemburg på Beneluxsträckan",
+  "Luxembourg keeps some of the lowest excise duties in Western Europe — expect 15–25 cents/litre less than France, Belgium or Germany. Stations near Wasserbillig, Schengen and Berchem are the classic top-up points.":
+    "Luxemburg har några av de lägsta punktskatterna i Västeuropa — räkna med 15–25 cent/liter lägre pris än i Frankrike, Belgien eller Tyskland. Stationer nära Wasserbillig, Schengen och Berchem är de klassiska tankställena.",
+  "≈ €10–15 per tank versus neighbouring countries": "≈ 10–15 € per tank jämfört med grannländerna",
+  "Add a Luxembourg fuel stop": "Lägg till ett tankstopp i Luxemburg",
+  "Cross into Spain (or Andorra) before you refuel":
+    "Kör in i Spanien (eller Andorra) innan du tankar",
+  "Spanish pump prices sit well below French ones, and Andorra is cheaper still. Coming down the A9/AP-7, hold out past La Jonquera; on the Atlantic side, Irún and Behobia are the border bargains.":
+    "Spanska pumppriser ligger klart under de franska, och Andorra är ännu billigare. Om du kör ner via A9/AP-7, vänta tills du passerat La Jonquera; på Atlantsidan är Irún och Behobia gränsköpen.",
+  "≈ 20–30 cents/litre versus France": "≈ 20–30 cent/liter jämfört med Frankrike",
+  "Add a La Jonquera or Irún fuel stop": "Lägg till ett tankstopp i La Jonquera eller Irún",
+  "State fuel-tax arbitrage": "Skattearbitrage mellan delstater",
+  "State excise makes a real difference: California and Pennsylvania sit at the top, while Texas, Missouri, Mississippi and Arizona are consistently cheap. Fill up just before entering a high-tax state.":
+    "Delstatsskatten gör verklig skillnad: Kalifornien och Pennsylvania ligger i topp, medan Texas, Missouri, Mississippi och Arizona konsekvent är billiga. Tanka strax innan du kör in i en delstat med hög skatt.",
+  "Up to US$0.70/gal between neighbouring states": "Upp till 0,70 USD/gallon mellan grannstater",
+  "Fuel is usually cheaper south of the 49th": "Bränsle är vanligtvis billigare söder om 49:e breddgraden",
+  "Once currency and litres-vs-gallons are converted, US fuel typically lands 20–30% below Canadian pumps — biggest gaps around BC and Québec. Cross with a low tank, return with a full one (within duty-free allowances).":
+    "När valuta och liter kontra gallon räknas om hamnar amerikanskt bränsle typiskt 20–30 % under kanadensiska priser — störst skillnad kring British Columbia och Québec. Kör över med låg tank, kom tillbaka med full (inom tullfria gränser).",
+  "≈ C$25–40 per tank on a border run": "≈ 25–40 CAD per tank på en gränsresa",
+
+  /* ---------------- Border crossings ---------------- */
+  "Germany → Austria": "Tyskland → Österrike",
+  "Open border · random ID checks": "Öppen gräns · slumpvisa ID-kontroller",
+  "Free movement inside Schengen. Bavaria runs intermittent spot checks on the A8/A93 — keep passports or ID cards within reach and you'll roll straight through.":
+    "Fri rörlighet inom Schengen. Bayern genomför tidvis stickprovskontroller på A8/A93 — ha pass eller id-kort nära till hands så kör du rakt igenom.",
+  "Photo ID for every occupant (random checks)": "Fotolegitimation för varje passagerare (slumpvisa kontroller)",
+  "Austrian motorway vignette valid before the first motorway metre":
+    "Giltig österrikisk motorvägsvinjett innan första motorvägsmetern",
+  "Warning triangle, hi-vis vest and first-aid kit on board":
+    "Varningstriangel, reflexväst och förbandslåda ombord",
+  "Typically 0–10 min": "Vanligtvis 0–10 min",
+  "Austria → Italy (Brenner)": "Österrike → Italien (Brenner)",
+  "Open border · occasional customs patrol": "Öppen gräns · enstaka tullpatruller",
+  "No passport control at the Brenner, but Italian Guardia di Finanza patrols do stop vehicles. Switch to Telepass lanes only if you have a transponder fitted.":
+    "Ingen passkontroll vid Brenner, men italienska Guardia di Finanza-patruller stoppar fordon. Använd Telepass-filerna bara om du har en transponder monterad.",
+  "Photo ID on board": "Fotolegitimation ombord",
+  "Brenner autostrada toll paid at the barrier (card, cash or Telepass)":
+    "Avgift för Brennerautostradan betalas vid bommen (kort, kontant eller Telepass)",
+  "Crit'Air-style city rules do not apply, but Italian ZTL zones do":
+    "Regler i Crit'Air-stil gäller inte, men italienska ZTL-zoner gör det",
+  "Typically 0–15 min at the toll plaza": "Vanligtvis 0–15 min vid betalstationen",
+  "Swiss borders (Schengen, non-EU customs)": "Schweiziska gränser (Schengen, utanför EU:s tullunion)",
+  "Customs control · goods declaration": "Tullkontroll · varudeklaration",
+  "Switzerland is in Schengen but outside the EU customs union, so customs officers can and do stop vehicles. Declare goods above the duty-free allowance and buy the vignette before the first motorway.":
+    "Schweiz ingår i Schengen men inte i EU:s tullunion, så tulltjänstemän kan och stoppar fordon. Deklarera varor över den tullfria gränsen och köp vinjetten innan första motorvägen.",
+  "CHF 40 motorway vignette (annual) or e-vignette per vehicle":
+    "CHF 40 motorvägsvinjett (årlig) eller e-vinjett per fordon",
+  "Customs declaration for goods over CHF 300 per person":
+    "Tulldeklaration för varor över CHF 300 per person",
+  "Meat, dairy and alcohol allowances are strictly enforced":
+    "Gränser för kött, mejeriprodukter och alkohol upprätthålls strikt",
+  "0–20 min · longer at Basel and Chiasso on weekends":
+    "0–20 min · längre vid Basel och Chiasso på helger",
+  "UK ↔ France (Channel Tunnel & Dover–Calais)":
+    "Storbritannien ↔ Frankrike (Kanaltunneln och Dover–Calais)",
+  "Full passport control & customs": "Full pass- och tullkontroll",
+  "Post-Brexit juxtaposed controls mean both British and French officers check you before boarding. Arrive 60–90 min ahead in peak season and have every document to hand.":
+    "Efter brexit innebär de kombinerade kontrollerna att både brittiska och franska tjänstemän kontrollerar dig innan ombordstigning. Kom 60–90 minuter i förväg under högsäsong och ha alla dokument till hands.",
+  "Valid passport for every traveller (ID cards no longer accepted for UK entry)":
+    "Giltigt pass för varje resenär (id-kort accepteras inte längre för inresa till Storbritannien)",
+  "EU Entry/Exit System biometric registration on first crossing":
+    "Biometrisk registrering i EU:s in- och utresesystem vid första passagen",
+  "Customs declaration for goods, alcohol, tobacco and pets (animal health certificate)":
+    "Tulldeklaration för varor, alkohol, tobak och husdjur (djurhälsointyg)",
+  "UK sticker on the vehicle and headlamp beam deflectors":
+    "UK-dekal på fordonet och avbländare för strålkastare",
+  "30–120 min in summer peaks": "30–120 min under sommartoppar",
+  "Croatia ↔ Bosnia & Herzegovina (Neum corridor)":
+    "Kroatien ↔ Bosnien och Hercegovina (Neum-korridoren)",
+  "Passport control · EU external border": "Passkontroll · EU:s yttre gräns",
+  "The Neum corridor crosses out of and back into the EU within 9 km. Green card insurance is essential, and queues build sharply on July/August weekends. The Pelješac Bridge bypasses it entirely.":
+    "Neum-korridoren tar dig ut ur och tillbaka in i EU på en sträcka av 9 km. Grönt kort-försäkring är nödvändigt, och köerna växer kraftigt under helger i juli/augusti. Pelješacbron kringgår hela korridoren.",
+  "Passport for every occupant (two stamps in 20 minutes)":
+    "Pass för varje passagerare (två stämplar på 20 minuter)",
+  "Green Card motor insurance valid for BiH": "Grönt kort-bilförsäkring giltig för Bosnien och Hercegovina",
+  "Vehicle registration document in the driver's name or a notarised letter":
+    "Registreringsbevis i förarens namn eller ett bestyrkt fullmaktsbrev",
+  "15–90 min in high season": "15–90 min under högsäsong",
+  "USA ↔ Canada land border": "Landgräns USA ↔ Kanada",
+  "Passport control · CBP / CBSA inspection": "Passkontroll · CBP/CBSA-inspektion",
+  "Every crossing is a full immigration and customs stop. NEXUS lanes cut the wait dramatically at Peace Arch, Detroit–Windsor and Niagara. Declare all food, alcohol, cannabis and firearms — penalties are steep.":
+    "Varje gränspassage är ett fullständigt immigrations- och tullstopp. NEXUS-filer förkortar väntetiden avsevärt vid Peace Arch, Detroit–Windsor och Niagara. Deklarera all mat, alkohol, cannabis och skjutvapen — straffen är höga.",
+  "Passport, NEXUS card or enhanced driver's licence":
+    "Pass, NEXUS-kort eller utökat körkort",
+  "Vehicle registration and proof of insurance valid in the destination country":
+    "Registreringsbevis och försäkringsbevis giltigt i destinationslandet",
+  "Declare food, alcohol, tobacco, cannabis and pets; firearms need advance paperwork":
+    "Deklarera mat, alkohol, tobak, cannabis och husdjur; skjutvapen kräver förhandsdokumentation",
+  "Electronic toll transponders (E-ZPass, 407 ETR) are not interchangeable across the border":
+    "Elektroniska vägtulltranspondrar (E-ZPass, 407 ETR) fungerar inte över gränsen",
+  "10–60 min · check live CBP border wait times":
+    "10–60 min · kontrollera aktuella väntetider hos CBP",
+
+  "Rider Safety & Gear Radar": "Radar för motorcyklisters säkerhet och utrustning",
+  "Camper Clearance & Weight Radar": "Radar för husbilars frigång och vikt",
+  "Driver Safety Radar": "Radar för förarsäkerhet",
+  "🧤 Gear & legal kit": "🧤 Utrustning och lagkrav",
+  "🏔️ Mountain pass alerts": "🏔️ Varningar för bergspass",
+  "⛽ Long-stretch fuel alerts": "⛽ Varningar för långa sträckor utan bränsle",
+  "📏 Clearance warnings": "📏 Varningar om fri höjd",
+  "⚖️ Weight & axle limits": "⚖️ Vikt- och axelgränser",
+  "🛠️ Services": "🛠️ Service",
+  "🚗 On the road": "🚗 På vägen",
+  "🏔️ Pass conditions": "🏔️ Passförhållanden",
+  "France: CE-approved gloves are mandatory for rider and pillion, and a high-vis vest must be carried within reach.": "Frankrike: CE-godkända handskar är obligatoriska för förare och passagerare, och en reflexväst måste finnas inom räckhåll.",
+  "Austria & Germany: carry a first-aid kit meeting DIN 13167 (motorcycle standard) — small, and checked at roadside stops.": "Österrike och Tyskland: ha en förbandslåda som uppfyller DIN 13167 (motorcykelstandard) — liten, och kontrolleras vid vägkontroller.",
+  "Keep your vest, kit and documents on top of the pannier so a check takes seconds.": "Ha väst, förbandslåda och dokument längst upp i väskan så att en kontroll tar sekunder.",
+  "Two stretches exceed 180 km between open stations — top up before the pass climbs.": "Två sträckor överstiger 180 km mellan öppna stationer — tanka innan uppstigningen till passet.",
+  "Night-time pumps on the alpine leg are card-only; carry a backup card.": "Nattöppna pumpar på alpsträckan tar endast kort — ha ett reservkort.",
+  "Two tunnels on this route cap height at 3.2 m — your 3.05 m profile clears with margin.": "Två tunnlar på rutten har en höjdgräns på 3,2 m — din höjd på 3,05 m klarar sig med marginal.",
+  "One low village archway (2.9 m) was bypassed via the valley road automatically.": "En låg byport (2,9 m) kringgicks automatiskt via dalvägen.",
+  "Route verified for vehicles up to 3.5 t; a 7.5 t restriction on the old pass road is avoided.": "Rutten är verifierad för fordon upp till 3,5 ton; en begränsning på 7,5 ton på den gamla passvägen undviks.",
+  "Crosswind advisory on the coastal bridge section — reduce speed with a high side profile.": "Varning för sidvind på kustbrosträckan — sänk farten vid hög sidoprofil.",
+  "Three overnight-friendly service areas with fresh water and grey-water disposal along the way.": "Tre övernattningsvänliga serviceområden med färskvatten och tömning av gråvatten längs vägen.",
+  "Winter equipment rules apply on the alpine section between October and April.": "Regler om vinterutrustning gäller på alpsträckan mellan oktober och april.",
+  "Rest stops are mapped every 2 hours so the drive stays fresh and relaxed.": "Rastplatser finns kartlagda varannan timme så att körningen förblir fräsch och avslappnad.",
+  "Every toll gantry on this route accepts contactless cards — no cash needed.": "Alla betalstationer på den här rutten accepterar kontaktlösa kort — ingen kontant behövs.",
+  "Stelvio Pass (2,757 m) — 48 hairpins, open, dry tarmac forecast until early evening.": "Stelviopasset (2 757 m) — 48 hårnålskurvor, öppet, torr asfalt enligt prognos till tidig kväll.",
+  "Grossglockner High Alpine Road — toll road, gates close at 21:00; ride it before dusk.": "Grossglockner Hochalpenstrasse — avgiftsbelagd väg, bommarna stängs kl. 21:00; kör före skymningen.",
+  "Furka Pass — clear and open today, light crosswinds on the western ramp.": "Furkapasset — klart och öppet idag, lätt sidvind på västra sidan.",
+  "Trollstigen — single-lane sections with tourist traffic; take the early morning slot.": "Trollstigen — enfiliga sträckor med turisttrafik; välj en tidig morgontid.",
+  "Tail of the Dragon (US-129) — 318 curves in 11 miles; watch for gravel on the inside lines.": "Tail of the Dragon (US-129) — 318 kurvor på 18 km; se upp för grus på insidan av kurvorna.",
+  "Icefields Parkway — stunning but exposed; wildlife on the road at dawn and dusk.": "Icefields Parkway — hänförande men utsatt; vilt på vägen vid gryning och skymning.",
+  "🇩🇪 Germany": "🇩🇪 Tyskland",
+  "🇦🇹 Austria": "🇦🇹 Österrike",
+  "🇨🇭 Switzerland": "🇨🇭 Schweiz",
+  "🇮🇹 Italy": "🇮🇹 Italien",
+  "🇳🇴 Norway": "🇳🇴 Norge",
+  "⛴️ Ferries": "⛴️ Färjor",
+  "🏙️ Illinois": "🏙️ Illinois",
+  "🌄 Colorado": "🌄 Colorado",
+  "🌉 California": "🌉 Kalifornien",
+  "🌴 Florida": "🌴 Florida",
+  "🍁 Ontario": "🍁 Ontario",
+  "🌲 Nova Scotia": "🌲 Nova Scotia",
+  "🏔️ British Columbia": "🏔️ British Columbia",
+  "No car tolls on German autobahns": "Inga vägtullar för bilar på tyska Autobahn",
+  "Ticket system, 8 checkpoints": "Biljettsystem, 8 betalstationer",
+  "Ticket system, 5 checkpoints": "Biljettsystem, 5 betalstationer",
+  "AutoPASS gantries — motorcycles pass free": "AutoPASS-portaler — motorcyklar passerar gratis",
+  "Vehicle + 2 passengers": "Fordon + 2 passagerare",
+  "Reserve seat": "Boka plats",
+  "Reserve": "Boka",
+  "Reserve ahead": "Boka i förväg",
+  "6 gantries, I-PASS rate": "6 portaler, I-PASS-taxa",
+  "Plate-pay surcharge included": "Tilläggsavgift för skyltbetalning ingår",
+  "Peak weekend rate": "Helgtoppris",
+  "Southbound, FasTrak": "Söderut, FasTrak",
+  "Weekday peak": "Vardagstopp",
+  "Evening rate": "Kvällstaxa",
+  "SunPass rate, 9 gantries": "SunPass-taxa, 9 portaler",
+  "Vehicle under 22ft + driver": "Fordon under 6,7 m + förare",
+  "Vehicle under 20ft + 2 adults": "Fordon under 6,1 m + 2 vuxna",
+  "Peak rate, transponder": "Topptaxa, transponder",
+  "Per-trip camera fee": "Kameraavgift per resa",
+  "Two-axle vehicle": "Tvåaxligt fordon",
+  "Toll-free since 2008": "Avgiftsfri sedan 2008",
+  "Digital vignette": "Digital vinjett",
+  "🇳🇴 Norway · Fjord ferries": "🇳🇴 Norge · Fjordfärjor",
+  "🌊 Scandinavia & Baltic": "🌊 Skandinavien och Baltikum",
+  "🇬🇧 English Channel": "🇬🇧 Engelska kanalen",
+  "☘️ Irish Sea": "☘️ Irländska sjön",
+  "☀️ Mediterranean & Adriatic": "☀️ Medelhavet och Adriatiska havet",
+  "🇺🇸 US marine highways": "🇺🇸 Amerikanska sjövägar",
+  "🇨🇦 Canadian coastal ferries": "🇨🇦 Kanadensiska kustfärjor",
+  "10–45 min per crossing": "10–45 min per överfart",
+  "Every 20–40 min, most run 24/7": "Var 20:e–40:e minut, de flesta går dygnet runt",
+  "NOK 120–290 per car": "120–290 NOK per bil",
+  "NOK 55–120 per motorcycle": "55–120 NOK per motorcykel",
+  "Register an AutoPASS ferjekort for an automatic ~50% discount — no cash, no queue at the booth.": "Registrera ett AutoPASS ferjekort för en automatisk rabatt på cirka 50 % — ingen kontant, ingen kö vid kassan.",
+  "AutoPASS ferjekort −50%": "AutoPASS ferjekort −50 %",
+  "45 min – 20 h depending on crossing": "45 min – 20 tim beroende på överfart",
+  "Scandlines every 30 min; overnight lines 1–2 sailings a day": "Scandlines var 30:e minut; nattlinjer 1–2 avgångar per dag",
+  "€45–210 car + driver": "45–210 € bil + förare",
+  "€28–120 motorcycle + rider": "28–120 € motorcykel + förare",
+  "Book overnight cabins early in July and August — the Oslo–Kiel and Tallinn routes sell out weeks ahead.": "Boka nattkajuter tidigt i juli och augusti — rutterna Oslo–Kiel och till Tallinn blir slutsålda flera veckor i förväg.",
+  "Cabins book out early": "Kajuterna bokas snabbt",
+  "35 min (LeShuttle) · 90–120 min (ferry)": "35 min (LeShuttle) · 90–120 min (färja)",
+  "Up to 4 departures an hour at peak": "Upp till 4 avgångar i timmen vid högtrafik",
+  "£70–190 car + passengers": "£70–190 bil + passagerare",
+  "£45–95 motorcycle + rider": "£45–95 motorcykel + förare",
+  "LeShuttle keeps you in your vehicle — the fastest option with a roof box or a loaded bike.": "LeShuttle låter dig sitta kvar i fordonet — snabbaste alternativet med takbox eller lastad motorcykel.",
+  "Flexi tickets recommended": "Flexibiljetter rekommenderas",
+  "2 h (fast craft) – 3 h 30 min": "2 tim (snabbfärja) – 3 tim 30 min",
+  "4–8 sailings a day per route": "4–8 avgångar per dag och rutt",
+  "€95–230 car + driver": "95–230 € bil + förare",
+  "€60–130 motorcycle + rider": "60–130 € motorcykel + förare",
+  "Wild Atlantic Way traffic peaks at weekends — a midweek morning sailing is calmer and cheaper.": "Trafiken på Wild Atlantic Way är som högst under helger — en morgonavgång mitt i veckan är lugnare och billigare.",
+  "50 min (island hops) – 20 h (overnight)": "50 min (öhopp) – 20 tim (natt)",
+  "Island hops hourly; long crossings daily": "Öhopp varje timme; långa överfarter dagligen",
+  "€55–260 car + driver": "55–260 € bil + förare",
+  "€30–140 motorcycle + rider": "30–140 € motorcykel + förare",
+  "Motorcycles usually board first and pay roughly 40% less — arrive 45 min before departure.": "Motorcyklar går vanligtvis ombord först och betalar cirka 40 % mindre — kom 45 min före avgång.",
+  "Bikes board first": "Motorcyklar går ombord först",
+  "60 min – 38 h (Alaska)": "60 min – 38 tim (Alaska)",
+  "San Juans hourly; Alaska weekly": "San Juans varje timme; Alaska varje vecka",
+  "$62–180 vehicle + driver": "62–180 USD fordon + förare",
+  "$28–70 motorcycle + rider": "28–70 USD motorcykel + förare",
+  "Vehicle reservations open two months ahead on Washington State Ferries and are essential in summer.": "Fordonsbokningar öppnar två månader i förväg hos Washington State Ferries och är nödvändiga sommartid.",
+  "1 h 35 min – 7 h (Newfoundland)": "1 tim 35 min – 7 tim (Newfoundland)",
+  "Every 1–2 h on the Vancouver Island runs": "Var 1–2:a timme på turerna till Vancouver Island",
+  "C$96–150 vehicle + 2 adults": "96–150 CAD fordon + 2 vuxna",
+  "C$45–70 motorcycle + rider": "45–70 CAD motorcykel + förare",
+  "Book a Saver fare on BC Ferries — cheapest sailings are before 09:00 and after 19:00.": "Boka en Saver-biljett hos BC Ferries — billigaste avgångarna är före 09:00 och efter 19:00.",
+  "Saver fares available": "Saver-biljetter tillgängliga",
+  "⚡ Smart EV Charging Optimizer": "⚡ Smart optimering av elbilsladdning",
+  "⛽ Smart Fuel Stop Optimizer": "⛽ Smart optimering av tankstopp",
+  "24/7 forecourt": "Bensinstation dygnet runt",
+
+  "I have AutoPASS / EPASS24": "Jag har AutoPASS / EPASS24",
+  "I have Telepass / Bip&Go / Fulli": "Jag har Telepass / Bip&Go / Fulli",
+  "I have SunPass / E-ZPass": "Jag har SunPass / E-ZPass",
+  "Vignettes & e-vignettes": "Vinjetter och e-vinjetter",
+  "Ticket-based motorway tolls": "Biljettbaserade motorvägsavgifter",
+  "Urban low-emission zones": "Stadens lågemissionszoner",
+  "State toll roads & turnpikes": "Delstatliga betalvägar och turnpikes",
+  "HOV / Express lanes": "HOV-/expressfiler",
+  "Bridge & tunnel tolls": "Bro- och tunnelavgifter",
+  "Highway 407 ETR": "Highway 407 ETR",
+  "Provincial tolls & bridges": "Provinsavgifter och broar",
+  "BC Ferries crossings": "BC Ferries-överfarter",
+
+  "Fuel is ~15% cheaper in Austria than Italy — refuel before crossing the Brenner Pass.": "Bränsle är cirka 15 % billigare i Österrike än i Italien — tanka innan du korsar Brennerpasset.",
+  "Luxembourg is the cheapest tank in Western Europe — top up before entering Belgium or France.": "Luxemburg har det billigaste bränslet i Västeuropa — tanka innan du kör in i Belgien eller Frankrike.",
+  "Diesel in Norway runs well above Swedish prices — fill near the border at Svinesund.": "Diesel i Norge kostar klart mer än svenska priser — tanka nära gränsen vid Svinesund.",
+  "Fuel in Georgia is ~20% cheaper than Florida — fill up before the state line on I-95.": "Bränsle i Georgia är cirka 20 % billigare än i Florida — tanka innan delstatsgränsen på I-95.",
+  "Skip turnpike service plazas: prices run 10–15% above exits one mile off the highway.": "Undvik servicestationer på betalvägen: priserna är 10–15 % högre än vid avfarter en bit från motorvägen.",
+  "California is the most expensive tank on the West Coast — fill in Nevada or Arizona first.": "Kalifornien har det dyraste bränslet på Västkusten — tanka först i Nevada eller Arizona.",
+  "Alberta fuel is ~20% cheaper than British Columbia — fill before Kicking Horse Pass.": "Bränsle i Alberta är cirka 20 % billigare än i British Columbia — tanka innan Kicking Horse Pass.",
+  "Québec charges more per litre than Ontario — top up before the provincial border on the 417.": "Québec tar ut mer per liter än Ontario — tanka innan provinsgränsen på väg 417.",
+  "Northern Ontario pumps run a premium — refuel in Sault Ste. Marie before Highway 17.": "Bränsle i norra Ontario har ett pristillägg — tanka i Sault Ste. Marie innan Highway 17.",
+  "Sognefjell (RV55), Norway — 194 km without a verified 24/7 station. Fill in Lom.": "Sognefjellet (RV55), Norge — 194 km utan verifierad station öppen dygnet runt. Tanka i Lom.",
+  "Grossglockner High Alpine Road — 186 km loop with no fuel above the toll gate.": "Grossglockner Hochalpenstrasse — 186 km slinga utan bränsle ovanför bomstationen.",
+  "US-50 “Loneliest Road”, Nevada — 226 km between verified stations. Fill in Ely.": "US-50 ”den ensammaste vägen”, Nevada — 226 km mellan verifierade stationer. Tanka i Ely.",
+  "I-10 Van Horn → Fort Stockton, Texas — 190 km with limited overnight service.": "I-10 Van Horn → Fort Stockton, Texas — 190 km med begränsad nattservice.",
+  "Highway 17 Wawa → White River — 198 km with no verified overnight fuel.": "Highway 17 Wawa → White River — 198 km utan verifierat nattbränsle.",
+  "Icefields Parkway, Alberta — 232 km between Lake Louise and Jasper; Saskatchewan Crossing only.": "Icefields Parkway, Alberta — 232 km mellan Lake Louise och Jasper; endast Saskatchewan Crossing på vägen.",
+  "Eleven hairpins climbing a sheer wall — viewing platform over the valley.": "Elva hårnålskurvor som klättrar en stupbrant vägg — utsiktsplattform över dalen.",
+  "Eight bridges hopping island to island straight over the open sea.": "Åtta broar som hoppar från ö till ö rakt över öppet hav.",
+  "48 km of alpine theatre topping out at 2,504 m.": "48 km alpin dramatik som toppar på 2 504 m.",
+  "48 numbered hairpins — the classic rider pilgrimage.": "48 numrerade hårnålskurvor — den klassiska motorcykelpilgrimen.",
+  "Glacier views, smooth tarmac and a lakeside descent.": "Glaciärutsikt, len asfalt och en nedförsbacke vid sjön.",
+  "Turquoise canyon rim road on the way to the Côte d'Azur.": "Väg längs turkosblå kanjonkant på väg till Franska rivieran.",
+  "469 miles of ridgeline overlooks, no trucks, no tolls.": "755 km utsikter längs bergskam, inga lastbilar, inga avgifter.",
+  "Big Sur cliffs, Bixby Bridge and endless Pacific vistas.": "Klipporna i Big Sur, Bixby Bridge och oändliga vyer över Stilla havet.",
+  "318 curves in 11 miles — ride it early to beat traffic.": "318 kurvor på 18 km — kör tidigt för att slippa trafiken.",
+  "Switchbacks to 10,947 ft on the doorstep of Yellowstone.": "Serpentiner upp till 3 337 m alldeles vid Yellowstones dörrsteg.",
+  "Red-rock tunnels and canyon overlooks between two parks.": "Tunnlar i röd klippa och kanjonutsikter mellan två parker.",
+  "232 km between Lake Louise and Jasper past glaciers and turquoise lakes.": "232 km mellan Lake Louise och Jasper förbi glaciärer och turkosblå sjöar.",
+  "Highland cliffs, whale lookouts and ocean switchbacks.": "Högländsklippor, valobservationsplatser och havsserpentiner.",
+  "Howe Sound fjord views from Vancouver up to Whistler.": "Fjordutsikt över Howe Sound från Vancouver upp till Whistler.",
+  "St. Lawrence riverside villages and beluga-watching stops.": "Byar längs Saint Lawrence-floden och stopp för att titta på belugavalar.",
+  "Late May – October": "Slutet av maj – oktober",
+  "Year-round": "Året runt",
+  "May – early November": "Maj – början av november",
+  "June – October": "Juni – oktober",
+  "Year-round (peak: October)": "Året runt (topp: oktober)",
+  "April – November": "April – november",
+  "Late May – mid October": "Slutet av maj – mitten av oktober",
+  "Year-round (winter tyres Oct–Apr)": "Året runt (vinterdäck okt–apr)",
+  "May – October": "Maj – oktober",
+  "Rauma, Norway": "Rauma, Norge",
+  "Møre og Romsdal, Norway": "Møre og Romsdal, Norge",
+  "Provence, France": "Provence, Frankrike",
+  "Virginia – North Carolina": "Virginia – North Carolina",
+  "California": "Kalifornien",
+  "Tennessee": "Tennessee",
+  "Montana – Wyoming": "Montana – Wyoming",
+  "Utah": "Utah",
+  "Alberta": "Alberta",
+  "Cape Breton, Nova Scotia": "Cape Breton, Nova Scotia",
+  "British Columbia": "British Columbia",
+  "Québec": "Québec",
+  "Fjord-side pitches, 5 min walk to the ferry quay.": "Platser vid fjorden, 5 minuters promenad till färjekajen.",
+  "Great overnight before Grossglockner — book in July/August.": "Bra övernattning innan Grossglockner — boka i juli/augusti.",
+  "France's aire network is the cheapest overnight option en route south.": "Frankrikes aire-nätverk är det billigaste övernattningsalternativet på väg söderut.",
+  "Large pitches; height/width friendly access road.": "Stora platser; infartsväg som är höjd-/breddvänlig.",
+  "EV hookup": "Elbilsanslutning",
+  "Chemical WC": "Kemisk toalett",
+  "Electricity": "El",
+  "Bakery service": "Bageriservice",
+  "Full hookup": "Full anslutning",
+  "24h access": "Åtkomst dygnet runt",
+  "Geiranger, Norway": "Geiranger, Norge",
+  "Salzburg, Austria": "Salzburg, Österrike",
+  "Haute-Savoie, France": "Haute-Savoie, Frankrike",
+  "Lake Garda, Italy": "Gardasjön, Italien",
+  "Motorcycles are exempt from this e-vignette — nothing to buy.": "Motorcyklar är undantagna från denna e-vinjett — inget att köpa.",
+  "Only one validity period exists — it covers the whole stay.": "Det finns bara en giltighetsperiod — den täcker hela vistelsen.",
+
+  /* ---------------- Tolls guide ---------------- */
+  "🇪🇺 Europe": "🇪🇺 Europa",
+  "🇺🇸 United States": "🇺🇸 USA",
+  "🇨🇦 Canada": "🇨🇦 Kanada",
+  "Tolls & vignettes": "Vägtullar och vinjetter",
+  "Every barrier, badge and sticker — made simple.": "Varje bom, dekal och märke — förklarat enkelt.",
+  "No guesswork, no fines. Here's what you need in each country, and how to get it before you set off.": "Inget gissande, inga böter. Här är vad du behöver i varje land och hur du skaffar det innan du ger dig av.",
+  "Austria digital vignette": "Österrikisk digital vinjett",
+  "10-day, 2-month or annual. Plate-linked, activates instantly.": "10 dagar, 2 månader eller årlig. Kopplad till registreringsskylten, aktiveras direkt.",
+  "Switzerland e-vignette": "Schweizisk e-vinjett",
+  "Annual only, valid 14 months. Motorcycles need their own.": "Endast årlig, giltig i 14 månader. Motorcyklar behöver en egen.",
+  "France & Italy ticket tolls": "Biljettbaserade avgifter i Frankrike och Italien",
+  "Take a ticket, pay on exit. Telepass and Bip&Go tags speed it up.": "Ta en biljett, betala vid utfarten. Telepass- och Bip&Go-brickor gör det snabbare.",
+  "Norway AutoPASS": "Norska AutoPASS",
+  "Automatic plate billing with discounts for registered EVs.": "Automatisk fakturering via registreringsskylt med rabatter för registrerade elbilar.",
+  "E-ZPass network": "E-ZPass-nätverket",
+  "One transponder covers 19 states from Maine to Illinois.": "En transponder täcker 19 delstater från Maine till Illinois.",
+  "SunPass (Florida)": "SunPass (Florida)",
+  "Best value for Turnpike and Miami express lanes.": "Bäst värde för Turnpike och Miamis expressfiler.",
+  "FasTrak (California)": "FasTrak (Kalifornien)",
+  "Required for bridge and express-lane discounts.": "Krävs för rabatter på broar och expressfiler.",
+  "Plate-pay tolling": "Betalning via registreringsskylt",
+  "Rental cars often add a daily admin fee — worth checking first.": "Hyrbilar lägger ofta till en daglig administrationsavgift — värt att kolla i förväg.",
+  "Ontario's all-electronic toll road. A transponder beats camera billing.": "Ontarios helt elektroniska betalväg. En transponder är billigare än kamerafakturering.",
+  "Cobequid Pass": "Cobequid Pass",
+  "Nova Scotia's only mainline toll — cash and card accepted.": "Nova Scotias enda huvudvägsavgift — kontant och kort accepteras.",
+  "Bridge tolls": "Broavgifter",
+  "Confederation Bridge is charged on the way off PEI only.": "Confederation Bridge tar ut avgift enbart när man lämnar Prince Edward Island.",
+};
+
+const SV_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [
+    /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
+    (m) => `Anländ med ca 25 % batteri och ladda till 80 % på ungefär ${m[1]} minuter.`,
+  ],
+  [
+    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
+    (m) => `Rekommenderad tankning — håller dig över 25 % reserv med en räckvidd på ${m[1]}.`,
+  ],
+  [/^(.+) full battery range$/, (m) => `${m[1]} räckvidd på fullt batteri`],
+  [/^(.+) full tank range$/, (m) => `${m[1]} räckvidd på full tank`],
+  [
+    /^Single transit leg: (.+) is the cheapest legal cover\.$/,
+    (m) => `En enkel sträcka: ${m[1]} är det billigaste lagliga alternativet.`,
+  ],
+  [
+    /^Covers all (\d+) days? of your return trip within one validity window\.$/,
+    (m) => `Täcker alla ${m[1]} dagar av din tur-och-retur-resa inom en giltighetsperiod.`,
+  ],
+  [
+    /^💡 AutoVere optimized your vignette cost: saved (.+) — (.+) in (.+) instead of the usual (.+)\.$/,
+    (m) => `💡 AutoVere optimerade din vinjettkostnad: sparade ${m[1]} — ${m[2]} i ${m[3]} i stället för vanliga ${m[4]}.`,
+  ],
+  [
+    /^💡 AutoVere checked every validity window — the standard tiers are already the cheapest legal cover for (\d+) days?\.$/,
+    (m) => `💡 AutoVere kontrollerade alla giltighetsperioder — standardalternativen är redan det billigaste lagliga alternativet för ${m[1]} dagar.`,
+  ],
+  [
+    /^Planned at 75% safety buffer — (.+) between stops$/,
+    (m) => `Planerat med 75 % säkerhetsmarginal — ${m[1]} mellan stoppen`,
+  ],
+];
+
+export { SV_PATTERNS };
