@@ -521,3 +521,89 @@ export function estimateTrip(
 export function money(currency: string, value: number) {
   return `${currency}${value.toLocaleString("en-GB", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
+
+export type QuickRoute = {
+  key: string;
+  emoji: string;
+  label: string;
+  origin: string;
+  destination: string;
+  via: string;
+  regions: RegionKey[];
+};
+
+export const QUICK_ROUTES: QuickRoute[] = [
+  {
+    key: "oslo-garda",
+    emoji: "🏔️",
+    label: "Oslo → Lake Garda",
+    origin: "Oslo, Norway",
+    destination: "Lake Garda, Italy",
+    via: "NO → IT via DE/AT",
+    regions: ["eu"],
+  },
+  {
+    key: "munich-split",
+    emoji: "🌊",
+    label: "Munich → Split",
+    origin: "Munich, Germany",
+    destination: "Split, Croatia",
+    via: "DE → HR via AT/SI",
+    regions: ["eu"],
+  },
+  {
+    key: "ams-cotedazur",
+    emoji: "☀️",
+    label: "Amsterdam → Côte d'Azur",
+    origin: "Amsterdam, Netherlands",
+    destination: "Nice, France",
+    via: "NL → FR",
+    regions: ["eu"],
+  },
+  {
+    key: "london-paris",
+    emoji: "🇬🇧",
+    label: "London → Paris",
+    origin: "London, United Kingdom",
+    destination: "Paris, France",
+    via: "UK → FR via Channel Ferry / LeShuttle",
+    regions: ["eu"],
+  },
+  {
+    key: "frankfurt-barcelona",
+    emoji: "🇪🇸",
+    label: "Frankfurt → Barcelona",
+    origin: "Frankfurt, Germany",
+    destination: "Barcelona, Spain",
+    via: "DE → ES via FR",
+    regions: ["eu"],
+  },
+];
+
+export type TransponderKey = "autopass" | "telepass" | "sunpass";
+
+export const TRANSPONDERS: {
+  key: TransponderKey;
+  label: string;
+  scope: string;
+  regions: RegionKey[];
+}[] = [
+  {
+    key: "autopass",
+    label: "I have AutoPASS / EPASS24",
+    scope: "NO / SE / DK",
+    regions: ["eu"],
+  },
+  {
+    key: "telepass",
+    label: "I have Telepass / Bip&Go / Fulli",
+    scope: "FR / IT / ES / PT",
+    regions: ["eu"],
+  },
+  {
+    key: "sunpass",
+    label: "I have SunPass / E-ZPass",
+    scope: "US",
+    regions: ["us", "ca"],
+  },
+];
