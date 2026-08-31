@@ -547,7 +547,7 @@ export function TripResults({
                   key={tip}
                   className="rounded-xl border border-border bg-background/40 px-4 py-3 text-sm text-foreground/85"
                 >
-                  💡 {t.results.tip}: {tip}
+                  💡 {t.results.tip}: {tr(tip)}
                 </li>
               ))}
             </ul>
@@ -564,7 +564,7 @@ export function TripResults({
                 key={item}
                 className="rounded-xl border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-sm text-foreground/90"
               >
-                ⚠️ {item}
+                ⚠️ {tr(item)}
               </li>
             ))}
           </ul>
