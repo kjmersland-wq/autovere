@@ -21,6 +21,7 @@ import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ScenicRouteImport } from './routes/scenic'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TollsRouteImport } from './routes/tolls'
 import { Route as UsRouteImport } from './routes/us'
@@ -118,6 +119,11 @@ const PrivacyRoute = PrivacyRouteImport.update({
 const ScenicRoute = ScenicRouteImport.update({
   id: '/scenic',
   path: '/scenic',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TermsRoute = TermsRouteImport.update({
@@ -325,6 +331,7 @@ export interface FileRoutesByFullPath {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/scenic': typeof ScenicRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
   '/us': typeof UsRouteWithChildren
@@ -376,6 +383,7 @@ export interface FileRoutesByTo {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/scenic': typeof ScenicRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
   '/$lang/$page': typeof LangPageRoute
@@ -428,6 +436,7 @@ export interface FileRoutesById {
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
   '/scenic': typeof ScenicRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
   '/us': typeof UsRouteWithChildren
@@ -482,6 +491,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/scenic'
+    | '/sitemap.xml'
     | '/terms'
     | '/tolls'
     | '/us'
@@ -533,6 +543,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/scenic'
+    | '/sitemap.xml'
     | '/terms'
     | '/tolls'
     | '/$lang/$page'
@@ -584,6 +595,7 @@ export interface FileRouteTypes {
     | '/pricing'
     | '/privacy'
     | '/scenic'
+    | '/sitemap.xml'
     | '/terms'
     | '/tolls'
     | '/us'
@@ -637,6 +649,7 @@ export interface RootRouteChildren {
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
   ScenicRoute: typeof ScenicRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
   TollsRoute: typeof TollsRoute
   UsRoute: typeof UsRouteWithChildren
@@ -742,6 +755,13 @@ declare module '@tanstack/react-router' {
       path: '/scenic'
       fullPath: '/scenic'
       preLoaderRoute: typeof ScenicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/terms': {
@@ -1080,6 +1100,7 @@ const rootRouteChildren: RootRouteChildren = {
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
   ScenicRoute: ScenicRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,
   TollsRoute: TollsRoute,
   UsRoute: UsRouteWithChildren,
