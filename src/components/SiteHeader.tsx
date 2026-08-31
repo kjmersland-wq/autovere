@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, Menu } from "lucide-react";
 
-import { LANGUAGES, NAV_LINKS, REGIONS, type RegionKey } from "@/lib/trip-data";
+import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,6 +12,8 @@ import {
 import { cn } from "@/lib/utils";
 
 export function SiteHeader({ region }: { region?: RegionKey }) {
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const activeRegion = region ?? regionFromPath(pathname);
   const [lang, setLang] = useState(LANGUAGES[0]!);
   const [open, setOpen] = useState(false);
 
@@ -29,7 +31,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               to={r.to}
               className={cn(
                 "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
-                region === r.key
+                activeRegion === r.key
                   ? "bg-primary text-primary-foreground"
                   : "text-foreground/80 hover:text-foreground",
               )}
@@ -90,7 +92,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-full border border-border px-3 py-1.5 text-sm",
-                  region === r.key && "bg-primary text-primary-foreground",
+                  activeRegion === r.key && "bg-primary text-primary-foreground",
                 )}
               >
                 {r.flag} {r.label}
