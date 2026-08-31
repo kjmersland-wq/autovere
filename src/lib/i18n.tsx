@@ -116,7 +116,7 @@ const en = {
     buyAt: "Buy at",
     vignetteTotal: "Optimised vignette cover for this route:",
     vignetteSaved: "saved by smart tier selection",
-    vignetteTail: (ret: boolean) =>
+    vignetteTail: (ret: boolean): string =>
       ret
         ? "Distance tolls and ferry tickets are charged per crossing and doubled for your return leg."
         : "Distance tolls and ferry tickets are charged per crossing.",
