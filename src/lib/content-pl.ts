@@ -600,7 +600,6 @@ export const CONTENT_PL: Record<string, string> = {
   "Required for bridge and express-lane discounts.": "Wymagany, by dostać zniżki na mostach i pasach ekspresowych.",
   "Plate-pay tolling": "Rozliczenie po tablicy rejestracyjnej",
   "Rental cars often add a daily admin fee — worth checking first.": "Wypożyczalnie często doliczają dzienną opłatę administracyjną — warto sprawdzić wcześniej.",
-  "Highway 407 ETR": "Autostrada 407 ETR",
   "Ontario's all-electronic toll road. A transponder beats camera billing.": "W pełni elektroniczna płatna droga w Ontario. Transponder wychodzi taniej niż rozliczenie z kamer.",
   "Cobequid Pass": "Cobequid Pass",
   "Nova Scotia's only mainline toll — cash and card accepted.": "Jedyna główna opłata w Nowej Szkocji — gotówka i karta.",
