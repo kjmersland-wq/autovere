@@ -60,10 +60,12 @@ export function ShareButton({
   lang = "en",
   url,
   className = "",
+  variant = "menu",
 }: {
   lang?: Lang;
   url?: string;
   className?: string;
+  variant?: "menu" | "bar";
 }) {
   const t: Copy = COPY[lang] ?? COPY.en;
   const [copied, setCopied] = useState(false);
