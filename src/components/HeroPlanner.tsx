@@ -11,7 +11,8 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import {
-  estimateTrip,
+  detectFerryCrossings,
+  estimateAllVariants,
   FUELS,
   QUICK_ROUTES,
   REGION_COPY,
@@ -21,6 +22,8 @@ import {
   type FuelKey,
   type QuickRoute,
   type RegionKey,
+  type FerryCrossing,
+  type RouteVariantKey,
   type TransponderKey,
   type TripEstimate,
   type VehicleKey,
@@ -47,7 +50,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [scenic, setScenic] = useState(true);
   const [avoidTolls, setAvoidTolls] = useState(false);
   const [ferries, setFerries] = useState(true);
-  const [trip, setTrip] = useState<TripEstimate | null>(null);
+  const [trip, setTrip] = useState<Record<RouteVariantKey, TripEstimate> | null>(null);
+  const [ferryCrossings, setFerryCrossings] = useState<FerryCrossing[]>([]);
   const [activeQuick, setActiveQuick] = useState<string | null>(null);
   const [tags, setTags] = useState<TransponderKey[]>([]);
   const [tankSize, setTankSize] = useState(imperial ? "16" : "60");
@@ -85,7 +89,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     setOrigin(r.origin);
     setDestination(r.destination);
     setActiveQuick(r.key);
-    setTrip(estimateTrip(region, vehicle, fuel, avoidTolls, ferries, scenic));
+    setTrip(estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic));
+    setFerryCrossings(ferries ? detectFerryCrossings(region, r.origin, r.destination) : []);
     scrollToResults();
   };
 
@@ -117,7 +122,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
           <form
             onSubmit={(e) => {
               e.preventDefault();
-              setTrip(estimateTrip(region, vehicle, fuel, avoidTolls, ferries, scenic));
+              setTrip(estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic));
+              setFerryCrossings(ferries ? detectFerryCrossings(region, origin, destination) : []);
               requestAnimationFrame(() =>
                 document.getElementById("trip-results")?.scrollIntoView({ behavior: "smooth" }),
               );
@@ -314,7 +320,15 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       </section>
 
       <div id="trip-results">
-        {trip && <TripResults trip={trip} origin={origin} destination={destination} />}
+        {trip && (
+          <TripResults
+            trips={trip}
+            origin={origin}
+            destination={destination}
+            ferryCrossings={ferryCrossings}
+            isMotorcycle={vehicle === "motorcycle"}
+          />
+        )}
       </div>
 
       <CountryCostDrawer

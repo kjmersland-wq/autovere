@@ -126,7 +126,10 @@ export type TripEstimate = {
   distanceLabel: string;
   budget: number;
   distanceKm: number;
+  driveHours: number;
+  variant: RouteVariantKey;
   driveTime: string;
+
   tolls: number;
   ferries: number;
   energyCost: number;
@@ -567,6 +570,40 @@ function safetyFor(region: RegionKey, vehicle: VehicleKey) {
 }
 
 
+export type RouteVariantKey = "fastest" | "smart" | "tollfree";
+
+export const ROUTE_VARIANTS: {
+  key: RouteVariantKey;
+  emoji: string;
+  label: string;
+  blurb: string;
+}[] = [
+  {
+    key: "fastest",
+    emoji: "⚡",
+    label: "Fastest Route",
+    blurb: "The standard optimal driving route — motorways all the way.",
+  },
+  {
+    key: "smart",
+    emoji: "✨",
+    label: "Smart Bypass",
+    blurb: "Balances toll cost against driving time — skips expensive corridors when the detour is cheap in minutes.",
+  },
+  {
+    key: "tollfree",
+    emoji: "🚫",
+    label: "100% Toll-Free",
+    blurb: "Strictly avoids every toll road, gantry and vignette zone.",
+  },
+];
+
+const VARIANT_TUNING: Record<RouteVariantKey, { toll: number; distance: number; speed: number }> = {
+  fastest: { toll: 1, distance: 1, speed: 98 },
+  smart: { toll: 0.55, distance: 1.03, speed: 93 },
+  tollfree: { toll: 0, distance: 1.1, speed: 83 },
+};
+
 export function estimateTrip(
   region: RegionKey,
   vehicle: VehicleKey,
@@ -574,12 +611,15 @@ export function estimateTrip(
   avoidTolls: boolean,
   includeFerries: boolean,
   scenic: boolean,
+  variant: RouteVariantKey = "fastest",
 ): TripEstimate {
+  const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
+  const tuning = VARIANT_TUNING[activeVariant];
   const defaults = REGION_DEFAULTS[region];
   const currency = defaults.currency;
   const imperial = defaults.units === "imperial";
   const baseDistance = region === "eu" ? 1420 : region === "us" ? 1890 : 1640;
-  const distanceKm = Math.round(baseDistance * (scenic ? 1.08 : 1));
+  const distanceKm = Math.round(baseDistance * (scenic ? 1.08 : 1) * tuning.distance);
 
   const isMoto = vehicle === "motorcycle";
   const round2 = (n: number) => Math.round(n * 100) / 100;
@@ -595,9 +635,10 @@ export function estimateTrip(
 
   const motoFactor = isMoto ? 0.6 : 1;
   segments = segments.map((s) => {
-    const tollFactor = s.country.includes("Ferries") || !avoidTolls ? 1 : 0.25;
+    const tollFactor = s.country.includes("Ferries") ? 1 : tuning.toll;
     const lines = mapLines(s.lines, tollFactor * motoFactor);
     return { ...s, lines, total: round2(lines.reduce((sum, l) => sum + l.amount, 0)) };
+
   });
 
   const ferries = round2(
@@ -630,15 +671,17 @@ export function estimateTrip(
     ? `${Math.round(distanceKm * 0.621371).toLocaleString("en-US")} mi`
     : `${distanceKm.toLocaleString("en-GB")} km`;
 
-  const hours = distanceKm / (scenic ? 78 : 98);
+  const hours = distanceKm / (scenic ? tuning.speed * 0.82 : tuning.speed);
   const driveTime = `${Math.floor(hours)}h ${Math.round((hours % 1) * 60)}m`;
 
   return {
     currency,
     units: defaults.units,
+    variant: activeVariant,
     distanceLabel,
     budget: round2(tolls + ferries + energyCost + distanceKm * 0.04),
     distanceKm,
+    driveHours: hours,
     driveTime,
     tolls,
     ferries,
@@ -653,6 +696,39 @@ export function estimateTrip(
       : undefined,
   };
 }
+
+export function estimateAllVariants(
+  region: RegionKey,
+  vehicle: VehicleKey,
+  fuel: FuelKey,
+  avoidTolls: boolean,
+  includeFerries: boolean,
+  scenic: boolean,
+): Record<RouteVariantKey, TripEstimate> {
+  return {
+    fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest"),
+    smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart"),
+    tollfree: estimateTrip(region, vehicle, fuel, avoidTolls, includeFerries, scenic, "tollfree"),
+  };
+}
+
+export function variantComparison(
+  base: TripEstimate,
+  candidate: TripEstimate,
+): { saved: number; hoursAdded: number; savedLabel: string; timeLabel: string } {
+  const saved = Math.round((base.tolls + base.ferries - candidate.tolls - candidate.ferries) * 100) / 100;
+  const hoursAdded = candidate.driveHours - base.driveHours;
+  const h = Math.floor(Math.abs(hoursAdded));
+  const m = Math.round((Math.abs(hoursAdded) % 1) * 60);
+  const sign = hoursAdded >= 0 ? "+" : "−";
+  return {
+    saved,
+    hoursAdded,
+    savedLabel: `${saved >= 0 ? "" : "−"}${money(base.currency, Math.abs(saved))}`,
+    timeLabel: `${sign}${h}h ${m}m`,
+  };
+}
+
 
 
 export function money(currency: string, value: number) {
@@ -744,3 +820,151 @@ export const TRANSPONDERS: {
     regions: ["us", "ca"],
   },
 ];
+
+/* ---------------------------------------------------------------------------
+ * Ferry & marine corridor detection
+ * ------------------------------------------------------------------------- */
+
+export type FerryCrossing = {
+  id: string;
+  corridor: string;
+  route: string;
+  operators: string[];
+  duration: string;
+  frequency: string;
+  price: string;
+  motoPrice?: string;
+  note: string;
+  badge?: string;
+  booking: { label: string; url: string };
+  /** Lowercase keywords that trigger this crossing */
+  match: string[];
+  regions: RegionKey[];
+};
+
+export const FERRY_CROSSINGS: FerryCrossing[] = [
+  {
+    id: "no-fjord",
+    corridor: "🇳🇴 Norway · Fjord ferries",
+    route: "Lauvvik–Oanes · Mortavika–Arsvågen · Halhjem–Sandvikvåg",
+    operators: ["Norled", "Fjord1", "Torghatten"],
+    duration: "10–45 min per crossing",
+    frequency: "Every 20–40 min, most run 24/7",
+    price: "NOK 120–290 per car",
+    motoPrice: "NOK 55–120 per motorcycle",
+    note: "Register an AutoPASS ferjekort for an automatic ~50% discount — no cash, no queue at the booth.",
+    badge: "AutoPASS ferjekort −50%",
+    booking: { label: "autopassferje.no", url: "https://www.autopassferje.no/" },
+    match: ["norway", "norge", "oslo", "bergen", "stavanger", "trondheim", "ålesund", "alesund", "lofoten", "geiranger", "trollstigen"],
+    regions: ["eu"],
+  },
+  {
+    id: "scandi-baltic",
+    corridor: "🌊 Scandinavia & Baltic",
+    route: "Oslo–Kiel · Hirtshals–Kristiansand · Puttgarden–Rødby · Helsinki–Tallinn",
+    operators: ["Color Line", "Fjord Line", "Scandlines", "DFDS", "Stena Line", "Tallink Silja", "Viking Line"],
+    duration: "45 min – 20 h depending on crossing",
+    frequency: "Scandlines every 30 min; overnight lines 1–2 sailings a day",
+    price: "€45–210 car + driver",
+    motoPrice: "€28–120 motorcycle + rider",
+    note: "Book overnight cabins early in July and August — the Oslo–Kiel and Tallinn routes sell out weeks ahead.",
+    badge: "Cabins book out early",
+    booking: { label: "Color Line", url: "https://www.colorline.com/" },
+    match: ["sweden", "sverige", "denmark", "danmark", "copenhagen", "københavn", "kiel", "hirtshals", "gothenburg", "göteborg", "stockholm", "helsinki", "tallinn", "estonia", "finland", "baltic", "malmö", "malmo"],
+    regions: ["eu"],
+  },
+  {
+    id: "channel",
+    corridor: "🇬🇧 English Channel",
+    route: "Dover–Calais · Dover–Dunkirk · Folkestone–Coquelles (LeShuttle)",
+    operators: ["DFDS", "P&O Ferries", "Irish Ferries", "LeShuttle"],
+    duration: "35 min (LeShuttle) · 90–120 min (ferry)",
+    frequency: "Up to 4 departures an hour at peak",
+    price: "£70–190 car + passengers",
+    motoPrice: "£45–95 motorcycle + rider",
+    note: "LeShuttle keeps you in your vehicle — the fastest option with a roof box or a loaded bike.",
+    badge: "Flexi tickets recommended",
+    booking: { label: "LeShuttle", url: "https://www.leshuttle.com/" },
+    match: ["london", "united kingdom", "england", "uk", "dover", "calais", "paris", "folkestone", "brighton", "kent"],
+    regions: ["eu"],
+  },
+  {
+    id: "irish-sea",
+    corridor: "☘️ Irish Sea",
+    route: "Holyhead–Dublin · Cairnryan–Belfast · Fishguard–Rosslare",
+    operators: ["Irish Ferries", "Stena Line", "P&O Ferries"],
+    duration: "2 h (fast craft) – 3 h 30 min",
+    frequency: "4–8 sailings a day per route",
+    price: "€95–230 car + driver",
+    motoPrice: "€60–130 motorcycle + rider",
+    note: "Wild Atlantic Way traffic peaks at weekends — a midweek morning sailing is calmer and cheaper.",
+    booking: { label: "Irish Ferries", url: "https://www.irishferries.com/" },
+    match: ["ireland", "dublin", "belfast", "cork", "galway", "holyhead", "wales", "rosslare", "northern ireland"],
+    regions: ["eu"],
+  },
+  {
+    id: "med-adriatic",
+    corridor: "☀️ Mediterranean & Adriatic",
+    route: "Split–Supetar · Ancona–Split · Genoa–Barcelona · Piraeus–Crete · Bari–Patras",
+    operators: ["Jadrolinija", "Moby", "GNV", "Minoan Lines", "Superfast Ferries", "Grimaldi Lines"],
+    duration: "50 min (island hops) – 20 h (overnight)",
+    frequency: "Island hops hourly; long crossings daily",
+    price: "€55–260 car + driver",
+    motoPrice: "€30–140 motorcycle + rider",
+    note: "Motorcycles usually board first and pay roughly 40% less — arrive 45 min before departure.",
+    badge: "Bikes board first",
+    booking: { label: "Jadrolinija", url: "https://www.jadrolinija.hr/en" },
+    match: ["croatia", "split", "dubrovnik", "italy", "italia", "rome", "naples", "genoa", "ancona", "bari", "greece", "athens", "patras", "crete", "sardinia", "sicily", "corsica", "barcelona", "spain", "lake garda", "amalfi"],
+    regions: ["eu"],
+  },
+  {
+    id: "us-marine",
+    corridor: "🇺🇸 US marine highways",
+    route: "Anacortes–Friday Harbor · Bellingham–Alaska · Cape May–Lewes",
+    operators: ["Washington State Ferries", "Alaska Marine Highway", "Cape May–Lewes Ferry"],
+    duration: "60 min – 38 h (Alaska)",
+    frequency: "San Juans hourly; Alaska weekly",
+    price: "$62–180 vehicle + driver",
+    motoPrice: "$28–70 motorcycle + rider",
+    note: "Vehicle reservations open two months ahead on Washington State Ferries and are essential in summer.",
+    badge: "Reserve ahead",
+    booking: { label: "WA State Ferries", url: "https://wsdot.com/travel/washington-state-ferries" },
+    match: ["seattle", "washington", "anacortes", "san juan", "alaska", "bellingham", "cape may"],
+    regions: ["us"],
+  },
+  {
+    id: "ca-marine",
+    corridor: "🇨🇦 Canadian coastal ferries",
+    route: "Tsawwassen–Swartz Bay · Horseshoe Bay–Nanaimo · North Sydney–Port aux Basques",
+    operators: ["BC Ferries", "Marine Atlantic", "Société des traversiers du Québec"],
+    duration: "1 h 35 min – 7 h (Newfoundland)",
+    frequency: "Every 1–2 h on the Vancouver Island runs",
+    price: "C$96–150 vehicle + 2 adults",
+    motoPrice: "C$45–70 motorcycle + rider",
+    note: "Book a Saver fare on BC Ferries — cheapest sailings are before 09:00 and after 19:00.",
+    badge: "Saver fares available",
+    booking: { label: "BC Ferries", url: "https://www.bcferries.com/" },
+    match: ["vancouver", "victoria", "tofino", "british columbia", "nanaimo", "newfoundland", "halifax", "nova scotia", "québec", "quebec", "gaspésie"],
+    regions: ["ca"],
+  },
+];
+
+const DEFAULT_FERRIES: Record<RegionKey, string[]> = {
+  eu: ["no-fjord", "scandi-baltic", "channel"],
+  us: ["us-marine"],
+  ca: ["ca-marine"],
+};
+
+export function detectFerryCrossings(
+  region: RegionKey,
+  origin: string,
+  destination: string,
+): FerryCrossing[] {
+  const text = `${origin} ${destination}`.toLowerCase();
+  const matched = FERRY_CROSSINGS.filter(
+    (f) => f.regions.includes(region) && f.match.some((m) => text.includes(m)),
+  );
+  if (matched.length > 0) return matched;
+  const fallback = DEFAULT_FERRIES[region];
+  return FERRY_CROSSINGS.filter((f) => fallback.includes(f.id));
+}
