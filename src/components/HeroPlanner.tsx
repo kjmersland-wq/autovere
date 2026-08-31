@@ -1,5 +1,16 @@
 import { useMemo, useState } from "react";
-import { Check, Gauge, MapPin, Route as RouteIcon, Tag } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Check,
+  Gauge,
+  GripVertical,
+  MapPin,
+  Plus,
+  Route as RouteIcon,
+  Tag,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import heroImage from "@/assets/hero-roadtrip.jpg";
@@ -12,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
+import { DURATION_OPTIONS, type TripType } from "@/lib/vignette-optimizer";
 import {
   detectEmissionBadges,
   detectFerryCrossings,
@@ -33,6 +45,7 @@ import {
   type VehicleKey,
 } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
+
 
 export type { RegionKey };
 
