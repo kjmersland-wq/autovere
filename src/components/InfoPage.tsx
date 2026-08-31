@@ -1,4 +1,5 @@
 import { SiteHeader } from "@/components/SiteHeader";
+import { localizeEuroText, useCurrency } from "@/lib/currency";
 
 export type InfoSection = {
   heading: string;
@@ -16,15 +17,18 @@ type InfoPageProps = {
 };
 
 export function InfoPage({ eyebrow, title, intro, sections, note }: InfoPageProps) {
+  const { currency } = useCurrency();
+  const cur = (text: string) => localizeEuroText(text, currency);
+
   return (
     <main className="min-h-screen bg-[hsl(var(--background))]">
       <SiteHeader />
       <div className="mx-auto max-w-4xl px-6 pb-24 pt-12">
         <p className="text-xs uppercase tracking-[0.22em] text-amber-300/90">{eyebrow}</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-          {title}
+          {cur(title)}
         </h1>
-        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{intro}</p>
+        <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{cur(intro)}</p>
 
         <div className="mt-12 space-y-6">
           {sections.map((section) => (
@@ -32,9 +36,9 @@ export function InfoPage({ eyebrow, title, intro, sections, note }: InfoPageProp
               key={section.heading}
               className="rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur"
             >
-              <h2 className="text-lg font-semibold text-foreground">{section.heading}</h2>
+              <h2 className="text-lg font-semibold text-foreground">{cur(section.heading)}</h2>
               {section.body ? (
-                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{section.body}</p>
+                <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{cur(section.body)}</p>
               ) : null}
               {section.items ? (
                 <ul className="mt-4 space-y-2">
@@ -44,7 +48,7 @@ export function InfoPage({ eyebrow, title, intro, sections, note }: InfoPageProp
                       className="flex gap-3 text-sm leading-relaxed text-muted-foreground"
                     >
                       <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-amber-300/80" />
-                      <span>{item}</span>
+                      <span>{cur(item)}</span>
                     </li>
                   ))}
                 </ul>
@@ -70,7 +74,7 @@ export function InfoPage({ eyebrow, title, intro, sections, note }: InfoPageProp
 
         {note ? (
           <p className="mt-10 rounded-xl border border-white/10 bg-white/[0.03] p-4 text-xs leading-relaxed text-muted-foreground">
-            {note}
+            {cur(note)}
           </p>
         ) : null}
       </div>

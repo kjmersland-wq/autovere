@@ -147,3 +147,18 @@ export function useMoney(baseSymbol: string) {
     [base, currency],
   );
 }
+
+/**
+ * Rewrites inline EUR amounts in prose ("€4.90", "4,90 €", "€29") into the
+ * user's selected display currency so pricing copy follows the header switcher.
+ */
+export function localizeEuroText(text: string, code: CurrencyCode): string {
+  if (!text || code === "EUR") return text;
+  const num = (raw: string) => Number(raw.replace(/\s/g, "").replace(",", "."));
+  const out = (v: number, hadDecimals: boolean) =>
+    formatCurrency(convert(v, "EUR", code), code, { decimals: hadDecimals ? 2 : 0 });
+
+  return text
+    .replace(/€\s?(\d+(?:[.,]\d{1,2})?)/g, (_m, d: string) => out(num(d), /[.,]/.test(d)))
+    .replace(/(\d+(?:[.,]\d{1,2})?)\s?€/g, (_m, d: string) => out(num(d), /[.,]/.test(d)));
+}
