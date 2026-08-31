@@ -215,6 +215,23 @@ const en = {
     tagSavingTail: (amount: string, pct: number) =>
       `— saving ${amount} (${pct}% on covered booths) and skipping every cash lane.`,
   },
+  map: {
+    title: "Corridor radar map",
+    corridorBadge: (d: string) => `${d} corridor`,
+    intro: (from: string, to: string) => `Live service radar along ${from} → ${to}. Toggle the layers you care about.`,
+    tooltipIn: "in",
+    fuelTitle: "Fuel stops & live prices along the route",
+    stations: (n: number) => `${n} stations`,
+    source: "Source",
+    alongRoute: "along route",
+    addRefuel: "Add as Refuel Stop",
+    campTitle: "🚐 Motorhome & camping radar",
+    campIntro:
+      "Rated campsites, aires and service points along the active corridor — add any of them straight into your itinerary.",
+    addItinerary: "Add to itinerary",
+    yourStart: "Your start",
+    yourDestination: "Your destination",
+  },
   footer: {
     tagline:
       "Cross-border road trip intelligence — tolls, vignettes, fuel, charging and ferries for cars, motorhomes and touring motorcycles.",
@@ -442,6 +459,24 @@ const no: Strings = {
     tagTo: "til",
     tagSavingTail: (amount: string, pct: number) =>
       `— du sparer ${amount} (${pct} % på dekkede bomstasjoner) og slipper alle kontantfelt.`,
+  },
+  map: {
+    title: "Ruteradar med kart",
+    corridorBadge: (d: string) => `${d} korridor`,
+    intro: (from: string, to: string) =>
+      `Live servicekart langs ${from} → ${to}. Slå på lagene du er interessert i.`,
+    tooltipIn: "inn i ruten",
+    fuelTitle: "Drivstoffstopp og priser langs ruten",
+    stations: (n: number) => `${n} stasjoner`,
+    source: "Kilde",
+    alongRoute: "langs ruten",
+    addRefuel: "Legg til som fyllestopp",
+    campTitle: "🚐 Bobil- og campingradar",
+    campIntro:
+      "Campingplasser, bobilparkeringer og servicepunkter langs ruten — legg dem rett inn i reiseplanen din.",
+    addItinerary: "Legg til i reiseplanen",
+    yourStart: "Startstedet ditt",
+    yourDestination: "Reisemålet ditt",
   },
   footer: {
     tagline: "Sømløs ruteplanlegging og kostnadskontroll på tvers av landegrenser.",
