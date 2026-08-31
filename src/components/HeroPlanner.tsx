@@ -6,6 +6,7 @@ import heroImage from "@/assets/hero-roadtrip.jpg";
 import { CountryCostDrawer } from "@/components/CountryCostDrawer";
 
 import { SiteHeader } from "@/components/SiteHeader";
+import { StateExplorer } from "@/components/StateExplorer";
 import { TripResults } from "@/components/TripResults";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -354,6 +355,17 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
           />
         )}
       </div>
+
+      {(region === "us" || region === "ca") && (
+        <StateExplorer
+          region={region}
+          onPlanRoute={(name) => {
+            setDestination(name);
+            setActiveQuick(null);
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        />
+      )}
 
       <CountryCostDrawer
         defaultGroup={region === "us" ? "us" : region === "ca" ? "ca" : "western"}
