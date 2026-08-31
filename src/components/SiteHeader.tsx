@@ -12,7 +12,7 @@ import {
 import { cn } from "@/lib/utils";
 
 export function SiteHeader({ region }: { region?: RegionKey }) {
-  const [lang, setLang] = useState(LANGUAGES[0]);
+  const [lang, setLang] = useState(LANGUAGES[0]!);
   const [open, setOpen] = useState(false);
 
   return (
