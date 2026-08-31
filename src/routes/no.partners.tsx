@@ -1,32 +1,25 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { InfoPage } from "@/components/InfoPage";
-import { NO_PARTNERS } from "@/lib/global-content-no";
-
-const content = NO_PARTNERS;
+import { PartnersPage } from "@/components/PartnersPage";
 
 export const Route = createFileRoute("/no/partners")({
   head: () => ({
     meta: [
-      { title: content.meta.title },
-      { name: "description", content: content.meta.description },
-      { property: "og:title", content: content.meta.title },
-      { property: "og:description", content: content.meta.description },
+      { title: "Partnere — Gi medlemmene 25 % rabatt på AutoVere Pro | AutoVere" },
+      {
+        name: "description",
+        content:
+          "Bli AutoVere-partner: gi medlemmene ekte bom-, vignett-, drivstoff- og ladekostnader før avreise, og 25 % rabatt på AutoVere Pro. Ingen teknologi å bygge.",
+      },
+      { property: "og:title", content: "Bli AutoVere-partner — 25 % rabatt til medlemmene dine" },
+      {
+        property: "og:description",
+        content:
+          "En reell medlemsfordel for bil-, bobil-, MC- og reiseorganisasjoner i Europa, USA og Canada.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: NoInfoPage,
+  component: () => <PartnersPage lang="no" />,
 });
-
-function NoInfoPage() {
-  return (
-    <InfoPage
-      eyebrow={content.eyebrow}
-      title={content.title}
-      intro={content.intro}
-      sections={content.sections}
-      note={content.note}
-    />
-  );
-}
