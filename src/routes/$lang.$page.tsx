@@ -16,6 +16,38 @@ import {
   GLOBAL_TERMS,
 } from "@/lib/global-content";
 import {
+  DA_FAQ,
+  DA_HOW_IT_WORKS,
+  DA_PARTNERS,
+  DA_PRICING,
+  DA_PRIVACY,
+  DA_TERMS,
+} from "@/lib/global-content-da";
+import {
+  DE_FAQ,
+  DE_HOW_IT_WORKS,
+  DE_PARTNERS,
+  DE_PRICING,
+  DE_PRIVACY,
+  DE_TERMS,
+} from "@/lib/global-content-de";
+import {
+  FR_FAQ,
+  FR_HOW_IT_WORKS,
+  FR_PARTNERS,
+  FR_PRICING,
+  FR_PRIVACY,
+  FR_TERMS,
+} from "@/lib/global-content-fr";
+import {
+  NL_FAQ,
+  NL_HOW_IT_WORKS,
+  NL_PARTNERS,
+  NL_PRICING,
+  NL_PRIVACY,
+  NL_TERMS,
+} from "@/lib/global-content-nl";
+import {
   PL_FAQ,
   PL_HOW_IT_WORKS,
   PL_PARTNERS,
@@ -23,6 +55,14 @@ import {
   PL_PRIVACY,
   PL_TERMS,
 } from "@/lib/global-content-pl";
+import {
+  SV_FAQ,
+  SV_HOW_IT_WORKS,
+  SV_PARTNERS,
+  SV_PRICING,
+  SV_PRIVACY,
+  SV_TERMS,
+} from "@/lib/global-content-sv";
 import {
   isLocalePage,
   isLocalePrefix,
@@ -41,18 +81,61 @@ const INFO = {
   terms: GLOBAL_TERMS,
 } as const;
 
-const INFO_PL = {
-  faq: PL_FAQ,
-  "how-it-works": PL_HOW_IT_WORKS,
-  pricing: PL_PRICING,
-  partners: PL_PARTNERS,
-  privacy: PL_PRIVACY,
-  terms: PL_TERMS,
-} as const;
+/** Localised info-page content per URL language prefix. */
+const INFO_BY_LANG: Record<string, typeof INFO> = {
+  pl: {
+    faq: PL_FAQ,
+    "how-it-works": PL_HOW_IT_WORKS,
+    pricing: PL_PRICING,
+    partners: PL_PARTNERS,
+    privacy: PL_PRIVACY,
+    terms: PL_TERMS,
+  },
+  se: {
+    faq: SV_FAQ,
+    "how-it-works": SV_HOW_IT_WORKS,
+    pricing: SV_PRICING,
+    partners: SV_PARTNERS,
+    privacy: SV_PRIVACY,
+    terms: SV_TERMS,
+  },
+  dk: {
+    faq: DA_FAQ,
+    "how-it-works": DA_HOW_IT_WORKS,
+    pricing: DA_PRICING,
+    partners: DA_PARTNERS,
+    privacy: DA_PRIVACY,
+    terms: DA_TERMS,
+  },
+  de: {
+    faq: DE_FAQ,
+    "how-it-works": DE_HOW_IT_WORKS,
+    pricing: DE_PRICING,
+    partners: DE_PARTNERS,
+    privacy: DE_PRIVACY,
+    terms: DE_TERMS,
+  },
+  nl: {
+    faq: NL_FAQ,
+    "how-it-works": NL_HOW_IT_WORKS,
+    pricing: NL_PRICING,
+    partners: NL_PARTNERS,
+    privacy: NL_PRIVACY,
+    terms: NL_TERMS,
+  },
+  fr: {
+    faq: FR_FAQ,
+    "how-it-works": FR_HOW_IT_WORKS,
+    pricing: FR_PRICING,
+    partners: FR_PARTNERS,
+    privacy: FR_PRIVACY,
+    terms: FR_TERMS,
+  },
+};
 
 function infoFor(lang: string, page: string) {
-  if (lang === "pl") return INFO_PL[page as keyof typeof INFO_PL] ?? null;
-  return INFO[page as keyof typeof INFO] ?? null;
+  const set = INFO_BY_LANG[lang] ?? INFO;
+  return set[page as keyof typeof INFO] ?? null;
 }
 
 export const Route = createFileRoute("/$lang/$page")({
