@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
+import { ShareButton } from "@/components/ShareButton";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -39,6 +40,9 @@ function Index() {
         title="Know the true cost of every kilometre."
         subtitle="Smart cross-border toll, vignette, fuel, charging, and ferry intelligence for cars, motorhomes, and touring motorcycles. Plan with total peace of mind."
       />
+      <div className="mx-auto flex w-full max-w-6xl justify-end px-4 pb-10">
+        <ShareButton lang="en" url="https://www.autovere.com/" />
+      </div>
     </main>
   );
 }
