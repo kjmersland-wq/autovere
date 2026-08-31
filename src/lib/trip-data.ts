@@ -247,11 +247,13 @@ function buildOptimizer(
   const stops: ChargingStop[] = Array.from({ length: stopCount }, (_, i) => {
     const atKm = Math.round(safeRange * (i + 1));
     return {
-      name: STOP_NAMES[region][i % STOP_NAMES[region].length],
+      name: STOP_NAMES[region][i % STOP_NAMES[region].length]!,
       atKm,
       atLabel: d(atKm),
       power: isEv ? (vehicle === "motorhome" ? "150 kW CCS" : "350 kW CCS") : "24/7 forecourt",
-      networks: isEv ? [networks[i % networks.length], networks[(i + 1) % networks.length]] : [],
+      networks: isEv
+        ? [networks[i % networks.length]!, networks[(i + 1) % networks.length]!]
+        : [],
       note: isEv
         ? `Arrive at ~25% state of charge, charge to 80% in about ${vehicle === "motorhome" ? 38 : 22} min.`
         : `Recommended refuel — keeps you above the 25% reserve on a ${d(fullRange)} tank range.`,
