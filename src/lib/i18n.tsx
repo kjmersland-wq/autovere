@@ -554,6 +554,22 @@ const NO_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
   [/^(.+) full battery range$/, (m) => `${m[1]} rekkevidde med fullt batteri`],
   [/^(.+) full tank range$/, (m) => `${m[1]} rekkevidde med full tank`],
   [
+    /^Single transit leg: (.+) is the cheapest legal cover\.$/,
+    (m) => `Én gjennomkjøring: ${m[1]} er det rimeligste lovlige alternativet.`,
+  ],
+  [
+    /^Covers all (\d+) days? of your return trip within one validity window\.$/,
+    (m) => `Dekker alle ${m[1]} dagene av tur-retur-reisen innenfor én gyldighetsperiode.`,
+  ],
+  [
+    /^💡 AutoVere optimized your vignette cost: saved (.+) — (.+) in (.+) instead of the usual (.+)\.$/,
+    (m) => `💡 AutoVere optimaliserte vignettkostnaden: spart ${m[1]} — ${m[2]} i ${m[3]} i stedet for vanlig ${m[4]}.`,
+  ],
+  [
+    /^💡 AutoVere checked every validity window — the standard tiers are already the cheapest legal cover for (\d+) days?\.$/,
+    (m) => `💡 AutoVere sjekket alle gyldighetsperioder — standardvalgene er allerede det rimeligste lovlige alternativet for ${m[1]} dager.`,
+  ],
+  [
     /^Planned at 75% safety buffer — (.+) between stops$/,
     (m) => `Planlagt med 75 % sikkerhetsmargin — ${m[1]} mellom stoppene`,
   ],

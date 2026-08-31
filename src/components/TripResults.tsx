@@ -431,7 +431,7 @@ export function TripResults({
           </div>
 
           <p className="mt-3 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 text-sm font-medium text-primary">
-            {trip.vignette.headline}
+            {tr(trip.vignette.headline)}
           </p>
 
           <div className="mt-4 grid gap-3 sm:grid-cols-2">
@@ -450,14 +450,14 @@ export function TripResults({
                 </div>
 
                 <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-                  {t.results.recommended}: {v.recommendation}
+                  {t.results.recommended}: {tr(v.recommendation)}
                 </p>
                 {v.saved > 0 && (
                   <p className="mt-2 text-xs font-medium text-emerald-400">
                     💡 {t.results.savesVs(`${v.currency}${v.saved.toFixed(2)}`, `${v.baselineLabel} (${v.currency}${v.baselineCost.toFixed(2)})`)}
                   </p>
                 )}
-                <p className="mt-2 text-sm text-foreground/80">{v.note}</p>
+                <p className="mt-2 text-sm text-foreground/80">{tr(v.note)}</p>
 
                 <a
                   href={v.portal.url}
@@ -656,9 +656,9 @@ export function TripResults({
               <p className="text-sm font-semibold">
                 {h.emoji} {h.name}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">{h.where}</p>
-              <p className="mt-2 text-sm text-foreground/80">{h.note}</p>
-              <p className="mt-3 text-xs font-medium text-primary">{t.results.open}: {h.season}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{tr(h.where)}</p>
+              <p className="mt-2 text-sm text-foreground/80">{tr(h.note)}</p>
+              <p className="mt-3 text-xs font-medium text-primary">{t.results.open}: {tr(h.season)}</p>
               <Button
                 size="sm"
                 variant="secondary"
@@ -682,8 +682,8 @@ export function TripResults({
                   <p className="text-sm font-semibold">
                     {p.emoji} {p.name}
                   </p>
-                  <p className="mt-1 text-xs text-muted-foreground">{p.where}</p>
-                  <p className="mt-2 text-sm text-foreground/80">{p.note}</p>
+                  <p className="mt-1 text-xs text-muted-foreground">{tr(p.where)}</p>
+                  <p className="mt-2 text-sm text-foreground/80">{tr(p.note)}</p>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {p.services.map((s) => (
                       <span
