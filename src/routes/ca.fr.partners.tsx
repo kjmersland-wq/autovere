@@ -1,0 +1,34 @@
+import { createFileRoute } from "@tanstack/react-router";
+
+import { InfoPage } from "@/components/InfoPage";
+import { PARTNERS } from "@/lib/info-content";
+
+const content = PARTNERS["ca-fr"];
+
+export const Route = createFileRoute("/ca/fr/partners")({
+  head: () => ({
+    meta: [
+      { title: content.meta.title },
+      { name: "description", content: content.meta.description },
+      { property: "og:title", content: content.meta.title },
+      { property: "og:description", content: content.meta.description },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: "/ca/fr/partners" },
+      { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [{ rel: "canonical", href: "/ca/fr/partners" }],
+  }),
+  component: CaFrPartnersPage,
+});
+
+function CaFrPartnersPage() {
+  return (
+    <InfoPage
+      eyebrow={content.eyebrow}
+      title={content.title}
+      intro={content.intro}
+      sections={content.sections}
+      note={content.note}
+    />
+  );
+}

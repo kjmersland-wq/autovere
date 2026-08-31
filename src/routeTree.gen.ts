@@ -18,6 +18,7 @@ import { Route as ScenicRouteImport } from './routes/scenic'
 import { Route as TollsRouteImport } from './routes/tolls'
 import { Route as UsRouteImport } from './routes/us'
 import { Route as CaIndexRouteImport } from './routes/ca.index'
+import { Route as UsIndexRouteImport } from './routes/us.index'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,6 +65,11 @@ const CaIndexRoute = CaIndexRouteImport.update({
   path: '/',
   getParentRoute: () => CaRoute,
 } as any)
+const UsIndexRoute = UsIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => UsRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -73,8 +79,9 @@ export interface FileRoutesByFullPath {
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
-  '/us': typeof UsRoute
+  '/us': typeof UsRouteWithChildren
   '/ca/': typeof CaIndexRoute
+  '/us/': typeof UsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -83,8 +90,8 @@ export interface FileRoutesByTo {
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
-  '/us': typeof UsRoute
   '/ca': typeof CaIndexRoute
+  '/us': typeof UsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -95,8 +102,9 @@ export interface FileRoutesById {
   '/planner': typeof PlannerRoute
   '/scenic': typeof ScenicRoute
   '/tolls': typeof TollsRoute
-  '/us': typeof UsRoute
+  '/us': typeof UsRouteWithChildren
   '/ca/': typeof CaIndexRoute
+  '/us/': typeof UsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,6 +118,7 @@ export interface FileRouteTypes {
     | '/tolls'
     | '/us'
     | '/ca/'
+    | '/us/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -118,8 +127,8 @@ export interface FileRouteTypes {
     | '/planner'
     | '/scenic'
     | '/tolls'
-    | '/us'
     | '/ca'
+    | '/us'
   id:
     | '__root__'
     | '/'
@@ -131,6 +140,7 @@ export interface FileRouteTypes {
     | '/tolls'
     | '/us'
     | '/ca/'
+    | '/us/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -141,7 +151,7 @@ export interface RootRouteChildren {
   PlannerRoute: typeof PlannerRoute
   ScenicRoute: typeof ScenicRoute
   TollsRoute: typeof TollsRoute
-  UsRoute: typeof UsRoute
+  UsRoute: typeof UsRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -209,6 +219,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaIndexRouteImport
       parentRoute: typeof CaRoute
     }
+    '/us/': {
+      id: '/us/'
+      path: '/'
+      fullPath: '/us/'
+      preLoaderRoute: typeof UsIndexRouteImport
+      parentRoute: typeof UsRoute
+    }
   }
 }
 
@@ -222,6 +239,16 @@ const CaRouteChildren: CaRouteChildren = {
 
 const CaRouteWithChildren = CaRoute._addFileChildren(CaRouteChildren)
 
+interface UsRouteChildren {
+  UsIndexRoute: typeof UsIndexRoute
+}
+
+const UsRouteChildren: UsRouteChildren = {
+  UsIndexRoute: UsIndexRoute,
+}
+
+const UsRouteWithChildren = UsRoute._addFileChildren(UsRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CaRoute: CaRouteWithChildren,
@@ -230,7 +257,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlannerRoute: PlannerRoute,
   ScenicRoute: ScenicRoute,
   TollsRoute: TollsRoute,
-  UsRoute: UsRoute,
+  UsRoute: UsRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
