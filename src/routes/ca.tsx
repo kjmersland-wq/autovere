@@ -30,8 +30,8 @@ function CaPage() {
       <HeroPlanner
         region="ca"
         eyebrow="Canada · coast to coast"
-        title="Highway 407 to the Rockies, costed."
-        subtitle="Provincial tolls, bridges, fuel, EV charging and BC ferries for cars, RVs and touring motorcycles."
+        title="Know the true cost of every kilometre."
+        subtitle="Smart provincial toll, bridge, fuel, charging, and ferry intelligence for cars, campervans, and touring motorcycles. Plan with total peace of mind."
       />
     </main>
   );
