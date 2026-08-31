@@ -17,6 +17,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
+import logoMark from "@/assets/autovere-logo.png";
 
 const US_NAV_LABELS: Record<string, string> = {
   "/planner": "Road Trip Planner",
