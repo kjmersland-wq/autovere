@@ -42,7 +42,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           {REGIONS.map((r) => (
             <Link
               key={r.key}
-              to={r.key === "eu" && prefix ? `/${prefix}` : r.to}
+              to={(r.key === "eu" && prefix ? `/${prefix}` : r.to) as "/"}
               className={cn(
                 "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
                 activeRegion === r.key
@@ -158,7 +158,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             {REGIONS.map((r) => (
               <Link
                 key={r.key}
-                to={r.key === "eu" && prefix ? `/${prefix}` : r.to}
+                to={(r.key === "eu" && prefix ? `/${prefix}` : r.to) as "/"}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-full border border-border px-3 py-1.5 text-sm",

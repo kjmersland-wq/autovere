@@ -19,11 +19,11 @@ type Props = {
 export function LocaleLink({ to, children, className, activeClassName, onClick }: Props) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const prefix = prefixFromPath(pathname);
-  const activeProps = activeClassName ? { className: activeClassName } : undefined;
+  const activeProps = activeClassName ? { activeProps: { className: activeClassName } } : {};
 
   if (!prefix) {
     return (
-      <Link to={to} className={className} activeProps={activeProps} onClick={onClick}>
+      <Link to={to} className={className} {...activeProps} onClick={onClick}>
         {children}
       </Link>
     );
@@ -43,7 +43,7 @@ export function LocaleLink({ to, children, className, activeClassName, onClick }
       to="/$lang/$page"
       params={{ lang: prefix, page: slug }}
       className={className}
-      activeProps={activeProps}
+      {...activeProps}
       onClick={onClick}
     >
       {children}
