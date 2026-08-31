@@ -150,7 +150,7 @@ export const Route = createFileRoute("/$lang/$page")({
       `/og/autovere-og-${prefix === "pl" || prefix === "no" ? prefix : "en"}.jpg`,
     );
     const info = infoFor(params.lang, params.page);
-    const localized = prefix === "pl" || prefix === "no";
+    const localized = INFO_BY_LANG[prefix] != null;
 
     let title: string;
     let description: string;
