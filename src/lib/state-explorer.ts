@@ -11,7 +11,7 @@ export interface UsState {
   charging: number; // USD / kWh DC fast charge
   tollSystem: string;
   tollNote: string;
-  helmet: "All riders" | "Under 18" | "Under 21" | "No helmet law" | "Under 26";
+  helmet: "All riders" | "Under 18" | "Under 19" | "Under 21" | "No helmet law" | "Under 26";
   helmetNote: string;
   portal?: { label: string; url: string };
 }
