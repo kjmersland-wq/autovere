@@ -45,6 +45,7 @@ import { Route as NoTermsRouteImport } from './routes/no.terms'
 import { Route as NoTollsRouteImport } from './routes/no.tolls'
 import { Route as UsIndexRouteImport } from './routes/us.index'
 import { Route as UsFaqRouteImport } from './routes/us.faq'
+import { Route as UsGarageRouteImport } from './routes/us.garage'
 import { Route as UsHowItWorksRouteImport } from './routes/us.how-it-works'
 import { Route as UsLegalRouteImport } from './routes/us.legal'
 import { Route as UsPartnersRouteImport } from './routes/us.partners'
@@ -237,6 +238,11 @@ const UsFaqRoute = UsFaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => UsRoute,
 } as any)
+const UsGarageRoute = UsGarageRouteImport.update({
+  id: '/garage',
+  path: '/garage',
+  getParentRoute: () => UsRoute,
+} as any)
 const UsHowItWorksRoute = UsHowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
@@ -327,6 +333,7 @@ export interface FileRoutesByFullPath {
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
+  '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
@@ -374,6 +381,7 @@ export interface FileRoutesByTo {
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
+  '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
@@ -424,6 +432,7 @@ export interface FileRoutesById {
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
+  '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
   '/us/partners': typeof UsPartnersRoute
@@ -475,6 +484,7 @@ export interface FileRouteTypes {
     | '/no/terms'
     | '/no/tolls'
     | '/us/faq'
+    | '/us/garage'
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
@@ -522,6 +532,7 @@ export interface FileRouteTypes {
     | '/no/terms'
     | '/no/tolls'
     | '/us/faq'
+    | '/us/garage'
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
@@ -571,6 +582,7 @@ export interface FileRouteTypes {
     | '/no/terms'
     | '/no/tolls'
     | '/us/faq'
+    | '/us/garage'
     | '/us/how-it-works'
     | '/us/legal'
     | '/us/partners'
@@ -875,6 +887,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof UsFaqRouteImport
       parentRoute: typeof UsRoute
     }
+    '/us/garage': {
+      id: '/us/garage'
+      path: '/garage'
+      fullPath: '/us/garage'
+      preLoaderRoute: typeof UsGarageRouteImport
+      parentRoute: typeof UsRoute
+    }
     '/us/how-it-works': {
       id: '/us/how-it-works'
       path: '/how-it-works'
@@ -983,6 +1002,7 @@ const CaRouteWithChildren = CaRoute._addFileChildren(CaRouteChildren)
 
 interface UsRouteChildren {
   UsFaqRoute: typeof UsFaqRoute
+  UsGarageRoute: typeof UsGarageRoute
   UsHowItWorksRoute: typeof UsHowItWorksRoute
   UsLegalRoute: typeof UsLegalRoute
   UsPartnersRoute: typeof UsPartnersRoute
@@ -994,6 +1014,7 @@ interface UsRouteChildren {
 
 const UsRouteChildren: UsRouteChildren = {
   UsFaqRoute: UsFaqRoute,
+  UsGarageRoute: UsGarageRoute,
   UsHowItWorksRoute: UsHowItWorksRoute,
   UsLegalRoute: UsLegalRoute,
   UsPartnersRoute: UsPartnersRoute,
