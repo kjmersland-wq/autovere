@@ -1,5 +1,16 @@
 import { useMemo, useState } from "react";
-import { Check, Gauge, MapPin, Route as RouteIcon, Tag } from "lucide-react";
+import {
+  ArrowDown,
+  ArrowUp,
+  Check,
+  Gauge,
+  GripVertical,
+  MapPin,
+  Plus,
+  Route as RouteIcon,
+  Tag,
+  X,
+} from "lucide-react";
 import { toast } from "sonner";
 
 import heroImage from "@/assets/hero-roadtrip.jpg";
@@ -12,6 +23,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
+import { DURATION_OPTIONS, type TripType } from "@/lib/vignette-optimizer";
 import {
   detectEmissionBadges,
   detectFerryCrossings,
@@ -33,6 +45,7 @@ import {
   type VehicleKey,
 } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
+
 
 export type { RegionKey };
 
@@ -62,6 +75,30 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [tags, setTags] = useState<TransponderKey[]>([]);
   const [tankSize, setTankSize] = useState(imperial ? "16" : "60");
   const [consumption, setConsumption] = useState(imperial ? "28" : "7.4");
+  const [waypoints, setWaypoints] = useState<{ id: string; value: string }[]>([]);
+  const [tripType, setTripType] = useState<TripType>("oneway");
+  const [durationDays, setDurationDays] = useState(7);
+
+  const viaCount = waypoints.filter((w) => w.value.trim()).length;
+
+  const addWaypoint = () => {
+    if (waypoints.length >= 3) {
+      toast.info("You can add up to 3 via-stops per route.");
+      return;
+    }
+    setWaypoints((prev) => [...prev, { id: Math.random().toString(36).slice(2, 9), value: "" }]);
+  };
+  const updateWaypoint = (id: string, value: string) =>
+    setWaypoints((prev) => prev.map((w) => (w.id === id ? { ...w, value } : w)));
+  const removeWaypoint = (id: string) => setWaypoints((prev) => prev.filter((w) => w.id !== id));
+  const moveWaypoint = (index: number, dir: -1 | 1) =>
+    setWaypoints((prev) => {
+      const next = [...prev];
+      const target = index + dir;
+      if (target < 0 || target >= next.length) return prev;
+      [next[index], next[target]] = [next[target]!, next[index]!];
+      return next;
+    });
 
   const quickRoutes = useMemo(
     () => QUICK_ROUTES.filter((r) => r.regions.includes(region)),
@@ -91,16 +128,31 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       document.getElementById("trip-results")?.scrollIntoView({ behavior: "smooth" }),
     );
 
+  const effectiveDuration = tripType === "return" ? durationDays : 1;
+
   const runQuickRoute = (r: QuickRoute) => {
     setOrigin(r.origin);
     setDestination(r.destination);
     setActiveQuick(r.key);
     setStops([]);
-    setTrip(estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic));
+    setTrip(
+      estimateAllVariants(
+        region,
+        vehicle,
+        fuel,
+        avoidTolls,
+        ferries,
+        scenic,
+        viaCount,
+        tripType,
+        effectiveDuration,
+      ),
+    );
     setFerryCrossings(ferries ? detectFerryCrossings(region, r.origin, r.destination) : []);
     setBadges(detectEmissionBadges(region, r.origin, r.destination));
     scrollToResults();
   };
+
 
 
   return (
@@ -131,7 +183,19 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             onSubmit={(e) => {
               e.preventDefault();
               setStops([]);
-              setTrip(estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic));
+              setTrip(
+                estimateAllVariants(
+                  region,
+                  vehicle,
+                  fuel,
+                  avoidTolls,
+                  ferries,
+                  scenic,
+                  viaCount,
+                  tripType,
+                  effectiveDuration,
+                ),
+              );
               setFerryCrossings(ferries ? detectFerryCrossings(region, origin, destination) : []);
               setBadges(detectEmissionBadges(region, origin, destination));
               requestAnimationFrame(() =>
@@ -140,7 +204,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             }}
             className="glass-panel mt-9 rounded-2xl p-4 shadow-2xl sm:p-6"
           >
-            <div className="flex flex-wrap gap-2">
+            <div className="flex flex-wrap items-center gap-2">
               {VEHICLES.map((v) => (
                 <button
                   key={v.key}
@@ -158,6 +222,46 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   {v.label}
                 </button>
               ))}
+
+              <span aria-hidden className="mx-1 hidden h-6 w-px bg-border sm:block" />
+
+              {([
+                { key: "oneway" as const, emoji: "➡️", label: "One-Way Transit" },
+                { key: "return" as const, emoji: "🔁", label: "Return Trip / Vacation" },
+              ]).map((t) => (
+                <button
+                  key={t.key}
+                  type="button"
+                  onClick={() => setTripType(t.key)}
+                  aria-pressed={tripType === t.key}
+                  className={cn(
+                    "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm font-medium transition-colors",
+                    tripType === t.key
+                      ? "border-primary bg-primary/15 text-foreground"
+                      : "border-border bg-background/50 text-foreground/85 hover:bg-background/70",
+                  )}
+                >
+                  <span>{t.emoji}</span>
+                  {t.label}
+                </button>
+              ))}
+
+              {tripType === "return" && (
+                <label className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-4 py-1.5 text-sm">
+                  <span className="text-foreground/75">Trip duration</span>
+                  <select
+                    value={durationDays}
+                    onChange={(e) => setDurationDays(Number(e.target.value))}
+                    className="rounded-md bg-transparent py-1 text-sm font-medium text-foreground outline-none"
+                  >
+                    {DURATION_OPTIONS.map((d) => (
+                      <option key={d.days} value={d.days} className="bg-card text-foreground">
+                        {d.label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              )}
             </div>
 
             <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
@@ -185,6 +289,64 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                 Calculate My Trip Cost →
               </Button>
             </div>
+
+            <div className="mt-3 grid gap-2">
+              {waypoints.map((w, i) => (
+                <div key={w.id} className="flex items-center gap-2">
+                  <span className="flex items-center gap-0.5 rounded-lg border border-border bg-background/40 px-1.5 py-1">
+                    <GripVertical className="size-4 text-muted-foreground" aria-hidden />
+                    <button
+                      type="button"
+                      onClick={() => moveWaypoint(i, -1)}
+                      aria-label={`Move via-stop ${i + 1} up`}
+                      className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                      disabled={i === 0}
+                    >
+                      <ArrowUp className="size-3.5" />
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => moveWaypoint(i, 1)}
+                      aria-label={`Move via-stop ${i + 1} down`}
+                      className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                      disabled={i === waypoints.length - 1}
+                    >
+                      <ArrowDown className="size-3.5" />
+                    </button>
+                  </span>
+                  <Input
+                    value={w.value}
+                    onChange={(e) => updateWaypoint(w.id, e.target.value)}
+                    className="h-11 border-border bg-background/60 text-base placeholder:text-muted-foreground"
+                    placeholder={`Via stop ${i + 1} — e.g. Innsbruck`}
+                  />
+                  <button
+                    type="button"
+                    onClick={() => removeWaypoint(w.id)}
+                    aria-label={`Remove via-stop ${i + 1}`}
+                    className="rounded-lg border border-border bg-background/40 p-2 text-muted-foreground hover:text-foreground"
+                  >
+                    <X className="size-4" />
+                  </button>
+                </div>
+              ))}
+
+              <div className="flex flex-wrap items-center gap-3">
+                <button
+                  type="button"
+                  onClick={addWaypoint}
+                  disabled={waypoints.length >= 3}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/20 disabled:opacity-40"
+                >
+                  <Plus className="size-4" />
+                  Add Via / Stop
+                </button>
+                <span className="text-xs text-muted-foreground">
+                  Up to 3 intermediate waypoints — drag order with the arrows.
+                </span>
+              </div>
+            </div>
+
 
             <div className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3">
               <Toggle
@@ -348,7 +510,17 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               const next = [...stops, name];
               setStops(next);
               setTrip(
-                estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic, next.length),
+                estimateAllVariants(
+                  region,
+                  vehicle,
+                  fuel,
+                  avoidTolls,
+                  ferries,
+                  scenic,
+                  next.length + viaCount,
+                  tripType,
+                  effectiveDuration,
+                ),
               );
               toast.success(`${name} added — trip re-routed via ${next.length} extra stop${next.length > 1 ? "s" : ""}.`);
             }}

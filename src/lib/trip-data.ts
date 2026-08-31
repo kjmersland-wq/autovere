@@ -1,4 +1,8 @@
 import type { FlagCode } from "@/components/FlagIcon";
+import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
+
+export type { TripType };
+
 
 export type RegionKey = "eu" | "us" | "ca";
 
@@ -138,6 +142,9 @@ export type TripEstimate = {
   segments: { country: string; total: number; lines: TollLine[] }[];
   safety: { title: string; sections: SafetySection[] };
   optimizer: EnergyOptimizer;
+  vignette?: VignettePlan | null;
+  tripType?: TripType;
+  durationDays?: number;
   discountNote?: string | undefined;
 };
 
@@ -613,25 +620,38 @@ export function estimateTrip(
   scenic: boolean,
   variant: RouteVariantKey = "fastest",
   extraStops = 0,
+  tripType: TripType = "oneway",
+  durationDays = 1,
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
   const defaults = REGION_DEFAULTS[region];
   const currency = defaults.currency;
   const imperial = defaults.units === "imperial";
+  const isReturn = tripType === "return";
+  const legMultiplier = isReturn ? 2 : 1;
   const baseDistance = region === "eu" ? 1420 : region === "us" ? 1890 : 1640;
   const distanceKm = Math.round(
-    baseDistance * (scenic ? 1.08 : 1) * tuning.distance * (1 + 0.035 * extraStops),
+    baseDistance * (scenic ? 1.08 : 1) * tuning.distance * (1 + 0.035 * extraStops) * legMultiplier,
   );
 
   const isMoto = vehicle === "motorcycle";
   const round2 = (n: number) => Math.round(n * 100) / 100;
+  const isVignetteLine = (l: TollLine) =>
+    /vignette|vinjeta|matrica|e-znamka|dalnice|sticker/i.test(`${l.place} ${l.detail ?? ""}`);
   const mapLines = (lines: TollLine[], factor: number) =>
-    lines.map((l) => ({
-      ...l,
-      amount: isMoto && l.freeForMotorcycle ? 0 : round2(l.amount * factor),
-      badge: isMoto && l.freeForMotorcycle ? "Free for motorcycles" : l.badge,
-    }));
+    lines.map((l) => {
+      // Multi-day vignettes stay valid for the whole return trip — only distance
+      // tolls and ferry tickets are charged twice.
+      const returnFactor = isReturn && !isVignetteLine(l) ? 2 : 1;
+      return {
+        ...l,
+        amount: isMoto && l.freeForMotorcycle ? 0 : round2(l.amount * factor * returnFactor),
+        badge: isMoto && l.freeForMotorcycle
+          ? "Free for motorcycles"
+          : (l.badge ?? (returnFactor === 2 ? "Return trip ×2" : undefined)),
+      };
+    });
 
   let segments = SEGMENTS[region];
   if (!includeFerries) segments = segments.filter((s) => !s.country.includes("Ferries"));
@@ -643,6 +663,7 @@ export function estimateTrip(
     return { ...s, lines, total: round2(lines.reduce((sum, l) => sum + l.amount, 0)) };
 
   });
+
 
   const ferries = round2(
     segments.filter((s) => s.country.includes("Ferries")).reduce((sum, s) => sum + s.total, 0),
@@ -694,6 +715,10 @@ export function estimateTrip(
     segments,
     safety: safetyFor(region, vehicle),
     optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial),
+    vignette:
+      activeVariant === "tollfree" ? null : optimizeVignettes(region, vehicle, tripType, durationDays),
+    tripType,
+    durationDays,
     discountNote: isMoto
       ? "Motorcycle rates applied: ~40% indicative discount on distance tolls, vignettes and ferries — and 0 in Norwegian city rings."
       : undefined,
@@ -708,13 +733,17 @@ export function estimateAllVariants(
   includeFerries: boolean,
   scenic: boolean,
   extraStops = 0,
+  tripType: TripType = "oneway",
+  durationDays = 1,
 ): Record<RouteVariantKey, TripEstimate> {
+  const args = [extraStops, tripType, durationDays] as const;
   return {
-    fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", extraStops),
-    smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", extraStops),
-    tollfree: estimateTrip(region, vehicle, fuel, avoidTolls, includeFerries, scenic, "tollfree", extraStops),
+    fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
+    smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
+    tollfree: estimateTrip(region, vehicle, fuel, avoidTolls, includeFerries, scenic, "tollfree", ...args),
   };
 }
+
 
 export function variantComparison(
   base: TripEstimate,
