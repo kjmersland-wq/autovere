@@ -64,6 +64,7 @@ export function CorridorMap({
     rv: isMotorhome,
     pass: true,
     ferry: true,
+    view: true,
   });
   const [hover, setHover] = useState<string | null>(null);
 
@@ -134,7 +135,7 @@ export function CorridorMap({
           lat: pos[0],
           lng: pos[1],
           color: p.layer === "pass" ? STATUS_COLOR[p.status ?? "open"]! : layer.color,
-          emoji: layer.emoji,
+          emoji: p.icon ?? layer.emoji,
           title: tr(p.name),
           subtitle: `${tr(p.detail)} · ${p.atLabel}`,
           mapUrl: poiMapUrl(p.name, `${from} ${to}`),
@@ -273,19 +274,19 @@ export function CorridorMap({
 
       {/* Legend list */}
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
-        {visible.slice(0, 9).map((p) => (
+        {visible.slice(0, 12).map((p) => (
           <div
             key={p.id}
             className="rounded-xl border border-border bg-background/40 px-3 py-2 text-xs"
           >
             <div className="flex items-center justify-between gap-3">
               <span className="truncate">
-                {MAP_LAYERS.find((l) => l.key === p.layer)!.emoji} {tr(p.name)}
+                {p.icon ?? MAP_LAYERS.find((l) => l.key === p.layer)!.emoji} {tr(p.name)}
               </span>
               <span className="shrink-0 text-muted-foreground">{p.price ?? p.atLabel}</span>
             </div>
             <PoiLinks
-              kind={p.layer === "rv" ? "camp" : p.layer}
+              kind={p.layer === "rv" ? "camp" : p.layer === "view" ? "place" : p.layer}
               name={p.name}
               where={`${origin} ${destination}`}
               region={region}
