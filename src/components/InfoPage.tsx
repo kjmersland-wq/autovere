@@ -26,7 +26,7 @@ export function InfoPage({ eyebrow, title, intro, sections, note }: InfoPageProp
       <div className="mx-auto max-w-4xl px-6 pb-24 pt-12">
         <p className="text-xs uppercase tracking-[0.22em] text-amber-300/90">{eyebrow}</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-          {title}
+          {cur(title)}
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">{cur(intro)}</p>
 
