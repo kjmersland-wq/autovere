@@ -554,8 +554,6 @@ export const CONTENT_NO: Record<string, string> = {
   "Great overnight before Grossglockner — book in July/August.": "Fin overnatting før Grossglockner — bestill i juli/august.",
   "France's aire network is the cheapest overnight option en route south.": "Det franske aire-nettverket er det rimeligste overnattingsvalget på vei sørover.",
   "Large pitches; height/width friendly access road.": "Store plasser; adkomstvei som passer for høye og brede kjøretøy.",
-  "Grey water": "Gråvann",
-  "Fresh water": "Ferskvann",
   "EV hookup": "Ladeuttak",
   "Chemical WC": "Tømming av kjemisk toalett",
   "Electricity": "Strøm",
