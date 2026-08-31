@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { GaragePage } from "@/routes/garage";
+import { GaragePage } from "@/components/GaragePage";
 
 export const Route = createFileRoute("/no/garage")({
   head: () => ({
