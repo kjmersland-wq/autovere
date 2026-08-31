@@ -30,6 +30,12 @@ import { Route as CaLegalRouteImport } from './routes/ca.legal'
 import { Route as CaPartnersRouteImport } from './routes/ca.partners'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as NoIndexRouteImport } from './routes/no.index'
+import { Route as NoFaqRouteImport } from './routes/no.faq'
+import { Route as NoHowItWorksRouteImport } from './routes/no.how-it-works'
+import { Route as NoPartnersRouteImport } from './routes/no.partners'
+import { Route as NoPricingRouteImport } from './routes/no.pricing'
+import { Route as NoPrivacyRouteImport } from './routes/no.privacy'
+import { Route as NoTermsRouteImport } from './routes/no.terms'
 import { Route as UsIndexRouteImport } from './routes/us.index'
 import { Route as UsFaqRouteImport } from './routes/us.faq'
 import { Route as UsHowItWorksRouteImport } from './routes/us.how-it-works'
@@ -146,6 +152,36 @@ const NoIndexRoute = NoIndexRouteImport.update({
   path: '/no/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NoFaqRoute = NoFaqRouteImport.update({
+  id: '/no/faq',
+  path: '/no/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoHowItWorksRoute = NoHowItWorksRouteImport.update({
+  id: '/no/how-it-works',
+  path: '/no/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoPartnersRoute = NoPartnersRouteImport.update({
+  id: '/no/partners',
+  path: '/no/partners',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoPricingRoute = NoPricingRouteImport.update({
+  id: '/no/pricing',
+  path: '/no/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoPrivacyRoute = NoPrivacyRouteImport.update({
+  id: '/no/privacy',
+  path: '/no/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const NoTermsRoute = NoTermsRouteImport.update({
+  id: '/no/terms',
+  path: '/no/terms',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsIndexRoute = UsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -218,6 +254,12 @@ export interface FileRoutesByFullPath {
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/no/faq': typeof NoFaqRoute
+  '/no/how-it-works': typeof NoHowItWorksRoute
+  '/no/partners': typeof NoPartnersRoute
+  '/no/pricing': typeof NoPricingRoute
+  '/no/privacy': typeof NoPrivacyRoute
+  '/no/terms': typeof NoTermsRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -249,6 +291,12 @@ export interface FileRoutesByTo {
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/no/faq': typeof NoFaqRoute
+  '/no/how-it-works': typeof NoHowItWorksRoute
+  '/no/partners': typeof NoPartnersRoute
+  '/no/pricing': typeof NoPricingRoute
+  '/no/privacy': typeof NoPrivacyRoute
+  '/no/terms': typeof NoTermsRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -283,6 +331,12 @@ export interface FileRoutesById {
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
   '/checkout/return': typeof CheckoutReturnRoute
+  '/no/faq': typeof NoFaqRoute
+  '/no/how-it-works': typeof NoHowItWorksRoute
+  '/no/partners': typeof NoPartnersRoute
+  '/no/pricing': typeof NoPricingRoute
+  '/no/privacy': typeof NoPrivacyRoute
+  '/no/terms': typeof NoTermsRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -318,6 +372,12 @@ export interface FileRouteTypes {
     | '/ca/legal'
     | '/ca/partners'
     | '/checkout/return'
+    | '/no/faq'
+    | '/no/how-it-works'
+    | '/no/partners'
+    | '/no/pricing'
+    | '/no/privacy'
+    | '/no/terms'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -349,6 +409,12 @@ export interface FileRouteTypes {
     | '/ca/legal'
     | '/ca/partners'
     | '/checkout/return'
+    | '/no/faq'
+    | '/no/how-it-works'
+    | '/no/partners'
+    | '/no/pricing'
+    | '/no/privacy'
+    | '/no/terms'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -382,6 +448,12 @@ export interface FileRouteTypes {
     | '/ca/legal'
     | '/ca/partners'
     | '/checkout/return'
+    | '/no/faq'
+    | '/no/how-it-works'
+    | '/no/partners'
+    | '/no/pricing'
+    | '/no/privacy'
+    | '/no/terms'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -412,6 +484,12 @@ export interface RootRouteChildren {
   TollsRoute: typeof TollsRoute
   UsRoute: typeof UsRouteWithChildren
   CheckoutReturnRoute: typeof CheckoutReturnRoute
+  NoFaqRoute: typeof NoFaqRoute
+  NoHowItWorksRoute: typeof NoHowItWorksRoute
+  NoPartnersRoute: typeof NoPartnersRoute
+  NoPricingRoute: typeof NoPricingRoute
+  NoPrivacyRoute: typeof NoPrivacyRoute
+  NoTermsRoute: typeof NoTermsRoute
   NoIndexRoute: typeof NoIndexRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -565,6 +643,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NoIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/no/faq': {
+      id: '/no/faq'
+      path: '/no/faq'
+      fullPath: '/no/faq'
+      preLoaderRoute: typeof NoFaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no/how-it-works': {
+      id: '/no/how-it-works'
+      path: '/no/how-it-works'
+      fullPath: '/no/how-it-works'
+      preLoaderRoute: typeof NoHowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no/partners': {
+      id: '/no/partners'
+      path: '/no/partners'
+      fullPath: '/no/partners'
+      preLoaderRoute: typeof NoPartnersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no/pricing': {
+      id: '/no/pricing'
+      path: '/no/pricing'
+      fullPath: '/no/pricing'
+      preLoaderRoute: typeof NoPricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no/privacy': {
+      id: '/no/privacy'
+      path: '/no/privacy'
+      fullPath: '/no/privacy'
+      preLoaderRoute: typeof NoPrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/no/terms': {
+      id: '/no/terms'
+      path: '/no/terms'
+      fullPath: '/no/terms'
+      preLoaderRoute: typeof NoTermsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/us/': {
       id: '/us/'
       path: '/'
@@ -698,6 +818,12 @@ const rootRouteChildren: RootRouteChildren = {
   TollsRoute: TollsRoute,
   UsRoute: UsRouteWithChildren,
   CheckoutReturnRoute: CheckoutReturnRoute,
+  NoFaqRoute: NoFaqRoute,
+  NoHowItWorksRoute: NoHowItWorksRoute,
+  NoPartnersRoute: NoPartnersRoute,
+  NoPricingRoute: NoPricingRoute,
+  NoPrivacyRoute: NoPrivacyRoute,
+  NoTermsRoute: NoTermsRoute,
   NoIndexRoute: NoIndexRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
