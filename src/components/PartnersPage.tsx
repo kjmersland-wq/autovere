@@ -218,12 +218,19 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
   const [sending, setSending] = useState(false);
 
   const t = {
-    sending: lang === "no" ? "Sender …" : "Sending …",
-    ok: lang === "no" ? "Takk! Meldingen er sendt." : "Thank you! Your message has been sent.",
+    sending: lang === "no" ? "Sender …" : lang === "pl" ? "Wysyłamy …" : "Sending …",
+    ok:
+      lang === "no"
+        ? "Takk! Meldingen er sendt."
+        : lang === "pl"
+          ? "Dziękujemy! Wiadomość została wysłana."
+          : "Thank you! Your message has been sent.",
     fail:
       lang === "no"
         ? "Kunne ikke sende akkurat nå. Prøv igjen om litt."
-        : "We couldn't send that right now. Please try again shortly.",
+        : lang === "pl"
+          ? "Nie udało się wysłać w tej chwili. Spróbuj ponownie za moment."
+          : "We couldn't send that right now. Please try again shortly.",
   };
 
   async function submit(form: HTMLFormElement, kind: "partner" | "message", close: () => void) {

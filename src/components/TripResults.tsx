@@ -132,7 +132,7 @@ export function TripResults({
         origin: origin || t.results.yourStart,
         destination: destination || t.results.yourDestination,
         detail: `${trip.distanceLabel} · ${trip.driveTime} · ${m.fmt(trip.budget, 0)} ${t.results.budgetWord}`,
-        when: t.results.savedOn(new Date().toLocaleDateString(locale === "no" ? "nb-NO" : "en-GB", { day: "numeric", month: "short" })),
+        when: t.results.savedOn(new Date().toLocaleDateString(locale === "no" ? "nb-NO" : locale === "pl" ? "pl-PL" : "en-GB", { day: "numeric", month: "short" })),
         distanceLabel: trip.distanceLabel,
         driveTime: trip.driveTime,
         budget: trip.budget,
