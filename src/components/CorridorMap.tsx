@@ -1,4 +1,7 @@
-import { useMemo, useState } from "react";
+import { Suspense, lazy, useMemo, useState } from "react";
+import { ClientOnly } from "@tanstack/react-router";
+import { useServerFn } from "@tanstack/react-start";
+import { useQuery } from "@tanstack/react-query";
 import { Fuel, Map as MapIcon, Plus, Radar } from "lucide-react";
 
 import {
@@ -20,8 +23,12 @@ import {
   type LayerKey,
 } from "@/lib/corridor-map";
 import { useT, useTr } from "@/lib/i18n";
+import { getRouteGeo } from "@/lib/route-geo.functions";
+import { poiMapUrl } from "@/lib/poi-links";
 import { detectMountainPasses, passStatus } from "@/lib/pass-intel";
 import type { FerryCrossing, FuelKey, RegionKey, TripEstimate } from "@/lib/trip-data";
+
+const LiveMap = lazy(() => import("@/components/LiveMap"));
 
 const STATUS_COLOR: Record<string, string> = {
   open: "#34d399",
@@ -104,6 +111,37 @@ export function CorridorMap({
     [region, trip, from, to],
   );
 
+  const routeFn = useServerFn(getRouteGeo);
+  const geoQuery = useQuery({
+    queryKey: ["route-geo", from, to],
+    queryFn: () => routeFn({ data: { origin: from, destination: to } }),
+    staleTime: 1000 * 60 * 60,
+    retry: 0,
+  });
+  const geo = geoQuery.data ?? null;
+
+  const liveMarkers = useMemo(() => {
+    if (!geo) return [];
+    const c = geo.coords;
+    return pois
+      .filter((p) => layers[p.layer])
+      .map((p) => {
+        const idx = Math.min(c.length - 1, Math.max(0, Math.round(p.progress * (c.length - 1))));
+        const pos = c[idx]!;
+        const layer = MAP_LAYERS.find((l) => l.key === p.layer)!;
+        return {
+          id: p.id,
+          lat: pos[0],
+          lng: pos[1],
+          color: p.layer === "pass" ? STATUS_COLOR[p.status ?? "open"]! : layer.color,
+          emoji: layer.emoji,
+          title: tr(p.name),
+          subtitle: `${tr(p.detail)} · ${p.atLabel}`,
+          mapUrl: poiMapUrl(p.name, `${from} ${to}`),
+        };
+      });
+  }, [geo, pois, layers, tr, from, to]);
+
   const path = line.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
   const visible = pois.filter((p) => layers[p.layer]);
 
@@ -159,6 +197,20 @@ export function CorridorMap({
       </div>
 
       {/* Map canvas */}
+      {geo && geo.coords.length > 1 ? (
+        <div className="relative mt-5 overflow-hidden rounded-2xl border border-border bg-[#070c18]">
+          <ClientOnly fallback={<div className="h-[320px] w-full animate-pulse bg-background/40 sm:h-[420px]" />}>
+            <Suspense fallback={<div className="h-[320px] w-full animate-pulse bg-background/40 sm:h-[420px]" />}>
+              <LiveMap
+                coords={geo.coords}
+                markers={liveMarkers}
+                fromLabel={from}
+                toLabel={to}
+              />
+            </Suspense>
+          </ClientOnly>
+        </div>
+      ) : (
       <div className="relative mt-5 overflow-hidden rounded-2xl border border-border bg-[#070c18]">
         <svg viewBox="0 0 100 100" className="h-[320px] w-full sm:h-[420px]" preserveAspectRatio="none">
           <defs>
@@ -214,6 +266,10 @@ export function CorridorMap({
           </div>
         )}
       </div>
+      )}
+      {geoQuery.isLoading && (
+        <p className="mt-2 text-[11px] text-muted-foreground">🛰️ {from} → {to}…</p>
+      )}
 
       {/* Legend list */}
       <div className="mt-4 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
