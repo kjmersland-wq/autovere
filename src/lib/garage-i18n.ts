@@ -1,6 +1,11 @@
 import { useRouterState } from "@tanstack/react-router";
 
+import { GARAGE_DA, MONTHS_DA } from "@/lib/garage-da";
+import { GARAGE_DE, MONTHS_DE } from "@/lib/garage-de";
+import { GARAGE_FR, MONTHS_FR } from "@/lib/garage-fr";
+import { GARAGE_NL, MONTHS_NL } from "@/lib/garage-nl";
 import { GARAGE_PL } from "@/lib/garage-pl";
+import { GARAGE_SV, MONTHS_SV } from "@/lib/garage-sv";
 import { prefixFromPath } from "@/lib/locales";
 
 /**
