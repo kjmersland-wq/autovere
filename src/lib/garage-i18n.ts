@@ -1,5 +1,6 @@
 import { useRouterState } from "@tanstack/react-router";
 
+import { GARAGE_PL } from "@/lib/garage-pl";
 import { prefixFromPath } from "@/lib/locales";
 
 /**
@@ -153,7 +154,12 @@ export type GarageT = (no: string) => string;
 /** Norwegian on /no, warm American English everywhere else. */
 export function useGarageText(): { t: GarageT; isNo: boolean } {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const isNo = prefixFromPath(pathname) === "no";
-  const t: GarageT = (no) => (isNo ? no : (GARAGE_EN[no] ?? no));
+  const prefix = prefixFromPath(pathname);
+  const isNo = prefix === "no";
+  const t: GarageT = (no) => {
+    if (isNo) return no;
+    if (prefix === "pl") return GARAGE_PL[no] ?? GARAGE_EN[no] ?? no;
+    return GARAGE_EN[no] ?? no;
+  };
   return { t, isNo };
 }

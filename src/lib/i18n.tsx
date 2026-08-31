@@ -630,13 +630,47 @@ const NO_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
   ],
 ];
 
+const PL_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [
+    /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
+    (m) => `Dojedziesz z ok. 25 % baterii i naładujesz do 80 % w jakieś ${m[1]} min.`,
+  ],
+  [
+    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
+    (m) => `Zalecane tankowanie — utrzyma Cię powyżej 25 % rezerwy przy zasięgu ${m[1]}.`,
+  ],
+  [/^(.+) full battery range$/, (m) => `${m[1]} zasięgu na pełnej baterii`],
+  [/^(.+) full tank range$/, (m) => `${m[1]} zasięgu na pełnym baku`],
+  [
+    /^Single transit leg: (.+) is the cheapest legal cover\.$/,
+    (m) => `Jeden przejazd: ${m[1]} to najtańsza legalna opcja.`,
+  ],
+  [
+    /^Covers all (\d+) days? of your return trip within one validity window\.$/,
+    (m) => `Obejmuje wszystkie ${m[1]} dni podróży w obie strony w jednym okresie ważności.`,
+  ],
+  [
+    /^💡 AutoVere optimized your vignette cost: saved (.+) — (.+) in (.+) instead of the usual (.+)\.$/,
+    (m) => `💡 AutoVere zoptymalizowało koszt winiet: oszczędzasz ${m[1]} — ${m[2]} w ${m[3]} zamiast zwykłych ${m[4]}.`,
+  ],
+  [
+    /^💡 AutoVere checked every validity window — the standard tiers are already the cheapest legal cover for (\d+) days?\.$/,
+    (m) => `💡 AutoVere sprawdziło każdy okres ważności — standardowe warianty są już najtańszą legalną opcją na ${m[1]} dni.`,
+  ],
+  [
+    /^Planned at 75% safety buffer — (.+) between stops$/,
+    (m) => `Zaplanowane z 75 % zapasem bezpieczeństwa — ${m[1]} między postojami`,
+  ],
+];
+
 export function useTr(): (value: string) => string {
   const locale = useLocale();
   return (value: string) => {
-    if (locale !== "no") return value;
-    const direct = CONTENT_NO[value];
+    const dict = locale === "no" ? CONTENT_NO : locale === "pl" ? CONTENT_PL : null;
+    if (!dict) return value;
+    const direct = dict[value];
     if (direct) return direct;
-    for (const [re, fn] of NO_PATTERNS) {
+    for (const [re, fn] of locale === "no" ? NO_PATTERNS : PL_PATTERNS) {
       const m = value.match(re);
       if (m) return fn(m);
     }
