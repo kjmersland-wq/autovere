@@ -114,7 +114,7 @@ export function TripResults({
         name: title,
         origin: origin || "Your start",
         destination: destination || "Your destination",
-        detail: `${trip.distanceLabel} · ${trip.driveTime} · ${money(trip.currency, trip.budget)} budget`,
+        detail: `${trip.distanceLabel} · ${trip.driveTime} · ${m.fmt(trip.budget, 0)} budget`,
         when: `Saved ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
         distanceLabel: trip.distanceLabel,
         driveTime: trip.driveTime,
@@ -136,7 +136,7 @@ export function TripResults({
 
 
   const shareTrip = async () => {
-    const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${money(trip.currency, trip.budget)} with AutoVere`;
+    const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)} with AutoVere`;
     try {
       if (navigator.share) await navigator.share({ title: "AutoVere road trip", text, url: window.location.href });
       else {
@@ -179,7 +179,7 @@ export function TripResults({
                   {v.emoji} {v.label}
                 </span>
                 <span className="mt-1 block text-xs text-muted-foreground">
-                  {money(t.currency, t.tolls + t.ferries)} tolls · {t.driveTime} · {t.distanceLabel}
+                  {m.fmt(t.tolls + t.ferries)} tolls · {t.driveTime} · {t.distanceLabel}
                 </span>
               </button>
             );
@@ -208,22 +208,22 @@ export function TripResults({
         <MetricCard
           accent
           label="Total Trip Budget"
-          value={money(trip.currency, trip.budget)}
+          value={m.fmt(trip.budget, 0)}
           hint="Tolls, energy, ferries and running costs"
         />
         <MetricCard label="Distance" value={trip.distanceLabel} hint="Door to door, your chosen route" />
         <MetricCard label="Driving Time" value={trip.driveTime} hint="Moving time, breaks excluded" />
         <MetricCard
           label={trip.energyLabel}
-          value={money(trip.currency, trip.energyCost)}
+          value={m.fmt(trip.energyCost)}
           hint={`Approx. ${trip.energyAmount} for the route`}
         />
       </div>
 
       <div className="mt-5 flex flex-wrap gap-2">
-        <SubtotalBadge emoji="🛣️" label="Tolls & Vignettes" value={money(trip.currency, trip.tolls)} />
-        <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={money(trip.currency, trip.energyCost)} />
-        <SubtotalBadge emoji="⛴️" label="Ferries & Mountain Passes" value={money(trip.currency, trip.ferries)} />
+        <SubtotalBadge emoji="🛣️" label="Tolls & Vignettes" value={m.fmt(trip.tolls)} />
+        <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={m.fmt(trip.energyCost)} />
+        <SubtotalBadge emoji="⛴️" label="Ferries & Mountain Passes" value={m.fmt(trip.ferries)} />
       </div>
 
       {trip.discountNote && (
@@ -329,7 +329,7 @@ export function TripResults({
                 <AccordionTrigger className="text-left">
                   <span className="flex w-full items-center justify-between gap-4 pr-3">
                     <span className="font-medium">{segment.country}</span>
-                    <span className="text-primary">{money(trip.currency, segment.total)}</span>
+                    <span className="text-primary">{m.fmt(segment.total)}</span>
                   </span>
                 </AccordionTrigger>
                 <AccordionContent>
