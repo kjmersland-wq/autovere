@@ -53,23 +53,30 @@ export const Route = createFileRoute("/$lang/$page")({
     if (!isLocalePrefix(params.lang) || !isLocalePage(params.page)) throw notFound();
   },
   head: ({ params }) => {
+    const prefix = params.lang as LocalePrefix;
+    const page = params.page as LocalePage;
+    const url = absUrl(`/${params.lang}/${params.page}`);
+    const image = absUrl(
+      `/og/autovere-og-${prefix === "pl" || prefix === "no" ? prefix : "en"}.jpg`,
+    );
     const info = infoFor(params.lang, params.page);
+    const localized = prefix === "pl" || prefix === "no";
+
+    let title: string;
+    let description: string;
     if (info) {
-      return {
-        meta: [
-          { title: info.meta.title },
-          { name: "description", content: info.meta.description },
-          { property: "og:title", content: info.meta.title },
-          { property: "og:description", content: info.meta.description },
-          { property: "og:type", content: "website" },
-          { name: "twitter:card", content: "summary_large_image" },
-        ],
-      };
+      const meta = localized ? info.meta : regionalize(prefix, info.meta);
+      title = meta.title;
+      description = meta.description;
+    } else {
+      const app = appPageMeta(prefix, page);
+      const entry = LOCALE_ROUTES.find((l) => l.prefix === params.lang);
+      const landing = entry ? LOCALE_LANDING[entry.code] : null;
+      title = app?.title ?? landing?.metaTitle ?? "AutoVere";
+      description =
+        app?.description ?? landing?.metaDescription ?? "Cross-border road trip cost intelligence.";
     }
-    const entry = LOCALE_ROUTES.find((l) => l.prefix === params.lang);
-    const landing = entry ? LOCALE_LANDING[entry.code] : null;
-    const title = landing?.metaTitle ?? "AutoVere";
-    const description = landing?.metaDescription ?? "Cross-border road trip cost intelligence.";
+
     return {
       meta: [
         { title },
@@ -77,8 +84,13 @@ export const Route = createFileRoute("/$lang/$page")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
+        { property: "og:url", content: url },
+        { property: "og:image", content: image },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: image },
       ],
+      links: [{ rel: "canonical", href: url }],
+      ...(info && params.page === "faq" ? { scripts: faqScript(info.sections) } : {}),
     };
   },
   component: LocalePage,
