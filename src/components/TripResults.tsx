@@ -245,7 +245,78 @@ export function TripResults({
         </Button>
       </div>
 
+      {ferryCrossings.length > 0 && (
+        <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
+          <div className="flex items-center gap-2">
+            <Ship className="size-5 text-primary" />
+            <h3 className="text-lg font-semibold tracking-tight">⛴️ Ferry & marine crossings detected</h3>
+          </div>
+          <p className="mt-1 text-sm text-foreground/70">
+            Your route touches water — here's every crossing with live-style timings and a direct link to
+            the official booking desk.
+          </p>
+          <div className="mt-5 grid gap-4 lg:grid-cols-2">
+            {ferryCrossings.map((f) => (
+              <article key={f.id} className="rounded-2xl border border-border bg-background/40 p-5">
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <div>
+                    <p className="text-sm font-semibold">{f.corridor}</p>
+                    <p className="mt-1 text-xs text-muted-foreground">{f.route}</p>
+                  </div>
+                  {f.badge && (
+                    <span className="rounded-full bg-primary/15 px-2.5 py-1 text-xs font-medium text-primary">
+                      {f.badge}
+                    </span>
+                  )}
+                </div>
+
+                <div className="mt-4 flex flex-wrap gap-1.5">
+                  {f.operators.map((op) => (
+                    <span
+                      key={op}
+                      className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
+                    >
+                      {op}
+                    </span>
+                  ))}
+                </div>
+
+                <dl className="mt-4 grid gap-3 sm:grid-cols-3">
+                  <div>
+                    <dt className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Duration</dt>
+                    <dd className="mt-0.5 text-sm font-medium">{f.duration}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Frequency</dt>
+                    <dd className="mt-0.5 text-sm font-medium">{f.frequency}</dd>
+                  </div>
+                  <div>
+                    <dt className="text-[11px] uppercase tracking-[0.14em] text-muted-foreground">Indicative</dt>
+                    <dd className="mt-0.5 text-sm font-semibold text-primary">
+                      {isMotorcycle && f.motoPrice ? f.motoPrice : f.price}
+                    </dd>
+                  </div>
+                </dl>
+
+                <p className="mt-4 text-sm text-foreground/80">{f.note}</p>
+
+                <a
+                  href={f.booking.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary hover:bg-primary/20"
+                >
+                  Official booking · {f.booking.label}
+                  <ExternalLink className="size-3.5" />
+                </a>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
+
         <div className="glass-panel rounded-2xl p-5 sm:p-6">
           <h3 className="text-lg font-semibold tracking-tight">Country & state breakdown</h3>
           <p className="mt-1 text-sm text-foreground/70">
