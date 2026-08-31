@@ -1121,3 +1121,209 @@ export const RV_POIS: Record<RegionKey, RvPoi[]> = {
     { id: "ca-3", emoji: "🚐", name: "Broad Cove Campground", where: "Cape Breton, Nova Scotia", note: "Oceanfront pitches on the Cabot Trail.", services: ["Water", "Dump station", "Showers"] },
   ],
 };
+
+/* ------------------------------------------------------------------ *
+ * Scandinavian toll infrastructure — AutoPASS rings, Norwegian
+ * highway segments and the Danish / Øresund bridge crossings.
+ * ------------------------------------------------------------------ */
+
+export type NorwayRing = {
+  id: string;
+  city: string;
+  emoji: string;
+  /** Indicative NOK per passing */
+  petrol: number;
+  ev: number;
+  motorcycle: number;
+  note: string;
+};
+
+export const NORWAY_CITY_RINGS: NorwayRing[] = [
+  {
+    id: "oslo",
+    city: "Oslo (Osloring + Indre ring)",
+    emoji: "🏙️",
+    petrol: 44,
+    ev: 15,
+    motorcycle: 0,
+    note: "Rush-hour rates 06:30–09:00 and 15:00–17:00 on weekdays. Hourly rule: one charge per 60 min.",
+  },
+  {
+    id: "bergen",
+    city: "Bergen (Bomringen)",
+    emoji: "🌧️",
+    petrol: 27,
+    ev: 12,
+    motorcycle: 0,
+    note: "Environmental differentiation — diesel Euro 5 and older pay a surcharge.",
+  },
+  {
+    id: "trondheim",
+    city: "Trondheim (Miljøpakken)",
+    emoji: "⚓",
+    petrol: 22,
+    ev: 11,
+    motorcycle: 0,
+    note: "Charged in both directions, monthly cap of 110 passings.",
+  },
+  {
+    id: "stavanger",
+    city: "Stavanger / Nord-Jæren (Bymiljøpakken)",
+    emoji: "🛢️",
+    petrol: 22,
+    ev: 11,
+    motorcycle: 0,
+    note: "Rush-hour rate applies weekdays; Ryfast and Hundvågtunnelen are billed separately.",
+  },
+];
+
+export type NorwayHighwaySegment = {
+  id: string;
+  road: string;
+  stretch: string;
+  /** Indicative NOK for a car with an AutoPASS tag */
+  car: number;
+  motorcycle: number;
+  note: string;
+};
+
+export const NORWAY_HIGHWAY_SEGMENTS: NorwayHighwaySegment[] = [
+  {
+    id: "e18",
+    road: "E18",
+    stretch: "Oslo → Kristiansand (Vestfold & Agder)",
+    car: 285,
+    motorcycle: 0,
+    note: "Several AutoPASS gantries along the new motorway sections — no barriers, you just drive through.",
+  },
+  {
+    id: "e6-sor",
+    road: "E6 Sør",
+    stretch: "Oslo → Lillehammer / Gudbrandsdalen",
+    car: 210,
+    motorcycle: 0,
+    note: "Continuous gantry stretches around Kolomoen–Moelv and Ringebu.",
+  },
+  {
+    id: "e6-nord",
+    road: "E6 Nord",
+    stretch: "Trondheim → Steinkjer / Helgeland",
+    car: 245,
+    motorcycle: 0,
+    note: "Helgeland Nord and Sør packages are billed per gantry passed.",
+  },
+  {
+    id: "e39",
+    road: "E39",
+    stretch: "Stavanger → Bergen → Ålesund (Western Norway)",
+    car: 330,
+    motorcycle: 0,
+    note: "Includes Ryfast, Rogfast-area projects and the fjord ferry links on the coastal corridor.",
+  },
+];
+
+export type NorwayPaymentOption = {
+  id: string;
+  title: string;
+  body: string;
+  badge: string;
+  portalLabel: string;
+  portalUrl: string;
+};
+
+export const NORWAY_PAYMENT_OPTIONS: NorwayPaymentOption[] = [
+  {
+    id: "autopass",
+    title: "AutoPASS tag (Norwegian & EU issuers)",
+    body:
+      "A tag gives you the standard 20% discount on most gantries and the AutoPASS ferjekort discount on fjord ferries. Order it before you cross the border and mount it behind the windscreen.",
+    badge: "20% discount",
+    portalLabel: "autopass.no",
+    portalUrl: "https://www.autopass.no/en/",
+  },
+  {
+    id: "epass24",
+    title: "EPASS24 — foreign-registered vehicles",
+    body:
+      "No tag? Every passing is photographed and invoiced to the registered keeper through EPASS24. You can also pre-register a card there to avoid paper invoices and admin fees.",
+    badge: "No tag needed",
+    portalLabel: "epass24.com",
+    portalUrl: "https://www.epass24.com/",
+  },
+  {
+    id: "ferjekort",
+    title: "AutoPASS ferjekort (fjord ferries)",
+    body:
+      "Prepay a ferjekort to take up to 50% off Norwegian fjord ferry crossings — worth it from about four crossings upward on a west-coast tour.",
+    badge: "Up to 50% off ferries",
+    portalLabel: "autopassferje.no",
+    portalUrl: "https://www.autopassferje.no/",
+  },
+];
+
+export type ScandiBridge = {
+  id: string;
+  emoji: string;
+  name: string;
+  crossing: string;
+  /** Indicative single crossing, cash / plate price */
+  carPrice: string;
+  motoPrice: string;
+  transponder: string;
+  note: string;
+  portalLabel: string;
+  portalUrl: string;
+  match: string[];
+};
+
+export const SCANDI_BRIDGES: ScandiBridge[] = [
+  {
+    id: "storebaelt",
+    emoji: "🌉",
+    name: "Storebælt Bridge",
+    crossing: "🇩🇰 Zealand ↔ Funen (E20, Korsør–Nyborg)",
+    carPrice: "DKK 265 car (≤ 6 m)",
+    motoPrice: "DKK 140 motorcycle",
+    transponder: "BroBizz saves up to 15% — Storebælt Pendler/Erhverv plans go further",
+    note: "18 km of bridge and tunnel. Tolled in both directions; the BroBizz is read automatically at speed.",
+    portalLabel: "storebaelt.dk",
+    portalUrl: "https://www.storebaelt.dk/english",
+    match: ["denmark", "danmark", "copenhagen", "københavn", "kobenhavn", "odense", "aarhus", "århus", "jutland", "jylland", "esbjerg", "aalborg", "hamburg", "sweden", "sverige", "malmö", "malmo", "stockholm", "göteborg", "gothenburg", "oslo", "norway", "norge"],
+  },
+  {
+    id: "oresund",
+    emoji: "🌉",
+    name: "Øresund Bridge",
+    crossing: "🇩🇰 Copenhagen ↔ 🇸🇪 Malmö (E20)",
+    carPrice: "DKK 510 / SEK 700 car (≤ 6 m)",
+    motoPrice: "DKK 265 / SEK 365 motorcycle",
+    transponder: "ØresundGO or BroBizz cuts the car crossing to roughly DKK 240–290",
+    note: "16 km bridge + Drogden tunnel. Register ØresundGO online before you travel — the discount applies instantly.",
+    portalLabel: "oresundsbron.com",
+    portalUrl: "https://www.oresundsbron.com/en/start",
+    match: ["copenhagen", "københavn", "kobenhavn", "malmö", "malmo", "sweden", "sverige", "stockholm", "lund", "helsingborg", "göteborg", "gothenburg", "denmark", "danmark", "oslo", "norway", "norge"],
+  },
+];
+
+const NORWAY_MATCH = [
+  "norway", "norge", "oslo", "bergen", "trondheim", "stavanger", "kristiansand",
+  "tromsø", "tromso", "ålesund", "alesund", "lofoten", "geiranger", "trollstigen",
+  "bodø", "bodo", "narvik", "svinesund", "hardanger", "sognefjell", "flåm", "flam",
+];
+
+/** True when the trip corridor touches Norway. */
+export function routeTouchesNorway(origin: string, destination: string): boolean {
+  const text = `${origin} ${destination}`.toLowerCase();
+  return NORWAY_MATCH.some((m) => text.includes(m));
+}
+
+/** Danish / Øresund bridge crossings on the corridor. */
+export function detectScandiBridges(
+  region: RegionKey,
+  origin: string,
+  destination: string,
+): ScandiBridge[] {
+  if (region !== "eu") return [];
+  const text = `${origin} ${destination}`.toLowerCase();
+  return SCANDI_BRIDGES.filter((b) => b.match.some((m) => text.includes(m)));
+}
