@@ -1,20 +1,25 @@
-import { useState } from "react";
-import { MapPin, Route as RouteIcon } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Check, Gauge, MapPin, Route as RouteIcon, Tag } from "lucide-react";
 
 import heroImage from "@/assets/hero-roadtrip.jpg";
 import { SiteHeader } from "@/components/SiteHeader";
 import { TripResults } from "@/components/TripResults";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import {
   estimateTrip,
   FUELS,
+  QUICK_ROUTES,
   REGION_COPY,
   REGION_DEFAULTS,
+  TRANSPONDERS,
   VEHICLES,
   type FuelKey,
+  type QuickRoute,
   type RegionKey,
+  type TransponderKey,
   type TripEstimate,
   type VehicleKey,
 } from "@/lib/trip-data";
@@ -32,6 +37,7 @@ type HeroPlannerProps = {
 export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerProps) {
   const copy = REGION_COPY[region];
   const defaults = REGION_DEFAULTS[region];
+  const imperial = defaults.units === "imperial";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
   const [fuel, setFuel] = useState<FuelKey>("petrol");
   const [origin, setOrigin] = useState("");
@@ -40,6 +46,47 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [avoidTolls, setAvoidTolls] = useState(false);
   const [ferries, setFerries] = useState(true);
   const [trip, setTrip] = useState<TripEstimate | null>(null);
+  const [activeQuick, setActiveQuick] = useState<string | null>(null);
+  const [tags, setTags] = useState<TransponderKey[]>([]);
+  const [tankSize, setTankSize] = useState(imperial ? "16" : "60");
+  const [consumption, setConsumption] = useState(imperial ? "28" : "7.4");
+
+  const quickRoutes = useMemo(
+    () => QUICK_ROUTES.filter((r) => r.regions.includes(region)),
+    [region],
+  );
+  const transponders = useMemo(
+    () => TRANSPONDERS.filter((t) => t.regions.includes(region)),
+    [region],
+  );
+
+  const volumeUnit = fuel === "electric" ? "kWh" : imperial ? "gal" : "L";
+  const consumptionUnit =
+    fuel === "electric"
+      ? imperial ? "kWh/100 mi" : "kWh/100 km"
+      : imperial ? "mpg" : "L/100 km";
+
+  const range = useMemo(() => {
+    const t = Number(tankSize);
+    const c = Number(consumption);
+    if (!t || !c) return "—";
+    if (imperial && fuel !== "electric") return Math.round(t * c);
+    return Math.round((t / c) * 100);
+  }, [tankSize, consumption, imperial, fuel]);
+
+  const scrollToResults = () =>
+    requestAnimationFrame(() =>
+      document.getElementById("trip-results")?.scrollIntoView({ behavior: "smooth" }),
+    );
+
+  const runQuickRoute = (r: QuickRoute) => {
+    setOrigin(r.origin);
+    setDestination(r.destination);
+    setActiveQuick(r.key);
+    setTrip(estimateTrip(region, vehicle, fuel, avoidTolls, ferries, scenic));
+    scrollToResults();
+  };
+
 
   return (
     <>
