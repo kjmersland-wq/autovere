@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
-import { ChevronDown, Menu } from "lucide-react";
+import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 
 import { FlagIcon } from "@/components/FlagIcon";
+import { useAuth } from "@/lib/auth";
 
 import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
@@ -18,6 +19,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
   const activeRegion = region ?? regionFromPath(pathname);
   const [lang, setLang] = useState(LANGUAGES[0]!);
   const [open, setOpen] = useState(false);
+  const { user, openAuth, signOut } = useAuth();
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/70 backdrop-blur-xl">
@@ -88,6 +90,40 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             })}
           </DropdownMenuContent>
         </DropdownMenu>
+
+        {user ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20">
+              <UserRound className="size-4" />
+              <span className="hidden max-w-[9rem] truncate sm:inline">{user.email}</span>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" className="w-52 rounded-xl border-border bg-popover p-1.5">
+              <DropdownMenuItem asChild className="cursor-pointer rounded-lg">
+                <Link to="/garage">🗺️ My Garage &amp; Trips</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem asChild className="cursor-pointer rounded-lg">
+                <Link to="/pricing">✨ Plans &amp; upgrade</Link>
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="cursor-pointer rounded-lg"
+                onSelect={() => {
+                  void signOut();
+                }}
+              >
+                <LogOut className="size-4" /> Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          <button
+            type="button"
+            onClick={() => openAuth("signin")}
+            className="inline-flex items-center gap-2 rounded-full bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+          >
+            <UserRound className="size-4" />
+            <span className="hidden sm:inline">Sign in</span>
+          </button>
+        )}
 
         <button
           type="button"

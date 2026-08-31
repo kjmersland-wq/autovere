@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
-import { Download, MapPin, Navigation, Pencil, Plus, Trash2 } from "lucide-react";
+import { Copy, Download, MapPin, Navigation, Pencil, Plus, Printer, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { SiteHeader } from "@/components/SiteHeader";
@@ -21,11 +21,13 @@ import {
   FUEL_LABEL,
   TOLL_TAGS,
   VEHICLE_META,
+  duplicateTrip,
   googleMapsUrl,
   loadTrips,
   loadVehicles,
   newId,
   persistTrips,
+  printTripSummary,
   saveVehicles,
   tripGpx,
   wazeUrl,
@@ -70,6 +72,8 @@ function GaragePage() {
   const [vehicles, setVehicles] = useState<GarageVehicle[]>([]);
   const [trips, setTrips] = useState<SavedTrip[]>([]);
   const [draft, setDraft] = useState<GarageVehicle | null>(null);
+  const [renaming, setRenaming] = useState<SavedTrip | null>(null);
+  const [renameValue, setRenameValue] = useState("");
 
   useEffect(() => {
     setVehicles(loadVehicles());
@@ -111,6 +115,40 @@ function GaragePage() {
     a.click();
     URL.revokeObjectURL(url);
     toast.success("GPX exported — load it straight into your sat-nav.");
+  };
+
+  const commitTrips = (next: SavedTrip[]) => {
+    setTrips(next);
+    persistTrips(next);
+  };
+
+  const duplicate = (trip: SavedTrip) => {
+    const copy = duplicateTrip(trip);
+    commitTrips([copy, ...trips]);
+    toast.success("Trip duplicated — tweak it and roll again.");
+  };
+
+  const startRename = (trip: SavedTrip) => {
+    setRenaming(trip);
+    setRenameValue(trip.name);
+  };
+
+  const submitRename = () => {
+    if (!renaming) return;
+    const name = renameValue.trim();
+    if (!name) {
+      toast.error("Give the trip a name you'll recognise.");
+      return;
+    }
+    commitTrips(trips.map((t) => (t.id === renaming.id ? { ...t, name } : t)));
+    setRenaming(null);
+    toast.success("Trip renamed.");
+  };
+
+  const printTrip = (trip: SavedTrip) => {
+    if (!printTripSummary(trip)) {
+      toast.error("Allow pop-ups to print your itinerary.");
+    }
   };
 
   const deleteTrip = (id: string) => {
@@ -231,6 +269,15 @@ function GaragePage() {
                     </dl>
                   )}
                   <div className="mt-4 flex flex-wrap gap-2">
+                    <Button size="sm" variant="outline" onClick={() => duplicate(t)}>
+                      <Copy className="size-4" /> Duplicate
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => startRename(t)}>
+                      <Pencil className="size-4" /> Rename
+                    </Button>
+                    <Button size="sm" variant="outline" onClick={() => printTrip(t)}>
+                      <Printer className="size-4" /> Print summary
+                    </Button>
                     <Button size="sm" variant="outline" onClick={() => downloadGpx(t)}>
                       <Download className="size-4" /> GPX
                     </Button>
@@ -259,6 +306,30 @@ function GaragePage() {
           </TabsContent>
         </Tabs>
       </section>
+
+      <Dialog open={renaming !== null} onOpenChange={(open) => !open && setRenaming(null)}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Rename trip</DialogTitle>
+            <DialogDescription>Give this adventure a name that feels like the road ahead.</DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-2">
+            <Label htmlFor="trip-name">Trip name</Label>
+            <Input
+              id="trip-name"
+              value={renameValue}
+              onChange={(e) => setRenameValue(e.target.value)}
+              placeholder="Oslo → Lofoten midnight sun"
+            />
+          </div>
+          <DialogFooter>
+            <Button variant="ghost" onClick={() => setRenaming(null)}>
+              Cancel
+            </Button>
+            <Button onClick={submitRename}>Save name</Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       <Dialog open={draft !== null} onOpenChange={(open) => !open && setDraft(null)}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-lg">

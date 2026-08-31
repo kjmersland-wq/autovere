@@ -9,6 +9,8 @@ import {
 } from "@tanstack/react-router";
 import { useEffect, type ReactNode } from "react";
 
+import { AuthModal } from "@/components/AuthModal";
+import { AuthProvider } from "@/lib/auth";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
 import appCss from "../styles.css?url";
@@ -79,15 +81,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      { title: "AutoVere — Road Trip Cost Intelligence" },
+      { name: "description", content: "Toll, vignette, fuel, charging and ferry cost intelligence for cars, motorhomes and touring motorcycles." },
+      { name: "author", content: "KM TECH LABS" },
+      { property: "og:title", content: "AutoVere — Road Trip Cost Intelligence" },
+      { property: "og:description", content: "Plan cross-border road trips with exact toll, fuel and ferry costs." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@Lovable" },
-    ],
+          ],
     links: [
       {
         rel: "stylesheet",
@@ -121,11 +122,13 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-      <Outlet />
-      <SiteFooter />
-      <Toaster position="bottom-right" />
+      <AuthProvider>
+        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
+        <Outlet />
+        <SiteFooter />
+        <AuthModal />
+        <Toaster position="bottom-right" />
+      </AuthProvider>
     </QueryClientProvider>
-
   );
 }

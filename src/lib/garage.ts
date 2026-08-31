@@ -232,3 +232,53 @@ export function googleMapsUrl(trip: SavedTrip) {
 export function wazeUrl(trip: SavedTrip) {
   return `https://www.waze.com/ul?q=${encodeURIComponent(trip.destination)}&navigate=yes`;
 }
+
+export function printTripSummary(trip: SavedTrip) {
+  const w = window.open("", "_blank", "width=880,height=1000");
+  if (!w) return false;
+  const row = (label: string, value: string) =>
+    `<tr><th>${escapeXml(label)}</th><td>${escapeXml(value)}</td></tr>`;
+  const money = (v?: number) =>
+    v === undefined ? "—" : `${trip.currency ?? "EUR"} ${v.toLocaleString("en-GB")}`;
+  const stops = (trip.stops ?? [])
+    .map((s) => `<li><strong>${escapeXml(s.place)}</strong> — ${escapeXml(s.detail)}</li>`)
+    .join("");
+  w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>${escapeXml(trip.name)} — AutoVere</title>
+<style>
+body{font-family:ui-sans-serif,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:#0f172a;margin:40px;}
+h1{font-size:26px;margin:0 0 4px;} p.sub{color:#475569;margin:0 0 24px;}
+table{border-collapse:collapse;width:100%;max-width:560px;margin-bottom:24px;}
+th,td{border-bottom:1px solid #e2e8f0;padding:8px 10px;text-align:left;font-size:14px;}
+th{width:200px;color:#475569;font-weight:600;}
+ul{padding-left:18px;font-size:14px;line-height:1.6;}
+footer{margin-top:36px;font-size:11px;color:#64748b;}
+</style></head><body>
+<h1>${escapeXml(trip.name)}</h1>
+<p class="sub">${escapeXml(trip.detail)} · ${escapeXml(trip.when)}</p>
+<table>
+${row("Origin", trip.origin)}
+${row("Destination", trip.destination)}
+${row("Distance", trip.distanceLabel ?? "—")}
+${row("Driving time", trip.driveTime ?? "—")}
+${row("Tolls & vignettes", money(trip.tolls))}
+${row("Ferries & passes", money(trip.ferries))}
+${row("Fuel / charging", money(trip.energyCost))}
+${row("Total budget", money(trip.budget))}
+</table>
+${stops ? `<h2 style="font-size:16px">Checkpoints &amp; stops</h2><ul>${stops}</ul>` : ""}
+<footer>AutoVere by KM TECH LABS — indicative estimates only. Verify with official portals before travelling.</footer>
+</body></html>`);
+  w.document.close();
+  w.focus();
+  w.print();
+  return true;
+}
+
+export function duplicateTrip(trip: SavedTrip): SavedTrip {
+  return {
+    ...trip,
+    id: newId(),
+    name: `${trip.name} (copy)`,
+    when: `Duplicated ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
+  };
+}
