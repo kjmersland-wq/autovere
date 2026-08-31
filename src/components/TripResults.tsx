@@ -622,6 +622,10 @@ export function TripResults({
       <CorridorMap
         region={region}
         trip={trip}
+        trips={trips}
+        activeVariant={active}
+        onVariantChange={setActive}
+        vehicle={isMotorhome ? "motorhome" : isMotorcycle ? "motorcycle" : "car"}
         origin={origin}
         destination={destination}
         ferryCrossings={ferryCrossings}
