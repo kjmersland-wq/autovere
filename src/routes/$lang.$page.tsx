@@ -23,7 +23,14 @@ import {
   PL_PRIVACY,
   PL_TERMS,
 } from "@/lib/global-content-pl";
-import { isLocalePage, isLocalePrefix, LOCALE_ROUTES } from "@/lib/locales";
+import {
+  isLocalePage,
+  isLocalePrefix,
+  LOCALE_ROUTES,
+  type LocalePage,
+  type LocalePrefix,
+} from "@/lib/locales";
+import { absUrl, appPageMeta, faqScript, regionalize } from "@/lib/seo";
 
 const INFO = {
   faq: GLOBAL_FAQ,
