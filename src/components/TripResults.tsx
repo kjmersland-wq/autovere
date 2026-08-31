@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
+import { PassBorderIntel } from "@/components/PassBorderIntel";
 import { cn } from "@/lib/utils";
 import {
   money,
@@ -509,6 +510,17 @@ export function TripResults({
           </div>
         </div>
       )}
+
+      <PassBorderIntel
+        region={region}
+        origin={origin}
+        destination={destination}
+        vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"}
+        {...(onAddStop ? { onAddStop } : {})}
+        onUseSmartBypass={() => setActive("smart")}
+      />
+
+
 
       <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
