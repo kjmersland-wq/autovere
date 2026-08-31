@@ -152,10 +152,111 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               ))}
             </div>
 
-            <p className="mt-4 text-xs text-muted-foreground">
+            <div className="mt-6 border-t border-border pt-5">
+              <span className="text-sm text-foreground/70">Popular cross-border routes</span>
+              <div className="mt-3 flex flex-wrap gap-2">
+                {quickRoutes.map((r) => (
+                  <button
+                    key={r.key}
+                    type="button"
+                    onClick={() => runQuickRoute(r)}
+                    title={r.via}
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors",
+                      activeQuick === r.key
+                        ? "border-primary bg-primary/15 text-foreground"
+                        : "border-border bg-background/50 text-foreground/85 hover:bg-background/70",
+                    )}
+                  >
+                    <span>{r.emoji}</span>
+                    <span className="font-medium">{r.label}</span>
+                    <span className="hidden text-xs text-muted-foreground sm:inline">{r.via}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            <div className="mt-6 grid gap-4 border-t border-border pt-5 lg:grid-cols-[1fr_auto]">
+              <div>
+                <span className="text-sm text-foreground/70">Transponder / toll tag</span>
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {transponders.map((t) => {
+                    const on = tags.includes(t.key);
+                    return (
+                      <button
+                        key={t.key}
+                        type="button"
+                        onClick={() =>
+                          setTags((prev) =>
+                            prev.includes(t.key) ? prev.filter((k) => k !== t.key) : [...prev, t.key],
+                          )
+                        }
+                        aria-pressed={on}
+                        className={cn(
+                          "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors",
+                          on
+                            ? "border-primary bg-primary/15 text-foreground"
+                            : "border-border bg-background/50 text-foreground/85 hover:bg-background/70",
+                        )}
+                      >
+                        {on ? <Check className="size-4 text-primary" /> : <Tag className="size-4 text-muted-foreground" />}
+                        <span className="font-medium">{t.label}</span>
+                        <span className="text-xs text-muted-foreground">{t.scope}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="h-11 self-end border-border bg-background/50"
+                  >
+                    <Gauge className="size-4" />
+                    Fuel &amp; consumption
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent align="end" className="w-72 border-border bg-card/95 backdrop-blur">
+                  <p className="text-sm font-semibold">Fine-tune consumption</p>
+                  <p className="mt-1 text-xs text-muted-foreground">
+                    Used to refine fuel &amp; charging estimates for your {vehicle}.
+                  </p>
+                  <label className="mt-4 block text-xs text-foreground/75">
+                    Tank / battery size ({volumeUnit})
+                    <Input
+                      type="number"
+                      min={1}
+                      value={tankSize}
+                      onChange={(e) => setTankSize(e.target.value)}
+                      className="mt-1 h-10 border-border bg-background/60"
+                    />
+                  </label>
+                  <label className="mt-3 block text-xs text-foreground/75">
+                    Average consumption ({consumptionUnit})
+                    <Input
+                      type="number"
+                      step="0.1"
+                      min={0}
+                      value={consumption}
+                      onChange={(e) => setConsumption(e.target.value)}
+                      className="mt-1 h-10 border-border bg-background/60"
+                    />
+                  </label>
+                  <p className="mt-3 text-xs text-muted-foreground">
+                    Range per fill: ~{range} {defaults.units === "imperial" ? "miles" : "km"}
+                  </p>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            <p className="mt-5 text-xs text-muted-foreground">
               Regional defaults: {defaults.units === "imperial" ? "Imperial (miles, gallons)" : "Metric (km, litres)"} ·{" "}
               {defaults.currencyCode} · {defaults.tollSystems.join(" · ")}
             </p>
+
             <p className="mt-2 text-xs text-muted-foreground">
               Tolls, vignettes, fuel &amp; charging, ferries — priced to the exact route.
             </p>
