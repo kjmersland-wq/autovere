@@ -556,8 +556,6 @@ export const CONTENT_NO: Record<string, string> = {
   "Electricity": "Strøm",
   "Bakery service": "Bakerivarer",
   "Full hookup": "Full tilkobling",
-  "Laundry": "Vaskeri",
-  "Pool": "Basseng",
   "24h access": "Døgnåpen adkomst",
   "Geiranger, Norway": "Geiranger, Norge",
   "Salzburg, Austria": "Salzburg, Østerrike",

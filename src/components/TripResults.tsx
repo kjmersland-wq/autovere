@@ -690,7 +690,7 @@ export function TripResults({
                         key={s}
                         className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
                       >
-                        {s}
+                        {tr(s)}
                       </span>
                     ))}
                   </div>
