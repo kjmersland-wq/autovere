@@ -645,6 +645,7 @@ export function estimateTrip(
     energyAmount,
     segments,
     safety: safetyFor(region, vehicle),
+    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial),
     discountNote: isMoto
       ? "Motorcycle rates applied: ~40% indicative discount on distance tolls, vignettes and ferries — and 0 in Norwegian city rings."
       : undefined,
