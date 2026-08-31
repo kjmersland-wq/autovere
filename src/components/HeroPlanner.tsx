@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
 import { Check, Gauge, MapPin, Route as RouteIcon, Tag } from "lucide-react";
+import { toast } from "sonner";
 
 import heroImage from "@/assets/hero-roadtrip.jpg";
 import { CountryCostDrawer } from "@/components/CountryCostDrawer";
@@ -11,6 +12,7 @@ import { Input } from "@/components/ui/input";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import {
+  detectEmissionBadges,
   detectFerryCrossings,
   estimateAllVariants,
   FUELS,
@@ -22,6 +24,7 @@ import {
   type FuelKey,
   type QuickRoute,
   type RegionKey,
+  type EmissionBadge,
   type FerryCrossing,
   type RouteVariantKey,
   type TransponderKey,
@@ -52,6 +55,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [ferries, setFerries] = useState(true);
   const [trip, setTrip] = useState<Record<RouteVariantKey, TripEstimate> | null>(null);
   const [ferryCrossings, setFerryCrossings] = useState<FerryCrossing[]>([]);
+  const [badges, setBadges] = useState<EmissionBadge[]>([]);
+  const [stops, setStops] = useState<string[]>([]);
   const [activeQuick, setActiveQuick] = useState<string | null>(null);
   const [tags, setTags] = useState<TransponderKey[]>([]);
   const [tankSize, setTankSize] = useState(imperial ? "16" : "60");
@@ -89,8 +94,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     setOrigin(r.origin);
     setDestination(r.destination);
     setActiveQuick(r.key);
+    setStops([]);
     setTrip(estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic));
     setFerryCrossings(ferries ? detectFerryCrossings(region, r.origin, r.destination) : []);
+    setBadges(detectEmissionBadges(region, r.origin, r.destination));
     scrollToResults();
   };
 
@@ -122,8 +129,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
           <form
             onSubmit={(e) => {
               e.preventDefault();
+              setStops([]);
               setTrip(estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic));
               setFerryCrossings(ferries ? detectFerryCrossings(region, origin, destination) : []);
+              setBadges(detectEmissionBadges(region, origin, destination));
               requestAnimationFrame(() =>
                 document.getElementById("trip-results")?.scrollIntoView({ behavior: "smooth" }),
               );
@@ -327,6 +336,21 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             destination={destination}
             ferryCrossings={ferryCrossings}
             isMotorcycle={vehicle === "motorcycle"}
+            isMotorhome={vehicle === "motorhome"}
+            region={region}
+            emissionBadges={badges}
+            onAddStop={(name) => {
+              if (stops.includes(name)) {
+                toast.info(`${name} is already a stop on this trip.`);
+                return;
+              }
+              const next = [...stops, name];
+              setStops(next);
+              setTrip(
+                estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic, next.length),
+              );
+              toast.success(`${name} added — trip re-routed via ${next.length} extra stop${next.length > 1 ? "s" : ""}.`);
+            }}
           />
         )}
       </div>
