@@ -12,9 +12,15 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CaRouteImport } from './routes/ca'
 import { Route as EuropeRouteImport } from './routes/europe'
+import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GarageRouteImport } from './routes/garage'
+import { Route as HowItWorksRouteImport } from './routes/how-it-works'
+import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PlannerRouteImport } from './routes/planner'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ScenicRouteImport } from './routes/scenic'
+import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TollsRouteImport } from './routes/tolls'
 import { Route as UsRouteImport } from './routes/us'
 import { Route as CaIndexRouteImport } from './routes/ca.index'
@@ -47,9 +53,24 @@ const EuropeRoute = EuropeRouteImport.update({
   path: '/europe',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FaqRoute = FaqRouteImport.update({
+  id: '/faq',
+  path: '/faq',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const GarageRoute = GarageRouteImport.update({
   id: '/garage',
   path: '/garage',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HowItWorksRoute = HowItWorksRouteImport.update({
+  id: '/how-it-works',
+  path: '/how-it-works',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PartnersRoute = PartnersRouteImport.update({
+  id: '/partners',
+  path: '/partners',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PlannerRoute = PlannerRouteImport.update({
@@ -57,9 +78,24 @@ const PlannerRoute = PlannerRouteImport.update({
   path: '/planner',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PricingRoute = PricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ScenicRoute = ScenicRouteImport.update({
   id: '/scenic',
   path: '/scenic',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const TermsRoute = TermsRouteImport.update({
+  id: '/terms',
+  path: '/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
 const TollsRoute = TollsRouteImport.update({
@@ -147,9 +183,15 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/ca': typeof CaRouteWithChildren
   '/europe': typeof EuropeRoute
+  '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/scenic': typeof ScenicRoute
+  '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
   '/us': typeof UsRouteWithChildren
   '/ca/faq': typeof CaFaqRoute
@@ -170,9 +212,15 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/europe': typeof EuropeRoute
+  '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/scenic': typeof ScenicRoute
+  '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
   '/ca/faq': typeof CaFaqRoute
   '/ca/how-it-works': typeof CaHowItWorksRoute
@@ -194,9 +242,15 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/ca': typeof CaRouteWithChildren
   '/europe': typeof EuropeRoute
+  '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
+  '/how-it-works': typeof HowItWorksRoute
+  '/partners': typeof PartnersRoute
   '/planner': typeof PlannerRoute
+  '/pricing': typeof PricingRoute
+  '/privacy': typeof PrivacyRoute
   '/scenic': typeof ScenicRoute
+  '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
   '/us': typeof UsRouteWithChildren
   '/ca/faq': typeof CaFaqRoute
@@ -220,9 +274,15 @@ export interface FileRouteTypes {
     | '/'
     | '/ca'
     | '/europe'
+    | '/faq'
     | '/garage'
+    | '/how-it-works'
+    | '/partners'
     | '/planner'
+    | '/pricing'
+    | '/privacy'
     | '/scenic'
+    | '/terms'
     | '/tolls'
     | '/us'
     | '/ca/faq'
@@ -243,9 +303,15 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/europe'
+    | '/faq'
     | '/garage'
+    | '/how-it-works'
+    | '/partners'
     | '/planner'
+    | '/pricing'
+    | '/privacy'
     | '/scenic'
+    | '/terms'
     | '/tolls'
     | '/ca/faq'
     | '/ca/how-it-works'
@@ -266,9 +332,15 @@ export interface FileRouteTypes {
     | '/'
     | '/ca'
     | '/europe'
+    | '/faq'
     | '/garage'
+    | '/how-it-works'
+    | '/partners'
     | '/planner'
+    | '/pricing'
+    | '/privacy'
     | '/scenic'
+    | '/terms'
     | '/tolls'
     | '/us'
     | '/ca/faq'
@@ -291,9 +363,15 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   CaRoute: typeof CaRouteWithChildren
   EuropeRoute: typeof EuropeRoute
+  FaqRoute: typeof FaqRoute
   GarageRoute: typeof GarageRoute
+  HowItWorksRoute: typeof HowItWorksRoute
+  PartnersRoute: typeof PartnersRoute
   PlannerRoute: typeof PlannerRoute
+  PricingRoute: typeof PricingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ScenicRoute: typeof ScenicRoute
+  TermsRoute: typeof TermsRoute
   TollsRoute: typeof TollsRoute
   UsRoute: typeof UsRouteWithChildren
 }
@@ -321,11 +399,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EuropeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/garage': {
       id: '/garage'
       path: '/garage'
       fullPath: '/garage'
       preLoaderRoute: typeof GarageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/how-it-works': {
+      id: '/how-it-works'
+      path: '/how-it-works'
+      fullPath: '/how-it-works'
+      preLoaderRoute: typeof HowItWorksRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/partners': {
+      id: '/partners'
+      path: '/partners'
+      fullPath: '/partners'
+      preLoaderRoute: typeof PartnersRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/planner': {
@@ -335,11 +434,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlannerRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/scenic': {
       id: '/scenic'
       path: '/scenic'
       fullPath: '/scenic'
       preLoaderRoute: typeof ScenicRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms': {
+      id: '/terms'
+      path: '/terms'
+      fullPath: '/terms'
+      preLoaderRoute: typeof TermsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/tolls': {
@@ -505,9 +625,15 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   CaRoute: CaRouteWithChildren,
   EuropeRoute: EuropeRoute,
+  FaqRoute: FaqRoute,
   GarageRoute: GarageRoute,
+  HowItWorksRoute: HowItWorksRoute,
+  PartnersRoute: PartnersRoute,
   PlannerRoute: PlannerRoute,
+  PricingRoute: PricingRoute,
+  PrivacyRoute: PrivacyRoute,
   ScenicRoute: ScenicRoute,
+  TermsRoute: TermsRoute,
   TollsRoute: TollsRoute,
   UsRoute: UsRouteWithChildren,
 }
