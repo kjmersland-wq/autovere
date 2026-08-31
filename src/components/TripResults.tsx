@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ExternalLink, Download, Save, Share2, ShieldCheck, Ship } from "lucide-react";
+import { ExternalLink, Download, Mountain, Save, Share2, ShieldCheck, Ship } from "lucide-react";
 import { toast } from "sonner";
 
 import {
@@ -9,12 +9,17 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 import {
   money,
   ROUTE_VARIANTS,
+  RV_POIS,
+  SCENIC_HIGHLIGHTS,
   variantComparison,
+  type EmissionBadge,
   type FerryCrossing,
+  type RegionKey,
   type RouteVariantKey,
   type TripEstimate,
 } from "@/lib/trip-data";
