@@ -668,10 +668,11 @@ export function TripResults({
               <p className="mt-1 text-xs text-muted-foreground">{tr(h.where)}</p>
               <p className="mt-2 text-sm text-foreground/80">{tr(h.note)}</p>
               <p className="mt-3 text-xs font-medium text-primary">{t.results.open}: {tr(h.season)}</p>
+              <PoiLinks kind="pass" name={h.name} where={h.where} region={region} />
               <Button
                 size="sm"
                 variant="secondary"
-                className="mt-4"
+                className="mt-3"
                 onClick={() => onAddStop?.(h.name)}
               >
                 {t.results.addStop}
@@ -703,10 +704,11 @@ export function TripResults({
                       </span>
                     ))}
                   </div>
+                  <PoiLinks kind="camp" name={p.name} where={p.where} region={region} />
                   <Button
                     size="sm"
                     variant="secondary"
-                    className="mt-4"
+                    className="mt-3"
                     onClick={() => onAddStop?.(p.name)}
                   >
                     {t.results.addStop}
