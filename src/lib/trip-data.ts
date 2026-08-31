@@ -138,6 +138,9 @@ export type TripEstimate = {
   segments: { country: string; total: number; lines: TollLine[] }[];
   safety: { title: string; sections: SafetySection[] };
   optimizer: EnergyOptimizer;
+  vignette?: VignettePlan | null;
+  tripType?: TripType;
+  durationDays?: number;
   discountNote?: string | undefined;
 };
 
