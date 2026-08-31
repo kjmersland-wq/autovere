@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
-  DEFAULT_TRIPS,
+
   FUEL_LABEL,
   TOLL_TAGS,
   VEHICLE_META,
@@ -394,4 +394,3 @@ function fmt(currency: string | undefined, value: number | undefined) {
   }
 }
 
-void DEFAULT_TRIPS;
