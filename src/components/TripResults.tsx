@@ -76,7 +76,7 @@ export function TripResults({
         />
         <MetricCard
           label="Distance & Drive Time"
-          value={`${trip.distanceKm.toLocaleString("en-GB")} km`}
+          value={trip.distanceLabel}
           hint={`${trip.driveTime} behind the wheel`}
         />
         <MetricCard

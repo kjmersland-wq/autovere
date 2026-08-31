@@ -11,6 +11,7 @@ import {
   estimateTrip,
   FUELS,
   REGION_COPY,
+  REGION_DEFAULTS,
   VEHICLES,
   type FuelKey,
   type RegionKey,
@@ -30,6 +31,7 @@ type HeroPlannerProps = {
 
 export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerProps) {
   const copy = REGION_COPY[region];
+  const defaults = REGION_DEFAULTS[region];
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
   const [fuel, setFuel] = useState<FuelKey>("petrol");
   const [origin, setOrigin] = useState("");
@@ -151,6 +153,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             </div>
 
             <p className="mt-4 text-xs text-muted-foreground">
+              Regional defaults: {defaults.units === "imperial" ? "Imperial (miles, gallons)" : "Metric (km, litres)"} ·{" "}
+              {defaults.currencyCode} · {defaults.tollSystems.join(" · ")}
+            </p>
+            <p className="mt-2 text-xs text-muted-foreground">
               Tolls, vignettes, fuel &amp; charging, ferries — priced to the exact route.
             </p>
           </form>

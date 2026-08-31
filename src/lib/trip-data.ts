@@ -38,6 +38,48 @@ export const FUELS: { key: FuelKey; emoji: string; label: string }[] = [
   { key: "electric", emoji: "⚡", label: "Electric (EV)" },
 ];
 
+export type RegionDefaults = {
+  units: "metric" | "imperial";
+  distanceUnit: string;
+  volumeUnit: string;
+  currencyCode: string;
+  currency: string;
+  tollSystems: string[];
+};
+
+export const REGION_DEFAULTS: Record<RegionKey, RegionDefaults> = {
+  eu: {
+    units: "metric",
+    distanceUnit: "km",
+    volumeUnit: "L",
+    currencyCode: "EUR",
+    currency: "€",
+    tollSystems: ["Vignettes & e-vignettes", "Ticket-based motorway tolls", "Urban low-emission zones"],
+  },
+  us: {
+    units: "imperial",
+    distanceUnit: "mi",
+    volumeUnit: "gal",
+    currencyCode: "USD",
+    currency: "$",
+    tollSystems: ["State toll roads & turnpikes", "HOV / Express lanes", "Bridge & tunnel tolls"],
+  },
+  ca: {
+    units: "metric",
+    distanceUnit: "km",
+    volumeUnit: "L",
+    currencyCode: "CAD",
+    currency: "C$",
+    tollSystems: ["Highway 407 ETR", "Provincial tolls & bridges", "BC Ferries crossings"],
+  },
+};
+
+export function regionFromPath(pathname: string): RegionKey {
+  if (pathname.startsWith("/us")) return "us";
+  if (pathname.startsWith("/ca")) return "ca";
+  return "eu";
+}
+
 export const REGION_COPY: Record<
   RegionKey,
   { eyebrow: string; currency: string; originHint: string; destinationHint: string }
@@ -71,6 +113,8 @@ export type TollLine = {
 
 export type TripEstimate = {
   currency: string;
+  units: "metric" | "imperial";
+  distanceLabel: string;
   budget: number;
   distanceKm: number;
   driveTime: string;
@@ -212,7 +256,9 @@ export function estimateTrip(
   includeFerries: boolean,
   scenic: boolean,
 ): TripEstimate {
-  const currency = REGION_COPY[region].currency;
+  const defaults = REGION_DEFAULTS[region];
+  const currency = defaults.currency;
+  const imperial = defaults.units === "imperial";
   const baseDistance = region === "eu" ? 1420 : region === "us" ? 1890 : 1640;
   const distanceKm = Math.round(baseDistance * (scenic ? 1.08 : 1));
 
@@ -238,16 +284,25 @@ export function estimateTrip(
       ? Math.round(((distanceKm / 100) * kwhPer100 * pricePerKwh) * 100) / 100
       : Math.round(((distanceKm / 100) * consumption * pricePerL) * 100) / 100;
 
+  const litres = (distanceKm / 100) * consumption;
   const energyAmount =
     fuel === "electric"
       ? `${Math.round((distanceKm / 100) * kwhPer100)} kWh`
-      : `${Math.round((distanceKm / 100) * consumption)} L`;
+      : imperial
+        ? `${Math.round(litres * 0.264172)} gal`
+        : `${Math.round(litres)} L`;
+
+  const distanceLabel = imperial
+    ? `${Math.round(distanceKm * 0.621371).toLocaleString("en-US")} mi`
+    : `${distanceKm.toLocaleString("en-GB")} km`;
 
   const hours = distanceKm / (scenic ? 78 : 98);
   const driveTime = `${Math.floor(hours)}h ${Math.round((hours % 1) * 60)}m`;
 
   return {
     currency,
+    units: defaults.units,
+    distanceLabel,
     budget: Math.round((tolls + energyCost + distanceKm * 0.04) * 100) / 100,
     distanceKm,
     driveTime,
