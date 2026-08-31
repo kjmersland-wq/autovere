@@ -22,6 +22,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } f
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
+import { sendContactMessage } from "@/lib/contact.functions";
 
 type Lang = "no" | "en";
 
@@ -210,40 +211,55 @@ const COPY = {
   },
 } as const;
 
-const PARTNER_EMAIL = "partners@autovere.com";
-
-function mailto(subject: string, body: string) {
-  return `mailto:${PARTNER_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-}
-
 export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
   const c = COPY[lang];
   const [applyOpen, setApplyOpen] = useState(false);
   const [talkOpen, setTalkOpen] = useState(false);
+  const [sending, setSending] = useState(false);
+
+  const t = {
+    sending: lang === "no" ? "Sender …" : "Sending …",
+    ok: lang === "no" ? "Takk! Meldingen er sendt." : "Thank you! Your message has been sent.",
+    fail:
+      lang === "no"
+        ? "Kunne ikke sende akkurat nå. Prøv igjen om litt."
+        : "We couldn't send that right now. Please try again shortly.",
+  };
+
+  async function submit(form: HTMLFormElement, kind: "partner" | "message", close: () => void) {
+    const f = new FormData(form);
+    setSending(true);
+    try {
+      await sendContactMessage({
+        data: {
+          kind,
+          name: String(f.get("name") ?? ""),
+          email: String(f.get("email") ?? ""),
+          subject: f.get("subject") ? String(f.get("subject")) : undefined,
+          organisation: f.get("org") ? String(f.get("org")) : undefined,
+          country: f.get("country") ? String(f.get("country")) : undefined,
+          website: f.get("site") ? String(f.get("site")) : undefined,
+          message: String(f.get("message") ?? f.get("members") ?? ""),
+        },
+      });
+      toast.success(t.ok);
+      form.reset();
+      close();
+    } catch {
+      toast.error(t.fail);
+    } finally {
+      setSending(false);
+    }
+  }
 
   function submitApplication(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    const body = [
-      `${c.fields.org}: ${f.get("org")}`,
-      `${c.fields.country}: ${f.get("country")}`,
-      `${c.fields.site}: ${f.get("site")}`,
-      `${c.fields.name}: ${f.get("name")}`,
-      `${c.fields.email}: ${f.get("email")}`,
-      "",
-      `${c.fields.members}:`,
-      String(f.get("members") ?? ""),
-    ].join("\n");
-    window.location.href = mailto(`${c.applyTitle} — ${f.get("org")}`, body);
-    setApplyOpen(false);
+    void submit(e.currentTarget, "partner", () => setApplyOpen(false));
   }
 
   function submitMessage(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const f = new FormData(e.currentTarget);
-    const body = [`${f.get("name")} <${f.get("email")}>`, "", String(f.get("message") ?? "")].join("\n");
-    window.location.href = mailto(String(f.get("subject") ?? c.fields.msgTitle), body);
-    setTalkOpen(false);
+    void submit(e.currentTarget, "message", () => setTalkOpen(false));
   }
 
   return (
