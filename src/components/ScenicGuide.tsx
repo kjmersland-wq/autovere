@@ -26,6 +26,26 @@ const TYPE_LABEL: Record<Spot["type"], { en: string; no: string; pl: string }> =
   Camp: { en: "Motorhome & camping", no: "Bobil og camping", pl: "Kamper i kemping" },
 };
 
+const PLACE_LABEL: Record<string, { no: string; pl: string }> = {
+  "🇨🇭 Switzerland": { no: "🇨🇭 Sveits", pl: "🇨🇭 Szwajcaria" },
+  "🇮🇹 Italy": { no: "🇮🇹 Italia", pl: "🇮🇹 Włochy" },
+  "🇦🇹 Austria": { no: "🇦🇹 Østerrike", pl: "🇦🇹 Austria" },
+  "🇳🇴 Norway": { no: "🇳🇴 Norge", pl: "🇳🇴 Norwegia" },
+  "🇮🇹 Lake Garda": { no: "🇮🇹 Gardasjøen", pl: "🇮🇹 Jezioro Garda" },
+  "🇦🇹 Salzburg": { no: "🇦🇹 Salzburg", pl: "🇦🇹 Salzburg" },
+  "🇺🇸 Montana": { no: "🇺🇸 Montana", pl: "🇺🇸 Montana" },
+  "🇺🇸 Montana – Wyoming": { no: "🇺🇸 Montana – Wyoming", pl: "🇺🇸 Montana – Wyoming" },
+  "🇺🇸 California": { no: "🇺🇸 California", pl: "🇺🇸 Kalifornia" },
+  "🇺🇸 Virginia – North Carolina": { no: "🇺🇸 Virginia – North Carolina", pl: "🇺🇸 Wirginia – Karolina Północna" },
+  "🇺🇸 Washington State Ferries": { no: "🇺🇸 Washington State Ferries", pl: "🇺🇸 Promy stanu Waszyngton" },
+  "🇨🇦 Alberta": { no: "🇨🇦 Alberta", pl: "🇨🇦 Alberta" },
+  "🇨🇦 Nova Scotia": { no: "🇨🇦 Nova Scotia", pl: "🇨🇦 Nowa Szkocja" },
+  "🇨🇦 British Columbia": { no: "🇨🇦 British Columbia", pl: "🇨🇦 Kolumbia Brytyjska" },
+  "🇨🇦 BC Ferries": { no: "🇨🇦 BC Ferries", pl: "🇨🇦 BC Ferries" },
+  "🇩🇰🇳🇴 Color Line": { no: "🇩🇰🇳🇴 Color Line", pl: "🇩🇰🇳🇴 Color Line" },
+  "🇳🇴 Fjord1": { no: "🇳🇴 Fjord1", pl: "🇳🇴 Fjord1" },
+};
+
 const SPOTS: Spot[] = [
   // Europe
   { name: "Furka Pass", place: "🇨🇭 Switzerland", note: "Open now · 2,429 m · dry tarmac today", noteNo: "Åpen nå · 2 429 m · tørr asfalt i dag", notePl: "Otwarta teraz · 2429 m · dziś sucha nawierzchnia", type: "Pass", kind: "pass", region: "eu" },
@@ -100,7 +120,9 @@ export function ScenicGuide() {
                 {isNo ? TYPE_LABEL[p.type].no : isPl ? TYPE_LABEL[p.type].pl : TYPE_LABEL[p.type].en}
               </span>
               <h2 className="mt-3 text-lg font-semibold tracking-tight">{p.name}</h2>
-              <p className="text-sm text-foreground/70">{p.place}</p>
+              <p className="text-sm text-foreground/70">
+                {isNo ? (PLACE_LABEL[p.place]?.no ?? p.place) : isPl ? (PLACE_LABEL[p.place]?.pl ?? p.place) : p.place}
+              </p>
               <p className="mt-3 text-sm text-foreground/85">{isNo ? p.noteNo : isPl ? p.notePl : p.note}</p>
               <PoiLinks
                 kind={p.kind}

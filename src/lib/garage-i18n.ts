@@ -149,10 +149,40 @@ export const GARAGE_EN: Record<string, string> = {
   "Stedet er lagret.": "Place saved.",
 };
 
+
+const MONTHS_PL: Record<string, string> = {
+  Jan: "sty", Feb: "lut", Mar: "mar", Apr: "kwi", May: "maj", Jun: "cze",
+  Jul: "lip", Aug: "sie", Sep: "wrz", Oct: "paź", Nov: "lis", Dec: "gru",
+};
+const MONTHS_NO: Record<string, string> = {
+  Jan: "jan", Feb: "feb", Mar: "mar", Apr: "apr", May: "mai", Jun: "jun",
+  Jul: "jul", Aug: "aug", Sep: "sep", Oct: "okt", Nov: "nov", Dec: "des",
+};
+
+/** Localise generated trip meta strings ("1,420 km · 14h 30m · €318 budget", "Saved 12 Aug"). */
+export function localizeTripMeta(text: string, prefix: string | null): string {
+  if (!text) return text;
+  if (prefix === "pl") {
+    return text
+      .replace(/\bbudget\b/g, "budżet")
+      .replace(/\bSaved\b/g, "Zapisano")
+      .replace(/(\d+)h\s(\d+)m/g, "$1 godz. $2 min")
+      .replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (m) => MONTHS_PL[m] ?? m);
+  }
+  if (prefix === "no") {
+    return text
+      .replace(/\bbudget\b/g, "budsjett")
+      .replace(/\bSaved\b/g, "Lagret")
+      .replace(/(\d+)h\s(\d+)m/g, "$1t $2m")
+      .replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (m) => MONTHS_NO[m] ?? m);
+  }
+  return text;
+}
+
 export type GarageT = (no: string) => string;
 
 /** Norwegian on /no, warm American English everywhere else. */
-export function useGarageText(): { t: GarageT; isNo: boolean } {
+export function useGarageText(): { t: GarageT; isNo: boolean; meta: (text: string) => string } {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const prefix = prefixFromPath(pathname);
   const isNo = prefix === "no";
@@ -161,5 +191,6 @@ export function useGarageText(): { t: GarageT; isNo: boolean } {
     if (prefix === "pl") return GARAGE_PL[no] ?? GARAGE_EN[no] ?? no;
     return GARAGE_EN[no] ?? no;
   };
-  return { t, isNo };
+  const meta = (text: string) => localizeTripMeta(text, prefix);
+  return { t, isNo, meta };
 }
