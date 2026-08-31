@@ -159,36 +159,52 @@ const MONTHS_NO: Record<string, string> = {
   Jul: "jul", Aug: "aug", Sep: "sep", Oct: "okt", Nov: "nov", Dec: "des",
 };
 
+/** Per-prefix garage dictionaries (keys are the Norwegian source strings). */
+const GARAGE_DICTS: Record<string, Record<string, string>> = {
+  pl: GARAGE_PL,
+  se: GARAGE_SV,
+  dk: GARAGE_DA,
+  de: GARAGE_DE,
+  nl: GARAGE_NL,
+  fr: GARAGE_FR,
+};
+
+const META_RULES: Record<
+  string,
+  { budget: string; saved: string; hm: string; months: Record<string, string> }
+> = {
+  pl: { budget: "budżet", saved: "Zapisano", hm: "$1 godz. $2 min", months: MONTHS_PL },
+  no: { budget: "budsjett", saved: "Lagret", hm: "$1t $2m", months: MONTHS_NO },
+  se: { budget: "budget", saved: "Sparad", hm: "$1 tim $2 min", months: MONTHS_SV },
+  dk: { budget: "budget", saved: "Gemt", hm: "$1 t $2 min", months: MONTHS_DA },
+  de: { budget: "Budget", saved: "Gespeichert", hm: "$1 Std. $2 Min.", months: MONTHS_DE },
+  nl: { budget: "budget", saved: "Opgeslagen", hm: "$1 u $2 min", months: MONTHS_NL },
+  fr: { budget: "budget", saved: "Enregistré", hm: "$1 h $2 min", months: MONTHS_FR },
+};
+
 /** Localise generated trip meta strings ("1,420 km · 14h 30m · €318 budget", "Saved 12 Aug"). */
 export function localizeTripMeta(text: string, prefix: string | null): string {
   if (!text) return text;
-  if (prefix === "pl") {
-    return text
-      .replace(/\bbudget\b/g, "budżet")
-      .replace(/\bSaved\b/g, "Zapisano")
-      .replace(/(\d+)h\s(\d+)m/g, "$1 godz. $2 min")
-      .replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (m) => MONTHS_PL[m] ?? m);
-  }
-  if (prefix === "no") {
-    return text
-      .replace(/\bbudget\b/g, "budsjett")
-      .replace(/\bSaved\b/g, "Lagret")
-      .replace(/(\d+)h\s(\d+)m/g, "$1t $2m")
-      .replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (m) => MONTHS_NO[m] ?? m);
-  }
-  return text;
+  const rule = prefix ? META_RULES[prefix] : undefined;
+  if (!rule) return text;
+  return text
+    .replace(/\bbudget\b/g, rule.budget)
+    .replace(/\bSaved\b/g, rule.saved)
+    .replace(/(\d+)h\s(\d+)m/g, rule.hm)
+    .replace(/\b(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)\b/g, (m) => rule.months[m] ?? m);
 }
 
 export type GarageT = (no: string) => string;
 
-/** Norwegian on /no, warm American English everywhere else. */
+/** Norwegian on /no, the visitor's language on other locale trees, English elsewhere. */
 export function useGarageText(): { t: GarageT; isNo: boolean; meta: (text: string) => string } {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const prefix = prefixFromPath(pathname);
   const isNo = prefix === "no";
   const t: GarageT = (no) => {
     if (isNo) return no;
-    if (prefix === "pl") return GARAGE_PL[no] ?? GARAGE_EN[no] ?? no;
+    const dict = prefix ? GARAGE_DICTS[prefix] : undefined;
+    if (dict) return dict[no] ?? GARAGE_EN[no] ?? no;
     return GARAGE_EN[no] ?? no;
   };
   const meta = (text: string) => localizeTripMeta(text, prefix);
