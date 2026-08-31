@@ -37,6 +37,7 @@ import { Route as NoPlannerRouteImport } from './routes/no.planner'
 import { Route as NoPricingRouteImport } from './routes/no.pricing'
 import { Route as NoPrivacyRouteImport } from './routes/no.privacy'
 import { Route as NoTermsRouteImport } from './routes/no.terms'
+import { Route as NoTollsRouteImport } from './routes/no.tolls'
 import { Route as UsIndexRouteImport } from './routes/us.index'
 import { Route as UsFaqRouteImport } from './routes/us.faq'
 import { Route as UsHowItWorksRouteImport } from './routes/us.how-it-works'
@@ -188,6 +189,11 @@ const NoTermsRoute = NoTermsRouteImport.update({
   path: '/no/terms',
   getParentRoute: () => rootRouteImport,
 } as any)
+const NoTollsRoute = NoTollsRouteImport.update({
+  id: '/no/tolls',
+  path: '/no/tolls',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsIndexRoute = UsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -267,6 +273,7 @@ export interface FileRoutesByFullPath {
   '/no/pricing': typeof NoPricingRoute
   '/no/privacy': typeof NoPrivacyRoute
   '/no/terms': typeof NoTermsRoute
+  '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -305,6 +312,7 @@ export interface FileRoutesByTo {
   '/no/pricing': typeof NoPricingRoute
   '/no/privacy': typeof NoPrivacyRoute
   '/no/terms': typeof NoTermsRoute
+  '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -346,6 +354,7 @@ export interface FileRoutesById {
   '/no/pricing': typeof NoPricingRoute
   '/no/privacy': typeof NoPrivacyRoute
   '/no/terms': typeof NoTermsRoute
+  '/no/tolls': typeof NoTollsRoute
   '/us/faq': typeof UsFaqRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
   '/us/legal': typeof UsLegalRoute
@@ -388,6 +397,7 @@ export interface FileRouteTypes {
     | '/no/pricing'
     | '/no/privacy'
     | '/no/terms'
+    | '/no/tolls'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -426,6 +436,7 @@ export interface FileRouteTypes {
     | '/no/pricing'
     | '/no/privacy'
     | '/no/terms'
+    | '/no/tolls'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -466,6 +477,7 @@ export interface FileRouteTypes {
     | '/no/pricing'
     | '/no/privacy'
     | '/no/terms'
+    | '/no/tolls'
     | '/us/faq'
     | '/us/how-it-works'
     | '/us/legal'
@@ -503,6 +515,7 @@ export interface RootRouteChildren {
   NoPricingRoute: typeof NoPricingRoute
   NoPrivacyRoute: typeof NoPrivacyRoute
   NoTermsRoute: typeof NoTermsRoute
+  NoTollsRoute: typeof NoTollsRoute
   NoIndexRoute: typeof NoIndexRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
@@ -705,6 +718,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NoTermsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/no/tolls': {
+      id: '/no/tolls'
+      path: '/no/tolls'
+      fullPath: '/no/tolls'
+      preLoaderRoute: typeof NoTollsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/us/': {
       id: '/us/'
       path: '/'
@@ -845,6 +865,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoPricingRoute: NoPricingRoute,
   NoPrivacyRoute: NoPrivacyRoute,
   NoTermsRoute: NoTermsRoute,
+  NoTollsRoute: NoTollsRoute,
   NoIndexRoute: NoIndexRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
