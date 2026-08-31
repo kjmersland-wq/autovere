@@ -663,14 +663,36 @@ const PL_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
   ],
 ];
 
+type Patterns = [RegExp, (m: RegExpMatchArray) => string][];
+
+const CONTENT_DICTS: Partial<Record<Locale, Record<string, string>>> = {
+  no: CONTENT_NO,
+  pl: CONTENT_PL,
+  sv: CONTENT_SV,
+  da: CONTENT_DA,
+  de: CONTENT_DE,
+  nl: CONTENT_NL,
+  fr: CONTENT_FR,
+};
+
+const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
+  no: NO_PATTERNS,
+  pl: PL_PATTERNS,
+  sv: SV_PATTERNS,
+  da: DA_PATTERNS,
+  de: DE_PATTERNS,
+  nl: NL_PATTERNS,
+  fr: FR_PATTERNS,
+};
+
 export function useTr(): (value: string) => string {
   const locale = useLocale();
   return (value: string) => {
-    const dict = locale === "no" ? CONTENT_NO : locale === "pl" ? CONTENT_PL : null;
+    const dict = CONTENT_DICTS[locale];
     if (!dict) return value;
     const direct = dict[value];
     if (direct) return direct;
-    for (const [re, fn] of locale === "no" ? NO_PATTERNS : PL_PATTERNS) {
+    for (const [re, fn] of CONTENT_PATTERNS[locale] ?? []) {
       const m = value.match(re);
       if (m) return fn(m);
     }
