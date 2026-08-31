@@ -2,6 +2,8 @@ import { useState } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, Menu } from "lucide-react";
 
+import { FlagIcon } from "@/components/FlagIcon";
+
 import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
   DropdownMenu,
@@ -56,18 +58,37 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
         </nav>
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="ml-auto inline-flex items-center gap-1.5 rounded-full border border-border bg-background/50 px-3 py-1.5 text-sm font-medium transition-colors hover:bg-background/80 lg:ml-0">
+          <DropdownMenuTrigger className="ml-auto inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-3 py-1.5 text-sm font-semibold tracking-wide transition-colors hover:bg-background/80 lg:ml-0">
+            <FlagIcon code={lang.flag} />
             <span>{lang.flag}</span>
-            <span className="hidden sm:inline">{lang.label}</span>
             <ChevronDown className="size-4 text-muted-foreground" />
           </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" className="w-44">
-            {LANGUAGES.map((l) => (
-              <DropdownMenuItem key={l.code} onSelect={() => setLang(l)}>
-                <span className="mr-2">{l.flag}</span>
-                {l.label}
-              </DropdownMenuItem>
-            ))}
+          <DropdownMenuContent
+            align="end"
+            className="w-36 rounded-xl border-border bg-popover p-1.5 shadow-2xl"
+          >
+            {LANGUAGES.map((l) => {
+              const active = l.code === lang.code;
+              return (
+                <DropdownMenuItem
+                  key={l.code}
+                  onSelect={() => setLang(l)}
+                  aria-label={l.label}
+                  className={cn(
+                    "flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-semibold tracking-wide transition-colors",
+                    active
+                      ? "bg-teal/10 text-teal focus:bg-teal/15 focus:text-teal"
+                      : "text-foreground focus:bg-foreground/10 focus:text-foreground",
+                  )}
+                >
+                  <FlagIcon code={l.flag} className="h-4 w-6" />
+                  <span>{l.flag}</span>
+                  <span className="ml-auto text-[11px] font-medium text-muted-foreground">
+                    {l.label}
+                  </span>
+                </DropdownMenuItem>
+              );
+            })}
           </DropdownMenuContent>
         </DropdownMenu>
 
