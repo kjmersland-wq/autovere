@@ -2,7 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
 
-export const Route = createFileRoute("/no")({
+export const Route = createFileRoute("/no/")({
   head: () => ({
     meta: [
       { title: "AutoVere Norge — Bompenger, vignetter og reisekostnader" },
