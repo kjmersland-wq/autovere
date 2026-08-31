@@ -134,8 +134,144 @@ export type TripEstimate = {
   energyAmount: string;
   segments: { country: string; total: number; lines: TollLine[] }[];
   safety: { title: string; sections: SafetySection[] };
+  optimizer: EnergyOptimizer;
   discountNote?: string | undefined;
 };
+
+export type ChargingStop = {
+  name: string;
+  atKm: number;
+  atLabel: string;
+  power: string;
+  networks: string[];
+  note: string;
+};
+
+export type EnergyOptimizer = {
+  mode: "ev" | "fuel";
+  title: string;
+  rangeLabel: string;
+  bufferLabel: string;
+  stops: ChargingStop[];
+  networks: string[];
+  arbitrage: string[];
+  longStretch: string[];
+};
+
+const STOP_NAMES: Record<RegionKey, string[]> = {
+  eu: [
+    "Kassel Nord Rasthof",
+    "Nürnberg Feucht Park",
+    "Innsbruck Ost",
+    "Trento Nord Hub",
+    "Bologna Cantagallo",
+  ],
+  us: [
+    "Breezewood Travel Plaza",
+    "Wytheville Crossroads",
+    "Cordele I-75 Hub",
+    "Ocala Service Plaza",
+    "Fort Pierce Plaza",
+  ],
+  ca: [
+    "Kingston ONroute",
+    "Port Hope ONroute",
+    "Parry Sound Hub",
+    "Sault Ste. Marie",
+    "Thunder Bay Terminal",
+  ],
+};
+
+const EV_NETWORKS: Record<RegionKey, string[]> = {
+  eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego"],
+  us: ["Electrify America", "Tesla Supercharger", "EVgo"],
+  ca: ["FLO", "Tesla Supercharger", "Petro-Canada eV", "Electrify Canada"],
+};
+
+const ARBITRAGE: Record<RegionKey, string[]> = {
+  eu: [
+    "Fuel is ~15% cheaper in Austria than Italy — refuel before crossing the Brenner Pass.",
+    "Luxembourg is the cheapest tank in Western Europe — top up before entering Belgium or France.",
+    "Diesel in Norway runs well above Swedish prices — fill near the border at Svinesund.",
+  ],
+  us: [
+    "Fuel in Georgia is ~20% cheaper than Florida — fill up before the state line on I-95.",
+    "Skip turnpike service plazas: prices run 10–15% above exits one mile off the highway.",
+    "California is the most expensive tank on the West Coast — fill in Nevada or Arizona first.",
+  ],
+  ca: [
+    "Alberta fuel is ~20% cheaper than British Columbia — fill before Kicking Horse Pass.",
+    "Québec charges more per litre than Ontario — top up before the provincial border on the 417.",
+    "Northern Ontario pumps run a premium — refuel in Sault Ste. Marie before Highway 17.",
+  ],
+};
+
+const LONG_STRETCH: Record<RegionKey, string[]> = {
+  eu: [
+    "Sognefjell (RV55), Norway — 194 km without a verified 24/7 station. Fill in Lom.",
+    "Grossglockner High Alpine Road — 186 km loop with no fuel above the toll gate.",
+  ],
+  us: [
+    "US-50 “Loneliest Road”, Nevada — 226 km between verified stations. Fill in Ely.",
+    "I-10 Van Horn → Fort Stockton, Texas — 190 km with limited overnight service.",
+  ],
+  ca: [
+    "Highway 17 Wawa → White River — 198 km with no verified overnight fuel.",
+    "Icefields Parkway, Alberta — 232 km between Lake Louise and Jasper; Saskatchewan Crossing only.",
+  ],
+};
+
+function buildOptimizer(
+  region: RegionKey,
+  vehicle: VehicleKey,
+  fuel: FuelKey,
+  distanceKm: number,
+  imperial: boolean,
+): EnergyOptimizer {
+  const isEv = fuel === "electric";
+  const tank = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 18 : 55;
+  const battery = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 21 : 77;
+  const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
+  const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+
+  const fullRange = isEv ? (battery / kwhPer100) * 100 : (tank / consumption) * 100;
+  const safeRange = fullRange * 0.75;
+  const stopCount = Math.max(1, Math.min(5, Math.ceil(distanceKm / safeRange) - 1));
+
+  const d = (km: number) =>
+    imperial
+      ? `${Math.round(km * 0.621371).toLocaleString("en-US")} mi`
+      : `${Math.round(km).toLocaleString("en-GB")} km`;
+
+  const networks = EV_NETWORKS[region];
+  const stops: ChargingStop[] = Array.from({ length: stopCount }, (_, i) => {
+    const atKm = Math.round(safeRange * (i + 1));
+    return {
+      name: STOP_NAMES[region][i % STOP_NAMES[region].length]!,
+      atKm,
+      atLabel: d(atKm),
+      power: isEv ? (vehicle === "motorhome" ? "150 kW CCS" : "350 kW CCS") : "24/7 forecourt",
+      networks: isEv
+        ? [networks[i % networks.length]!, networks[(i + 1) % networks.length]!]
+        : [],
+      note: isEv
+        ? `Arrive at ~25% state of charge, charge to 80% in about ${vehicle === "motorhome" ? 38 : 22} min.`
+        : `Recommended refuel — keeps you above the 25% reserve on a ${d(fullRange)} tank range.`,
+    };
+  });
+
+  return {
+    mode: isEv ? "ev" : "fuel",
+    title: isEv ? "⚡ Smart EV Charging Optimizer" : "⛽ Smart Fuel Stop Optimizer",
+    rangeLabel: `${d(fullRange)} full ${isEv ? "battery" : "tank"} range`,
+    bufferLabel: `Planned at 75% safety buffer — ${d(safeRange)} between stops`,
+    stops,
+    networks: isEv ? networks : [],
+    arbitrage: isEv ? [] : ARBITRAGE[region],
+    longStretch: LONG_STRETCH[region],
+  };
+}
+
 
 const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
   eu: [
@@ -511,6 +647,7 @@ export function estimateTrip(
     energyAmount,
     segments,
     safety: safetyFor(region, vehicle),
+    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial),
     discountNote: isMoto
       ? "Motorcycle rates applied: ~40% indicative discount on distance tolls, vignettes and ferries — and 0 in Norwegian city rings."
       : undefined,

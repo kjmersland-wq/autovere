@@ -246,6 +246,94 @@ export function TripResults({
           </div>
         </div>
       </div>
+
+      <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-lg font-semibold tracking-tight">{trip.optimizer.title}</h3>
+          <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+            {trip.optimizer.rangeLabel}
+          </span>
+        </div>
+        <p className="mt-2 text-sm text-muted-foreground">{trip.optimizer.bufferLabel}</p>
+
+        {trip.optimizer.networks.length > 0 && (
+          <div className="mt-4 flex flex-wrap gap-2">
+            {trip.optimizer.networks.map((n) => (
+              <span
+                key={n}
+                className="rounded-full border border-border bg-background/50 px-3 py-1 text-xs font-medium text-foreground/85"
+              >
+                🔌 {n}
+              </span>
+            ))}
+          </div>
+        )}
+
+        <ol className="mt-5 grid gap-3 md:grid-cols-2">
+          {trip.optimizer.stops.map((stop, i) => (
+            <li
+              key={`${stop.name}-${i}`}
+              className="rounded-xl border border-border bg-background/40 p-4"
+            >
+              <div className="flex items-start justify-between gap-3">
+                <p className="text-sm font-semibold">
+                  {i + 1}. {stop.name}
+                </p>
+                <span className="shrink-0 text-xs text-muted-foreground">at {stop.atLabel}</span>
+              </div>
+              <p className="mt-1 text-xs font-medium text-primary">{stop.power}</p>
+              <p className="mt-2 text-sm text-foreground/80">{stop.note}</p>
+              {stop.networks.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {stop.networks.map((n) => (
+                    <span
+                      key={n}
+                      className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
+                    >
+                      {n}
+                    </span>
+                  ))}
+                </div>
+              )}
+            </li>
+          ))}
+        </ol>
+
+        {trip.optimizer.arbitrage.length > 0 && (
+          <div className="mt-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              Border fuel arbitrage
+            </p>
+            <ul className="mt-2 grid gap-2">
+              {trip.optimizer.arbitrage.map((tip) => (
+                <li
+                  key={tip}
+                  className="rounded-xl border border-border bg-background/40 px-4 py-3 text-sm text-foreground/85"
+                >
+                  💡 Tip: {tip}
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        <div className="mt-6">
+          <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+            Long-stretch alerts (&gt;180 km without a verified station)
+          </p>
+          <ul className="mt-2 grid gap-2">
+            {trip.optimizer.longStretch.map((item) => (
+              <li
+                key={item}
+                className="rounded-xl border border-amber-400/40 bg-amber-400/10 px-4 py-3 text-sm text-foreground/90"
+              >
+                ⚠️ {item}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+
     </section>
   );
 }
