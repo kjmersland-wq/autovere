@@ -166,7 +166,7 @@ export function RouteExportPanel({
       ${s.lines
         .map(
           (l) =>
-            `<tr><td>${escapeXml(l.place)}</td><td>${escapeXml(l.detail)}</td><td class="num">${escapeXml(money(trip.currency, l.cost))}</td></tr>`,
+            `<tr><td>${escapeXml(l.place)}</td><td>${escapeXml(l.detail)}</td><td class="num">${escapeXml(money(trip.currency, l.amount))}</td></tr>`,
         )
         .join("")}`,
       )
@@ -174,7 +174,7 @@ export function RouteExportPanel({
     const stops = trip.optimizer.stops
       .map(
         (s) =>
-          `<li><strong>${escapeXml(s.name)}</strong> — ${escapeXml(s.detail)}${s.atKmLabel ? ` (${escapeXml(s.atKmLabel)})` : ""}</li>`,
+          `<li><strong>${escapeXml(s.name)}</strong> — ${escapeXml(s.atLabel)} · ${escapeXml(s.power)} · ${escapeXml(s.note)}</li>`,
       )
       .join("");
 
@@ -208,7 +208,7 @@ export function RouteExportPanel({
 </div>
 <h2>Turn-by-turn toll checkpoints</h2>
 <table><thead><tr><th>Checkpoint</th><th>Detail</th><th class="num">Cost</th></tr></thead><tbody>${rows}</tbody></table>
-<h2>Estimated ${trip.optimizer.isElectric ? "charging" : "fuel"} stops</h2>
+<h2>Estimated ${trip.optimizer.mode === "ev" ? "charging" : "fuel"} stops</h2>
 <ul>${stops || "<li>No mandatory stops on this leg — top up before departure.</li>"}</ul>
 <footer>Indicative estimates only — verify with official portals before you travel. AutoVere by KM TECH LABS, Kristiansand, Norway.</footer>
 </body></html>`;
