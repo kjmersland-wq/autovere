@@ -2,6 +2,8 @@ import { useMemo, useState } from "react";
 import { Check, Gauge, MapPin, Route as RouteIcon, Tag } from "lucide-react";
 
 import heroImage from "@/assets/hero-roadtrip.jpg";
+import { CountryCostDrawer } from "@/components/CountryCostDrawer";
+
 import { SiteHeader } from "@/components/SiteHeader";
 import { TripResults } from "@/components/TripResults";
 import { Button } from "@/components/ui/button";
