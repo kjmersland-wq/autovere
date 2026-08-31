@@ -156,6 +156,33 @@ const en = {
     planRoute: (c: string) => `🚀 Plan route to ${c}`,
     disclaimer: "Indicative estimates only — verify with official portals before travelling.",
   },
+  export: {
+    title: "Export & navigate",
+    intro:
+      "Take this route with you — sat-nav files, one-tap navigation, or a clean printed cost summary for the glovebox.",
+    gpx: "📥 Download GPX File",
+    kml: "📄 Download KML File",
+    fileHint:
+      "GPX works with Garmin zūmo, TomTom Rider and BMW Motorrad Connected · KML opens in Google Earth.",
+    navTitle: "1-click navigation",
+    google: "Open in Google Maps",
+    apple: "Open in Apple Maps",
+    waze: "Open in Waze",
+    sendToCar: "🚘 Send to Connected Vehicle",
+    handoffHint: "Quick hand-off to your car's built-in navigation.",
+    handoffToast: (n: string) => `Route handed off to ${n}.`,
+    print: "🖨️ Print Turn-by-Turn Cost Summary",
+    printHint: "Paper-friendly PDF with every toll checkpoint and fuel stop.",
+    gpxToast: "GPX ready — load it into Garmin, TomTom Rider or BMW Motorrad Connected.",
+    kmlToast: "KML ready — open it in Google Earth or your mapping overlay.",
+    popupError: "Allow pop-ups to print your itinerary.",
+    hints: {
+      tesla: "Send destination via your Tesla account",
+      bmw: "Send to Car via My BMW / Motorrad Connected",
+      mercedes: "Push the route to MBUX navigation",
+      phone: "Opens the maps hand-off link on your phone",
+    } as Record<string, string>,
+  },
   footer: {
     tagline:
       "Cross-border road trip intelligence — tolls, vignettes, fuel, charging and ferries for cars, motorhomes and touring motorcycles.",
@@ -325,6 +352,33 @@ const no: Strings = {
     fastDc: "Hurtiglading",
     planRoute: (c: string) => `🚀 Planlegg rute til ${c}`,
     disclaimer: "Kun veiledende estimater — kontroller hos offisielle portaler før avreise.",
+  },
+  export: {
+    title: "Eksport og navigasjon",
+    intro:
+      "Ta ruten med deg — filer til GPS-en, navigasjon med ett trykk, eller en ryddig utskrift til hanskerommet.",
+    gpx: "📥 Last ned GPX-fil",
+    kml: "📄 Last ned KML-fil",
+    fileHint:
+      "GPX fungerer med Garmin zūmo, TomTom Rider og BMW Motorrad Connected · KML åpnes i Google Earth.",
+    navTitle: "Navigasjon med ett klikk",
+    google: "Åpne i Google Maps",
+    apple: "Åpne i Apple Maps",
+    waze: "Åpne i Waze",
+    sendToCar: "🚘 Send til bilens navigasjon",
+    handoffHint: "Rask overføring til bilens innebygde navigasjon.",
+    handoffToast: (n: string) => `Ruten er sendt til ${n}.`,
+    print: "🖨️ Skriv ut kostnadsoversikt",
+    printHint: "Utskriftsvennlig PDF med alle bompunkter og drivstoffstopp.",
+    gpxToast: "GPX er klar — last den inn i Garmin, TomTom Rider eller BMW Motorrad Connected.",
+    kmlToast: "KML er klar — åpne den i Google Earth eller ditt eget kartlag.",
+    popupError: "Tillat popup-vinduer for å skrive ut reiseoversikten.",
+    hints: {
+      tesla: "Send reisemålet via Tesla-kontoen din",
+      bmw: "Send til bilen via My BMW / Motorrad Connected",
+      mercedes: "Send ruten til MBUX-navigasjonen",
+      phone: "Åpner overføringslenken til kart på mobilen din",
+    },
   },
   footer: {
     tagline: "Sømløs ruteplanlegging og kostnadskontroll på tvers av landegrenser.",
