@@ -510,7 +510,17 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               const next = [...stops, name];
               setStops(next);
               setTrip(
-                estimateAllVariants(region, vehicle, fuel, avoidTolls, ferries, scenic, next.length),
+                estimateAllVariants(
+                  region,
+                  vehicle,
+                  fuel,
+                  avoidTolls,
+                  ferries,
+                  scenic,
+                  next.length + viaCount,
+                  tripType,
+                  effectiveDuration,
+                ),
               );
               toast.success(`${name} added — trip re-routed via ${next.length} extra stop${next.length > 1 ? "s" : ""}.`);
             }}
