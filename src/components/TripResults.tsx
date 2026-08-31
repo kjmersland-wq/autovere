@@ -484,6 +484,111 @@ export function TripResults({
         </div>
       </div>
 
+      {emissionBadges.length > 0 && (
+        <div className="mt-10">
+          <h3 className="text-lg font-semibold tracking-tight">🌱 Environmental &amp; emission badge radar</h3>
+          <p className="mt-1 text-sm text-foreground/70">
+            Sort these before you leave home — badges are checked at the city boundary, not at the border.
+          </p>
+          <div className="mt-4 grid gap-3 lg:grid-cols-2">
+            {emissionBadges.map((b) => (
+              <article
+                key={b.id}
+                className="rounded-2xl border border-amber-400/40 bg-amber-400/10 p-5"
+              >
+                <p className="text-sm font-semibold">
+                  {b.flag} {b.title}
+                </p>
+                <p className="mt-2 text-sm text-foreground/80">{b.body}</p>
+                <a
+                  href={b.portalUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary hover:underline"
+                >
+                  Official info · {b.portalLabel}
+                  <ExternalLink className="size-3.5" />
+                </a>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
+      <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Mountain className="size-5 text-primary" />
+            <h3 className="text-lg font-semibold tracking-tight">Scenic &amp; road trip highlights</h3>
+          </div>
+          <label className="flex cursor-pointer items-center gap-2 rounded-full border border-border bg-background/50 px-4 py-2 text-sm">
+            <span className="text-foreground/85">🚐 Show RV campgrounds &amp; service areas</span>
+            <Switch checked={rvMode} onCheckedChange={setRvMode} />
+          </label>
+        </div>
+        <p className="mt-1 text-sm text-foreground/70">
+          Viewpoints and iconic passes worth the detour along your corridor.
+        </p>
+
+        <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {highlights.map((h) => (
+            <article key={h.id} className="rounded-2xl border border-border bg-background/40 p-5">
+              <p className="text-sm font-semibold">
+                {h.emoji} {h.name}
+              </p>
+              <p className="mt-1 text-xs text-muted-foreground">{h.where}</p>
+              <p className="mt-2 text-sm text-foreground/80">{h.note}</p>
+              <p className="mt-3 text-xs font-medium text-primary">Open: {h.season}</p>
+              <Button
+                size="sm"
+                variant="secondary"
+                className="mt-4"
+                onClick={() => onAddStop?.(h.name)}
+              >
+                + Add as Stop
+              </Button>
+            </article>
+          ))}
+        </div>
+
+        {rvMode && (
+          <div className="mt-8">
+            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-muted-foreground">
+              🚐 RV campgrounds &amp; service areas along the corridor
+            </p>
+            <div className="mt-3 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {rvPois.map((p) => (
+                <article key={p.id} className="rounded-2xl border border-border bg-background/40 p-5">
+                  <p className="text-sm font-semibold">
+                    {p.emoji} {p.name}
+                  </p>
+                  <p className="mt-1 text-xs text-muted-foreground">{p.where}</p>
+                  <p className="mt-2 text-sm text-foreground/80">{p.note}</p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {p.services.map((s) => (
+                      <span
+                        key={s}
+                        className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
+                      >
+                        {s}
+                      </span>
+                    ))}
+                  </div>
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    className="mt-4"
+                    onClick={() => onAddStop?.(p.name)}
+                  >
+                    + Add as Stop
+                  </Button>
+                </article>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+
     </section>
   );
 }
