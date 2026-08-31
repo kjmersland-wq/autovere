@@ -1,0 +1,369 @@
+import type { FuelKey, RegionKey, TripEstimate, VehicleKey } from "@/lib/trip-data";
+
+/* ------------------------------------------------------------------ */
+/* Deterministic pseudo-randomness so a route always renders the same  */
+/* ------------------------------------------------------------------ */
+
+function seedFrom(text: string) {
+  let h = 2166136261;
+  for (let i = 0; i < text.length; i += 1) {
+    h ^= text.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function makeRandom(seed: number) {
+  let s = seed || 1;
+  return () => {
+    s ^= s << 13;
+    s ^= s >>> 17;
+    s ^= s << 5;
+    s >>>= 0;
+    return s / 4294967296;
+  };
+}
+
+/* ------------------------------------------------------------------ */
+/* Map geometry                                                        */
+/* ------------------------------------------------------------------ */
+
+export type MapPoint = { x: number; y: number };
+
+/** Route polyline in a 0-100 × 0-100 viewport space. */
+export function corridorPolyline(seedText: string, points = 9): MapPoint[] {
+  const rnd = makeRandom(seedFrom(seedText));
+  const out: MapPoint[] = [];
+  for (let i = 0; i < points; i += 1) {
+    const t = i / (points - 1);
+    const x = 8 + t * 84;
+    const wobble = Math.sin(t * Math.PI * 1.7 + rnd() * 0.6) * 16 + (rnd() - 0.5) * 9;
+    const y = 72 - t * 44 + wobble * (0.25 + t * 0.5);
+    out.push({ x, y: Math.min(90, Math.max(10, y)) });
+  }
+  out[0] = { x: 8, y: out[0]!.y };
+  out[points - 1] = { x: 92, y: out[points - 1]!.y };
+  return out;
+}
+
+/** Position along the polyline for a 0..1 progress value. */
+export function pointAt(line: MapPoint[], t: number): MapPoint {
+  const clamped = Math.min(1, Math.max(0, t));
+  const scaled = clamped * (line.length - 1);
+  const i = Math.min(line.length - 2, Math.floor(scaled));
+  const f = scaled - i;
+  const a = line[i]!;
+  const b = line[i + 1]!;
+  return { x: a.x + (b.x - a.x) * f, y: a.y + (b.y - a.y) * f };
+}
+
+/* ------------------------------------------------------------------ */
+/* Layers                                                              */
+/* ------------------------------------------------------------------ */
+
+export type LayerKey = "ev" | "fuel" | "rv" | "pass" | "ferry";
+
+export const MAP_LAYERS: { key: LayerKey; emoji: string; label: string; color: string }[] = [
+  { key: "ev", emoji: "⚡", label: "EV Fast Chargers", color: "#34d399" },
+  { key: "fuel", emoji: "⛽", label: "Fuel Stations", color: "#fbbf24" },
+  { key: "rv", emoji: "🚐", label: "RV Campgrounds & Service Areas", color: "#60a5fa" },
+  { key: "pass", emoji: "🏔️", label: "Mountain Passes", color: "#f87171" },
+  { key: "ferry", emoji: "⛴️", label: "Ferry Terminals", color: "#22d3ee" },
+];
+
+export type CorridorPoi = {
+  id: string;
+  layer: LayerKey;
+  name: string;
+  detail: string;
+  atKm: number;
+  atLabel: string;
+  progress: number;
+  status?: "open" | "closed" | "chains";
+  price?: string;
+};
+
+const EV_NETWORKS: Record<RegionKey, string[]> = {
+  eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego", "Recharge"],
+  us: ["Tesla Supercharger", "Electrify America", "EVgo", "ChargePoint"],
+  ca: ["Circuit électrique", "Tesla Supercharger", "Petro-Canada eV", "Flo"],
+};
+
+const FUEL_BRANDS: Record<RegionKey, string[]> = {
+  eu: ["Shell", "TotalEnergies", "Eni", "Aral", "Circle K", "OMV"],
+  us: ["Shell", "Chevron", "Pilot Flying J", "BP", "Buc-ee's"],
+  ca: ["Petro-Canada", "Esso", "Shell", "Circle K", "Ultramar"],
+};
+
+const RV_NAMES: Record<RegionKey, string[]> = {
+  eu: ["Aire de camping-car", "Stellplatz", "Camping municipal", "Bobilparkering"],
+  us: ["KOA Holiday", "State Park Campground", "RV Resort", "Truck & RV Plaza"],
+  ca: ["Provincial Park Campground", "KOA Campground", "Halte routière VR", "RV Park"],
+};
+
+function kmLabel(units: "metric" | "imperial", km: number) {
+  return units === "imperial" ? `${Math.round(km * 0.621371)} mi` : `${Math.round(km)} km`;
+}
+
+export function buildCorridorPois({
+  region,
+  trip,
+  origin,
+  destination,
+  ferryNames,
+  passes,
+}: {
+  region: RegionKey;
+  trip: TripEstimate;
+  origin: string;
+  destination: string;
+  ferryNames: string[];
+  passes: { name: string; status: "open" | "closed" | "chains"; detail: string }[];
+}): CorridorPoi[] {
+  const rnd = makeRandom(seedFrom(`${origin}|${destination}|${trip.variant}|${region}`));
+  const total = Math.max(60, trip.distanceKm);
+  const pois: CorridorPoi[] = [];
+
+  const push = (layer: LayerKey, progress: number, name: string, detail: string, extra: Partial<CorridorPoi> = {}) => {
+    const atKm = total * progress;
+    pois.push({
+      id: `${layer}-${pois.length}`,
+      layer,
+      name,
+      detail,
+      atKm,
+      atLabel: kmLabel(trip.units, atKm),
+      progress,
+      ...extra,
+    });
+  };
+
+  const evCount = Math.min(6, Math.max(3, Math.round(total / 220)));
+  for (let i = 0; i < evCount; i += 1) {
+    const p = (i + 1) / (evCount + 1);
+    const net = EV_NETWORKS[region][Math.floor(rnd() * EV_NETWORKS[region].length)]!;
+    push("ev", p, `${net} hub`, `${[150, 175, 250, 350][Math.floor(rnd() * 4)]} kW · ${2 + Math.floor(rnd() * 10)} bays`);
+  }
+
+  const fuelCount = Math.min(6, Math.max(3, Math.round(total / 190)));
+  for (let i = 0; i < fuelCount; i += 1) {
+    const p = (i + 0.55) / (fuelCount + 0.4);
+    const brand = FUEL_BRANDS[region][Math.floor(rnd() * FUEL_BRANDS[region].length)]!;
+    push("fuel", p, `${brand} service station`, "24/7 · restrooms · café", {
+      price: fuelPriceLabel(region, trip, rnd()),
+    });
+  }
+
+  const rvCount = Math.min(5, Math.max(2, Math.round(total / 280)));
+  for (let i = 0; i < rvCount; i += 1) {
+    const p = (i + 0.8) / (rvCount + 0.6);
+    const base = RV_NAMES[region][Math.floor(rnd() * RV_NAMES[region].length)]!;
+    push("rv", p, base, "Dump station · fresh water · overnight pitches");
+  }
+
+  passes.slice(0, 4).forEach((pass, i) => {
+    push("pass", 0.25 + i * 0.18, pass.name, pass.detail, { status: pass.status });
+  });
+
+  ferryNames.slice(0, 3).forEach((name, i) => {
+    push("ferry", 0.35 + i * 0.22, name, "Ferry terminal · check-in 30 min before departure");
+  });
+
+  return pois.sort((a, b) => a.atKm - b.atKm);
+}
+
+/* ------------------------------------------------------------------ */
+/* Fuel price sourcing                                                 */
+/* ------------------------------------------------------------------ */
+
+export type FuelSource = {
+  key: "fr" | "at" | "benchmark";
+  badge: string;
+  note: string;
+  url: string;
+};
+
+export const FUEL_SOURCES: Record<FuelSource["key"], FuelSource> = {
+  fr: {
+    key: "fr",
+    badge: "Live Government Fuel Data (prix-carburants)",
+    note: "Station prices published by the French Ministry of Economy open data feed.",
+    url: "https://www.prix-carburants.gouv.fr/",
+  },
+  at: {
+    key: "at",
+    badge: "Live E-Control Spritpreisrechner",
+    note: "Austrian regulator E-Control publishes station-level prices, updated through the day.",
+    url: "https://www.spritpreisrechner.at/",
+  },
+  benchmark: {
+    key: "benchmark",
+    badge: "National Average Benchmark (EAFO / EU Bulletin)",
+    note: "Indicative national averages from EAFO and the EU Weekly Oil Bulletin.",
+    url: "https://alternative-fuels-observatory.ec.europa.eu/",
+  },
+};
+
+const COUNTRY_BASE: Record<string, number> = {
+  France: 1.82,
+  Austria: 1.65,
+  Germany: 1.79,
+  Italy: 1.88,
+  Switzerland: 1.86,
+  Netherlands: 2.05,
+  Belgium: 1.78,
+  Norway: 1.94,
+  Sweden: 1.72,
+  Denmark: 1.83,
+  Spain: 1.62,
+  Poland: 1.5,
+  Slovenia: 1.6,
+  Czechia: 1.58,
+  Hungary: 1.55,
+};
+
+export function countryFuelSource(country: string): FuelSource {
+  if (/france/i.test(country)) return FUEL_SOURCES.fr;
+  if (/austria|österreich/i.test(country)) return FUEL_SOURCES.at;
+  return FUEL_SOURCES.benchmark;
+}
+
+function fuelPriceLabel(region: RegionKey, trip: TripEstimate, jitter: number) {
+  if (region === "us") return `$${(3.35 + jitter * 0.8).toFixed(2)}/gal`;
+  if (region === "ca") return `C$${(1.55 + jitter * 0.25).toFixed(2)}/L`;
+  return `€${(1.62 + jitter * 0.4).toFixed(2)}/L`;
+}
+
+export type FuelStop = {
+  id: string;
+  brand: string;
+  name: string;
+  country: string;
+  atLabel: string;
+  atKm: number;
+  price: string;
+  priceUnit: string;
+  source: FuelSource;
+  amenities: string[];
+};
+
+export function buildFuelStops({
+  region,
+  trip,
+  origin,
+  destination,
+  fuel,
+}: {
+  region: RegionKey;
+  trip: TripEstimate;
+  origin: string;
+  destination: string;
+  fuel: FuelKey;
+}): FuelStop[] {
+  const rnd = makeRandom(seedFrom(`fuel|${origin}|${destination}|${trip.variant}|${fuel}`));
+  const countries = trip.segments.length
+    ? trip.segments.map((s) => s.country)
+    : [region === "us" ? "United States" : region === "ca" ? "Canada" : "Europe"];
+  const total = Math.max(60, trip.distanceKm);
+  const count = Math.min(7, Math.max(3, Math.round(total / 170)));
+  const brands = FUEL_BRANDS[region];
+
+  return Array.from({ length: count }, (_, i) => {
+    const p = (i + 0.6) / (count + 0.3);
+    const country = countries[Math.min(countries.length - 1, Math.floor(p * countries.length))]!;
+    const brand = brands[Math.floor(rnd() * brands.length)]!;
+    const base = COUNTRY_BASE[country] ?? 1.72;
+    const dieselAdj = fuel === "diesel" ? -0.08 : 0;
+    const litre = base + dieselAdj + (rnd() - 0.5) * 0.14;
+    const price =
+      region === "us"
+        ? `$${(litre * 3.785 * 0.55).toFixed(2)}`
+        : region === "ca"
+          ? `C$${(litre * 0.82).toFixed(3)}`
+          : `€${litre.toFixed(3)}`;
+    const atKm = total * p;
+    return {
+      id: `stop-${i}`,
+      brand,
+      name: `${brand} · ${country} corridor stop ${i + 1}`,
+      country,
+      atKm,
+      atLabel: kmLabel(trip.units, atKm),
+      price,
+      priceUnit: region === "us" ? "per gallon" : "per litre",
+      source: countryFuelSource(country),
+      amenities: ["24/7", rnd() > 0.5 ? "HGV/RV lanes" : "Café", rnd() > 0.6 ? "AdBlue" : "Car wash"],
+    };
+  });
+}
+
+/* ------------------------------------------------------------------ */
+/* Motorhome camping radar                                             */
+/* ------------------------------------------------------------------ */
+
+export type CampSpot = {
+  id: string;
+  name: string;
+  kind: string;
+  atLabel: string;
+  rating: number;
+  price: string;
+  services: string[];
+};
+
+const CAMP_TEMPLATES: Record<RegionKey, { name: string; kind: string; services: string[] }[]> = {
+  eu: [
+    { name: "Aire de camping-car municipale", kind: "Aire · France", services: ["Dump station", "Fresh water", "Electric hook-up"] },
+    { name: "Stellplatz am Fluss", kind: "Stellplatz · Germany/Austria", services: ["Overnight pitches", "Grey water", "WiFi"] },
+    { name: "Camping Alpenblick", kind: "Rated campsite · Alps", services: ["Showers", "Laundry", "Restaurant"] },
+    { name: "Bobilparkering Fjordsyn", kind: "Bobil pitch · Norway", services: ["Fjord view", "Fresh water", "Toilets"] },
+    { name: "Sosta camper Lago", kind: "Sosta · Italy", services: ["Dump station", "Shade", "Walk to town"] },
+  ],
+  us: [
+    { name: "KOA Holiday Resort", kind: "Full hook-up RV park", services: ["50-amp", "Sewer", "Pool"] },
+    { name: "State Park Campground", kind: "Public campground", services: ["Dump station", "Potable water", "Trails"] },
+    { name: "Interstate Travel Plaza", kind: "Overnight service area", services: ["RV dump", "Propane", "24/7 fuel"] },
+    { name: "Lakeside RV Resort", kind: "Premium RV resort", services: ["Full hook-up", "Laundry", "WiFi"] },
+  ],
+  ca: [
+    { name: "Provincial Park Campground", kind: "Public campground", services: ["Dump station", "Potable water", "Firewood"] },
+    { name: "Halte routière VR", kind: "Roadside VR halt", services: ["Overnight parking", "Toilets", "Fresh water"] },
+    { name: "KOA Campground", kind: "Full hook-up RV park", services: ["30/50-amp", "Sewer", "Showers"] },
+    { name: "Mountain View RV Park", kind: "Rated RV park", services: ["Full hook-up", "Laundry", "WiFi"] },
+  ],
+};
+
+export function buildCampSpots({
+  region,
+  trip,
+  origin,
+  destination,
+}: {
+  region: RegionKey;
+  trip: TripEstimate;
+  origin: string;
+  destination: string;
+}): CampSpot[] {
+  const rnd = makeRandom(seedFrom(`camp|${origin}|${destination}|${region}`));
+  const templates = CAMP_TEMPLATES[region];
+  const total = Math.max(60, trip.distanceKm);
+  const count = Math.min(templates.length, Math.max(3, Math.round(total / 260)));
+  const currency = region === "us" ? "$" : region === "ca" ? "C$" : "€";
+
+  return Array.from({ length: count }, (_, i) => {
+    const t = templates[i % templates.length]!;
+    const p = (i + 0.7) / (count + 0.4);
+    const atKm = total * p;
+    return {
+      id: `camp-${i}`,
+      name: t.name,
+      kind: t.kind,
+      atLabel: kmLabel(trip.units, atKm),
+      rating: Math.round((3.9 + rnd() * 1.05) * 10) / 10,
+      price: `${currency}${(12 + Math.round(rnd() * 34))}/night`,
+      services: t.services,
+    };
+  });
+}
+
+export type { VehicleKey };
