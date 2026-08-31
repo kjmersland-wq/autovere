@@ -26,7 +26,18 @@ import { useT, useTr } from "@/lib/i18n";
 import { getRouteGeo } from "@/lib/route-geo.functions";
 import { poiMapUrl } from "@/lib/poi-links";
 import { detectMountainPasses, passStatus } from "@/lib/pass-intel";
-import type { FerryCrossing, FuelKey, RegionKey, TripEstimate } from "@/lib/trip-data";
+import {
+  ROUTE_VARIANTS,
+  evComparison,
+  variantComparison,
+  type FerryCrossing,
+  type FuelKey,
+  type RegionKey,
+  type RouteVariantKey,
+  type TripEstimate,
+  type VehicleKey,
+} from "@/lib/trip-data";
+import { useMoney } from "@/lib/currency";
 
 const LiveMap = lazy(() => import("@/components/LiveMap"));
 
@@ -46,9 +57,17 @@ export function CorridorMap({
   isMotorhome,
   fuel = "petrol",
   onAddStop,
+  trips,
+  activeVariant,
+  onVariantChange,
+  vehicle = "car",
 }: {
   region: RegionKey;
   trip: TripEstimate;
+  trips?: Record<RouteVariantKey, TripEstimate>;
+  activeVariant?: RouteVariantKey;
+  onVariantChange?: (v: RouteVariantKey) => void;
+  vehicle?: VehicleKey;
   origin: string;
   destination: string;
   ferryCrossings: FerryCrossing[];
@@ -58,6 +77,8 @@ export function CorridorMap({
 }) {
   const t = useT();
   const tr = useTr();
+  const m = useMoney(trip.currency);
+  const ev = evComparison(trip, vehicle, fuel);
   const [layers, setLayers] = useState<Record<LayerKey, boolean>>({
     ev: true,
     fuel: true,
@@ -196,6 +217,101 @@ export function CorridorMap({
           );
         })}
       </div>
+
+      {trips && (
+        <div className="mt-5">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            {t.map.routesTitle}
+          </p>
+          <p className="mt-1 text-sm text-foreground/70">{t.map.routesIntro}</p>
+          <div className="mt-3 grid gap-3 sm:grid-cols-3">
+            {ROUTE_VARIANTS.map((v) => {
+              const vt = trips[v.key];
+              const on = (activeVariant ?? trip.variant) === v.key;
+              const cmp = variantComparison(trips.fastest, vt);
+              const perHour =
+                cmp.hoursAdded > 0.05 ? cmp.saved / cmp.hoursAdded : null;
+              return (
+                <button
+                  key={v.key}
+                  type="button"
+                  onClick={() => onVariantChange?.(v.key)}
+                  aria-pressed={on}
+                  className={cn(
+                    "rounded-2xl border p-4 text-left transition-colors",
+                    on
+                      ? "border-primary bg-primary/15 shadow-[0_0_0_1px_rgba(245,158,11,0.25)]"
+                      : "border-border bg-background/40 hover:border-primary/50 hover:bg-background/60",
+                  )}
+                >
+                  <span className="flex items-center justify-between gap-2">
+                    <span className="text-sm font-semibold">
+                      {v.emoji} {t.results.variants[v.key].label}
+                    </span>
+                    {on && (
+                      <span className="rounded-full border border-primary/50 bg-primary/15 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                        {t.map.activeBadge}
+                      </span>
+                    )}
+                  </span>
+                  <span className="mt-2 block text-xl font-semibold tracking-tight">
+                    {m.fmt(vt.budget, 0)}
+                  </span>
+                  <span className="mt-1 block text-xs text-muted-foreground">
+                    {m.fmt(vt.tolls + vt.ferries, 0)} {t.map.tollsShort} · {vt.driveTime} · {vt.distanceLabel}
+                  </span>
+                  {v.key !== "fastest" && (
+                    <span className="mt-2 flex flex-wrap gap-1.5 text-[11px] font-medium">
+                      <span
+                        className={cn(
+                          "rounded-full px-2 py-0.5",
+                          cmp.saved >= 0
+                            ? "bg-emerald-400/15 text-emerald-300"
+                            : "bg-rose-400/15 text-rose-300",
+                        )}
+                      >
+                        {cmp.saved >= 0 ? t.map.saves : t.map.costsExtra} {m.fmt(Math.abs(cmp.saved), 0)}
+                      </span>
+                      <span className="rounded-full bg-amber-400/15 px-2 py-0.5 text-amber-300">
+                        {cmp.timeLabel}
+                      </span>
+                    </span>
+                  )}
+                  {v.key !== "fastest" && perHour !== null && perHour > 0 && (
+                    <span className="mt-2 block text-[11px] text-foreground/70">
+                      💡 {t.map.perHour(m.fmt(perHour, 0))}
+                    </span>
+                  )}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="mt-3 rounded-2xl border border-teal/30 bg-teal/5 p-4">
+            <p className="text-sm font-semibold">{t.map.evTitle}</p>
+            <p className="mt-1 text-sm text-foreground/75">
+              {ev.isElectric
+                ? t.map.evAlready
+                : t.map.evIntro(m.fmt(ev.fuelCost, 0), m.fmt(ev.evCost, 0))}
+            </p>
+            <p className="mt-2 flex flex-wrap items-center gap-2 text-xs font-semibold">
+              <span
+                className={cn(
+                  "rounded-full px-3 py-1",
+                  ev.saved >= 0 ? "bg-emerald-400/15 text-emerald-300" : "bg-rose-400/15 text-rose-300",
+                )}
+              >
+                {ev.saved >= 0
+                  ? t.map.evSaved(m.fmt(Math.abs(ev.saved), 0))
+                  : t.map.evCostlier(m.fmt(Math.abs(ev.saved), 0))}
+              </span>
+              <span className="rounded-full border border-border bg-background/50 px-3 py-1 text-foreground/75">
+                {t.map.evEnergy(`${ev.kwh} kWh`, `${ev.litres} L`)}
+              </span>
+            </p>
+          </div>
+        </div>
+      )}
 
       {/* Map canvas */}
       {geo && geo.coords.length > 1 ? (
