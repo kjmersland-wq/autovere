@@ -271,7 +271,7 @@ export function TripResults({
         <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
           <div className="flex items-center gap-2">
             <Ship className="size-5 text-primary" />
-            <h3 className="text-lg font-semibold tracking-tight">⛴️ Ferry & marine crossings detected</h3>
+            <h3 className="text-lg font-semibold tracking-tight">{t.results.ferryTitle}</h3>
           </div>
           <p className="mt-1 text-sm text-foreground/70">
             {t.results.ferryIntro}
@@ -339,7 +339,7 @@ export function TripResults({
       <div className="mt-10 grid gap-6 lg:grid-cols-[1.5fr_1fr]">
 
         <div className="glass-panel rounded-2xl p-5 sm:p-6">
-          <h3 className="text-lg font-semibold tracking-tight">Country & state breakdown</h3>
+          <h3 className="text-lg font-semibold tracking-tight">{t.results.breakdown}</h3>
           <p className="mt-1 text-sm text-foreground/70">
             {t.results.breakdownIntro}
           </p>
