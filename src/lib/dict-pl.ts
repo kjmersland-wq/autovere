@@ -5,7 +5,7 @@ export const PL_DICT: Record<string, unknown> = {
       "/planner": "Planer podróży",
       "/tolls": "Opłaty drogowe i winiety",
       "/scenic": "Malownicze przełęcze i promy",
-      "/garage": "Moje Garaż",
+      "/garage": "Mój Garaż",
     } as Record<string, string>,
     signIn: "Zaloguj się",
     garageMenu: "🗺️ Mój Garaż i podróże",
