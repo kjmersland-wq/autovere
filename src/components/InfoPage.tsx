@@ -12,7 +12,7 @@ type InfoPageProps = {
   title: string;
   intro: string;
   sections: InfoSection[];
-  note?: string;
+  note?: string | undefined;
 };
 
 export function InfoPage({ eyebrow, title, intro, sections, note }: InfoPageProps) {
