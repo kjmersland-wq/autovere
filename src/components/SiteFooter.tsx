@@ -84,12 +84,12 @@ export function SiteFooter() {
             </li>
             <li>
               <Link to={`${noPrefix}/tolls` as "/tolls"} className="transition-colors hover:text-foreground">
-                {t.header.nav["/tolls"]}
+                {region === "us" ? "Tolls & Express Lanes" : t.header.nav["/tolls"]}
               </Link>
             </li>
             <li>
               <Link to={`${noPrefix}/scenic` as "/scenic"} className="transition-colors hover:text-foreground">
-                {t.header.nav["/scenic"]}
+                {region === "us" ? "Scenic Byways & Ferries" : t.header.nav["/scenic"]}
               </Link>
             </li>
             <li>
