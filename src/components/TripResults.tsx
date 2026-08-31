@@ -93,9 +93,22 @@ export function TripResults({
       const key = "autovere.savedTrips";
       const saved = JSON.parse(localStorage.getItem(key) ?? "[]");
       saved.unshift({
+        id: Math.random().toString(36).slice(2, 10),
         name: title,
+        origin: origin || "Your start",
+        destination: destination || "Your destination",
         detail: `${trip.distanceLabel} · ${trip.driveTime} · ${money(trip.currency, trip.budget)} budget`,
         when: `Saved ${new Date().toLocaleDateString("en-GB", { day: "numeric", month: "short" })}`,
+        distanceLabel: trip.distanceLabel,
+        driveTime: trip.driveTime,
+        budget: trip.budget,
+        currency: trip.currency,
+        tolls: trip.tolls,
+        ferries: trip.ferries,
+        energyCost: trip.energyCost,
+        stops: trip.segments
+          .flatMap((s) => s.lines)
+          .map((l) => ({ place: l.place, detail: l.detail })),
       });
       localStorage.setItem(key, JSON.stringify(saved.slice(0, 20)));
       toast.success("Saved to My Garage — it's waiting whenever you're ready.");
@@ -103,6 +116,7 @@ export function TripResults({
       toast.error("Couldn't save this trip right now.");
     }
   };
+
 
   const shareTrip = async () => {
     const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${money(trip.currency, trip.budget)} with AutoVere`;
