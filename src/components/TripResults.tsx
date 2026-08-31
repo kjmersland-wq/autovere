@@ -14,6 +14,7 @@ import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { PassBorderIntel } from "@/components/PassBorderIntel";
 import { CorridorMap } from "@/components/CorridorMap";
+import { LezMonitor, MotorhomeClearanceRadar, TransponderSelector } from "@/components/ComplianceModules";
 import { cn } from "@/lib/utils";
 import {
   money,
@@ -592,6 +593,17 @@ export function TripResults({
         fuel={fuel}
         {...(onAddStop ? { onAddStop } : {})}
       />
+
+      {isMotorhome && <MotorhomeClearanceRadar region={region} />}
+
+      <LezMonitor
+        region={region}
+        origin={origin}
+        destination={destination}
+        isMotorcycle={isMotorcycle}
+      />
+
+      <TransponderSelector region={region} trip={trip} />
 
       <PassBorderIntel
         region={region}
