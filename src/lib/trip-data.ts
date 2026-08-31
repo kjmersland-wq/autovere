@@ -764,6 +764,36 @@ export function variantComparison(
 
 
 
+/** What the same corridor would cost on petrol/diesel vs. on electricity. */
+export function evComparison(
+  trip: TripEstimate,
+  vehicle: VehicleKey,
+  fuel: FuelKey,
+): {
+  fuelCost: number;
+  evCost: number;
+  saved: number;
+  kwh: number;
+  litres: number;
+  isElectric: boolean;
+} {
+  const round2 = (n: number) => Math.round(n * 100) / 100;
+  const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
+  const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const pricePerL = fuel === "diesel" ? 1.72 : 1.89;
+  const pricePerKwh = 0.44;
+  const fuelCost = round2((trip.distanceKm / 100) * consumption * pricePerL);
+  const evCost = round2((trip.distanceKm / 100) * kwhPer100 * pricePerKwh);
+  return {
+    fuelCost,
+    evCost,
+    saved: round2(fuelCost - evCost),
+    kwh: Math.round((trip.distanceKm / 100) * kwhPer100),
+    litres: Math.round((trip.distanceKm / 100) * consumption),
+    isElectric: fuel === "electric",
+  };
+}
+
 export function money(currency: string, value: number) {
   return `${currency}${value.toLocaleString("en-GB", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
 }
