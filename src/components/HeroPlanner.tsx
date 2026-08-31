@@ -314,6 +314,16 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       <div id="trip-results">
         {trip && <TripResults trip={trip} origin={origin} destination={destination} />}
       </div>
+
+      <CountryCostDrawer
+        defaultGroup={region === "us" ? "us" : region === "ca" ? "ca" : "western"}
+        onPlanRoute={(c) => {
+          setDestination(c.name);
+          setActiveQuick(null);
+          window.scrollTo({ top: 0, behavior: "smooth" });
+        }}
+      />
+
     </>
   );
 }
