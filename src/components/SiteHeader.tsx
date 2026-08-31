@@ -23,8 +23,33 @@ const NO_NAV = {
   "/garage": "/no/garage",
 } as const;
 
+/** Norwegian pages that exist under /no. */
+const NO_PAGES = [
+  "planner",
+  "tolls",
+  "scenic",
+  "garage",
+  "faq",
+  "how-it-works",
+  "pricing",
+  "privacy",
+  "terms",
+  "partners",
+] as const;
+
+/** Map the current path to its counterpart in the requested language. */
+function pathForLang(pathname: string, code: string): string {
+  const stripped =
+    pathname === "/no" ? "/" : pathname.startsWith("/no/") ? pathname.slice(3) : pathname;
+  if (code !== "no") return stripped;
+  const slug = stripped.replace(/^\/+/, "").split("/")[0] ?? "";
+  if (!slug) return "/no";
+  return (NO_PAGES as readonly string[]).includes(slug) ? `/no/${slug}` : "/no";
+}
+
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const navigate = useNavigate();
   const activeRegion = region ?? regionFromPath(pathname);
   const t = useT();
   const locale = useLocale();
