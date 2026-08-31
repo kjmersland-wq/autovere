@@ -143,3 +143,8 @@ export const GARAGE_SV: Record<string, string> = {
   "Gi stedet et navn.": "Ge platsen ett namn.",
   "Stedet er lagret.": "Platsen har sparats.",
 };
+
+export const MONTHS_SV: Record<string, string> = {
+  Jan: "jan", Feb: "feb", Mar: "mar", Apr: "apr", May: "maj", Jun: "jun",
+  Jul: "jul", Aug: "aug", Sep: "sep", Oct: "okt", Nov: "nov", Dec: "dec",
+};
