@@ -188,4 +188,182 @@ export const CONTENT_NO: Record<string, string> = {
   Firewood: "Ved",
   "Full hook-up": "Full tilkobling",
   "Overnight parking": "Overnattingsparkering",
+
+  /* ---------------- Mountain passes ---------------- */
+  "Grossglockner High Alpine Road": "Grossglockner Høyalpevei",
+  "🇦🇹 Austria · Salzburg ↔ Carinthia": "🇦🇹 Østerrike · Salzburg ↔ Kärnten",
+  "2 504 m · Hochtor summit": "2 504 m · Hochtor-toppen",
+  "Early May – late October (gates close nightly)":
+    "Tidlig mai – slutten av oktober (bommene stenger om natten)",
+  "€40.00 car day ticket · €30.00 motorcycle · motorhomes €40.00 (over 3.5 t on request)":
+    "€40,00 dagsbillett bil · €30,00 motorsykkel · bobil €40,00 (over 3,5 t på forespørsel)",
+  "Toll road, not part of the Austrian vignette network. Gates open ~05:30–06:00 and close 19:30–21:30 depending on the month — plan to be through before dusk and enjoy the Edelweissspitze detour.":
+    "Bomvei som ikke inngår i det østerrikske vignettsystemet. Bommene åpner ca. 05:30–06:00 og stenger 19:30–21:30 avhengig av måned — planlegg å være gjennom før skumringen, og ta gjerne avstikkeren til Edelweissspitze.",
+  "Riders get a reduced ticket and a dedicated Bikers Point at Fuschertörl.":
+    "MC-førere får rabattert billett og eget Bikers Point ved Fuschertörl.",
+  "Passo dello Stelvio (Stelvio Pass)": "Passo dello Stelvio (Stelvio-passet)",
+  "🇮🇹 Italy · Bormio ↔ Trafoi, South Tyrol": "🇮🇹 Italia · Bormio ↔ Trafoi, Sør-Tirol",
+  "2 758 m · 48 numbered hairpins on the north ramp":
+    "2 758 m · 48 nummererte hårnålssvinger på nordsiden",
+  "Usually late May/June – early November, snow dependent":
+    "Vanligvis slutten av mai/juni – tidlig november, avhengig av snø",
+  "Free of charge": "Gratis",
+  "Europe's most photogenic hairpin ladder. Ride or drive it early — coaches and cyclists fill the switchbacks from 10:00. Expect 8–12 °C colder at the summit than in Bormio.":
+    "Europas mest fotogene hårnålsstige. Kjør tidlig — busser og syklister fyller svingene fra klokka 10. Regn med 8–12 °C kaldere på toppen enn i Bormio.",
+  "Tight, off-camber hairpins: stay wide on entry and watch for gravel after rain.":
+    "Trange hårnålssvinger med motfall: legg deg vidt inn, og se opp for grus etter regn.",
+  "Furka & Grimsel Passes": "Furka- og Grimselpasset",
+  "🇨🇭 Switzerland · Valais ↔ Uri ↔ Bern": "🇨🇭 Sveits · Valais ↔ Uri ↔ Bern",
+  "Furka 2 429 m · Grimsel 2 164 m": "Furka 2 429 m · Grimsel 2 164 m",
+  "Roughly mid-June – late October": "Omtrent midten av juni – slutten av oktober",
+  "Free passes · CHF 40 motorway vignette still required for Swiss motorways":
+    "Gratis fjelloverganger · CHF 40 motorveivignett kreves fortsatt på sveitsiske motorveier",
+  "Check the live pass board before committing — snow chains can be mandated at short notice even in summer. The Furka–Grimsel–Susten triangle is a perfect full-day loop.":
+    "Sjekk statusen for fjellovergangene før du drar — kjettingpåbud kan komme på kort varsel selv om sommeren. Trekanten Furka–Grimsel–Susten er en perfekt dagstur.",
+  "Cool mornings at altitude: pack a thermal layer and waterproofs.":
+    "Kjølige morgener i høyden: ta med et varmt lag og regntøy.",
+  "Trollstigen & Sognefjellet": "Trollstigen og Sognefjellet",
+  "🇳🇴 Norway · Møre og Romsdal · Jotunheimen": "🇳🇴 Norge · Møre og Romsdal · Jotunheimen",
+  "Trollstigen 858 m · Sognefjellet 1 434 m (highest road in Northern Europe)":
+    "Trollstigen 858 m · Sognefjellet 1 434 m (Nord-Europas høyeste vei)",
+  "Trollstigen late May – October · Sognefjellet May – November":
+    "Trollstigen slutten av mai – oktober · Sognefjellet mai – november",
+  "Free roads · parking fee at the Trollstigen viewpoint":
+    "Gratis veier · parkeringsavgift ved utsiktspunktet på Trollstigen",
+  "Both are National Tourist Routes with hairpins and narrow shoulders. Trollstigen has periodic rockfall closures — check the live status the morning you travel. Vehicles over 12.4 m are not permitted on Trollstigen.":
+    "Begge er nasjonale turistveier med hårnålssvinger og smale veiskuldre. Trollstigen stenges periodevis på grunn av steinsprang — sjekk status samme morgen som du kjører. Kjøretøy over 12,4 m er ikke tillatt på Trollstigen.",
+  "Wet granite and painted lines get slick in fjord drizzle — brake early into the hairpins.":
+    "Våt granitt og veimerking blir glatt i fjordyr — brems tidlig inn i svingene.",
+  "Icefields Parkway (Highway 93N)": "Icefields Parkway (Highway 93N)",
+  "🇨🇦 Alberta · Lake Louise ↔ Jasper": "🇨🇦 Alberta · Lake Louise ↔ Jasper",
+  "2 088 m · Bow Summit": "2 088 m · Bow Summit",
+  "Open year-round, with winter storm closures": "Åpen hele året, med stengning ved vinterstormer",
+  "Parks Canada pass required: C$11.00 adult/day or C$75.25 Discovery Pass (annual, per vehicle)":
+    "Krever Parks Canada-pass: C$11,00 per voksen/dag eller C$75,25 Discovery Pass (årlig, per kjøretøy)",
+  "232 km of glaciers with no fuel between Lake Louise and Saskatchewan River Crossing — top up before you start. From 1 Nov to 31 Mar winter tires or carried chains are mandatory on Highway 93N.":
+    "232 km med isbreer og ingen bensinstasjon mellom Lake Louise og Saskatchewan River Crossing — fyll tanken før du starter. Fra 1. november til 31. mars er vinterdekk eller kjettinger påbudt på Highway 93N.",
+  "Wildlife on the shoulder at dawn and dusk — ride the centre of your lane and keep speed down.":
+    "Vilt i veikanten ved daggry og skumring — hold deg midt i feltet og senk farten.",
+  "Tail of the Dragon (US 129, Deals Gap)": "Tail of the Dragon (US 129, Deals Gap)",
+  "🇺🇸 North Carolina ↔ Tennessee": "🇺🇸 North Carolina ↔ Tennessee",
+  "318 curves in 11 miles (17.7 km)": "318 svinger på 17,7 km",
+  "Open year-round · best March – November, ice risk in winter":
+    "Åpen hele året · best mars – november, isfare om vinteren",
+  "Free — no tolls": "Gratis — ingen bompenger",
+  "Strictly enforced 30 mph (48 km/h) limit with unmarked patrols and roadside speed radar. No guardrails on many curves and zero fuel on the strip — fill up in Robbinsville or Tapoco.":
+    "Strengt håndhevet fartsgrense på 48 km/t med sivile patruljer og fartsradar. Mange svinger mangler autovern, og det finnes ingen bensinstasjon på strekningen — fyll opp i Robbinsville eller Tapoco.",
+  "Photographers shoot every curve — ride your own pace, not the camera's. Trailers and RVs should use US 74 instead.":
+    "Fotografer står i hver sving — kjør i ditt eget tempo, ikke kameraets. Tilhengere og bobiler bør bruke US 74 i stedet.",
+  "Open · winter tyres / chains required": "Åpen · vinterdekk/kjettinger påkrevd",
+  Open: "Åpen",
+  "Closed for the season": "Stengt for sesongen",
+  "Opening/closing window · check live status": "Åpnings-/stengeperiode · sjekk oppdatert status",
+  "€30.00 motorcycle day ticket (reduced)": "€30,00 dagsbillett motorsykkel (rabattert)",
+
+  /* ---------------- Border tips ---------------- */
+  "Refuel in Austria before the Brenner Pass": "Fyll drivstoff i Østerrike før Brennerpasset",
+  "Diesel and petrol run roughly 15% cheaper in Austria than in Italy. Fill the tank around Innsbruck or Matrei am Brenner — the last Austrian stations before the border are the cheapest on the corridor.":
+    "Diesel og bensin er rundt 15 % billigere i Østerrike enn i Italia. Fyll tanken ved Innsbruck eller Matrei am Brenner — de siste østerrikske stasjonene før grensen er de rimeligste på strekningen.",
+  "≈ €12–18 saved on a 60 L tank": "≈ €12–18 spart på en tank på 60 liter",
+  "Plan a fuel stop at Matrei am Brenner": "Legg inn et drivstoffstopp i Matrei am Brenner",
+  "Swiss motorways need the CHF 40 annual vignette":
+    "Sveitsiske motorveier krever årsvignett til CHF 40",
+  "Switzerland has no day or week option — one sticker (or the e-vignette) costs CHF 40 and is valid for the whole calendar year, even if you only transit for two hours. Motorcycles need their own vignette.":
+    "Sveits har verken dags- eller ukesvignett — én oblat (eller e-vignetten) koster CHF 40 og gjelder hele kalenderåret, selv om du bare kjører gjennom på to timer. Motorsykler trenger egen vignett.",
+  "Switch to Smart Bypass to route around Swiss motorways on a short transit leg":
+    "Bytt til Smart snarvei for å styre utenom sveitsiske motorveier på en kort gjennomkjøring",
+  "Try the 🧭 Smart Bypass variant": "Prøv ruten 🧭 Smart snarvei",
+  "Luxembourg fuel arbitrage on the Benelux corridor":
+    "Billig drivstoff i Luxembourg på Benelux-strekningen",
+  "Luxembourg keeps some of the lowest excise duties in Western Europe — expect 15–25 cents/litre less than France, Belgium or Germany. Stations near Wasserbillig, Schengen and Berchem are the classic top-up points.":
+    "Luxembourg har noen av de laveste avgiftene i Vest-Europa — regn med 15–25 cent lavere per liter enn i Frankrike, Belgia og Tyskland. Stasjonene ved Wasserbillig, Schengen og Berchem er de klassiske fyllestedene.",
+  "≈ €10–15 per tank versus neighbouring countries": "≈ €10–15 per tank mot nabolandene",
+  "Add a Luxembourg fuel stop": "Legg inn et drivstoffstopp i Luxembourg",
+  "Cross into Spain (or Andorra) before you refuel":
+    "Kjør inn i Spania (eller Andorra) før du fyller",
+  "Spanish pump prices sit well below French ones, and Andorra is cheaper still. Coming down the A9/AP-7, hold out past La Jonquera; on the Atlantic side, Irún and Behobia are the border bargains.":
+    "Spanske pumpepriser ligger godt under de franske, og Andorra er enda billigere. Kommer du ned A9/AP-7, vent til forbi La Jonquera; på atlanterhavssiden er Irún og Behobia grensekuppene.",
+  "≈ 20–30 cents/litre versus France": "≈ 20–30 cent per liter mot Frankrike",
+  "Add a La Jonquera or Irún fuel stop": "Legg inn et drivstoffstopp i La Jonquera eller Irún",
+  "State fuel-tax arbitrage": "Utnytt forskjeller i delstatenes drivstoffavgift",
+  "State excise makes a real difference: California and Pennsylvania sit at the top, while Texas, Missouri, Mississippi and Arizona are consistently cheap. Fill up just before entering a high-tax state.":
+    "Delstatsavgiftene utgjør stor forskjell: California og Pennsylvania ligger på topp, mens Texas, Missouri, Mississippi og Arizona er jevnt billige. Fyll opp rett før du kjører inn i en delstat med høy avgift.",
+  "Up to US$0.70/gal between neighbouring states": "Opptil US$0,70 per gallon mellom nabodelstater",
+  "Fuel is usually cheaper south of the 49th": "Drivstoff er som regel billigere sør for 49. breddegrad",
+  "Once currency and litres-vs-gallons are converted, US fuel typically lands 20–30% below Canadian pumps — biggest gaps around BC and Québec. Cross with a low tank, return with a full one (within duty-free allowances).":
+    "Når valuta og liter/gallon er regnet om, ligger amerikansk drivstoff typisk 20–30 % under kanadiske priser — størst forskjell rundt BC og Québec. Kjør over med lite på tanken, og kom tilbake med full tank (innenfor tollkvotene).",
+  "≈ C$25–40 per tank on a border run": "≈ C$25–40 per tank på en grensetur",
+
+  /* ---------------- Border crossings ---------------- */
+  "Germany → Austria": "Tyskland → Østerrike",
+  "Open border · random ID checks": "Åpen grense · stikkprøver av ID",
+  "Free movement inside Schengen. Bavaria runs intermittent spot checks on the A8/A93 — keep passports or ID cards within reach and you'll roll straight through.":
+    "Fri bevegelse innenfor Schengen. Bayern har periodiske stikkprøver på A8/A93 — ha pass eller ID-kort lett tilgjengelig, så ruller du rett gjennom.",
+  "Photo ID for every occupant (random checks)": "Legitimasjon med bilde for alle i bilen (stikkprøver)",
+  "Austrian motorway vignette valid before the first motorway metre":
+    "Gyldig østerriksk motorveivignett før første motorveimeter",
+  "Warning triangle, hi-vis vest and first-aid kit on board":
+    "Varseltrekant, refleksvest og førstehjelpsskrin i bilen",
+  "Typically 0–10 min": "Vanligvis 0–10 min",
+  "Austria → Italy (Brenner)": "Østerrike → Italia (Brenner)",
+  "Open border · occasional customs patrol": "Åpen grense · sporadiske tollpatruljer",
+  "No passport control at the Brenner, but Italian Guardia di Finanza patrols do stop vehicles. Switch to Telepass lanes only if you have a transponder fitted.":
+    "Ingen passkontroll på Brenner, men italienske Guardia di Finanza stopper kjøretøy. Bruk Telepass-feltene bare hvis du faktisk har brikke montert.",
+  "Photo ID on board": "Legitimasjon med bilde i bilen",
+  "Brenner autostrada toll paid at the barrier (card, cash or Telepass)":
+    "Bompenger på Brenner-motorveien betales i bommen (kort, kontant eller Telepass)",
+  "Crit'Air-style city rules do not apply, but Italian ZTL zones do":
+    "Crit'Air-lignende byregler gjelder ikke, men italienske ZTL-soner gjør det",
+  "Typically 0–15 min at the toll plaza": "Vanligvis 0–15 min i bomstasjonen",
+  "Swiss borders (Schengen, non-EU customs)": "Sveitsiske grenser (Schengen, utenfor EUs tollunion)",
+  "Customs control · goods declaration": "Tollkontroll · vareerklæring",
+  "Switzerland is in Schengen but outside the EU customs union, so customs officers can and do stop vehicles. Declare goods above the duty-free allowance and buy the vignette before the first motorway.":
+    "Sveits er med i Schengen, men står utenfor EUs tollunion, så tollerne kan og vil stoppe kjøretøy. Deklarer varer over kvoten, og kjøp vignetten før første motorvei.",
+  "CHF 40 motorway vignette (annual) or e-vignette per vehicle":
+    "Motorveivignett til CHF 40 (årlig) eller e-vignett per kjøretøy",
+  "Customs declaration for goods over CHF 300 per person":
+    "Tolldeklarasjon for varer over CHF 300 per person",
+  "Meat, dairy and alcohol allowances are strictly enforced":
+    "Kvotene for kjøtt, meieriprodukter og alkohol håndheves strengt",
+  "0–20 min · longer at Basel and Chiasso on weekends":
+    "0–20 min · lengre ved Basel og Chiasso i helgene",
+  "UK ↔ France (Channel Tunnel & Dover–Calais)":
+    "Storbritannia ↔ Frankrike (Kanaltunnelen og Dover–Calais)",
+  "Full passport control & customs": "Full pass- og tollkontroll",
+  "Post-Brexit juxtaposed controls mean both British and French officers check you before boarding. Arrive 60–90 min ahead in peak season and have every document to hand.":
+    "Etter brexit kontrollerer både britiske og franske myndigheter deg før ombordkjøring. Møt opp 60–90 minutter før avgang i høysesongen, og ha alle dokumenter klare.",
+  "Valid passport for every traveller (ID cards no longer accepted for UK entry)":
+    "Gyldig pass for alle reisende (ID-kort godtas ikke lenger ved innreise til Storbritannia)",
+  "EU Entry/Exit System biometric registration on first crossing":
+    "Biometrisk registrering i EUs inn- og utreisesystem ved første kryssing",
+  "Customs declaration for goods, alcohol, tobacco and pets (animal health certificate)":
+    "Tolldeklarasjon for varer, alkohol, tobakk og kjæledyr (dyrehelseattest)",
+  "UK sticker on the vehicle and headlamp beam deflectors":
+    "UK-merke på bilen og lysavskjermere på frontlyktene",
+  "30–120 min in summer peaks": "30–120 min på de travleste sommerdagene",
+  "Croatia ↔ Bosnia & Herzegovina (Neum corridor)":
+    "Kroatia ↔ Bosnia-Hercegovina (Neum-korridoren)",
+  "Passport control · EU external border": "Passkontroll · EUs yttergrense",
+  "The Neum corridor crosses out of and back into the EU within 9 km. Green card insurance is essential, and queues build sharply on July/August weekends. The Pelješac Bridge bypasses it entirely.":
+    "Neum-korridoren tar deg ut av og inn i EU igjen på 9 km. Grønt kort-forsikring er nødvendig, og køene blir lange i helgene i juli og august. Pelješac-broen lar deg unngå strekningen helt.",
+  "Passport for every occupant (two stamps in 20 minutes)":
+    "Pass for alle i bilen (to stempler på 20 minutter)",
+  "Green Card motor insurance valid for BiH": "Grønt kort-forsikring som gjelder i Bosnia-Hercegovina",
+  "Vehicle registration document in the driver's name or a notarised letter":
+    "Vognkort i førerens navn, eller en attestert fullmakt",
+  "15–90 min in high season": "15–90 min i høysesongen",
+  "USA ↔ Canada land border": "Landegrensen USA ↔ Canada",
+  "Passport control · CBP / CBSA inspection": "Passkontroll · CBP-/CBSA-inspeksjon",
+  "Every crossing is a full immigration and customs stop. NEXUS lanes cut the wait dramatically at Peace Arch, Detroit–Windsor and Niagara. Declare all food, alcohol, cannabis and firearms — penalties are steep.":
+    "Hver kryssing er full innvandrings- og tollkontroll. NEXUS-feltene kutter ventetiden kraftig ved Peace Arch, Detroit–Windsor og Niagara. Deklarer all mat, alkohol, cannabis og våpen — bøtene er høye.",
+  "Passport, NEXUS card or enhanced driver's licence":
+    "Pass, NEXUS-kort eller utvidet førerkort",
+  "Vehicle registration and proof of insurance valid in the destination country":
+    "Vognkort og forsikringsbevis som gjelder i landet du reiser til",
+  "Declare food, alcohol, tobacco, cannabis and pets; firearms need advance paperwork":
+    "Deklarer mat, alkohol, tobakk, cannabis og kjæledyr; våpen krever papirarbeid på forhånd",
+  "Electronic toll transponders (E-ZPass, 407 ETR) are not interchangeable across the border":
+    "Elektroniske bombrikker (E-ZPass, 407 ETR) kan ikke brukes på tvers av grensen",
+  "10–60 min · check live CBP border wait times":
+    "10–60 min · sjekk oppdaterte ventetider hos CBP",
 };
