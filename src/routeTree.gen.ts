@@ -24,6 +24,7 @@ import { Route as TermsRouteImport } from './routes/terms'
 import { Route as TollsRouteImport } from './routes/tolls'
 import { Route as UsRouteImport } from './routes/us'
 import { Route as LangIndexRouteImport } from './routes/$lang.index'
+import { Route as LangPageRouteImport } from './routes/$lang.$page'
 import { Route as CaIndexRouteImport } from './routes/ca.index'
 import { Route as CaFaqRouteImport } from './routes/ca.faq'
 import { Route as CaHowItWorksRouteImport } from './routes/ca.how-it-works'
@@ -125,6 +126,11 @@ const UsRoute = UsRouteImport.update({
 const LangIndexRoute = LangIndexRouteImport.update({
   id: '/$lang/',
   path: '/$lang/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LangPageRoute = LangPageRouteImport.update({
+  id: '/$lang/$page',
+  path: '/$lang/$page',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CaIndexRoute = CaIndexRouteImport.update({
@@ -279,6 +285,7 @@ export interface FileRoutesByFullPath {
   '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
   '/us': typeof UsRouteWithChildren
+  '/$lang/$page': typeof LangPageRoute
   '/ca/faq': typeof CaFaqRoute
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
@@ -321,6 +328,7 @@ export interface FileRoutesByTo {
   '/scenic': typeof ScenicRoute
   '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
+  '/$lang/$page': typeof LangPageRoute
   '/ca/faq': typeof CaFaqRoute
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
@@ -366,6 +374,7 @@ export interface FileRoutesById {
   '/terms': typeof TermsRoute
   '/tolls': typeof TollsRoute
   '/us': typeof UsRouteWithChildren
+  '/$lang/$page': typeof LangPageRoute
   '/ca/faq': typeof CaFaqRoute
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
@@ -412,6 +421,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tolls'
     | '/us'
+    | '/$lang/$page'
     | '/ca/faq'
     | '/ca/how-it-works'
     | '/ca/legal'
@@ -454,6 +464,7 @@ export interface FileRouteTypes {
     | '/scenic'
     | '/terms'
     | '/tolls'
+    | '/$lang/$page'
     | '/ca/faq'
     | '/ca/how-it-works'
     | '/ca/legal'
@@ -498,6 +509,7 @@ export interface FileRouteTypes {
     | '/terms'
     | '/tolls'
     | '/us'
+    | '/$lang/$page'
     | '/ca/faq'
     | '/ca/how-it-works'
     | '/ca/legal'
@@ -543,6 +555,7 @@ export interface RootRouteChildren {
   TermsRoute: typeof TermsRoute
   TollsRoute: typeof TollsRoute
   UsRoute: typeof UsRouteWithChildren
+  LangPageRoute: typeof LangPageRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   NoFaqRoute: typeof NoFaqRoute
   NoGarageRoute: typeof NoGarageRoute
@@ -664,6 +677,13 @@ declare module '@tanstack/react-router' {
       path: '/$lang'
       fullPath: '/$lang/'
       preLoaderRoute: typeof LangIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$lang/$page': {
+      id: '/$lang/$page'
+      path: '/$lang/$page'
+      fullPath: '/$lang/$page'
+      preLoaderRoute: typeof LangPageRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ca/': {
@@ -917,6 +937,7 @@ const rootRouteChildren: RootRouteChildren = {
   TermsRoute: TermsRoute,
   TollsRoute: TollsRoute,
   UsRoute: UsRouteWithChildren,
+  LangPageRoute: LangPageRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   NoFaqRoute: NoFaqRoute,
   NoGarageRoute: NoGarageRoute,
