@@ -126,7 +126,10 @@ export type TripEstimate = {
   distanceLabel: string;
   budget: number;
   distanceKm: number;
+  driveHours: number;
+  variant: RouteVariantKey;
   driveTime: string;
+
   tolls: number;
   ferries: number;
   energyCost: number;
