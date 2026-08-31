@@ -442,16 +442,31 @@ export function estimateTrip(
   const baseDistance = region === "eu" ? 1420 : region === "us" ? 1890 : 1640;
   const distanceKm = Math.round(baseDistance * (scenic ? 1.08 : 1));
 
+  const isMoto = vehicle === "motorcycle";
+  const round2 = (n: number) => Math.round(n * 100) / 100;
+  const mapLines = (lines: TollLine[], factor: number) =>
+    lines.map((l) => ({
+      ...l,
+      amount: isMoto && l.freeForMotorcycle ? 0 : round2(l.amount * factor),
+      badge: isMoto && l.freeForMotorcycle ? "Free for motorcycles" : l.badge,
+    }));
+
   let segments = SEGMENTS[region];
   if (!includeFerries) segments = segments.filter((s) => !s.country.includes("Ferries"));
-  if (avoidTolls)
-    segments = segments.map((s) =>
-      s.country.includes("Ferries")
-        ? s
-        : { ...s, total: Math.round(s.total * 0.25 * 10) / 10, lines: s.lines.map((l) => ({ ...l, amount: Math.round(l.amount * 0.25 * 100) / 100 })) },
-    );
 
-  const tolls = Math.round(segments.reduce((sum, s) => sum + s.total, 0) * 100) / 100;
+  const motoFactor = isMoto ? 0.6 : 1;
+  segments = segments.map((s) => {
+    const tollFactor = s.country.includes("Ferries") || !avoidTolls ? 1 : 0.25;
+    const lines = mapLines(s.lines, tollFactor * motoFactor);
+    return { ...s, lines, total: round2(lines.reduce((sum, l) => sum + l.amount, 0)) };
+  });
+
+  const ferries = round2(
+    segments.filter((s) => s.country.includes("Ferries")).reduce((sum, s) => sum + s.total, 0),
+  );
+  const tolls = round2(
+    segments.filter((s) => !s.country.includes("Ferries")).reduce((sum, s) => sum + s.total, 0),
+  );
 
   const consumption =
     vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
@@ -461,8 +476,8 @@ export function estimateTrip(
 
   const energyCost =
     fuel === "electric"
-      ? Math.round(((distanceKm / 100) * kwhPer100 * pricePerKwh) * 100) / 100
-      : Math.round(((distanceKm / 100) * consumption * pricePerL) * 100) / 100;
+      ? round2((distanceKm / 100) * kwhPer100 * pricePerKwh)
+      : round2((distanceKm / 100) * consumption * pricePerL);
 
   const litres = (distanceKm / 100) * consumption;
   const energyAmount =
@@ -483,17 +498,22 @@ export function estimateTrip(
     currency,
     units: defaults.units,
     distanceLabel,
-    budget: Math.round((tolls + energyCost + distanceKm * 0.04) * 100) / 100,
+    budget: round2(tolls + ferries + energyCost + distanceKm * 0.04),
     distanceKm,
     driveTime,
     tolls,
+    ferries,
     energyCost,
     energyLabel: fuel === "electric" ? "EV Charging" : "Fuel",
     energyAmount,
     segments,
-    safety: SAFETY[vehicle],
+    safety: safetyFor(region, vehicle),
+    discountNote: isMoto
+      ? "Motorcycle rates applied: ~40% indicative discount on distance tolls, vignettes and ferries — and 0 in Norwegian city rings."
+      : undefined,
   };
 }
+
 
 export function money(currency: string, value: number) {
   return `${currency}${value.toLocaleString("en-GB", { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`;
