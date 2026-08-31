@@ -6,9 +6,16 @@ import {
   COST_GROUPS,
   COUNTRY_COSTS,
   COUNTRY_COUNT,
+  COSTS_UPDATED,
   type CostGroupKey,
   type CountryCost,
 } from "@/lib/country-costs";
+import {
+  convert,
+  currencyFromSymbol,
+  formatCurrency,
+  useCurrency,
+} from "@/lib/currency";
 import { useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
@@ -21,6 +28,11 @@ export function CountryCostDrawer({ defaultGroup = "western", onPlanRoute }: Pro
   const [open, setOpen] = useState(false);
   const [group, setGroup] = useState<CostGroupKey>(defaultGroup);
   const t = useT();
+  const { currency } = useCurrency();
+  const price = (value: number, nativeSymbol: string) => {
+    const from = currencyFromSymbol(nativeSymbol);
+    return formatCurrency(convert(value, from, currency), currency, { decimals: 2 });
+  };
   const countries = COUNTRY_COSTS[group];
 
   return (
@@ -83,9 +95,9 @@ export function CountryCostDrawer({ defaultGroup = "western", onPlanRoute }: Pro
                   </header>
 
                   <dl className="mt-4 grid grid-cols-3 gap-2 text-center">
-                    <Stat icon={<Fuel className="size-3.5" />} label={t.drawer.petrol} value={`${c.currency}${c.petrol.toFixed(2)}/L`} />
-                    <Stat icon={<Fuel className="size-3.5" />} label={t.drawer.diesel} value={`${c.currency}${c.diesel.toFixed(2)}/L`} />
-                    <Stat icon={<Zap className="size-3.5" />} label={t.drawer.fastDc} value={`${c.currency}${c.charging.toFixed(2)}/kWh`} />
+                    <Stat icon={<Fuel className="size-3.5" />} label={t.drawer.petrol} value={`${price(c.petrol, c.currency)}/L`} />
+                    <Stat icon={<Fuel className="size-3.5" />} label={t.drawer.diesel} value={`${price(c.diesel, c.currency)}/L`} />
+                    <Stat icon={<Zap className="size-3.5" />} label={t.drawer.fastDc} value={`${price(c.charging, c.currency)}/kWh`} />
                   </dl>
 
                   <p className="mt-4 text-sm text-foreground/75">{c.tollNote}</p>
@@ -114,7 +126,7 @@ export function CountryCostDrawer({ defaultGroup = "western", onPlanRoute }: Pro
             </div>
 
             <p className="mt-6 text-xs text-muted-foreground">
-              {t.drawer.disclaimer}
+              {t.drawer.disclaimer} · {currency} · {COSTS_UPDATED}
             </p>
           </div>
         )}
