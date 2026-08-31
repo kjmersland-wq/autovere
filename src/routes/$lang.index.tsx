@@ -55,8 +55,9 @@ function LocaleHome() {
           "Tell us where you're starting and where you're dreaming of — we'll handle tolls, vignettes, fuel, charging and ferries."
         }
       />
-      <div className="mx-auto flex w-full max-w-6xl justify-end px-4 pb-10">
+      <div className="mx-auto w-full max-w-6xl px-4 pb-14">
         <ShareButton
+          variant="bar"
           lang={lang === "pl" ? "pl" : lang === "no" ? "no" : "en"}
           url={`https://www.autovere.com/${lang}`}
         />
