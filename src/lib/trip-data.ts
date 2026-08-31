@@ -968,3 +968,152 @@ export function detectFerryCrossings(
   const fallback = DEFAULT_FERRIES[region];
   return FERRY_CROSSINGS.filter((f) => fallback.includes(f.id));
 }
+
+/* ------------------------------------------------------------------ *
+ * Environmental / emission badge radar
+ * ------------------------------------------------------------------ */
+
+export interface EmissionBadge {
+  id: string;
+  flag: string;
+  title: string;
+  body: string;
+  portalLabel: string;
+  portalUrl: string;
+  match: string[];
+  regions: RegionKey[];
+}
+
+export const EMISSION_BADGES: EmissionBadge[] = [
+  {
+    id: "critair",
+    flag: "🇫🇷",
+    title: "Crit'Air badge required in French LEZs",
+    body:
+      "France's Zones à Faibles Émissions (Paris, Lyon, Grenoble, Strasbourg, Marseille, Rouen and more) require a Crit'Air sticker on the windscreen — motorcycles included. Order 3–4 weeks ahead; postal delivery abroad takes time.",
+    portalLabel: "certificat-air.gouv.fr",
+    portalUrl: "https://www.certificat-air.gouv.fr/",
+    match: ["france", "french", "paris", "lyon", "grenoble", "marseille", "nice", "côte", "cote d'azur", "strasbourg", "calais", "dunkirk", "bordeaux", "toulouse", "montpellier", "rouen"],
+    regions: ["eu"],
+  },
+  {
+    id: "umweltplakette",
+    flag: "🇩🇪",
+    title: "Umweltplakette required in German green zones",
+    body:
+      "Umweltzonen in Berlin, Munich, Stuttgart, Cologne, Frankfurt, Hamburg and ~50 other cities need a green (grüne) Umweltplakette. Cars and motorhomes are checked; fines are €100 plus towing risk. Motorcycles are exempt.",
+    portalLabel: "umweltbundesamt.de",
+    portalUrl: "https://www.umweltbundesamt.de/en/topics/air/air-quality-control-in-europe/low-emission-zones",
+    match: ["germany", "german", "berlin", "munich", "münchen", "stuttgart", "cologne", "köln", "frankfurt", "hamburg", "düsseldorf", "dusseldorf", "leipzig", "nuremberg", "brenner", "garda", "split", "barcelona"],
+    regions: ["eu"],
+  },
+  {
+    id: "belgium-lez",
+    flag: "🇧🇪",
+    title: "Belgian LEZ pre-registration (Brussels, Antwerp, Ghent)",
+    body:
+      "No sticker — but foreign plates must register online before entering. Unregistered entry is an automatic fine.",
+    portalLabel: "lez.brussels",
+    portalUrl: "https://lez.brussels/mytax/en",
+    match: ["belgium", "brussels", "antwerp", "ghent", "bruges", "amsterdam", "netherlands"],
+    regions: ["eu"],
+  },
+  {
+    id: "uk-ulez",
+    flag: "🇬🇧",
+    title: "London ULEZ & Congestion Charge",
+    body:
+      "Non-compliant vehicles pay £12.50/day ULEZ plus £15 Congestion Charge inside central London. Pay online within three days of travel.",
+    portalLabel: "tfl.gov.uk",
+    portalUrl: "https://tfl.gov.uk/modes/driving/ultra-low-emission-zone",
+    match: ["london", "uk", "england", "dover", "britain"],
+    regions: ["eu"],
+  },
+  {
+    id: "carb",
+    flag: "🇺🇸",
+    title: "California clean-air & idling rules",
+    body:
+      "California enforces anti-idling and emissions rules on RVs and diesel vehicles; some metro areas run seasonal air-quality restrictions.",
+    portalLabel: "ww2.arb.ca.gov",
+    portalUrl: "https://ww2.arb.ca.gov/",
+    match: ["california", "los angeles", "san francisco", "san diego", "sacramento"],
+    regions: ["us"],
+  },
+];
+
+export function detectEmissionBadges(
+  region: RegionKey,
+  origin: string,
+  destination: string,
+): EmissionBadge[] {
+  const text = `${origin} ${destination}`.toLowerCase();
+  return EMISSION_BADGES.filter(
+    (b) => b.regions.includes(region) && b.match.some((m) => text.includes(m)),
+  );
+}
+
+/* ------------------------------------------------------------------ *
+ * Scenic highlights & RV points of interest
+ * ------------------------------------------------------------------ */
+
+export interface ScenicHighlight {
+  id: string;
+  emoji: string;
+  name: string;
+  where: string;
+  note: string;
+  season: string;
+}
+
+export interface RvPoi {
+  id: string;
+  emoji: string;
+  name: string;
+  where: string;
+  services: string[];
+  note: string;
+}
+
+export const SCENIC_HIGHLIGHTS: Record<RegionKey, ScenicHighlight[]> = {
+  eu: [
+    { id: "trollstigen", emoji: "🏔️", name: "Trollstigen", where: "Rauma, Norway", note: "Eleven hairpins climbing a sheer wall — viewing platform over the valley.", season: "Late May – October" },
+    { id: "atlantic-road", emoji: "🌊", name: "Atlantic Road", where: "Møre og Romsdal, Norway", note: "Eight bridges hopping island to island straight over the open sea.", season: "Year-round" },
+    { id: "grossglockner", emoji: "⛰️", name: "Grossglockner High Alpine Road", where: "Austria", note: "48 km of alpine theatre topping out at 2,504 m.", season: "May – early November" },
+    { id: "stelvio", emoji: "🏍️", name: "Stelvio Pass", where: "Italy", note: "48 numbered hairpins — the classic rider pilgrimage.", season: "June – October" },
+    { id: "furka", emoji: "✨", name: "Furka & Grimsel Passes", where: "Switzerland", note: "Glacier views, smooth tarmac and a lakeside descent.", season: "June – October" },
+    { id: "verdon", emoji: "🌅", name: "Gorges du Verdon", where: "Provence, France", note: "Turquoise canyon rim road on the way to the Côte d'Azur.", season: "Year-round" },
+  ],
+  us: [
+    { id: "blue-ridge", emoji: "🌄", name: "Blue Ridge Parkway", where: "Virginia – North Carolina", note: "469 miles of ridgeline overlooks, no trucks, no tolls.", season: "Year-round (peak: October)" },
+    { id: "pch", emoji: "🌊", name: "Pacific Coast Highway (SR-1)", where: "California", note: "Big Sur cliffs, Bixby Bridge and endless Pacific vistas.", season: "Year-round" },
+    { id: "dragon", emoji: "🏍️", name: "Tail of the Dragon (US-129)", where: "Tennessee", note: "318 curves in 11 miles — ride it early to beat traffic.", season: "April – November" },
+    { id: "beartooth", emoji: "⛰️", name: "Beartooth Highway", where: "Montana – Wyoming", note: "Switchbacks to 10,947 ft on the doorstep of Yellowstone.", season: "Late May – mid October" },
+    { id: "zion", emoji: "🏜️", name: "Zion – Bryce scenic corridor", where: "Utah", note: "Red-rock tunnels and canyon overlooks between two parks.", season: "Year-round" },
+  ],
+  ca: [
+    { id: "icefields", emoji: "🏔️", name: "Icefields Parkway", where: "Alberta", note: "232 km between Lake Louise and Jasper past glaciers and turquoise lakes.", season: "Year-round (winter tyres Oct–Apr)" },
+    { id: "cabot", emoji: "🌊", name: "Cabot Trail", where: "Cape Breton, Nova Scotia", note: "Highland cliffs, whale lookouts and ocean switchbacks.", season: "May – October" },
+    { id: "sea-to-sky", emoji: "✨", name: "Sea-to-Sky Highway", where: "British Columbia", note: "Howe Sound fjord views from Vancouver up to Whistler.", season: "Year-round" },
+    { id: "charlevoix", emoji: "🍁", name: "Route du Fleuve, Charlevoix", where: "Québec", note: "St. Lawrence riverside villages and beluga-watching stops.", season: "May – October" },
+  ],
+};
+
+export const RV_POIS: Record<RegionKey, RvPoi[]> = {
+  eu: [
+    { id: "eu-1", emoji: "🚐", name: "Bobil-parkering Geiranger", where: "Geiranger, Norway", services: ["Grey water", "Fresh water", "EV hookup"], note: "Fjord-side pitches, 5 min walk to the ferry quay." },
+    { id: "eu-2", emoji: "🚐", name: "Stellplatz Zell am See", where: "Salzburg, Austria", services: ["Chemical WC", "Electricity", "Bakery service"], note: "Great overnight before Grossglockner — book in July/August." },
+    { id: "eu-3", emoji: "🚐", name: "Aire de Camping-Car Annecy", where: "Haute-Savoie, France", services: ["Fresh water", "Grey water", "24h access"], note: "France's aire network is the cheapest overnight option en route south." },
+    { id: "eu-4", emoji: "🚐", name: "Camping Bella Italia, Peschiera", where: "Lake Garda, Italy", services: ["Full hookup", "Laundry", "Pool"], note: "Large pitches; height/width friendly access road." },
+  ],
+  us: [
+    { id: "us-1", emoji: "🚐", name: "KOA Journey — Interstate corridor", where: "Nationwide", note: "Pull-through sites sized for 40 ft rigs and towed cars.", services: ["Full hookup", "Dump station", "Wi-Fi"] },
+    { id: "us-2", emoji: "🚐", name: "Yellowstone Grizzly RV Park", where: "West Yellowstone, MT", note: "Book months ahead for summer; ideal Beartooth basecamp.", services: ["50 amp", "Dump station", "Laundry"] },
+    { id: "us-3", emoji: "🚐", name: "Pismo Coast Village RV Resort", where: "California", note: "Beachfront stop midway along the Pacific Coast Highway.", services: ["Full hookup", "Propane", "Dump station"] },
+  ],
+  ca: [
+    { id: "ca-1", emoji: "🚐", name: "Whistler RV Park & Campground", where: "British Columbia", note: "Last full-service stop on the Sea-to-Sky corridor.", services: ["Full hookup", "Showers", "Dump station"] },
+    { id: "ca-2", emoji: "🚐", name: "Whistlers Campground", where: "Jasper, Alberta", note: "Huge serviced loop right at the north end of the Icefields Parkway.", services: ["Electric", "Dump station", "Fire pits"] },
+    { id: "ca-3", emoji: "🚐", name: "Broad Cove Campground", where: "Cape Breton, Nova Scotia", note: "Oceanfront pitches on the Cabot Trail.", services: ["Water", "Dump station", "Showers"] },
+  ],
+};
