@@ -8,6 +8,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
+import { useLocale } from "@/lib/i18n";
 import { getStripeEnvironment, PRICE_IDS, type PlanTier } from "@/lib/stripe";
 import { cn } from "@/lib/utils";
 import { createPortalSession } from "@/utils/payments.functions";
@@ -75,7 +76,109 @@ export const TIERS: Tier[] = [
   },
 ];
 
+
+export const TIERS_PL: Tier[] = [
+  {
+    id: "free",
+    name: "Free",
+    emoji: "🧭",
+    tagline: "Wszystko, czego potrzebujesz do pierwszej uczciwej wyceny.",
+    monthly: "0 €",
+    cta: "Zacznij planować za darmo",
+    features: [
+      "Podstawowe wyliczenia opłat drogowych, winiet i paliwa",
+      "Trasowanie OSRM w Europie, USA i Kanadzie",
+      "Jeden profil pojazdu",
+      "Przeglądarka kosztów według krajów i stanów",
+      "Udostępnianie linku do podróży",
+    ],
+  },
+  {
+    id: "pro",
+    name: "AutoVere Pro",
+    emoji: "✨",
+    tagline: "Dla podróżnika, który żyje kolejną przełęczą.",
+    monthly: "4,99 €",
+    yearly: "39 €",
+    cta: "Przejdź na Pro",
+    highlight: true,
+    features: [
+      "Garaż wielu pojazdów (samochód, kamper, motocykl)",
+      "Eksport GPX i KML do Garmin, TomTom i CarPlay",
+      "Alerty o przełęczach i promach w czasie rzeczywistym",
+      "Trasa offline krok po kroku i pakiety do druku",
+      "Zniżki motocyklowe i radar bezpieczeństwa kierowcy",
+      "Nieograniczona liczba zapisanych podróży",
+    ],
+  },
+  {
+    id: "fleet",
+    name: "AutoVere Business / Flota",
+    emoji: "🚛",
+    tagline: "Operacje transgraniczne w jednym miejscu.",
+    monthly: "19 €",
+    cta: "Przejdź na Business",
+    features: [
+      "Konsolidacja faktur za opłaty drogowe z wielu krajów",
+      "Trasowanie zespołowe ze wspólną biblioteką podróży",
+      "Profile pojazdów ciężkich (>3,5 t) i opłaty według osi",
+      "Przypisanie kierowców i eksport centrów kosztów (CSV)",
+      "Priorytetowe wsparcie od KM TECH LABS",
+    ],
+  },
+];
+
+const PRICING_COPY = {
+  en: {
+    onPlan: "You're on",
+    retrying: " — payment retrying",
+    until: (d: string) => `Access stays open until ${d}.`,
+    renews: (d: string) => `Renews ${d}.`,
+    active: "Active subscription.",
+    manage: "Manage billing",
+    monthly: "Monthly",
+    yearly: "Yearly · save 35%",
+    forever: "forever",
+    perYear: "per year",
+    perMonth: "per month",
+    mostLoved: "Most loved",
+    proFine: "€4.99/mo or €39/yr — cancel anytime.",
+    current: "Your current plan",
+    switch: "Switch plan in billing portal",
+    foot: "Prices in EUR incl. applicable VAT. Payments and tax handled securely by Stripe. Cost estimates remain indicative — always verify with official toll portals.",
+    checkout: "Secure checkout",
+    freeToast: "You're on the Free plan — plan away!",
+    signupToast: "Create your account first, then we'll take you straight to secure checkout.",
+    portalError: "Could not open the billing portal.",
+  },
+  pl: {
+    onPlan: "Twój plan to",
+    retrying: " — ponawiamy płatność",
+    until: (d: string) => `Dostęp pozostaje otwarty do ${d}.`,
+    renews: (d: string) => `Odnawia się ${d}.`,
+    active: "Aktywna subskrypcja.",
+    manage: "Zarządzaj płatnościami",
+    monthly: "Miesięcznie",
+    yearly: "Rocznie · oszczędzasz 35%",
+    forever: "na zawsze",
+    perYear: "rocznie",
+    perMonth: "miesięcznie",
+    mostLoved: "Najczęściej wybierany",
+    proFine: "4,99 €/mies. lub 39 €/rok — anulujesz, kiedy chcesz.",
+    current: "Twój obecny plan",
+    switch: "Zmień plan w panelu płatności",
+    foot: "Ceny w EUR z odpowiednim VAT. Płatności i podatki bezpiecznie obsługuje Stripe. Szacunki kosztów są orientacyjne — zawsze sprawdź je na oficjalnych portalach opłat drogowych.",
+    checkout: "Bezpieczna płatność",
+    freeToast: "Korzystasz z planu Free — planuj do woli!",
+    signupToast: "Najpierw załóż konto, a potem przeniesiemy Cię prosto do bezpiecznej płatności.",
+    portalError: "Nie udało się otworzyć panelu płatności.",
+  },
+} as const;
+
 export function PricingTiers() {
+  const locale = useLocale();
+  const L = locale === "pl" ? PRICING_COPY.pl : PRICING_COPY.en;
+  const tiers = locale === "pl" ? TIERS_PL : TIERS;
   const { user, openAuth } = useAuth();
   const { tier: currentTier, isActive, cancelAtPeriodEnd, periodEnd, pastDue } = useSubscription();
   const { openCheckout, closeCheckout, isOpen, checkoutElement } = useStripeCheckout();
@@ -91,12 +194,12 @@ export function PricingTiers() {
 
   const upgrade = (tier: Tier) => {
     if (tier.id === "free") {
-      toast.success("You're on the Free plan — plan away!");
+      toast.success(L.freeToast);
       return;
     }
     if (!user) {
       openAuth("signup");
-      toast.info("Create your account first, then we'll take you straight to secure checkout.");
+      toast.info(L.signupToast);
       return;
     }
     openCheckout({
@@ -114,7 +217,7 @@ export function PricingTiers() {
       if ("error" in result) throw new Error(result.error);
       window.open(result.url, "_blank", "noopener");
     } catch (error) {
-      toast.error(error instanceof Error ? error.message : "Could not open the billing portal.");
+      toast.error(error instanceof Error ? error.message : L.portalError);
     } finally {
       setPortalLoading(false);
     }
@@ -128,20 +231,20 @@ export function PricingTiers() {
         <div className="glass-panel mx-auto mb-8 mt-6 flex max-w-2xl flex-col items-center gap-3 rounded-2xl p-5 text-center sm:flex-row sm:justify-between sm:text-left">
           <div>
             <p className="text-sm font-medium">
-              You're on <span className="text-amber-300">{TIERS.find((t) => t.id === currentTier)?.name}</span>
-              {pastDue && " — payment retrying"}
+              {L.onPlan} <span className="text-amber-300">{tiers.find((t) => t.id === currentTier)?.name}</span>
+              {pastDue && L.retrying}
             </p>
             <p className="text-xs text-muted-foreground">
               {cancelAtPeriodEnd
-                ? `Access stays open until ${periodEnd?.toLocaleDateString()}.`
+                ? L.until(periodEnd?.toLocaleDateString(locale === "pl" ? "pl-PL" : "en-GB") ?? "")
                 : periodEnd
-                  ? `Renews ${periodEnd.toLocaleDateString()}.`
-                  : "Active subscription."}
+                  ? L.renews(periodEnd.toLocaleDateString(locale === "pl" ? "pl-PL" : "en-GB"))
+                  : L.active}
             </p>
           </div>
           <Button variant="outline" size="sm" onClick={manageBilling} disabled={portalLoading}>
             {portalLoading ? <Loader2 className="mr-2 size-4 animate-spin" /> : <ExternalLink className="mr-2 size-4" />}
-            Manage billing
+            {L.manage}
           </Button>
         </div>
       )}
@@ -157,15 +260,15 @@ export function PricingTiers() {
               cycle === c ? "bg-primary text-primary-foreground" : "text-foreground/70 hover:text-foreground",
             )}
           >
-            {c === "monthly" ? "Monthly" : "Yearly · save 35%"}
+            {c === "monthly" ? L.monthly : L.yearly}
           </button>
         ))}
       </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        {TIERS.map((tier) => {
+        {tiers.map((tier) => {
           const price = cycle === "yearly" && tier.yearly ? tier.yearly : tier.monthly;
-          const unit = tier.id === "free" ? "forever" : cycle === "yearly" && tier.yearly ? "per year" : "per month";
+          const unit = tier.id === "free" ? L.forever : cycle === "yearly" && tier.yearly ? L.perYear : L.perMonth;
           const isCurrent = isActive ? currentTier === tier.id : tier.id === "free";
           return (
             <article
@@ -177,7 +280,7 @@ export function PricingTiers() {
             >
               {tier.highlight && (
                 <span className="absolute -top-3 left-6 inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
-                  <Sparkles className="size-3" /> Most loved
+                  <Sparkles className="size-3" /> {L.mostLoved}
                 </span>
               )}
               <h3 className="text-lg font-semibold tracking-tight">
@@ -189,7 +292,7 @@ export function PricingTiers() {
                 <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">{unit}</span>
               </p>
               {tier.id === "pro" && (
-                <p className="mt-1 text-xs text-muted-foreground">€4.99/mo or €39/yr — cancel anytime.</p>
+                <p className="mt-1 text-xs text-muted-foreground">{L.proFine}</p>
               )}
               <ul className="mt-6 grid flex-1 gap-3 text-sm">
                 {tier.features.map((f) => (
@@ -205,7 +308,7 @@ export function PricingTiers() {
                 disabled={isCurrent && tier.id !== "free"}
                 onClick={() => (isCurrent && tier.id !== "free" ? undefined : upgrade(tier))}
               >
-                {isCurrent && tier.id !== "free" ? "Your current plan" : tier.cta}
+                {isCurrent && tier.id !== "free" ? L.current : tier.cta}
               </Button>
               {isActive && !isCurrent && tier.id !== "free" && (
                 <button
@@ -213,7 +316,7 @@ export function PricingTiers() {
                   onClick={manageBilling}
                   className="mt-2 text-xs text-muted-foreground underline-offset-4 hover:underline"
                 >
-                  Switch plan in billing portal
+                  {L.switch}
                 </button>
               )}
             </article>
@@ -222,14 +325,13 @@ export function PricingTiers() {
       </div>
 
       <p className="mt-8 text-center text-xs text-muted-foreground">
-        Prices in EUR incl. applicable VAT. Payments and tax handled securely by Stripe. Cost estimates remain
-        indicative — always verify with official toll portals.
+        {L.foot}
       </p>
 
       <Dialog open={isOpen} onOpenChange={(open) => !open && closeCheckout()}>
         <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Secure checkout</DialogTitle>
+            <DialogTitle>{L.checkout}</DialogTitle>
           </DialogHeader>
           {checkoutElement}
         </DialogContent>
