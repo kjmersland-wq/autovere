@@ -65,7 +65,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           </DropdownMenuTrigger>
           <DropdownMenuContent
             align="end"
-            className="w-36 rounded-xl border-border bg-popover p-1.5 shadow-2xl"
+            className="w-24 rounded-xl border-border bg-popover p-1.5 shadow-2xl"
           >
             {LANGUAGES.map((l) => {
               const active = l.code === lang.code;
@@ -83,9 +83,6 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                 >
                   <FlagIcon code={l.flag} className="h-4 w-6" />
                   <span>{l.flag}</span>
-                  <span className="ml-auto text-[11px] font-medium text-muted-foreground">
-                    {l.label}
-                  </span>
                 </DropdownMenuItem>
               );
             })}
