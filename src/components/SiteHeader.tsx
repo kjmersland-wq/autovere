@@ -3,9 +3,11 @@ import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 
 import { CurrencySelector } from "@/components/CurrencySelector";
+import { LocaleLink } from "@/components/LocaleLink";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useAuth } from "@/lib/auth";
 import { useLocale, useT } from "@/lib/i18n";
+import { pathForCode, prefixFromPath } from "@/lib/locales";
 
 import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
@@ -16,40 +18,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 
-const NO_NAV = {
-  "/planner": "/no/planner",
-  "/tolls": "/no/tolls",
-  "/scenic": "/no/scenic",
-  "/garage": "/no/garage",
-} as const;
-
-/** Norwegian pages that exist under /no. */
-const NO_PAGES = [
-  "planner",
-  "tolls",
-  "scenic",
-  "garage",
-  "faq",
-  "how-it-works",
-  "pricing",
-  "privacy",
-  "terms",
-  "partners",
-] as const;
-
-/** Map the current path to its counterpart in the requested language. */
-function pathForLang(pathname: string, code: string): string {
-  const stripped =
-    pathname === "/no" ? "/" : pathname.startsWith("/no/") ? pathname.slice(3) : pathname;
-  if (code !== "no") return stripped;
-  const slug = stripped.replace(/^\/+/, "").split("/")[0] ?? "";
-  if (!slug) return "/no";
-  return (NO_PAGES as readonly string[]).includes(slug) ? `/no/${slug}` : "/no";
-}
-
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
+  const prefix = prefixFromPath(pathname);
   const activeRegion = region ?? regionFromPath(pathname);
   const t = useT();
   const locale = useLocale();
@@ -62,15 +34,15 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/70 backdrop-blur-xl">
       <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-5 py-3 sm:px-8">
-        <Link to={locale === "no" ? "/no" : "/"} className="text-lg font-semibold tracking-tight">
+        <LocaleLink to="/" className="text-lg font-semibold tracking-tight">
           Auto<span className="text-primary">Vere</span>
-        </Link>
+        </LocaleLink>
 
         <nav className="ml-2 hidden items-center gap-1 rounded-full border border-border bg-background/40 p-1 lg:flex">
           {REGIONS.map((r) => (
             <Link
               key={r.key}
-              to={r.key === "eu" && locale === "no" ? "/no" : r.to}
+              to={r.key === "eu" && prefix ? `/${prefix}` : r.to}
               className={cn(
                 "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
                 activeRegion === r.key
@@ -86,14 +58,14 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
 
         <nav className="ml-auto hidden items-center gap-6 lg:flex">
           {NAV_LINKS.map((l) => (
-            <Link
+            <LocaleLink
               key={l.to}
-              to={locale === "no" ? NO_NAV[l.to] : l.to}
-              activeProps={{ className: "text-primary" }}
+              to={l.to}
+              activeClassName="text-primary"
               className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
             >
               {t.header.nav[l.to] ?? l.label}
-            </Link>
+            </LocaleLink>
           ))}
         </nav>
 
@@ -116,7 +88,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                   key={l.code}
                   onSelect={() => {
                     setLang(l);
-                    const target = pathForLang(pathname, l.code);
+                    const target = pathForCode(pathname, l.code);
                     if (target !== pathname) void navigate({ to: target });
                   }}
                   aria-label={l.label}
@@ -143,10 +115,10 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-52 rounded-xl border-border bg-popover p-1.5">
               <DropdownMenuItem asChild className="cursor-pointer rounded-lg">
-                <Link to={locale === "no" ? "/no/garage" : "/garage"}>{t.header.garageMenu}</Link>
+                <LocaleLink to="/garage">{t.header.garageMenu}</LocaleLink>
               </DropdownMenuItem>
               <DropdownMenuItem asChild className="cursor-pointer rounded-lg">
-                <Link to={locale === "no" ? "/no/pricing" : "/pricing"}>{t.header.plansMenu}</Link>
+                <LocaleLink to="/pricing">{t.header.plansMenu}</LocaleLink>
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="cursor-pointer rounded-lg"
@@ -186,7 +158,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             {REGIONS.map((r) => (
               <Link
                 key={r.key}
-                to={r.key === "eu" && locale === "no" ? "/no" : r.to}
+                to={r.key === "eu" && prefix ? `/${prefix}` : r.to}
                 onClick={() => setOpen(false)}
                 className={cn(
                   "rounded-full border border-border px-3 py-1.5 text-sm",
@@ -199,14 +171,14 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           </div>
           <div className="mt-4 grid gap-3">
             {NAV_LINKS.map((l) => (
-              <Link
+              <LocaleLink
                 key={l.to}
-                to={locale === "no" ? NO_NAV[l.to] : l.to}
+                to={l.to}
                 onClick={() => setOpen(false)}
                 className="text-sm font-medium text-foreground/85"
               >
                 {t.header.nav[l.to] ?? l.label}
-              </Link>
+              </LocaleLink>
             ))}
           </div>
         </div>
