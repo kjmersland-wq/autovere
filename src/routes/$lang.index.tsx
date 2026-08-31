@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
+import { ShareButton } from "@/components/ShareButton";
 import { LOCALE_LANDING } from "@/lib/dictionaries";
 import { isLocalePrefix, LOCALE_ROUTES } from "@/lib/locales";
 
@@ -54,6 +55,12 @@ function LocaleHome() {
           "Tell us where you're starting and where you're dreaming of — we'll handle tolls, vignettes, fuel, charging and ferries."
         }
       />
+      <div className="mx-auto flex w-full max-w-6xl justify-end px-4 pb-10">
+        <ShareButton
+          lang={lang === "pl" ? "pl" : lang === "no" ? "no" : "en"}
+          url={`https://www.autovere.com/${lang}`}
+        />
+      </div>
     </main>
   );
 }
