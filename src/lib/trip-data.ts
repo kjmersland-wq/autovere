@@ -600,8 +600,8 @@ export const ROUTE_VARIANTS: {
 
 const VARIANT_TUNING: Record<RouteVariantKey, { toll: number; distance: number; speed: number }> = {
   fastest: { toll: 1, distance: 1, speed: 98 },
-  smart: { toll: 0.55, distance: 1.04, speed: 90 },
-  tollfree: { toll: 0, distance: 1.14, speed: 74 },
+  smart: { toll: 0.55, distance: 1.03, speed: 93 },
+  tollfree: { toll: 0, distance: 1.1, speed: 83 },
 };
 
 export function estimateTrip(
