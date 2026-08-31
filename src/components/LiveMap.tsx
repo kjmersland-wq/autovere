@@ -41,10 +41,11 @@ export default function LiveMap({
       scrollWheelZoom: false,
       attributionControl: true,
     });
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png", {
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
       maxZoom: 19,
+      className: "autovere-dark-tiles",
       attribution:
-        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a> · routing by OSRM',
+        '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors · routing by OSRM',
     }).addTo(map);
     layerRef.current = L.layerGroup().addTo(map);
     mapRef.current = map;
@@ -103,7 +104,7 @@ export default function LiveMap({
     <div
       ref={ref}
       style={{ height }}
-      className="w-full overflow-hidden rounded-2xl [&_.leaflet-container]:bg-[#070c18]"
+      className="w-full overflow-hidden rounded-2xl"
     />
   );
 }
