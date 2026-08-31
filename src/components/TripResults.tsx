@@ -393,6 +393,73 @@ export function TripResults({
         </div>
       </div>
 
+      {trip.vignette && (
+        <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-lg font-semibold tracking-tight">🏷️ Smart Vignette Period Optimizer</h3>
+            <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+              {trip.tripType === "return"
+                ? `Return trip · ${trip.vignette.daysCovered} day${trip.vignette.daysCovered > 1 ? "s" : ""} covered`
+                : "One-way transit · single leg"}
+            </span>
+          </div>
+
+          <p className="mt-3 rounded-xl border border-primary/40 bg-primary/10 px-4 py-3 text-sm font-medium text-primary">
+            {trip.vignette.headline}
+          </p>
+
+          <div className="mt-4 grid gap-3 sm:grid-cols-2">
+            {trip.vignette.items.map((v) => (
+              <article key={v.code} className="rounded-2xl border border-border bg-background/40 p-4">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-sm font-semibold">
+                      {v.flag} {v.country}
+                    </p>
+                    <p className="text-xs text-muted-foreground">{v.system}</p>
+                  </div>
+                  <p className="text-right text-sm font-semibold text-primary">
+                    {v.exempt ? "Exempt" : `${v.currency}${v.cost.toFixed(2)}`}
+                  </p>
+                </div>
+
+                <p className="mt-3 inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
+                  Recommended: {v.recommendation}
+                </p>
+                {v.saved > 0 && (
+                  <p className="mt-2 text-xs font-medium text-emerald-400">
+                    💡 Saves {v.currency}{v.saved.toFixed(2)} vs the usual {v.baselineLabel} ({v.currency}
+                    {v.baselineCost.toFixed(2)})
+                  </p>
+                )}
+                <p className="mt-2 text-sm text-foreground/80">{v.note}</p>
+
+                <a
+                  href={v.portal.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex items-center gap-1.5 rounded-full border border-border px-3 py-1.5 text-xs font-medium text-foreground/85 hover:border-primary/50 hover:text-primary"
+                >
+                  Buy at {v.portal.label}
+                  <ExternalLink className="size-3" />
+                </a>
+              </article>
+            ))}
+          </div>
+
+          <p className="mt-4 text-sm text-foreground/75">
+            Optimised vignette cover for this route:{" "}
+            <span className="font-semibold text-foreground">€{trip.vignette.total.toFixed(2)}</span>
+            {trip.vignette.totalSaved > 0 && (
+              <span className="text-emerald-400"> · €{trip.vignette.totalSaved.toFixed(2)} saved by smart tier selection</span>
+            )}
+            . Distance tolls and ferry tickets are charged per crossing
+            {trip.tripType === "return" ? " and doubled for your return leg." : "."}
+          </p>
+        </div>
+      )}
+
+
       <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h3 className="text-lg font-semibold tracking-tight">{trip.optimizer.title}</h3>
