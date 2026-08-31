@@ -1,4 +1,5 @@
 import { ExternalLink, Landmark, Waypoints } from "lucide-react";
+import { PoiLinks } from "@/components/PoiLinks";
 
 import {
   NORWAY_CITY_RINGS,
@@ -73,6 +74,7 @@ export function NorwayAutoPassCard({ isMotorcycle }: { isMotorcycle: boolean }) 
               </span>
             </div>
             <p className="mt-3 text-xs text-muted-foreground">{ring.note}</p>
+            <PoiLinks kind="toll" name={`${ring.city} bomring`} where="Norway" region="eu" />
           </div>
         ))}
       </div>
@@ -183,6 +185,7 @@ export function ScandiBridgeCard({
             <div className="mt-3">
               <PortalLink label={b.portalLabel} url={b.portalUrl} />
             </div>
+            <PoiLinks kind="toll" name={b.name} where={b.crossing} region="eu" website={b.portalUrl} />
           </div>
         ))}
       </div>

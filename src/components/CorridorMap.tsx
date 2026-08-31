@@ -8,6 +8,7 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import { PoiLinks } from "@/components/PoiLinks";
 import { cn } from "@/lib/utils";
 import {
   MAP_LAYERS,
@@ -219,12 +220,21 @@ export function CorridorMap({
         {visible.slice(0, 9).map((p) => (
           <div
             key={p.id}
-            className="flex items-center justify-between gap-3 rounded-xl border border-border bg-background/40 px-3 py-2 text-xs"
+            className="rounded-xl border border-border bg-background/40 px-3 py-2 text-xs"
           >
-            <span className="truncate">
-              {MAP_LAYERS.find((l) => l.key === p.layer)!.emoji} {tr(p.name)}
-            </span>
-            <span className="shrink-0 text-muted-foreground">{p.price ?? p.atLabel}</span>
+            <div className="flex items-center justify-between gap-3">
+              <span className="truncate">
+                {MAP_LAYERS.find((l) => l.key === p.layer)!.emoji} {tr(p.name)}
+              </span>
+              <span className="shrink-0 text-muted-foreground">{p.price ?? p.atLabel}</span>
+            </div>
+            <PoiLinks
+              kind={p.layer === "rv" ? "camp" : p.layer}
+              name={p.name}
+              where={`${origin} ${destination}`}
+              region={region}
+              className="mt-2"
+            />
           </div>
         ))}
       </div>
@@ -287,7 +297,8 @@ export function CorridorMap({
                             </span>
                           ))}
                         </div>
-                        <Button size="sm" variant="secondary" className="mt-4" onClick={() => onAddStop?.(s.name)}>
+                        <PoiLinks kind="fuel" name={s.name} where={s.country} region={region} />
+                        <Button size="sm" variant="secondary" className="mt-3" onClick={() => onAddStop?.(s.name)}>
                           <Plus className="mr-1 size-3.5" /> {t.map.addRefuel}
                         </Button>
                       </article>
@@ -333,7 +344,8 @@ export function CorridorMap({
                     </span>
                   ))}
                 </div>
-                <Button size="sm" variant="secondary" className="mt-4" onClick={() => onAddStop?.(c.name)}>
+                <PoiLinks kind="camp" name={c.name} where={`${origin} ${destination}`} region={region} />
+                <Button size="sm" variant="secondary" className="mt-3" onClick={() => onAddStop?.(c.name)}>
                   <Plus className="mr-1 size-3.5" /> {t.map.addItinerary}
                 </Button>
               </article>

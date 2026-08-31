@@ -1,6 +1,7 @@
 import { ExternalLink, Fuel, Mountain, ShieldCheck } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { PoiLinks } from "@/components/PoiLinks";
 import {
   detectBorderCrossings,
   detectBorderTips,
@@ -104,6 +105,13 @@ export function PassBorderIntel({
                 </dl>
 
                 <p className="mt-3 text-sm text-foreground/80">{tr(p.advisory)}</p>
+                <PoiLinks
+                  kind="pass"
+                  name={p.name}
+                  where={p.where}
+                  region={region}
+                  website={p.portalUrl}
+                />
                 {vehicle === "motorcycle" && p.motoNote && (
                   <p className="mt-2 rounded-xl border border-amber-400/40 bg-amber-400/10 px-3 py-2 text-sm text-foreground/90">
                     🏍️ {tr(p.motoNote)}
