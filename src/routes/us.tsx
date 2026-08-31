@@ -30,8 +30,8 @@ function UsPage() {
       <HeroPlanner
         region="us"
         eyebrow="United States · 50 states"
-        title="Every toll plaza, priced before you drive."
-        subtitle="Interstate tolls, express lanes, fuel, EV charging and ferries for cars, RVs and touring motorcycles."
+        title="Know the true cost of every mile."
+        subtitle="Smart interstate toll, express lane, fuel, charging, and ferry intelligence for cars, RVs, and touring motorcycles. Plan with total peace of mind."
       />
     </main>
   );

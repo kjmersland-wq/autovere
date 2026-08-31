@@ -31,7 +31,7 @@ function Index() {
         region="eu"
         eyebrow="Europe · 30+ countries"
         title="Know the true cost of every kilometre."
-        subtitle="Cross-border toll, vignette, fuel, charging and ferry intelligence for cars, motorhomes and touring motorcycles."
+        subtitle="Smart cross-border toll, vignette, fuel, charging, and ferry intelligence for cars, motorhomes, and touring motorcycles. Plan with total peace of mind."
       />
     </main>
   );
