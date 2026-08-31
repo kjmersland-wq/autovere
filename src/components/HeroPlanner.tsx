@@ -44,7 +44,7 @@ import {
   type TripEstimate,
   type VehicleKey,
 } from "@/lib/trip-data";
-import { useT } from "@/lib/i18n";
+import { useLocale, useT } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 
@@ -59,7 +59,10 @@ type HeroPlannerProps = {
 
 export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerProps) {
   const t = useT();
+  const locale = useLocale();
   const copy = REGION_COPY[region];
+  const originHint = locale === "no" ? t.hero.originHint : copy.originHint;
+  const destinationHint = locale === "no" ? t.hero.destinationHint : copy.destinationHint;
   const defaults = REGION_DEFAULTS[region];
   const imperial = defaults.units === "imperial";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
@@ -274,7 +277,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   value={origin}
                   onChange={(e) => setOrigin(e.target.value)}
                   className="h-12 border-border bg-background/60 pl-9 text-base placeholder:text-muted-foreground"
-                  placeholder={t.hero.originHint === undefined ? copy.originHint : t.hero.originHint}
+                  placeholder={originHint}
                 />
               </label>
               <label className="relative block">
@@ -284,7 +287,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   value={destination}
                   onChange={(e) => setDestination(e.target.value)}
                   className="h-12 border-border bg-background/60 pl-9 text-base placeholder:text-muted-foreground"
-                  placeholder={t.hero.destinationHint}
+                  placeholder={destinationHint}
                 />
               </label>
               <Button type="submit" size="lg" className="h-12 px-8 text-base font-semibold">
