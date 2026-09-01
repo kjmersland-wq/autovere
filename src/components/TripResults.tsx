@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship } from "lucide-react";
 import { toast } from "sonner";
 import { tripTrackPoints } from "@/lib/trip-export";
@@ -162,8 +162,14 @@ export function TripResults({
   const [printing, setPrinting] = useState(false);
   const [rvMode, setRvMode] = useState(isMotorhome);
   const [savePrompt, setSavePrompt] = useState(false);
+  /** Operator picked interactively from the charging network pills. */
+  const [netFilter, setNetFilter] = useState<string | null>(null);
   const { user, openAuth } = useAuth();
   const trip = trips[active];
+  const optimizer = useMemo(
+    () => applyNetworkFilter(trip.optimizer, netFilter ?? trip.optimizer.preferredNetwork ?? null),
+    [trip.optimizer, netFilter],
+  );
   // Everything "along the route" is filtered against the real polyline.
   const corridorCoords = trip.corridor?.coords;
   const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25);
