@@ -9,176 +9,15 @@ import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { useLocale } from "@/lib/i18n";
-import { getStripeEnvironment, PRICE_IDS, type PlanTier } from "@/lib/stripe";
+import { pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib/pricing-i18n";
+import { getStripeEnvironment, PRICE_IDS } from "@/lib/stripe";
 import { cn } from "@/lib/utils";
 import { createPortalSession } from "@/utils/payments.functions";
 
-type Tier = {
-  id: PlanTier;
-  name: string;
-  emoji: string;
-  tagline: string;
-  monthly: string;
-  yearly?: string;
-  cta: string;
-  highlight?: boolean;
-  features: string[];
-};
-
-export const TIERS: Tier[] = [
-  {
-    id: "free",
-    name: "Free",
-    emoji: "🧭",
-    tagline: "Everything you need for a first honest estimate.",
-    monthly: "€0",
-    cta: "Start planning free",
-    features: [
-      "Basic toll, vignette and fuel cost calculations",
-      "OSRM routing across Europe, the USA and Canada",
-      "One vehicle profile",
-      "Country & state cost explorer",
-      "Share a trip link",
-    ],
-  },
-  {
-    id: "pro",
-    name: "AutoVere Pro",
-    emoji: "✨",
-    tagline: "For the traveller who lives for the next pass.",
-    monthly: "€4.99",
-    yearly: "€39",
-    cta: "Upgrade to Pro",
-    highlight: true,
-    features: [
-      "Multi-vehicle garage (car, motorhome, motorcycle)",
-      "GPX & KML export to Garmin, TomTom and CarPlay",
-      "Real-time mountain pass & ferry alerts",
-      "Offline turn-by-turn itinerary and print packs",
-      "Motorcycle toll discounts & rider safety radar",
-      "Unlimited saved adventures",
-    ],
-  },
-  {
-    id: "fleet",
-    name: "AutoVere Business / Fleet",
-    emoji: "🚛",
-    tagline: "Cross-border operations, consolidated.",
-    monthly: "€19",
-    cta: "Upgrade to Business",
-    features: [
-      "Multi-country toll invoice consolidation",
-      "Team routing with shared trip libraries",
-      "Heavy vehicle profiles (>3.5 t) and axle-based tolls",
-      "Driver assignment & cost centre exports (CSV)",
-      "Priority support from KM TECH LABS",
-    ],
-  },
-];
-
-
-export const TIERS_PL: Tier[] = [
-  {
-    id: "free",
-    name: "Free",
-    emoji: "🧭",
-    tagline: "Wszystko, czego potrzebujesz do pierwszej uczciwej wyceny.",
-    monthly: "0 €",
-    cta: "Zacznij planować za darmo",
-    features: [
-      "Podstawowe wyliczenia opłat drogowych, winiet i paliwa",
-      "Trasowanie OSRM w Europie, USA i Kanadzie",
-      "Jeden profil pojazdu",
-      "Przeglądarka kosztów według krajów i stanów",
-      "Udostępnianie linku do podróży",
-    ],
-  },
-  {
-    id: "pro",
-    name: "AutoVere Pro",
-    emoji: "✨",
-    tagline: "Dla podróżnika, który żyje kolejną przełęczą.",
-    monthly: "4,99 €",
-    yearly: "39 €",
-    cta: "Przejdź na Pro",
-    highlight: true,
-    features: [
-      "Garaż wielu pojazdów (samochód, kamper, motocykl)",
-      "Eksport GPX i KML do Garmin, TomTom i CarPlay",
-      "Alerty o przełęczach i promach w czasie rzeczywistym",
-      "Trasa offline krok po kroku i pakiety do druku",
-      "Zniżki motocyklowe i radar bezpieczeństwa kierowcy",
-      "Nieograniczona liczba zapisanych podróży",
-    ],
-  },
-  {
-    id: "fleet",
-    name: "AutoVere Business / Flota",
-    emoji: "🚛",
-    tagline: "Operacje transgraniczne w jednym miejscu.",
-    monthly: "19 €",
-    cta: "Przejdź na Business",
-    features: [
-      "Konsolidacja faktur za opłaty drogowe z wielu krajów",
-      "Trasowanie zespołowe ze wspólną biblioteką podróży",
-      "Profile pojazdów ciężkich (>3,5 t) i opłaty według osi",
-      "Przypisanie kierowców i eksport centrów kosztów (CSV)",
-      "Priorytetowe wsparcie od KM TECH LABS",
-    ],
-  },
-];
-
-const PRICING_COPY = {
-  en: {
-    onPlan: "You're on",
-    retrying: " — payment retrying",
-    until: (d: string) => `Access stays open until ${d}.`,
-    renews: (d: string) => `Renews ${d}.`,
-    active: "Active subscription.",
-    manage: "Manage billing",
-    monthly: "Monthly",
-    yearly: "Yearly · save 35%",
-    forever: "forever",
-    perYear: "per year",
-    perMonth: "per month",
-    mostLoved: "Most loved",
-    proFine: "€4.99/mo or €39/yr — cancel anytime.",
-    current: "Your current plan",
-    switch: "Switch plan in billing portal",
-    foot: "Prices in EUR incl. applicable VAT. Payments and tax handled securely by Stripe. Cost estimates remain indicative — always verify with official toll portals.",
-    checkout: "Secure checkout",
-    freeToast: "You're on the Free plan — plan away!",
-    signupToast: "Create your account first, then we'll take you straight to secure checkout.",
-    portalError: "Could not open the billing portal.",
-  },
-  pl: {
-    onPlan: "Twój plan to",
-    retrying: " — ponawiamy płatność",
-    until: (d: string) => `Dostęp pozostaje otwarty do ${d}.`,
-    renews: (d: string) => `Odnawia się ${d}.`,
-    active: "Aktywna subskrypcja.",
-    manage: "Zarządzaj płatnościami",
-    monthly: "Miesięcznie",
-    yearly: "Rocznie · oszczędzasz 35%",
-    forever: "na zawsze",
-    perYear: "rocznie",
-    perMonth: "miesięcznie",
-    mostLoved: "Najczęściej wybierany",
-    proFine: "4,99 €/mies. lub 39 €/rok — anulujesz, kiedy chcesz.",
-    current: "Twój obecny plan",
-    switch: "Zmień plan w panelu płatności",
-    foot: "Ceny w EUR z odpowiednim VAT. Płatności i podatki bezpiecznie obsługuje Stripe. Szacunki kosztów są orientacyjne — zawsze sprawdź je na oficjalnych portalach opłat drogowych.",
-    checkout: "Bezpieczna płatność",
-    freeToast: "Korzystasz z planu Free — planuj do woli!",
-    signupToast: "Najpierw załóż konto, a potem przeniesiemy Cię prosto do bezpiecznej płatności.",
-    portalError: "Nie udało się otworzyć panelu płatności.",
-  },
-} as const;
-
 export function PricingTiers() {
   const locale = useLocale();
-  const L = locale === "pl" ? PRICING_COPY.pl : PRICING_COPY.en;
-  const tiers = locale === "pl" ? TIERS_PL : TIERS;
+  const L = pricingCopy(locale);
+  const tiers = tiersFor(locale);
   const { user, openAuth } = useAuth();
   const { tier: currentTier, isActive, cancelAtPeriodEnd, periodEnd, pastDue } = useSubscription();
   const { openCheckout, closeCheckout, isOpen, checkoutElement } = useStripeCheckout();
@@ -236,9 +75,9 @@ export function PricingTiers() {
             </p>
             <p className="text-xs text-muted-foreground">
               {cancelAtPeriodEnd
-                ? L.until(periodEnd?.toLocaleDateString(locale === "pl" ? "pl-PL" : "en-GB") ?? "")
+                ? L.until(periodEnd?.toLocaleDateString(DATE_LOCALE[locale]) ?? "")
                 : periodEnd
-                  ? L.renews(periodEnd.toLocaleDateString(locale === "pl" ? "pl-PL" : "en-GB"))
+                  ? L.renews(periodEnd.toLocaleDateString(DATE_LOCALE[locale]))
                   : L.active}
             </p>
           </div>
