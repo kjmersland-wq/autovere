@@ -217,6 +217,38 @@ export function saveVehicles(vehicles: GarageVehicle[]) {
   }
 }
 
+/** The vehicle currently bound to the route calculation engine. */
+export function loadActiveVehicleId(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem(ACTIVE_VEHICLE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function saveActiveVehicleId(id: string | null) {
+  try {
+    if (id) localStorage.setItem(ACTIVE_VEHICLE_KEY, id);
+    else localStorage.removeItem(ACTIVE_VEHICLE_KEY);
+  } catch {
+    /* storage unavailable */
+  }
+}
+
+export function loadActiveVehicle(): GarageVehicle | null {
+  const id = loadActiveVehicleId();
+  if (!id) return null;
+  return loadVehicles().find((v) => v.id === id) ?? null;
+}
+
+/** Pull the first number out of a free-text field such as "18 kWh/100 km". */
+export function parseNumber(value?: string): number | undefined {
+  if (!value) return undefined;
+  const m = value.replace(",", ".").match(/\d+(\.\d+)?/);
+  return m ? Number(m[0]) : undefined;
+}
+
 export function loadTrips(): SavedTrip[] {
   const stored = read<Partial<SavedTrip>[]>(TRIPS_KEY, []);
   const normalised = stored.map((t, i) => ({
