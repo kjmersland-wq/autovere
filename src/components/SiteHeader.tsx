@@ -60,7 +60,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             height={1024}
             className="size-8 shrink-0 rounded-[0.55rem] shadow-lg shadow-black/30 ring-1 ring-border/60"
           />
-          <span className="hidden min-[380px]:inline">
+          <span className="hidden sm:inline">
             Auto<span className="text-primary">Vere</span>
           </span>
         </LocaleLink>
