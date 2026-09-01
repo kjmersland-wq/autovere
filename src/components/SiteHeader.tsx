@@ -7,7 +7,7 @@ import { LocaleLink } from "@/components/LocaleLink";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useAuth } from "@/lib/auth";
 import { useLocale, useT } from "@/lib/i18n";
-import { pathForCode, pathForRegion, prefixFromPath } from "@/lib/locales";
+import { pathForCode, pathForRegion } from "@/lib/locales";
 
 import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
@@ -35,7 +35,6 @@ function regionLabel(to: string, region: RegionKey, locale: Parameters<typeof re
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
-  const prefix = prefixFromPath(pathname);
   const activeRegion = region ?? regionFromPath(pathname);
   const t = useT();
   const locale = useLocale();
