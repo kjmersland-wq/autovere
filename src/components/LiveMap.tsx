@@ -10,22 +10,34 @@ export type LiveMapMarker = {
   title: string;
   subtitle?: string;
   mapUrl?: string;
+  /** Charging / refuelling power, shown in the popup. */
+  power?: string | undefined;
+  /** Distance along the corridor, shown in the popup. */
+  distanceLabel?: string | undefined;
 };
 
-/** Dark AutoVere styling — works without a Cloud mapId. */
-const DARK_STYLES: google.maps.MapTypeStyle[] = [
-  { elementType: "geometry", stylers: [{ color: "#0b1120" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#0b1120" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#94a3b8" }] },
-  { featureType: "poi", stylers: [{ visibility: "off" }] },
+/**
+ * Crisp, high-contrast AutoVere styling: readable motorways, secondary roads,
+ * water and city labels — no blackout. Works without a Cloud mapId.
+ */
+const CRISP_STYLES: google.maps.MapTypeStyle[] = [
+  { elementType: "geometry", stylers: [{ color: "#eef2f7" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#1e293b" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#ffffff" }, { weight: 3 }] },
+  { featureType: "poi", elementType: "labels.icon", stylers: [{ visibility: "off" }] },
+  { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#d8ecd6" }] },
   { featureType: "transit", stylers: [{ visibility: "off" }] },
-  { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#1e293b" }] },
-  { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#cbd5e1" }] },
-  { featureType: "road", elementType: "geometry", stylers: [{ color: "#1e293b" }] },
-  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#334155" }] },
-  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#64748b" }] },
-  { featureType: "water", elementType: "geometry", stylers: [{ color: "#050a14" }] },
-  { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#0f172a" }] },
+  { featureType: "landscape.natural", elementType: "geometry", stylers: [{ color: "#e7ecf2" }] },
+  { featureType: "administrative", elementType: "geometry.stroke", stylers: [{ color: "#94a3b8" }] },
+  { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#0f172a" }] },
+  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#0f172a" }] },
+  { featureType: "road", elementType: "geometry", stylers: [{ color: "#ffffff" }] },
+  { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#ffe9b8" }] },
+  { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#ffcf5c" }] },
+  { featureType: "road.highway", elementType: "geometry.stroke", stylers: [{ color: "#e0a92a" }] },
+  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#334155" }] },
+  { featureType: "water", elementType: "geometry", stylers: [{ color: "#a9d6f5" }] },
+  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#1d4ed8" }] },
 ];
 
 let loaderPromise: Promise<void> | null = null;
@@ -55,8 +67,21 @@ function loadGoogleMaps(): Promise<void> {
   return loaderPromise;
 }
 
+/** Teardrop pin drawn in the operator / endpoint colour. */
+function pin(color: string): google.maps.Symbol {
+  return {
+    path: "M 0,0 C -3,-6 -9,-8 -9,-14 a 9,9 0 1,1 18,0 c 0,6 -6,8 -9,14 z",
+    fillColor: color,
+    fillOpacity: 1,
+    strokeColor: "#0f172a",
+    strokeWeight: 1.6,
+    scale: 1.35,
+    labelOrigin: new google.maps.Point(0, -14),
+  };
+}
+
 /**
- * Real, interactive Google Map in AutoVere's dark theme.
+ * Real, interactive Google Map with full controls.
  * Browser-only — always mount behind <ClientOnly> + React.lazy.
  */
 export default function LiveMap({
@@ -99,80 +124,83 @@ export default function LiveMap({
     const map =
       mapRef.current ??
       new google.maps.Map(ref.current, {
-        styles: DARK_STYLES,
+        styles: CRISP_STYLES,
         disableDefaultUI: false,
-        mapTypeControl: false,
-        streetViewControl: false,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          mapTypeIds: ["roadmap", "satellite", "hybrid", "terrain"],
+        },
+        zoomControl: true,
+        streetViewControl: true,
         fullscreenControl: true,
+        scaleControl: true,
         scrollwheel: false,
-        backgroundColor: "#070c18",
+        backgroundColor: "#eef2f7",
       });
     mapRef.current = map;
 
     overlaysRef.current.forEach((o) => o.setMap(null));
     overlaysRef.current = [];
 
-    const glow = new google.maps.Polyline({
+    const casing = new google.maps.Polyline({
       path,
-      strokeColor: "#f59e0b",
-      strokeOpacity: 0.2,
-      strokeWeight: 10,
+      strokeColor: "#0f172a",
+      strokeOpacity: 0.85,
+      strokeWeight: 11,
+      zIndex: 1,
       map,
     });
     const line = new google.maps.Polyline({
       path,
-      strokeColor: "#fb923c",
-      strokeOpacity: 0.95,
-      strokeWeight: 4,
+      strokeColor: "#00E5FF",
+      strokeOpacity: 1,
+      strokeWeight: 7,
+      zIndex: 2,
       map,
     });
-    overlaysRef.current.push(glow, line);
+    overlaysRef.current.push(casing, line);
 
     const info = new google.maps.InfoWindow();
 
-    const endpoint = (pos: google.maps.LatLngLiteral, label: string, color: string) => {
+    const endpoint = (pos: google.maps.LatLngLiteral, label: string, color: string, glyph: string) => {
       const marker = new google.maps.Marker({
         position: pos,
         map,
         title: label,
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 7,
-          fillColor: color,
-          fillOpacity: 1,
-          strokeColor: "#070c18",
-          strokeWeight: 3,
-        },
+        zIndex: 20,
+        icon: pin(color),
+        label: { text: glyph, fontSize: "12px" },
+      });
+      marker.addListener("click", () => {
+        info.setContent(`<div style="color:#0f172a;font-size:13px"><strong>${label}</strong></div>`);
+        info.open({ map, anchor: marker });
       });
       overlaysRef.current.push(marker);
     };
 
-    endpoint(path[0]!, fromLabel, "#e2e8f0");
-    endpoint(path[path.length - 1]!, toLabel, "#f59e0b");
+    endpoint(path[0]!, fromLabel, "#16a34a", "A");
+    endpoint(path[path.length - 1]!, toLabel, "#dc2626", "B");
 
     markers.forEach((m) => {
       const marker = new google.maps.Marker({
         position: { lat: m.lat, lng: m.lng },
         map,
         title: m.title,
+        zIndex: 10,
         label: { text: m.emoji, fontSize: "12px" },
-        icon: {
-          path: google.maps.SymbolPath.CIRCLE,
-          scale: 11,
-          fillColor: "#070c18",
-          fillOpacity: 1,
-          strokeColor: m.color,
-          strokeWeight: 2,
-        },
+        icon: pin(m.color),
       });
       marker.addListener("click", () => {
         const link = m.mapUrl
-          ? `<br/><a href="${m.mapUrl}" target="_blank" rel="noopener noreferrer" style="color:#b45309">Google Maps ↗</a>`
+          ? `<div style="margin-top:4px"><a href="${m.mapUrl}" target="_blank" rel="noopener noreferrer" style="color:#1d4ed8">Google Maps ↗</a></div>`
           : "";
+        const meta = [m.power, m.distanceLabel].filter(Boolean).join(" · ");
         info.setContent(
-          `<div style="color:#0f172a;font-size:13px"><strong>${m.title}</strong>${
-            m.subtitle ? `<br/>${m.subtitle}` : ""
-          }${link}</div>`,
+          `<div style="color:#0f172a;font-size:13px;line-height:1.45"><strong>${m.title}</strong>` +
+            (meta ? `<div style="font-weight:600">${meta}</div>` : "") +
+            (m.subtitle ? `<div style="color:#475569">${m.subtitle}</div>` : "") +
+            `${link}</div>`,
         );
         info.open({ map, anchor: marker });
       });
@@ -195,11 +223,5 @@ export default function LiveMap({
     );
   }
 
-  return (
-    <div
-      ref={ref}
-      style={{ height }}
-      className="w-full overflow-hidden rounded-2xl bg-[#070c18]"
-    />
-  );
+  return <div ref={ref} style={{ height }} className="w-full overflow-hidden rounded-2xl bg-[#eef2f7]" />;
 }

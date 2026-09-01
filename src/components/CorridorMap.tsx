@@ -18,6 +18,7 @@ import {
   buildCampSpots,
   buildCorridorPois,
   buildFuelStops,
+  operatorColor,
   corridorPolyline,
   pointAt,
   type LayerKey,
@@ -37,7 +38,7 @@ import {
   type TripEstimate,
   type VehicleKey,
 } from "@/lib/trip-data";
-import { useMoney } from "@/lib/currency";
+import { convert, currencyFromSymbol, formatCurrency, useMoney } from "@/lib/currency";
 
 const LiveMap = lazy(() => import("@/components/LiveMap"));
 
@@ -79,9 +80,10 @@ export function CorridorMap({
   const tr = useTr();
   const m = useMoney(trip.currency);
   const ev = evComparison(trip, vehicle, fuel);
+  const isElectric = fuel === "electric";
   const [layers, setLayers] = useState<Record<LayerKey, boolean>>({
     ev: true,
-    fuel: true,
+    fuel: !isElectric,
     rv: isMotorhome,
     pass: true,
     ferry: true,
@@ -151,14 +153,22 @@ export function CorridorMap({
         const idx = Math.min(c.length - 1, Math.max(0, Math.round(p.progress * (c.length - 1))));
         const pos = c[idx]!;
         const layer = MAP_LAYERS.find((l) => l.key === p.layer)!;
+        const power = p.layer === "ev" || p.layer === "fuel" ? (p.detail.split("·")[0] ?? "").trim() : "";
         return {
           id: p.id,
           lat: pos[0],
           lng: pos[1],
-          color: p.layer === "pass" ? STATUS_COLOR[p.status ?? "open"]! : layer.color,
+          color:
+            p.layer === "pass"
+              ? STATUS_COLOR[p.status ?? "open"]!
+              : p.layer === "ev"
+                ? operatorColor(p.name, layer.color)
+                : layer.color,
           emoji: p.icon ?? layer.emoji,
           title: tr(p.name),
-          subtitle: `${tr(p.detail)} · ${p.atLabel}`,
+          subtitle: tr(p.detail),
+          power: power ? tr(power) : undefined,
+          distanceLabel: p.atLabel,
           mapUrl: poiMapUrl(p.name, `${from} ${to}`),
         };
       });
@@ -412,7 +422,8 @@ export function CorridorMap({
         ))}
       </div>
 
-      {/* Fuel station price accordion */}
+      {/* Fuel station price accordion — hidden entirely for electric vehicles */}
+      {!isElectric && (
       <div className="mt-8">
         <div className="flex items-center gap-2">
           <Fuel className="size-5 text-primary" />
@@ -456,7 +467,13 @@ export function CorridorMap({
                             </p>
                           </div>
                           <div className="text-right">
-                            <p className="text-lg font-semibold text-primary">{s.price}</p>
+                            <p className="text-lg font-semibold text-primary">
+                              {formatCurrency(
+                                convert(s.priceValue, currencyFromSymbol(s.priceSymbol), m.display),
+                                m.display,
+                                { decimals: 2 },
+                              )}
+                            </p>
                             <p className="text-[11px] text-muted-foreground">{tr(s.priceUnit)}</p>
                           </div>
                         </div>
@@ -483,6 +500,7 @@ export function CorridorMap({
           })}
         </Accordion>
       </div>
+      )}
 
       {/* Motorhome camping radar */}
       {isMotorhome && (

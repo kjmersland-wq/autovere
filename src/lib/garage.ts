@@ -15,6 +15,8 @@ export type GarageVehicle = {
   batteryKwh?: number | undefined;
   /** Preferred fast-charging operator, or "all" for no preference. */
   network?: string | undefined;
+  /** Battery reserve kept in percent (default 25 → plan at 75% usable). */
+  bufferPct?: number | undefined;
 };
 
 /** Charging operators the planner can prioritise along a corridor. */
