@@ -342,7 +342,7 @@ export function TripResults({
           <Share2 className="size-4" /> {t.results.share}
         </Button>
         <Button size="lg" variant="outline" onClick={() => setPrinting(true)}>
-          <Printer className="size-4" /> {t.results.print}
+          <Printer className="size-4" /> Export to PDF / Print itinerary
         </Button>
       </div>
 
@@ -815,6 +815,7 @@ export function TripResults({
           destination={destination}
           vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"}
           fuel={fuel}
+          region={region}
           onClose={() => setPrinting(false)}
         />
       )}
