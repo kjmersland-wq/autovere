@@ -47,7 +47,7 @@ const pill =
  */
 export function PartnerOffers({ vehicle }: { vehicle: Vehicle }) {
   const locale = useLocale();
-  const c = COPY[locale] ?? COPY.en!;
+  const c = COPY[locale] ?? COPY["en"]!;
   const A = AFFILIATES;
 
   const carLinks = [
