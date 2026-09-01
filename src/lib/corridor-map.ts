@@ -268,35 +268,12 @@ export const FUEL_SOURCES: Record<FuelSource["key"], FuelSource> = {
   },
 };
 
-const COUNTRY_BASE: Record<string, number> = {
-  France: 1.82,
-  Austria: 1.65,
-  Germany: 1.79,
-  Italy: 1.88,
-  Switzerland: 1.86,
-  Netherlands: 2.05,
-  Belgium: 1.78,
-  Norway: 1.94,
-  Sweden: 1.72,
-  Denmark: 1.83,
-  Spain: 1.62,
-  Poland: 1.5,
-  Slovenia: 1.6,
-  Czechia: 1.58,
-  Hungary: 1.55,
-};
-
 export function countryFuelSource(country: string): FuelSource {
   if (/france/i.test(country)) return FUEL_SOURCES.fr;
   if (/austria|österreich/i.test(country)) return FUEL_SOURCES.at;
   return FUEL_SOURCES.benchmark;
 }
 
-function fuelPriceLabel(region: RegionKey, trip: TripEstimate, jitter: number) {
-  if (region === "us") return `$${(3.35 + jitter * 0.8).toFixed(2)}/gal`;
-  if (region === "ca") return `C$${(1.55 + jitter * 0.25).toFixed(2)}/L`;
-  return `€${(1.62 + jitter * 0.4).toFixed(2)}/L`;
-}
 
 export type FuelStop = {
   id: string;
