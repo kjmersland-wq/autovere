@@ -161,7 +161,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           <button
             type="button"
             onClick={() => openAuth("signin")}
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
           >
             <UserRound className="size-4" />
             <span className="hidden sm:inline">{t.header.signIn}</span>
