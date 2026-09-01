@@ -337,17 +337,24 @@ function buildOptimizer(
 
   const countryNames = geo?.countries.map((c) => `${c.flag} ${c.country}`) ?? [];
 
+  const profileTail =
+    isEv && (profile?.kwhPer100 || profile?.batteryKwh)
+      ? ` · ${profile.name ?? "Saved vehicle"}: ${kwhPer100} kWh/100 km on a ${battery} kWh battery`
+      : "";
+
   return {
     mode: isEv ? "ev" : "fuel",
     title: isEv ? "⚡ Smart EV Charging Optimizer" : "⛽ Smart Fuel Stop Optimizer",
     rangeLabel: `${d(fullRange)} full ${isEv ? "battery" : "tank"} range`,
-    bufferLabel: countryNames.length
-      ? `Planned at 75% safety buffer — ${d(safeRange)} between stops along ${countryNames.join(" → ")}`
-      : `Planned at 75% safety buffer — ${d(safeRange)} between stops`,
+    bufferLabel:
+      (countryNames.length
+        ? `Planned at 75% safety buffer — ${d(safeRange)} between stops along ${countryNames.join(" → ")}`
+        : `Planned at 75% safety buffer — ${d(safeRange)} between stops`) + profileTail,
     stops,
     networks: isEv ? networks : [],
     arbitrage: [],
     longStretch: [],
+    preferredNetwork: isEv ? wanted : null,
   };
 }
 
