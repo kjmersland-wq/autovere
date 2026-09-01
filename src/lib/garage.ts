@@ -9,7 +9,35 @@ export type GarageVehicle = {
   consumption: string;
   height?: string;
   tags: string[];
+  /** Custom EV average consumption in kWh/100 km. */
+  kwhPer100?: number;
+  /** Usable battery capacity in kWh. */
+  batteryKwh?: number;
+  /** Preferred fast-charging operator, or "all" for no preference. */
+  network?: string;
 };
+
+/** Charging operators the planner can prioritise along a corridor. */
+export const CHARGING_NETWORKS = [
+  "All networks",
+  "Tesla Supercharger",
+  "Ionity",
+  "EnBW mobility+",
+  "Fastned",
+  "GreenWay Polska",
+  "Orlen Charge",
+  "Allego",
+  "Recharge",
+  "Mer",
+  "Clever",
+  "Electrify America",
+  "EvGo",
+  "Electrify Canada",
+  "FLO",
+  "Petro-Canada eV",
+] as const;
+
+export const ALL_NETWORKS = "All networks";
 
 export type SavedTripStop = { place: string; detail: string };
 
