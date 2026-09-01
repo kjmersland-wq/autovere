@@ -306,10 +306,18 @@ function buildOptimizer(
     ? Array.from(new Set(samples.flatMap((s) => corridorNetworks(s.code))))
     : EV_NETWORKS[region];
 
+  /** The preferred operator first when it actually runs in that country. */
+  const orderNetworks = (local: string[]) => {
+    if (!wanted) return { list: local, hit: false };
+    const match = local.find((n) => n.toLowerCase().includes(wanted.toLowerCase()));
+    return match ? { list: [match, ...local.filter((n) => n !== match)], hit: true } : { list: local, hit: false };
+  };
+
   const stops: ChargingStop[] = Array.from({ length: stopCount }, (_, i) => {
     const atKm = Math.round(safeRange * (i + 1));
     const point = corridorPoint(atKm);
-    const local = corridorNetworks(point?.code);
+    const { list: local, hit } = orderNetworks(corridorNetworks(point?.code));
+    const chargeNote = `Arrive at ~25% state of charge, charge to 80% in about ${vehicle === "motorhome" ? 38 : 22} min.`;
     return {
       name: point ? `${point.place || point.country} (${point.country})` : `Stop at ${d(atKm)}`,
       atKm,
@@ -317,8 +325,13 @@ function buildOptimizer(
       power: isEv ? (vehicle === "motorhome" ? "150 kW CCS" : "350 kW CCS") : "24/7 forecourt",
       networks: isEv ? [local[0]!, local[1 % local.length]!] : [],
       note: isEv
-        ? `Arrive at ~25% state of charge, charge to 80% in about ${vehicle === "motorhome" ? 38 : 22} min.`
+        ? wanted
+          ? hit
+            ? `${wanted} hub on this leg. ${chargeNote}`
+            : `No ${wanted} site in this battery window — nearest high-power CCS hub is ${local[0]}. ${chargeNote}`
+          : chargeNote
         : `Recommended refuel — keeps you above the 25% reserve on a ${d(fullRange)} tank range.`,
+      ...(isEv && wanted ? { preferred: hit, fallback: !hit } : {}),
     };
   });
 
