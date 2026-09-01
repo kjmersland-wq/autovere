@@ -148,7 +148,7 @@ export function CorridorMap({
     if (!geo) return [];
     const c = geo.coords;
     return pois
-      .filter((p) => layers[p.layer])
+      .filter((p) => layers[p.layer] && !(isElectric && p.layer === "fuel"))
       .map((p) => {
         const idx = Math.min(c.length - 1, Math.max(0, Math.round(p.progress * (c.length - 1))));
         const pos = c[idx]!;
@@ -183,7 +183,7 @@ export function CorridorMap({
           mapUrl: poiMapUrl(p.name, `${from} ${to}`),
         };
       });
-  }, [geo, pois, layers, tr, from, to, t, m.display]);
+  }, [geo, pois, layers, tr, from, to, t, m.display, isElectric]);
 
   const path = line.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
   const visible = pois.filter((p) => layers[p.layer]);
