@@ -88,6 +88,7 @@ export const TOLL_TAGS = [
 ];
 
 const VEHICLE_KEY = "autovere.vehicles";
+const ACTIVE_VEHICLE_KEY = "autovere.activeVehicle";
 export const TRIPS_KEY = "autovere.savedTrips";
 
 export const DEFAULT_VEHICLES: GarageVehicle[] = [
