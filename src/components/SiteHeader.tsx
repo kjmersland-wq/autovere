@@ -51,16 +51,18 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-5 py-3 sm:px-8">
-        <LocaleLink to="/" className="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-2 overflow-hidden px-4 py-3 sm:gap-4 sm:px-8">
+        <LocaleLink to="/" className="flex min-w-0 shrink-0 items-center gap-2.5 text-lg font-semibold tracking-tight">
           <img
             src={logoMark}
             alt="AutoVere"
             width={1024}
             height={1024}
-            className="size-8 rounded-[0.55rem] shadow-lg shadow-black/30 ring-1 ring-border/60"
+            className="size-8 shrink-0 rounded-[0.55rem] shadow-lg shadow-black/30 ring-1 ring-border/60"
           />
-          Auto<span className="text-primary">Vere</span>
+          <span className="hidden min-[380px]:inline">
+            Auto<span className="text-primary">Vere</span>
+          </span>
         </LocaleLink>
 
         <nav className="ml-2 hidden items-center gap-1 rounded-full border border-border bg-background/40 p-1 lg:flex">
