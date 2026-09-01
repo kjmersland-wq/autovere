@@ -36,6 +36,7 @@ import {
   useMoney,
 } from "@/lib/currency";
 import { useLocale, useT, useTr } from "@/lib/i18n";
+import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
 import {
   ROUTE_VARIANTS,
@@ -162,16 +163,18 @@ export function TripResults({
   const [rvMode, setRvMode] = useState(isMotorhome);
   const [savePrompt, setSavePrompt] = useState(false);
   const { user, openAuth } = useAuth();
-  const highlights = SCENIC_HIGHLIGHTS[region];
-  const rvPois = RV_POIS[region];
   const trip = trips[active];
+  // Everything "along the route" is filtered against the real polyline.
+  const corridorCoords = trip.corridor?.coords;
+  const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25);
+  const rvPois = filterByCorridor(RV_POIS[region], corridorCoords, 25);
   const m = useMoney(trip.currency);
   const nativePrice = (value: number, symbol: string) =>
     formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
   const comparison = variantComparison(trips.fastest, trip);
   const title = `${origin || t.results.yourStart} → ${destination || t.results.yourDestination}`;
   const showNorway = region === "eu" && routeTouchesNorway(origin, destination);
-  const bridges = detectScandiBridges(region, origin, destination);
+  const bridges = region === "eu" ? detectScandiBridges(corridorCoords) : [];
 
 
   const persistTrip = () => {
@@ -744,12 +747,16 @@ export function TripResults({
         origin={origin}
         destination={destination}
         vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"}
+        {...(corridorCoords ? { coords: corridorCoords } : {})}
+        countryCodes={trip.corridor?.countries.map((c) => c.code) ?? []}
+        countryNames={trip.corridor?.countries.map((c) => c.country) ?? []}
         {...(onAddStop ? { onAddStop } : {})}
         onUseSmartBypass={() => setActive("smart")}
       />
 
 
 
+      {(highlights.length > 0 || rvPois.length > 0) && (
       <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2">
@@ -825,6 +832,7 @@ export function TripResults({
           </div>
         )}
       </div>
+      )}
 
       <PartnerOffers vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"} />
 
