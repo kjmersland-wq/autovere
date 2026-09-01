@@ -26,13 +26,6 @@ import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
 import logoMark from "@/assets/autovere-logo.png";
 
-const US_NAV_LABELS: Record<string, string> = {
-  "/planner": "Road Trip Planner",
-  "/tolls": "Tolls & Express Lanes",
-  "/scenic": "Scenic Byways & Ferries",
-  "/garage": "My Garage",
-};
-
 function regionLabel(to: string, region: RegionKey, locale: Parameters<typeof regionStrings>[0]) {
   const nav = regionStrings(locale, region).nav;
   const key = to.replace(/^\//, "") as keyof typeof nav;
