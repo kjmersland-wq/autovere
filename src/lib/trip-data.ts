@@ -512,6 +512,7 @@ export function estimateTrip(
   durationDays = 1,
   geo: RouteGeo | null = null,
   prices: EnergyPrices | null = null,
+  profile: VehicleProfile | null = null,
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -566,7 +567,10 @@ export function estimateTrip(
 
   const consumption =
     vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
-  const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const kwhPer100 =
+    fuel === "electric" && profile?.kwhPer100 && profile.kwhPer100 > 0
+      ? profile.kwhPer100
+      : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
   // Live prices from the energy feed when available; the estimator never
   // invents a number it cannot source.
   const perLitreLive = prices
@@ -649,7 +653,7 @@ export function estimateTrip(
     segments,
     corridor,
     safety: safetyFor(region, vehicle, geo),
-    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo),
+    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile),
     vignette:
       activeVariant === "tollfree"
         ? null
@@ -680,6 +684,7 @@ export function estimateAllVariants(
   durationDays = 1,
   geo: RouteGeo | null = null,
   prices: EnergyPrices | null = null,
+  profile: VehicleProfile | null = null,
 ): Record<RouteVariantKey, TripEstimate> {
   const args = [extraStops, tripType, durationDays, geo, prices] as const;
   return {
@@ -715,6 +720,7 @@ export function evComparison(
   vehicle: VehicleKey,
   fuel: FuelKey,
   prices: EnergyPrices | null = null,
+  profile: VehicleProfile | null = null,
 ): {
   fuelCost: number;
   evCost: number;
@@ -725,7 +731,10 @@ export function evComparison(
 } {
   const round2 = (n: number) => Math.round(n * 100) / 100;
   const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
-  const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const kwhPer100 =
+    profile?.kwhPer100 && profile.kwhPer100 > 0
+      ? profile.kwhPer100
+      : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
   const perLitreLive = prices
     ? prices.unit === "gallon"
       ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.785
