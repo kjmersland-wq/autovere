@@ -11,9 +11,9 @@ export type LiveMapMarker = {
   subtitle?: string;
   mapUrl?: string;
   /** Charging / refuelling power, shown in the popup. */
-  power?: string;
+  power?: string | undefined;
   /** Distance along the corridor, shown in the popup. */
-  distanceLabel?: string;
+  distanceLabel?: string | undefined;
 };
 
 /**
