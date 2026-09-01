@@ -7,7 +7,7 @@ import { LocaleLink } from "@/components/LocaleLink";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useAuth } from "@/lib/auth";
 import { useLocale, useT } from "@/lib/i18n";
-import { pathForCode, prefixFromPath } from "@/lib/locales";
+import { pathForCode, pathForRegion, prefixFromPath } from "@/lib/locales";
 
 import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
@@ -22,6 +22,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@/components/ui/sheet";
+import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
 import logoMark from "@/assets/autovere-logo.png";
 
@@ -32,8 +33,10 @@ const US_NAV_LABELS: Record<string, string> = {
   "/garage": "My Garage",
 };
 
-function usLabel(to: string, region: RegionKey) {
-  return region === "us" ? US_NAV_LABELS[to] : undefined;
+function regionLabel(to: string, region: RegionKey, locale: Parameters<typeof regionStrings>[0]) {
+  const nav = regionStrings(locale, region).nav;
+  const key = to.replace(/^\//, "") as keyof typeof nav;
+  return nav[key];
 }
 
 export function SiteHeader({ region }: { region?: RegionKey }) {
@@ -69,7 +72,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           {REGIONS.map((r) => (
             <Link
               key={r.key}
-              to={(r.key === "eu" && prefix ? `/${prefix}` : r.to) as "/"}
+              to={pathForRegion(pathname, r.key) as "/"}
               className={cn(
                 "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
                 activeRegion === r.key
@@ -91,7 +94,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               activeClassName="text-primary"
               className="text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
             >
-              {usLabel(l.to, activeRegion) ?? t.header.nav[l.to] ?? l.label}
+              {regionLabel(l.to, activeRegion, locale) ?? t.header.nav[l.to] ?? l.label}
             </LocaleLink>
           ))}
         </nav>
@@ -199,7 +202,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               {REGIONS.map((r) => (
                 <Link
                   key={r.key}
-                  to={(r.key === "eu" && prefix ? `/${prefix}` : r.to) as "/"}
+                  to={pathForRegion(pathname, r.key) as "/"}
                   onClick={() => setOpen(false)}
                   className={cn(
                     "rounded-full border border-border px-3 py-1.5 text-sm transition-colors",
@@ -223,7 +226,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                   activeClassName="bg-primary/10 text-primary"
                   className="rounded-xl px-3 py-2.5 text-sm font-medium text-foreground/85 transition-colors hover:bg-muted"
                 >
-                  {usLabel(l.to, activeRegion) ?? t.header.nav[l.to] ?? l.label}
+                  {regionLabel(l.to, activeRegion, locale) ?? t.header.nav[l.to] ?? l.label}
                 </LocaleLink>
               ))}
               <LocaleLink
