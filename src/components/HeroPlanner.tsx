@@ -405,6 +405,11 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                     <span>{r.emoji}</span>
                     <span className="font-medium">{r.label}</span>
                     <span className="hidden text-xs text-muted-foreground sm:inline">{r.via}</span>
+                    {r.evBadge && (
+                      <span className="rounded-full bg-emerald-400/15 px-2 py-0.5 text-[11px] font-semibold text-emerald-300">
+                        {r.evBadge}
+                      </span>
+                    )}
                   </button>
                 ))}
               </div>
