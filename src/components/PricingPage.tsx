@@ -14,7 +14,7 @@ export function PricingPage({ region }: { region?: RegionKey }) {
 
   return (
     <main className="min-h-screen">
-      <SiteHeader region={region} />
+      {region ? <SiteHeader region={region} /> : <SiteHeader />}
       <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
         <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">{hero.eyebrow}</p>
         <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">{hero.title}</h1>
