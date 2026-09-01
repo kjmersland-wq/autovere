@@ -1,5 +1,7 @@
 import type { Locale } from "@/lib/i18n";
 import type { PlanTier } from "@/lib/stripe";
+import type { RegionKey } from "@/lib/trip-data";
+
 
 export type Tier = {
   id: PlanTier;
@@ -702,9 +704,36 @@ const HERO: Record<Locale, PricingHero> = {
   },
 };
 
-export function tiersFor(locale: Locale): Tier[] {
-  return TIERS_BY_LOCALE[locale] ?? EN_TIERS;
+/**
+ * Regional price overrides. The tier structure, features and copy stay identical
+ * across every region — only the displayed amounts and currency change.
+ */
+const REGION_PRICES: Partial<Record<RegionKey, Partial<Record<PlanTier, { monthly: string; yearly?: string }>>>> = {
+  us: {
+    free: { monthly: "$0" },
+    pro: { monthly: "$5.99", yearly: "$49" },
+    fleet: { monthly: "$24" },
+  },
+  ca: {
+    free: { monthly: "$0 CAD" },
+    pro: { monthly: "$6.99 CAD", yearly: "$59 CAD" },
+    fleet: { monthly: "$29 CAD" },
+  },
+};
+
+export function tiersFor(locale: Locale, region?: RegionKey): Tier[] {
+  const base = TIERS_BY_LOCALE[locale] ?? EN_TIERS;
+  const overrides = region ? REGION_PRICES[region] : undefined;
+  if (!overrides) return base;
+  return base.map((tier) => {
+    const price = overrides[tier.id];
+    if (!price) return tier;
+    const { yearly: baseYearly, ...rest } = tier;
+    const yearly = price.yearly ?? baseYearly;
+    return { ...rest, monthly: price.monthly, ...(yearly ? { yearly } : {}) };
+  });
 }
+
 
 export function pricingCopy(locale: Locale): PricingCopy {
   return COPY[locale] ?? COPY.en;

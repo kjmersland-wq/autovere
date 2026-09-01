@@ -195,7 +195,16 @@ const STOP_NAMES: Record<RegionKey, string[]> = {
 const EV_NETWORKS: Record<RegionKey, string[]> = {
   eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego"],
   us: ["Electrify America", "Tesla Supercharger", "EVgo"],
-  ca: ["FLO", "Tesla Supercharger", "Petro-Canada eV", "Electrify Canada"],
+  ca: [
+    "FLO",
+    "Tesla Supercharger",
+    "Petro-Canada eV",
+    "Electrify Canada",
+    "Circuit Électrique (QC)",
+    "BC Hydro EV",
+    "ChargePoint Canada",
+    "Ivy Charging Network (ON)",
+  ],
 };
 
 const ARBITRAGE: Record<RegionKey, string[]> = {
@@ -451,7 +460,7 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
   ca: [
     {
       country: "🍁 Ontario",
-      total: 39.4,
+      total: 46.4,
       lines: [
         {
           place: "Highway 407 ETR",
@@ -459,6 +468,18 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
           amount: 31.4,
           badge: "407 tag",
           portal: { label: "407 ETR", url: "https://www.407etr.com/" },
+        },
+        {
+          place: "Highway 412 (Whitby ↔ 407)",
+          detail: "Two-axle vehicle, transponder rate",
+          amount: 3.9,
+          portal: { label: "Ontario 407 tolls", url: "https://www.ontario.ca/page/highway-407-tolls" },
+        },
+        {
+          place: "Highway 418 (Courtice ↔ 407)",
+          detail: "Two-axle vehicle, transponder rate",
+          amount: 3.1,
+          portal: { label: "Ontario 407 tolls", url: "https://www.ontario.ca/page/highway-407-tolls" },
         },
         {
           place: "Video toll charge",
@@ -469,10 +490,37 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
       ],
     },
     {
+      country: "⚜️ Québec",
+      total: 7.15,
+      lines: [
+        {
+          place: "A25 Bridge (Montréal ↔ Laval)",
+          detail: "Two-axle vehicle, peak with transponder",
+          amount: 4.3,
+          badge: "A25 tag",
+          portal: { label: "A25", url: "https://a25.com/" },
+        },
+        {
+          place: "A30 (Autoroute 30 toll section)",
+          detail: "Two-axle vehicle, electronic toll",
+          amount: 2.85,
+          portal: { label: "A30 Express", url: "https://a30express.com/" },
+        },
+      ],
+    },
+    {
       country: "🌲 Nova Scotia",
       total: 12.5,
-      lines: [{ place: "Cobequid Pass (Hwy 104)", detail: "Two-axle vehicle", amount: 12.5 }],
+      lines: [
+        {
+          place: "Cobequid Pass (Hwy 104)",
+          detail: "Two-axle vehicle",
+          amount: 12.5,
+          portal: { label: "Cobequid Pass", url: "https://cobequidpass.com/" },
+        },
+      ],
     },
+
     {
       country: "🏔️ British Columbia",
       total: 0,

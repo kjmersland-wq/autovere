@@ -26,6 +26,7 @@ const ENGLISH_PAGES = [
 
 const US_PAGES = ["/us/planner", "/us/garage", "/us/faq", "/us/how-it-works", "/us/partners", "/us/legal"];
 const CA_PAGES = [
+  "/ca/pricing",
   "/ca/faq",
   "/ca/how-it-works",
   "/ca/partners",

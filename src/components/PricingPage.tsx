@@ -20,7 +20,7 @@ export function PricingPage({ region }: { region?: RegionKey }) {
         <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">{hero.title}</h1>
         <p className="mt-4 max-w-2xl text-foreground/75">{hero.intro}</p>
         <div className="mt-12">
-          <PricingTiers />
+          <PricingTiers region={region} />
         </div>
       </section>
     </main>

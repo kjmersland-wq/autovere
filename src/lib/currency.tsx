@@ -110,11 +110,19 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     try {
       const stored = localStorage.getItem(STORAGE_KEY) as CurrencyCode | null;
-      if (stored && stored in RATES) setCurrencyState(stored);
+      if (stored && stored in RATES) {
+        setCurrencyState(stored);
+        return;
+      }
     } catch {
       /* storage unavailable */
     }
+    // No saved preference: fall back to the regional default from the URL.
+    const path = window.location.pathname;
+    if (path.startsWith("/ca")) setCurrencyState("CAD");
+    else if (path.startsWith("/us")) setCurrencyState("USD");
   }, []);
+
 
   const setCurrency = useCallback((c: CurrencyCode) => {
     setCurrencyState(c);
