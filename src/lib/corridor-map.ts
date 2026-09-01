@@ -1,3 +1,5 @@
+import { countryFuelEur, operatorKwhEur } from "@/lib/market-rates";
+
 import type { FuelKey, RegionKey, TripEstimate, VehicleKey } from "@/lib/trip-data";
 
 /* ------------------------------------------------------------------ */
@@ -82,6 +84,11 @@ export type CorridorPoi = {
   progress: number;
   status?: "open" | "closed" | "chains";
   price?: string;
+  /** Ad-hoc charging rate per kWh in EUR (EV layer). */
+  kwhEur?: number;
+  /** Pump rates per litre in EUR (fuel layer). */
+  petrolEur?: number;
+  dieselEur?: number;
   /** Brand/point specific symbol shown on the map instead of the generic layer emoji. */
   icon?: string;
 };
@@ -197,15 +204,31 @@ export function buildCorridorPois({
   for (let i = 0; i < evCount; i += 1) {
     const p = (i + 1) / (evCount + 1);
     const net = EV_NETWORKS[region][Math.floor(rnd() * EV_NETWORKS[region].length)]!;
-    push("ev", p, `${net} hub`, `${[150, 175, 250, 350][Math.floor(rnd() * 4)]} kW · ${2 + Math.floor(rnd() * 10)} bays`);
+    push(
+      "ev",
+      p,
+      `${net} hub`,
+      `${[150, 175, 250, 350][Math.floor(rnd() * 4)]} kW · ${2 + Math.floor(rnd() * 10)} bays`,
+      { kwhEur: operatorKwhEur(net) },
+    );
   }
 
   const fuelCount = Math.min(6, Math.max(3, Math.round(total / 190)));
   for (let i = 0; i < fuelCount; i += 1) {
     const p = (i + 0.55) / (fuelCount + 0.4);
     const brand = FUEL_BRANDS[region][Math.floor(rnd() * FUEL_BRANDS[region].length)]!;
+    const country = trip.segments.length
+      ? trip.segments[Math.min(trip.segments.length - 1, Math.floor(p * trip.segments.length))]!.country
+      : region === "us"
+        ? "United States"
+        : region === "ca"
+          ? "Canada"
+          : "Europe";
+    const rate = countryFuelEur(country);
     push("fuel", p, `${brand} service station`, "24/7 · restrooms · café", {
-      price: fuelPriceLabel(region, trip, rnd()),
+      price: `€${rate.petrol.toFixed(2)}/L`,
+      petrolEur: rate.petrol,
+      dieselEur: rate.diesel,
     });
   }
 
