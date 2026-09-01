@@ -59,12 +59,57 @@ export function stripLocale(pathname: string): string {
   return rest === "" ? "/" : rest;
 }
 
-/** Translate the current path into the same page in another language. */
+/* ------------------------------------------------------------------ */
+/* Matrix routing: language and region are independent URL segments.   */
+/* Shapes: /            /fr            /us          /fr/us            */
+/*         /planner     /fr/planner    /us/planner  /fr/us/planner    */
+/* ------------------------------------------------------------------ */
+
+export const REGION_PREFIXES = ["us", "ca"] as const;
+export type RegionPrefix = (typeof REGION_PREFIXES)[number];
+
+export function isRegionPrefix(value: string): value is RegionPrefix {
+  return (REGION_PREFIXES as readonly string[]).includes(value);
+}
+
+export type PathParts = {
+  prefix: LocalePrefix | null;
+  region: RegionPrefix | null;
+  page: string | null;
+};
+
+/** Split any app path into its independent language / region / page parts. */
+export function splitPath(pathname: string): PathParts {
+  const parts = pathname.replace(/^\/+/, "").split("/").filter(Boolean);
+  let i = 0;
+  const prefix = isLocalePrefix(parts[i] ?? "") ? (parts[i] as LocalePrefix) : null;
+  if (prefix) i += 1;
+  const region = isRegionPrefix(parts[i] ?? "") ? (parts[i] as RegionPrefix) : null;
+  if (region) i += 1;
+  const page = parts[i] ?? null;
+  return { prefix, region, page: page || null };
+}
+
+/** Rebuild a path from independent language / region / page parts. */
+export function buildPath(parts: PathParts): string {
+  const segs: string[] = [];
+  if (parts.prefix) segs.push(parts.prefix);
+  if (parts.region) segs.push(parts.region);
+  if (parts.page) segs.push(parts.page);
+  return segs.length ? `/${segs.join("/")}` : "/";
+}
+
+/** Translate the current path into the same page + region in another language. */
 export function pathForCode(pathname: string, code: string): string {
-  const base = stripLocale(pathname);
+  const { region, page } = splitPath(pathname);
   const prefix = prefixForCode(code);
-  if (!prefix) return base;
-  const slug = base.replace(/^\/+/, "").split("/")[0] ?? "";
-  if (!slug) return `/${prefix}`;
-  return isLocalePage(slug) ? `/${prefix}/${slug}` : `/${prefix}`;
+  const keepPage = page && isLocalePage(page) ? page : null;
+  return buildPath({ prefix, region, page: keepPage });
+}
+
+/** Switch region while keeping the active language and page. */
+export function pathForRegion(pathname: string, region: "eu" | RegionPrefix): string {
+  const { prefix, page } = splitPath(pathname);
+  const keepPage = page && isLocalePage(page) ? page : null;
+  return buildPath({ prefix, region: region === "eu" ? null : region, page: keepPage });
 }
