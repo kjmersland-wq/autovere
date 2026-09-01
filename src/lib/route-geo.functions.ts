@@ -289,9 +289,17 @@ function summarise(samples: RouteSample[], totalKm: number) {
   return { countries, borders };
 }
 
-async function buildRouteGeo(origin: string, destination: string): Promise<RouteGeo | null> {
-  const from = await geocode(origin);
-  const to = await geocode(destination);
+type Locked = { name: string; lat: number; lng: number } | undefined;
+
+async function buildRouteGeo(
+  origin: string,
+  destination: string,
+  lockedFrom?: Locked,
+  lockedTo?: Locked,
+): Promise<RouteGeo | null> {
+  // Coordinates picked from the autocomplete are authoritative — never re-geocode them.
+  const from = lockedFrom ?? (await geocode(origin));
+  const to = lockedTo ?? (await geocode(destination));
   if (!from || !to) return null;
 
   const osrm = `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson`;
