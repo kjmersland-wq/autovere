@@ -160,13 +160,21 @@ export function optimizeVignettes(
   vehicle: VehicleKey,
   tripType: TripType,
   durationDays: number,
+  /** ISO codes of the countries the routed polyline actually enters. */
+  routeCountryCodes?: string[],
 ): VignettePlan | null {
-  if (region !== "eu") return null;
+  if (routeCountryCodes && !routeCountryCodes.some((c) => VIGNETTE_COUNTRIES.some((v) => v.code === c)))
+    return null;
+  if (!routeCountryCodes && region !== "eu") return null;
 
   const daysCovered = tripType === "oneway" ? 1 : Math.max(1, durationDays);
   const isMoto = vehicle === "motorcycle";
 
-  const items: VignetteRecommendation[] = VIGNETTE_COUNTRIES.map((c) => {
+  const relevant = routeCountryCodes
+    ? VIGNETTE_COUNTRIES.filter((c) => routeCountryCodes.includes(c.code))
+    : VIGNETTE_COUNTRIES;
+
+  const items: VignetteRecommendation[] = relevant.map((c) => {
     const factor = isMoto ? c.motoFactor : 1;
     const exempt = isMoto && c.motoFactor === 0;
     const best = cheapestCombination(c.tiers, daysCovered, factor);

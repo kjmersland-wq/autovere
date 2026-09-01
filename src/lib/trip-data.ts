@@ -1,4 +1,6 @@
 import type { FlagCode } from "@/components/FlagIcon";
+import type { RouteGeo } from "@/lib/route-geo.functions";
+import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
 
 export type { TripType };
@@ -145,12 +147,29 @@ export type TripEstimate = {
   energyLabel: string;
   energyAmount: string;
   segments: { country: string; total: number; lines: TollLine[] }[];
+  /** Real routed corridor: countries actually crossed + border crossings. */
+  corridor?: RouteCorridor | null;
   safety: { title: string; sections: SafetySection[] };
   optimizer: EnergyOptimizer;
   vignette?: VignettePlan | null;
   tripType?: TripType;
   durationDays?: number;
   discountNote?: string | undefined;
+};
+
+export type RouteCorridor = {
+  countries: {
+    code: string;
+    flag: string;
+    country: string;
+    distanceKm: number;
+    distanceLabel: string;
+    entryPlace: string;
+    exitPlace: string;
+  }[];
+  borders: string[];
+  from: string;
+  to: string;
 };
 
 export type ChargingStop = {
@@ -212,6 +231,31 @@ const EV_NETWORKS: Record<RegionKey, string[]> = {
   ],
 };
 
+/** Charging networks that actually operate in each country on the corridor. */
+const COUNTRY_EV_NETWORKS: Record<string, string[]> = {
+  DK: ["Clever", "Ionity", "Tesla Supercharger", "Spirii"],
+  DE: ["Ionity", "EnBW mobility+", "Tesla Supercharger", "Aral pulse"],
+  PL: ["GreenWay Polska", "Ionity", "Orlen Charge", "Tesla Supercharger"],
+  NL: ["Fastned", "Allego", "Ionity", "Tesla Supercharger"],
+  BE: ["Fastned", "Ionity", "Allego", "Tesla Supercharger"],
+  FR: ["Ionity", "TotalEnergies", "Tesla Supercharger", "Electra"],
+  IT: ["Ionity", "Enel X Way", "Tesla Supercharger", "Free To X"],
+  ES: ["Iberdrola", "Ionity", "Tesla Supercharger", "Zunder"],
+  NO: ["Recharge", "Ionity", "Tesla Supercharger", "Mer"],
+  SE: ["Recharge", "Ionity", "Tesla Supercharger", "Mer"],
+  FI: ["Kesko K-Lataus", "Ionity", "Tesla Supercharger"],
+  AT: ["Ionity", "Smatrics", "Tesla Supercharger"],
+  CH: ["Ionity", "MOVE", "Tesla Supercharger"],
+  CZ: ["ČEZ Futur/E", "Ionity", "Tesla Supercharger"],
+  SK: ["ZSE Drive", "Ionity", "Tesla Supercharger"],
+  HU: ["MOL Plugee", "Ionity", "Tesla Supercharger"],
+  SI: ["Petrol", "Ionity", "Tesla Supercharger"],
+  HR: ["ELEN", "Ionity", "Tesla Supercharger"],
+  US: ["Electrify America", "Tesla Supercharger", "EVgo"],
+  CA: ["FLO", "Tesla Supercharger", "Petro-Canada eV", "Electrify Canada"],
+  GB: ["Ionity", "InstaVolt", "Tesla Supercharger", "Gridserve"],
+};
+
 const ARBITRAGE: Record<RegionKey, string[]> = {
   eu: [
     "Fuel is ~15% cheaper in Austria than Italy — refuel before crossing the Brenner Pass.",
@@ -251,6 +295,7 @@ function buildOptimizer(
   fuel: FuelKey,
   distanceKm: number,
   imperial: boolean,
+  geo?: RouteGeo | null,
 ): EnergyOptimizer {
   const isEv = fuel === "electric";
   const tank = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 18 : 55;
@@ -267,32 +312,53 @@ function buildOptimizer(
       ? `${Math.round(km * 0.621371).toLocaleString("en-US")} mi`
       : `${Math.round(km).toLocaleString("en-GB")} km`;
 
-  const networks = EV_NETWORKS[region];
+  const samples = geo?.samples ?? [];
+  /** Closest reverse-geocoded point on the real polyline to a given distance. */
+  const corridorPoint = (atKm: number) =>
+    samples.length
+      ? samples.reduce((best, s) =>
+          Math.abs(s.atKm - atKm) < Math.abs(best.atKm - atKm) ? s : best,
+        )
+      : null;
+
+  const corridorNetworks = (code?: string) =>
+    (code && COUNTRY_EV_NETWORKS[code]) || EV_NETWORKS[region];
+
+  const networks = samples.length
+    ? Array.from(new Set(samples.flatMap((s) => corridorNetworks(s.code))))
+    : EV_NETWORKS[region];
+
   const stops: ChargingStop[] = Array.from({ length: stopCount }, (_, i) => {
     const atKm = Math.round(safeRange * (i + 1));
+    const point = corridorPoint(atKm);
+    const local = corridorNetworks(point?.code);
     return {
-      name: STOP_NAMES[region][i % STOP_NAMES[region].length]!,
+      name: point
+        ? `${point.place || point.country} (${point.country})`
+        : STOP_NAMES[region][i % STOP_NAMES[region].length]!,
       atKm,
       atLabel: d(atKm),
       power: isEv ? (vehicle === "motorhome" ? "150 kW CCS" : "350 kW CCS") : "24/7 forecourt",
-      networks: isEv
-        ? [networks[i % networks.length]!, networks[(i + 1) % networks.length]!]
-        : [],
+      networks: isEv ? [local[0]!, local[1 % local.length]!] : [],
       note: isEv
         ? `Arrive at ~25% state of charge, charge to 80% in about ${vehicle === "motorhome" ? 38 : 22} min.`
         : `Recommended refuel — keeps you above the 25% reserve on a ${d(fullRange)} tank range.`,
     };
   });
 
+  const countryNames = geo?.countries.map((c) => `${c.flag} ${c.country}`) ?? [];
+
   return {
     mode: isEv ? "ev" : "fuel",
     title: isEv ? "⚡ Smart EV Charging Optimizer" : "⛽ Smart Fuel Stop Optimizer",
     rangeLabel: `${d(fullRange)} full ${isEv ? "battery" : "tank"} range`,
-    bufferLabel: `Planned at 75% safety buffer — ${d(safeRange)} between stops`,
+    bufferLabel: countryNames.length
+      ? `Planned at 75% safety buffer — ${d(safeRange)} between stops along ${countryNames.join(" → ")}`
+      : `Planned at 75% safety buffer — ${d(safeRange)} between stops`,
     stops,
     networks: isEv ? networks : [],
-    arbitrage: isEv ? [] : ARBITRAGE[region],
-    longStretch: LONG_STRETCH[region],
+    arbitrage: isEv ? [] : geo ? [] : ARBITRAGE[region],
+    longStretch: geo ? [] : LONG_STRETCH[region],
   };
 }
 
@@ -559,7 +625,35 @@ const PASSES: Record<RegionKey, string[]> = {
   ca: ["Icefields Parkway — stunning but exposed; wildlife on the road at dawn and dusk."],
 };
 
-function safetyFor(region: RegionKey, vehicle: VehicleKey) {
+/** Pass advisories keyed by the ISO code of the country they sit in. */
+const PASSES_BY_COUNTRY: Record<string, string[]> = {
+  IT: ["Stelvio Pass (2,757 m) — 48 hairpins, open, dry tarmac forecast until early evening."],
+  AT: ["Grossglockner High Alpine Road — toll road, gates close at 21:00; ride it before dusk."],
+  CH: ["Furka Pass — clear and open today, light crosswinds on the western ramp."],
+  NO: ["Trollstigen — single-lane sections with tourist traffic; take the early morning slot."],
+  FR: ["Col du Galibier (2,642 m) — open, but the north ramp cools fast after sunset."],
+  ES: ["Puerto de Navacerrada — clear; watch for cyclists on the descent."],
+  DE: ["Black Forest B500 ridge road — open, damp patches in shaded curves."],
+  PL: ["Zakopianka (S7/DK47) mountain approach — heavy weekend tourist traffic."],
+  SE: ["Vildmarksvägen — seasonal road, open June to October only."],
+  DK: ["No mountain passes on this route — expect exposed crosswinds on the bridge sections instead."],
+  NL: ["No mountain passes on this route — flat, well-lit motorway driving throughout."],
+  US: ["Tail of the Dragon (US-129) — 318 curves in 11 miles; watch for gravel on the inside lines."],
+  CA: ["Icefields Parkway — stunning but exposed; wildlife on the road at dawn and dusk."],
+};
+
+/** Only surface pass intel for countries the routed polyline actually crosses. */
+function passesForRoute(region: RegionKey, geo: RouteGeo | null): string[] {
+  if (geo && geo.countries.length) {
+    const items = geo.countries.flatMap((c) => PASSES_BY_COUNTRY[c.code] ?? []);
+    return items.length
+      ? items
+      : ["No mountain passes or seasonal closures detected along this corridor."];
+  }
+  return PASSES[region];
+}
+
+function safetyFor(region: RegionKey, vehicle: VehicleKey, geo: RouteGeo | null = null) {
   if (vehicle === "motorcycle") {
     return {
       title: "Rider Safety & Gear Radar",
@@ -574,7 +668,7 @@ function safetyFor(region: RegionKey, vehicle: VehicleKey) {
         },
         {
           heading: "🏔️ Mountain pass alerts",
-          items: [...PASSES[region], ...(region === "eu" ? [] : PASSES.eu.slice(0, 2))],
+          items: passesForRoute(region, geo),
         },
         {
           heading: "⛽ Long-stretch fuel alerts",
@@ -619,12 +713,12 @@ function safetyFor(region: RegionKey, vehicle: VehicleKey) {
       {
         heading: "🚗 On the road",
         items: [
-          "Winter equipment rules apply on the alpine section between October and April.",
+          "Winter equipment rules apply on the higher sections of this route between October and April.",
           "Rest stops are mapped every 2 hours so the drive stays fresh and relaxed.",
           "Every toll gantry on this route accepts contactless cards — no cash needed.",
         ],
       },
-      { heading: "🏔️ Pass conditions", items: PASSES[region] },
+      { heading: "🏔️ Pass conditions", items: passesForRoute(region, geo) },
     ],
   };
 }
@@ -675,6 +769,7 @@ export function estimateTrip(
   extraStops = 0,
   tripType: TripType = "oneway",
   durationDays = 1,
+  geo: RouteGeo | null = null,
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -683,7 +778,7 @@ export function estimateTrip(
   const imperial = defaults.units === "imperial";
   const isReturn = tripType === "return";
   const legMultiplier = isReturn ? 2 : 1;
-  const baseDistance = region === "eu" ? 1420 : region === "us" ? 1890 : 1640;
+  const baseDistance = geo?.distanceKm ?? (region === "eu" ? 1420 : region === "us" ? 1890 : 1640);
   const distanceKm = Math.round(
     baseDistance * (scenic ? 1.08 : 1) * tuning.distance * (1 + 0.035 * extraStops) * legMultiplier,
   );
@@ -706,7 +801,9 @@ export function estimateTrip(
       };
     });
 
-  let segments = SEGMENTS[region];
+  // Real routed corridor → real countries. Only fall back to the sample
+  // breakdown when no route geometry could be resolved.
+  let segments = geo ? buildRouteSegments(geo).segments : SEGMENTS[region];
   if (!includeFerries) segments = segments.filter((s) => !s.country.includes("Ferries"));
 
   const motoFactor = isMoto ? 0.6 : 1;
@@ -748,8 +845,30 @@ export function estimateTrip(
     ? `${Math.round(distanceKm * 0.621371).toLocaleString("en-US")} mi`
     : `${distanceKm.toLocaleString("en-GB")} km`;
 
-  const hours = distanceKm / (scenic ? tuning.speed * 0.82 : tuning.speed);
+  const hours = geo
+    ? ((geo.durationMin / 60) * legMultiplier * (scenic ? 1.18 : 1)) /
+      (activeVariant === "tollfree" ? 0.86 : activeVariant === "smart" ? 0.95 : 1)
+    : distanceKm / (scenic ? tuning.speed * 0.82 : tuning.speed);
   const driveTime = `${Math.floor(hours)}h ${Math.round((hours % 1) * 60)}m`;
+
+  const corridor = geo
+    ? {
+        countries: geo.countries.map((c) => ({
+          code: c.code,
+          flag: c.flag,
+          country: c.country,
+          distanceKm: Math.round(c.distanceKm * legMultiplier),
+          distanceLabel: imperial
+            ? `${Math.round(c.distanceKm * 0.621371).toLocaleString("en-US")} mi`
+            : `${Math.round(c.distanceKm).toLocaleString("en-GB")} km`,
+          entryPlace: c.entryPlace,
+          exitPlace: c.exitPlace,
+        })),
+        borders: borderLabels(geo.borders, imperial),
+        from: geo.from.name,
+        to: geo.to.name,
+      }
+    : null;
 
   return {
     currency,
@@ -766,10 +885,19 @@ export function estimateTrip(
     energyLabel: fuel === "electric" ? "EV Charging" : "Fuel",
     energyAmount,
     segments,
-    safety: safetyFor(region, vehicle),
-    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial),
+    corridor,
+    safety: safetyFor(region, vehicle, geo),
+    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo),
     vignette:
-      activeVariant === "tollfree" ? null : optimizeVignettes(region, vehicle, tripType, durationDays),
+      activeVariant === "tollfree"
+        ? null
+        : optimizeVignettes(
+            region,
+            vehicle,
+            tripType,
+            durationDays,
+            geo ? geo.countries.map((c) => c.code) : undefined,
+          ),
     tripType,
     durationDays,
     discountNote: isMoto
@@ -788,8 +916,9 @@ export function estimateAllVariants(
   extraStops = 0,
   tripType: TripType = "oneway",
   durationDays = 1,
+  geo: RouteGeo | null = null,
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays] as const;
+  const args = [extraStops, tripType, durationDays, geo] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
@@ -1117,12 +1246,14 @@ export function detectFerryCrossings(
   region: RegionKey,
   origin: string,
   destination: string,
+  /** Countries/places on the real routed corridor — disables the generic fallback. */
+  corridorPlaces?: string[],
 ): FerryCrossing[] {
-  const text = `${origin} ${destination}`.toLowerCase();
-  const matched = FERRY_CROSSINGS.filter(
-    (f) => f.regions.includes(region) && f.match.some((m) => text.includes(m)),
-  );
+  const text = `${origin} ${destination} ${(corridorPlaces ?? []).join(" ")}`.toLowerCase();
+  const matched = FERRY_CROSSINGS.filter((f) => f.match.some((m) => text.includes(m)));
   if (matched.length > 0) return matched;
+  // Only guess when we have no verified corridor to reason about.
+  if (corridorPlaces) return [];
   const fallback = DEFAULT_FERRIES[region];
   return FERRY_CROSSINGS.filter((f) => fallback.includes(f.id));
 }
@@ -1204,10 +1335,13 @@ export function detectEmissionBadges(
   region: RegionKey,
   origin: string,
   destination: string,
+  corridorPlaces?: string[],
 ): EmissionBadge[] {
-  const text = `${origin} ${destination}`.toLowerCase();
+  const text = `${origin} ${destination} ${(corridorPlaces ?? []).join(" ")}`.toLowerCase();
   return EMISSION_BADGES.filter(
-    (b) => b.regions.includes(region) && b.match.some((m) => text.includes(m)),
+    (b) =>
+      (corridorPlaces ? true : b.regions.includes(region)) &&
+      b.match.some((m) => text.includes(m)),
   );
 }
 
