@@ -71,10 +71,23 @@ function haversine(a: [number, number], b: [number, number]) {
 const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 /**
- * Nominatim allows roughly one request per second per client. Every call is
- * funnelled through this serial queue with retry/backoff on 429 so a route
- * lookup degrades gracefully instead of failing outright.
+ * Photon (Komoot) is the primary geocoder: keyless, OSM-backed and tolerant of
+ * the burst of corridor samples we need. Nominatim stays as a slow, serialised
+ * fallback for the rare query Photon cannot resolve.
  */
+async function photon(path: string): Promise<any | null> {
+  try {
+    const res = await fetch(`https://photon.komoot.io/${path}`, {
+      headers: { "User-Agent": UA, Accept: "application/json" },
+    });
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
+}
+
+/** Nominatim allows ~1 request/second, so serialise + back off on 429. */
 let nominatimChain: Promise<unknown> = Promise.resolve();
 const MIN_GAP_MS = 1200;
 let lastCall = 0;
@@ -86,7 +99,7 @@ function nominatim(url: string, attempt = 0): Promise<Response | null> {
     lastCall = Date.now();
     try {
       const res = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" } });
-      if ((res.status === 429 || res.status >= 500) && attempt < 3) {
+      if ((res.status === 429 || res.status >= 500) && attempt < 2) {
         await sleep(1500 * (attempt + 1));
         return nominatim(url, attempt + 1);
       }
@@ -105,14 +118,33 @@ const geocodeCache = new Map<string, { name: string; lat: number; lng: number } 
 async function geocode(query: string): Promise<{ name: string; lat: number; lng: number } | null> {
   const key = query.toLowerCase().trim();
   if (geocodeCache.has(key)) return geocodeCache.get(key) ?? null;
-  const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(query)}`;
-  const res = await nominatim(url);
-  if (!res) return null;
-  const json = (await res.json()) as { lat: string; lon: string; display_name: string }[];
-  const hit = json[0];
-  if (!hit) return null;
-  const out = { name: hit.display_name, lat: Number(hit.lat), lng: Number(hit.lon) };
-  geocodeCache.set(key, out);
+
+  let out: { name: string; lat: number; lng: number } | null = null;
+
+  const pj = await photon(`api?limit=1&q=${encodeURIComponent(query)}`);
+  const feat = pj?.features?.[0];
+  if (feat?.geometry?.coordinates) {
+    const [lng, lat] = feat.geometry.coordinates as [number, number];
+    const p = feat.properties ?? {};
+    out = {
+      name: [p.name, p.city, p.state, p.country].filter(Boolean).join(", ") || query,
+      lat,
+      lng,
+    };
+  }
+
+  if (!out) {
+    const res = await nominatim(
+      `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(query)}`,
+    );
+    if (res) {
+      const json = (await res.json()) as { lat: string; lon: string; display_name: string }[];
+      const hit = json[0];
+      if (hit) out = { name: hit.display_name, lat: Number(hit.lat), lng: Number(hit.lon) };
+    }
+  }
+
+  if (out) geocodeCache.set(key, out);
   return out;
 }
 
@@ -124,36 +156,48 @@ const reverseCache = new Map<string, ReverseHit | null>();
 async function reverse(lat: number, lng: number): Promise<ReverseHit | null> {
   const cacheKey = `${lat.toFixed(1)},${lng.toFixed(1)}`;
   if (reverseCache.has(cacheKey)) return reverseCache.get(cacheKey) ?? null;
-  const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&lat=${lat}&lon=${lng}`;
-  try {
-    const res = await nominatim(url);
-    if (!res) return null;
-    const json = (await res.json()) as {
-      address?: Record<string, string>;
+
+  let hit: ReverseHit | null = null;
+
+  const pj = await photon(`reverse?lat=${lat}&lon=${lng}`);
+  const p = pj?.features?.[0]?.properties;
+  if (p?.countrycode) {
+    hit = {
+      code: String(p.countrycode).toUpperCase(),
+      country: p.country ?? String(p.countrycode).toUpperCase(),
+      place: p.city ?? p.district ?? p.locality ?? p.county ?? p.state ?? p.country ?? "",
     };
-    const a = json.address;
-    if (!a?.["country_code"]) return null;
-    const place =
-      a["city"] ??
-      a["town"] ??
-      a["village"] ??
-      a["municipality"] ??
-      a["suburb"] ??
-      a["county"] ??
-      a["state"] ??
-      a["country"] ??
-      "";
-    const hit: ReverseHit = {
-      code: a["country_code"]!.toUpperCase(),
-      country: a["country"] ?? a["country_code"]!.toUpperCase(),
-      place,
-    };
-    if (a["state"]) hit.state = a["state"];
-    reverseCache.set(cacheKey, hit);
-    return hit;
-  } catch {
-    return null;
+    if (p.state) hit.state = p.state;
   }
+
+  if (!hit) {
+    const res = await nominatim(
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&lat=${lat}&lon=${lng}`,
+    );
+    if (res) {
+      const json = (await res.json()) as { address?: Record<string, string> };
+      const a = json.address;
+      if (a?.["country_code"]) {
+        hit = {
+          code: a["country_code"]!.toUpperCase(),
+          country: a["country"] ?? a["country_code"]!.toUpperCase(),
+          place:
+            a["city"] ??
+            a["town"] ??
+            a["village"] ??
+            a["municipality"] ??
+            a["county"] ??
+            a["state"] ??
+            a["country"] ??
+            "",
+        };
+        if (a["state"]) hit.state = a["state"];
+      }
+    }
+  }
+
+  if (hit) reverseCache.set(cacheKey, hit);
+  return hit;
 }
 
 /** Reverse-geocode evenly spaced points along the routed polyline. */
