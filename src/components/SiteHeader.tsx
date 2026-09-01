@@ -96,10 +96,10 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           ))}
         </nav>
 
-        <CurrencySelector className="ml-auto lg:ml-0" />
+        <CurrencySelector className="ml-auto shrink-0 lg:ml-0" />
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-3 py-1.5 text-sm font-semibold tracking-wide transition-colors hover:bg-background/80 lg:ml-0">
+          <DropdownMenuTrigger className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-background/50 px-2.5 py-1.5 text-sm font-semibold tracking-wide transition-colors hover:bg-background/80 sm:px-3 lg:ml-0">
             <FlagIcon code={lang.flag} />
             <span>{lang.flag}</span>
             <ChevronDown className="size-4 text-muted-foreground" />
