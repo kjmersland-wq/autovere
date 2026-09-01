@@ -4,9 +4,9 @@
  * ─────────────────────────────────────────────────────────────────────
  * HOW TO ADD / UPDATE A LINK
  * ─────────────────────────────────────────────────────────────────────
- * Every entry is `{ url, active }`:
+ * Every entry is `{ url, active, fallback }`:
  *   • url    — your full affiliate tracking URL (paste it here, nothing else to change)
- *   • active — false renders the plain provider URL (or hides the offer);
+ *   • active — false renders the plain provider URL instead;
  *              flip to true the moment your tracking link goes live.
  *
  * UI components read ONLY from this file — you never touch components
@@ -35,28 +35,35 @@ export function affiliateUrl(e: AffiliateEntry): string {
 }
 
 /* ------------------------------------------------------------------ */
-/* Travelpayouts — live programs                                       */
-/* Replace "YOUR_MARKER" once with your Travelpayouts marker and all   */
-/* programs below activate at the same time.                           */
+/* Travelpayouts — LIVE (marker 704131)                                */
 /* ------------------------------------------------------------------ */
-const TP_MARKER = "YOUR_MARKER";
-
-const tp = (promoId: string, fallback: string): AffiliateEntry =>
-  entry(
-    TP_MARKER === "YOUR_MARKER"
-      ? ""
-      : `https://c55.travelpayouts.com/click?shmarker=${TP_MARKER}&promo_id=${promoId}&source_type=customlink&type=click`,
-    fallback,
-  );
+export const AFFILIATE_CONFIG = {
+  carRental: {
+    autoEurope:
+      "https://tp.media/r?marker=704131&trs=284910&p=4114&u=https%3A%2F%2Fwww.autoeurope.com",
+    economyBookings:
+      "https://tp.media/r?marker=704131&trs=284910&p=4477&u=https%3A%2F%2Fwww.economybookings.com",
+    localrent:
+      "https://tp.media/r?marker=704131&trs=284910&p=4238&u=https%3A%2F%2Flocalrent.com",
+  },
+  motorcycle: {
+    bikesBooking:
+      "https://tp.media/r?marker=704131&trs=284910&p=680&u=https%3A%2F%2Fbikesbooking.com",
+  },
+  connectivity: {
+    yesim: "https://tp.media/r?marker=704131&trs=284910&p=8544&u=https%3A%2F%2Fyesim.app",
+    saily: "https://tp.media/r?marker=704131&trs=284910&p=8921&u=https%3A%2F%2Fsaily.com",
+  },
+} as const;
 
 export const AFFILIATES = {
   carRental: {
     /** Travelpayouts — live */
-    autoEurope: tp("4490", "https://www.autoeurope.com/"),
+    autoEurope: entry(AFFILIATE_CONFIG.carRental.autoEurope, "https://www.autoeurope.com/"),
     /** Travelpayouts — live */
-    economyBookings: tp("4491", "https://www.economybookings.com/"),
+    economyBookings: entry(AFFILIATE_CONFIG.carRental.economyBookings, "https://www.economybookings.com/"),
     /** Travelpayouts — live */
-    localrent: tp("4522", "https://localrent.com/"),
+    localrent: entry(AFFILIATE_CONFIG.carRental.localrent, "https://localrent.com/"),
     /** Awin — pending: paste affiliate URL to activate */
     europcar: entry("", "https://www.europcar.com/"),
     /** Awin — pending */
@@ -76,14 +83,14 @@ export const AFFILIATES = {
 
   twoWheelers: {
     /** Travelpayouts — live */
-    bikesBooking: tp("4534", "https://www.bikesbooking.com/"),
+    bikesBooking: entry(AFFILIATE_CONFIG.motorcycle.bikesBooking, "https://www.bikesbooking.com/"),
   },
 
   connectivity: {
     /** Travelpayouts — live */
-    yesim: tp("4615", "https://yesim.app/"),
+    yesim: entry(AFFILIATE_CONFIG.connectivity.yesim, "https://yesim.app/"),
     /** Travelpayouts — live */
-    saily: tp("4656", "https://saily.com/"),
+    saily: entry(AFFILIATE_CONFIG.connectivity.saily, "https://saily.com/"),
   },
 
   tours: {
