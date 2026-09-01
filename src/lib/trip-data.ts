@@ -333,30 +333,59 @@ function passesForRoute(region: RegionKey, geo: RouteGeo | null): string[] {
   return ["Select a start and destination to load live pass and closure intel for the countries you actually cross."];
 }
 
+/** Country-specific rules, only surfaced for countries the route really enters. */
+const RIDER_RULES: Record<string, string> = {
+  FR: "France: CE-approved gloves are mandatory for rider and pillion, and a high-vis vest must be carried within reach.",
+  DE: "Germany: a DIN 13167 motorcycle first-aid kit is expected, and lane filtering is not permitted.",
+  AT: "Austria: first-aid kit required; dipped headlights on at all times.",
+  IT: "Italy: motorways are off-limits to bikes under 150 cc; carry the V5/registration document.",
+  PL: "Poland: zero-tolerance alcohol limit (0.02%) and headlights on day and night.",
+  DK: "Denmark: headlights on at all times; strong crosswinds on the Storebælt and Øresund bridges.",
+  NO: "Norway: studded-tyre season rules apply from November; AutoPASS gantries are free for motorcycles.",
+  SE: "Sweden: winter tyres required 1 Dec – 31 Mar in wintry conditions.",
+  NL: "Netherlands: mopeds and bikes must use the main carriageway on motorways; strict 100 km/h daytime limit.",
+  ES: "Spain: reflective vest must be carried; approved helmet with visor required.",
+  US: "US: helmet laws vary by state — check the state line rules before you cross.",
+  CA: "Canada: helmets are mandatory in every province; watch for wildlife at dawn and dusk.",
+};
+
+const CAMPER_RULES: Record<string, string> = {
+  DE: "Germany: 3.5 t campers may use the left lane, but 100 km/h is the legal maximum unless plated for 120.",
+  FR: "France: over 3.5 t you fall into the lower speed bands (110/100/80) and pay the class-2 péage rate.",
+  IT: "Italy: many historic centres are ZTL-restricted — park outside and walk in.",
+  AT: "Austria: over 3.5 t you need the GO-Box, not the vignette.",
+  CH: "Switzerland: over 3.5 t requires the heavy-vehicle charge (PSVA) instead of the e-vignette.",
+  DK: "Denmark: bridge tolls are charged by vehicle length — over 6 m moves you to a higher class.",
+  PL: "Poland: over 3.5 t requires e-TOLL on-board registration.",
+  NO: "Norway: AutoPASS class 2 applies over 3.5 t; many tunnels have 4.0 m height limits.",
+  NL: "Netherlands: several tunnels cap height at 4.0 m and LPG carriage is restricted.",
+  US: "US: check bridge clearances on older state routes — many are under 4.1 m (13'6\").",
+  CA: "Canada: provincial parks require reservations in summer; propane must be off in tunnels.",
+};
+
+function corridorNotes(geo: RouteGeo | null, table: Record<string, string>): string[] {
+  if (!geo || !geo.countries.length) return [];
+  return geo.countries.map((c) => table[c.code]).filter((v): v is string => Boolean(v));
+}
+
+function corridorSummary(geo: RouteGeo | null): string[] {
+  if (!geo || !geo.countries.length) {
+    return ["Calculate a route to load the live advisories for the countries you actually cross."];
+  }
+  const names = geo.countries.map((c) => `${c.flag} ${c.country}`).join(" → ");
+  const borders = geo.borders.length
+    ? `${geo.borders.length} border crossing${geo.borders.length > 1 ? "s" : ""} on the way.`
+    : "No border crossings — the whole route stays in one country.";
+  return [`Corridor analysed from the routed polyline: ${names}.`, borders];
+}
+
 function safetyFor(region: RegionKey, vehicle: VehicleKey, geo: RouteGeo | null = null) {
   if (vehicle === "motorcycle") {
     return {
       title: "Rider Safety & Gear Radar",
       sections: [
-        {
-          heading: "🧤 Gear & legal kit",
-          items: [
-            "France: CE-approved gloves are mandatory for rider and pillion, and a high-vis vest must be carried within reach.",
-            "Austria & Germany: carry a first-aid kit meeting DIN 13167 (motorcycle standard) — small, and checked at roadside stops.",
-            "Keep your vest, kit and documents on top of the pannier so a check takes seconds.",
-          ],
-        },
-        {
-          heading: "🏔️ Mountain pass alerts",
-          items: passesForRoute(region, geo),
-        },
-        {
-          heading: "⛽ Long-stretch fuel alerts",
-          items: [
-            "Two stretches exceed 180 km between open stations — top up before the pass climbs.",
-            "Night-time pumps on the alpine leg are card-only; carry a backup card.",
-          ],
-        },
+        { heading: "🧤 Gear & legal kit", items: [...corridorNotes(geo, RIDER_RULES), ...corridorSummary(geo)] },
+        { heading: "🏔️ Mountain pass alerts", items: passesForRoute(region, geo) },
       ],
     };
   }
@@ -364,40 +393,15 @@ function safetyFor(region: RegionKey, vehicle: VehicleKey, geo: RouteGeo | null 
     return {
       title: "Camper Clearance & Weight Radar",
       sections: [
-        {
-          heading: "📏 Clearance warnings",
-          items: [
-            "Two tunnels on this route cap height at 3.2 m — your 3.05 m profile clears with margin.",
-            "One low village archway (2.9 m) was bypassed via the valley road automatically.",
-          ],
-        },
-        {
-          heading: "⚖️ Weight & axle limits",
-          items: [
-            "Route verified for vehicles up to 3.5 t; a 7.5 t restriction on the old pass road is avoided.",
-            "Crosswind advisory on the coastal bridge section — reduce speed with a high side profile.",
-          ],
-        },
-        {
-          heading: "🛠️ Services",
-          items: [
-            "Three overnight-friendly service areas with fresh water and grey-water disposal along the way.",
-          ],
-        },
+        { heading: "📏 Clearance, weight & class rules", items: [...corridorNotes(geo, CAMPER_RULES), ...corridorSummary(geo)] },
+        { heading: "🏔️ Pass conditions", items: passesForRoute(region, geo) },
       ],
     };
   }
   return {
     title: "Driver Safety Radar",
     sections: [
-      {
-        heading: "🚗 On the road",
-        items: [
-          "Winter equipment rules apply on the higher sections of this route between October and April.",
-          "Rest stops are mapped every 2 hours so the drive stays fresh and relaxed.",
-          "Every toll gantry on this route accepts contactless cards — no cash needed.",
-        ],
-      },
+      { heading: "🚗 On the road", items: corridorSummary(geo) },
       { heading: "🏔️ Pass conditions", items: passesForRoute(region, geo) },
     ],
   };
