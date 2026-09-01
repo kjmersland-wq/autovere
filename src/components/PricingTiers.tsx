@@ -2,7 +2,6 @@ import { useState } from "react";
 import { Check, ExternalLink, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
-import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { useStripeCheckout } from "@/hooks/useStripeCheckout";
@@ -10,14 +9,15 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { useLocale } from "@/lib/i18n";
 import { pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib/pricing-i18n";
-import { getStripeEnvironment, PRICE_IDS } from "@/lib/stripe";
+import { billingReturnUrl, checkoutReturnUrl, getStripeEnvironment, PRICE_IDS } from "@/lib/stripe";
+import type { RegionKey } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
 import { createPortalSession } from "@/utils/payments.functions";
 
-export function PricingTiers() {
+export function PricingTiers({ region }: { region?: RegionKey }) {
   const locale = useLocale();
   const L = pricingCopy(locale);
-  const tiers = tiersFor(locale);
+  const tiers = tiersFor(locale, region);
   const { user, openAuth } = useAuth();
   const { tier: currentTier, isActive, cancelAtPeriodEnd, periodEnd, pastDue } = useSubscription();
   const { openCheckout, closeCheckout, isOpen, checkoutElement } = useStripeCheckout();
@@ -43,7 +43,7 @@ export function PricingTiers() {
     }
     openCheckout({
       priceId: priceIdFor(tier),
-      returnUrl: `${window.location.origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`,
+      returnUrl: checkoutReturnUrl(),
     });
   };
 
@@ -51,7 +51,7 @@ export function PricingTiers() {
     setPortalLoading(true);
     try {
       const result = await createPortalSession({
-        data: { returnUrl: `${window.location.origin}/pricing`, environment: getStripeEnvironment() },
+        data: { returnUrl: billingReturnUrl(), environment: getStripeEnvironment() },
       });
       if ("error" in result) throw new Error(result.error);
       window.open(result.url, "_blank", "noopener");
@@ -64,8 +64,6 @@ export function PricingTiers() {
 
   return (
     <div>
-      <PaymentTestModeBanner />
-
       {isActive && (
         <div className="glass-panel mx-auto mb-8 mt-6 flex max-w-2xl flex-col items-center gap-3 rounded-2xl p-5 text-center sm:flex-row sm:justify-between sm:text-left">
           <div>
