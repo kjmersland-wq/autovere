@@ -854,6 +854,8 @@ export type QuickRoute = {
   destination: string;
   via: string;
   regions: RegionKey[];
+  /** Optional EV savings highlight rendered as a badge on the pill. */
+  evBadge?: string;
 };
 
 export const QUICK_ROUTES: QuickRoute[] = [
@@ -901,6 +903,46 @@ export const QUICK_ROUTES: QuickRoute[] = [
     destination: "Barcelona, Spain",
     via: "DE → ES via FR",
     regions: ["eu"],
+  },
+  {
+    key: "nyc-toronto",
+    emoji: "🗽",
+    label: "New York, NY → Toronto, ON",
+    origin: "New York, NY",
+    destination: "Toronto, ON",
+    via: "Tolls ~$18–24 · I-87 / ON 401",
+    regions: ["us"],
+    evBadge: "⚡ EV saves ~60% (~$51) vs petrol",
+  },
+  {
+    key: "orlando-miami",
+    emoji: "🌴",
+    label: "Orlando, FL → Miami, FL",
+    origin: "Orlando, FL",
+    destination: "Miami, FL",
+    via: "SunPass $17.50 · FL Turnpike",
+    regions: ["us"],
+    evBadge: "⚡ EV saves ~62% (~$26) vs petrol",
+  },
+  {
+    key: "toronto-montreal",
+    emoji: "🍁",
+    label: "Toronto, ON → Montréal, QC",
+    origin: "Toronto, ON",
+    destination: "Montréal, QC",
+    via: "407 ETR bypass · $0 tolls · Hwy 401 / A-20",
+    regions: ["ca"],
+    evBadge: "⚡ EV saves ~64% (~$56 CAD) vs petrol",
+  },
+  {
+    key: "calgary-vancouver",
+    emoji: "🏔️",
+    label: "Calgary, AB → Vancouver, BC",
+    origin: "Calgary, AB",
+    destination: "Vancouver, BC",
+    via: "Trans-Canada Hwy · no tolls",
+    regions: ["ca"],
+    evBadge: "⚡ EV saves ~62% (~$97 CAD) vs petrol",
   },
 ];
 

@@ -32,6 +32,7 @@ import {
   RV_POIS,
   SCENIC_HIGHLIGHTS,
   detectScandiBridges,
+  evComparison,
   routeTouchesNorway,
   variantComparison,
   type EmissionBadge,
@@ -78,6 +79,45 @@ function SubtotalBadge({ emoji, label, value }: { emoji: string; label: string; 
       <span className="text-foreground/75">{label}</span>
       <span className="font-semibold text-foreground">{value}</span>
     </span>
+  );
+}
+
+function EvSavingsBanner({
+  trip,
+  vehicle,
+  fuel,
+}: {
+  trip: TripEstimate;
+  vehicle: "car" | "motorhome" | "motorcycle";
+  fuel: FuelKey;
+}) {
+  const t = useT();
+  const m = useMoney(trip.currency);
+  const ev = evComparison(trip, vehicle, fuel);
+  return (
+    <div className="mt-5 rounded-2xl border border-emerald-400/30 bg-emerald-400/5 p-5">
+      <p className="text-sm font-semibold">{t.map.evTitle}</p>
+      <p className="mt-1 text-sm text-foreground/75">
+        {ev.isElectric
+          ? t.map.evAlready
+          : t.map.evIntro(m.fmt(ev.fuelCost, 0), m.fmt(ev.evCost, 0))}
+      </p>
+      <p className="mt-3 flex flex-wrap items-center gap-2 text-sm font-semibold">
+        <span
+          className={cn(
+            "rounded-full px-3 py-1",
+            ev.saved >= 0 ? "bg-emerald-400/15 text-emerald-300" : "bg-rose-400/15 text-rose-300",
+          )}
+        >
+          {ev.saved >= 0
+            ? t.map.evSaved(m.fmt(Math.abs(ev.saved), 0))
+            : t.map.evCostlier(m.fmt(Math.abs(ev.saved), 0))}
+        </span>
+        <span className="rounded-full border border-border bg-background/50 px-3 py-1 text-xs text-foreground/75">
+          {t.map.evEnergy(`${ev.kwh} kWh`, `${ev.litres} L`)}
+        </span>
+      </p>
+    </div>
   );
 }
 
@@ -253,6 +293,14 @@ export function TripResults({
         <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={m.fmt(trip.energyCost)} />
         <SubtotalBadge emoji="⛴️" label={t.results.ferriesBadge} value={m.fmt(trip.ferries)} />
       </div>
+
+      {(region === "us" || region === "ca") && (
+        <EvSavingsBanner
+          trip={trip}
+          vehicle={isMotorhome ? "motorhome" : isMotorcycle ? "motorcycle" : "car"}
+          fuel={fuel}
+        />
+      )}
 
       {trip.discountNote && (
         <p className="mt-4 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-foreground/85">
