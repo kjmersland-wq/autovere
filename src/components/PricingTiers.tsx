@@ -14,7 +14,7 @@ import type { RegionKey } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
 import { createPortalSession } from "@/utils/payments.functions";
 
-export function PricingTiers({ region }: { region?: RegionKey }) {
+export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
   const locale = useLocale();
   const L = pricingCopy(locale);
   const tiers = tiersFor(locale, region);
