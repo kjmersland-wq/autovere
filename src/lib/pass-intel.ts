@@ -1,4 +1,6 @@
+import { borderPairs, filterByCorridor, type LatLng } from "./corridor-filter";
 import type { RegionKey, VehicleKey } from "./trip-data";
+
 
 /* ------------------------------------------------------------------ *
  * Iconic mountain pass radar
