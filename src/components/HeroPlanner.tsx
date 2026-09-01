@@ -62,9 +62,9 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const tr = useTr();
   const locale = useLocale();
   const copy = REGION_COPY[region];
-  const localizedHints = locale === "no" || locale === "pl";
-  const originHint = localizedHints ? t.hero.originHint : copy.originHint;
-  const destinationHint = localizedHints ? t.hero.destinationHint : copy.destinationHint;
+  const rs = regionStrings(locale, region);
+  const originHint = rs.originHint;
+  const destinationHint = rs.destinationHint;
   const defaults = REGION_DEFAULTS[region];
   const imperial = defaults.units === "imperial";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
