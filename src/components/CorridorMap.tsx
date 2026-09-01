@@ -96,7 +96,7 @@ export function CorridorMap({
 
   const passes = useMemo(
     () =>
-      detectMountainPasses(region, from, to).map((p) => {
+      detectMountainPasses(trip.corridor?.coords).map((p) => {
         const st = passStatus(p);
         return {
           name: `${p.emoji} ${p.name}`,
@@ -107,7 +107,7 @@ export function CorridorMap({
             | "chains",
         };
       }),
-    [region, from, to],
+    [trip.corridor?.coords],
   );
 
   const pois = useMemo(
