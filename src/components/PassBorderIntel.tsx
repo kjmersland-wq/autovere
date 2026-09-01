@@ -30,6 +30,9 @@ export function PassBorderIntel({
   origin,
   destination,
   vehicle,
+  coords,
+  countryCodes = [],
+  countryNames = [],
   onAddStop,
   onUseSmartBypass,
 }: {
@@ -37,18 +40,23 @@ export function PassBorderIntel({
   origin: string;
   destination: string;
   vehicle: VehicleKey;
+  /** Real routed polyline — everything here is filtered against it. */
+  coords?: [number, number][] | undefined;
+  countryCodes?: string[];
+  countryNames?: string[];
   onAddStop?: (name: string) => void;
   onUseSmartBypass?: () => void;
 }) {
   const t = useT();
   const tr = useTr();
-  const passes = detectMountainPasses(region, origin, destination);
+  const passes = detectMountainPasses(coords);
   const tips = detectBorderTips(region, origin, destination);
-  const crossings = detectBorderCrossings(region, origin, destination);
+  const crossings = detectBorderCrossings(countryCodes, countryNames);
 
   return (
     <>
-      {/* Mountain pass radar */}
+      {/* Mountain pass radar — only when a listed pass sits on the corridor */}
+      {passes.length > 0 && (
       <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
         <div className="flex items-center gap-2">
           <Mountain className="size-5 text-primary" />
@@ -137,6 +145,7 @@ export function PassBorderIntel({
           })}
         </div>
       </div>
+      )}
 
       {/* Cross-border fuel arbitrage */}
       {tips.length > 0 && (
@@ -180,7 +189,8 @@ export function PassBorderIntel({
         </div>
       )}
 
-      {/* Border crossing checkpoints */}
+      {/* Border crossing checkpoints — only for countries actually crossed */}
+      {crossings.length > 0 && (
       <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
         <div className="flex items-center gap-2">
           <ShieldCheck className="size-5 text-primary" />
@@ -251,6 +261,7 @@ export function PassBorderIntel({
           })}
         </div>
       </div>
+      )}
     </>
   );
 }
