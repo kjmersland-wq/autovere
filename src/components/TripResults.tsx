@@ -32,6 +32,7 @@ import {
   RV_POIS,
   SCENIC_HIGHLIGHTS,
   detectScandiBridges,
+  evComparison,
   routeTouchesNorway,
   variantComparison,
   type EmissionBadge,
@@ -253,6 +254,14 @@ export function TripResults({
         <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={m.fmt(trip.energyCost)} />
         <SubtotalBadge emoji="⛴️" label={t.results.ferriesBadge} value={m.fmt(trip.ferries)} />
       </div>
+
+      {(region === "us" || region === "ca") && (
+        <EvSavingsBanner
+          trip={trip}
+          vehicle={isMotorhome ? "motorhome" : isMotorcycle ? "motorcycle" : "car"}
+          fuel={fuel}
+        />
+      )}
 
       {trip.discountNote && (
         <p className="mt-4 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-foreground/85">
