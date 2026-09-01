@@ -229,6 +229,11 @@ export function TripResults({
     <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">{t.results.eyebrow}</p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          {isMotorhome ? "🚐 Motorhome" : isMotorcycle ? "🏍️ Motorcycle" : "🚗 Car"}
+        </span>
+      </div>
       <p className="mt-2 max-w-2xl text-foreground/75">
         {t.results.intro}
       </p>
