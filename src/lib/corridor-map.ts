@@ -288,6 +288,9 @@ export type FuelStop = {
   /** Currency symbol the numeric price is expressed in. */
   priceSymbol: string;
   priceUnit: string;
+  /** Petrol 95 / diesel market rate per litre in EUR, for popups and comparisons. */
+  petrolEur: number;
+  dieselEur: number;
   source: FuelSource;
   amenities: string[];
 };
@@ -317,13 +320,14 @@ export function buildFuelStops({
     const p = (i + 0.6) / (count + 0.3);
     const country = countries[Math.min(countries.length - 1, Math.floor(p * countries.length))]!;
     const brand = brands[Math.floor(rnd() * brands.length)]!;
-    const base = COUNTRY_BASE[country] ?? 1.72;
-    const dieselAdj = fuel === "diesel" ? -0.08 : 0;
-    const litre = base + dieselAdj + (rnd() - 0.5) * 0.14;
-    const priceValue =
-      region === "us" ? litre * 3.785 * 0.55 : region === "ca" ? litre * 0.82 : litre;
-    const priceSymbol = region === "us" ? "$" : region === "ca" ? "C$" : "€";
-    const price = `${priceSymbol}${priceValue.toFixed(region === "us" ? 2 : 3)}`;
+    const rate = countryFuelEur(country);
+    // Motorway forecourts carry the higher published rate where we have one.
+    const motorway = rnd() > 0.6;
+    const petrolEur = motorway ? rate.motorwayPetrol ?? rate.petrol * 1.06 : rate.petrol;
+    const dieselEur = motorway ? rate.motorwayDiesel ?? rate.diesel * 1.06 : rate.diesel;
+    const priceValue = fuel === "diesel" ? dieselEur : petrolEur;
+    const priceSymbol = "€";
+    const price = `${priceSymbol}${priceValue.toFixed(3)}`;
     const atKm = total * p;
     return {
       id: `stop-${i}`,
@@ -335,12 +339,15 @@ export function buildFuelStops({
       price,
       priceValue,
       priceSymbol,
-      priceUnit: region === "us" ? "per gallon" : "per litre",
+      priceUnit: "per litre",
+      petrolEur,
+      dieselEur,
       source: countryFuelSource(country),
       amenities: ["24/7", rnd() > 0.5 ? "HGV/RV lanes" : "Café", rnd() > 0.6 ? "AdBlue" : "Car wash"],
     };
   });
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Motorhome camping radar                                             */
