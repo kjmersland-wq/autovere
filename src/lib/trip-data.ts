@@ -686,7 +686,7 @@ export function estimateAllVariants(
   prices: EnergyPrices | null = null,
   profile: VehicleProfile | null = null,
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays, geo, prices] as const;
+  const args = [extraStops, tripType, durationDays, geo, prices, profile] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
