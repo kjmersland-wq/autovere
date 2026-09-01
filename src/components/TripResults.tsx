@@ -805,6 +805,8 @@ export function TripResults({
         )}
       </div>
 
+      <PartnerOffers vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"} />
+
       {printing && (
         <PrintItinerary
           trip={trip}

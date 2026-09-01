@@ -1,3 +1,5 @@
+import { AFFILIATES, affiliateUrl } from "@/config/affiliateLinks";
+
 import type { RegionKey } from "./trip-data";
 
 /**
