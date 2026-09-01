@@ -185,7 +185,28 @@ export type ChargingStop = {
   power: string;
   networks: string[];
   note: string;
+  /** True when the stop is served by the driver's preferred operator. */
+  preferred?: boolean;
+  /** True when we had to fall back to the nearest high-power CCS hub. */
+  fallback?: boolean;
 };
+
+/**
+ * Consumption and charging preferences taken from the active saved vehicle
+ * in "My Garage" — when present these drive the cost and stop intervals.
+ */
+export type VehicleProfile = {
+  name?: string;
+  kwhPer100?: number | undefined;
+  batteryKwh?: number | undefined;
+  /** Preferred charging operator, or undefined / "All networks" for any. */
+  network?: string | undefined;
+};
+
+export function preferredNetwork(profile?: VehicleProfile | null) {
+  const n = profile?.network?.trim();
+  return n && !/^all/i.test(n) ? n : null;
+}
 
 export type EnergyOptimizer = {
   mode: "ev" | "fuel";
