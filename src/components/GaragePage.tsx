@@ -6,6 +6,7 @@ import {
   Copy,
   CreditCard,
   Download,
+  Gauge,
   HelpCircle,
   LayoutGrid,
   LifeBuoy,
@@ -214,6 +215,10 @@ export function GaragePage() {
   };
 
   const removeVehicle = (id: string) => {
+    if (activeVehicleId === id) {
+      setActiveVehicleId(null);
+      saveActiveVehicleId(null);
+    }
     commitVehicles(vehicles.filter((v) => v.id !== id));
     toast.success(tx("Kjøretøyet er fjernet."));
   };
@@ -486,6 +491,24 @@ export function GaragePage() {
                           {v.consumption ? ` · ${v.consumption}` : ""}
                           {v.height ? ` · ${v.height}` : ""}
                         </p>
+                        {v.fuel === "ev" && (
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {v.kwhPer100 ? `${v.kwhPer100} kWh/100 km` : tx("Forbruk ikke satt")}
+                            {v.batteryKwh ? ` · ${v.batteryKwh} kWh ${tx("batteri")}` : ""}
+                            {` · 🔌 ${v.network && v.network !== ALL_NETWORKS ? v.network : tx("Alle nettverk")}`}
+                          </p>
+                        )}
+                        <Button
+                          size="sm"
+                          variant={activeVehicleId === v.id ? "default" : "outline"}
+                          className="mt-3"
+                          onClick={() => activateVehicle(v)}
+                        >
+                          <Gauge className="size-4" />
+                          {activeVehicleId === v.id
+                            ? tx("Aktiv i ruteberegning")
+                            : tx("Bruk i ruteberegning")}
+                        </Button>
                         <div className="mt-3 flex flex-wrap gap-2">
                           {v.tags.map((t) => (
                             <span
@@ -851,6 +874,58 @@ export function GaragePage() {
                   />
                 </div>
               </div>
+              {draft.fuel === "ev" && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-2">
+                    <Label htmlFor="v-kwh">{tx("Snittforbruk (kWh/100 km)")}</Label>
+                    <Input
+                      id="v-kwh"
+                      inputMode="decimal"
+                      value={draft.kwhPer100 ?? ""}
+                      placeholder="18"
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          kwhPer100: e.target.value ? Number(e.target.value.replace(",", ".")) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="v-batt">{tx("Batterikapasitet (kWh)")}</Label>
+                    <Input
+                      id="v-batt"
+                      inputMode="decimal"
+                      value={draft.batteryKwh ?? ""}
+                      placeholder="75"
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          batteryKwh: e.target.value ? Number(e.target.value.replace(",", ".")) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2 sm:col-span-2">
+                    <Label htmlFor="v-network">{tx("Foretrukket ladenettverk")}</Label>
+                    <select
+                      id="v-network"
+                      value={draft.network ?? ALL_NETWORKS}
+                      onChange={(e) => setDraft({ ...draft, network: e.target.value })}
+                      className="h-10 rounded-md border border-border bg-background/60 px-3 text-sm"
+                    >
+                      {CHARGING_NETWORKS.map((n) => (
+                        <option key={n} value={n} className="bg-card text-foreground">
+                          {n === ALL_NETWORKS ? tx("Alle nettverk") : n}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-muted-foreground">
+                      {tx("Ladestopp langs ruten prioriteres for dette nettverket når det finnes i nærheten.")}
+                    </p>
+                  </div>
+                </div>
+              )}
               {draft.kind === "motorhome" && (
                 <div className="grid gap-2">
                   <Label htmlFor="v-height">{tx("Høyde og vekt")}</Label>
