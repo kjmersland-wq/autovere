@@ -40,6 +40,7 @@ import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
 import {
   ROUTE_VARIANTS,
+  applyNetworkFilter,
   RV_POIS,
   SCENIC_HIGHLIGHTS,
   detectScandiBridges,
