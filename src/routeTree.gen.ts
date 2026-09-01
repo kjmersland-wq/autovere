@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CaRouteImport } from './routes/ca'
+import { Route as DecalsRouteImport } from './routes/decals'
 import { Route as EuropeRouteImport } from './routes/europe'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GarageRouteImport } from './routes/garage'
@@ -80,6 +81,11 @@ const AdminRoute = AdminRouteImport.update({
 const CaRoute = CaRouteImport.update({
   id: '/ca',
   path: '/ca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DecalsRoute = DecalsRouteImport.update({
+  id: '/decals',
+  path: '/decals',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EuropeRoute = EuropeRouteImport.update({
@@ -358,6 +364,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/ca': typeof CaRouteWithChildren
+  '/decals': typeof DecalsRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
@@ -416,6 +423,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/decals': typeof DecalsRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
@@ -475,6 +483,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/ca': typeof CaRouteWithChildren
+  '/decals': typeof DecalsRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
@@ -536,6 +545,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ca'
+    | '/decals'
     | '/europe'
     | '/faq'
     | '/garage'
@@ -594,6 +604,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/decals'
     | '/europe'
     | '/faq'
     | '/garage'
@@ -652,6 +663,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ca'
+    | '/decals'
     | '/europe'
     | '/faq'
     | '/garage'
@@ -712,6 +724,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   CaRoute: typeof CaRouteWithChildren
+  DecalsRoute: typeof DecalsRoute
   EuropeRoute: typeof EuropeRoute
   FaqRoute: typeof FaqRoute
   GarageRoute: typeof GarageRoute
@@ -765,6 +778,13 @@ declare module '@tanstack/react-router' {
       path: '/ca'
       fullPath: '/ca'
       preLoaderRoute: typeof CaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/decals': {
+      id: '/decals'
+      path: '/decals'
+      fullPath: '/decals'
+      preLoaderRoute: typeof DecalsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/europe': {
@@ -1216,6 +1236,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   CaRoute: CaRouteWithChildren,
+  DecalsRoute: DecalsRoute,
   EuropeRoute: EuropeRoute,
   FaqRoute: FaqRoute,
   GarageRoute: GarageRoute,
