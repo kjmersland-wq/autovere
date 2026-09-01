@@ -144,11 +144,9 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
   },
 ];
 
-const DEFAULT_PASSES: Record<RegionKey, string[]> = {
-  eu: ["grossglockner", "stelvio", "furka-grimsel"],
-  us: ["dragon"],
-  ca: ["icefields"],
-};
+/** A pass only counts as "on the route" inside this corridor. */
+export const PASS_CORRIDOR_KM = 50;
+
 
 function inSeason(pass: MountainPass, month: number) {
   const [from, to] = pass.openMonths;
