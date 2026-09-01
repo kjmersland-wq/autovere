@@ -175,19 +175,15 @@ export function passStatus(pass: MountainPass, date = new Date()): {
   return { status: "open", label: "Open", tone: "open" };
 }
 
+/**
+ * Passes within 50 km of the real routed polyline. No polyline → no radar.
+ */
 export function detectMountainPasses(
-  region: RegionKey,
-  origin: string,
-  destination: string,
+  coords: LatLng[] | undefined | null,
 ): MountainPass[] {
-  const text = `${origin} ${destination}`.toLowerCase();
-  const matched = MOUNTAIN_PASSES.filter(
-    (p) => p.regions.includes(region) && p.match.some((m) => text.includes(m)),
-  );
-  if (matched.length > 0) return matched;
-  const fallback = DEFAULT_PASSES[region];
-  return MOUNTAIN_PASSES.filter((p) => fallback.includes(p.id));
+  return filterByCorridor(MOUNTAIN_PASSES, coords, PASS_CORRIDOR_KM);
 }
+
 
 /* ------------------------------------------------------------------ *
  * Cross-border fuel & cost arbitrage
