@@ -461,6 +461,18 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
           portal: { label: "407 ETR", url: "https://www.407etr.com/" },
         },
         {
+          place: "Highway 412 (Whitby ↔ 407)",
+          detail: "Two-axle vehicle, transponder rate",
+          amount: 3.9,
+          portal: { label: "Ontario 407 tolls", url: "https://www.ontario.ca/page/highway-407-tolls" },
+        },
+        {
+          place: "Highway 418 (Courtice ↔ 407)",
+          detail: "Two-axle vehicle, transponder rate",
+          amount: 3.1,
+          portal: { label: "Ontario 407 tolls", url: "https://www.ontario.ca/page/highway-407-tolls" },
+        },
+        {
           place: "Video toll charge",
           detail: "Per-trip camera fee",
           amount: 8,
@@ -469,10 +481,37 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
       ],
     },
     {
+      country: "⚜️ Québec",
+      total: 7.15,
+      lines: [
+        {
+          place: "A25 Bridge (Montréal ↔ Laval)",
+          detail: "Two-axle vehicle, peak with transponder",
+          amount: 4.3,
+          badge: "A25 tag",
+          portal: { label: "A25", url: "https://a25.com/" },
+        },
+        {
+          place: "A30 (Autoroute 30 toll section)",
+          detail: "Two-axle vehicle, electronic toll",
+          amount: 2.85,
+          portal: { label: "A30 Express", url: "https://a30express.com/" },
+        },
+      ],
+    },
+    {
       country: "🌲 Nova Scotia",
       total: 12.5,
-      lines: [{ place: "Cobequid Pass (Hwy 104)", detail: "Two-axle vehicle", amount: 12.5 }],
+      lines: [
+        {
+          place: "Cobequid Pass (Hwy 104)",
+          detail: "Two-axle vehicle",
+          amount: 12.5,
+          portal: { label: "Cobequid Pass", url: "https://cobequidpass.com/" },
+        },
+      ],
     },
+
     {
       country: "🏔️ British Columbia",
       total: 0,
