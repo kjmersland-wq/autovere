@@ -150,6 +150,34 @@ export const Route = createFileRoute("/$lang/$page")({
     const prefix = params.lang as LocalePrefix;
     const page = params.page as LocalePage;
     const url = absUrl(`/${params.lang}/${params.page}`);
+
+    // /<lang>/us and /<lang>/ca are regional homes, not content pages.
+    if (isRegionPrefix(params.page)) {
+      const regionName = params.page === "ca" ? "Canada" : "USA";
+      const regionImage = absUrl(`/og/autovere-og-${params.page}.jpg`);
+      const rTitle = `AutoVere ${regionName} — Road Trip Toll & Fuel Cost Planner (${params.lang.toUpperCase()})`;
+      const rDesc =
+        params.page === "ca"
+          ? "Plan Canadian road trips with exact toll, fuel, EV charging and ferry costs — in your language."
+          : "Plan American road trips with exact toll, gas, EV charging and ferry costs — in your language.";
+      return {
+        meta: [
+          { title: rTitle },
+          { name: "description", content: rDesc },
+          { property: "og:title", content: rTitle },
+          { property: "og:description", content: rDesc },
+          { property: "og:type", content: "website" },
+          { property: "og:url", content: url },
+          { property: "og:image", content: regionImage },
+          { property: "og:image:width", content: "1200" },
+          { property: "og:image:height", content: "630" },
+          { name: "twitter:card", content: "summary_large_image" },
+          { name: "twitter:image", content: regionImage },
+        ],
+        links: [{ rel: "canonical", href: url }],
+      };
+    }
+
     const image = absUrl(
       `/og/autovere-og-${prefix === "pl" || prefix === "no" ? prefix : "en"}.jpg`,
     );
