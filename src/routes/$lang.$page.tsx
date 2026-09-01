@@ -4,6 +4,7 @@ import { GaragePage } from "@/components/GaragePage";
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { InfoPage } from "@/components/InfoPage";
 import { PartnersPage } from "@/components/PartnersPage";
+import { PricingPage } from "@/components/PricingPage";
 import { ScenicGuide } from "@/components/ScenicGuide";
 import { TollsGuide } from "@/components/TollsGuide";
 import { LOCALE_LANDING } from "@/lib/dictionaries";
@@ -190,6 +191,8 @@ function LocalePage() {
   const { lang, page } = Route.useParams();
   const entry = LOCALE_ROUTES.find((l) => l.prefix === lang);
   const landing = entry ? LOCALE_LANDING[entry.code] : null;
+
+  if (page === "pricing") return <PricingPage />;
 
   if (page === "partners" && lang === "pl") return <PartnersPage lang="pl" />;
 
