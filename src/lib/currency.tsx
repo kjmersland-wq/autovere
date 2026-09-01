@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
+import { regionFromPath } from "@/lib/trip-data";
+
 export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF" | "ISK" | "PLN";
 
 export type CurrencyDef = {
