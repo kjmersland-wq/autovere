@@ -1,4 +1,5 @@
 import type { FlagCode } from "@/components/FlagIcon";
+import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
@@ -454,6 +455,7 @@ export function estimateTrip(
   tripType: TripType = "oneway",
   durationDays = 1,
   geo: RouteGeo | null = null,
+  prices: EnergyPrices | null = null,
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -509,8 +511,17 @@ export function estimateTrip(
   const consumption =
     vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
   const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
-  const pricePerL = fuel === "diesel" ? 1.72 : 1.89;
-  const pricePerKwh = 0.44;
+  // Live prices from the energy feed when available; the estimator never
+  // invents a number it cannot source.
+  const perLitreLive = prices
+    ? prices.unit === "gallon"
+      ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.785
+      : fuel === "diesel"
+        ? prices.diesel
+        : prices.petrol
+    : null;
+  const pricePerL = perLitreLive ?? (fuel === "diesel" ? 1.72 : 1.89);
+  const pricePerKwh = prices?.kwh ?? 0.44;
 
   const energyCost =
     fuel === "electric"
@@ -601,8 +612,9 @@ export function estimateAllVariants(
   tripType: TripType = "oneway",
   durationDays = 1,
   geo: RouteGeo | null = null,
+  prices: EnergyPrices | null = null,
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays, geo] as const;
+  const args = [extraStops, tripType, durationDays, geo, prices] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
@@ -635,6 +647,7 @@ export function evComparison(
   trip: TripEstimate,
   vehicle: VehicleKey,
   fuel: FuelKey,
+  prices: EnergyPrices | null = null,
 ): {
   fuelCost: number;
   evCost: number;
@@ -646,8 +659,15 @@ export function evComparison(
   const round2 = (n: number) => Math.round(n * 100) / 100;
   const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
   const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
-  const pricePerL = fuel === "diesel" ? 1.72 : 1.89;
-  const pricePerKwh = 0.44;
+  const perLitreLive = prices
+    ? prices.unit === "gallon"
+      ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.785
+      : fuel === "diesel"
+        ? prices.diesel
+        : prices.petrol
+    : null;
+  const pricePerL = perLitreLive ?? (fuel === "diesel" ? 1.72 : 1.89);
+  const pricePerKwh = prices?.kwh ?? 0.44;
   const fuelCost = round2((trip.distanceKm / 100) * consumption * pricePerL);
   const evCost = round2((trip.distanceKm / 100) * kwhPer100 * pricePerKwh);
   return {
