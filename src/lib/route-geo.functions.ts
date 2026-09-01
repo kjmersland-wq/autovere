@@ -333,17 +333,30 @@ async function buildRouteGeo(
   };
 }
 
+const point = z.object({ name: z.string().min(1).max(160), lat: z.number(), lng: z.number() });
+
 export const getRouteGeo = createServerFn({ method: "GET" })
   .inputValidator((data) =>
-    z.object({ origin: z.string().min(2).max(120), destination: z.string().min(2).max(120) }).parse(data),
+    z
+      .object({
+        origin: z.string().min(2).max(160),
+        destination: z.string().min(2).max(160),
+        /** Coordinates locked in by the autocomplete selection. */
+        fromPoint: point.optional(),
+        toPoint: point.optional(),
+      })
+      .parse(data),
   )
   .handler(async ({ data }): Promise<RouteGeo | null> => {
-    const key = `${data.origin.toLowerCase().trim()}|${data.destination.toLowerCase().trim()}`;
+    const coordKey = data.fromPoint && data.toPoint
+      ? `${data.fromPoint.lat},${data.fromPoint.lng}|${data.toPoint.lat},${data.toPoint.lng}`
+      : `${data.origin.toLowerCase().trim()}|${data.destination.toLowerCase().trim()}`;
+    const key = coordKey;
     if (cache.has(key)) return cache.get(key) ?? null;
     const running = inflight.get(key);
     if (running) return running;
 
-    const task = buildRouteGeo(data.origin, data.destination)
+    const task = buildRouteGeo(data.origin, data.destination, data.fromPoint, data.toPoint)
       .catch(() => null)
       .then((result) => {
         // Only cache successful lookups — a throttled miss should be retried.
