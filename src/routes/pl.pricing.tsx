@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { PricingTiers } from "@/components/PricingTiers";
-import { SiteHeader } from "@/components/SiteHeader";
+import { PricingPage } from "@/components/PricingPage";
 
 const title = "Plany i cennik — Free, Pro i Flota | AutoVere";
 const description =
@@ -19,26 +18,5 @@ export const Route = createFileRoute("/pl/pricing")({
     ],
     links: [{ rel: "canonical", href: "https://www.autovere.com/pl/pricing" }],
   }),
-  component: PlPricingPage,
+  component: () => <PricingPage />,
 });
-
-function PlPricingPage() {
-  return (
-    <main className="min-h-screen">
-      <SiteHeader />
-      <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Plany i cennik</p>
-        <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          Wybierz plan dopasowany do drogi, która przed Tobą.
-        </h1>
-        <p className="mt-4 max-w-2xl text-foreground/75">
-          Każdy plan zaczyna się od uczciwych liczb. Ulepsz go, gdy zechcesz mieć pełny garaż, nawigację offline i
-          rozliczenia opłat dla floty — anulujesz, kiedy sezon się kończy.
-        </p>
-        <div className="mt-12">
-          <PricingTiers />
-        </div>
-      </section>
-    </main>
-  );
-}

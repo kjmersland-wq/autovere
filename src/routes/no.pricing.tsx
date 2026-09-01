@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { InfoPage } from "@/components/InfoPage";
+import { PricingPage } from "@/components/PricingPage";
 import { NO_PRICING } from "@/lib/global-content-no";
 
 const content = NO_PRICING;
@@ -16,17 +16,5 @@ export const Route = createFileRoute("/no/pricing")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: NoInfoPage,
+  component: () => <PricingPage />,
 });
-
-function NoInfoPage() {
-  return (
-    <InfoPage
-      eyebrow={content.eyebrow}
-      title={content.title}
-      intro={content.intro}
-      sections={content.sections}
-      note={content.note}
-    />
-  );
-}
