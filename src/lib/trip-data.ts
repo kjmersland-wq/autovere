@@ -266,12 +266,20 @@ function buildOptimizer(
   distanceKm: number,
   imperial: boolean,
   geo?: RouteGeo | null,
+  profile?: VehicleProfile | null,
 ): EnergyOptimizer {
   const isEv = fuel === "electric";
   const tank = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 18 : 55;
-  const battery = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 21 : 77;
+  const battery =
+    profile?.batteryKwh && profile.batteryKwh > 0
+      ? profile.batteryKwh
+      : vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 21 : 77;
   const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
-  const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const kwhPer100 =
+    profile?.kwhPer100 && profile.kwhPer100 > 0
+      ? profile.kwhPer100
+      : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const wanted = preferredNetwork(profile);
 
   const fullRange = isEv ? (battery / kwhPer100) * 100 : (tank / consumption) * 100;
   const safeRange = fullRange * 0.75;
