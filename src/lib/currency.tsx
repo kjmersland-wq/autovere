@@ -119,8 +119,9 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     }
     // No saved preference: fall back to the regional default from the URL.
     const path = window.location.pathname;
-    if (path.startsWith("/ca")) setCurrencyState("CAD");
-    else if (path.startsWith("/us")) setCurrencyState("USD");
+    const pathRegion = regionFromPath(path);
+    if (pathRegion === "ca") setCurrencyState("CAD");
+    else if (pathRegion === "us") setCurrencyState("USD");
   }, []);
 
 
