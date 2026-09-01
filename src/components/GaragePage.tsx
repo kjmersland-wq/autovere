@@ -40,13 +40,17 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { CURRENCIES, useCurrency } from "@/lib/currency";
 import {
+  ALL_NETWORKS,
+  CHARGING_NETWORKS,
   FUEL_LABEL,
   TOLL_TAGS,
   VEHICLE_META,
   duplicateTrip,
   googleMapsUrl,
+  loadActiveVehicleId,
   loadTrips,
   loadVehicles,
+  saveActiveVehicleId,
   newId,
   persistTrips,
   printTripSummary,
@@ -109,6 +113,7 @@ export function GaragePage() {
   const [trips, setTrips] = useState<SavedTrip[]>([]);
   const [places, setPlaces] = useState<SavedPlace[]>([]);
   const [draft, setDraft] = useState<GarageVehicle | null>(null);
+  const [activeVehicleId, setActiveVehicleId] = useState<string | null>(null);
   const [renaming, setRenaming] = useState<SavedTrip | null>(null);
   const [renameValue, setRenameValue] = useState("");
   const [placeDraft, setPlaceDraft] = useState<SavedPlace | null>(null);
@@ -117,6 +122,7 @@ export function GaragePage() {
 
   useEffect(() => {
     setVehicles(loadVehicles());
+    setActiveVehicleId(loadActiveVehicleId());
     setTrips(loadTrips());
     try {
       const raw = localStorage.getItem(PLACES_KEY);
@@ -194,6 +200,17 @@ export function GaragePage() {
     );
     toast.success(exists ? tx("Kjøretøyet er oppdatert.") : tx("Kjøretøyet er lagt til i garasjen."));
     setDraft(null);
+  };
+
+  const activateVehicle = (v: GarageVehicle) => {
+    const next = activeVehicleId === v.id ? null : v.id;
+    setActiveVehicleId(next);
+    saveActiveVehicleId(next);
+    toast.success(
+      next
+        ? tx("Kjøretøyet brukes nå i ruteberegningen.")
+        : tx("Kjøretøyet brukes ikke lenger i ruteberegningen."),
+    );
   };
 
   const removeVehicle = (id: string) => {
