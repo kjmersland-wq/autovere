@@ -195,9 +195,16 @@ export function GaragePage() {
       toast.error(tx("Gi kjøretøyet et navn så du kjenner det igjen."));
       return;
     }
+    const filled: GarageVehicle = {
+      ...draft,
+      tank: draft.tank || (draft.fuel === "ev" && draft.batteryKwh ? `${draft.batteryKwh} kWh` : draft.tank),
+      consumption:
+        draft.consumption ||
+        (draft.fuel === "ev" && draft.kwhPer100 ? `${draft.kwhPer100} kWh/100 km` : draft.consumption),
+    };
     const exists = vehicles.some((v) => v.id === draft.id);
     commitVehicles(
-      exists ? vehicles.map((v) => (v.id === draft.id ? draft : v)) : [...vehicles, { ...draft, id: newId() }],
+      exists ? vehicles.map((v) => (v.id === filled.id ? filled : v)) : [...vehicles, { ...filled, id: newId() }],
     );
     toast.success(exists ? tx("Kjøretøyet er oppdatert.") : tx("Kjøretøyet er lagt til i garasjen."));
     setDraft(null);
