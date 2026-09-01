@@ -28,7 +28,7 @@ export function poiWebUrl(name: string, where?: string, explicit?: string) {
 }
 
 const FERRY_PORTALS: Record<RegionKey, string> = {
-  eu: "https://www.directferries.com/",
+  eu: affiliateUrl(AFFILIATES.ferries.directFerries),
   us: "https://www.ferrytickets.com/",
   ca: "https://www.bcferries.com/",
 };
