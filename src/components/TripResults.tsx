@@ -162,7 +162,7 @@ export function TripResults({
   const bridges = detectScandiBridges(region, origin, destination);
 
 
-  const saveTrip = () => {
+  const persistTrip = () => {
     try {
       const key = "autovere.savedTrips";
       const saved = JSON.parse(localStorage.getItem(key) ?? "[]");
