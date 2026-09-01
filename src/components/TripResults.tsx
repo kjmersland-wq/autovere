@@ -150,6 +150,8 @@ export function TripResults({
   const [active, setActive] = useState<RouteVariantKey>("fastest");
   const [printing, setPrinting] = useState(false);
   const [rvMode, setRvMode] = useState(isMotorhome);
+  const [savePrompt, setSavePrompt] = useState(false);
+  const { user, openAuth } = useAuth();
   const highlights = SCENIC_HIGHLIGHTS[region];
   const rvPois = RV_POIS[region];
   const trip = trips[active];
