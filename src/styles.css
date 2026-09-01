@@ -177,6 +177,10 @@
     overflow: visible !important;
   }
 
+  body > *:not(.print-portal) {
+    display: none !important;
+  }
+
   body * {
     visibility: hidden !important;
   }

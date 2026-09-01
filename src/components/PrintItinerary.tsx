@@ -208,8 +208,8 @@ export function PrintItinerary({
     );
   };
 
-  return (
-    <div className="fixed inset-0 z-50 overflow-y-auto bg-background/80 p-4 backdrop-blur-sm print:static print:overflow-visible print:bg-transparent print:p-0 print:backdrop-blur-none">
+  const overlay = (
+    <div className="print-portal fixed inset-0 z-50 overflow-y-auto bg-background/80 p-4 backdrop-blur-sm print:static print:overflow-visible print:bg-transparent print:p-0 print:backdrop-blur-none">
       <div className="print-sheet glass-panel mx-auto my-6 w-full max-w-3xl rounded-2xl p-6 sm:p-8">
         <div className="no-print mb-6 flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
@@ -525,4 +525,6 @@ export function PrintItinerary({
       </div>
     </div>
   );
+
+  return typeof document === "undefined" ? overlay : createPortal(overlay, document.body);
 }
