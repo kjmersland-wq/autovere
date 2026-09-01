@@ -344,7 +344,9 @@ export function CorridorMap({
                 markers={liveMarkers}
                 fromLabel={from}
                 toLabel={to}
+                openLabel={tr("Open in Google Maps")}
               />
+
             </Suspense>
           </ClientOnly>
         </div>
