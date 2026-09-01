@@ -61,7 +61,6 @@ import { Route as UsPricingRouteImport } from './routes/us.pricing'
 import { Route as UsScenicRouteImport } from './routes/us.scenic'
 import { Route as UsTollsRouteImport } from './routes/us.tolls'
 import { Route as LangRegionPageRouteImport } from './routes/$lang.$region.$page'
-import { Route as ApiPublicGeoSelftestRouteImport } from './routes/api/public/geo-selftest'
 import { Route as CaFrFaqRouteImport } from './routes/ca.fr.faq'
 import { Route as CaFrHowItWorksRouteImport } from './routes/ca.fr.how-it-works'
 import { Route as CaFrLegalRouteImport } from './routes/ca.fr.legal'
@@ -328,11 +327,6 @@ const LangRegionPageRoute = LangRegionPageRouteImport.update({
   path: '/$lang/$region/$page',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiPublicGeoSelftestRoute = ApiPublicGeoSelftestRouteImport.update({
-  id: '/api/public/geo-selftest',
-  path: '/api/public/geo-selftest',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CaFrFaqRoute = CaFrFaqRouteImport.update({
   id: '/fr/faq',
   path: '/fr/faq',
@@ -413,7 +407,6 @@ export interface FileRoutesByFullPath {
   '/no/': typeof NoIndexRoute
   '/us/': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
-  '/api/public/geo-selftest': typeof ApiPublicGeoSelftestRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -471,7 +464,6 @@ export interface FileRoutesByTo {
   '/no': typeof NoIndexRoute
   '/us': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
-  '/api/public/geo-selftest': typeof ApiPublicGeoSelftestRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -532,7 +524,6 @@ export interface FileRoutesById {
   '/no/': typeof NoIndexRoute
   '/us/': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
-  '/api/public/geo-selftest': typeof ApiPublicGeoSelftestRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -594,7 +585,6 @@ export interface FileRouteTypes {
     | '/no/'
     | '/us/'
     | '/$lang/$region/$page'
-    | '/api/public/geo-selftest'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -652,7 +642,6 @@ export interface FileRouteTypes {
     | '/no'
     | '/us'
     | '/$lang/$region/$page'
-    | '/api/public/geo-selftest'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -712,7 +701,6 @@ export interface FileRouteTypes {
     | '/no/'
     | '/us/'
     | '/$lang/$region/$page'
-    | '/api/public/geo-selftest'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -753,7 +741,6 @@ export interface RootRouteChildren {
   LangIndexRoute: typeof LangIndexRoute
   NoIndexRoute: typeof NoIndexRoute
   LangRegionPageRoute: typeof LangRegionPageRoute
-  ApiPublicGeoSelftestRoute: typeof ApiPublicGeoSelftestRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -1123,13 +1110,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangRegionPageRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/public/geo-selftest': {
-      id: '/api/public/geo-selftest'
-      path: '/api/public/geo-selftest'
-      fullPath: '/api/public/geo-selftest'
-      preLoaderRoute: typeof ApiPublicGeoSelftestRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/ca/fr/faq': {
       id: '/ca/fr/faq'
       path: '/fr/faq'
@@ -1265,7 +1245,6 @@ const rootRouteChildren: RootRouteChildren = {
   LangIndexRoute: LangIndexRoute,
   NoIndexRoute: NoIndexRoute,
   LangRegionPageRoute: LangRegionPageRoute,
-  ApiPublicGeoSelftestRoute: ApiPublicGeoSelftestRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
