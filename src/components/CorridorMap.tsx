@@ -213,7 +213,7 @@ export function CorridorMap({
 
       {/* Layer toggles */}
       <div className="mt-4 flex flex-wrap gap-2">
-        {MAP_LAYERS.map((l) => {
+        {MAP_LAYERS.filter((l) => !(isElectric && l.key === "fuel")).map((l) => {
           const on = layers[l.key];
           return (
             <button
