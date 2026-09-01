@@ -4,7 +4,22 @@ import { createFileRoute } from "@tanstack/react-router";
 export const Route = createFileRoute("/api/public/geo-selftest")({
   server: {
     handlers: {
-      GET: async () => {
+      GET: async ({ request }) => {
+        const q = new URL(request.url).searchParams;
+        if (q.get("route")) {
+          const { getRouteGeo } = await import("@/lib/route-geo.functions");
+          try {
+            const geo = await getRouteGeo({
+              data: { origin: q.get("from") ?? "Hirtshals, Denmark", destination: q.get("to") ?? "Gabin, Poland" },
+            });
+            return new Response(
+              JSON.stringify(geo ? { countries: geo.countries, borders: geo.borders, km: geo.distanceKm } : null),
+              { headers: { "content-type": "application/json" } },
+            );
+          } catch (e) {
+            return new Response(`throw ${String(e).slice(0, 400)}`, { status: 500 });
+          }
+        }
         const out: Record<string, string> = {};
         for (const [k, url] of [
           ["photon", "https://photon.komoot.io/api?limit=1&q=Hirtshals"],
