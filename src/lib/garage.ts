@@ -9,7 +9,35 @@ export type GarageVehicle = {
   consumption: string;
   height?: string;
   tags: string[];
+  /** Custom EV average consumption in kWh/100 km. */
+  kwhPer100?: number;
+  /** Usable battery capacity in kWh. */
+  batteryKwh?: number;
+  /** Preferred fast-charging operator, or "all" for no preference. */
+  network?: string;
 };
+
+/** Charging operators the planner can prioritise along a corridor. */
+export const CHARGING_NETWORKS = [
+  "All networks",
+  "Tesla Supercharger",
+  "Ionity",
+  "EnBW mobility+",
+  "Fastned",
+  "GreenWay Polska",
+  "Orlen Charge",
+  "Allego",
+  "Recharge",
+  "Mer",
+  "Clever",
+  "Electrify America",
+  "EvGo",
+  "Electrify Canada",
+  "FLO",
+  "Petro-Canada eV",
+] as const;
+
+export const ALL_NETWORKS = "All networks";
 
 export type SavedTripStop = { place: string; detail: string };
 
@@ -60,6 +88,7 @@ export const TOLL_TAGS = [
 ];
 
 const VEHICLE_KEY = "autovere.vehicles";
+const ACTIVE_VEHICLE_KEY = "autovere.activeVehicle";
 export const TRIPS_KEY = "autovere.savedTrips";
 
 export const DEFAULT_VEHICLES: GarageVehicle[] = [
@@ -89,6 +118,9 @@ export const DEFAULT_VEHICLES: GarageVehicle[] = [
     fuel: "ev",
     tank: "75 kWh",
     consumption: "18 kWh/100 km",
+    kwhPer100: 18,
+    batteryKwh: 75,
+    network: "Tesla Supercharger",
     tags: ["AutoPASS", "SunPass"],
   },
 ];
@@ -183,6 +215,38 @@ export function saveVehicles(vehicles: GarageVehicle[]) {
   } catch {
     /* storage unavailable */
   }
+}
+
+/** The vehicle currently bound to the route calculation engine. */
+export function loadActiveVehicleId(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return localStorage.getItem(ACTIVE_VEHICLE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function saveActiveVehicleId(id: string | null) {
+  try {
+    if (id) localStorage.setItem(ACTIVE_VEHICLE_KEY, id);
+    else localStorage.removeItem(ACTIVE_VEHICLE_KEY);
+  } catch {
+    /* storage unavailable */
+  }
+}
+
+export function loadActiveVehicle(): GarageVehicle | null {
+  const id = loadActiveVehicleId();
+  if (!id) return null;
+  return loadVehicles().find((v) => v.id === id) ?? null;
+}
+
+/** Pull the first number out of a free-text field such as "18 kWh/100 km". */
+export function parseNumber(value?: string): number | undefined {
+  if (!value) return undefined;
+  const m = value.replace(",", ".").match(/\d+(\.\d+)?/);
+  return m ? Number(m[0]) : undefined;
 }
 
 export function loadTrips(): SavedTrip[] {

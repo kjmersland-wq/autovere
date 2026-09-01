@@ -6,6 +6,7 @@ import {
   Copy,
   CreditCard,
   Download,
+  Gauge,
   HelpCircle,
   LayoutGrid,
   LifeBuoy,
@@ -40,13 +41,17 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { CURRENCIES, useCurrency } from "@/lib/currency";
 import {
+  ALL_NETWORKS,
+  CHARGING_NETWORKS,
   FUEL_LABEL,
   TOLL_TAGS,
   VEHICLE_META,
   duplicateTrip,
   googleMapsUrl,
+  loadActiveVehicleId,
   loadTrips,
   loadVehicles,
+  saveActiveVehicleId,
   newId,
   persistTrips,
   printTripSummary,
@@ -109,6 +114,7 @@ export function GaragePage() {
   const [trips, setTrips] = useState<SavedTrip[]>([]);
   const [places, setPlaces] = useState<SavedPlace[]>([]);
   const [draft, setDraft] = useState<GarageVehicle | null>(null);
+  const [activeVehicleId, setActiveVehicleId] = useState<string | null>(null);
   const [renaming, setRenaming] = useState<SavedTrip | null>(null);
   const [renameValue, setRenameValue] = useState("");
   const [placeDraft, setPlaceDraft] = useState<SavedPlace | null>(null);
@@ -117,6 +123,7 @@ export function GaragePage() {
 
   useEffect(() => {
     setVehicles(loadVehicles());
+    setActiveVehicleId(loadActiveVehicleId());
     setTrips(loadTrips());
     try {
       const raw = localStorage.getItem(PLACES_KEY);
@@ -188,15 +195,37 @@ export function GaragePage() {
       toast.error(tx("Gi kjøretøyet et navn så du kjenner det igjen."));
       return;
     }
+    const filled: GarageVehicle = {
+      ...draft,
+      tank: draft.tank || (draft.fuel === "ev" && draft.batteryKwh ? `${draft.batteryKwh} kWh` : draft.tank),
+      consumption:
+        draft.consumption ||
+        (draft.fuel === "ev" && draft.kwhPer100 ? `${draft.kwhPer100} kWh/100 km` : draft.consumption),
+    };
     const exists = vehicles.some((v) => v.id === draft.id);
     commitVehicles(
-      exists ? vehicles.map((v) => (v.id === draft.id ? draft : v)) : [...vehicles, { ...draft, id: newId() }],
+      exists ? vehicles.map((v) => (v.id === filled.id ? filled : v)) : [...vehicles, { ...filled, id: newId() }],
     );
     toast.success(exists ? tx("Kjøretøyet er oppdatert.") : tx("Kjøretøyet er lagt til i garasjen."));
     setDraft(null);
   };
 
+  const activateVehicle = (v: GarageVehicle) => {
+    const next = activeVehicleId === v.id ? null : v.id;
+    setActiveVehicleId(next);
+    saveActiveVehicleId(next);
+    toast.success(
+      next
+        ? tx("Kjøretøyet brukes nå i ruteberegningen.")
+        : tx("Kjøretøyet brukes ikke lenger i ruteberegningen."),
+    );
+  };
+
   const removeVehicle = (id: string) => {
+    if (activeVehicleId === id) {
+      setActiveVehicleId(null);
+      saveActiveVehicleId(null);
+    }
     commitVehicles(vehicles.filter((v) => v.id !== id));
     toast.success(tx("Kjøretøyet er fjernet."));
   };
@@ -469,6 +498,24 @@ export function GaragePage() {
                           {v.consumption ? ` · ${v.consumption}` : ""}
                           {v.height ? ` · ${v.height}` : ""}
                         </p>
+                        {v.fuel === "ev" && (
+                          <p className="mt-1 text-xs text-muted-foreground">
+                            {v.kwhPer100 ? `${v.kwhPer100} kWh/100 km` : tx("Forbruk ikke satt")}
+                            {v.batteryKwh ? ` · ${v.batteryKwh} kWh ${tx("batteri")}` : ""}
+                            {` · 🔌 ${v.network && v.network !== ALL_NETWORKS ? v.network : tx("Alle nettverk")}`}
+                          </p>
+                        )}
+                        <Button
+                          size="sm"
+                          variant={activeVehicleId === v.id ? "default" : "outline"}
+                          className="mt-3"
+                          onClick={() => activateVehicle(v)}
+                        >
+                          <Gauge className="size-4" />
+                          {activeVehicleId === v.id
+                            ? tx("Aktiv i ruteberegning")
+                            : tx("Bruk i ruteberegning")}
+                        </Button>
                         <div className="mt-3 flex flex-wrap gap-2">
                           {v.tags.map((t) => (
                             <span
@@ -834,6 +881,58 @@ export function GaragePage() {
                   />
                 </div>
               </div>
+              {draft.fuel === "ev" && (
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <div className="grid gap-2">
+                    <Label htmlFor="v-kwh">{tx("Snittforbruk (kWh/100 km)")}</Label>
+                    <Input
+                      id="v-kwh"
+                      inputMode="decimal"
+                      value={draft.kwhPer100 ?? ""}
+                      placeholder="18"
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          kwhPer100: e.target.value ? Number(e.target.value.replace(",", ".")) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="v-batt">{tx("Batterikapasitet (kWh)")}</Label>
+                    <Input
+                      id="v-batt"
+                      inputMode="decimal"
+                      value={draft.batteryKwh ?? ""}
+                      placeholder="75"
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          batteryKwh: e.target.value ? Number(e.target.value.replace(",", ".")) : undefined,
+                        })
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2 sm:col-span-2">
+                    <Label htmlFor="v-network">{tx("Foretrukket ladenettverk")}</Label>
+                    <select
+                      id="v-network"
+                      value={draft.network ?? ALL_NETWORKS}
+                      onChange={(e) => setDraft({ ...draft, network: e.target.value })}
+                      className="h-10 rounded-md border border-border bg-background/60 px-3 text-sm"
+                    >
+                      {CHARGING_NETWORKS.map((n) => (
+                        <option key={n} value={n} className="bg-card text-foreground">
+                          {n === ALL_NETWORKS ? tx("Alle nettverk") : n}
+                        </option>
+                      ))}
+                    </select>
+                    <p className="text-xs text-muted-foreground">
+                      {tx("Ladestopp langs ruten prioriteres for dette nettverket når det finnes i nærheten.")}
+                    </p>
+                  </div>
+                </div>
+              )}
               {draft.kind === "motorhome" && (
                 <div className="grid gap-2">
                   <Label htmlFor="v-height">{tx("Høyde og vekt")}</Label>

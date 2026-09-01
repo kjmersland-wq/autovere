@@ -185,7 +185,28 @@ export type ChargingStop = {
   power: string;
   networks: string[];
   note: string;
+  /** True when the stop is served by the driver's preferred operator. */
+  preferred?: boolean;
+  /** True when we had to fall back to the nearest high-power CCS hub. */
+  fallback?: boolean;
 };
+
+/**
+ * Consumption and charging preferences taken from the active saved vehicle
+ * in "My Garage" — when present these drive the cost and stop intervals.
+ */
+export type VehicleProfile = {
+  name?: string;
+  kwhPer100?: number | undefined;
+  batteryKwh?: number | undefined;
+  /** Preferred charging operator, or undefined / "All networks" for any. */
+  network?: string | undefined;
+};
+
+export function preferredNetwork(profile?: VehicleProfile | null) {
+  const n = profile?.network?.trim();
+  return n && !/^all/i.test(n) ? n : null;
+}
 
 export type EnergyOptimizer = {
   mode: "ev" | "fuel";
@@ -196,6 +217,8 @@ export type EnergyOptimizer = {
   networks: string[];
   arbitrage: string[];
   longStretch: string[];
+  /** Operator the driver asked us to prioritise, if any. */
+  preferredNetwork?: string | null;
 };
 
 const EV_NETWORKS: Record<RegionKey, string[]> = {
@@ -245,12 +268,20 @@ function buildOptimizer(
   distanceKm: number,
   imperial: boolean,
   geo?: RouteGeo | null,
+  profile?: VehicleProfile | null,
 ): EnergyOptimizer {
   const isEv = fuel === "electric";
   const tank = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 18 : 55;
-  const battery = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 21 : 77;
+  const battery =
+    profile?.batteryKwh && profile.batteryKwh > 0
+      ? profile.batteryKwh
+      : vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 21 : 77;
   const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
-  const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const kwhPer100 =
+    profile?.kwhPer100 && profile.kwhPer100 > 0
+      ? profile.kwhPer100
+      : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const wanted = preferredNetwork(profile);
 
   const fullRange = isEv ? (battery / kwhPer100) * 100 : (tank / consumption) * 100;
   const safeRange = fullRange * 0.75;
@@ -277,10 +308,18 @@ function buildOptimizer(
     ? Array.from(new Set(samples.flatMap((s) => corridorNetworks(s.code))))
     : EV_NETWORKS[region];
 
+  /** The preferred operator first when it actually runs in that country. */
+  const orderNetworks = (local: string[]) => {
+    if (!wanted) return { list: local, hit: false };
+    const match = local.find((n) => n.toLowerCase().includes(wanted.toLowerCase()));
+    return match ? { list: [match, ...local.filter((n) => n !== match)], hit: true } : { list: local, hit: false };
+  };
+
   const stops: ChargingStop[] = Array.from({ length: stopCount }, (_, i) => {
     const atKm = Math.round(safeRange * (i + 1));
     const point = corridorPoint(atKm);
-    const local = corridorNetworks(point?.code);
+    const { list: local, hit } = orderNetworks(corridorNetworks(point?.code));
+    const chargeNote = `Arrive at ~25% state of charge, charge to 80% in about ${vehicle === "motorhome" ? 38 : 22} min.`;
     return {
       name: point ? `${point.place || point.country} (${point.country})` : `Stop at ${d(atKm)}`,
       atKm,
@@ -288,24 +327,36 @@ function buildOptimizer(
       power: isEv ? (vehicle === "motorhome" ? "150 kW CCS" : "350 kW CCS") : "24/7 forecourt",
       networks: isEv ? [local[0]!, local[1 % local.length]!] : [],
       note: isEv
-        ? `Arrive at ~25% state of charge, charge to 80% in about ${vehicle === "motorhome" ? 38 : 22} min.`
+        ? wanted
+          ? hit
+            ? `${wanted} hub on this leg. ${chargeNote}`
+            : `No ${wanted} site in this battery window — nearest high-power CCS hub is ${local[0]}. ${chargeNote}`
+          : chargeNote
         : `Recommended refuel — keeps you above the 25% reserve on a ${d(fullRange)} tank range.`,
+      ...(isEv && wanted ? { preferred: hit, fallback: !hit } : {}),
     };
   });
 
   const countryNames = geo?.countries.map((c) => `${c.flag} ${c.country}`) ?? [];
 
+  const profileTail =
+    isEv && (profile?.kwhPer100 || profile?.batteryKwh)
+      ? ` · ${profile.name ?? "Saved vehicle"}: ${kwhPer100} kWh/100 km on a ${battery} kWh battery`
+      : "";
+
   return {
     mode: isEv ? "ev" : "fuel",
     title: isEv ? "⚡ Smart EV Charging Optimizer" : "⛽ Smart Fuel Stop Optimizer",
     rangeLabel: `${d(fullRange)} full ${isEv ? "battery" : "tank"} range`,
-    bufferLabel: countryNames.length
-      ? `Planned at 75% safety buffer — ${d(safeRange)} between stops along ${countryNames.join(" → ")}`
-      : `Planned at 75% safety buffer — ${d(safeRange)} between stops`,
+    bufferLabel:
+      (countryNames.length
+        ? `Planned at 75% safety buffer — ${d(safeRange)} between stops along ${countryNames.join(" → ")}`
+        : `Planned at 75% safety buffer — ${d(safeRange)} between stops`) + profileTail,
     stops,
     networks: isEv ? networks : [],
     arbitrage: [],
     longStretch: [],
+    preferredNetwork: isEv ? wanted : null,
   };
 }
 
@@ -461,6 +512,7 @@ export function estimateTrip(
   durationDays = 1,
   geo: RouteGeo | null = null,
   prices: EnergyPrices | null = null,
+  profile: VehicleProfile | null = null,
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -515,7 +567,10 @@ export function estimateTrip(
 
   const consumption =
     vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
-  const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const kwhPer100 =
+    fuel === "electric" && profile?.kwhPer100 && profile.kwhPer100 > 0
+      ? profile.kwhPer100
+      : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
   // Live prices from the energy feed when available; the estimator never
   // invents a number it cannot source.
   const perLitreLive = prices
@@ -598,7 +653,7 @@ export function estimateTrip(
     segments,
     corridor,
     safety: safetyFor(region, vehicle, geo),
-    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo),
+    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile),
     vignette:
       activeVariant === "tollfree"
         ? null
@@ -629,8 +684,9 @@ export function estimateAllVariants(
   durationDays = 1,
   geo: RouteGeo | null = null,
   prices: EnergyPrices | null = null,
+  profile: VehicleProfile | null = null,
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays, geo, prices] as const;
+  const args = [extraStops, tripType, durationDays, geo, prices, profile] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
@@ -664,6 +720,7 @@ export function evComparison(
   vehicle: VehicleKey,
   fuel: FuelKey,
   prices: EnergyPrices | null = null,
+  profile: VehicleProfile | null = null,
 ): {
   fuelCost: number;
   evCost: number;
@@ -674,7 +731,10 @@ export function evComparison(
 } {
   const round2 = (n: number) => Math.round(n * 100) / 100;
   const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
-  const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const kwhPer100 =
+    profile?.kwhPer100 && profile.kwhPer100 > 0
+      ? profile.kwhPer100
+      : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
   const perLitreLive = prices
     ? prices.unit === "gallon"
       ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.785
