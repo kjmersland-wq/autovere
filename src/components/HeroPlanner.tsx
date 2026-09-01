@@ -150,17 +150,14 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
    */
   const runCalculation = async (from: string, to: string, extra: number) => {
     setCalculating(true);
-    console.warn("[autovere] calc", from, to);
     let resolved: RouteGeo | null = null;
     if (from.trim().length > 1 && to.trim().length > 1) {
       try {
         resolved = await routeFn({ data: { origin: from, destination: to } });
-      } catch (err) {
-        console.warn("[autovere] route lookup failed", err);
+      } catch {
         resolved = null;
       }
     }
-    console.warn("[autovere] resolved", JSON.stringify(resolved)?.slice(0, 120));
     setGeo(resolved);
     setTrip(
       estimateAllVariants(

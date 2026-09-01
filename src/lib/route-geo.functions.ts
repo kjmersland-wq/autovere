@@ -68,35 +68,66 @@ function haversine(a: [number, number], b: [number, number]) {
   return 2 * R * Math.asin(Math.min(1, Math.sqrt(h)));
 }
 
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+/**
+ * Nominatim allows roughly one request per second per client. Every call is
+ * funnelled through this serial queue with retry/backoff on 429 so a route
+ * lookup degrades gracefully instead of failing outright.
+ */
+let nominatimChain: Promise<unknown> = Promise.resolve();
+const MIN_GAP_MS = 1200;
+let lastCall = 0;
+
+function nominatim(url: string, attempt = 0): Promise<Response | null> {
+  const run = async (): Promise<Response | null> => {
+    const wait = MIN_GAP_MS - (Date.now() - lastCall);
+    if (wait > 0) await sleep(wait);
+    lastCall = Date.now();
+    try {
+      const res = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" } });
+      if ((res.status === 429 || res.status >= 500) && attempt < 3) {
+        await sleep(1500 * (attempt + 1));
+        return nominatim(url, attempt + 1);
+      }
+      return res.ok ? res : null;
+    } catch {
+      return null;
+    }
+  };
+  const next = nominatimChain.then(run, run);
+  nominatimChain = next.catch(() => undefined);
+  return next;
+}
+
+const geocodeCache = new Map<string, { name: string; lat: number; lng: number } | null>();
+
 async function geocode(query: string): Promise<{ name: string; lat: number; lng: number } | null> {
+  const key = query.toLowerCase().trim();
+  if (geocodeCache.has(key)) return geocodeCache.get(key) ?? null;
   const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(query)}`;
-  const res = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" } });
-  console.log("[route-geo] geocode status", res.status, (await res.clone().text()).slice(0, 120));
-  if (!res.ok) return null;
+  const res = await nominatim(url);
+  if (!res) return null;
   const json = (await res.json()) as { lat: string; lon: string; display_name: string }[];
   const hit = json[0];
   if (!hit) return null;
-  return { name: hit.display_name, lat: Number(hit.lat), lng: Number(hit.lon) };
+  const out = { name: hit.display_name, lat: Number(hit.lat), lng: Number(hit.lon) };
+  geocodeCache.set(key, out);
+  return out;
 }
-
-const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
 
 type ReverseHit = { code: string; country: string; place: string; state?: string };
 
 /** Grid-keyed cache (≈10 km cells) so repeated corridors reuse geocodes. */
 const reverseCache = new Map<string, ReverseHit | null>();
 
-async function reverse(lat: number, lng: number, attempt = 0): Promise<ReverseHit | null> {
+async function reverse(lat: number, lng: number): Promise<ReverseHit | null> {
   const cacheKey = `${lat.toFixed(1)},${lng.toFixed(1)}`;
   if (reverseCache.has(cacheKey)) return reverseCache.get(cacheKey) ?? null;
   const url = `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&lat=${lat}&lon=${lng}`;
   try {
-    const res = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" } });
-    if ((res.status === 429 || res.status >= 500) && attempt < 2) {
-      await sleep(1200 * (attempt + 1));
-      return reverse(lat, lng, attempt + 1);
-    }
-    if (!res.ok) return null;
+    const res = await nominatim(url);
+    if (!res) return null;
     const json = (await res.json()) as {
       address?: Record<string, string>;
     };
@@ -137,7 +168,7 @@ async function sampleCorridor(
   }
   const measured = cum[cum.length - 1] || totalKm || 1;
   // Nominatim allows ~1 request/second, so keep the sample count modest.
-  const count = Math.min(14, Math.max(6, Math.round(totalKm / 90)));
+  const count = Math.min(12, Math.max(5, Math.round(totalKm / 110)));
 
   const targets: { atKm: number; lat: number; lng: number }[] = [];
   for (let i = 0; i < count; i += 1) {
@@ -163,7 +194,7 @@ async function sampleCorridor(
       if (hit.state) s.state = hit.state;
       samples.push(s);
     }
-    await sleep(1050);
+
   }
   return samples;
 }
@@ -215,8 +246,8 @@ function summarise(samples: RouteSample[], totalKm: number) {
 }
 
 async function buildRouteGeo(origin: string, destination: string): Promise<RouteGeo | null> {
-  const [from, to] = await Promise.all([geocode(origin), geocode(destination)]);
-  console.log("[route-geo] geocode", origin, !!from, destination, !!to);
+  const from = await geocode(origin);
+  const to = await geocode(destination);
   if (!from || !to) return null;
 
   const osrm = `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson`;
@@ -237,7 +268,6 @@ async function buildRouteGeo(origin: string, destination: string): Promise<Route
   const distanceKm = Math.round(route.distance / 1000);
   const samples = await sampleCorridor(coords, distanceKm);
   const { countries, borders } = summarise(samples, distanceKm);
-  console.log("[route-geo] samples", samples.length, countries.map((c) => c.code).join(">"));
 
   return {
     coords,
@@ -262,10 +292,7 @@ export const getRouteGeo = createServerFn({ method: "GET" })
     if (running) return running;
 
     const task = buildRouteGeo(data.origin, data.destination)
-      .catch((err) => {
-        console.error("[route-geo] failed", err);
-        return null;
-      })
+      .catch(() => null)
       .then((result) => {
         // Only cache successful lookups — a throttled miss should be retried.
         if (result) cache.set(key, result);
