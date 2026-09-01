@@ -1,5 +1,7 @@
 import type { Locale } from "@/lib/i18n";
 import type { PlanTier } from "@/lib/stripe";
+import type { RegionKey } from "@/lib/trip-data";
+
 
 export type Tier = {
   id: PlanTier;
