@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/dialog";
 import { useAuth } from "@/lib/auth";
 import { Switch } from "@/components/ui/switch";
+import { PartnerOffers } from "@/components/PartnerOffers";
 import { PoiLinks } from "@/components/PoiLinks";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
