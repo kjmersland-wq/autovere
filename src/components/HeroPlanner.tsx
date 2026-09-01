@@ -44,7 +44,9 @@ import {
   type TransponderKey,
   type TripEstimate,
   type VehicleKey,
+  type VehicleProfile,
 } from "@/lib/trip-data";
+import { loadActiveVehicle, parseNumber } from "@/lib/garage";
 import { getRouteGeo, type RouteGeo } from "@/lib/route-geo.functions";
 import { getEnergyPrices, type EnergyPrices } from "@/lib/energy-prices.functions";
 import { PlaceAutocomplete, type PlaceHit } from "@/components/PlaceAutocomplete";
@@ -95,6 +97,21 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [calculating, setCalculating] = useState(false);
   const [tripType, setTripType] = useState<TripType>("oneway");
   const [durationDays, setDurationDays] = useState(7);
+  /** Consumption + charging preferences from the active vehicle in My Garage. */
+  const [profile, setProfile] = useState<VehicleProfile | null>(null);
+
+  useEffect(() => {
+    const active = loadActiveVehicle();
+    if (!active) return;
+    setProfile({
+      name: active.name,
+      kwhPer100: active.kwhPer100 ?? parseNumber(active.consumption),
+      batteryKwh: active.batteryKwh ?? parseNumber(active.tank),
+      network: active.network,
+    });
+    if (active.fuel === "ev") setFuel("electric");
+    setVehicle(active.kind === "motorcycle" ? "motorcycle" : active.kind === "motorhome" ? "motorhome" : "car");
+  }, []);
 
   const viaCount = waypoints.filter((w) => w.value.trim()).length;
 
@@ -199,6 +216,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
         effectiveDuration,
         resolved,
         prices,
+        profile,
       ),
     );
     const places = resolved
