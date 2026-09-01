@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowDown,
@@ -46,6 +46,8 @@ import {
   type VehicleKey,
 } from "@/lib/trip-data";
 import { getRouteGeo, type RouteGeo } from "@/lib/route-geo.functions";
+import { getEnergyPrices, type EnergyPrices } from "@/lib/energy-prices.functions";
+import { PlaceAutocomplete, type PlaceHit } from "@/components/PlaceAutocomplete";
 import { useLocale, useT, useTr } from "@/lib/i18n";
 import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
@@ -87,6 +89,9 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [consumption, setConsumption] = useState(imperial ? "28" : "7.4");
   const [waypoints, setWaypoints] = useState<{ id: string; value: string }[]>([]);
   const [geo, setGeo] = useState<RouteGeo | null>(null);
+  const [originHit, setOriginHit] = useState<PlaceHit | null>(null);
+  const [destinationHit, setDestinationHit] = useState<PlaceHit | null>(null);
+  const [prices, setPrices] = useState<EnergyPrices | null>(null);
   const [calculating, setCalculating] = useState(false);
   const [tripType, setTripType] = useState<TripType>("oneway");
   const [durationDays, setDurationDays] = useState(7);
@@ -142,6 +147,18 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
   const effectiveDuration = tripType === "return" ? durationDays : 1;
   const routeFn = useServerFn(getRouteGeo);
+  const pricesFn = useServerFn(getEnergyPrices);
+
+  // Live fuel / kWh feed for the active region — refreshed on mount.
+  useEffect(() => {
+    let alive = true;
+    pricesFn({ data: { region } })
+      .then((p) => alive && setPrices(p))
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [region, pricesFn]);
 
   /**
    * Resolve the real routed corridor first (OSRM polyline + reverse-geocoded
@@ -153,7 +170,17 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     let resolved: RouteGeo | null = null;
     if (from.trim().length > 1 && to.trim().length > 1) {
       try {
-        resolved = await routeFn({ data: { origin: from, destination: to } });
+        const fromPoint =
+          originHit && originHit.label === from
+            ? { name: originHit.label, lat: originHit.lat, lng: originHit.lng }
+            : undefined;
+        const toPoint =
+          destinationHit && destinationHit.label === to
+            ? { name: destinationHit.label, lat: destinationHit.lat, lng: destinationHit.lng }
+            : undefined;
+        resolved = await routeFn({
+          data: { origin: from, destination: to, ...(fromPoint && { fromPoint }), ...(toPoint && { toPoint }) },
+        });
       } catch {
         resolved = null;
       }
@@ -171,6 +198,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
         tripType,
         effectiveDuration,
         resolved,
+        prices,
       ),
     );
     const places = resolved
@@ -183,7 +211,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     setBadges(detectEmissionBadges(region, from, to, places));
     setCalculating(false);
     if (!resolved && from.trim() && to.trim()) {
-      toast.info("Couldn't resolve that route — showing an indicative regional estimate.");
+      toast.error("Couldn't resolve those places — pick a suggestion from the dropdown and try again.");
     }
     scrollToResults();
   };
@@ -291,26 +319,34 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             </div>
 
             <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
-              <label className="relative block">
-                <span className="sr-only">{t.hero.origin}</span>
-                <MapPin className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  value={origin}
-                  onChange={(e) => setOrigin(e.target.value)}
-                  className="h-12 border-border bg-background/60 pl-9 text-base placeholder:text-muted-foreground"
-                  placeholder={originHint}
-                />
-              </label>
-              <label className="relative block">
-                <span className="sr-only">{t.hero.destination}</span>
-                <RouteIcon className="pointer-events-none absolute left-3 top-1/2 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input
-                  value={destination}
-                  onChange={(e) => setDestination(e.target.value)}
-                  className="h-12 border-border bg-background/60 pl-9 text-base placeholder:text-muted-foreground"
-                  placeholder={destinationHint}
-                />
-              </label>
+              <PlaceAutocomplete
+                value={origin}
+                onValueChange={(v) => {
+                  setOrigin(v);
+                  setActiveQuick(null);
+                }}
+                onSelect={setOriginHit}
+                region={region}
+                ariaLabel={t.hero.origin}
+                placeholder={originHint}
+                icon={
+                  <MapPin className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
+                }
+              />
+              <PlaceAutocomplete
+                value={destination}
+                onValueChange={(v) => {
+                  setDestination(v);
+                  setActiveQuick(null);
+                }}
+                onSelect={setDestinationHit}
+                region={region}
+                ariaLabel={t.hero.destination}
+                placeholder={destinationHint}
+                icon={
+                  <RouteIcon className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
+                }
+              />
               <Button
                 type="submit"
                 size="lg"
@@ -558,6 +594,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   tripType,
                   effectiveDuration,
                   geo,
+                  prices,
                 ),
               );
               toast.success(t.results.stopAdded(name, next.length));

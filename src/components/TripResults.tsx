@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship } from "lucide-react";
 import { toast } from "sonner";
+import { tripTrackPoints } from "@/lib/trip-export";
 
 import {
   Accordion,
@@ -194,6 +195,9 @@ export function TripResults({
         stops: trip.segments
           .flatMap((s) => s.lines)
           .map((l) => ({ place: l.place, detail: l.detail })),
+        points: trip.corridor?.points ?? [],
+        coords: tripTrackPoints(trip),
+        countries: trip.corridor?.countries.map((c) => `${c.flag} ${c.country}`) ?? [],
       });
       localStorage.setItem(key, JSON.stringify(saved.slice(0, 20)));
       toast.success(t.results.savedToast);

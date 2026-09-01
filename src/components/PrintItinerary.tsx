@@ -2,6 +2,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Download, MapPin, Printer, X } from "lucide-react";
 
+import autovereLogo from "@/assets/autovere-logo.png";
 import { Button } from "@/components/ui/button";
 import { CURRENCY_BY_CODE, RATES_UPDATED, rateNote, useCurrency, useMoney } from "@/lib/currency";
 import { CLEARANCE_ADVISORIES, detectLezZones, tagsForRegion } from "@/lib/compliance";
@@ -32,27 +33,54 @@ function consumptionFor(vehicle: VehicleKey, fuel: FuelKey, units: "metric" | "i
   return units === "imperial" ? `${(235.215 / l).toFixed(1)} MPG (US)` : `${l.toFixed(1)} L / 100 km`;
 }
 
-/** Static, print-safe snapshot of the route corridor. */
+/** Static, print-safe snapshot of the real routed polyline. */
 function RouteSnapshot({
   seed,
   origin,
   destination,
   waypoints,
+  coords,
 }: {
   seed: string;
   origin: string;
   destination: string;
   waypoints: string[];
+  coords: [number, number][];
 }) {
-  const line = useMemo(() => corridorPolyline(seed, 11), [seed]);
-  // Flatten the 0-100 square corridor space into a wide 100x50 map band.
-  const sy = (y: number) => 5 + (y - 10) * 0.5;
-  const path = line.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${sy(p.y).toFixed(1)}`).join(" ");
+  const line = useMemo(() => {
+    if (coords.length > 3) {
+      // Equirectangular projection of the real polyline into the 100x50 band.
+      const lats = coords.map((c) => c[0]);
+      const lngs = coords.map((c) => c[1]);
+      const midLat = (Math.min(...lats) + Math.max(...lats)) / 2;
+      const k = Math.cos((midLat * Math.PI) / 180);
+      const xs = lngs.map((v) => v * k);
+      const minX = Math.min(...xs);
+      const maxX = Math.max(...xs);
+      const minY = Math.min(...lats);
+      const maxY = Math.max(...lats);
+      const spanX = maxX - minX || 1;
+      const spanY = maxY - minY || 1;
+      const scale = Math.min(88 / spanX, 38 / spanY);
+      const offX = (100 - spanX * scale) / 2;
+      const offY = (50 - spanY * scale) / 2;
+      const step = Math.max(1, Math.ceil(coords.length / 240));
+      return coords
+        .filter((_, i) => i % step === 0 || i === coords.length - 1)
+        .map((c) => ({
+          x: offX + (c[1] * k - minX) * scale,
+          y: 50 - (offY + (c[0] - minY) * scale),
+        }));
+    }
+    return corridorPolyline(seed, 11).map((p) => ({ x: p.x, y: 5 + (p.y - 10) * 0.5 }));
+  }, [coords, seed]);
+
+  const path = line.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(" ");
   const start = line[0]!;
   const end = line[line.length - 1]!;
   const marks = waypoints.slice(0, 6).map((name, i) => {
-    const p = pointAt(line, (i + 1) / (Math.min(waypoints.length, 6) + 1));
-    return { name, p: { x: p.x, y: sy(p.y) } };
+    const idx = Math.round(((i + 1) / (Math.min(waypoints.length, 6) + 1)) * (line.length - 1));
+    return { name, p: line[idx]! };
   });
 
   return (
@@ -75,8 +103,8 @@ function RouteSnapshot({
         {marks.map((mk) => (
           <circle key={mk.name} cx={mk.p.x} cy={mk.p.y} r="1.3" fill="#fff" stroke="#1d4ed8" strokeWidth="0.6" />
         ))}
-        <circle cx={start.x} cy={sy(start.y)} r="1.9" fill="#16a34a" stroke="#fff" strokeWidth="0.6" />
-        <circle cx={end.x} cy={sy(end.y)} r="1.9" fill="#dc2626" stroke="#fff" strokeWidth="0.6" />
+        <circle cx={start.x} cy={start.y} r="1.9" fill="#16a34a" stroke="#fff" strokeWidth="0.6" />
+        <circle cx={end.x} cy={end.y} r="1.9" fill="#dc2626" stroke="#fff" strokeWidth="0.6" />
       </svg>
       <figcaption className="flex flex-wrap items-center justify-between gap-2 border-t border-border px-3 py-2 text-[11px] text-muted-foreground">
         <span>🟢 {origin || "Start"}</span>
@@ -200,15 +228,6 @@ export function PrintItinerary({
     };
   });
 
-  const summary: [string, string][] = [
-    ["Total trip budget", m.fmt(trip.budget, 0)],
-    ["Distance", trip.distanceLabel],
-    ["Driving time", trip.driveTime],
-    [`Cost per ${unitLabel}`, m.fmt(perUnit, 2)],
-    ["Tolls & vignettes", m.fmt(trip.tolls)],
-    [trip.energyLabel, `${m.fmt(trip.energyCost)} (${trip.energyAmount})`],
-    ["Ferries & passes", m.fmt(trip.ferries)],
-  ];
 
   const downloadGpx = () => {
     downloadFile(
@@ -239,20 +258,27 @@ export function PrintItinerary({
         </div>
 
         <header className="print-block border-b border-border pb-5">
-          <p className="text-lg font-semibold tracking-tight">
-            Auto<span className="text-primary">Vere</span>
-          </p>
-          <h1 className="mt-2 text-2xl font-semibold tracking-tight">{title}</h1>
+          <div className="flex items-center gap-2">
+            <img src={autovereLogo} alt="AutoVere" width={28} height={28} className="size-7 rounded-md" />
+            <p className="text-lg font-semibold tracking-tight">
+              Auto<span className="text-primary">Vere</span>
+            </p>
+          </div>
+          <h1 className="mt-2 text-xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-1 text-sm text-foreground/70">
             Road trip cost itinerary · Prepared {date} · All figures in {display.code} ({display.label})
           </p>
-          <dl className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <dl className="mt-3 grid grid-cols-4 gap-2">
             {(
               [
                 ["Distance", trip.distanceLabel],
                 ["Driving time", trip.driveTime],
                 ["Total cost", m.fmt(trip.budget, 0)],
                 [`Per ${unitLabel}`, m.fmt(perUnit, 2)],
+                ["Tolls & vignettes", m.fmt(trip.tolls)],
+                ["Ferries & passes", m.fmt(trip.ferries)],
+                [trip.energyLabel, m.fmt(trip.energyCost)],
+                ["Energy used", trip.energyAmount],
               ] as [string, string][]
             ).map(([k, v]) => (
               <div key={k} className="rounded-xl border border-border px-3 py-2">
@@ -272,6 +298,7 @@ export function PrintItinerary({
             origin={origin}
             destination={destination}
             waypoints={checkpoints}
+            coords={trip.corridor?.coords ?? []}
           />
         </section>
 
@@ -306,50 +333,32 @@ export function PrintItinerary({
         </section>
 
         <section className="print-block mt-6">
-          <h2 className="print-h2">Summary metrics</h2>
-          <table className="print-table mt-3 w-full text-sm">
-            <tbody>
-              {summary.map(([k, v]) => (
-                <tr key={k}>
-                  <th scope="row">{k}</th>
-                  <td className="font-semibold">{v}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </section>
-
-        <section className="print-block mt-6">
           <h2 className="print-h2">Cost intelligence — country &amp; state breakdown</h2>
           <table className="print-table mt-3 w-full text-sm">
             <thead>
               <tr>
-                <th scope="col" className="text-left">Country / checkpoint</th>
-                <th scope="col" className="text-left">Detail</th>
+                <th scope="col" className="text-left">Country</th>
+                <th scope="col" className="text-left">Distance &amp; checkpoints</th>
                 <th scope="col" className="text-right">Local</th>
                 <th scope="col" className="text-right">{display.code}</th>
               </tr>
             </thead>
             <tbody>
-              {trip.segments.map((segment) => (
-                <Fragment key={segment.country}>
-                  <tr className="print-section-row">
-                    <td colSpan={3} className="font-semibold">{segment.country}</td>
+              {trip.segments.map((segment) => {
+                const real = corridor?.countries.find((c) => segment.country.includes(c.country));
+                const nat = m.native(segment.total, segment.country);
+                return (
+                  <tr key={segment.country}>
+                    <td className="font-semibold">{segment.country}</td>
+                    <td className="text-foreground/70">
+                      {real?.distanceLabel ? `${real.distanceLabel} · ` : ""}
+                      {segment.lines.map((l) => l.place).join(" · ") || "No barrier stops"}
+                    </td>
+                    <td className="text-right">{nat.text}</td>
                     <td className="text-right font-semibold">{m.fmt(segment.total)}</td>
                   </tr>
-                  {segment.lines.map((line) => {
-                    const nat = m.native(line.amount, segment.country);
-                    return (
-                      <tr key={`${segment.country}-${line.place}`}>
-                        <td>{line.place}</td>
-                        <td className="text-foreground/70">{line.detail}</td>
-                        <td className="text-right">{nat.text}</td>
-                        <td className="text-right font-medium">{m.fmt(line.amount)}</td>
-                      </tr>
-                    );
-                  })}
-                </Fragment>
-              ))}
+                );
+              })}
               <tr className="print-total-row">
                 <td colSpan={3} className="font-semibold">Total tolls, vignettes &amp; ferries</td>
                 <td className="text-right font-semibold">{m.fmt(trip.tolls + trip.ferries)}</td>

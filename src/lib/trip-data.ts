@@ -1,4 +1,5 @@
 import type { FlagCode } from "@/components/FlagIcon";
+import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
@@ -170,6 +171,10 @@ export type RouteCorridor = {
   borders: string[];
   from: string;
   to: string;
+  /** Real routed polyline [lat, lng] — used by GPX export and the print map. */
+  coords: [number, number][];
+  /** Reverse-geocoded waypoints along the real polyline. */
+  points: { name: string; detail: string; lat: number; lon: number }[];
 };
 
 export type ChargingStop = {
@@ -190,30 +195,6 @@ export type EnergyOptimizer = {
   networks: string[];
   arbitrage: string[];
   longStretch: string[];
-};
-
-const STOP_NAMES: Record<RegionKey, string[]> = {
-  eu: [
-    "Kassel Nord Rasthof",
-    "Nürnberg Feucht Park",
-    "Innsbruck Ost",
-    "Trento Nord Hub",
-    "Bologna Cantagallo",
-  ],
-  us: [
-    "Breezewood Travel Plaza",
-    "Wytheville Crossroads",
-    "Cordele I-75 Hub",
-    "Ocala Service Plaza",
-    "Fort Pierce Plaza",
-  ],
-  ca: [
-    "Kingston ONroute",
-    "Port Hope ONroute",
-    "Parry Sound Hub",
-    "Sault Ste. Marie",
-    "Thunder Bay Terminal",
-  ],
 };
 
 const EV_NETWORKS: Record<RegionKey, string[]> = {
@@ -254,39 +235,6 @@ const COUNTRY_EV_NETWORKS: Record<string, string[]> = {
   US: ["Electrify America", "Tesla Supercharger", "EVgo"],
   CA: ["FLO", "Tesla Supercharger", "Petro-Canada eV", "Electrify Canada"],
   GB: ["Ionity", "InstaVolt", "Tesla Supercharger", "Gridserve"],
-};
-
-const ARBITRAGE: Record<RegionKey, string[]> = {
-  eu: [
-    "Fuel is ~15% cheaper in Austria than Italy — refuel before crossing the Brenner Pass.",
-    "Luxembourg is the cheapest tank in Western Europe — top up before entering Belgium or France.",
-    "Diesel in Norway runs well above Swedish prices — fill near the border at Svinesund.",
-  ],
-  us: [
-    "Fuel in Georgia is ~20% cheaper than Florida — fill up before the state line on I-95.",
-    "Skip turnpike service plazas: prices run 10–15% above exits one mile off the highway.",
-    "California is the most expensive tank on the West Coast — fill in Nevada or Arizona first.",
-  ],
-  ca: [
-    "Alberta fuel is ~20% cheaper than British Columbia — fill before Kicking Horse Pass.",
-    "Québec charges more per litre than Ontario — top up before the provincial border on the 417.",
-    "Northern Ontario pumps run a premium — refuel in Sault Ste. Marie before Highway 17.",
-  ],
-};
-
-const LONG_STRETCH: Record<RegionKey, string[]> = {
-  eu: [
-    "Sognefjell (RV55), Norway — 194 km without a verified 24/7 station. Fill in Lom.",
-    "Grossglockner High Alpine Road — 186 km loop with no fuel above the toll gate.",
-  ],
-  us: [
-    "US-50 “Loneliest Road”, Nevada — 226 km between verified stations. Fill in Ely.",
-    "I-10 Van Horn → Fort Stockton, Texas — 190 km with limited overnight service.",
-  ],
-  ca: [
-    "Highway 17 Wawa → White River — 198 km with no verified overnight fuel.",
-    "Icefields Parkway, Alberta — 232 km between Lake Louise and Jasper; Saskatchewan Crossing only.",
-  ],
 };
 
 function buildOptimizer(
@@ -333,9 +281,7 @@ function buildOptimizer(
     const point = corridorPoint(atKm);
     const local = corridorNetworks(point?.code);
     return {
-      name: point
-        ? `${point.place || point.country} (${point.country})`
-        : STOP_NAMES[region][i % STOP_NAMES[region].length]!,
+      name: point ? `${point.place || point.country} (${point.country})` : `Stop at ${d(atKm)}`,
       atKm,
       atLabel: d(atKm),
       power: isEv ? (vehicle === "motorhome" ? "150 kW CCS" : "350 kW CCS") : "24/7 forecourt",
@@ -357,273 +303,12 @@ function buildOptimizer(
       : `Planned at 75% safety buffer — ${d(safeRange)} between stops`,
     stops,
     networks: isEv ? networks : [],
-    arbitrage: isEv ? [] : geo ? [] : ARBITRAGE[region],
-    longStretch: geo ? [] : LONG_STRETCH[region],
+    arbitrage: [],
+    longStretch: [],
   };
 }
 
 
-const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
-  eu: [
-    {
-      country: "🇩🇪 Germany",
-      total: 0,
-      lines: [
-        { place: "A8 Munich → Salzburg", detail: "No car tolls on German autobahns", amount: 0 },
-      ],
-    },
-    {
-      country: "🇦🇹 Austria",
-      total: 34.6,
-      lines: [
-        {
-          place: "Digital vignette",
-          detail: "10-day pass, valid nationwide",
-          amount: 12.4,
-          badge: "Buy online",
-          portal: { label: "ASFINAG", url: "https://shop.asfinag.at/" },
-        },
-        {
-          place: "Brenner Pass A13",
-          detail: "Section toll, one way",
-          amount: 11.1,
-          badge: "Buy online",
-          portal: { label: "ASFINAG", url: "https://shop.asfinag.at/" },
-        },
-        {
-          place: "Tauern tunnel",
-          detail: "Section toll, one way",
-          amount: 11.1,
-          portal: { label: "ASFINAG", url: "https://www.asfinag.at/maut-vignette/streckenmaut/" },
-        },
-      ],
-    },
-    {
-      country: "🇨🇭 Switzerland",
-      total: 42.5,
-      lines: [
-        {
-          place: "E-vignette",
-          detail: "Annual e-vignette, plate-linked",
-          amount: 42.5,
-          badge: "Buy online",
-          portal: { label: "via.admin.ch", url: "https://via.admin.ch/shop/dashboard" },
-        },
-      ],
-    },
-    {
-      country: "🇮🇹 Italy",
-      total: 61.8,
-      lines: [
-        {
-          place: "A22 Brennero → Modena",
-          detail: "Ticket system, 8 checkpoints",
-          amount: 38.9,
-          badge: "Telepass",
-          portal: { label: "Telepass", url: "https://www.telepass.com/en/" },
-        },
-        {
-          place: "A1 Firenze → Roma",
-          detail: "Ticket system, 5 checkpoints",
-          amount: 22.9,
-          portal: { label: "Telepass", url: "https://www.telepass.com/en/" },
-        },
-      ],
-    },
-    {
-      country: "🇳🇴 Norway",
-      total: 18.4,
-      lines: [
-        {
-          place: "Oslo & Bergen city rings",
-          detail: "AutoPASS gantries — motorcycles pass free",
-          amount: 18.4,
-          badge: "AutoPASS",
-          freeForMotorcycle: true,
-          portal: { label: "AutoPASS", url: "https://www.autopass.no/en/" },
-        },
-      ],
-    },
-    {
-      country: "⛴️ Ferries",
-      total: 78,
-      lines: [
-        {
-          place: "Naples → Capri",
-          detail: "Vehicle + 2 passengers",
-          amount: 78,
-          badge: "Reserve seat",
-          portal: { label: "Direct Ferries", url: "https://www.directferries.com/" },
-        },
-      ],
-    },
-  ],
-  us: [
-    {
-      country: "🏙️ Illinois",
-      total: 14.2,
-      lines: [
-        {
-          place: "I-90 Jane Addams Tollway",
-          detail: "6 gantries, I-PASS rate",
-          amount: 14.2,
-          badge: "I-PASS",
-          portal: { label: "Illinois Tollway", url: "https://www.illinoistollway.com/" },
-        },
-      ],
-    },
-    {
-      country: "🌄 Colorado",
-      total: 21.5,
-      lines: [
-        {
-          place: "E-470 Express",
-          detail: "Plate-pay surcharge included",
-          amount: 15.5,
-          badge: "ExpressToll",
-          portal: { label: "ExpressToll", url: "https://www.expresstoll.com/" },
-        },
-        { place: "I-70 Mountain Express Lane", detail: "Peak weekend rate", amount: 6 },
-      ],
-    },
-    {
-      country: "🌉 California",
-      total: 26,
-      lines: [
-        {
-          place: "Golden Gate Bridge",
-          detail: "Southbound, FasTrak",
-          amount: 9.75,
-          badge: "FasTrak",
-          portal: { label: "FasTrak", url: "https://www.bayareafastrak.org/" },
-        },
-        { place: "Bay Bridge", detail: "Weekday peak", amount: 8.25 },
-        { place: "SR-91 Express Lanes", detail: "Evening rate", amount: 8 },
-      ],
-    },
-    {
-      country: "🌴 Florida",
-      total: 18.6,
-      lines: [
-        {
-          place: "Florida Turnpike (Orlando → Miami)",
-          detail: "SunPass rate, 9 gantries",
-          amount: 18.6,
-          badge: "SunPass",
-          portal: { label: "SunPass", url: "https://www.sunpass.com/" },
-        },
-      ],
-    },
-    {
-      country: "⛴️ Ferries",
-      total: 62,
-      lines: [
-        {
-          place: "Anacortes → Friday Harbor",
-          detail: "Vehicle under 22ft + driver",
-          amount: 62,
-          badge: "Reserve",
-          portal: { label: "WA State Ferries", url: "https://wsdot.com/travel/washington-state-ferries" },
-        },
-      ],
-    },
-  ],
-  ca: [
-    {
-      country: "🍁 Ontario",
-      total: 46.4,
-      lines: [
-        {
-          place: "Highway 407 ETR",
-          detail: "Peak rate, transponder",
-          amount: 31.4,
-          badge: "407 tag",
-          portal: { label: "407 ETR", url: "https://www.407etr.com/" },
-        },
-        {
-          place: "Highway 412 (Whitby ↔ 407)",
-          detail: "Two-axle vehicle, transponder rate",
-          amount: 3.9,
-          portal: { label: "Ontario 407 tolls", url: "https://www.ontario.ca/page/highway-407-tolls" },
-        },
-        {
-          place: "Highway 418 (Courtice ↔ 407)",
-          detail: "Two-axle vehicle, transponder rate",
-          amount: 3.1,
-          portal: { label: "Ontario 407 tolls", url: "https://www.ontario.ca/page/highway-407-tolls" },
-        },
-        {
-          place: "Video toll charge",
-          detail: "Per-trip camera fee",
-          amount: 8,
-          portal: { label: "407 ETR", url: "https://www.407etr.com/en/tolls/tolls/toll-rates.html" },
-        },
-      ],
-    },
-    {
-      country: "⚜️ Québec",
-      total: 7.15,
-      lines: [
-        {
-          place: "A25 Bridge (Montréal ↔ Laval)",
-          detail: "Two-axle vehicle, peak with transponder",
-          amount: 4.3,
-          badge: "A25 tag",
-          portal: { label: "A25", url: "https://a25.com/" },
-        },
-        {
-          place: "A30 (Autoroute 30 toll section)",
-          detail: "Two-axle vehicle, electronic toll",
-          amount: 2.85,
-          portal: { label: "A30 Express", url: "https://a30express.com/" },
-        },
-      ],
-    },
-    {
-      country: "🌲 Nova Scotia",
-      total: 12.5,
-      lines: [
-        {
-          place: "Cobequid Pass (Hwy 104)",
-          detail: "Two-axle vehicle",
-          amount: 12.5,
-          portal: { label: "Cobequid Pass", url: "https://cobequidpass.com/" },
-        },
-      ],
-    },
-
-    {
-      country: "🏔️ British Columbia",
-      total: 0,
-      lines: [{ place: "Coquihalla Hwy 5", detail: "Toll-free since 2008", amount: 0 }],
-    },
-    {
-      country: "⛴️ Ferries",
-      total: 96,
-      lines: [
-        {
-          place: "Tsawwassen → Swartz Bay",
-          detail: "Vehicle under 20ft + 2 adults",
-          amount: 96,
-          badge: "Reserve",
-          portal: { label: "BC Ferries", url: "https://www.bcferries.com/" },
-        },
-      ],
-    },
-  ],
-};
-
-
-const PASSES: Record<RegionKey, string[]> = {
-  eu: [
-    "Stelvio Pass (2,757 m) — 48 hairpins, open, dry tarmac forecast until early evening.",
-    "Grossglockner High Alpine Road — toll road, gates close at 21:00; ride it before dusk.",
-    "Furka Pass — clear and open today, light crosswinds on the western ramp.",
-    "Trollstigen — single-lane sections with tourist traffic; take the early morning slot.",
-  ],
-  us: ["Tail of the Dragon (US-129) — 318 curves in 11 miles; watch for gravel on the inside lines."],
-  ca: ["Icefields Parkway — stunning but exposed; wildlife on the road at dawn and dusk."],
-};
 
 /** Pass advisories keyed by the ISO code of the country they sit in. */
 const PASSES_BY_COUNTRY: Record<string, string[]> = {
@@ -650,7 +335,53 @@ function passesForRoute(region: RegionKey, geo: RouteGeo | null): string[] {
       ? items
       : ["No mountain passes or seasonal closures detected along this corridor."];
   }
-  return PASSES[region];
+  return ["Select a start and destination to load live pass and closure intel for the countries you actually cross."];
+}
+
+/** Country-specific rules, only surfaced for countries the route really enters. */
+const RIDER_RULES: Record<string, string> = {
+  FR: "France: CE-approved gloves are mandatory for rider and pillion, and a high-vis vest must be carried within reach.",
+  DE: "Germany: a DIN 13167 motorcycle first-aid kit is expected, and lane filtering is not permitted.",
+  AT: "Austria: first-aid kit required; dipped headlights on at all times.",
+  IT: "Italy: motorways are off-limits to bikes under 150 cc; carry the V5/registration document.",
+  PL: "Poland: zero-tolerance alcohol limit (0.02%) and headlights on day and night.",
+  DK: "Denmark: headlights on at all times; strong crosswinds on the Storebælt and Øresund bridges.",
+  NO: "Norway: studded-tyre season rules apply from November; AutoPASS gantries are free for motorcycles.",
+  SE: "Sweden: winter tyres required 1 Dec – 31 Mar in wintry conditions.",
+  NL: "Netherlands: mopeds and bikes must use the main carriageway on motorways; strict 100 km/h daytime limit.",
+  ES: "Spain: reflective vest must be carried; approved helmet with visor required.",
+  US: "US: helmet laws vary by state — check the state line rules before you cross.",
+  CA: "Canada: helmets are mandatory in every province; watch for wildlife at dawn and dusk.",
+};
+
+const CAMPER_RULES: Record<string, string> = {
+  DE: "Germany: 3.5 t campers may use the left lane, but 100 km/h is the legal maximum unless plated for 120.",
+  FR: "France: over 3.5 t you fall into the lower speed bands (110/100/80) and pay the class-2 péage rate.",
+  IT: "Italy: many historic centres are ZTL-restricted — park outside and walk in.",
+  AT: "Austria: over 3.5 t you need the GO-Box, not the vignette.",
+  CH: "Switzerland: over 3.5 t requires the heavy-vehicle charge (PSVA) instead of the e-vignette.",
+  DK: "Denmark: bridge tolls are charged by vehicle length — over 6 m moves you to a higher class.",
+  PL: "Poland: over 3.5 t requires e-TOLL on-board registration.",
+  NO: "Norway: AutoPASS class 2 applies over 3.5 t; many tunnels have 4.0 m height limits.",
+  NL: "Netherlands: several tunnels cap height at 4.0 m and LPG carriage is restricted.",
+  US: "US: check bridge clearances on older state routes — many are under 4.1 m (13'6\").",
+  CA: "Canada: provincial parks require reservations in summer; propane must be off in tunnels.",
+};
+
+function corridorNotes(geo: RouteGeo | null, table: Record<string, string>): string[] {
+  if (!geo || !geo.countries.length) return [];
+  return geo.countries.map((c) => table[c.code]).filter((v): v is string => Boolean(v));
+}
+
+function corridorSummary(geo: RouteGeo | null): string[] {
+  if (!geo || !geo.countries.length) {
+    return ["Calculate a route to load the live advisories for the countries you actually cross."];
+  }
+  const names = geo.countries.map((c) => `${c.flag} ${c.country}`).join(" → ");
+  const borders = geo.borders.length
+    ? `${geo.borders.length} border crossing${geo.borders.length > 1 ? "s" : ""} on the way.`
+    : "No border crossings — the whole route stays in one country.";
+  return [`Corridor analysed from the routed polyline: ${names}.`, borders];
 }
 
 function safetyFor(region: RegionKey, vehicle: VehicleKey, geo: RouteGeo | null = null) {
@@ -658,25 +389,8 @@ function safetyFor(region: RegionKey, vehicle: VehicleKey, geo: RouteGeo | null 
     return {
       title: "Rider Safety & Gear Radar",
       sections: [
-        {
-          heading: "🧤 Gear & legal kit",
-          items: [
-            "France: CE-approved gloves are mandatory for rider and pillion, and a high-vis vest must be carried within reach.",
-            "Austria & Germany: carry a first-aid kit meeting DIN 13167 (motorcycle standard) — small, and checked at roadside stops.",
-            "Keep your vest, kit and documents on top of the pannier so a check takes seconds.",
-          ],
-        },
-        {
-          heading: "🏔️ Mountain pass alerts",
-          items: passesForRoute(region, geo),
-        },
-        {
-          heading: "⛽ Long-stretch fuel alerts",
-          items: [
-            "Two stretches exceed 180 km between open stations — top up before the pass climbs.",
-            "Night-time pumps on the alpine leg are card-only; carry a backup card.",
-          ],
-        },
+        { heading: "🧤 Gear & legal kit", items: [...corridorNotes(geo, RIDER_RULES), ...corridorSummary(geo)] },
+        { heading: "🏔️ Mountain pass alerts", items: passesForRoute(region, geo) },
       ],
     };
   }
@@ -684,40 +398,15 @@ function safetyFor(region: RegionKey, vehicle: VehicleKey, geo: RouteGeo | null 
     return {
       title: "Camper Clearance & Weight Radar",
       sections: [
-        {
-          heading: "📏 Clearance warnings",
-          items: [
-            "Two tunnels on this route cap height at 3.2 m — your 3.05 m profile clears with margin.",
-            "One low village archway (2.9 m) was bypassed via the valley road automatically.",
-          ],
-        },
-        {
-          heading: "⚖️ Weight & axle limits",
-          items: [
-            "Route verified for vehicles up to 3.5 t; a 7.5 t restriction on the old pass road is avoided.",
-            "Crosswind advisory on the coastal bridge section — reduce speed with a high side profile.",
-          ],
-        },
-        {
-          heading: "🛠️ Services",
-          items: [
-            "Three overnight-friendly service areas with fresh water and grey-water disposal along the way.",
-          ],
-        },
+        { heading: "📏 Clearance, weight & class rules", items: [...corridorNotes(geo, CAMPER_RULES), ...corridorSummary(geo)] },
+        { heading: "🏔️ Pass conditions", items: passesForRoute(region, geo) },
       ],
     };
   }
   return {
     title: "Driver Safety Radar",
     sections: [
-      {
-        heading: "🚗 On the road",
-        items: [
-          "Winter equipment rules apply on the higher sections of this route between October and April.",
-          "Rest stops are mapped every 2 hours so the drive stays fresh and relaxed.",
-          "Every toll gantry on this route accepts contactless cards — no cash needed.",
-        ],
-      },
+      { heading: "🚗 On the road", items: corridorSummary(geo) },
       { heading: "🏔️ Pass conditions", items: passesForRoute(region, geo) },
     ],
   };
@@ -770,6 +459,7 @@ export function estimateTrip(
   tripType: TripType = "oneway",
   durationDays = 1,
   geo: RouteGeo | null = null,
+  prices: EnergyPrices | null = null,
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -803,7 +493,7 @@ export function estimateTrip(
 
   // Real routed corridor → real countries. Only fall back to the sample
   // breakdown when no route geometry could be resolved.
-  let segments = geo ? buildRouteSegments(geo).segments : SEGMENTS[region];
+  let segments = geo ? buildRouteSegments(geo).segments : [];
   if (!includeFerries) segments = segments.filter((s) => !s.country.includes("Ferries"));
 
   const motoFactor = isMoto ? 0.6 : 1;
@@ -825,8 +515,17 @@ export function estimateTrip(
   const consumption =
     vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
   const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
-  const pricePerL = fuel === "diesel" ? 1.72 : 1.89;
-  const pricePerKwh = 0.44;
+  // Live prices from the energy feed when available; the estimator never
+  // invents a number it cannot source.
+  const perLitreLive = prices
+    ? prices.unit === "gallon"
+      ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.785
+      : fuel === "diesel"
+        ? prices.diesel
+        : prices.petrol
+    : null;
+  const pricePerL = perLitreLive ?? (fuel === "diesel" ? 1.72 : 1.89);
+  const pricePerKwh = prices?.kwh ?? 0.44;
 
   const energyCost =
     fuel === "electric"
@@ -867,6 +566,17 @@ export function estimateTrip(
         borders: borderLabels(geo.borders, imperial),
         from: geo.from.name,
         to: geo.to.name,
+        coords: geo.coords,
+        points: [
+          { name: geo.from.name, detail: "Start", lat: geo.from.lat, lon: geo.from.lng },
+          ...geo.samples.map((sp) => ({
+            name: sp.place || sp.country,
+            detail: `${sp.country}${sp.state ? ` · ${sp.state}` : ""} · ${Math.round(sp.atKm)} km`,
+            lat: sp.lat,
+            lon: sp.lng,
+          })),
+          { name: geo.to.name, detail: "Destination", lat: geo.to.lat, lon: geo.to.lng },
+        ],
       }
     : null;
 
@@ -917,8 +627,9 @@ export function estimateAllVariants(
   tripType: TripType = "oneway",
   durationDays = 1,
   geo: RouteGeo | null = null,
+  prices: EnergyPrices | null = null,
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays, geo] as const;
+  const args = [extraStops, tripType, durationDays, geo, prices] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
@@ -951,6 +662,7 @@ export function evComparison(
   trip: TripEstimate,
   vehicle: VehicleKey,
   fuel: FuelKey,
+  prices: EnergyPrices | null = null,
 ): {
   fuelCost: number;
   evCost: number;
@@ -962,8 +674,15 @@ export function evComparison(
   const round2 = (n: number) => Math.round(n * 100) / 100;
   const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
   const kwhPer100 = vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
-  const pricePerL = fuel === "diesel" ? 1.72 : 1.89;
-  const pricePerKwh = 0.44;
+  const perLitreLive = prices
+    ? prices.unit === "gallon"
+      ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.785
+      : fuel === "diesel"
+        ? prices.diesel
+        : prices.petrol
+    : null;
+  const pricePerL = perLitreLive ?? (fuel === "diesel" ? 1.72 : 1.89);
+  const pricePerKwh = prices?.kwh ?? 0.44;
   const fuelCost = round2((trip.distanceKm / 100) * consumption * pricePerL);
   const evCost = round2((trip.distanceKm / 100) * kwhPer100 * pricePerKwh);
   return {

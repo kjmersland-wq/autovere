@@ -4,16 +4,17 @@ export function escapeXml(value: string) {
   return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-/** Indicative waypoints so exported files load cleanly in GPS units. */
+/** Real waypoints from the routed polyline — never synthetic coordinates. */
 export function tripWaypoints(trip: TripEstimate) {
-  return trip.segments
-    .flatMap((s) => s.lines)
-    .map((l, i) => ({
-      name: l.place,
-      detail: l.detail,
-      lat: 46 + i * 0.35,
-      lon: 9 + i * 0.4,
-    }));
+  return trip.corridor?.points ?? [];
+}
+
+/** The routed polyline, thinned to a GPS-unit friendly point count. */
+export function tripTrackPoints(trip: TripEstimate): [number, number][] {
+  const coords = trip.corridor?.coords ?? [];
+  if (coords.length <= 500) return coords;
+  const step = Math.ceil(coords.length / 500);
+  return coords.filter((_, i) => i % step === 0 || i === coords.length - 1);
 }
 
 export function buildTripGpx(trip: TripEstimate, origin: string, destination: string) {
@@ -24,8 +25,8 @@ export function buildTripGpx(trip: TripEstimate, origin: string, destination: st
         `  <wpt lat="${p.lat.toFixed(4)}" lon="${p.lon.toFixed(4)}">\n    <name>${escapeXml(p.name)}</name>\n    <desc>${escapeXml(p.detail)}</desc>\n    <sym>Flag, Blue</sym>\n  </wpt>`,
     )
     .join("\n");
-  const track = pts
-    .map((p) => `      <trkpt lat="${p.lat.toFixed(4)}" lon="${p.lon.toFixed(4)}" />`)
+  const track = tripTrackPoints(trip)
+    .map(([lat, lon]) => `      <trkpt lat="${lat.toFixed(5)}" lon="${lon.toFixed(5)}" />`)
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="AutoVere" xmlns="http://www.topografix.com/GPX/1/1">
