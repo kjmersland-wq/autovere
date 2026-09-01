@@ -24,8 +24,22 @@ const ENGLISH_PAGES = [
   "/terms",
 ];
 
-const US_PAGES = ["/us/planner", "/us/garage", "/us/faq", "/us/how-it-works", "/us/partners", "/us/legal"];
+const US_PAGES = [
+  "/us/planner",
+  "/us/tolls",
+  "/us/scenic",
+  "/us/garage",
+  "/us/pricing",
+  "/us/faq",
+  "/us/how-it-works",
+  "/us/partners",
+  "/us/legal",
+];
 const CA_PAGES = [
+  "/ca/planner",
+  "/ca/tolls",
+  "/ca/scenic",
+  "/ca/garage",
   "/ca/pricing",
   "/ca/faq",
   "/ca/how-it-works",
@@ -35,6 +49,7 @@ const CA_PAGES = [
   "/ca/fr/how-it-works",
   "/ca/fr/partners",
   "/ca/fr/legal",
+
 ];
 
 export const Route = createFileRoute("/sitemap.xml")({
