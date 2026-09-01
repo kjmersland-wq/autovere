@@ -2,6 +2,7 @@ import type { FlagCode } from "@/components/FlagIcon";
 import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
+import { filterByCorridor } from "@/lib/corridor-filter";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
 
 export type { TripType };
@@ -1070,6 +1071,8 @@ export function detectEmissionBadges(
 
 export interface ScenicHighlight {
   id: string;
+  lat: number;
+  lng: number;
   emoji: string;
   name: string;
   where: string;
@@ -1079,6 +1082,8 @@ export interface ScenicHighlight {
 
 export interface RvPoi {
   id: string;
+  lat: number;
+  lng: number;
   emoji: string;
   name: string;
   where: string;
@@ -1088,44 +1093,44 @@ export interface RvPoi {
 
 export const SCENIC_HIGHLIGHTS: Record<RegionKey, ScenicHighlight[]> = {
   eu: [
-    { id: "trollstigen", emoji: "🏔️", name: "Trollstigen", where: "Rauma, Norway", note: "Eleven hairpins climbing a sheer wall — viewing platform over the valley.", season: "Late May – October" },
-    { id: "atlantic-road", emoji: "🌊", name: "Atlantic Road", where: "Møre og Romsdal, Norway", note: "Eight bridges hopping island to island straight over the open sea.", season: "Year-round" },
-    { id: "grossglockner", emoji: "⛰️", name: "Grossglockner High Alpine Road", where: "Austria", note: "48 km of alpine theatre topping out at 2,504 m.", season: "May – early November" },
-    { id: "stelvio", emoji: "🏍️", name: "Stelvio Pass", where: "Italy", note: "48 numbered hairpins — the classic rider pilgrimage.", season: "June – October" },
-    { id: "furka", emoji: "✨", name: "Furka & Grimsel Passes", where: "Switzerland", note: "Glacier views, smooth tarmac and a lakeside descent.", season: "June – October" },
-    { id: "verdon", emoji: "🌅", name: "Gorges du Verdon", where: "Provence, France", note: "Turquoise canyon rim road on the way to the Côte d'Azur.", season: "Year-round" },
+    { id: "trollstigen", lat: 62.4558, lng: 7.6709, emoji: "🏔️", name: "Trollstigen", where: "Rauma, Norway", note: "Eleven hairpins climbing a sheer wall — viewing platform over the valley.", season: "Late May – October" },
+    { id: "atlantic-road", lat: 63.0139, lng: 7.352, emoji: "🌊", name: "Atlantic Road", where: "Møre og Romsdal, Norway", note: "Eight bridges hopping island to island straight over the open sea.", season: "Year-round" },
+    { id: "grossglockner", lat: 47.076, lng: 12.838, emoji: "⛰️", name: "Grossglockner High Alpine Road", where: "Austria", note: "48 km of alpine theatre topping out at 2,504 m.", season: "May – early November" },
+    { id: "stelvio", lat: 46.5285, lng: 10.4543, emoji: "🏍️", name: "Stelvio Pass", where: "Italy", note: "48 numbered hairpins — the classic rider pilgrimage.", season: "June – October" },
+    { id: "furka", lat: 46.5723, lng: 8.4152, emoji: "✨", name: "Furka & Grimsel Passes", where: "Switzerland", note: "Glacier views, smooth tarmac and a lakeside descent.", season: "June – October" },
+    { id: "verdon", lat: 43.75, lng: 6.33, emoji: "🌅", name: "Gorges du Verdon", where: "Provence, France", note: "Turquoise canyon rim road on the way to the Côte d'Azur.", season: "Year-round" },
   ],
   us: [
-    { id: "blue-ridge", emoji: "🌄", name: "Blue Ridge Parkway", where: "Virginia – North Carolina", note: "469 miles of ridgeline overlooks, no trucks, no tolls.", season: "Year-round (peak: October)" },
-    { id: "pch", emoji: "🌊", name: "Pacific Coast Highway (SR-1)", where: "California", note: "Big Sur cliffs, Bixby Bridge and endless Pacific vistas.", season: "Year-round" },
-    { id: "dragon", emoji: "🏍️", name: "Tail of the Dragon (US-129)", where: "Tennessee", note: "318 curves in 11 miles — ride it early to beat traffic.", season: "April – November" },
-    { id: "beartooth", emoji: "⛰️", name: "Beartooth Highway", where: "Montana – Wyoming", note: "Switchbacks to 10,947 ft on the doorstep of Yellowstone.", season: "Late May – mid October" },
-    { id: "zion", emoji: "🏜️", name: "Zion – Bryce scenic corridor", where: "Utah", note: "Red-rock tunnels and canyon overlooks between two parks.", season: "Year-round" },
+    { id: "blue-ridge", lat: 36.5, lng: -81.0, emoji: "🌄", name: "Blue Ridge Parkway", where: "Virginia – North Carolina", note: "469 miles of ridgeline overlooks, no trucks, no tolls.", season: "Year-round (peak: October)" },
+    { id: "pch", lat: 36.2704, lng: -121.8081, emoji: "🌊", name: "Pacific Coast Highway (SR-1)", where: "California", note: "Big Sur cliffs, Bixby Bridge and endless Pacific vistas.", season: "Year-round" },
+    { id: "dragon", lat: 35.51, lng: -83.93, emoji: "🏍️", name: "Tail of the Dragon (US-129)", where: "Tennessee", note: "318 curves in 11 miles — ride it early to beat traffic.", season: "April – November" },
+    { id: "beartooth", lat: 45.0, lng: -109.47, emoji: "⛰️", name: "Beartooth Highway", where: "Montana – Wyoming", note: "Switchbacks to 10,947 ft on the doorstep of Yellowstone.", season: "Late May – mid October" },
+    { id: "zion", lat: 37.2, lng: -112.98, emoji: "🏜️", name: "Zion – Bryce scenic corridor", where: "Utah", note: "Red-rock tunnels and canyon overlooks between two parks.", season: "Year-round" },
   ],
   ca: [
-    { id: "icefields", emoji: "🏔️", name: "Icefields Parkway", where: "Alberta", note: "232 km between Lake Louise and Jasper past glaciers and turquoise lakes.", season: "Year-round (winter tyres Oct–Apr)" },
-    { id: "cabot", emoji: "🌊", name: "Cabot Trail", where: "Cape Breton, Nova Scotia", note: "Highland cliffs, whale lookouts and ocean switchbacks.", season: "May – October" },
-    { id: "sea-to-sky", emoji: "✨", name: "Sea-to-Sky Highway", where: "British Columbia", note: "Howe Sound fjord views from Vancouver up to Whistler.", season: "Year-round" },
-    { id: "charlevoix", emoji: "🍁", name: "Route du Fleuve, Charlevoix", where: "Québec", note: "St. Lawrence riverside villages and beluga-watching stops.", season: "May – October" },
+    { id: "icefields", lat: 51.67, lng: -116.94, emoji: "🏔️", name: "Icefields Parkway", where: "Alberta", note: "232 km between Lake Louise and Jasper past glaciers and turquoise lakes.", season: "Year-round (winter tyres Oct–Apr)" },
+    { id: "cabot", lat: 46.75, lng: -60.75, emoji: "🌊", name: "Cabot Trail", where: "Cape Breton, Nova Scotia", note: "Highland cliffs, whale lookouts and ocean switchbacks.", season: "May – October" },
+    { id: "sea-to-sky", lat: 49.7, lng: -123.15, emoji: "✨", name: "Sea-to-Sky Highway", where: "British Columbia", note: "Howe Sound fjord views from Vancouver up to Whistler.", season: "Year-round" },
+    { id: "charlevoix", lat: 47.44, lng: -70.5, emoji: "🍁", name: "Route du Fleuve, Charlevoix", where: "Québec", note: "St. Lawrence riverside villages and beluga-watching stops.", season: "May – October" },
   ],
 };
 
 export const RV_POIS: Record<RegionKey, RvPoi[]> = {
   eu: [
-    { id: "eu-1", emoji: "🚐", name: "Bobil-parkering Geiranger", where: "Geiranger, Norway", services: ["Grey water", "Fresh water", "EV hookup"], note: "Fjord-side pitches, 5 min walk to the ferry quay." },
-    { id: "eu-2", emoji: "🚐", name: "Stellplatz Zell am See", where: "Salzburg, Austria", services: ["Chemical WC", "Electricity", "Bakery service"], note: "Great overnight before Grossglockner — book in July/August." },
-    { id: "eu-3", emoji: "🚐", name: "Aire de Camping-Car Annecy", where: "Haute-Savoie, France", services: ["Fresh water", "Grey water", "24h access"], note: "France's aire network is the cheapest overnight option en route south." },
-    { id: "eu-4", emoji: "🚐", name: "Camping Bella Italia, Peschiera", where: "Lake Garda, Italy", services: ["Full hookup", "Laundry", "Pool"], note: "Large pitches; height/width friendly access road." },
+    { id: "eu-1", lat: 62.101, lng: 7.206, emoji: "🚐", name: "Bobil-parkering Geiranger", where: "Geiranger, Norway", services: ["Grey water", "Fresh water", "EV hookup"], note: "Fjord-side pitches, 5 min walk to the ferry quay." },
+    { id: "eu-2", lat: 47.323, lng: 12.796, emoji: "🚐", name: "Stellplatz Zell am See", where: "Salzburg, Austria", services: ["Chemical WC", "Electricity", "Bakery service"], note: "Great overnight before Grossglockner — book in July/August." },
+    { id: "eu-3", lat: 45.899, lng: 6.129, emoji: "🚐", name: "Aire de Camping-Car Annecy", where: "Haute-Savoie, France", services: ["Fresh water", "Grey water", "24h access"], note: "France's aire network is the cheapest overnight option en route south." },
+    { id: "eu-4", lat: 45.44, lng: 10.69, emoji: "🚐", name: "Camping Bella Italia, Peschiera", where: "Lake Garda, Italy", services: ["Full hookup", "Laundry", "Pool"], note: "Large pitches; height/width friendly access road." },
   ],
   us: [
-    { id: "us-1", emoji: "🚐", name: "KOA Journey — Interstate corridor", where: "Nationwide", note: "Pull-through sites sized for 40 ft rigs and towed cars.", services: ["Full hookup", "Dump station", "Wi-Fi"] },
-    { id: "us-2", emoji: "🚐", name: "Yellowstone Grizzly RV Park", where: "West Yellowstone, MT", note: "Book months ahead for summer; ideal Beartooth basecamp.", services: ["50 amp", "Dump station", "Laundry"] },
-    { id: "us-3", emoji: "🚐", name: "Pismo Coast Village RV Resort", where: "California", note: "Beachfront stop midway along the Pacific Coast Highway.", services: ["Full hookup", "Propane", "Dump station"] },
+    { id: "us-1", lat: 39.5, lng: -98.35, emoji: "🚐", name: "KOA Journey — Interstate corridor", where: "Nationwide", note: "Pull-through sites sized for 40 ft rigs and towed cars.", services: ["Full hookup", "Dump station", "Wi-Fi"] },
+    { id: "us-2", lat: 44.662, lng: -111.1, emoji: "🚐", name: "Yellowstone Grizzly RV Park", where: "West Yellowstone, MT", note: "Book months ahead for summer; ideal Beartooth basecamp.", services: ["50 amp", "Dump station", "Laundry"] },
+    { id: "us-3", lat: 35.135, lng: -120.635, emoji: "🚐", name: "Pismo Coast Village RV Resort", where: "California", note: "Beachfront stop midway along the Pacific Coast Highway.", services: ["Full hookup", "Propane", "Dump station"] },
   ],
   ca: [
-    { id: "ca-1", emoji: "🚐", name: "Whistler RV Park & Campground", where: "British Columbia", note: "Last full-service stop on the Sea-to-Sky corridor.", services: ["Full hookup", "Showers", "Dump station"] },
-    { id: "ca-2", emoji: "🚐", name: "Whistlers Campground", where: "Jasper, Alberta", note: "Huge serviced loop right at the north end of the Icefields Parkway.", services: ["Electric", "Dump station", "Fire pits"] },
-    { id: "ca-3", emoji: "🚐", name: "Broad Cove Campground", where: "Cape Breton, Nova Scotia", note: "Oceanfront pitches on the Cabot Trail.", services: ["Water", "Dump station", "Showers"] },
+    { id: "ca-1", lat: 50.1163, lng: -122.9574, emoji: "🚐", name: "Whistler RV Park & Campground", where: "British Columbia", note: "Last full-service stop on the Sea-to-Sky corridor.", services: ["Full hookup", "Showers", "Dump station"] },
+    { id: "ca-2", lat: 52.85, lng: -118.08, emoji: "🚐", name: "Whistlers Campground", where: "Jasper, Alberta", note: "Huge serviced loop right at the north end of the Icefields Parkway.", services: ["Electric", "Dump station", "Fire pits"] },
+    { id: "ca-3", lat: 46.79, lng: -60.68, emoji: "🚐", name: "Broad Cove Campground", where: "Cape Breton, Nova Scotia", note: "Oceanfront pitches on the Cabot Trail.", services: ["Water", "Dump station", "Showers"] },
   ],
 };
 
@@ -1281,6 +1286,8 @@ export type ScandiBridge = {
   portalLabel: string;
   portalUrl: string;
   match: string[];
+  lat: number;
+  lng: number;
 };
 
 export const SCANDI_BRIDGES: ScandiBridge[] = [
@@ -1296,6 +1303,8 @@ export const SCANDI_BRIDGES: ScandiBridge[] = [
     portalLabel: "storebaelt.dk",
     portalUrl: "https://www.storebaelt.dk/english",
     match: ["denmark", "danmark", "copenhagen", "københavn", "kobenhavn", "odense", "aarhus", "århus", "jutland", "jylland", "esbjerg", "aalborg", "hamburg", "sweden", "sverige", "malmö", "malmo", "stockholm", "göteborg", "gothenburg", "oslo", "norway", "norge"],
+    lat: 55.335,
+    lng: 10.977,
   },
   {
     id: "oresund",
@@ -1309,6 +1318,8 @@ export const SCANDI_BRIDGES: ScandiBridge[] = [
     portalLabel: "oresundsbron.com",
     portalUrl: "https://www.oresundsbron.com/en/start",
     match: ["copenhagen", "københavn", "kobenhavn", "malmö", "malmo", "sweden", "sverige", "stockholm", "lund", "helsingborg", "göteborg", "gothenburg", "denmark", "danmark", "oslo", "norway", "norge"],
+    lat: 55.573,
+    lng: 12.833,
   },
 ];
 
@@ -1324,13 +1335,9 @@ export function routeTouchesNorway(origin: string, destination: string): boolean
   return NORWAY_MATCH.some((m) => text.includes(m));
 }
 
-/** Danish / Øresund bridge crossings on the corridor. */
+/** Bridge crossings the routed polyline physically uses (≈15 km corridor). */
 export function detectScandiBridges(
-  region: RegionKey,
-  origin: string,
-  destination: string,
+  coords: [number, number][] | undefined | null,
 ): ScandiBridge[] {
-  if (region !== "eu") return [];
-  const text = `${origin} ${destination}`.toLowerCase();
-  return SCANDI_BRIDGES.filter((b) => b.match.some((m) => text.includes(m)));
+  return filterByCorridor(SCANDI_BRIDGES, coords, 15);
 }

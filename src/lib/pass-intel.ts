@@ -1,4 +1,6 @@
+import { borderPairs, filterByCorridor, type LatLng } from "./corridor-filter";
 import type { RegionKey, VehicleKey } from "./trip-data";
+
 
 /* ------------------------------------------------------------------ *
  * Iconic mountain pass radar
@@ -22,6 +24,9 @@ export interface MountainPass {
   portalUrl: string;
   match: string[];
   regions: RegionKey[];
+  /** Real-world summit coordinates — used for polyline proximity filtering. */
+  lat: number;
+  lng: number;
 }
 
 export const MOUNTAIN_PASSES: MountainPass[] = [
@@ -41,6 +46,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://www.grossglockner.at/gg/en/index",
     match: ["austria", "salzburg", "zell am see", "heiligenblut", "grossglockner", "großglockner", "carinthia", "villach", "brenner", "innsbruck", "italy", "garda"],
     regions: ["eu"],
+    lat: 47.076,
+    lng: 12.838,
   },
   {
     id: "stelvio",
@@ -58,6 +65,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://www.stelviopark.it/en/",
     match: ["italy", "bormio", "stelvio", "south tyrol", "bolzano", "milan", "milano", "garda", "como", "switzerland", "livigno", "sondrio"],
     regions: ["eu"],
+    lat: 46.5285,
+    lng: 10.4543,
   },
   {
     id: "furka-grimsel",
@@ -75,6 +84,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://www.tcs.ch/en/travel-camping/travel-information/traffic-information/alpine-passes.php",
     match: ["switzerland", "swiss", "furka", "grimsel", "andermatt", "interlaken", "bern", "lucerne", "zurich", "zürich", "valais", "brig", "geneva", "milan", "como"],
     regions: ["eu"],
+    lat: 46.5723,
+    lng: 8.4152,
   },
   {
     id: "trollstigen",
@@ -92,6 +103,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://www.vegvesen.no/en/traffic/",
     match: ["norway", "norge", "oslo", "bergen", "ålesund", "alesund", "åndalsnes", "geiranger", "trollstigen", "sognefjell", "lom", "trondheim", "fjord", "stavanger"],
     regions: ["eu"],
+    lat: 62.4558,
+    lng: 7.6709,
   },
   {
     id: "icefields",
@@ -109,6 +122,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://parks.canada.ca/pn-np/ab/banff/visit/parkway-promenade",
     match: ["alberta", "banff", "jasper", "lake louise", "calgary", "canmore", "icefields", "edmonton", "rockies"],
     regions: ["ca"],
+    lat: 51.67,
+    lng: -116.94,
   },
   {
     id: "dragon",
@@ -126,14 +141,14 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://tailofthedragon.com/",
     match: ["tennessee", "north carolina", "knoxville", "asheville", "deals gap", "dragon", "smoky", "gatlinburg", "chattanooga", "nashville", "atlanta"],
     regions: ["us"],
+    lat: 35.51,
+    lng: -83.93,
   },
 ];
 
-const DEFAULT_PASSES: Record<RegionKey, string[]> = {
-  eu: ["grossglockner", "stelvio", "furka-grimsel"],
-  us: ["dragon"],
-  ca: ["icefields"],
-};
+/** A pass only counts as "on the route" inside this corridor. */
+export const PASS_CORRIDOR_KM = 50;
+
 
 function inSeason(pass: MountainPass, month: number) {
   const [from, to] = pass.openMonths;
@@ -162,19 +177,15 @@ export function passStatus(pass: MountainPass, date = new Date()): {
   return { status: "open", label: "Open", tone: "open" };
 }
 
+/**
+ * Passes within 50 km of the real routed polyline. No polyline → no radar.
+ */
 export function detectMountainPasses(
-  region: RegionKey,
-  origin: string,
-  destination: string,
+  coords: LatLng[] | undefined | null,
 ): MountainPass[] {
-  const text = `${origin} ${destination}`.toLowerCase();
-  const matched = MOUNTAIN_PASSES.filter(
-    (p) => p.regions.includes(region) && p.match.some((m) => text.includes(m)),
-  );
-  if (matched.length > 0) return matched;
-  const fallback = DEFAULT_PASSES[region];
-  return MOUNTAIN_PASSES.filter((p) => fallback.includes(p.id));
+  return filterByCorridor(MOUNTAIN_PASSES, coords, PASS_CORRIDOR_KM);
 }
+
 
 /* ------------------------------------------------------------------ *
  * Cross-border fuel & cost arbitrage
@@ -288,11 +299,14 @@ export interface BorderCrossing {
   portalUrl?: string;
   match: string[];
   regions: RegionKey[];
+  /** ISO country pair this checkpoint sits on (order-insensitive). */
+  codes: [string, string];
 }
 
 export const BORDER_CROSSINGS: BorderCrossing[] = [
   {
     id: "de-at",
+    codes: ["DE", "AT"],
     kind: "schengen",
     flags: "🇩🇪 → 🇦🇹",
     name: "Germany → Austria",
@@ -310,6 +324,7 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
   },
   {
     id: "at-it",
+    codes: ["AT", "IT"],
     kind: "schengen",
     flags: "🇦🇹 → 🇮🇹",
     name: "Austria → Italy (Brenner)",
@@ -327,6 +342,7 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
   },
   {
     id: "ch-borders",
+    codes: ["CH", "*"],
     kind: "strict",
     flags: "🇨🇭",
     name: "Swiss borders (Schengen, non-EU customs)",
@@ -346,6 +362,7 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
   },
   {
     id: "uk-fr",
+    codes: ["GB", "FR"],
     kind: "strict",
     flags: "🇬🇧 ↔ 🇫🇷",
     name: "UK ↔ France (Channel Tunnel & Dover–Calais)",
@@ -366,6 +383,7 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
   },
   {
     id: "hr-bih",
+    codes: ["HR", "BA"],
     kind: "strict",
     flags: "🇭🇷 ↔ 🇧🇦",
     name: "Croatia ↔ Bosnia & Herzegovina (Neum corridor)",
@@ -383,6 +401,7 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
   },
   {
     id: "us-ca",
+    codes: ["US", "CA"],
     kind: "strict",
     flags: "🇺🇸 ↔ 🇨🇦",
     name: "USA ↔ Canada land border",
@@ -403,24 +422,86 @@ export const BORDER_CROSSINGS: BorderCrossing[] = [
   },
 ];
 
-const DEFAULT_CROSSINGS: Record<RegionKey, string[]> = {
-  eu: ["de-at", "at-it"],
-  us: ["us-ca"],
-  ca: ["us-ca"],
-};
+const SCHENGEN = new Set([
+  "AT","BE","BG","CH","CZ","DE","DK","EE","ES","FI","FR","GR","HR","HU","IS","IT",
+  "LI","LT","LU","LV","MT","NL","NO","PL","PT","RO","SE","SI","SK",
+]);
 
-export function detectBorderCrossings(
-  region: RegionKey,
-  origin: string,
-  destination: string,
-): BorderCrossing[] {
-  const text = `${origin} ${destination}`.toLowerCase();
-  const matched = BORDER_CROSSINGS.filter(
-    (c) => c.regions.includes(region) && c.match.some((m) => text.includes(m)),
+function flagFor(code: string) {
+  if (!/^[a-z]{2}$/i.test(code)) return "🏳️";
+  return String.fromCodePoint(
+    ...code.toUpperCase().split("").map((c) => 127397 + c.charCodeAt(0)),
   );
-  if (matched.length > 0) return matched;
-  const fallback = DEFAULT_CROSSINGS[region];
-  return BORDER_CROSSINGS.filter((c) => fallback.includes(c.id));
+}
+
+function matchesPair(crossing: BorderCrossing, a: string, b: string) {
+  const [x, y] = crossing.codes;
+  if (x === "*" || y === "*") {
+    const fixed = x === "*" ? y : x;
+    return fixed === a || fixed === b;
+  }
+  return (x === a && y === b) || (x === b && y === a);
+}
+
+function genericCrossing(
+  a: string,
+  b: string,
+  aName: string,
+  bName: string,
+): BorderCrossing {
+  const schengen = SCHENGEN.has(a) && SCHENGEN.has(b);
+  return {
+    id: `${a}-${b}`.toLowerCase(),
+    kind: schengen ? "schengen" : "strict",
+    flags: `${flagFor(a)} → ${flagFor(b)}`,
+    name: `${aName} → ${bName}`,
+    statusLabel: schengen
+      ? "Open border · random ID checks"
+      : "Passport and customs control",
+    body: schengen
+      ? `Your route crosses from ${aName} into ${bName} inside the Schengen area — no fixed checkpoint, but police can run spot checks on the motorway.`
+      : `Your route crosses from ${aName} into ${bName} at an external border with full passport and customs control. Allow extra time in peak season.`,
+    requirements: schengen
+      ? [
+          "Photo ID for every occupant (random checks)",
+          `Any ${bName} motorway toll or vignette valid before the first motorway metre`,
+          "Warning triangle, hi-vis vest and first-aid kit on board",
+        ]
+      : [
+          "Valid passport for every traveller",
+          "Vehicle registration and insurance valid in the destination country",
+          "Declare goods, alcohol, tobacco and pets",
+        ],
+    waitLabel: schengen ? "Typically 0–10 min" : "15–90 min depending on season",
+    match: [],
+    regions: ["eu", "us", "ca"],
+    codes: [a, b],
+  };
+}
+
+/**
+ * Border cards for the countries the polyline physically crosses, in travel
+ * order. Countries not on the route never produce a card.
+ */
+export function detectBorderCrossings(
+  countryCodes: string[],
+  countryNames: string[] = [],
+): BorderCrossing[] {
+  const pairs = borderPairs(countryCodes);
+  const nameFor = (code: string) => {
+    const i = countryCodes.indexOf(code);
+    return (i >= 0 ? countryNames[i] : undefined) ?? code;
+  };
+  const out: BorderCrossing[] = [];
+  const seen = new Set<string>();
+  for (const [a, b] of pairs) {
+    const key = `${a}-${b}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    const curated = BORDER_CROSSINGS.find((c) => matchesPair(c, a, b));
+    out.push(curated ?? genericCrossing(a, b, nameFor(a), nameFor(b)));
+  }
+  return out;
 }
 
 export function passTollForVehicle(pass: MountainPass, vehicle: VehicleKey): string {
