@@ -32,6 +32,7 @@ import { Route as CaFaqRouteImport } from './routes/ca.faq'
 import { Route as CaHowItWorksRouteImport } from './routes/ca.how-it-works'
 import { Route as CaLegalRouteImport } from './routes/ca.legal'
 import { Route as CaPartnersRouteImport } from './routes/ca.partners'
+import { Route as CaPricingRouteImport } from './routes/ca.pricing'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as NoIndexRouteImport } from './routes/no.index'
 import { Route as NoFaqRouteImport } from './routes/no.faq'
@@ -174,6 +175,11 @@ const CaLegalRoute = CaLegalRouteImport.update({
 const CaPartnersRoute = CaPartnersRouteImport.update({
   id: '/partners',
   path: '/partners',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaPricingRoute = CaPricingRouteImport.update({
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => CaRoute,
 } as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
@@ -340,6 +346,7 @@ export interface FileRoutesByFullPath {
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/ca/pricing': typeof CaPricingRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -391,6 +398,7 @@ export interface FileRoutesByTo {
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/ca/pricing': typeof CaPricingRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -445,6 +453,7 @@ export interface FileRoutesById {
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/ca/pricing': typeof CaPricingRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -500,6 +509,7 @@ export interface FileRouteTypes {
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/ca/pricing'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -551,6 +561,7 @@ export interface FileRouteTypes {
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/ca/pricing'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -604,6 +615,7 @@ export interface FileRouteTypes {
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/ca/pricing'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -834,6 +846,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaPartnersRouteImport
       parentRoute: typeof CaRoute
     }
+    '/ca/pricing': {
+      id: '/ca/pricing'
+      path: '/pricing'
+      fullPath: '/ca/pricing'
+      preLoaderRoute: typeof CaPricingRouteImport
+      parentRoute: typeof CaRoute
+    }
     '/checkout/return': {
       id: '/checkout/return'
       path: '/checkout/return'
@@ -1038,6 +1057,7 @@ interface CaRouteChildren {
   CaHowItWorksRoute: typeof CaHowItWorksRoute
   CaLegalRoute: typeof CaLegalRoute
   CaPartnersRoute: typeof CaPartnersRoute
+  CaPricingRoute: typeof CaPricingRoute
   CaIndexRoute: typeof CaIndexRoute
   CaFrFaqRoute: typeof CaFrFaqRoute
   CaFrHowItWorksRoute: typeof CaFrHowItWorksRoute
@@ -1050,6 +1070,7 @@ const CaRouteChildren: CaRouteChildren = {
   CaHowItWorksRoute: CaHowItWorksRoute,
   CaLegalRoute: CaLegalRoute,
   CaPartnersRoute: CaPartnersRoute,
+  CaPricingRoute: CaPricingRoute,
   CaIndexRoute: CaIndexRoute,
   CaFrFaqRoute: CaFrFaqRoute,
   CaFrHowItWorksRoute: CaFrHowItWorksRoute,
