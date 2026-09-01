@@ -45,7 +45,7 @@ function RouteSnapshot({
 }) {
   const line = useMemo(() => corridorPolyline(seed, 11), [seed]);
   // Flatten the 0-100 square corridor space into a wide 100x50 map band.
-  const sy = (y: number) => 24 + y * 0.5;
+  const sy = (y: number) => 5 + (y - 10) * 0.5;
   const path = line.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x.toFixed(1)} ${sy(p.y).toFixed(1)}`).join(" ");
   const start = line[0]!;
   const end = line[line.length - 1]!;
