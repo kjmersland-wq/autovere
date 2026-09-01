@@ -175,6 +175,8 @@
     margin: 0 !important;
     padding: 0 !important;
     overflow: visible !important;
+    background: #fff !important;
+    color: #0a0f1d !important;
   }
 
   body > *:not(.print-portal) {
