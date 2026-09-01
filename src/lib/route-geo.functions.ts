@@ -71,6 +71,7 @@ function haversine(a: [number, number], b: [number, number]) {
 async function geocode(query: string): Promise<{ name: string; lat: number; lng: number } | null> {
   const url = `https://nominatim.openstreetmap.org/search?format=jsonv2&limit=1&q=${encodeURIComponent(query)}`;
   const res = await fetch(url, { headers: { "User-Agent": UA, Accept: "application/json" } });
+  console.log("[route-geo] geocode status", res.status, (await res.clone().text()).slice(0, 120));
   if (!res.ok) return null;
   const json = (await res.json()) as { lat: string; lon: string; display_name: string }[];
   const hit = json[0];
