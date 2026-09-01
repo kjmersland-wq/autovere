@@ -228,15 +228,6 @@ export function PrintItinerary({
     };
   });
 
-  const summary: [string, string][] = [
-    ["Total trip budget", m.fmt(trip.budget, 0)],
-    ["Distance", trip.distanceLabel],
-    ["Driving time", trip.driveTime],
-    [`Cost per ${unitLabel}`, m.fmt(perUnit, 2)],
-    ["Tolls & vignettes", m.fmt(trip.tolls)],
-    [trip.energyLabel, `${m.fmt(trip.energyCost)} (${trip.energyAmount})`],
-    ["Ferries & passes", m.fmt(trip.ferries)],
-  ];
 
   const downloadGpx = () => {
     downloadFile(
