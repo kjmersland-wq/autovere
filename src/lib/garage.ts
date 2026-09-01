@@ -10,11 +10,11 @@ export type GarageVehicle = {
   height?: string;
   tags: string[];
   /** Custom EV average consumption in kWh/100 km. */
-  kwhPer100?: number;
+  kwhPer100?: number | undefined;
   /** Usable battery capacity in kWh. */
-  batteryKwh?: number;
+  batteryKwh?: number | undefined;
   /** Preferred fast-charging operator, or "all" for no preference. */
-  network?: string;
+  network?: string | undefined;
 };
 
 /** Charging operators the planner can prioritise along a corridor. */
