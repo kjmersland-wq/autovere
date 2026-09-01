@@ -153,6 +153,8 @@ export type TripEstimate = {
   corridor?: RouteCorridor | null;
   safety: { title: string; sections: SafetySection[] };
   optimizer: EnergyOptimizer;
+  /** Energy price per kWh expressed in the trip's base currency. */
+  pricePerKwh?: number;
   vignette?: VignettePlan | null;
   tripType?: TripType;
   durationDays?: number;
@@ -189,6 +191,12 @@ export type ChargingStop = {
   preferred?: boolean;
   /** True when we had to fall back to the nearest high-power CCS hub. */
   fallback?: boolean;
+  /** Energy needed on the leg leading into this stop. */
+  kwhNeeded?: number;
+  /** Length of the leg leading into this stop. */
+  legLabel?: string;
+  /** Indicative price per kWh in the trip's base currency. */
+  pricePerKwh?: number;
 };
 
 /**
@@ -201,6 +209,8 @@ export type VehicleProfile = {
   batteryKwh?: number | undefined;
   /** Preferred charging operator, or undefined / "All networks" for any. */
   network?: string | undefined;
+  /** Reserve kept in the battery, in percent (e.g. 25 → plan at 75% usable). */
+  bufferPct?: number | undefined;
 };
 
 export function preferredNetwork(profile?: VehicleProfile | null) {
@@ -220,6 +230,39 @@ export type EnergyOptimizer = {
   /** Operator the driver asked us to prioritise, if any. */
   preferredNetwork?: string | null;
 };
+
+/**
+ * Re-prioritises the corridor charging stops against an operator the driver
+ * picked interactively in the results view. Stops without that operator inside
+ * the battery window fall back to the nearest high-power CCS hub.
+ */
+export function applyNetworkFilter(
+  optimizer: EnergyOptimizer,
+  operator: string | null,
+): EnergyOptimizer {
+  if (optimizer.mode !== "ev" || !operator) {
+    return {
+      ...optimizer,
+      preferredNetwork: optimizer.mode === "ev" ? optimizer.preferredNetwork ?? null : null,
+    };
+  }
+  const want = operator.toLowerCase();
+  const stops = optimizer.stops.map((s) => {
+    const match = s.networks.find((n) => n.toLowerCase().includes(want));
+    const networks = match ? [match, ...s.networks.filter((n) => n !== match)] : s.networks;
+    const base = s.note.replace(/^[^.]*\.\s*/, "");
+    return {
+      ...s,
+      networks,
+      preferred: !!match,
+      fallback: !match,
+      note: match
+        ? `${operator} hub on this leg. ${base}`
+        : `No ${operator} site inside the battery window — nearest high-power CCS hub is ${networks[0] ?? "CCS"}. ${base}`,
+    };
+  });
+  return { ...optimizer, stops, preferredNetwork: operator };
+}
 
 const EV_NETWORKS: Record<RegionKey, string[]> = {
   eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego"],
@@ -269,6 +312,7 @@ function buildOptimizer(
   imperial: boolean,
   geo?: RouteGeo | null,
   profile?: VehicleProfile | null,
+  pricePerKwh?: number,
 ): EnergyOptimizer {
   const isEv = fuel === "electric";
   const tank = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 18 : 55;
@@ -282,9 +326,15 @@ function buildOptimizer(
       ? profile.kwhPer100
       : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
   const wanted = preferredNetwork(profile);
+  /** Reserve the driver wants left in the battery / tank. */
+  const bufferPct =
+    profile?.bufferPct !== undefined && profile.bufferPct >= 5 && profile.bufferPct <= 50
+      ? profile.bufferPct
+      : 25;
+  const usable = 1 - bufferPct / 100;
 
   const fullRange = isEv ? (battery / kwhPer100) * 100 : (tank / consumption) * 100;
-  const safeRange = fullRange * 0.75;
+  const safeRange = fullRange * usable;
   const stopCount = Math.max(1, Math.min(5, Math.ceil(distanceKm / safeRange) - 1));
 
   const d = (km: number) =>
@@ -317,9 +367,11 @@ function buildOptimizer(
 
   const stops: ChargingStop[] = Array.from({ length: stopCount }, (_, i) => {
     const atKm = Math.round(safeRange * (i + 1));
+    const legKm = i === 0 ? atKm : Math.round(safeRange);
+    const kwhNeeded = Math.round((legKm / 100) * kwhPer100);
     const point = corridorPoint(atKm);
     const { list: local, hit } = orderNetworks(corridorNetworks(point?.code));
-    const chargeNote = `Arrive at ~25% state of charge, charge to 80% in about ${vehicle === "motorhome" ? 38 : 22} min.`;
+    const chargeNote = `Leg of ${d(legKm)} needs about ${kwhNeeded} kWh — arrive near ${bufferPct}% state of charge and charge to 80% in roughly ${vehicle === "motorhome" ? 38 : 22} min.`;
     return {
       name: point ? `${point.place || point.country} (${point.country})` : `Stop at ${d(atKm)}`,
       atKm,
@@ -332,7 +384,9 @@ function buildOptimizer(
             ? `${wanted} hub on this leg. ${chargeNote}`
             : `No ${wanted} site in this battery window — nearest high-power CCS hub is ${local[0]}. ${chargeNote}`
           : chargeNote
-        : `Recommended refuel — keeps you above the 25% reserve on a ${d(fullRange)} tank range.`,
+        : `Recommended refuel — keeps you above the ${bufferPct}% reserve on a ${d(fullRange)} tank range.`,
+      ...(isEv ? { kwhNeeded, legLabel: d(legKm) } : {}),
+      ...(isEv && pricePerKwh ? { pricePerKwh } : {}),
       ...(isEv && wanted ? { preferred: hit, fallback: !hit } : {}),
     };
   });
@@ -350,8 +404,8 @@ function buildOptimizer(
     rangeLabel: `${d(fullRange)} full ${isEv ? "battery" : "tank"} range`,
     bufferLabel:
       (countryNames.length
-        ? `Planned at 75% safety buffer — ${d(safeRange)} between stops along ${countryNames.join(" → ")}`
-        : `Planned at 75% safety buffer — ${d(safeRange)} between stops`) + profileTail,
+        ? `Planned at a ${bufferPct}% safety buffer — ${d(safeRange)} between stops along ${countryNames.join(" → ")}`
+        : `Planned at a ${bufferPct}% safety buffer — ${d(safeRange)} between stops`) + profileTail,
     stops,
     networks: isEv ? networks : [],
     arbitrage: [],
@@ -653,7 +707,8 @@ export function estimateTrip(
     segments,
     corridor,
     safety: safetyFor(region, vehicle, geo),
-    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile),
+    pricePerKwh,
+    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh),
     vignette:
       activeVariant === "tollfree"
         ? null

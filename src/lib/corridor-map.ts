@@ -101,6 +101,21 @@ export function brandIcon(name: string, layer: LayerKey): string {
   return MAP_LAYERS.find((l) => l.key === layer)?.emoji ?? "📍";
 }
 
+/** Operator livery colours so charging pins read at a glance on the map. */
+export function operatorColor(name: string, fallback: string): string {
+  const n = name.toLowerCase();
+  if (/tesla/.test(n)) return "#e11d48";
+  if (/ionity/.test(n)) return "#2563eb";
+  if (/fastned/.test(n)) return "#facc15";
+  if (/electrify america|electrify canada/.test(n)) return "#22c55e";
+  if (/enbw/.test(n)) return "#0ea5e9";
+  if (/greenway|orlen/.test(n)) return "#16a34a";
+  if (/clever|spirii|recharge|mer\b/.test(n)) return "#8b5cf6";
+  if (/allego/.test(n)) return "#f97316";
+  if (/evgo|chargepoint|flo|circuit|petro-canada/.test(n)) return "#06b6d4";
+  return fallback;
+}
+
 const EV_NETWORKS: Record<RegionKey, string[]> = {
   eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego", "Recharge"],
   us: ["Tesla Supercharger", "Electrify America", "EVgo", "ChargePoint"],
@@ -291,6 +306,10 @@ export type FuelStop = {
   atLabel: string;
   atKm: number;
   price: string;
+  /** Numeric price so the UI can render it in the active display currency. */
+  priceValue: number;
+  /** Currency symbol the numeric price is expressed in. */
+  priceSymbol: string;
   priceUnit: string;
   source: FuelSource;
   amenities: string[];
@@ -324,12 +343,10 @@ export function buildFuelStops({
     const base = COUNTRY_BASE[country] ?? 1.72;
     const dieselAdj = fuel === "diesel" ? -0.08 : 0;
     const litre = base + dieselAdj + (rnd() - 0.5) * 0.14;
-    const price =
-      region === "us"
-        ? `$${(litre * 3.785 * 0.55).toFixed(2)}`
-        : region === "ca"
-          ? `C$${(litre * 0.82).toFixed(3)}`
-          : `€${litre.toFixed(3)}`;
+    const priceValue =
+      region === "us" ? litre * 3.785 * 0.55 : region === "ca" ? litre * 0.82 : litre;
+    const priceSymbol = region === "us" ? "$" : region === "ca" ? "C$" : "€";
+    const price = `${priceSymbol}${priceValue.toFixed(region === "us" ? 2 : 3)}`;
     const atKm = total * p;
     return {
       id: `stop-${i}`,
@@ -339,6 +356,8 @@ export function buildFuelStops({
       atKm,
       atLabel: kmLabel(trip.units, atKm),
       price,
+      priceValue,
+      priceSymbol,
       priceUnit: region === "us" ? "per gallon" : "per litre",
       source: countryFuelSource(country),
       amenities: ["24/7", rnd() > 0.5 ? "HGV/RV lanes" : "Café", rnd() > 0.6 ? "AdBlue" : "Car wash"],

@@ -108,6 +108,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       kwhPer100: active.kwhPer100 ?? parseNumber(active.consumption),
       batteryKwh: active.batteryKwh ?? parseNumber(active.tank),
       network: active.network,
+      bufferPct: active.bufferPct,
     });
     if (active.fuel === "ev") setFuel("electric");
     setVehicle(active.kind === "motorcycle" ? "motorcycle" : active.kind === "motorhome" ? "motorhome" : "car");

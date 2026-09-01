@@ -588,9 +588,14 @@ export function TripResults({
 
           <p className="mt-4 text-sm text-foreground/75">
             {t.results.vignetteTotal}{" "}
-            <span className="font-semibold text-foreground">€{trip.vignette.total.toFixed(2)}</span>
+            <span className="font-semibold text-foreground">
+              {formatCurrency(convert(trip.vignette.total, "EUR", m.display), m.display)}
+            </span>
             {trip.vignette.totalSaved > 0 && (
-              <span className="text-emerald-400"> · €{trip.vignette.totalSaved.toFixed(2)} {t.results.vignetteSaved}</span>
+              <span className="text-emerald-400">
+                {" "}· {formatCurrency(convert(trip.vignette.totalSaved, "EUR", m.display), m.display)}{" "}
+                {t.results.vignetteSaved}
+              </span>
             )}
             . {t.results.vignetteTail(trip.tripType === "return")}
           </p>
@@ -600,43 +605,46 @@ export function TripResults({
 
       <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <h3 className="text-lg font-semibold tracking-tight">{tr(trip.optimizer.title)}</h3>
+          <h3 className="text-lg font-semibold tracking-tight">{tr(optimizer.title)}</h3>
           <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-            {tr(trip.optimizer.rangeLabel)}
+            {tr(optimizer.rangeLabel)}
           </span>
         </div>
-        <p className="mt-2 text-sm text-muted-foreground">{tr(trip.optimizer.bufferLabel)}</p>
+        <p className="mt-2 text-sm text-muted-foreground">{tr(optimizer.bufferLabel)}</p>
 
-        {trip.optimizer.preferredNetwork && (
+        {optimizer.preferredNetwork && (
           <p className="mt-2 text-sm font-medium text-primary">
-            ⭐ {tr("Preferred network")}: {trip.optimizer.preferredNetwork}
+            ⭐ {tr("Preferred network")}: {optimizer.preferredNetwork}
           </p>
         )}
 
-        {trip.optimizer.networks.length > 0 && (
+        {optimizer.networks.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
-            {trip.optimizer.networks.map((n) => {
+            {optimizer.networks.map((n) => {
               const isPreferred =
-                !!trip.optimizer.preferredNetwork &&
-                n.toLowerCase().includes(trip.optimizer.preferredNetwork.toLowerCase());
+                !!optimizer.preferredNetwork &&
+                n.toLowerCase().includes(optimizer.preferredNetwork.toLowerCase());
               return (
-                <span
+                <button
                   key={n}
+                  type="button"
+                  aria-pressed={isPreferred}
+                  onClick={() => setNetFilter(isPreferred ? null : n)}
                   className={
                     isPreferred
                       ? "rounded-full border border-primary bg-primary/15 px-3 py-1 text-xs font-semibold text-primary"
-                      : "rounded-full border border-border bg-background/50 px-3 py-1 text-xs font-medium text-foreground/85"
+                      : "rounded-full border border-border bg-background/50 px-3 py-1 text-xs font-medium text-foreground/85 transition-colors hover:border-primary/50 hover:text-primary"
                   }
                 >
                   🔌 {n}
-                </span>
+                </button>
               );
             })}
           </div>
         )}
 
         <ol className="mt-5 grid gap-3 md:grid-cols-2">
-          {trip.optimizer.stops.map((stop, i) => (
+          {optimizer.stops.map((stop, i) => (
             <li
               key={`${stop.name}-${i}`}
               className={
@@ -653,29 +661,37 @@ export function TripResults({
               </div>
               <p className="mt-1 text-xs font-medium text-primary">
                 {tr(stop.power)}
-                {stop.preferred && trip.optimizer.preferredNetwork
-                  ? ` · ⭐ ${trip.optimizer.preferredNetwork}`
+                {stop.kwhNeeded ? ` · ~${stop.kwhNeeded} kWh` : ""}
+                {stop.preferred && optimizer.preferredNetwork
+                  ? ` · ⭐ ${optimizer.preferredNetwork}`
                   : ""}
                 {stop.fallback ? ` · ↩️ ${tr("Nearest high-power CCS hub")}` : ""}
               </p>
+              {stop.pricePerKwh ? (
+                <p className="mt-1 text-xs font-semibold text-foreground/80">
+                  ~{formatCurrency(convert(stop.pricePerKwh, m.base, m.display), m.display, { decimals: 2 })} / kWh
+                </p>
+              ) : null}
               <p className="mt-2 text-sm text-foreground/80">{tr(stop.note)}</p>
               {stop.networks.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1.5">
                   {stop.networks.map((n) => {
                     const isPreferred =
-                      !!trip.optimizer.preferredNetwork &&
-                      n.toLowerCase().includes(trip.optimizer.preferredNetwork.toLowerCase());
+                      !!optimizer.preferredNetwork &&
+                      n.toLowerCase().includes(optimizer.preferredNetwork.toLowerCase());
                     return (
-                      <span
+                      <button
                         key={n}
+                        type="button"
+                        onClick={() => setNetFilter(isPreferred ? null : n)}
                         className={
                           isPreferred
                             ? "rounded-full border border-primary bg-primary/20 px-2.5 py-0.5 text-[11px] font-semibold text-primary"
-                            : "rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
+                            : "rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80 transition-colors hover:border-primary/50 hover:text-primary"
                         }
                       >
                         {isPreferred ? "⭐ " : ""}{n}
-                      </span>
+                      </button>
                     );
                   })}
                 </div>

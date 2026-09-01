@@ -914,6 +914,24 @@ export function GaragePage() {
                     />
                   </div>
                   <div className="grid gap-2 sm:col-span-2">
+                    <Label htmlFor="v-buffer">{tx("Sikkerhetsmargin (%)")}</Label>
+                    <Input
+                      id="v-buffer"
+                      inputMode="numeric"
+                      value={draft.bufferPct ?? ""}
+                      placeholder="25"
+                      onChange={(e) =>
+                        setDraft({
+                          ...draft,
+                          bufferPct: e.target.value ? Number(e.target.value.replace(",", ".")) : undefined,
+                        })
+                      }
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      {tx("Reserven du alltid vil ha igjen på batteriet — styrer avstanden mellom ladestoppene.")}
+                    </p>
+                  </div>
+                  <div className="grid gap-2 sm:col-span-2">
                     <Label htmlFor="v-network">{tx("Foretrukket ladenettverk")}</Label>
                     <select
                       id="v-network"
