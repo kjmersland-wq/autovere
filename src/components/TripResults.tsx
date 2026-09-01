@@ -9,6 +9,14 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useAuth } from "@/lib/auth";
 import { Switch } from "@/components/ui/switch";
 import { PoiLinks } from "@/components/PoiLinks";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
@@ -150,6 +158,8 @@ export function TripResults({
   const [active, setActive] = useState<RouteVariantKey>("fastest");
   const [printing, setPrinting] = useState(false);
   const [rvMode, setRvMode] = useState(isMotorhome);
+  const [savePrompt, setSavePrompt] = useState(false);
+  const { user, openAuth } = useAuth();
   const highlights = SCENIC_HIGHLIGHTS[region];
   const rvPois = RV_POIS[region];
   const trip = trips[active];
@@ -162,7 +172,7 @@ export function TripResults({
   const bridges = detectScandiBridges(region, origin, destination);
 
 
-  const saveTrip = () => {
+  const persistTrip = () => {
     try {
       const key = "autovere.savedTrips";
       const saved = JSON.parse(localStorage.getItem(key) ?? "[]");
@@ -191,6 +201,16 @@ export function TripResults({
     }
   };
 
+  const saveTrip = () => {
+    if (!user) {
+      setSavePrompt(true);
+      return;
+    }
+    persistTrip();
+  };
+
+
+
 
   const shareTrip = async () => {
     const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)} · AutoVere`;
@@ -209,6 +229,11 @@ export function TripResults({
     <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
       <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">{t.results.eyebrow}</p>
       <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
+      <div className="mt-3 flex flex-wrap gap-2">
+        <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
+          {isMotorhome ? "🚐 Motorhome" : isMotorcycle ? "🏍️ Motorcycle" : "🚗 Car"}
+        </span>
+      </div>
       <p className="mt-2 max-w-2xl text-foreground/75">
         {t.results.intro}
       </p>
@@ -790,6 +815,45 @@ export function TripResults({
           onClose={() => setPrinting(false)}
         />
       )}
+
+      <Dialog open={savePrompt} onOpenChange={setSavePrompt}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {locale === "no" ? "Lagre turen i Min Garasje" : "Save this trip to My Garage"}
+            </DialogTitle>
+            <DialogDescription>
+              {locale === "no"
+                ? "Opprett en gratis konto for å lagre ruter, egne kjøretøyprofiler (bil, MC, bobil) og låse opp GPX-eksport for offline navigasjon."
+                : "Create a free account to save routes, build custom vehicle profiles (car, motorcycle, camper) and unlock offline GPX export."}
+            </DialogDescription>
+          </DialogHeader>
+          <ul className="space-y-2 text-sm text-foreground/80">
+            <li>🗺️ {locale === "no" ? "Alle beregnede turer samlet ett sted" : "Every calculated trip in one place"}</li>
+            <li>🚐 {locale === "no" ? "Kjøretøyprofiler med tank, høyde og bompengebrikke" : "Vehicle profiles with tank, height and toll tags"}</li>
+            <li>📥 {locale === "no" ? "GPX-eksport for offline navigasjon" : "GPX export for offline navigation"}</li>
+          </ul>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => {
+                setSavePrompt(false);
+                openAuth("signup");
+              }}
+            >
+              {locale === "no" ? "Opprett gratis konto" : "Create free account"}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSavePrompt(false);
+                openAuth("signin");
+              }}
+            >
+              {locale === "no" ? "Logg inn" : "Sign in"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
