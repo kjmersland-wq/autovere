@@ -175,19 +175,28 @@ export function PrintItinerary({
   const tags = tagsForRegion(region);
   const lez = vehicle === "motorhome" ? detectLezZones(region, origin, destination).matched : [];
 
+  const corridor = trip.corridor;
   const legs = trip.segments.map((segment, i) => {
+    // Real per-country distance when the routed corridor resolved; otherwise
+    // an even share of the indicative estimate.
+    const real = corridor?.countries.find((c) => segment.country.includes(c.country));
     const share = trip.segments.length ? 1 / trip.segments.length : 1;
     const legDistance = distanceValue * share;
     return {
       index: i + 1,
       country: segment.country,
-      distance: `${legDistance.toLocaleString("en-GB", { maximumFractionDigits: 0 })} ${imperial ? "mi" : "km"}`,
+      distance:
+        real?.distanceLabel ??
+        `${legDistance.toLocaleString("en-GB", { maximumFractionDigits: 0 })} ${imperial ? "mi" : "km"}`,
       cost: m.fmt(segment.total),
       checkpoints: segment.lines.map((l) => l.place).join(" · ") || "No barrier stops",
       border:
-        i < trip.segments.length - 1
-          ? `${segment.country} → ${trip.segments[i + 1]!.country}`
-          : "Arrival",
+        corridor?.borders[i] ??
+        (corridor
+          ? "Arrival"
+          : i < trip.segments.length - 1
+            ? `${segment.country} → ${trip.segments[i + 1]!.country}`
+            : "Arrival"),
     };
   });
 

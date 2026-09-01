@@ -435,6 +435,22 @@ export function TripResults({
           <p className="mt-1 text-sm text-foreground/70">
             {t.results.breakdownIntro}
           </p>
+          {trip.corridor && (
+            <div className="mt-3 rounded-xl border border-border bg-background/40 p-3 text-xs">
+              <p className="font-medium text-foreground/90">
+                {trip.corridor.countries
+                  .map((c) => `${c.flag} ${c.country} · ${c.distanceLabel}`)
+                  .join("  →  ")}
+              </p>
+              {trip.corridor.borders.length > 0 && (
+                <ul className="mt-2 grid gap-1 text-muted-foreground">
+                  {trip.corridor.borders.map((b) => (
+                    <li key={b}>🛂 {b}</li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          )}
           <Accordion type="single" collapsible className="mt-2">
             {trip.segments.map((segment) => (
               <AccordionItem key={segment.country} value={segment.country}>

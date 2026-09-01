@@ -1,4 +1,5 @@
 import { useMemo, useState } from "react";
+import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowDown,
   ArrowUp,
@@ -44,6 +45,7 @@ import {
   type TripEstimate,
   type VehicleKey,
 } from "@/lib/trip-data";
+import { getRouteGeo, type RouteGeo } from "@/lib/route-geo.functions";
 import { useLocale, useT, useTr } from "@/lib/i18n";
 import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
@@ -84,6 +86,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [tankSize, setTankSize] = useState(imperial ? "16" : "60");
   const [consumption, setConsumption] = useState(imperial ? "28" : "7.4");
   const [waypoints, setWaypoints] = useState<{ id: string; value: string }[]>([]);
+  const [geo, setGeo] = useState<RouteGeo | null>(null);
+  const [calculating, setCalculating] = useState(false);
   const [tripType, setTripType] = useState<TripType>("oneway");
   const [durationDays, setDurationDays] = useState(7);
 
@@ -137,12 +141,24 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     );
 
   const effectiveDuration = tripType === "return" ? durationDays : 1;
+  const routeFn = useServerFn(getRouteGeo);
 
-  const runQuickRoute = (r: QuickRoute) => {
-    setOrigin(r.origin);
-    setDestination(r.destination);
-    setActiveQuick(r.key);
-    setStops([]);
+  /**
+   * Resolve the real routed corridor first (OSRM polyline + reverse-geocoded
+   * countries), then cost it. Only when geocoding fails do we fall back to the
+   * generic regional sample.
+   */
+  const runCalculation = async (from: string, to: string, extra: number) => {
+    setCalculating(true);
+    let resolved: RouteGeo | null = null;
+    if (from.trim().length > 1 && to.trim().length > 1) {
+      try {
+        resolved = await routeFn({ data: { origin: from, destination: to } });
+      } catch {
+        resolved = null;
+      }
+    }
+    setGeo(resolved);
     setTrip(
       estimateAllVariants(
         region,
@@ -151,14 +167,33 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
         avoidTolls,
         ferries,
         scenic,
-        viaCount,
+        extra,
         tripType,
         effectiveDuration,
+        resolved,
       ),
     );
-    setFerryCrossings(ferries ? detectFerryCrossings(region, r.origin, r.destination) : []);
-    setBadges(detectEmissionBadges(region, r.origin, r.destination));
+    const places = resolved
+      ? [
+          ...resolved.countries.map((c) => c.country),
+          ...resolved.samples.map((sp) => sp.place),
+        ]
+      : undefined;
+    setFerryCrossings(ferries ? detectFerryCrossings(region, from, to, places) : []);
+    setBadges(detectEmissionBadges(region, from, to, places));
+    setCalculating(false);
+    if (!resolved && from.trim() && to.trim()) {
+      toast.info("Couldn't resolve that route — showing an indicative regional estimate.");
+    }
     scrollToResults();
+  };
+
+  const runQuickRoute = (r: QuickRoute) => {
+    setOrigin(r.origin);
+    setDestination(r.destination);
+    setActiveQuick(r.key);
+    setStops([]);
+    void runCalculation(r.origin, r.destination, viaCount);
   };
 
 
@@ -191,24 +226,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             onSubmit={(e) => {
               e.preventDefault();
               setStops([]);
-              setTrip(
-                estimateAllVariants(
-                  region,
-                  vehicle,
-                  fuel,
-                  avoidTolls,
-                  ferries,
-                  scenic,
-                  viaCount,
-                  tripType,
-                  effectiveDuration,
-                ),
-              );
-              setFerryCrossings(ferries ? detectFerryCrossings(region, origin, destination) : []);
-              setBadges(detectEmissionBadges(region, origin, destination));
-              requestAnimationFrame(() =>
-                document.getElementById("trip-results")?.scrollIntoView({ behavior: "smooth" }),
-              );
+              void runCalculation(origin, destination, viaCount);
             }}
             className="glass-panel mt-9 rounded-2xl p-4 shadow-2xl sm:p-6"
           >
@@ -293,8 +311,13 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   placeholder={destinationHint}
                 />
               </label>
-              <Button type="submit" size="lg" className="h-12 px-8 text-base font-semibold">
-                {t.hero.submit}
+              <Button
+                type="submit"
+                size="lg"
+                disabled={calculating}
+                className="h-12 px-8 text-base font-semibold"
+              >
+                {calculating ? "Analysing route…" : t.hero.submit}
               </Button>
             </div>
 
@@ -534,6 +557,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   next.length + viaCount,
                   tripType,
                   effectiveDuration,
+                  geo,
                 ),
               );
               toast.success(t.results.stopAdded(name, next.length));
