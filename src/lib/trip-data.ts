@@ -217,6 +217,8 @@ export type EnergyOptimizer = {
   networks: string[];
   arbitrage: string[];
   longStretch: string[];
+  /** Operator the driver asked us to prioritise, if any. */
+  preferredNetwork?: string | null;
 };
 
 const EV_NETWORKS: Record<RegionKey, string[]> = {
