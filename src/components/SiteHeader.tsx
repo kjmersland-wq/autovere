@@ -16,6 +16,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  Sheet,
+  SheetContent,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import logoMark from "@/assets/autovere-logo.png";
 
@@ -45,16 +51,18 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/70 backdrop-blur-xl">
-      <div className="mx-auto flex w-full max-w-7xl items-center gap-4 px-5 py-3 sm:px-8">
-        <LocaleLink to="/" className="flex items-center gap-2.5 text-lg font-semibold tracking-tight">
+      <div className="mx-auto flex w-full max-w-7xl items-center gap-2 overflow-hidden px-4 py-3 sm:gap-4 sm:px-8">
+        <LocaleLink to="/" className="flex min-w-0 shrink-0 items-center gap-2.5 text-lg font-semibold tracking-tight">
           <img
             src={logoMark}
             alt="AutoVere"
             width={1024}
             height={1024}
-            className="size-8 rounded-[0.55rem] shadow-lg shadow-black/30 ring-1 ring-border/60"
+            className="size-8 shrink-0 rounded-[0.55rem] shadow-lg shadow-black/30 ring-1 ring-border/60"
           />
-          Auto<span className="text-primary">Vere</span>
+          <span className="hidden sm:inline">
+            Auto<span className="text-primary">Vere</span>
+          </span>
         </LocaleLink>
 
         <nav className="ml-2 hidden items-center gap-1 rounded-full border border-border bg-background/40 p-1 lg:flex">
@@ -88,10 +96,10 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           ))}
         </nav>
 
-        <CurrencySelector className="ml-auto lg:ml-0" />
+        <CurrencySelector className="ml-auto shrink-0 lg:ml-0" />
 
         <DropdownMenu>
-          <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-3 py-1.5 text-sm font-semibold tracking-wide transition-colors hover:bg-background/80 lg:ml-0">
+          <DropdownMenuTrigger className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-background/50 px-2.5 py-1.5 text-sm font-semibold tracking-wide transition-colors hover:bg-background/80 sm:px-3 lg:ml-0">
             <FlagIcon code={lang.flag} />
             <span>{lang.flag}</span>
             <ChevronDown className="size-4 text-muted-foreground" />
@@ -128,7 +136,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
 
         {user ? (
           <DropdownMenu>
-            <DropdownMenuTrigger className="inline-flex items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20">
+            <DropdownMenuTrigger className="inline-flex shrink-0 items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-3 py-1.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20">
               <UserRound className="size-4" />
               <span className="hidden max-w-[9rem] truncate sm:inline">{user.email}</span>
             </DropdownMenuTrigger>
@@ -153,7 +161,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           <button
             type="button"
             onClick={() => openAuth("signin")}
-            className="inline-flex items-center gap-2 rounded-full bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="inline-flex shrink-0 items-center gap-2 rounded-full bg-primary px-3.5 py-1.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
           >
             <UserRound className="size-4" />
             <span className="hidden sm:inline">{t.header.signIn}</span>
@@ -162,46 +170,74 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
 
         <button
           type="button"
-          onClick={() => setOpen((v) => !v)}
+          onClick={() => setOpen(true)}
           aria-label={t.header.toggleNav}
           aria-expanded={open}
-          className="rounded-full border border-border bg-background/50 p-2 lg:hidden"
+          className="shrink-0 rounded-full border border-border bg-background/50 p-2 lg:hidden"
         >
           <Menu className="size-4" />
         </button>
       </div>
 
-      {open && (
-        <div className="border-t border-border px-5 py-4 lg:hidden">
-          <div className="flex flex-wrap gap-2">
-            {REGIONS.map((r) => (
-              <Link
-                key={r.key}
-                to={(r.key === "eu" && prefix ? `/${prefix}` : r.to) as "/"}
-                onClick={() => setOpen(false)}
-                className={cn(
-                  "rounded-full border border-border px-3 py-1.5 text-sm",
-                  activeRegion === r.key && "bg-primary text-primary-foreground",
-                )}
-              >
-                {r.flag} {t.header.regions[r.key]}
-              </Link>
-            ))}
-          </div>
-          <div className="mt-4 grid gap-3">
-            {NAV_LINKS.map((l) => (
+      <Sheet open={open} onOpenChange={setOpen}>
+        <SheetContent side="right" className="w-[min(20rem,85vw)] border-border bg-background p-0 lg:hidden">
+          <SheetHeader className="border-b border-border px-5 py-4 text-left">
+            <SheetTitle className="flex items-center gap-2.5 text-base">
+              <img
+                src={logoMark}
+                alt="AutoVere"
+                width={1024}
+                height={1024}
+                className="size-7 rounded-lg ring-1 ring-border/60"
+              />
+              Auto<span className="text-primary">Vere</span>
+            </SheetTitle>
+          </SheetHeader>
+
+          <div className="flex flex-col gap-6 overflow-y-auto px-5 py-5">
+            <div className="flex flex-wrap gap-2">
+              {REGIONS.map((r) => (
+                <Link
+                  key={r.key}
+                  to={(r.key === "eu" && prefix ? `/${prefix}` : r.to) as "/"}
+                  onClick={() => setOpen(false)}
+                  className={cn(
+                    "rounded-full border border-border px-3 py-1.5 text-sm transition-colors",
+                    activeRegion === r.key
+                      ? "bg-primary text-primary-foreground"
+                      : "text-foreground/80 hover:text-foreground",
+                  )}
+                >
+                  <span className="mr-1.5">{r.flag}</span>
+                  {t.header.regions[r.key]}
+                </Link>
+              ))}
+            </div>
+
+            <nav className="grid gap-1">
+              {NAV_LINKS.map((l) => (
+                <LocaleLink
+                  key={l.to}
+                  to={l.to}
+                  onClick={() => setOpen(false)}
+                  activeClassName="bg-primary/10 text-primary"
+                  className="rounded-xl px-3 py-2.5 text-sm font-medium text-foreground/85 transition-colors hover:bg-muted"
+                >
+                  {usLabel(l.to, activeRegion) ?? t.header.nav[l.to] ?? l.label}
+                </LocaleLink>
+              ))}
               <LocaleLink
-                key={l.to}
-                to={l.to}
+                to="/pricing"
                 onClick={() => setOpen(false)}
-                className="text-sm font-medium text-foreground/85"
+                activeClassName="bg-primary/10 text-primary"
+                className="rounded-xl px-3 py-2.5 text-sm font-medium text-foreground/85 transition-colors hover:bg-muted"
               >
-                {usLabel(l.to, activeRegion) ?? t.header.nav[l.to] ?? l.label}
+                {t.header.plansMenu}
               </LocaleLink>
-            ))}
+            </nav>
           </div>
-        </div>
-      )}
+        </SheetContent>
+      </Sheet>
     </header>
   );
 }
