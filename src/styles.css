@@ -169,6 +169,14 @@
 }
 
 @media print {
+  html,
+  body {
+    width: auto !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+  }
+
   body * {
     visibility: hidden !important;
   }
@@ -208,8 +216,40 @@
 
   .print-sheet section,
   .print-sheet header,
-  .print-sheet footer {
+  .print-sheet footer,
+  .print-sheet .print-block,
+  .print-sheet li,
+  .print-sheet tr,
+  .print-sheet figure {
     break-inside: avoid;
+    page-break-inside: avoid;
+  }
+
+  .print-sheet h1,
+  .print-sheet h2 {
+    break-after: avoid;
+    page-break-after: avoid;
+  }
+
+  .print-sheet thead {
+    display: table-header-group;
+  }
+
+  .print-sheet a {
+    text-decoration: none;
+  }
+
+  .print-sheet .print-map svg,
+  .print-sheet .print-map rect,
+  .print-sheet .print-map path,
+  .print-sheet .print-map circle,
+  .print-sheet .print-map line {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-sheet .print-total-row td {
+    border-top: 2px solid #0a0f1d !important;
   }
 
   @page {
@@ -240,6 +280,19 @@
   text-transform: uppercase;
   letter-spacing: 0.12em;
   color: var(--color-muted-foreground);
+}
+
+.print-h2 {
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--color-muted-foreground);
+}
+
+.print-total-row td {
+  border-top: 2px solid var(--color-border);
+  padding-top: 0.6rem;
 }
 
 .print-section-row td {

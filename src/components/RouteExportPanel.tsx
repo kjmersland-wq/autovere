@@ -5,10 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useT } from "@/lib/i18n";
 import { money, type TripEstimate } from "@/lib/trip-data";
-
-function escapeXml(value: string) {
-  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-}
+import { buildTripGpx, downloadFile, escapeXml } from "@/lib/trip-export";
 
 /** Indicative waypoints so exported files load cleanly in GPS units. */
 function waypoints(trip: TripEstimate) {
@@ -22,32 +19,6 @@ function waypoints(trip: TripEstimate) {
     }));
 }
 
-function buildGpx(trip: TripEstimate, origin: string, destination: string) {
-  const pts = waypoints(trip);
-  const wpts = pts
-    .map(
-      (p) =>
-        `  <wpt lat="${p.lat.toFixed(4)}" lon="${p.lon.toFixed(4)}">\n    <name>${escapeXml(p.name)}</name>\n    <desc>${escapeXml(p.detail)}</desc>\n    <sym>Flag, Blue</sym>\n  </wpt>`,
-    )
-    .join("\n");
-  const track = pts
-    .map((p) => `      <trkpt lat="${p.lat.toFixed(4)}" lon="${p.lon.toFixed(4)}" />`)
-    .join("\n");
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<gpx version="1.1" creator="AutoVere" xmlns="http://www.topografix.com/GPX/1/1">
-  <metadata>
-    <name>${escapeXml(origin || "Start")} to ${escapeXml(destination || "Destination")}</name>
-    <desc>${escapeXml(`${trip.distanceLabel} · ${trip.driveTime} · budget ${money(trip.currency, trip.budget)}`)}</desc>
-  </metadata>
-${wpts}
-  <trk>
-    <name>${escapeXml(origin || "Start")} → ${escapeXml(destination || "Destination")}</name>
-    <trkseg>
-${track}
-    </trkseg>
-  </trk>
-</gpx>`;
-}
 
 function buildKml(trip: TripEstimate, origin: string, destination: string) {
   const pts = waypoints(trip);
@@ -72,15 +43,6 @@ ${placemarks}
 </kml>`;
 }
 
-function downloadFile(content: string, filename: string, mime: string) {
-  const blob = new Blob([content], { type: mime });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = filename;
-  a.click();
-  URL.revokeObjectURL(url);
-}
 
 function slug(value: string, fallback: string) {
   const s = value.toLowerCase().replace(/\W+/g, "-").replace(/^-|-$/g, "");
@@ -133,7 +95,7 @@ export function RouteExportPanel({
   const base = `autovere-${slug(`${origin}-${destination}`, "road-trip")}`;
 
   const exportGpx = () => {
-    downloadFile(buildGpx(trip, origin, destination), `${base}.gpx`, "application/gpx+xml");
+    downloadFile(buildTripGpx(trip, origin, destination), `${base}.gpx`, "application/gpx+xml");
     toast.success(t.export.gpxToast);
   };
 
