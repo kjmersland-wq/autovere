@@ -168,11 +168,22 @@ export function CorridorMap({
           title: tr(p.name),
           subtitle: tr(p.detail),
           power: power ? tr(power) : undefined,
-          distanceLabel: p.atLabel,
+          distanceLabel: `${p.atLabel} ${t.map.alongRoute}`,
+          priceLines:
+            p.layer === "ev" && p.kwhEur
+              ? [
+                  `${tr("Est. rate")}: ${formatCurrency(convert(p.kwhEur, "EUR", m.display), m.display, { decimals: 2 })} / kWh`,
+                ]
+              : p.layer === "fuel" && p.petrolEur && p.dieselEur
+                ? [
+                    `${tr("Petrol 95")}: ${formatCurrency(convert(p.petrolEur, "EUR", m.display), m.display, { decimals: 2 })} / L`,
+                    `${tr("Diesel")}: ${formatCurrency(convert(p.dieselEur, "EUR", m.display), m.display, { decimals: 2 })} / L`,
+                  ]
+                : undefined,
           mapUrl: poiMapUrl(p.name, `${from} ${to}`),
         };
       });
-  }, [geo, pois, layers, tr, from, to]);
+  }, [geo, pois, layers, tr, from, to, t, m.display]);
 
   const path = line.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
   const visible = pois.filter((p) => layers[p.layer]);
