@@ -118,6 +118,9 @@ export const DEFAULT_VEHICLES: GarageVehicle[] = [
     fuel: "ev",
     tank: "75 kWh",
     consumption: "18 kWh/100 km",
+    kwhPer100: 18,
+    batteryKwh: 75,
+    network: "Tesla Supercharger",
     tags: ["AutoPASS", "SunPass"],
   },
 ];
