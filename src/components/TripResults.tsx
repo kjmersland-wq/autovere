@@ -191,6 +191,16 @@ export function TripResults({
     }
   };
 
+  const saveTrip = () => {
+    if (!user) {
+      setSavePrompt(true);
+      return;
+    }
+    persistTrip();
+  };
+
+
+
 
   const shareTrip = async () => {
     const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)} · AutoVere`;
