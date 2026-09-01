@@ -815,6 +815,45 @@ export function TripResults({
           onClose={() => setPrinting(false)}
         />
       )}
+
+      <Dialog open={savePrompt} onOpenChange={setSavePrompt}>
+        <DialogContent className="sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>
+              {locale === "no" ? "Lagre turen i Min Garasje" : "Save this trip to My Garage"}
+            </DialogTitle>
+            <DialogDescription>
+              {locale === "no"
+                ? "Opprett en gratis konto for å lagre ruter, egne kjøretøyprofiler (bil, MC, bobil) og låse opp GPX-eksport for offline navigasjon."
+                : "Create a free account to save routes, build custom vehicle profiles (car, motorcycle, camper) and unlock offline GPX export."}
+            </DialogDescription>
+          </DialogHeader>
+          <ul className="space-y-2 text-sm text-foreground/80">
+            <li>🗺️ {locale === "no" ? "Alle beregnede turer samlet ett sted" : "Every calculated trip in one place"}</li>
+            <li>🚐 {locale === "no" ? "Kjøretøyprofiler med tank, høyde og bompengebrikke" : "Vehicle profiles with tank, height and toll tags"}</li>
+            <li>📥 {locale === "no" ? "GPX-eksport for offline navigasjon" : "GPX export for offline navigation"}</li>
+          </ul>
+          <div className="flex flex-wrap gap-3">
+            <Button
+              onClick={() => {
+                setSavePrompt(false);
+                openAuth("signup");
+              }}
+            >
+              {locale === "no" ? "Opprett gratis konto" : "Create free account"}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                setSavePrompt(false);
+                openAuth("signin");
+              }}
+            >
+              {locale === "no" ? "Logg inn" : "Sign in"}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
