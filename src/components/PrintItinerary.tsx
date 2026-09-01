@@ -479,15 +479,27 @@ export function PrintItinerary({
             </thead>
             <tbody>
               {trip.optimizer.stops.map((s, i) => (
-                <tr key={`${s.name}-${i}`}>
+                <tr key={`${s.name}-${i}`} className={s.preferred ? "font-semibold" : undefined}>
                   <td>{i + 1}</td>
-                  <td className="font-medium">{s.name}</td>
+                  <td className="font-medium">
+                    {s.preferred ? "⭐ " : ""}
+                    {s.name}
+                  </td>
                   <td>{s.atLabel}</td>
-                  <td>{s.power}{s.networks.length ? ` · ${s.networks.join(", ")}` : ""}</td>
+                  <td>
+                    {s.power}
+                    {s.networks.length ? ` · ${s.networks.join(", ")}` : ""}
+                    {s.fallback ? " · nearest high-power CCS hub" : ""}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
+          {trip.optimizer.preferredNetwork && (
+            <p className="mt-2 text-xs font-semibold">
+              ⭐ Preferred network: {trip.optimizer.preferredNetwork} — highlighted stops are served by it.
+            </p>
+          )}
           {trip.optimizer.networks.length > 0 && (
             <p className="mt-2 text-xs text-muted-foreground">
               Networks on this corridor: {trip.optimizer.networks.join(" · ")}

@@ -607,16 +607,31 @@ export function TripResults({
         </div>
         <p className="mt-2 text-sm text-muted-foreground">{tr(trip.optimizer.bufferLabel)}</p>
 
+        {trip.optimizer.preferredNetwork && (
+          <p className="mt-2 text-sm font-medium text-primary">
+            ⭐ {tr("Preferred network")}: {trip.optimizer.preferredNetwork}
+          </p>
+        )}
+
         {trip.optimizer.networks.length > 0 && (
           <div className="mt-4 flex flex-wrap gap-2">
-            {trip.optimizer.networks.map((n) => (
-              <span
-                key={n}
-                className="rounded-full border border-border bg-background/50 px-3 py-1 text-xs font-medium text-foreground/85"
-              >
-                🔌 {n}
-              </span>
-            ))}
+            {trip.optimizer.networks.map((n) => {
+              const isPreferred =
+                !!trip.optimizer.preferredNetwork &&
+                n.toLowerCase().includes(trip.optimizer.preferredNetwork.toLowerCase());
+              return (
+                <span
+                  key={n}
+                  className={
+                    isPreferred
+                      ? "rounded-full border border-primary bg-primary/15 px-3 py-1 text-xs font-semibold text-primary"
+                      : "rounded-full border border-border bg-background/50 px-3 py-1 text-xs font-medium text-foreground/85"
+                  }
+                >
+                  🔌 {n}
+                </span>
+              );
+            })}
           </div>
         )}
 
@@ -624,7 +639,11 @@ export function TripResults({
           {trip.optimizer.stops.map((stop, i) => (
             <li
               key={`${stop.name}-${i}`}
-              className="rounded-xl border border-border bg-background/40 p-4"
+              className={
+                stop.preferred
+                  ? "rounded-xl border border-primary/60 bg-primary/10 p-4"
+                  : "rounded-xl border border-border bg-background/40 p-4"
+              }
             >
               <div className="flex items-start justify-between gap-3">
                 <p className="text-sm font-semibold">
@@ -632,18 +651,33 @@ export function TripResults({
                 </p>
                 <span className="shrink-0 text-xs text-muted-foreground">{t.results.at} {stop.atLabel}</span>
               </div>
-              <p className="mt-1 text-xs font-medium text-primary">{tr(stop.power)}</p>
+              <p className="mt-1 text-xs font-medium text-primary">
+                {tr(stop.power)}
+                {stop.preferred && trip.optimizer.preferredNetwork
+                  ? ` · ⭐ ${trip.optimizer.preferredNetwork}`
+                  : ""}
+                {stop.fallback ? ` · ↩️ ${tr("Nearest high-power CCS hub")}` : ""}
+              </p>
               <p className="mt-2 text-sm text-foreground/80">{tr(stop.note)}</p>
               {stop.networks.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-1.5">
-                  {stop.networks.map((n) => (
-                    <span
-                      key={n}
-                      className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
-                    >
-                      {n}
-                    </span>
-                  ))}
+                  {stop.networks.map((n) => {
+                    const isPreferred =
+                      !!trip.optimizer.preferredNetwork &&
+                      n.toLowerCase().includes(trip.optimizer.preferredNetwork.toLowerCase());
+                    return (
+                      <span
+                        key={n}
+                        className={
+                          isPreferred
+                            ? "rounded-full border border-primary bg-primary/20 px-2.5 py-0.5 text-[11px] font-semibold text-primary"
+                            : "rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80"
+                        }
+                      >
+                        {isPreferred ? "⭐ " : ""}{n}
+                      </span>
+                    );
+                  })}
                 </div>
               )}
             </li>
