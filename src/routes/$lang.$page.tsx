@@ -64,9 +64,11 @@ import {
   SV_PRIVACY,
   SV_TERMS,
 } from "@/lib/global-content-sv";
+import { LocalizedRegionPage } from "@/components/LocalizedRegionPage";
 import {
   isLocalePage,
   isLocalePrefix,
+  isRegionPrefix,
   LOCALE_ROUTES,
   type LocalePage,
   type LocalePrefix,
@@ -141,7 +143,8 @@ function infoFor(lang: string, page: string) {
 
 export const Route = createFileRoute("/$lang/$page")({
   beforeLoad: ({ params }) => {
-    if (!isLocalePrefix(params.lang) || !isLocalePage(params.page)) throw notFound();
+    if (!isLocalePrefix(params.lang)) throw notFound();
+    if (!isLocalePage(params.page) && !isRegionPrefix(params.page)) throw notFound();
   },
   head: ({ params }) => {
     const prefix = params.lang as LocalePrefix;
@@ -189,6 +192,10 @@ export const Route = createFileRoute("/$lang/$page")({
 
 function LocalePage() {
   const { lang, page } = Route.useParams();
+  // /<lang>/us and /<lang>/ca — regional home in the active language.
+  if (page === "us" || page === "ca") {
+    return <LocalizedRegionPage lang={lang} region={page} page={null} />;
+  }
   const entry = LOCALE_ROUTES.find((l) => l.prefix === lang);
   const landing = entry ? LOCALE_LANDING[entry.code] : null;
 

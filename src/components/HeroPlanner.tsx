@@ -45,6 +45,7 @@ import {
   type VehicleKey,
 } from "@/lib/trip-data";
 import { useLocale, useT, useTr } from "@/lib/i18n";
+import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
 
 
@@ -62,9 +63,9 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const tr = useTr();
   const locale = useLocale();
   const copy = REGION_COPY[region];
-  const localizedHints = locale === "no" || locale === "pl";
-  const originHint = localizedHints ? t.hero.originHint : copy.originHint;
-  const destinationHint = localizedHints ? t.hero.destinationHint : copy.destinationHint;
+  const rs = regionStrings(locale, region);
+  const originHint = rs.originHint;
+  const destinationHint = rs.destinationHint;
   const defaults = REGION_DEFAULTS[region];
   const imperial = defaults.units === "imperial";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
@@ -493,7 +494,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
             <p className="mt-5 text-xs text-muted-foreground">
               {t.hero.regionalDefaults}: {defaults.units === "imperial" ? t.hero.imperial : t.hero.metric} ·{" "}
-              {defaults.currencyCode} · {defaults.tollSystems.map(tr).join(" · ")}
+              {defaults.currencyCode} · {rs.tollSystems.join(" · ")}
             </p>
 
             <p className="mt-2 text-xs text-muted-foreground">

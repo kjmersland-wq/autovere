@@ -81,9 +81,14 @@ export const REGION_DEFAULTS: Record<RegionKey, RegionDefaults> = {
   },
 };
 
+/** Region is independent from language: /us, /ca, /fr/us, /no/ca all resolve here. */
 export function regionFromPath(pathname: string): RegionKey {
-  if (pathname.startsWith("/us")) return "us";
-  if (pathname.startsWith("/ca")) return "ca";
+  const parts = pathname.replace(/^\/+/, "").split("/").filter(Boolean);
+  const LANGS = ["no", "se", "dk", "de", "nl", "fr", "pl"];
+  const first = parts[0] ?? "";
+  const seg = LANGS.includes(first) ? (parts[1] ?? "") : first;
+  if (seg === "us") return "us";
+  if (seg === "ca") return "ca";
   return "eu";
 }
 
