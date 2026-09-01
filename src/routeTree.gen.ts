@@ -29,10 +29,14 @@ import { Route as LangIndexRouteImport } from './routes/$lang.index'
 import { Route as LangPageRouteImport } from './routes/$lang.$page'
 import { Route as CaIndexRouteImport } from './routes/ca.index'
 import { Route as CaFaqRouteImport } from './routes/ca.faq'
+import { Route as CaGarageRouteImport } from './routes/ca.garage'
 import { Route as CaHowItWorksRouteImport } from './routes/ca.how-it-works'
 import { Route as CaLegalRouteImport } from './routes/ca.legal'
 import { Route as CaPartnersRouteImport } from './routes/ca.partners'
+import { Route as CaPlannerRouteImport } from './routes/ca.planner'
 import { Route as CaPricingRouteImport } from './routes/ca.pricing'
+import { Route as CaScenicRouteImport } from './routes/ca.scenic'
+import { Route as CaTollsRouteImport } from './routes/ca.tolls'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as NoIndexRouteImport } from './routes/no.index'
 import { Route as NoFaqRouteImport } from './routes/no.faq'
@@ -163,6 +167,11 @@ const CaFaqRoute = CaFaqRouteImport.update({
   path: '/faq',
   getParentRoute: () => CaRoute,
 } as any)
+const CaGarageRoute = CaGarageRouteImport.update({
+  id: '/garage',
+  path: '/garage',
+  getParentRoute: () => CaRoute,
+} as any)
 const CaHowItWorksRoute = CaHowItWorksRouteImport.update({
   id: '/how-it-works',
   path: '/how-it-works',
@@ -178,9 +187,24 @@ const CaPartnersRoute = CaPartnersRouteImport.update({
   path: '/partners',
   getParentRoute: () => CaRoute,
 } as any)
+const CaPlannerRoute = CaPlannerRouteImport.update({
+  id: '/planner',
+  path: '/planner',
+  getParentRoute: () => CaRoute,
+} as any)
 const CaPricingRoute = CaPricingRouteImport.update({
   id: '/pricing',
   path: '/pricing',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaScenicRoute = CaScenicRouteImport.update({
+  id: '/scenic',
+  path: '/scenic',
+  getParentRoute: () => CaRoute,
+} as any)
+const CaTollsRoute = CaTollsRouteImport.update({
+  id: '/tolls',
+  path: '/tolls',
   getParentRoute: () => CaRoute,
 } as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
@@ -349,10 +373,14 @@ export interface FileRoutesByFullPath {
   '/us': typeof UsRouteWithChildren
   '/$lang/$page': typeof LangPageRoute
   '/ca/faq': typeof CaFaqRoute
+  '/ca/garage': typeof CaGarageRoute
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/ca/planner': typeof CaPlannerRoute
   '/ca/pricing': typeof CaPricingRoute
+  '/ca/scenic': typeof CaScenicRoute
+  '/ca/tolls': typeof CaTollsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -402,10 +430,14 @@ export interface FileRoutesByTo {
   '/tolls': typeof TollsRoute
   '/$lang/$page': typeof LangPageRoute
   '/ca/faq': typeof CaFaqRoute
+  '/ca/garage': typeof CaGarageRoute
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/ca/planner': typeof CaPlannerRoute
   '/ca/pricing': typeof CaPricingRoute
+  '/ca/scenic': typeof CaScenicRoute
+  '/ca/tolls': typeof CaTollsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -458,10 +490,14 @@ export interface FileRoutesById {
   '/us': typeof UsRouteWithChildren
   '/$lang/$page': typeof LangPageRoute
   '/ca/faq': typeof CaFaqRoute
+  '/ca/garage': typeof CaGarageRoute
   '/ca/how-it-works': typeof CaHowItWorksRoute
   '/ca/legal': typeof CaLegalRoute
   '/ca/partners': typeof CaPartnersRoute
+  '/ca/planner': typeof CaPlannerRoute
   '/ca/pricing': typeof CaPricingRoute
+  '/ca/scenic': typeof CaScenicRoute
+  '/ca/tolls': typeof CaTollsRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -515,10 +551,14 @@ export interface FileRouteTypes {
     | '/us'
     | '/$lang/$page'
     | '/ca/faq'
+    | '/ca/garage'
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/ca/planner'
     | '/ca/pricing'
+    | '/ca/scenic'
+    | '/ca/tolls'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -568,10 +608,14 @@ export interface FileRouteTypes {
     | '/tolls'
     | '/$lang/$page'
     | '/ca/faq'
+    | '/ca/garage'
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/ca/planner'
     | '/ca/pricing'
+    | '/ca/scenic'
+    | '/ca/tolls'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -623,10 +667,14 @@ export interface FileRouteTypes {
     | '/us'
     | '/$lang/$page'
     | '/ca/faq'
+    | '/ca/garage'
     | '/ca/how-it-works'
     | '/ca/legal'
     | '/ca/partners'
+    | '/ca/planner'
     | '/ca/pricing'
+    | '/ca/scenic'
+    | '/ca/tolls'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -838,6 +886,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaFaqRouteImport
       parentRoute: typeof CaRoute
     }
+    '/ca/garage': {
+      id: '/ca/garage'
+      path: '/garage'
+      fullPath: '/ca/garage'
+      preLoaderRoute: typeof CaGarageRouteImport
+      parentRoute: typeof CaRoute
+    }
     '/ca/how-it-works': {
       id: '/ca/how-it-works'
       path: '/how-it-works'
@@ -859,11 +914,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaPartnersRouteImport
       parentRoute: typeof CaRoute
     }
+    '/ca/planner': {
+      id: '/ca/planner'
+      path: '/planner'
+      fullPath: '/ca/planner'
+      preLoaderRoute: typeof CaPlannerRouteImport
+      parentRoute: typeof CaRoute
+    }
     '/ca/pricing': {
       id: '/ca/pricing'
       path: '/pricing'
       fullPath: '/ca/pricing'
       preLoaderRoute: typeof CaPricingRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/scenic': {
+      id: '/ca/scenic'
+      path: '/scenic'
+      fullPath: '/ca/scenic'
+      preLoaderRoute: typeof CaScenicRouteImport
+      parentRoute: typeof CaRoute
+    }
+    '/ca/tolls': {
+      id: '/ca/tolls'
+      path: '/tolls'
+      fullPath: '/ca/tolls'
+      preLoaderRoute: typeof CaTollsRouteImport
       parentRoute: typeof CaRoute
     }
     '/checkout/return': {
@@ -1074,10 +1150,14 @@ declare module '@tanstack/react-router' {
 
 interface CaRouteChildren {
   CaFaqRoute: typeof CaFaqRoute
+  CaGarageRoute: typeof CaGarageRoute
   CaHowItWorksRoute: typeof CaHowItWorksRoute
   CaLegalRoute: typeof CaLegalRoute
   CaPartnersRoute: typeof CaPartnersRoute
+  CaPlannerRoute: typeof CaPlannerRoute
   CaPricingRoute: typeof CaPricingRoute
+  CaScenicRoute: typeof CaScenicRoute
+  CaTollsRoute: typeof CaTollsRoute
   CaIndexRoute: typeof CaIndexRoute
   CaFrFaqRoute: typeof CaFrFaqRoute
   CaFrHowItWorksRoute: typeof CaFrHowItWorksRoute
@@ -1087,10 +1167,14 @@ interface CaRouteChildren {
 
 const CaRouteChildren: CaRouteChildren = {
   CaFaqRoute: CaFaqRoute,
+  CaGarageRoute: CaGarageRoute,
   CaHowItWorksRoute: CaHowItWorksRoute,
   CaLegalRoute: CaLegalRoute,
   CaPartnersRoute: CaPartnersRoute,
+  CaPlannerRoute: CaPlannerRoute,
   CaPricingRoute: CaPricingRoute,
+  CaScenicRoute: CaScenicRoute,
+  CaTollsRoute: CaTollsRoute,
   CaIndexRoute: CaIndexRoute,
   CaFrFaqRoute: CaFrFaqRoute,
   CaFrHowItWorksRoute: CaFrHowItWorksRoute,
