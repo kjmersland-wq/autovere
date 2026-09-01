@@ -1,4 +1,5 @@
 import type { FlagCode } from "@/components/FlagIcon";
+import { DEFAULT_KWH_EUR, operatorKwhEur } from "@/lib/market-rates";
 import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
@@ -386,7 +387,7 @@ function buildOptimizer(
           : chargeNote
         : `Recommended refuel — keeps you above the ${bufferPct}% reserve on a ${d(fullRange)} tank range.`,
       ...(isEv ? { kwhNeeded, legLabel: d(legKm) } : {}),
-      ...(isEv && pricePerKwh ? { pricePerKwh } : {}),
+      ...(isEv ? { pricePerKwh: operatorKwhEur(local[0]!) || pricePerKwh || DEFAULT_KWH_EUR } : {}),
       ...(isEv && wanted ? { preferred: hit, fallback: !hit } : {}),
     };
   });

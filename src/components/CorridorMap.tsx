@@ -148,7 +148,7 @@ export function CorridorMap({
     if (!geo) return [];
     const c = geo.coords;
     return pois
-      .filter((p) => layers[p.layer])
+      .filter((p) => layers[p.layer] && !(isElectric && p.layer === "fuel"))
       .map((p) => {
         const idx = Math.min(c.length - 1, Math.max(0, Math.round(p.progress * (c.length - 1))));
         const pos = c[idx]!;
@@ -168,11 +168,22 @@ export function CorridorMap({
           title: tr(p.name),
           subtitle: tr(p.detail),
           power: power ? tr(power) : undefined,
-          distanceLabel: p.atLabel,
+          distanceLabel: `${p.atLabel} ${t.map.alongRoute}`,
+          priceLines:
+            p.layer === "ev" && p.kwhEur
+              ? [
+                  `${tr("Est. rate")}: ${formatCurrency(convert(p.kwhEur, "EUR", m.display), m.display, { decimals: 2 })} / kWh`,
+                ]
+              : p.layer === "fuel" && p.petrolEur && p.dieselEur
+                ? [
+                    `${tr("Petrol 95")}: ${formatCurrency(convert(p.petrolEur, "EUR", m.display), m.display, { decimals: 2 })} / L`,
+                    `${tr("Diesel")}: ${formatCurrency(convert(p.dieselEur, "EUR", m.display), m.display, { decimals: 2 })} / L`,
+                  ]
+                : undefined,
           mapUrl: poiMapUrl(p.name, `${from} ${to}`),
         };
       });
-  }, [geo, pois, layers, tr, from, to]);
+  }, [geo, pois, layers, tr, from, to, t, m.display, isElectric]);
 
   const path = line.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
   const visible = pois.filter((p) => layers[p.layer]);
@@ -202,7 +213,7 @@ export function CorridorMap({
 
       {/* Layer toggles */}
       <div className="mt-4 flex flex-wrap gap-2">
-        {MAP_LAYERS.map((l) => {
+        {MAP_LAYERS.filter((l) => !(isElectric && l.key === "fuel")).map((l) => {
           const on = layers[l.key];
           return (
             <button
@@ -333,7 +344,9 @@ export function CorridorMap({
                 markers={liveMarkers}
                 fromLabel={from}
                 toLabel={to}
+                openLabel={tr("Open in Google Maps")}
               />
+
             </Suspense>
           </ClientOnly>
         </div>

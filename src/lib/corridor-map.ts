@@ -1,3 +1,5 @@
+import { countryFuelEur, operatorKwhEur } from "@/lib/market-rates";
+
 import type { FuelKey, RegionKey, TripEstimate, VehicleKey } from "@/lib/trip-data";
 
 /* ------------------------------------------------------------------ */
@@ -82,6 +84,11 @@ export type CorridorPoi = {
   progress: number;
   status?: "open" | "closed" | "chains";
   price?: string;
+  /** Ad-hoc charging rate per kWh in EUR (EV layer). */
+  kwhEur?: number;
+  /** Pump rates per litre in EUR (fuel layer). */
+  petrolEur?: number;
+  dieselEur?: number;
   /** Brand/point specific symbol shown on the map instead of the generic layer emoji. */
   icon?: string;
 };
@@ -197,15 +204,31 @@ export function buildCorridorPois({
   for (let i = 0; i < evCount; i += 1) {
     const p = (i + 1) / (evCount + 1);
     const net = EV_NETWORKS[region][Math.floor(rnd() * EV_NETWORKS[region].length)]!;
-    push("ev", p, `${net} hub`, `${[150, 175, 250, 350][Math.floor(rnd() * 4)]} kW · ${2 + Math.floor(rnd() * 10)} bays`);
+    push(
+      "ev",
+      p,
+      `${net} hub`,
+      `${[150, 175, 250, 350][Math.floor(rnd() * 4)]} kW · ${2 + Math.floor(rnd() * 10)} bays`,
+      { kwhEur: operatorKwhEur(net) },
+    );
   }
 
   const fuelCount = Math.min(6, Math.max(3, Math.round(total / 190)));
   for (let i = 0; i < fuelCount; i += 1) {
     const p = (i + 0.55) / (fuelCount + 0.4);
     const brand = FUEL_BRANDS[region][Math.floor(rnd() * FUEL_BRANDS[region].length)]!;
+    const country = trip.segments.length
+      ? trip.segments[Math.min(trip.segments.length - 1, Math.floor(p * trip.segments.length))]!.country
+      : region === "us"
+        ? "United States"
+        : region === "ca"
+          ? "Canada"
+          : "Europe";
+    const rate = countryFuelEur(country);
     push("fuel", p, `${brand} service station`, "24/7 · restrooms · café", {
-      price: fuelPriceLabel(region, trip, rnd()),
+      price: `€${rate.petrol.toFixed(2)}/L`,
+      petrolEur: rate.petrol,
+      dieselEur: rate.diesel,
     });
   }
 
@@ -268,35 +291,12 @@ export const FUEL_SOURCES: Record<FuelSource["key"], FuelSource> = {
   },
 };
 
-const COUNTRY_BASE: Record<string, number> = {
-  France: 1.82,
-  Austria: 1.65,
-  Germany: 1.79,
-  Italy: 1.88,
-  Switzerland: 1.86,
-  Netherlands: 2.05,
-  Belgium: 1.78,
-  Norway: 1.94,
-  Sweden: 1.72,
-  Denmark: 1.83,
-  Spain: 1.62,
-  Poland: 1.5,
-  Slovenia: 1.6,
-  Czechia: 1.58,
-  Hungary: 1.55,
-};
-
 export function countryFuelSource(country: string): FuelSource {
   if (/france/i.test(country)) return FUEL_SOURCES.fr;
   if (/austria|österreich/i.test(country)) return FUEL_SOURCES.at;
   return FUEL_SOURCES.benchmark;
 }
 
-function fuelPriceLabel(region: RegionKey, trip: TripEstimate, jitter: number) {
-  if (region === "us") return `$${(3.35 + jitter * 0.8).toFixed(2)}/gal`;
-  if (region === "ca") return `C$${(1.55 + jitter * 0.25).toFixed(2)}/L`;
-  return `€${(1.62 + jitter * 0.4).toFixed(2)}/L`;
-}
 
 export type FuelStop = {
   id: string;
@@ -311,6 +311,9 @@ export type FuelStop = {
   /** Currency symbol the numeric price is expressed in. */
   priceSymbol: string;
   priceUnit: string;
+  /** Petrol 95 / diesel market rate per litre in EUR, for popups and comparisons. */
+  petrolEur: number;
+  dieselEur: number;
   source: FuelSource;
   amenities: string[];
 };
@@ -340,13 +343,14 @@ export function buildFuelStops({
     const p = (i + 0.6) / (count + 0.3);
     const country = countries[Math.min(countries.length - 1, Math.floor(p * countries.length))]!;
     const brand = brands[Math.floor(rnd() * brands.length)]!;
-    const base = COUNTRY_BASE[country] ?? 1.72;
-    const dieselAdj = fuel === "diesel" ? -0.08 : 0;
-    const litre = base + dieselAdj + (rnd() - 0.5) * 0.14;
-    const priceValue =
-      region === "us" ? litre * 3.785 * 0.55 : region === "ca" ? litre * 0.82 : litre;
-    const priceSymbol = region === "us" ? "$" : region === "ca" ? "C$" : "€";
-    const price = `${priceSymbol}${priceValue.toFixed(region === "us" ? 2 : 3)}`;
+    const rate = countryFuelEur(country);
+    // Motorway forecourts carry the higher published rate where we have one.
+    const motorway = rnd() > 0.6;
+    const petrolEur = motorway ? rate.motorwayPetrol ?? rate.petrol * 1.06 : rate.petrol;
+    const dieselEur = motorway ? rate.motorwayDiesel ?? rate.diesel * 1.06 : rate.diesel;
+    const priceValue = fuel === "diesel" ? dieselEur : petrolEur;
+    const priceSymbol = "€";
+    const price = `${priceSymbol}${priceValue.toFixed(3)}`;
     const atKm = total * p;
     return {
       id: `stop-${i}`,
@@ -358,12 +362,15 @@ export function buildFuelStops({
       price,
       priceValue,
       priceSymbol,
-      priceUnit: region === "us" ? "per gallon" : "per litre",
+      priceUnit: "per litre",
+      petrolEur,
+      dieselEur,
       source: countryFuelSource(country),
       amenities: ["24/7", rnd() > 0.5 ? "HGV/RV lanes" : "Café", rnd() > 0.6 ? "AdBlue" : "Car wash"],
     };
   });
 }
+
 
 /* ------------------------------------------------------------------ */
 /* Motorhome camping radar                                             */

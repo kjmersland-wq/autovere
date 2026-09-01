@@ -14,6 +14,8 @@ export type LiveMapMarker = {
   power?: string | undefined;
   /** Distance along the corridor, shown in the popup. */
   distanceLabel?: string | undefined;
+  /** Price lines rendered in the popup accent colour, e.g. "Est. 4,85 kr / kWh". */
+  priceLines?: string[] | undefined;
 };
 
 /**
@@ -39,6 +41,34 @@ const CRISP_STYLES: google.maps.MapTypeStyle[] = [
   { featureType: "water", elementType: "geometry", stylers: [{ color: "#a9d6f5" }] },
   { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#1d4ed8" }] },
 ];
+
+/** Dark AutoVere skin for every Google InfoWindow bubble. */
+const INFO_CSS = `
+.gm-style .gm-style-iw.gm-style-iw-c{
+  background:#0f172a;border:1px solid #334155;border-radius:12px;
+  box-shadow:0 18px 40px rgba(2,6,23,.55);padding:14px 16px;
+}
+.gm-style .gm-style-iw-d{background:#0f172a;overflow:auto!important;}
+.gm-style .gm-style-iw-tc::after{background:#0f172a;}
+.gm-style .gm-style-iw-c button.gm-ui-hover-effect{top:4px!important;right:4px!important;opacity:1!important;}
+.gm-style .gm-style-iw-c button.gm-ui-hover-effect>span{background-color:#f8fafc!important;}
+.autovere-iw{font-family:inherit;color:#f8fafc;font-size:13px;line-height:1.5;max-width:250px;}
+.autovere-iw h4{margin:0;font-size:14px;font-weight:700;color:#f8fafc;}
+.autovere-iw .meta{color:#94a3b8;font-size:12px;margin-top:2px;}
+.autovere-iw .power{color:#38bdf8;font-weight:600;margin-top:4px;}
+.autovere-iw .price{color:#34d399;font-weight:600;margin-top:2px;}
+.autovere-iw .dist{color:#f59e0b;font-weight:600;margin-top:2px;}
+.autovere-iw a{color:#38bdf8;font-weight:600;text-decoration:none;display:inline-block;margin-top:8px;}
+.autovere-iw a:hover{text-decoration:underline;}
+`;
+
+function injectInfoCss() {
+  if (typeof document === "undefined" || document.getElementById("autovere-iw-css")) return;
+  const style = document.createElement("style");
+  style.id = "autovere-iw-css";
+  style.textContent = INFO_CSS;
+  document.head.appendChild(style);
+}
 
 let loaderPromise: Promise<void> | null = null;
 
@@ -90,12 +120,14 @@ export default function LiveMap({
   fromLabel,
   toLabel,
   height = 420,
+  openLabel = "Open in Google Maps",
 }: {
   coords: [number, number][];
   markers: LiveMapMarker[];
   fromLabel: string;
   toLabel: string;
   height?: number;
+  openLabel?: string;
 }) {
   const ref = useRef<HTMLDivElement | null>(null);
   const mapRef = useRef<google.maps.Map | null>(null);
@@ -105,6 +137,7 @@ export default function LiveMap({
 
   useEffect(() => {
     let cancelled = false;
+    injectInfoCss();
     loadGoogleMaps()
       .then(() => {
         if (!cancelled) setReady(true);
@@ -173,7 +206,7 @@ export default function LiveMap({
         label: { text: glyph, fontSize: "12px" },
       });
       marker.addListener("click", () => {
-        info.setContent(`<div style="color:#0f172a;font-size:13px"><strong>${label}</strong></div>`);
+        info.setContent(`<div class="autovere-iw"><h4>${label}</h4></div>`);
         info.open({ map, anchor: marker });
       });
       overlaysRef.current.push(marker);
@@ -193,13 +226,17 @@ export default function LiveMap({
       });
       marker.addListener("click", () => {
         const link = m.mapUrl
-          ? `<div style="margin-top:4px"><a href="${m.mapUrl}" target="_blank" rel="noopener noreferrer" style="color:#1d4ed8">Google Maps ↗</a></div>`
+          ? `<a href="${m.mapUrl}" target="_blank" rel="noopener noreferrer">${openLabel} ↗</a>`
           : "";
-        const meta = [m.power, m.distanceLabel].filter(Boolean).join(" · ");
+        const prices = (m.priceLines ?? [])
+          .map((p) => `<div class="price">${p}</div>`)
+          .join("");
         info.setContent(
-          `<div style="color:#0f172a;font-size:13px;line-height:1.45"><strong>${m.title}</strong>` +
-            (meta ? `<div style="font-weight:600">${meta}</div>` : "") +
-            (m.subtitle ? `<div style="color:#475569">${m.subtitle}</div>` : "") +
+          `<div class="autovere-iw"><h4>${m.title}</h4>` +
+            (m.power ? `<div class="power">${m.power}</div>` : "") +
+            prices +
+            (m.distanceLabel ? `<div class="dist">${m.distanceLabel}</div>` : "") +
+            (m.subtitle ? `<div class="meta">${m.subtitle}</div>` : "") +
             `${link}</div>`,
         );
         info.open({ map, anchor: marker });
@@ -210,7 +247,7 @@ export default function LiveMap({
     const bounds = new google.maps.LatLngBounds();
     path.forEach((p) => bounds.extend(p));
     map.fitBounds(bounds, 32);
-  }, [ready, coords, markers, fromLabel, toLabel]);
+  }, [ready, coords, markers, fromLabel, toLabel, openLabel]);
 
   if (error) {
     return (

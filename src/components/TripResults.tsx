@@ -676,7 +676,7 @@ export function TripResults({
               </p>
               {stop.pricePerKwh ? (
                 <p className="mt-1 text-xs font-semibold text-foreground/80">
-                  ~{formatCurrency(convert(stop.pricePerKwh, m.base, m.display), m.display, { decimals: 2 })} / kWh
+                  ~{formatCurrency(convert(stop.pricePerKwh, "EUR", m.display), m.display, { decimals: 2 })} / kWh
                 </p>
               ) : null}
               <p className="mt-2 text-sm text-foreground/80">{tr(stop.note)}</p>
