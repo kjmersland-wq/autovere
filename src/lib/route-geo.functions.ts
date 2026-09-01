@@ -212,7 +212,7 @@ async function sampleCorridor(
   }
   const measured = cum[cum.length - 1] || totalKm || 1;
   // Nominatim allows ~1 request/second, so keep the sample count modest.
-  const count = Math.min(12, Math.max(5, Math.round(totalKm / 110)));
+  const count = Math.min(20, Math.max(8, Math.round(totalKm / 60)));
 
   const targets: { atKm: number; lat: number; lng: number }[] = [];
   for (let i = 0; i < count; i += 1) {
