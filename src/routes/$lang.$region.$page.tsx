@@ -1,6 +1,7 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { LocalizedRegionPage } from "@/components/LocalizedRegionPage";
+import { infoForLang } from "@/lib/info-by-lang";
 import { isLocalePage, isLocalePrefix, isRegionPrefix } from "@/lib/locales";
 import { absUrl } from "@/lib/seo";
 import type { RegionKey } from "@/lib/trip-data";
@@ -14,8 +15,15 @@ export const Route = createFileRoute("/$lang/$region/$page")({
   },
   head: ({ params }) => {
     const url = absUrl(`/${params.lang}/${params.region}/${params.page}`);
-    const title = `AutoVere ${REGION_NAME[params.region] ?? ""} — ${params.page.replace(/-/g, " ")} (${params.lang.toUpperCase()})`;
-    const description = `Tolls, fuel, EV charging and ferry costs for ${REGION_NAME[params.region] ?? "your"} road trips — in your language.`;
+    const regionName = REGION_NAME[params.region] ?? "";
+    const info = infoForLang(params.lang, params.page);
+    const image = absUrl(`/og/autovere-og-${params.region}.jpg`);
+    const title = info
+      ? `${info.meta.title} — ${regionName}`
+      : `AutoVere ${regionName} — ${params.page.replace(/-/g, " ")} (${params.lang.toUpperCase()})`;
+    const description =
+      info?.meta.description ??
+      `Tolls, fuel, EV charging and ferry costs for ${regionName || "your"} road trips — in your language.`;
     return {
       meta: [
         { title },
@@ -24,11 +32,16 @@ export const Route = createFileRoute("/$lang/$region/$page")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
+        { property: "og:image", content: image },
+        { property: "og:image:width", content: "1200" },
+        { property: "og:image:height", content: "630" },
         { name: "twitter:card", content: "summary_large_image" },
+        { name: "twitter:image", content: image },
       ],
       links: [{ rel: "canonical", href: url }],
     };
   },
+
   component: MatrixPage,
 });
 
