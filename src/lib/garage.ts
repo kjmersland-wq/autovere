@@ -28,6 +28,11 @@ export type SavedTrip = {
   ferries?: number;
   energyCost?: number;
   stops?: SavedTripStop[];
+  /** Real reverse-geocoded waypoints from the routed polyline. */
+  points?: { name: string; detail: string; lat: number; lon: number }[];
+  /** Thinned routed polyline [lat, lng] for GPX tracks. */
+  coords?: [number, number][];
+  countries?: string[];
 };
 
 export const VEHICLE_META: Record<VehicleKind, { emoji: string; label: string }> = {
@@ -203,13 +208,16 @@ export function persistTrips(trips: SavedTrip[]) {
   }
 }
 
+/** GPX built from the real routed coordinates stored with the saved trip. */
 export function tripGpx(trip: SavedTrip) {
-  const stops = trip.stops?.length ? trip.stops : [{ place: trip.destination, detail: trip.detail }];
-  const wpts = stops
+  const wpts = (trip.points ?? [])
     .map(
-      (s, i) =>
-        `  <wpt lat="${(46 + i * 0.35).toFixed(4)}" lon="${(9 + i * 0.4).toFixed(4)}">\n    <name>${escapeXml(s.place)}</name>\n    <desc>${escapeXml(s.detail)}</desc>\n  </wpt>`,
+      (p) =>
+        `  <wpt lat="${p.lat.toFixed(5)}" lon="${p.lon.toFixed(5)}">\n    <name>${escapeXml(p.name)}</name>\n    <desc>${escapeXml(p.detail)}</desc>\n  </wpt>`,
     )
+    .join("\n");
+  const track = (trip.coords ?? [])
+    .map(([lat, lon]) => `      <trkpt lat="${lat.toFixed(5)}" lon="${lon.toFixed(5)}" />`)
     .join("\n");
   return `<?xml version="1.0" encoding="UTF-8"?>
 <gpx version="1.1" creator="AutoVere" xmlns="http://www.topografix.com/GPX/1/1">
@@ -218,6 +226,7 @@ export function tripGpx(trip: SavedTrip) {
     <desc>${escapeXml(trip.detail)}</desc>
   </metadata>
 ${wpts}
+${track ? `  <trk>\n    <name>${escapeXml(trip.name)}</name>\n    <trkseg>\n${track}\n    </trkseg>\n  </trk>` : ""}
 </gpx>`;
 }
 
