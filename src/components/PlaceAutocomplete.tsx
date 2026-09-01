@@ -73,9 +73,10 @@ export function PlaceAutocomplete({
     return () => {
       cancelled = true;
       clearTimeout(timer);
-      setLoading(false);
     };
-  }, [value, region, search]);
+    // `search` is a stable server-fn caller; excluding it keeps the debounce intact.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value, region]);
 
   useEffect(() => {
     const onDoc = (e: MouseEvent) => {
