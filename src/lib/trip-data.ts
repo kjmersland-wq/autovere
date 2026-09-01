@@ -171,6 +171,10 @@ export type RouteCorridor = {
   borders: string[];
   from: string;
   to: string;
+  /** Real routed polyline [lat, lng] — used by GPX export and the print map. */
+  coords: [number, number][];
+  /** Reverse-geocoded waypoints along the real polyline. */
+  points: { name: string; detail: string; lat: number; lon: number }[];
 };
 
 export type ChargingStop = {
@@ -562,6 +566,17 @@ export function estimateTrip(
         borders: borderLabels(geo.borders, imperial),
         from: geo.from.name,
         to: geo.to.name,
+        coords: geo.coords,
+        points: [
+          { name: geo.from.name, detail: "Start", lat: geo.from.lat, lon: geo.from.lng },
+          ...geo.samples.map((sp) => ({
+            name: sp.place || sp.country,
+            detail: `${sp.country}${sp.state ? ` · ${sp.state}` : ""} · ${Math.round(sp.atKm)} km`,
+            lat: sp.lat,
+            lon: sp.lng,
+          })),
+          { name: geo.to.name, detail: "Destination", lat: geo.to.lat, lon: geo.to.lng },
+        ],
       }
     : null;
 
