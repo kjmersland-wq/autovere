@@ -22,6 +22,9 @@ export interface MountainPass {
   portalUrl: string;
   match: string[];
   regions: RegionKey[];
+  /** Real-world summit coordinates — used for polyline proximity filtering. */
+  lat: number;
+  lng: number;
 }
 
 export const MOUNTAIN_PASSES: MountainPass[] = [
@@ -41,6 +44,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://www.grossglockner.at/gg/en/index",
     match: ["austria", "salzburg", "zell am see", "heiligenblut", "grossglockner", "großglockner", "carinthia", "villach", "brenner", "innsbruck", "italy", "garda"],
     regions: ["eu"],
+    lat: 47.076,
+    lng: 12.838,
   },
   {
     id: "stelvio",
@@ -58,6 +63,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://www.stelviopark.it/en/",
     match: ["italy", "bormio", "stelvio", "south tyrol", "bolzano", "milan", "milano", "garda", "como", "switzerland", "livigno", "sondrio"],
     regions: ["eu"],
+    lat: 46.5285,
+    lng: 10.4543,
   },
   {
     id: "furka-grimsel",
@@ -75,6 +82,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://www.tcs.ch/en/travel-camping/travel-information/traffic-information/alpine-passes.php",
     match: ["switzerland", "swiss", "furka", "grimsel", "andermatt", "interlaken", "bern", "lucerne", "zurich", "zürich", "valais", "brig", "geneva", "milan", "como"],
     regions: ["eu"],
+    lat: 46.5723,
+    lng: 8.4152,
   },
   {
     id: "trollstigen",
@@ -92,6 +101,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://www.vegvesen.no/en/traffic/",
     match: ["norway", "norge", "oslo", "bergen", "ålesund", "alesund", "åndalsnes", "geiranger", "trollstigen", "sognefjell", "lom", "trondheim", "fjord", "stavanger"],
     regions: ["eu"],
+    lat: 62.4558,
+    lng: 7.6709,
   },
   {
     id: "icefields",
@@ -109,6 +120,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://parks.canada.ca/pn-np/ab/banff/visit/parkway-promenade",
     match: ["alberta", "banff", "jasper", "lake louise", "calgary", "canmore", "icefields", "edmonton", "rockies"],
     regions: ["ca"],
+    lat: 51.67,
+    lng: -116.94,
   },
   {
     id: "dragon",
@@ -126,6 +139,8 @@ export const MOUNTAIN_PASSES: MountainPass[] = [
     portalUrl: "https://tailofthedragon.com/",
     match: ["tennessee", "north carolina", "knoxville", "asheville", "deals gap", "dragon", "smoky", "gatlinburg", "chattanooga", "nashville", "atlanta"],
     regions: ["us"],
+    lat: 35.51,
+    lng: -83.93,
   },
 ];
 
