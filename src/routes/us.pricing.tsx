@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { PricingTiers } from "@/components/PricingTiers";
-import { SiteHeader } from "@/components/SiteHeader";
+import { PricingPage } from "@/components/PricingPage";
 
 export const Route = createFileRoute("/us/pricing")({
   head: () => ({
@@ -29,26 +28,5 @@ export const Route = createFileRoute("/us/pricing")({
     ],
     links: [{ rel: "canonical", href: "https://www.autovere.com/us/pricing" }],
   }),
-  component: UsPricingPage,
+  component: () => <PricingPage region="us" />,
 });
-
-function UsPricingPage() {
-  return (
-    <main className="min-h-screen">
-      <SiteHeader region="us" />
-      <section className="mx-auto w-full max-w-6xl px-5 py-14 sm:px-8">
-        <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">Plans &amp; pricing</p>
-        <h1 className="mt-3 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
-          Pick the plan that matches the road ahead.
-        </h1>
-        <p className="mt-4 max-w-2xl text-foreground/75">
-          Every plan starts with honest numbers. Upgrade whenever you want a full garage, offline navigation and
-          fleet-grade toll invoicing — and cancel any time the season winds down.
-        </p>
-        <div className="mt-12">
-          <PricingTiers />
-        </div>
-      </section>
-    </main>
-  );
-}
