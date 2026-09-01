@@ -195,7 +195,16 @@ const STOP_NAMES: Record<RegionKey, string[]> = {
 const EV_NETWORKS: Record<RegionKey, string[]> = {
   eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego"],
   us: ["Electrify America", "Tesla Supercharger", "EVgo"],
-  ca: ["FLO", "Tesla Supercharger", "Petro-Canada eV", "Electrify Canada"],
+  ca: [
+    "FLO",
+    "Tesla Supercharger",
+    "Petro-Canada eV",
+    "Electrify Canada",
+    "Circuit Électrique (QC)",
+    "BC Hydro EV",
+    "ChargePoint Canada",
+    "Ivy Charging Network (ON)",
+  ],
 };
 
 const ARBITRAGE: Record<RegionKey, string[]> = {
@@ -451,7 +460,7 @@ const SEGMENTS: Record<RegionKey, TripEstimate["segments"]> = {
   ca: [
     {
       country: "🍁 Ontario",
-      total: 39.4,
+      total: 46.4,
       lines: [
         {
           place: "Highway 407 ETR",
