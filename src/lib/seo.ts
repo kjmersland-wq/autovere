@@ -154,6 +154,13 @@ const APP_PAGE_META_BASE = {
   },
 };
 
+const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
+  ...APP_PAGE_META_BASE,
+  // Placeholder: English metadata until translations land.
+  es: {},
+  it: {},
+};
+
 export function appPageMeta(prefix: LocalePrefix, page: LocalePage): PageMeta | null {
   return APP_PAGE_META[prefix]?.[page] ?? null;
 }
