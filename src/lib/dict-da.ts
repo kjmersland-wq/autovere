@@ -181,7 +181,7 @@ export const DA_DICT: Record<string, unknown> = {
     appliesAt: (h: string) => `Gælder fra ${h} m`,
     speedTitle: "Fartgrænser og overhalingsforbud",
     officialPortal: "Officiel portal",
-    lezTitle: "Overvågning af byernes lavemissionszoner",
+    lezTitle: "Overvågning af byernes miljøzoner",
     lezDetected: (n: number) => `${n} fundet på denne rute`,
     lezOverview: "Regionalt overblik",
     lezIntro:

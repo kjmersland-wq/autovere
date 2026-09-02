@@ -93,13 +93,13 @@ export const CONTENT_DA: Record<string, string> = {
   "Order 2 weeks ahead or buy at a TÜV/DEKRA station on arrival":
     "Bestil 2 uger i forvejen, eller køb på en TÜV/DEKRA-station ved ankomst",
   "Motorcycles are exempt from German Umweltzonen.": "Motorcykler er fritaget for tyske Umweltzonen.",
-  "LEZ online registration": "Online registrering til lavemissionszone",
+  "LEZ online registration": "Online registrering til miljøzone",
   "No sticker — foreign plates must be registered online before the first entry into Brussels, Antwerp, Ghent, Rotterdam or Amsterdam. Cameras match plates automatically.":
     "Intet mærke — udenlandske nummerplader skal registreres online, inden første indkørsel i Bruxelles, Antwerpen, Gent, Rotterdam eller Amsterdam. Kameraer genkender pladerne automatisk.",
   "Free registration; fines from €150": "Gratis registrering; bøder fra 150 €",
   "Register at least 24 hours before entry": "Registrer dig mindst 24 timer før indkørsel",
   "Motorcycles are currently outside the Belgian and Dutch LEZ scope.":
-    "Motorcykler er i øjeblikket ikke omfattet af de belgiske og hollandske lavemissionszoner.",
+    "Motorcykler er i øjeblikket ikke omfattet af de belgiske og hollandske miljøzoner.",
   "ULEZ + Congestion Charge": "ULEZ + trængselsafgift",
   "Greater London's ULEZ charges non-compliant vehicles £12.50/day, plus £15 Congestion Charge in the central zone on weekdays. Pay online or by Auto Pay.":
     "Storlondons ULEZ opkræver £12,50/dag for køretøjer, der ikke overholder kravene, plus £15 i trængselsafgift i centrumzonen på hverdage. Betal online eller via Auto Pay.",
@@ -501,7 +501,7 @@ export const CONTENT_DA: Record<string, string> = {
   "I have SunPass / E-ZPass": "Jeg har SunPass/E-ZPass",
   "Vignettes & e-vignettes": "Vignetter og e-vignetter",
   "Ticket-based motorway tolls": "Billetbaserede motorvejsafgifter",
-  "Urban low-emission zones": "Byernes lavemissionszoner",
+  "Urban low-emission zones": "Byernes miljøzoner",
   "State toll roads & turnpikes": "Statslige betalingsveje",
   "HOV / Express lanes": "HOV-/ekspresbaner",
   "Bridge & tunnel tolls": "Bro- og tunnelafgifter",
