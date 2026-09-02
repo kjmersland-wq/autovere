@@ -50,6 +50,8 @@ export const DATE_LOCALE: Record<Locale, string> = {
   nl: "nl-NL",
   fr: "fr-FR",
   pl: "pl-PL",
+  es: "es-ES",
+  it: "it-IT",
 };
 
 const EN_TIERS: Tier[] = [
@@ -476,7 +478,7 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   it: EN_TIERS,
 };
 
-const COPY: Record<Locale, PricingCopy> = {
+const COPY_BASE = {
   en: {
     onPlan: "You're on",
     retrying: " — payment retrying",
@@ -655,7 +657,9 @@ const COPY: Record<Locale, PricingCopy> = {
   },
 };
 
-const HERO: Record<Locale, PricingHero> = {
+const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.en, it: COPY_BASE.en };
+
+const HERO_BASE = {
   en: {
     eyebrow: "Plans & pricing",
     title: "Pick the plan that matches your road ahead.",
