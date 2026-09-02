@@ -76,6 +76,25 @@ const FLAGS: Record<FlagCode, { label: string; svg: React.ReactNode }> = {
       </>
     ),
   },
+  ES: {
+    label: "Spain",
+    svg: (
+      <>
+        <rect width="60" height="40" fill="#AA151B" />
+        <rect y="10" width="60" height="20" fill="#F1BF00" />
+      </>
+    ),
+  },
+  IT: {
+    label: "Italy",
+    svg: (
+      <>
+        <rect width="60" height="40" fill="#FFFFFF" />
+        <rect width="20" height="40" fill="#008C45" />
+        <rect x="40" width="20" height="40" fill="#CD212A" />
+      </>
+    ),
+  },
 };
 
 export function FlagIcon({ code, className, title }: FlagProps) {
