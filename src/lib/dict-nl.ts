@@ -29,7 +29,7 @@ export const NL_DICT: Record<string, unknown> = {
     viaLimit: "Je kunt maximaal 3 tussenstops per route toevoegen.",
     viaPlaceholder: (i: number) => `Tussenstop ${i} — bijv. Innsbruck`,
     scenic: "✨ Geef de voorkeur aan panoramische berg- en kustomwegen",
-    avoidTolls: "🚫 Vermijd betaalde snelwegen",
+    avoidTolls: "🚫 Vermijd tolwegen",
     ferries: "⛴️ Neem veerbootoversteken mee",
     fuelType: "Brandstof / aandrijving",
     popularRoutes: "Populaire grensoverschrijdende routes",
@@ -99,7 +99,7 @@ export const NL_DICT: Record<string, unknown> = {
     savesVs: (amount: string, baseline: string) => `Je bespaart ${amount} vergeleken met het gebruikelijke ${baseline}`,
     buyAt: "Koop bij",
     vignetteTotal: "Geoptimaliseerde vignetdekking voor deze route:",
-    vignetteSaved: "bespaard dankzij slimme keuze",
+    vignetteSaved: "bespaard dankzij slimme tariefkeuze",
     vignetteTail: (ret: boolean): string =>
       ret
         ? "Afstandstol en veerboottickets worden per oversteek berekend en verdubbeld voor je terugreis."
@@ -120,7 +120,7 @@ export const NL_DICT: Record<string, unknown> = {
     stopExists: (n: string) => `${n} is al een stop op deze reis.`,
     stopAdded: (n: string, c: number) =>
       `${n} toegevoegd — route omgeleid via ${c} extra ${c > 1 ? "stops" : "stop"}.`,
-    at: "in",
+    at: "bij",
   },
   drawer: {
     title: "Tol, vignetten en brandstofkosten per land / regio",
@@ -189,7 +189,7 @@ export const NL_DICT: Record<string, unknown> = {
     tagTitle: "Mijn transponders en toltags",
     tagIntro:
       "Vink de tags aan die je al hebt — we markeren de bijpassende poorten als automatisch gedetecteerde rijstroken en herberekenen je tol.",
-    tagAuto: "🟢 Automatisch gedetecteerde rijstrook / geen contante stop nodig",
+    tagAuto: "🟢 Automatisch gedetecteerde rijstrook / geen stop voor contant geld nodig",
     tagSaving: (p: number) => `Typische besparing op gedekte tol: ${p}%`,
     tagNone: (amount: string) => `Geen tags geselecteerd — tol blijft op ${amount} met stops bij kassa/kaart.`,
     tagActivePrefix: (n: number) => `Met ${n} actieve ${n > 1 ? "tags" : "tag"} daalt je tol van`,

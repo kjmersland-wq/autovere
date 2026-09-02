@@ -9,7 +9,7 @@ export const DE_DICT: Record<string, unknown> = {
     } as Record<string, string>,
     signIn: "Anmelden",
     garageMenu: "🗺️ Meine Garage & Reisen",
-    plansMenu: "✨ Pläne & Upgrade",
+    plansMenu: "✨ Tarife & Upgrade",
     signOut: "Abmelden",
     toggleNav: "Navigation ein-/ausblenden",
   },
@@ -33,7 +33,7 @@ export const DE_DICT: Record<string, unknown> = {
     ferries: "⛴️ Fährüberfahrten einbeziehen",
     fuelType: "Kraftstoff- / Antriebsart",
     popularRoutes: "Beliebte grenzüberschreitende Routen",
-    transponder: "Transponder / elektronische Vignette",
+    transponder: "Transponder / Mauttag",
     consumption: "Kraftstoff & Verbrauch",
     fineTune: "Verbrauch anpassen",
     fineTuneHint: "Dient der genaueren Berechnung der Kraftstoff- und Ladekosten für Ihr Fahrzeug.",
@@ -99,7 +99,7 @@ export const DE_DICT: Record<string, unknown> = {
     savesVs: (amount: string, baseline: string) => `Spart ${amount} gegenüber der üblichen ${baseline}`,
     buyAt: "Kaufen bei",
     vignetteTotal: "Optimierte Vignettenabdeckung für diese Route:",
-    vignetteSaved: "gespart durch intelligente Variantenwahl",
+    vignetteSaved: "gespart durch intelligente Tarifwahl",
     vignetteTail: (ret: boolean): string =>
       ret
         ? "Streckenmaut und Fährtickets werden pro Überfahrt berechnet und für die Rückreise verdoppelt."
@@ -107,7 +107,7 @@ export const DE_DICT: Record<string, unknown> = {
     arbitrage: "Kraftstoff-Preisvorteil an der Grenze",
     tip: "Tipp",
     longStretch: "Warnungen bei langen Abschnitten (>180 km ohne verifizierte Tankstelle)",
-    badgeRadar: "🌱 Umwelt- und Abgasplaketten-Radar",
+    badgeRadar: "🌱 Umweltplaketten-Radar",
     badgeRadarIntro:
       "Besorgen Sie diese schon vor der Abfahrt — Plaketten werden an der Stadtgrenze kontrolliert, nicht an der Landesgrenze.",
     officialInfo: "Offizielle Informationen",
@@ -119,7 +119,7 @@ export const DE_DICT: Record<string, unknown> = {
     addStop: "+ Als Stopp hinzufügen",
     stopExists: (n: string) => `${n} ist bereits ein Stopp auf dieser Reise.`,
     stopAdded: (n: string, c: number) =>
-      `${n} hinzugefügt — Route über ${c} zusätzlichen ${c > 1 ? "Stopps" : "Stopp"} umgeplant.`,
+      `${n} hinzugefügt — Route über ${c} ${c > 1 ? "zusätzliche Stopps" : "zusätzlichen Stopp"} umgeplant.`,
     at: "bei",
   },
   drawer: {
@@ -185,17 +185,17 @@ export const DE_DICT: Record<string, unknown> = {
     lezDetected: (n: number) => `${n} auf dieser Route erkannt`,
     lezOverview: "Regionale Übersicht",
     lezIntro:
-      "Bestellen Sie Plaketten und registrieren Sie Kennzeichen vor der Abreise — die meisten Zonen werden per Kamera überwacht, ohne Zahlung vor Ort.",
-    tagTitle: "Meine Transponder und Mauttags",
+      "Bestellen Sie Umweltplaketten und registrieren Sie Ihr Kennzeichen vor der Abreise — die meisten Zonen werden per Kamera überwacht, ohne Zahlung vor Ort.",
+    tagTitle: "Meine Transponder und Mautboxen",
     tagIntro:
       "Kreuzen Sie die Tags an, die Sie bereits besitzen — wir markieren die passenden Schranken als automatisch erkannte Spuren und berechnen Ihre Maut neu.",
-    tagAuto: "🟢 Automatisch erkannte Spur / kein Anhalten mit Bargeld nötig",
-    tagSaving: (p: number) => `Typische Ersparnis bei abgedeckter Maut: ${p}%`,
+    tagAuto: "🟢 Automatisch erkannte Spur / kein Bargeldstopp nötig",
+    tagSaving: (p: number) => `Typische Ersparnis bei abgedeckter Maut: ${p} %`,
     tagNone: (amount: string) => `Keine Tags ausgewählt — die Maut bleibt bei ${amount} mit Halt an der Kasse/Kartenzahlung.`,
-    tagActivePrefix: (n: number) => `Mit ${n} aktiven ${n > 1 ? "Tags" : "Tag"} sinkt Ihre Maut von`,
+    tagActivePrefix: (n: number) => `Mit ${n} ${n > 1 ? "aktiven Tags" : "aktivem Tag"} sinkt Ihre Maut von`,
     tagTo: "auf",
     tagSavingTail: (amount: string, pct: number) =>
-      `— das spart ${amount} (${pct}% bei abgedeckten Schranken) und umgeht jede Bargeldspur.`,
+      `— das spart ${amount} (${pct} % bei abgedeckten Schranken) und umgeht jede Bargeldspur.`,
   },
   map: {
     title: "Radar-Karte der Route",
@@ -245,7 +245,7 @@ export const DE_DICT: Record<string, unknown> = {
       "Was Sie an jeder Grenze auf dieser Route erwartet — halten Sie die Unterlagen bereit, dann ist der Grenzübertritt reine Formsache.",
     wait: "Wartezeit:",
     schengen: "Schengen",
-    strict: "Pass und Zoll",
+    strict: "Reisepass und Zoll",
   },
   footer: {
     tagline:

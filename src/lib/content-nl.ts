@@ -605,6 +605,70 @@ export const CONTENT_NL: Record<string, string> = {
   "Nova Scotia's only mainline toll — cash and card accepted.": "De enige hoofdtol van Nova Scotia — contant en kaart geaccepteerd.",
   "Bridge tolls": "Brugtol",
   "Confederation Bridge is charged on the way off PEI only.": "Voor de Confederation Bridge wordt alleen betaald bij het verlaten van PEI.",
+
+  /* ---------------- Corridor map: fuel & map extras ---------------- */
+  "Est. rate": "Geschatte prijs",
+  "Petrol 95": "Benzine 95",
+  Diesel: "Diesel",
+  "Open in Google Maps": "Openen in Google Maps",
+
+  /* ---------------- Trip results: EV optimizer extras ---------------- */
+  "Preferred network": "Voorkeursnetwerk",
+  "Nearest high-power CCS hub": "Dichtstbijzijnde CCS-snellader",
+
+  /* ---------------- Route tolls: distance & vignette details ---------------- */
+  "Ticket system, charged per kilometre": "Ticketsysteem, tarief per kilometer",
+  "Private concession segments only — state-run e-TOLL motorways are free for cars":
+    "Alleen particuliere concessietrajecten — door de staat beheerde e-TOLL-snelwegen zijn gratis voor auto's",
+  "Remaining concession sections": "Overige concessietrajecten",
+  "Includes electronic-only motorways": "Inclusief volledig elektronisch beheerde snelwegen",
+  "Fixed plaza charges along the corridor": "Vaste tarieven bij tolpleinen langs de route",
+  "Automatic tolling — motorcycles pass free": "Automatische tolheffing — motoren rijden gratis door",
+  "10-day pass, valid nationwide": "10-dagenpas, landelijk geldig",
+  "Annual e-vignette, plate-linked (no short tier exists)":
+    "Jaarlijks e-vignet, gekoppeld aan kenteken (geen kortere variant beschikbaar)",
+  "7-day e-vignette": "7-daags e-vignet",
+  "10-day electronic vignette": "10-daags elektronisch vignet",
+  "10-day national e-vignette": "10-daags nationaal e-vignet",
+  "Weekend/weekly e-vignette": "Weekend-/weekvignet (e-vignet)",
+  "7-day road vignette": "7-daags wegvignet",
+
+  /* ---------------- Route tolls: toll-free country/province notes ---------------- */
+  "No motorway toll in Denmark — only the Storebælt and Øresund bridges are charged, and only if you cross them.":
+    "Geen snelwegtol in Denemarken — alleen de Storebælt- en de Øresundbrug kosten geld, en alleen als je ze oversteekt.",
+  "German autobahns are toll-free for cars and motorhomes up to 7.5 t.":
+    "Duitse autobahns zijn tolvrij voor auto's en campers tot 7,5 t.",
+  "Dutch motorways are free — only the Westerschelde and Kil tunnels charge.":
+    "Nederlandse snelwegen zijn gratis — alleen de Westerscheldetunnel en de Kiltunnel rekenen tol.",
+  "Belgian motorways are free for cars; the Liefkenshoek tunnel is the exception.":
+    "Belgische snelwegen zijn gratis voor auto's; de Liefkenshoektunnel is de uitzondering.",
+  "Luxembourg motorways are toll-free (and the cheapest fuel on the corridor).":
+    "Luxemburgse snelwegen zijn tolvrij (en hebben de goedkoopste brandstof op de route).",
+  "Swedish motorways are free; only Stockholm/Göteborg congestion charges apply.":
+    "Zweedse snelwegen zijn gratis; alleen de congestieheffing in Stockholm/Göteborg geldt.",
+  "Finnish roads are toll-free.": "Finse wegen zijn tolvrij.",
+  "Estonian roads are toll-free for passenger vehicles.": "Estse wegen zijn tolvrij voor personenauto's.",
+  "Latvian roads are toll-free for passenger vehicles.": "Letse wegen zijn tolvrij voor personenauto's.",
+  "Lithuanian roads are toll-free for passenger vehicles.": "Litouwse wegen zijn tolvrij voor personenauto's.",
+  "Only individual toll plazas (M50 eFlow) charge — none on this corridor.":
+    "Alleen individuele tolpleinen (M50 eFlow) rekenen tol — geen op deze route.",
+  "UK motorways are free apart from the M6 Toll and Dartford Crossing.":
+    "Britse snelwegen zijn gratis, behalve de M6 Toll en de Dartford Crossing.",
+  "New Brunswick highways are toll-free.": "Snelwegen in New Brunswick zijn tolvrij.",
+  "BC highways are toll-free since the Port Mann and Golden Ears tolls ended.":
+    "Snelwegen in Brits-Columbia zijn tolvrij sinds de tol op Port Mann en Golden Ears is afgeschaft.",
+  "Alberta highways are toll-free.": "Snelwegen in Alberta zijn tolvrij.",
+  "Manitoba highways are toll-free.": "Snelwegen in Manitoba zijn tolvrij.",
+  "Saskatchewan highways are toll-free.": "Snelwegen in Saskatchewan zijn tolvrij.",
+
+  /* ---------------- Vignette optimizer: tier labels ---------------- */
+  "1-Day": "1 dag",
+  "10-Day": "10 dagen",
+  "2-Month": "2 maanden",
+  Annual: "Jaarlijks",
+  "7-Day": "7 dagen",
+  "1-Month": "1 maand",
+  "30-Day": "30 dagen",
 };
 
 const NL_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

@@ -90,12 +90,12 @@ const APP_PAGE_META_BASE = {
       description: "Maut, Vignetten und Transponder in Europa, den USA und Kanada für Auto, Wohnmobil und Motorrad.",
     },
     scenic: {
-      title: "Alpenpässe und Fähren | AutoVere Deutschland",
+      title: "Bergpässe und Fähren | AutoVere Deutschland",
       description: "Passstraßen, Küstenrouten und Autofähren mit Saison, Höhenlimits und Buchungstipps.",
     },
     garage: {
       title: "Meine Garage — Fahrzeuge, Transponder und Touren | AutoVere Deutschland",
-      description: "Fahrzeuge, Tankgrößen und Mautboxen speichern und alle gespeicherten Touren abrufen.",
+      description: "Fahrzeuge, Tankgrößen und Transponder speichern und alle gespeicherten Touren abrufen.",
     },
   },
   nl: {

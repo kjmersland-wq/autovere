@@ -512,7 +512,7 @@ export const CONTENT_DE: Record<string, string> = {
   "Fuel is ~15% cheaper in Austria than Italy — refuel before crossing the Brenner Pass.": "Kraftstoff ist in Österreich rund 15 % günstiger als in Italien — tanken Sie vor der Überquerung des Brennerpasses.",
   "Luxembourg is the cheapest tank in Western Europe — top up before entering Belgium or France.": "Luxemburg bietet den günstigsten Kraftstoff Westeuropas — tanken Sie voll, bevor Sie nach Belgien oder Frankreich einreisen.",
   "Diesel in Norway runs well above Swedish prices — fill near the border at Svinesund.": "Diesel ist in Norwegen deutlich teurer als in Schweden — tanken Sie nahe der Grenze in Svinesund.",
-  "Fuel is Georgia is ~20% cheaper than Florida — fill up before the state line on I-95.": "Kraftstoff in Georgia ist rund 20 % günstiger als in Florida — tanken Sie vor der Staatsgrenze auf der I-95.",
+  "Fuel in Georgia is ~20% cheaper than Florida — fill up before the state line on I-95.": "Kraftstoff in Georgia ist rund 20 % günstiger als in Florida — tanken Sie vor der Staatsgrenze auf der I-95.",
   "Skip turnpike service plazas: prices run 10–15% above exits one mile off the highway.": "Meiden Sie Raststätten an der Mautstraße: Die Preise liegen 10–15 % über denen an Ausfahrten einen Kilometer abseits der Autobahn.",
   "California is the most expensive tank on the West Coast — fill in Nevada or Arizona first.": "Kalifornien hat den teuersten Kraftstoff an der Westküste — tanken Sie zuvor in Nevada oder Arizona.",
   "Alberta fuel is ~20% cheaper than British Columbia — fill before Kicking Horse Pass.": "Kraftstoff in Alberta ist rund 20 % günstiger als in British Columbia — tanken Sie vor dem Kicking Horse Pass.",
@@ -605,6 +605,70 @@ export const CONTENT_DE: Record<string, string> = {
   "Nova Scotia's only mainline toll — cash and card accepted.": "Die einzige durchgehende Mautstrecke Nova Scotias — Bargeld und Karte werden akzeptiert.",
   "Bridge tolls": "Brückenmaut",
   "Confederation Bridge is charged on the way off PEI only.": "Die Confederation Bridge wird nur bei der Ausfahrt von Prince Edward Island berechnet.",
+
+  /* ---------------- Corridor map: fuel & map extras ---------------- */
+  "Est. rate": "Geschätzter Preis",
+  "Petrol 95": "Benzin 95",
+  Diesel: "Diesel",
+  "Open in Google Maps": "In Google Maps öffnen",
+
+  /* ---------------- Trip results: EV optimizer extras ---------------- */
+  "Preferred network": "Bevorzugtes Netzwerk",
+  "Nearest high-power CCS hub": "Nächster CCS-Schnelllade-Hub",
+
+  /* ---------------- Route tolls: distance & vignette details ---------------- */
+  "Ticket system, charged per kilometre": "Ticketsystem, Abrechnung pro Kilometer",
+  "Private concession segments only — state-run e-TOLL motorways are free for cars":
+    "Nur private Konzessionsabschnitte — staatliche e-TOLL-Autobahnen sind für Pkw kostenlos",
+  "Remaining concession sections": "Verbleibende Konzessionsabschnitte",
+  "Includes electronic-only motorways": "Einschließlich rein elektronisch abgerechneter Autobahnen",
+  "Fixed plaza charges along the corridor": "Feste Mautstationsgebühren entlang der Route",
+  "Automatic tolling — motorcycles pass free": "Automatische Mauterhebung — Motorräder fahren kostenlos durch",
+  "10-day pass, valid nationwide": "10-Tage-Ticket, landesweit gültig",
+  "Annual e-vignette, plate-linked (no short tier exists)":
+    "Jährliche E-Vignette, kennzeichengebunden (keine kürzere Variante vorhanden)",
+  "7-day e-vignette": "7-Tage-E-Vignette",
+  "10-day electronic vignette": "10-Tage-elektronische Vignette",
+  "10-day national e-vignette": "10-Tage-nationale E-Vignette",
+  "Weekend/weekly e-vignette": "Wochenend-/Wochen-E-Vignette",
+  "7-day road vignette": "7-Tage-Straßenvignette",
+
+  /* ---------------- Route tolls: toll-free country/province notes ---------------- */
+  "No motorway toll in Denmark — only the Storebælt and Øresund bridges are charged, and only if you cross them.":
+    "Keine Autobahnmaut in Dänemark — nur die Storebælt- und die Öresundbrücke kosten Gebühren, und auch nur, wenn Sie sie überqueren.",
+  "German autobahns are toll-free for cars and motorhomes up to 7.5 t.":
+    "Deutsche Autobahnen sind für Pkw und Wohnmobile bis 7,5 t mautfrei.",
+  "Dutch motorways are free — only the Westerschelde and Kil tunnels charge.":
+    "Niederländische Autobahnen sind kostenlos — nur der Westerschelde- und der Kil-Tunnel erheben Maut.",
+  "Belgian motorways are free for cars; the Liefkenshoek tunnel is the exception.":
+    "Belgische Autobahnen sind für Pkw kostenlos; der Liefkenshoek-Tunnel ist die Ausnahme.",
+  "Luxembourg motorways are toll-free (and the cheapest fuel on the corridor).":
+    "Luxemburgische Autobahnen sind mautfrei (und bieten den günstigsten Kraftstoff auf der Route).",
+  "Swedish motorways are free; only Stockholm/Göteborg congestion charges apply.":
+    "Schwedische Autobahnen sind kostenlos; nur die Staugebühren in Stockholm/Göteborg gelten.",
+  "Finnish roads are toll-free.": "Finnische Straßen sind mautfrei.",
+  "Estonian roads are toll-free for passenger vehicles.": "Estnische Straßen sind für Pkw mautfrei.",
+  "Latvian roads are toll-free for passenger vehicles.": "Lettische Straßen sind für Pkw mautfrei.",
+  "Lithuanian roads are toll-free for passenger vehicles.": "Litauische Straßen sind für Pkw mautfrei.",
+  "Only individual toll plazas (M50 eFlow) charge — none on this corridor.":
+    "Nur einzelne Mautstationen (M50 eFlow) erheben Gebühren — keine auf dieser Route.",
+  "UK motorways are free apart from the M6 Toll and Dartford Crossing.":
+    "Britische Autobahnen sind kostenlos, abgesehen vom M6 Toll und der Dartford Crossing.",
+  "New Brunswick highways are toll-free.": "Autobahnen in New Brunswick sind mautfrei.",
+  "BC highways are toll-free since the Port Mann and Golden Ears tolls ended.":
+    "Autobahnen in British Columbia sind mautfrei, seit die Maut an Port Mann und Golden Ears abgeschafft wurde.",
+  "Alberta highways are toll-free.": "Autobahnen in Alberta sind mautfrei.",
+  "Manitoba highways are toll-free.": "Autobahnen in Manitoba sind mautfrei.",
+  "Saskatchewan highways are toll-free.": "Autobahnen in Saskatchewan sind mautfrei.",
+
+  /* ---------------- Vignette optimizer: tier labels ---------------- */
+  "1-Day": "1 Tag",
+  "10-Day": "10 Tage",
+  "2-Month": "2 Monate",
+  Annual: "Jährlich",
+  "7-Day": "7 Tage",
+  "1-Month": "1 Monat",
+  "30-Day": "30 Tage",
 };
 
 const DE_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

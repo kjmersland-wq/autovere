@@ -50,6 +50,22 @@ const COPY: Record<
     esimNote: "eSIM-mobildata — ingen roaming-overraskelser",
     ferry: "Sammenlign færgebilletter",
   },
+  de: {
+    title: "Praktisch für diese Reise",
+    car: "Mietwagen vergleichen",
+    bike: "Motorrad oder Roller mieten",
+    esim: "Im Ausland online bleiben",
+    esimNote: "eSIM-Datenpaket — keine Roaming-Überraschungen",
+    ferry: "Fährtickets vergleichen",
+  },
+  nl: {
+    title: "Handig voor deze reis",
+    car: "Vergelijk huurauto's",
+    bike: "Huur een motor of scooter",
+    esim: "Blijf online in het buitenland",
+    esimNote: "eSIM-databundel — geen roamingverrassingen",
+    ferry: "Vergelijk veerboottickets",
+  },
 };
 
 const pill =

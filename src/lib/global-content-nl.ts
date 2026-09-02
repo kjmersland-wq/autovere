@@ -14,7 +14,7 @@ export const NL_HOW_IT_WORKS: InfoPageContent = {
       items: [
         "Profielen voor auto, camper/campervan en toermotor",
         "Benzine, diesel of elektrisch met je eigen tank-, batterij- en verbruiksgegevens",
-        "Toltags zoals AutoPASS, Telepass, Bip&Go, SunPass of E-ZPass",
+        "Tolkastjes zoals AutoPASS, Telepass, Bip&Go, SunPass of E-ZPass",
       ],
     },
     {
@@ -23,7 +23,7 @@ export const NL_HOW_IT_WORKS: InfoPageContent = {
       items: [
         "Overzicht van tol en vignetten per land, met details per controlepunt",
         "Motorkortingen waar exploitanten eigen tarieven aanbieden",
-        "Veerboten en bergpassen apart weergegeven als aparte kostenposten",
+        "Veerboten en bergpassen weergegeven als aparte kostenposten",
         "Slimme optimalisatie van brandstof en laden met 75% bereikbuffer",
       ],
     },

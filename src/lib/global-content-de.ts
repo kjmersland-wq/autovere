@@ -14,7 +14,7 @@ export const DE_HOW_IT_WORKS: InfoPageContent = {
       items: [
         "Profile für Auto, Wohnmobil/Campervan oder Reisemotorrad",
         "Benzin, Diesel oder Elektro mit eigenen Angaben zu Tank, Batterie und Verbrauch",
-        "Mauttags wie AutoPASS, Telepass, Bip&Go, SunPass oder E-ZPass",
+        "Mauttransponder wie AutoPASS, Telepass, Bip&Go, SunPass oder E-ZPass",
       ],
     },
     {

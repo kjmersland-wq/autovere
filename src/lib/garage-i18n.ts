@@ -217,11 +217,20 @@ export function localizeTripMeta(text: string, prefix: string | null): string {
 export type GarageT = (no: string) => string;
 
 /** Norwegian on /no, the visitor's language on other locale trees, English elsewhere. */
-export function useGarageText(): { t: GarageT; isNo: boolean; isDa: boolean; meta: (text: string) => string } {
+export function useGarageText(): {
+  t: GarageT;
+  isNo: boolean;
+  isDa: boolean;
+  isDe: boolean;
+  isNl: boolean;
+  meta: (text: string) => string;
+} {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const prefix = prefixFromPath(pathname);
   const isNo = prefix === "no";
   const isDa = prefix === "dk";
+  const isDe = prefix === "de";
+  const isNl = prefix === "nl";
   const t: GarageT = (no) => {
     if (isNo) return no;
     const dict = prefix ? GARAGE_DICTS[prefix] : undefined;
@@ -229,5 +238,5 @@ export function useGarageText(): { t: GarageT; isNo: boolean; isDa: boolean; met
     return GARAGE_EN[no] ?? no;
   };
   const meta = (text: string) => localizeTripMeta(text, prefix);
-  return { t, isNo, isDa, meta };
+  return { t, isNo, isDa, isDe, isNl, meta };
 }
