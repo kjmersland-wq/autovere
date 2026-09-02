@@ -230,7 +230,36 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                 {t.header.plansMenu}
               </LocaleLink>
             </nav>
+
+            <div className="flex flex-wrap gap-1.5">
+              {LANGUAGES.map((l) => {
+                const active = l.code === lang.code;
+                return (
+                  <button
+                    key={l.code}
+                    type="button"
+                    aria-label={l.label}
+                    onClick={() => {
+                      setLang(l);
+                      setOpen(false);
+                      const target = pathForCode(pathname, l.code);
+                      if (target !== pathname) void navigate({ to: target });
+                    }}
+                    className={cn(
+                      "flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-semibold tracking-wide transition-colors",
+                      active
+                        ? "bg-teal/10 text-teal"
+                        : "text-foreground hover:bg-foreground/10",
+                    )}
+                  >
+                    <FlagIcon code={l.flag} className="h-4 w-6" />
+                    <span>{l.flag}</span>
+                  </button>
+                );
+              })}
+            </div>
           </div>
+
         </SheetContent>
       </Sheet>
     </header>
