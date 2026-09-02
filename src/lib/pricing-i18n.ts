@@ -50,6 +50,8 @@ export const DATE_LOCALE: Record<Locale, string> = {
   nl: "nl-NL",
   fr: "fr-FR",
   pl: "pl-PL",
+  es: "es-ES",
+  it: "it-IT",
 };
 
 const EN_TIERS: Tier[] = [
@@ -472,9 +474,11 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   nl: NL_TIERS,
   fr: FR_TIERS,
   pl: PL_TIERS,
+  es: EN_TIERS,
+  it: EN_TIERS,
 };
 
-const COPY: Record<Locale, PricingCopy> = {
+const COPY_BASE = {
   en: {
     onPlan: "You're on",
     retrying: " — payment retrying",
@@ -651,9 +655,11 @@ const COPY: Record<Locale, PricingCopy> = {
     signupToast: "Najpierw załóż konto, a potem przeniesiemy Cię prosto do bezpiecznej płatności.",
     portalError: "Nie udało się otworzyć panelu płatności.",
   },
-};
+} satisfies Partial<Record<Locale, PricingCopy>>;
 
-const HERO: Record<Locale, PricingHero> = {
+const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.en, it: COPY_BASE.en };
+
+const HERO_BASE = {
   en: {
     eyebrow: "Plans & pricing",
     title: "Pick the plan that matches your road ahead.",
@@ -703,6 +709,8 @@ const HERO: Record<Locale, PricingHero> = {
       "Każdy plan zaczyna się od uczciwych liczb. Ulepsz go, gdy zechcesz mieć pełny garaż, nawigację offline i rozliczenia opłat dla floty — anulujesz, kiedy sezon się kończy.",
   },
 };
+
+const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.en, it: HERO_BASE.en };
 
 /**
  * Regional price overrides. The tier structure, features and copy stay identical

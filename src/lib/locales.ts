@@ -7,6 +7,8 @@ export const LOCALE_ROUTES = [
   { prefix: "nl", code: "nl", label: "Nederlands", flag: "🇳🇱" },
   { prefix: "fr", code: "fr", label: "Français", flag: "🇫🇷" },
   { prefix: "pl", code: "pl", label: "Polski", flag: "🇵🇱" },
+  { prefix: "es", code: "es", label: "Español", flag: "🇪🇸" },
+  { prefix: "it", code: "it", label: "Italiano", flag: "🇮🇹" },
 ] as const;
 
 export type LocalePrefix = (typeof LOCALE_ROUTES)[number]["prefix"];

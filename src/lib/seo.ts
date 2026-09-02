@@ -16,12 +16,14 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
   nl: "Nederland",
   fr: "France",
   pl: "Polska",
+  es: "España",
+  it: "Italia",
 };
 
 type PageMeta = { title: string; description: string };
 
 /** Titles for the app pages that have no per-language info content. */
-const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
+const APP_PAGE_META_BASE = {
   no: {
     planner: {
       title: "Ruteplanlegger — bompenger, drivstoff og ferjer | AutoVere Norge",
@@ -150,6 +152,13 @@ const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>>
       description: "Zapisz pojazdy, pojemność baku i transpondery oraz wszystkie zapisane trasy.",
     },
   },
+};
+
+const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
+  ...APP_PAGE_META_BASE,
+  // Placeholder: English metadata until translations land.
+  es: {},
+  it: {},
 };
 
 export function appPageMeta(prefix: LocalePrefix, page: LocalePage): PageMeta | null {

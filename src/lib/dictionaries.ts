@@ -80,4 +80,23 @@ export const LOCALE_LANDING: Record<
     metaDescription:
       "Zaplanuj podróż samochodem z dokładnymi opłatami, winietami, paliwem, ładowaniem i promami dla auta, kampera i motocykla.",
   },
+  // Placeholder: English copy until translations land.
+  es: {
+    eyebrow: "Europe · 30+ countries",
+    title: "Plan it once. Enjoy every kilometre.",
+    subtitle:
+      "Tell us where you're starting and where you're dreaming of — we'll handle tolls, vignettes, fuel, charging and ferries.",
+    metaTitle: "AutoVere España — Tolls, vignettes and road trip costs",
+    metaDescription:
+      "Plan your road trip with exact tolls, vignettes, fuel, charging and ferry costs for cars, motorhomes and motorcycles.",
+  },
+  it: {
+    eyebrow: "Europe · 30+ countries",
+    title: "Plan it once. Enjoy every kilometre.",
+    subtitle:
+      "Tell us where you're starting and where you're dreaming of — we'll handle tolls, vignettes, fuel, charging and ferries.",
+    metaTitle: "AutoVere Italia — Tolls, vignettes and road trip costs",
+    metaDescription:
+      "Plan your road trip with exact tolls, vignettes, fuel, charging and ferry costs for cars, motorhomes and motorcycles.",
+  },
 };

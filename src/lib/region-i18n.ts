@@ -207,7 +207,7 @@ const pl: RegionPack = {
   },
 };
 
-const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl };
+const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es: en, it: en };
 
 export function regionStrings(locale: Locale, region: RegionKey): RegionStrings {
   return (PACKS[locale] ?? en)[region];
