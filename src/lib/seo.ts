@@ -16,6 +16,8 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
   nl: "Nederland",
   fr: "France",
   pl: "Polska",
+  es: "España",
+  it: "Italia",
 };
 
 type PageMeta = { title: string; description: string };

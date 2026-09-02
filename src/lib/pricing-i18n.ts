@@ -472,6 +472,8 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   nl: NL_TIERS,
   fr: FR_TIERS,
   pl: PL_TIERS,
+  es: EN_TIERS,
+  it: EN_TIERS,
 };
 
 const COPY: Record<Locale, PricingCopy> = {
