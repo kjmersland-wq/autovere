@@ -3,7 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import type { CostGroupKey } from "@/lib/country-costs";
 import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 
-export type Locale = "en" | "no" | "sv" | "da" | "de" | "nl" | "fr" | "pl";
+export type Locale = "en" | "no" | "sv" | "da" | "de" | "nl" | "fr" | "pl" | "es" | "it";
 
 import { CONTENT_DA, DA_PATTERNS } from "@/lib/content-da";
 import { CONTENT_DE, DE_PATTERNS } from "@/lib/content-de";
