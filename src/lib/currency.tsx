@@ -1,4 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { useRouterState } from "@tanstack/react-router";
 
 import { codeFromPath } from "@/lib/locales";
 import { regionFromPath } from "@/lib/trip-data";
@@ -128,6 +129,10 @@ const LOCALE_DEFAULT_CURRENCY: Partial<Record<string, CurrencyCode>> = {
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<CurrencyCode>("EUR");
+  // Reactive pathname (not window.location.pathname read once) — client-side navigation between
+  // locale routes doesn't remount this provider, so the effect below must re-run on every route
+  // change or the currency stays stuck at whichever locale the session happened to start on.
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
 
   useEffect(() => {
     try {
@@ -140,8 +145,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
       /* storage unavailable */
     }
     // No saved preference: fall back to the region default, then the language default.
-    const path = window.location.pathname;
-    const pathRegion = regionFromPath(path);
+    const pathRegion = regionFromPath(pathname);
     if (pathRegion === "ca") {
       setCurrencyState("CAD");
       return;
@@ -150,9 +154,9 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
       setCurrencyState("USD");
       return;
     }
-    const localeDefault = LOCALE_DEFAULT_CURRENCY[codeFromPath(path)];
-    if (localeDefault) setCurrencyState(localeDefault);
-  }, []);
+    const localeDefault = LOCALE_DEFAULT_CURRENCY[codeFromPath(pathname)];
+    setCurrencyState(localeDefault ?? "EUR");
+  }, [pathname]);
 
 
   const setCurrency = useCallback((c: CurrencyCode) => {
