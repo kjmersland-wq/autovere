@@ -224,6 +224,7 @@ export function useGarageText(): {
   isDe: boolean;
   isNl: boolean;
   isFr: boolean;
+  isPl: boolean;
   meta: (text: string) => string;
 } {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -233,6 +234,7 @@ export function useGarageText(): {
   const isDe = prefix === "de";
   const isNl = prefix === "nl";
   const isFr = prefix === "fr";
+  const isPl = prefix === "pl";
   const t: GarageT = (no) => {
     if (isNo) return no;
     const dict = prefix ? GARAGE_DICTS[prefix] : undefined;
@@ -240,5 +242,5 @@ export function useGarageText(): {
     return GARAGE_EN[no] ?? no;
   };
   const meta = (text: string) => localizeTripMeta(text, prefix);
-  return { t, isNo, isDa, isDe, isNl, isFr, meta };
+  return { t, isNo, isDa, isDe, isNl, isFr, isPl, meta };
 }

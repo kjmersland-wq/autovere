@@ -501,7 +501,7 @@ export const CONTENT_PL: Record<string, string> = {
   "I have SunPass / E-ZPass": "Mam SunPass / E-ZPass",
   "Vignettes & e-vignettes": "Winiety i e-winiety",
   "Ticket-based motorway tolls": "Opłaty autostradowe na bilety",
-  "Urban low-emission zones": "Miejskie strefy niskiej emisji",
+  "Urban low-emission zones": "Miejskie strefy czystego transportu",
   "State toll roads & turnpikes": "Stanowe drogi płatne i turnpike'i",
   "HOV / Express lanes": "Pasy HOV / ekspresowe",
   "Bridge & tunnel tolls": "Opłaty za mosty i tunele",
@@ -605,4 +605,68 @@ export const CONTENT_PL: Record<string, string> = {
   "Nova Scotia's only mainline toll — cash and card accepted.": "Jedyna główna opłata w Nowej Szkocji — gotówka i karta.",
   "Bridge tolls": "Opłaty mostowe",
   "Confederation Bridge is charged on the way off PEI only.": "Za Confederation Bridge płacisz tylko przy wyjeździe z Wyspy Księcia Edwarda.",
+
+  /* ---------------- Corridor map: fuel & map extras ---------------- */
+  "Est. rate": "Szac. stawka",
+  "Petrol 95": "Benzyna 95",
+  Diesel: "Diesel",
+  "Open in Google Maps": "Otwórz w Mapach Google",
+
+  /* ---------------- Trip results: EV optimizer extras ---------------- */
+  "Preferred network": "Preferowana sieć",
+  "Nearest high-power CCS hub": "Najbliższy punkt szybkiego ładowania CCS",
+
+  /* ---------------- Route tolls: distance & vignette details ---------------- */
+  "Ticket system, charged per kilometre": "System biletowy, opłata za kilometr",
+  "Private concession segments only — state-run e-TOLL motorways are free for cars":
+    "Tylko prywatne odcinki koncesyjne — państwowe autostrady e-TOLL są bezpłatne dla samochodów osobowych",
+  "Remaining concession sections": "Pozostałe odcinki koncesyjne",
+  "Includes electronic-only motorways": "Obejmuje autostrady z wyłącznie elektronicznym poborem opłat",
+  "Fixed plaza charges along the corridor": "Stałe opłaty na bramkach wzdłuż trasy",
+  "Automatic tolling — motorcycles pass free": "Automatyczny pobór opłat — motocykle przejeżdżają bezpłatnie",
+  "10-day pass, valid nationwide": "Bilet 10-dniowy, ważny w całym kraju",
+  "Annual e-vignette, plate-linked (no short tier exists)":
+    "Roczna e-winieta, przypisana do tablicy (brak wariantu krótkoterminowego)",
+  "7-day e-vignette": "E-winieta 7-dniowa",
+  "10-day electronic vignette": "Elektroniczna winieta 10-dniowa",
+  "10-day national e-vignette": "Krajowa e-winieta 10-dniowa",
+  "Weekend/weekly e-vignette": "E-winieta weekendowa/tygodniowa",
+  "7-day road vignette": "Winieta drogowa 7-dniowa",
+
+  /* ---------------- Route tolls: toll-free country/province notes ---------------- */
+  "No motorway toll in Denmark — only the Storebælt and Øresund bridges are charged, and only if you cross them.":
+    "W Danii nie ma opłat autostradowych — płatne są tylko mosty Storebælt i Øresund, i tylko jeśli nimi przejeżdżasz.",
+  "German autobahns are toll-free for cars and motorhomes up to 7.5 t.":
+    "Niemieckie autostrady są bezpłatne dla samochodów i kamperów do 7,5 t.",
+  "Dutch motorways are free — only the Westerschelde and Kil tunnels charge.":
+    "Holenderskie autostrady są bezpłatne — opłaty pobierane są tylko w tunelach Westerschelde i Kil.",
+  "Belgian motorways are free for cars; the Liefkenshoek tunnel is the exception.":
+    "Belgijskie autostrady są bezpłatne dla samochodów; wyjątkiem jest tunel Liefkenshoek.",
+  "Luxembourg motorways are toll-free (and the cheapest fuel on the corridor).":
+    "Autostrady w Luksemburgu są bezpłatne (a paliwo jest tam najtańsze na całej trasie).",
+  "Swedish motorways are free; only Stockholm/Göteborg congestion charges apply.":
+    "Szwedzkie autostrady są bezpłatne; obowiązują jedynie opłaty za korki w Sztokholmie i Göteborgu.",
+  "Finnish roads are toll-free.": "Fińskie drogi są bezpłatne.",
+  "Estonian roads are toll-free for passenger vehicles.": "Estońskie drogi są bezpłatne dla samochodów osobowych.",
+  "Latvian roads are toll-free for passenger vehicles.": "Łotewskie drogi są bezpłatne dla samochodów osobowych.",
+  "Lithuanian roads are toll-free for passenger vehicles.": "Litewskie drogi są bezpłatne dla samochodów osobowych.",
+  "Only individual toll plazas (M50 eFlow) charge — none on this corridor.":
+    "Opłaty pobierane są tylko na pojedynczych bramkach (M50 eFlow) — żadnej na tej trasie.",
+  "UK motorways are free apart from the M6 Toll and Dartford Crossing.":
+    "Brytyjskie autostrady są bezpłatne, poza M6 Toll i Dartford Crossing.",
+  "New Brunswick highways are toll-free.": "Autostrady w Nowym Brunszwiku są bezpłatne.",
+  "BC highways are toll-free since the Port Mann and Golden Ears tolls ended.":
+    "Autostrady w Kolumbii Brytyjskiej są bezpłatne, odkąd zniesiono opłaty za Port Mann i Golden Ears.",
+  "Alberta highways are toll-free.": "Autostrady w Albercie są bezpłatne.",
+  "Manitoba highways are toll-free.": "Autostrady w Manitobie są bezpłatne.",
+  "Saskatchewan highways are toll-free.": "Autostrady w Saskatchewan są bezpłatne.",
+
+  /* ---------------- Vignette optimizer: tier labels ---------------- */
+  "1-Day": "1 dzień",
+  "10-Day": "10 dni",
+  "2-Month": "2 miesiące",
+  Annual: "Roczna",
+  "7-Day": "7 dni",
+  "1-Month": "1 miesiąc",
+  "30-Day": "30 dni",
 };

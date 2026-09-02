@@ -4,7 +4,7 @@ const DISCLAIMER = "Tylko orientacyjne szacunki — zawsze sprawdzaj na oficjaln
 
 export const PL_HOW_IT_WORKS: InfoPageContent = {
   eyebrow: "Jak to działa",
-  title: "Od luźnego pomysłu do w pełni wycenionej podróży samochodem w trzech spokojnych krokach.",
+  title: "Od luźnego pomysłu do w pełni wycenionej podróży w trzech spokojnych krokach.",
   intro:
     "AutoVere zamienia start i cel podróży w przejrzysty, transgraniczny obraz kosztów — opłaty drogowe, winiety, paliwo, ładowanie i promy — dla samochodów, kamperów i motocykli turystycznych.",
   sections: [
@@ -14,22 +14,22 @@ export const PL_HOW_IT_WORKS: InfoPageContent = {
       items: [
         "Profile dla samochodu, kampera/campervana i motocykla turystycznego",
         "Benzyna, diesel lub elektryczny z własnymi danymi o baku, baterii i zużyciu",
-        "Znaczniki opłat drogowych, takie jak AutoPASS, Telepass, Bip&Go, SunPass czy E-ZPass",
+        "Transpondery opłat drogowych, takie jak AutoPASS, Telepass, Bip&Go, SunPass czy E-ZPass",
       ],
     },
     {
       heading: "2 — Obliczamy rzeczywisty koszt każdego kilometra",
-      body: "Każdy kraj i stan na trasie jest wyceniany osobno, zgodnie z jego własnym systemem opłat — elektronicznymi winietami, bramkami naliczającymi opłaty według odległości, obwodnicami miejskimi lub bezpłatnymi autostradami — a do tego dochodzą lokalne ceny paliwa i szybkiego ładowania.",
+      body: "Każdy kraj lub stan na trasie jest wyceniany osobno, zgodnie z jego własnym systemem opłat — elektronicznymi winietami, bramkami poboru opłat naliczanych według przejechanego dystansu, obwodnicami miejskimi lub bezpłatnymi autostradami — a do tego dochodzą lokalne ceny paliwa i szybkiego ładowania.",
       items: [
         "Zestawienie opłat drogowych i winiet kraj po kraju, ze szczegółami dla każdego punktu poboru",
-        "Zniżki motocyklowe tam, gdzie operatorzy oferują własne stawki",
+        "Zniżki motocyklowe tam, gdzie operatorzy oferują obniżone stawki",
         "Promy i przełęcze górskie pokazane jako osobne pozycje",
-        "Inteligentna optymalizacja paliwa i ładowania z 75% buforem zasięgu",
+        "Inteligentna optymalizacja paliwa i ładowania EV z 75% buforem bezpieczeństwa zasięgu",
       ],
     },
     {
       heading: "3 — Zabierz to w trasę",
-      body: "Pobierz plik GPX do nawigacji, zapisz trasę w Mojej Garażu lub udostępnij ją współpodróżnym. Każda pozycja opłaty prowadzi do oficjalnego portalu, dzięki czemu możesz zapłacić, zanim przekroczysz granicę.",
+      body: "Pobierz plik GPX do nawigacji, zapisz trasę w Moim Garażu lub udostępnij ją współpodróżnym. Każda pozycja opłaty prowadzi do oficjalnego portalu, dzięki czemu możesz zapłacić, zanim przekroczysz granicę.",
       links: [
         { label: "ASFINAG (Austria)", url: "https://www.asfinag.at/" },
         { label: "AutoPASS (Norwegia)", url: "https://www.autopass.no/" },
@@ -41,7 +41,7 @@ export const PL_HOW_IT_WORKS: InfoPageContent = {
   meta: {
     title: "Jak działa AutoVere — Planowanie kosztów podróży transgranicznych",
     description:
-      "Zobacz, jak AutoVere wylicza opłaty drogowe, winiety, paliwo, ładowanie i promy kraj po kraju dla samochodów, kamperów i motocykli turystycznych.",
+      "Zobacz, jak AutoVere wylicza opłaty drogowe, winiety, paliwo, ładowanie EV i promy kraj po kraju dla samochodów, kamperów i motocykli turystycznych.",
   },
 };
 

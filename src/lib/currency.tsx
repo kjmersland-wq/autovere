@@ -110,8 +110,8 @@ const STORAGE_KEY = "autovere.currency";
 /**
  * Default display currency per active language, applied only when the visitor has no
  * saved preference and isn't on a US/CA region page. English (the GB-authored base
- * locale) defaults to GBP; the eurozone languages (de, nl, fr, es, it) default to EUR.
- * Locales not listed here (e.g. pl) keep the EUR fallback.
+ * locale) defaults to GBP; the eurozone languages (de, nl, fr, es, it) default to EUR;
+ * pl defaults to PLN, its national currency.
  */
 const LOCALE_DEFAULT_CURRENCY: Partial<Record<string, CurrencyCode>> = {
   en: "GBP",
@@ -123,6 +123,7 @@ const LOCALE_DEFAULT_CURRENCY: Partial<Record<string, CurrencyCode>> = {
   fr: "EUR",
   es: "EUR",
   it: "EUR",
+  pl: "PLN",
 };
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {

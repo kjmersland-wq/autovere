@@ -29,11 +29,11 @@ export const PL_DICT: Record<string, unknown> = {
     viaLimit: "Możesz dodać maksymalnie 3 przystanki pośrednie na trasie.",
     viaPlaceholder: (i: number) => `Przystanek pośredni ${i} — np. Innsbruck`,
     scenic: "✨ Preferuj malownicze objazdy górskie i nadmorskie",
-    avoidTolls: "🚫 Unikaj płatnych autostrad",
+    avoidTolls: "🚫 Unikaj płatnych dróg",
     ferries: "⛴️ Uwzględnij przeprawy promowe",
     fuelType: "Rodzaj paliwa / zasilania",
     popularRoutes: "Popularne trasy transgraniczne",
-    transponder: "Transponder / winieta elektroniczna",
+    transponder: "Transponder / tag opłat drogowych",
     consumption: "Paliwo i spalanie",
     fineTune: "Dostosuj spalanie",
     fineTuneHint: "Służy do dokładniejszego wyliczenia kosztów paliwa i ładowania dla Twojego pojazdu.",
@@ -52,13 +52,13 @@ export const PL_DICT: Record<string, unknown> = {
     intro:
       "Oto wszystko, co wydasz w trasie — żadnych niespodzianek przy szlabanie, tylko jasny budżet, byś mógł cieszyć się jazdą.",
     variants: {
-      fastest: { label: "Najszybsza trasa", blurb: "Standardowa, optymalna trasa jazdy — głównie autostradami." },
+      fastest: { label: "Najszybsza trasa", blurb: "Standardowa, optymalna trasa jazdy — autostradami na całej trasie." },
       smart: {
-        label: "Inteligentny objazd (zoptymalizowany pod opłaty)",
+        label: "Inteligentny objazd (zoptymalizowany pod kątem opłat drogowych)",
         blurb:
           "Równoważy koszt opłat drogowych z czasem jazdy — pomija drogie odcinki, gdy objazd kosztuje niewiele minut.",
       },
-      tollfree: { label: "100% bez opłat", blurb: "Ściśle omija każdą płatną drogę, bramkę i strefę winiet." },
+      tollfree: { label: "100% bez opłat", blurb: "Ściśle omija każdą płatną drogę, bramkę poboru opłat i strefę winiet." },
     },
     tollsShort: "opłaty",
     saved: "Zaoszczędzone pieniądze",
@@ -119,13 +119,13 @@ export const PL_DICT: Record<string, unknown> = {
     addStop: "+ Dodaj jako przystanek",
     stopExists: (n: string) => `${n} jest już przystankiem w tej podróży.`,
     stopAdded: (n: string, c: number) =>
-      `${n} dodano — trasa przeplanowana przez ${c} dodatkowy ${c > 1 ? "przystanki" : "przystanek"}.`,
+      `${n} dodano — trasa zaktualizowana o ${c} ${c > 1 ? "dodatkowe przystanki" : "dodatkowy przystanek"}.`,
     at: "w",
   },
   drawer: {
     title: "Opłaty drogowe, winiety i koszty paliwa według kraju / regionu",
     subtitle: (n: number) =>
-      `Aktualny przewodnik dla ${n}+ krajów i regionów — paliwo, ładowanie i systemy opłat w skrócie.`,
+      `Aktualny przewodnik dla ${n}+ krajów i regionów — paliwo, ładowanie i systemy opłat drogowych w skrócie.`,
     groups: {
       western: "Europa Zachodnia",
       alps: "Europa Środkowa i Alpy",
@@ -181,21 +181,21 @@ export const PL_DICT: Record<string, unknown> = {
     appliesAt: (h: string) => `Obowiązuje od ${h} m`,
     speedTitle: "Ograniczenia prędkości i zakazy wyprzedzania",
     officialPortal: "Oficjalny portal",
-    lezTitle: "Monitor miejskich stref niskiej emisji",
+    lezTitle: "Monitor miejskich stref czystego transportu",
     lezDetected: (n: number) => `${n} wykrytych na tej trasie`,
     lezOverview: "Przegląd regionalny",
     lezIntro:
       "Zamów plakietki i zarejestruj tablice rejestracyjne przed wyjazdem — większość stref jest monitorowana kamerami, bez płatności na miejscu.",
     tagTitle: "Moje transpondery i tagi opłat drogowych",
     tagIntro:
-      "Zaznacz tagi, które już posiadasz — oznaczymy pasujące bramki jako automatycznie wykrywane pasy i przeliczymy Twoje opłaty.",
+      "Zaznacz tagi, które już posiadasz — oznaczymy pasujące bramki poboru opłat jako automatycznie wykrywane pasy i przeliczymy Twoje opłaty.",
     tagAuto: "🟢 Pas automatycznie wykrywany / bez konieczności zatrzymania z gotówką",
     tagSaving: (p: number) => `Typowa oszczędność na objętych opłatach: ${p}%`,
     tagNone: (amount: string) => `Nie wybrano tagów — opłaty pozostają na poziomie ${amount} z zatrzymaniami przy kasie/kartą.`,
-    tagActivePrefix: (n: number) => `Z ${n} aktywnym ${n > 1 ? "tagami" : "tagiem"} Twoje opłaty spadają z`,
+    tagActivePrefix: (n: number) => `Z ${n} ${n > 1 ? "aktywnymi tagami" : "aktywnym tagiem"} Twoje opłaty spadają z`,
     tagTo: "do",
     tagSavingTail: (amount: string, pct: number) =>
-      `— oszczędzając ${amount} (${pct}% na objętych bramkach) i omijając każdy pas gotówkowy.`,
+      `— oszczędzając ${amount} (${pct}% na objętych bramkach poboru opłat) i omijając każdy pas gotówkowy.`,
   },
   map: {
     title: "Mapa radaru trasy",

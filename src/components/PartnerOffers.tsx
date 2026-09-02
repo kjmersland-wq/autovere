@@ -74,6 +74,14 @@ const COPY: Record<
     esimNote: "Forfait data eSIM — aucune surprise en itinérance",
     ferry: "Comparer les billets de ferry",
   },
+  pl: {
+    title: "Przydatne na tę podróż",
+    car: "Porównaj wypożyczalnie samochodów",
+    bike: "Wynajmij motocykl lub skuter",
+    esim: "Bądź online za granicą",
+    esimNote: "Pakiet danych eSIM — bez niespodzianek związanych z roamingiem",
+    ferry: "Porównaj bilety na prom",
+  },
 };
 
 const pill =

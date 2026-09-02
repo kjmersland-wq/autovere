@@ -137,15 +137,16 @@ const APP_PAGE_META_BASE = {
   pl: {
     planner: {
       title: "Planer trasy — opłaty drogowe, paliwo i promy | AutoVere Polska",
-      description: "Zaplanuj trasę i zobacz opłaty drogowe, winiety, paliwo, ładowanie i promy w jednym budżecie.",
+      description:
+        "Zaplanuj trasę i zobacz opłaty drogowe, winiety, paliwo, ładowanie i promy w jednym przejrzystym budżecie.",
     },
     tolls: {
       title: "Opłaty drogowe i winiety — przewodnik | AutoVere Polska",
       description: "Opłaty drogowe, winiety i transpondery w Europie, USA i Kanadzie dla auta, kampera i motocykla.",
     },
     scenic: {
-      title: "Przełęcze i promy | AutoVere Polska",
-      description: "Alpejskie przełęcze, trasy nadmorskie i promy samochodowe: sezon, limity i rezerwacje.",
+      title: "Przełęcze górskie i promy | AutoVere Polska",
+      description: "Alpejskie przełęcze, trasy nadmorskie i promy samochodowe: sezon, limity wysokości i rezerwacje.",
     },
     garage: {
       title: "Mój Garaż — pojazdy, transpondery i trasy | AutoVere Polska",
