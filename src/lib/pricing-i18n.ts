@@ -655,7 +655,7 @@ const COPY_BASE = {
     signupToast: "Najpierw załóż konto, a potem przeniesiemy Cię prosto do bezpiecznej płatności.",
     portalError: "Nie udało się otworzyć panelu płatności.",
   },
-};
+} satisfies Partial<Record<Locale, PricingCopy>>;
 
 const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.en, it: COPY_BASE.en };
 
