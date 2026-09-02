@@ -5,6 +5,7 @@
 
 import { DA_DICT } from "@/lib/dict-da";
 import { DE_DICT } from "@/lib/dict-de";
+import { ES_DICT } from "@/lib/dict-es";
 import { FR_DICT } from "@/lib/dict-fr";
 import { NL_DICT } from "@/lib/dict-nl";
 import { PL_DICT } from "@/lib/dict-pl";
@@ -19,6 +20,7 @@ export const PARTIAL_DICTS: Record<string, Dict> = {
   nl: NL_DICT,
   fr: FR_DICT,
   pl: PL_DICT,
+  es: ES_DICT,
 };
 
 /** Hero copy per language for the localized landing page. */
@@ -80,16 +82,16 @@ export const LOCALE_LANDING: Record<
     metaDescription:
       "Zaplanuj podróż samochodem z dokładnymi opłatami, winietami, paliwem, ładowaniem i promami dla auta, kampera i motocykla.",
   },
-  // Placeholder: English copy until translations land.
   es: {
-    eyebrow: "Europe · 30+ countries",
-    title: "Plan it once. Enjoy every kilometre.",
+    eyebrow: "Europa · más de 30 países",
+    title: "Planifícalo una vez. Disfruta de cada kilómetro.",
     subtitle:
-      "Tell us where you're starting and where you're dreaming of — we'll handle tolls, vignettes, fuel, charging and ferries.",
-    metaTitle: "AutoVere España — Tolls, vignettes and road trip costs",
+      "Cuéntanos dónde empiezas y adónde sueñas con llegar — nosotros nos encargamos de los peajes, las viñetas, el combustible, la carga y los ferris.",
+    metaTitle: "AutoVere España — Peajes, viñetas y costes de viaje",
     metaDescription:
-      "Plan your road trip with exact tolls, vignettes, fuel, charging and ferry costs for cars, motorhomes and motorcycles.",
+      "Planifica tu viaje por carretera con peajes, viñetas, combustible, carga y ferris exactos para coches, autocaravanas y motos.",
   },
+  // Placeholder: English copy until translations land.
   it: {
     eyebrow: "Europe · 30+ countries",
     title: "Plan it once. Enjoy every kilometre.",

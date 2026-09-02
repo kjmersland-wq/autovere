@@ -157,8 +157,29 @@ const APP_PAGE_META_BASE = {
 
 const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
   ...APP_PAGE_META_BASE,
+  es: {
+    planner: {
+      title: "Planificador de viajes por carretera — peajes, combustible y ferris | AutoVere España",
+      description:
+        "Planifica tu ruta y consulta peajes, viñetas, combustible, recarga eléctrica y ferris en un presupuesto claro para coches, autocaravanas y motos.",
+    },
+    tolls: {
+      title: "Peajes y viñetas explicados — Europa, EE. UU. y Canadá | AutoVere España",
+      description:
+        "Guía clara y actualizada sobre peajes, viñetas y dispositivos de telepeaje en Europa, Estados Unidos y Canadá para coches, autocaravanas y motos.",
+    },
+    scenic: {
+      title: "Puertos de montaña y ferris — las rutas que merecen el desvío | AutoVere España",
+      description:
+        "Puertos alpinos, carreteras costeras y ferris para vehículos en Europa, Estados Unidos y Canadá, con temporadas, limitaciones de altura y consejos de reserva.",
+    },
+    garage: {
+      title: "Mi Garaje y viajes — vehículos, dispositivos de peaje y rutas guardadas | AutoVere España",
+      description:
+        "Guarda tus coches, autocaravanas y motos, sus capacidades de depósito y dispositivos de telepeaje, además de cada itinerario listo para descargar en GPX.",
+    },
+  },
   // Placeholder: English metadata until translations land.
-  es: {},
   it: {},
 };
 

@@ -2,6 +2,7 @@ import { useRouterState } from "@tanstack/react-router";
 
 import { GARAGE_DA, MONTHS_DA } from "@/lib/garage-da";
 import { GARAGE_DE, MONTHS_DE } from "@/lib/garage-de";
+import { GARAGE_ES, MONTHS_ES } from "@/lib/garage-es";
 import { GARAGE_FR, MONTHS_FR } from "@/lib/garage-fr";
 import { GARAGE_NL, MONTHS_NL } from "@/lib/garage-nl";
 import { GARAGE_PL } from "@/lib/garage-pl";
@@ -187,6 +188,7 @@ const GARAGE_DICTS: Record<string, Record<string, string>> = {
   de: GARAGE_DE,
   nl: GARAGE_NL,
   fr: GARAGE_FR,
+  es: GARAGE_ES,
 };
 
 const META_RULES: Record<
@@ -200,6 +202,7 @@ const META_RULES: Record<
   de: { budget: "Budget", saved: "Gespeichert", hm: "$1 Std. $2 Min.", months: MONTHS_DE },
   nl: { budget: "budget", saved: "Opgeslagen", hm: "$1 u $2 min", months: MONTHS_NL },
   fr: { budget: "budget", saved: "Enregistré", hm: "$1 h $2 min", months: MONTHS_FR },
+  es: { budget: "presupuesto", saved: "Guardado", hm: "$1 h $2 min", months: MONTHS_ES },
 };
 
 /** Localise generated trip meta strings ("1,420 km · 14h 30m · €318 budget", "Saved 12 Aug"). */
@@ -225,6 +228,7 @@ export function useGarageText(): {
   isNl: boolean;
   isFr: boolean;
   isPl: boolean;
+  isEs: boolean;
   meta: (text: string) => string;
 } {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -235,6 +239,7 @@ export function useGarageText(): {
   const isNl = prefix === "nl";
   const isFr = prefix === "fr";
   const isPl = prefix === "pl";
+  const isEs = prefix === "es";
   const t: GarageT = (no) => {
     if (isNo) return no;
     const dict = prefix ? GARAGE_DICTS[prefix] : undefined;
@@ -242,5 +247,5 @@ export function useGarageText(): {
     return GARAGE_EN[no] ?? no;
   };
   const meta = (text: string) => localizeTripMeta(text, prefix);
-  return { t, isNo, isDa, isDe, isNl, isFr, isPl, meta };
+  return { t, isNo, isDa, isDe, isNl, isFr, isPl, isEs, meta };
 }

@@ -33,6 +33,14 @@ import {
   DE_TERMS,
 } from "@/lib/global-content-de";
 import {
+  ES_FAQ,
+  ES_HOW_IT_WORKS,
+  ES_PARTNERS,
+  ES_PRICING,
+  ES_PRIVACY,
+  ES_TERMS,
+} from "@/lib/global-content-es";
+import {
   FR_FAQ,
   FR_HOW_IT_WORKS,
   FR_PARTNERS,
@@ -133,6 +141,14 @@ const INFO_BY_LANG: Record<string, typeof INFO> = {
     partners: FR_PARTNERS,
     privacy: FR_PRIVACY,
     terms: FR_TERMS,
+  },
+  es: {
+    faq: ES_FAQ,
+    "how-it-works": ES_HOW_IT_WORKS,
+    pricing: ES_PRICING,
+    partners: ES_PARTNERS,
+    privacy: ES_PRIVACY,
+    terms: ES_TERMS,
   },
 };
 

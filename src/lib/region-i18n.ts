@@ -207,7 +207,31 @@ const pl: RegionPack = {
   },
 };
 
-const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es: en, it: en };
+const es: RegionPack = {
+  eu: {
+    eyebrow: "Europa · más de 30 países",
+    originHint: "Ciudad o lugar de salida (p. ej., Múnich, Oslo, Madrid)",
+    destinationHint: "¿Adónde te diriges? (p. ej., Costa Amalfitana, Alpes, Praga)",
+    tollSystems: ["Viñetas y viñetas electrónicas", "Peajes de autopista por ticket", "Zonas urbanas de bajas emisiones"],
+    nav: { planner: "Planificador de viajes", tolls: "Peajes y viñetas", scenic: "Puertos panorámicos y ferris", garage: "Mi garaje" },
+  },
+  us: {
+    eyebrow: "Estados Unidos · 50 estados",
+    originHint: "Ciudad o lugar de salida (p. ej., Seattle, Denver, Miami)",
+    destinationHint: "¿Adónde te diriges? (p. ej., Big Sur, Moab, Key West)",
+    tollSystems: ["Autopistas de peaje estatales y turnpikes", "Carriles HOV / exprés", "Peajes de puentes y túneles"],
+    nav: { planner: "Planificador de viajes", tolls: "Peajes y carriles exprés", scenic: "Rutas panorámicas y ferris", garage: "Mi garaje" },
+  },
+  ca: {
+    eyebrow: "Canadá · de costa a costa",
+    originHint: "Ciudad o lugar de salida (p. ej., Toronto, Calgary, Halifax)",
+    destinationHint: "¿Adónde te diriges? (p. ej., Banff, Tofino, Gaspésie)",
+    tollSystems: ["Circunvalación de peaje Highway 407 ETR", "Peajes y puentes provinciales", "Travesías de BC Ferries"],
+    nav: { planner: "Planificador de viajes", tolls: "Peajes y autopistas de peaje", scenic: "Rutas panorámicas y ferris", garage: "Mi garaje" },
+  },
+};
+
+const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it: en };
 
 export function regionStrings(locale: Locale, region: RegionKey): RegionStrings {
   return (PACKS[locale] ?? en)[region];
