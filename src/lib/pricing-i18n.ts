@@ -710,6 +710,8 @@ const HERO_BASE = {
   },
 };
 
+const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.en, it: HERO_BASE.en };
+
 /**
  * Regional price overrides. The tier structure, features and copy stay identical
  * across every region — only the displayed amounts and currency change.
