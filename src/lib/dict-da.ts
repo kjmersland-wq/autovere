@@ -33,7 +33,7 @@ export const DA_DICT: Record<string, unknown> = {
     ferries: "⛴️ Inkluder færgeoverfarter",
     fuelType: "Brændstof / drivmiddel",
     popularRoutes: "Populære grænseoverskridende ruter",
-    transponder: "Brobizz / elektronisk vignet",
+    transponder: "Brobizz / vejafgiftsbrik",
     consumption: "Brændstof og forbrug",
     fineTune: "Finjuster forbrug",
     fineTuneHint: "Bruges til at forfine beregningen af brændstof- og opladningsomkostninger for dit køretøj.",
@@ -52,13 +52,13 @@ export const DA_DICT: Record<string, unknown> = {
     intro:
       "Her er alt, hvad du kommer til at bruge undervejs — ingen overraskelser ved bommen, bare et klart budget, så du kan nyde køreturen.",
     variants: {
-      fastest: { label: "Hurtigste rute", blurb: "Den almindelige, optimale køreretning — mest motorvej hele vejen." },
+      fastest: { label: "Hurtigste rute", blurb: "Den almindelige, optimale rute — motorvej hele vejen." },
       smart: {
         label: "Smart omvej (afgiftsoptimeret)",
         blurb:
           "Vejer afgiftsomkostning op mod køretid — springer dyre strækninger over, når omvejen kun koster få minutter.",
       },
-      tollfree: { label: "100 % afgiftsfri", blurb: "Undgår konsekvent alle betalingsveje, broer og vignetzoner." },
+      tollfree: { label: "100 % afgiftsfri", blurb: "Undgår konsekvent alle betalingsveje, betalingsanlæg og vignetzoner." },
     },
     tollsShort: "afgifter",
     saved: "Sparede penge",
@@ -159,7 +159,7 @@ export const DA_DICT: Record<string, unknown> = {
     printHint: "Udskriftsvenlig PDF med hvert afgiftspunkt og hvert brændstofstop.",
     gpxToast: "GPX er klar — indlæs den i Garmin, TomTom Rider eller BMW Motorrad Connected.",
     kmlToast: "KML er klar — åbn den i Google Earth eller dit kortlag.",
-    popupError: "Tillad pop op-vinduer for at udskrive din rejseplan.",
+    popupError: "Tillad pop-up-vinduer for at udskrive din rejseplan.",
     hints: {
       tesla: "Send rejsemålet via din Tesla-konto",
       bmw: "Send til bil via My BMW / Motorrad Connected",
@@ -170,10 +170,10 @@ export const DA_DICT: Record<string, unknown> = {
   compliance: {
     clearanceTitle: "🚐 Radar for autocamperens vægt og højde",
     clearanceIntro:
-      "Bekræft din tilladte totalvægt og køjehøjde — reglerne ændrer sig markant over 3,5 t og 3,2 m.",
+      "Bekræft din tilladte totalvægt og rejsehøjde — reglerne ændrer sig markant over 3,5 t og 3,2 m.",
     heavyToggle: "Min autocamper vejer over 3,5 t",
     heavyHint: "Maksimal tilladt totalvægt ifølge registreringsattesten, ikke egenvægten.",
-    heightLabel: "Køjehøjde",
+    heightLabel: "Rejsehøjde",
     heightAria: "Køretøjets højde i meter",
     heightHint: "Mål til det højeste faste punkt, inklusive solpaneler og tagbokse.",
     heavyWarning:
@@ -195,7 +195,7 @@ export const DA_DICT: Record<string, unknown> = {
     tagActivePrefix: (n: number) => `Med ${n} aktive ${n > 1 ? "brikker" : "brik"} falder dine afgifter fra`,
     tagTo: "til",
     tagSavingTail: (amount: string, pct: number) =>
-      `— du sparer ${amount} (${pct}% på dækkede stationer) og undgår hver eneste kontantbane.`,
+      `— du sparer ${amount} (${pct}% på dækkede betalingsanlæg) og undgår hver eneste kontantbane.`,
   },
   map: {
     title: "Rutens radarkort",

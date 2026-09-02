@@ -65,19 +65,19 @@ const APP_PAGE_META_BASE = {
   dk: {
     planner: {
       title: "Ruteplanlægger — vejafgifter, brændstof og færger | AutoVere Danmark",
-      description: "Planlæg ruten og se vejafgifter, vignetter, brændstof, opladning og færger samlet.",
+      description: "Planlæg ruten og se vejafgifter, vignetter, brændstof, opladning og færger i ét samlet budget.",
     },
     tolls: {
       title: "Vejafgifter og vignetter — guide | AutoVere Danmark",
-      description: "Vejafgifter, vignetter og bompasser i Europa, USA og Canada for bil, autocamper og MC.",
+      description: "Vejafgifter, vignetter og vejafgiftsbrikker i Europa, USA og Canada for bil, autocamper og MC.",
     },
     scenic: {
       title: "Bjergpas og færger | AutoVere Danmark",
       description: "Alpepas, kystveje og bilfærger med sæson, højdegrænser og bookingtips.",
     },
     garage: {
-      title: "Min Garage — køretøjer, bompasser og ture | AutoVere Danmark",
-      description: "Gem køretøjer, tankstørrelse og bompasser samt alle dine gemte ruter.",
+      title: "Min Garage — køretøjer, vejafgiftsbrikker og ture | AutoVere Danmark",
+      description: "Gem køretøjer, tankstørrelse og vejafgiftsbrikker samt alle dine gemte ruter.",
     },
   },
   de: {

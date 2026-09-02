@@ -10,7 +10,7 @@ export const DA_HOW_IT_WORKS: InfoPageContent = {
   sections: [
     {
       heading: "1 — Fortæl os om rejsen",
-      body: "Angiv dit udgangspunkt og rejsemål, vælg køretøjstype og brændstof eller drivmiddel, og tilføj ruteønsker som naturskønne omveje, undgåelse af vejafgifter eller inklusion af færger.",
+      body: "Angiv dit udgangspunkt og rejsemål, vælg køretøjstype og brændstof eller drivmiddel, og vælg ruteønsker som naturskønne omveje, fravalg af vejafgifter eller medtagelse af færger.",
       items: [
         "Profiler til bil, autocamper/campingvogn og turmotorcykel",
         "Benzin, diesel eller elektrisk med dine egne tal for tank, batteri og forbrug",
@@ -29,7 +29,7 @@ export const DA_HOW_IT_WORKS: InfoPageContent = {
     },
     {
       heading: "3 — Tag den med på vejen",
-      body: "Eksportér en GPX-fil til din navigation, gem rejseplanen i Min Garage, eller del den med dine rejsefæller. Hver afgiftspost linker til den officielle portal, så du kan betale, inden du krydser grænsen.",
+      body: "Eksportér en GPX-fil til din GPS, gem rejseplanen i Min Garage, eller del den med dine rejsefæller. Hver afgiftspost linker til den officielle portal, så du kan betale, inden du krydser grænsen.",
       links: [
         { label: "ASFINAG (Østrig)", url: "https://www.asfinag.at/" },
         { label: "AutoPASS (Norge)", url: "https://www.autopass.no/" },

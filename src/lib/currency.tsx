@@ -1,5 +1,6 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 
+import { codeFromPath } from "@/lib/locales";
 import { regionFromPath } from "@/lib/trip-data";
 
 export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF" | "ISK" | "PLN";
@@ -106,6 +107,24 @@ const CurrencyContext = createContext<Ctx>({ currency: "EUR", setCurrency: () =>
 
 const STORAGE_KEY = "autovere.currency";
 
+/**
+ * Default display currency per active language, applied only when the visitor has no
+ * saved preference and isn't on a US/CA region page. English (the GB-authored base
+ * locale) defaults to GBP; the eurozone languages (de, nl, fr, es, it) default to EUR.
+ * Locales not listed here (e.g. pl) keep the EUR fallback.
+ */
+const LOCALE_DEFAULT_CURRENCY: Partial<Record<string, CurrencyCode>> = {
+  en: "GBP",
+  no: "NOK",
+  sv: "SEK",
+  da: "DKK",
+  de: "EUR",
+  nl: "EUR",
+  fr: "EUR",
+  es: "EUR",
+  it: "EUR",
+};
+
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<CurrencyCode>("EUR");
 
@@ -119,11 +138,19 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     } catch {
       /* storage unavailable */
     }
-    // No saved preference: fall back to the regional default from the URL.
+    // No saved preference: fall back to the region default, then the language default.
     const path = window.location.pathname;
     const pathRegion = regionFromPath(path);
-    if (pathRegion === "ca") setCurrencyState("CAD");
-    else if (pathRegion === "us") setCurrencyState("USD");
+    if (pathRegion === "ca") {
+      setCurrencyState("CAD");
+      return;
+    }
+    if (pathRegion === "us") {
+      setCurrencyState("USD");
+      return;
+    }
+    const localeDefault = LOCALE_DEFAULT_CURRENCY[codeFromPath(path)];
+    if (localeDefault) setCurrencyState(localeDefault);
   }, []);
 
 

@@ -42,6 +42,14 @@ const COPY: Record<
     esimNote: "eSIM-mobildata — inga roamingöverraskningar",
     ferry: "Jämför färjebiljetter",
   },
+  da: {
+    title: "Nyttigt til denne tur",
+    car: "Sammenlign lejebiler",
+    bike: "Lej motorcykel eller scooter",
+    esim: "Vær online i udlandet",
+    esimNote: "eSIM-mobildata — ingen roaming-overraskelser",
+    ferry: "Sammenlign færgebilletter",
+  },
 };
 
 const pill =
