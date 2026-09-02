@@ -23,7 +23,7 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
 type PageMeta = { title: string; description: string };
 
 /** Titles for the app pages that have no per-language info content. */
-const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
+const APP_PAGE_META_BASE = {
   no: {
     planner: {
       title: "Ruteplanlegger — bompenger, drivstoff og ferjer | AutoVere Norge",
