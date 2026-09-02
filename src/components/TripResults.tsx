@@ -20,7 +20,7 @@ import {
 import { useAuth } from "@/lib/auth";
 import { Switch } from "@/components/ui/switch";
 import { PartnerOffers } from "@/components/PartnerOffers";
-import { DecalConcepts } from "@/components/DecalConcepts";
+
 import { PoiLinks } from "@/components/PoiLinks";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
@@ -893,8 +893,6 @@ export function TripResults({
       )}
 
       <PartnerOffers vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"} />
-
-      <DecalConcepts />
 
       {printing && (
         <PrintItinerary
