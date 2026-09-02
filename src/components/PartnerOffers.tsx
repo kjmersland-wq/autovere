@@ -66,6 +66,14 @@ const COPY: Record<
     esimNote: "eSIM-databundel — geen roamingverrassingen",
     ferry: "Vergelijk veerboottickets",
   },
+  fr: {
+    title: "Utile pour ce voyage",
+    car: "Comparer les locations de voiture",
+    bike: "Louer une moto ou un scooter",
+    esim: "Rester connecté à l'étranger",
+    esimNote: "Forfait data eSIM — aucune surprise en itinérance",
+    ferry: "Comparer les billets de ferry",
+  },
 };
 
 const pill =

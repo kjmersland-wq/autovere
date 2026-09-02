@@ -119,19 +119,19 @@ const APP_PAGE_META_BASE = {
   fr: {
     planner: {
       title: "Planificateur d'itinéraire — péages, carburant et ferries | AutoVere France",
-      description: "Planifiez la route et visualisez péages, vignettes, carburant, recharge et ferries.",
+      description: "Planifiez la route et visualisez péages, vignettes, carburant, recharge et ferries dans un budget clair.",
     },
     tolls: {
       title: "Péages et vignettes — le guide | AutoVere France",
-      description: "Péages, vignettes et badges en Europe, aux États-Unis et au Canada pour voiture, camping-car et moto.",
+      description: "Péages, vignettes et badges de télépéage en Europe, aux États-Unis et au Canada pour voiture, camping-car et moto.",
     },
     scenic: {
       title: "Cols de montagne et ferries | AutoVere France",
-      description: "Cols alpins, routes côtières et ferries avec saison, gabarits et conseils de réservation.",
+      description: "Cols alpins, routes côtières et ferries automobiles avec saison, gabarits et conseils de réservation.",
     },
     garage: {
-      title: "Mon Garage — véhicules, badges et voyages | AutoVere France",
-      description: "Enregistrez véhicules, capacités de réservoir et badges, avec tous vos itinéraires sauvegardés.",
+      title: "Mon Garage — véhicules, badges de télépéage et voyages | AutoVere France",
+      description: "Enregistrez véhicules, capacités de réservoir et badges de télépéage, avec tous vos itinéraires sauvegardés.",
     },
   },
   pl: {

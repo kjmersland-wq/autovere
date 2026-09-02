@@ -39,7 +39,7 @@ export const CONTENT_FR: Record<string, string> = {
 
   "GO-Box (ASFINAG)": "GO-Box (ASFINAG)",
   "Motorhomes over 3.5 t maximum permissible weight may not use the car vignette. You need a GO-Box on-board unit, charged per kilometre by axle count and EURO class. Pick one up at a GO point near the border before your first motorway kilometre.":
-    "Les camping-cars de plus de 3,5 t de PTAC ne peuvent pas utiliser la vignette voiture. Vous avez besoin d'un boîtier embarqué GO-Box, facturé au kilomètre selon le nombre d'essieux et la classe EURO. Procurez-vous-en un dans un point GO près de la frontière avant votre premier kilomètre d'autoroute.",
+    "Les camping-cars de plus de 3,5 t de PTAC ne peuvent pas utiliser la vignette autoroutière voiture. Vous avez besoin d'un boîtier embarqué GO-Box, facturé au kilomètre selon le nombre d'essieux et la classe EURO. Procurez-vous-en un dans un point GO près de la frontière avant votre premier kilomètre d'autoroute.",
   "LSVA / PSVA heavy vehicle charge": "Redevance poids lourds LSVA / PSVA",
   "Above 3.5 t the Swiss motorway vignette no longer covers you. Foreign motorhomes normally pay the flat-rate PSVA (per-day or per-year) declared at the border customs post; ID-based LSVA applies to commercial units.":
     "Au-delà de 3,5 t, la vignette autoroutière suisse ne vous couvre plus. Les camping-cars étrangers paient normalement la PSVA forfaitaire (par jour ou par an) déclarée au poste de douane frontalier ; la LSVA basée sur l'identifiant s'applique aux véhicules commerciaux.",
@@ -211,7 +211,7 @@ export const CONTENT_FR: Record<string, string> = {
   "€40.00 car day ticket · €30.00 motorcycle · motorhomes €40.00 (over 3.5 t on request)":
     "40,00 € billet journée voiture · 30,00 € moto · camping-car 40,00 € (au-delà de 3,5 t sur demande)",
   "Toll road, not part of the Austrian vignette network. Gates open ~05:30–06:00 and close 19:30–21:30 depending on the month — plan to be through before dusk and enjoy the Edelweissspitze detour.":
-    "Route à péage, ne faisant pas partie du réseau de vignettes autrichien. Les barrières ouvrent vers 5h30–6h00 et ferment entre 19h30 et 21h30 selon le mois — prévoyez de passer avant la tombée de la nuit et profitez du détour par l'Edelweissspitze.",
+    "Route à péage, ne faisant pas partie du réseau de vignettes autoroutières autrichien. Les barrières ouvrent vers 5h30–6h00 et ferment entre 19h30 et 21h30 selon le mois — prévoyez de passer avant la tombée de la nuit et profitez du détour par l'Edelweissspitze.",
   "Riders get a reduced ticket and a dedicated Bikers Point at Fuschertörl.":
     "Les motards bénéficient d'un billet réduit et d'un Bikers Point dédié à Fuschertörl.",
   "Passo dello Stelvio (Stelvio Pass)": "Passo dello Stelvio (col du Stelvio)",
@@ -280,7 +280,7 @@ export const CONTENT_FR: Record<string, string> = {
   "≈ €12–18 saved on a 60 L tank": "≈ 12 à 18 € économisés sur un réservoir de 60 l",
   "Plan a fuel stop at Matrei am Brenner": "Prévoyez un arrêt carburant à Matrei am Brenner",
   "Swiss motorways need the CHF 40 annual vignette":
-    "Les autoroutes suisses nécessitent la vignette annuelle de 40 CHF",
+    "Les autoroutes suisses nécessitent la vignette autoroutière annuelle de 40 CHF",
   "Switzerland has no day or week option — one sticker (or the e-vignette) costs CHF 40 and is valid for the whole calendar year, even if you only transit for two hours. Motorcycles need their own vignette.":
     "La Suisse ne propose pas d'option journée ou semaine — une vignette (ou l'e-vignette) coûte 40 CHF et est valable toute l'année civile, même pour un simple transit de deux heures. Les motos ont besoin de leur propre vignette.",
   "Switch to Smart Bypass to route around Swiss motorways on a short transit leg":
@@ -326,8 +326,8 @@ export const CONTENT_FR: Record<string, string> = {
   "Brenner autostrada toll paid at the barrier (card, cash or Telepass)":
     "Péage de l'autostrada du Brenner payé à la barrière (carte, espèces ou Telepass)",
   "Crit'Air-style city rules do not apply, but Italian ZTL zones do":
-    "Les règles de style Crit'Air ne s'appliquent pas, mais les zones ZTL italiennes oui",
-  "Typically 0–15 min at the toll plaza": "Généralement 0 à 15 min à la barrière de péage",
+    "Les règles de type Crit'Air ne s'appliquent pas ici, mais les zones ZTL italiennes, oui",
+  "Typically 0–15 min at the toll plaza": "Généralement 0 à 15 min à la gare de péage",
   "Swiss borders (Schengen, non-EU customs)": "Frontières suisses (Schengen, hors union douanière UE)",
   "Customs control · goods declaration": "Contrôle douanier · déclaration de marchandises",
   "Switzerland is in Schengen but outside the EU customs union, so customs officers can and do stop vehicles. Declare goods above the duty-free allowance and buy the vignette before the first motorway.":
@@ -605,6 +605,70 @@ export const CONTENT_FR: Record<string, string> = {
   "Nova Scotia's only mainline toll — cash and card accepted.": "Le seul péage principal de la Nouvelle-Écosse — espèces et carte acceptées.",
   "Bridge tolls": "Péages de pont",
   "Confederation Bridge is charged on the way off PEI only.": "Le pont de la Confédération n'est facturé qu'en sortant de l'Île-du-Prince-Édouard.",
+
+  /* ---------------- Corridor map: fuel & map extras ---------------- */
+  "Est. rate": "Tarif estimé",
+  "Petrol 95": "Essence 95",
+  Diesel: "Diesel",
+  "Open in Google Maps": "Ouvrir dans Google Maps",
+
+  /* ---------------- Trip results: EV optimizer extras ---------------- */
+  "Preferred network": "Réseau préféré",
+  "Nearest high-power CCS hub": "Borne CCS haute puissance la plus proche",
+
+  /* ---------------- Route tolls: distance & vignette details ---------------- */
+  "Ticket system, charged per kilometre": "Système à ticket, facturé au kilomètre",
+  "Private concession segments only — state-run e-TOLL motorways are free for cars":
+    "Uniquement les tronçons concédés privés — les autoroutes publiques e-TOLL sont gratuites pour les voitures",
+  "Remaining concession sections": "Tronçons concédés restants",
+  "Includes electronic-only motorways": "Inclut les autoroutes à péage uniquement électronique",
+  "Fixed plaza charges along the corridor": "Tarifs fixes aux gares de péage sur le trajet",
+  "Automatic tolling — motorcycles pass free": "Péage automatique — les motos passent gratuitement",
+  "10-day pass, valid nationwide": "Forfait 10 jours, valable dans tout le pays",
+  "Annual e-vignette, plate-linked (no short tier exists)":
+    "E-vignette annuelle, liée à la plaque (pas de formule courte)",
+  "7-day e-vignette": "E-vignette 7 jours",
+  "10-day electronic vignette": "Vignette électronique 10 jours",
+  "10-day national e-vignette": "E-vignette nationale 10 jours",
+  "Weekend/weekly e-vignette": "E-vignette week-end/semaine",
+  "7-day road vignette": "Vignette routière 7 jours",
+
+  /* ---------------- Route tolls: toll-free country/province notes ---------------- */
+  "No motorway toll in Denmark — only the Storebælt and Øresund bridges are charged, and only if you cross them.":
+    "Aucun péage autoroutier au Danemark — seuls les ponts du Storebælt et de l'Øresund sont payants, et uniquement si vous les empruntez.",
+  "German autobahns are toll-free for cars and motorhomes up to 7.5 t.":
+    "Les autoroutes allemandes sont gratuites pour les voitures et les camping-cars jusqu'à 7,5 t.",
+  "Dutch motorways are free — only the Westerschelde and Kil tunnels charge.":
+    "Les autoroutes néerlandaises sont gratuites — seuls les tunnels de la Westerschelde et du Kil sont payants.",
+  "Belgian motorways are free for cars; the Liefkenshoek tunnel is the exception.":
+    "Les autoroutes belges sont gratuites pour les voitures ; le tunnel du Liefkenshoek fait exception.",
+  "Luxembourg motorways are toll-free (and the cheapest fuel on the corridor).":
+    "Les autoroutes luxembourgeoises sont gratuites (et offrent le carburant le moins cher du trajet).",
+  "Swedish motorways are free; only Stockholm/Göteborg congestion charges apply.":
+    "Les autoroutes suédoises sont gratuites ; seuls les péages urbains de Stockholm/Göteborg s'appliquent.",
+  "Finnish roads are toll-free.": "Les routes finlandaises sont gratuites.",
+  "Estonian roads are toll-free for passenger vehicles.": "Les routes estoniennes sont gratuites pour les véhicules particuliers.",
+  "Latvian roads are toll-free for passenger vehicles.": "Les routes lettones sont gratuites pour les véhicules particuliers.",
+  "Lithuanian roads are toll-free for passenger vehicles.": "Les routes lituaniennes sont gratuites pour les véhicules particuliers.",
+  "Only individual toll plazas (M50 eFlow) charge — none on this corridor.":
+    "Seules certaines gares de péage isolées (M50 eFlow) sont payantes — aucune sur ce trajet.",
+  "UK motorways are free apart from the M6 Toll and Dartford Crossing.":
+    "Les autoroutes britanniques sont gratuites, à l'exception du M6 Toll et du Dartford Crossing.",
+  "New Brunswick highways are toll-free.": "Les autoroutes du Nouveau-Brunswick sont gratuites.",
+  "BC highways are toll-free since the Port Mann and Golden Ears tolls ended.":
+    "Les autoroutes de Colombie-Britannique sont gratuites depuis la suppression des péages du Port Mann et du Golden Ears.",
+  "Alberta highways are toll-free.": "Les autoroutes de l'Alberta sont gratuites.",
+  "Manitoba highways are toll-free.": "Les autoroutes du Manitoba sont gratuites.",
+  "Saskatchewan highways are toll-free.": "Les autoroutes de la Saskatchewan sont gratuites.",
+
+  /* ---------------- Vignette optimizer: tier labels ---------------- */
+  "1-Day": "1 jour",
+  "10-Day": "10 jours",
+  "2-Month": "2 mois",
+  Annual: "Annuelle",
+  "7-Day": "7 jours",
+  "1-Month": "1 mois",
+  "30-Day": "30 jours",
 };
 
 const FR_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

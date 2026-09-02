@@ -4,7 +4,7 @@ const DISCLAIMER = "Estimations indicatives uniquement — vérifiez auprès des
 
 export const FR_HOW_IT_WORKS: InfoPageContent = {
   eyebrow: "Comment ça marche",
-  title: "D'une idée en l'air à un road trip entièrement chiffré en trois étapes tranquilles.",
+  title: "D'une idée vague à un road trip entièrement chiffré en trois étapes tranquilles.",
   intro:
     "AutoVere transforme un départ et une destination en un tableau de coûts transfrontalier transparent — péages, vignettes, carburant, recharge et ferries — pour les voitures, camping-cars et motos de tourisme.",
   sections: [
@@ -19,9 +19,9 @@ export const FR_HOW_IT_WORKS: InfoPageContent = {
     },
     {
       heading: "2 — Nous calculons le coût réel de chaque kilomètre",
-      body: "Chaque pays ou état de votre trajet est chiffré séparément, selon son propre système de péage — vignettes électroniques, barrières à la distance, ceintures urbaines ou autoroutes gratuites — auquel s'ajoutent les prix locaux du carburant et de la recharge rapide.",
+      body: "Chaque pays ou état de votre trajet est chiffré séparément, selon son propre système de péage — vignettes électroniques, barrières de péage kilométriques, ceintures urbaines ou autoroutes gratuites — auquel s'ajoutent les prix locaux du carburant et de la recharge rapide.",
       items: [
-        "Répartition pays par pays des péages et vignettes, avec le détail de chaque poste",
+        "Répartition pays par pays des péages et vignettes, avec le détail de chaque gare de péage",
         "Réductions moto appliquées là où les opérateurs publient des tarifs réduits",
         "Coûts des ferries et cols de montagne listés comme des lignes distinctes",
         "Optimiseur intelligent de carburant et de recharge VE avec une marge de sécurité de 75 % de l'autonomie",

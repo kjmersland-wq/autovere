@@ -29,11 +29,11 @@ export const FR_DICT: Record<string, unknown> = {
     viaLimit: "Vous pouvez ajouter jusqu'à 3 étapes intermédiaires par itinéraire.",
     viaPlaceholder: (i: number) => `Étape intermédiaire ${i} — ex. Innsbruck`,
     scenic: "✨ Privilégier les déviations pittoresques en montagne et sur le littoral",
-    avoidTolls: "🚫 Éviter les autoroutes à péage",
+    avoidTolls: "🚫 Éviter les routes à péage",
     ferries: "⛴️ Inclure les traversées en ferry",
     fuelType: "Type de carburant / d'énergie",
     popularRoutes: "Itinéraires transfrontaliers populaires",
-    transponder: "Badge de télépéage / vignette électronique",
+    transponder: "Transpondeur / badge de télépéage",
     consumption: "Carburant et consommation",
     fineTune: "Affiner la consommation",
     fineTuneHint: "Sert à affiner l'estimation du carburant et de la recharge pour votre véhicule.",
@@ -52,9 +52,9 @@ export const FR_DICT: Record<string, unknown> = {
     intro:
       "Voici tout ce que vous dépenserez sur la route — aucune surprise à la barrière, juste un budget clair pour profiter du trajet.",
     variants: {
-      fastest: { label: "Itinéraire le plus rapide", blurb: "L'itinéraire standard optimal — autoroute de bout en bout." },
+      fastest: { label: "Itinéraire le plus rapide", blurb: "L'itinéraire standard optimal — autoroutes de bout en bout." },
       smart: {
-        label: "Détour intelligent (optimisé péages)",
+        label: "Détour intelligent (optimisé pour les péages)",
         blurb:
           "Équilibre le coût des péages et le temps de trajet — évite les tronçons coûteux quand le détour ne coûte que quelques minutes.",
       },
@@ -90,7 +90,7 @@ export const FR_DICT: Record<string, unknown> = {
     indicative: "Indicatif",
     officialBooking: "Réservation officielle",
     breakdown: "Répartition par pays et région",
-    breakdownIntro: "Chaque point de contrôle détaillé, avec des liens directs vers les portails officiels.",
+    breakdownIntro: "Chaque point de péage détaillé, avec des liens directs vers les portails officiels.",
     vignetteTitle: "🏷️ Optimiseur intelligent de période de vignette",
     returnBadge: (d: number) => `Aller-retour · ${d} jour${d > 1 ? "s" : ""} couvert${d > 1 ? "s" : ""}`,
     onewayBadge: "Aller simple · trajet unique",
@@ -107,9 +107,9 @@ export const FR_DICT: Record<string, unknown> = {
     arbitrage: "Arbitrage carburant frontalier",
     tip: "Astuce",
     longStretch: "Alertes de longs tronçons (>180 km sans station vérifiée)",
-    badgeRadar: "🌱 Radar des vignettes environnementales et d'émissions",
+    badgeRadar: "🌱 Radar des pastilles environnementales et d'émissions",
     badgeRadarIntro:
-      "Réglez cela avant de partir — les vignettes sont contrôlées à l'entrée des villes, pas à la frontière.",
+      "Réglez cela avant de partir — les pastilles sont contrôlées à l'entrée des villes, pas à la frontière.",
     officialInfo: "Informations officielles",
     scenicTitle: "Points d'intérêt pittoresques sur la route",
     scenicIntro: "Points de vue et cols emblématiques qui valent le détour le long de votre trajet.",
@@ -185,13 +185,13 @@ export const FR_DICT: Record<string, unknown> = {
     lezDetected: (n: number) => `${n} détectée${n > 1 ? "s" : ""} sur ce trajet`,
     lezOverview: "Aperçu régional",
     lezIntro:
-      "Commandez vos vignettes et enregistrez votre plaque avant de partir — la plupart des zones sont contrôlées par caméra, sans paiement sur place.",
+      "Commandez vos pastilles et enregistrez votre plaque avant de partir — la plupart des zones sont contrôlées par caméra, sans paiement sur place.",
     tagTitle: "Mes badges et transpondeurs de péage",
     tagIntro:
-      "Cochez les badges que vous possédez déjà — nous marquerons les voies compatibles comme automatiques et recalculerons vos péages.",
+      "Cochez les badges que vous possédez déjà — nous identifierons les gares de péage compatibles comme voies automatiques et recalculerons vos péages.",
     tagAuto: "🟢 Voie automatique / aucun arrêt en espèces requis",
     tagSaving: (p: number) => `Économie habituelle sur les péages couverts : ${p} %`,
-    tagNone: (amount: string) => `Aucun badge sélectionné — les péages restent à ${amount} avec arrêts en espèces/carte.`,
+    tagNone: (amount: string) => `Aucun badge sélectionné — les péages restent à ${amount} avec des arrêts aux points de péage en espèces/carte.`,
     tagActivePrefix: (n: number) => `Avec ${n} badge${n > 1 ? "s" : ""} actif${n > 1 ? "s" : ""}, vos péages passent de`,
     tagTo: "à",
     tagSavingTail: (amount: string, pct: number) =>
@@ -238,7 +238,7 @@ export const FR_DICT: Record<string, unknown> = {
     addStop: "+ Ajouter comme étape",
     liveStatus: "Statut en direct",
     tipsTitle: "💡 Arbitrage transfrontalier de carburant et de coûts",
-    tipsIntro: "De petites décisions de timing à la frontière font une vraie différence sur le dîner de l'autre côté.",
+    tipsIntro: "De petits choix de timing à la frontière peuvent vous offrir un très bon dîner une fois de l'autre côté.",
     tipPrefix: "Astuce frontière :",
     crossTitle: "🛂 Points de passage frontaliers",
     crossIntro:
