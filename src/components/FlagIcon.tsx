@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type FlagCode = "GB" | "NO" | "SE" | "DK" | "DE" | "NL" | "FR" | "PL";
+export type FlagCode = "GB" | "NO" | "SE" | "DK" | "DE" | "NL" | "FR" | "PL" | "ES" | "IT";
 
 type FlagProps = { code: FlagCode; className?: string; title?: string };
 
