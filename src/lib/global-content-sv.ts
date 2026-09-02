@@ -6,13 +6,13 @@ export const SV_HOW_IT_WORKS: InfoPageContent = {
   eyebrow: "Så funkar det",
   title: "Från en lös idé till en fullständigt kostnadsberäknad bilresa i tre lugna steg.",
   intro:
-    "AutoVere Sverige omvandlar en start och en destination till en tydlig, gränsöverskridande kostnadsbild — vägtullar, vinjetter, bränsle, laddning och färjor — för bilar, husbilar och turingmotorcyklar.",
+    "AutoVere Sverige omvandlar en start och en destination till en tydlig, gränsöverskridande kostnadsbild — vägtullar, vinjetter, bränsle, laddning och färjor — för bilar, husbilar och turmotorcyklar.",
   sections: [
     {
       heading: "1 — Berätta om resan",
-      body: "Ange var du startar och vart du ska, välj fordonstyp och bränsle eller drivmedel, och välj ruttinställningar som natursköna vägar, undvika vägtullar eller inkludera färjor.",
+      body: "Ange var du startar och vart du ska, välj fordonstyp och bränsle eller drivmedel, och välj ruttinställningar som natursköna omvägar, undvika vägtullar eller inkludera färjor.",
       items: [
-        "Profiler för bil, husbil/husbilscamper och turingmotorcykel",
+        "Profiler för bil, husbil/campingbil och turmotorcykel",
         "Bensin, diesel eller elektrisk med dina egna uppgifter om tank, batteri och förbrukning",
         "Vägtullbrickor som AutoPASS, Telepass, Bip&Go, SunPass eller E-ZPass",
       ],
@@ -41,7 +41,7 @@ export const SV_HOW_IT_WORKS: InfoPageContent = {
   meta: {
     title: "Så funkar AutoVere — Planering av gränsöverskridande resekostnader",
     description:
-      "Se hur AutoVere beräknar vägtullar, vinjetter, bränsle, laddning och färjor land för land för bilar, husbilar och turingmotorcyklar.",
+      "Se hur AutoVere beräknar vägtullar, vinjetter, bränsle, laddning och färjor land för land för bilar, husbilar och turmotorcyklar.",
   },
 };
 

@@ -164,10 +164,11 @@ export function GaragePage() {
         { id: "billing" as const, label: tx("Abonnement og fakturering"), icon: CreditCard },
         { id: "places" as const, label: tx("Lagrede steder"), icon: Bookmark },
         { id: "profile" as const, label: tx("Profil og sikkerhet"), icon: ShieldCheck },
-        ...(isAdmin ? [{ id: "admin" as const, label: tx("Admin"), icon: Lock }] : []),
+        // Admin panel is internal-only and restricted to the Norwegian locale, even for an admin account.
+        ...(isAdmin && isNo ? [{ id: "admin" as const, label: tx("Admin"), icon: Lock }] : []),
         { id: "support" as const, label: tx("Hjelp og support"), icon: LifeBuoy },
       ].filter(Boolean),
-    [isAdmin],
+    [isAdmin, isNo],
   );
 
   const commitVehicles = (next: GarageVehicle[]) => {
@@ -350,7 +351,7 @@ export function GaragePage() {
                       </p>
                     </div>
                     <div className="flex gap-2">
-                      {isAdmin && (
+                      {isAdmin && isNo && (
                         <Button variant="outline" size="sm" asChild>
                           <Link to="/admin">
                             <Lock className="size-4" /> {tx("Admin")}
@@ -689,7 +690,7 @@ export function GaragePage() {
               </Panel>
             )}
 
-            {section === "admin" && isAdmin && (
+            {section === "admin" && isAdmin && isNo && (
               <Panel title={tx("Admin")}>
                 <p className="text-sm text-foreground/70">
                   {tx("Full oversikt over trafikk, abonnementer, markeder og økonomi.")}

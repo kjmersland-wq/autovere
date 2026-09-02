@@ -576,4 +576,105 @@ export const CONTENT_NO: Record<string, string> = {
   "Lake Garda, Italy": "Gardasjøen, Italia",
   "Motorcycles are exempt from this e-vignette — nothing to buy.": "Motorsykler er fritatt fra denne e-vignetten — ingenting å kjøpe.",
   "Only one validity period exists — it covers the whole stay.": "Det finnes bare én gyldighetsperiode — den dekker hele oppholdet.",
+
+  /* ---------------- Corridor map: fuel & map extras ---------------- */
+  "Est. rate": "Est. pris",
+  "Petrol 95": "Bensin 95",
+  Diesel: "Diesel",
+  "Open in Google Maps": "Åpne i Google Maps",
+
+  /* ---------------- Trip results: EV optimizer extras ---------------- */
+  "Preferred network": "Foretrukket nettverk",
+  "Nearest high-power CCS hub": "Nærmeste hurtigladestasjon (CCS)",
+
+  /* ---------------- Route tolls: distance & vignette details ---------------- */
+  "Ticket system, charged per kilometre": "Billettsystem, avgift per kilometer",
+  "Private concession segments only — state-run e-TOLL motorways are free for cars":
+    "Kun private konsesjonsstrekninger — statlige e-TOLL-motorveier er gratis for personbiler",
+  "Remaining concession sections": "Gjenværende konsesjonsstrekninger",
+  "Includes electronic-only motorways": "Inkluderer motorveier med kun elektronisk betaling",
+  "Fixed plaza charges along the corridor": "Faste bomstasjonsavgifter langs strekningen",
+  "Automatic tolling — motorcycles pass free": "Automatisk bompengeinnkreving — motorsykler kjører gratis",
+  "10-day pass, valid nationwide": "10-dagers billett, gyldig i hele landet",
+  "Annual e-vignette, plate-linked (no short tier exists)":
+    "Årlig e-vignett, koblet til skiltnummer (ingen kortere variant finnes)",
+  "7-day e-vignette": "7-dagers e-vignett",
+  "10-day electronic vignette": "10-dagers elektronisk vignett",
+  "10-day national e-vignette": "10-dagers nasjonal e-vignett",
+  "Weekend/weekly e-vignette": "Helge-/ukesvignett (e-vignett)",
+  "7-day road vignette": "7-dagers veivignett",
+
+  /* ---------------- Route tolls: toll-free country/province notes ---------------- */
+  "No motorway toll in Denmark — only the Storebælt and Øresund bridges are charged, and only if you cross them.":
+    "Ingen motorveiavgift i Danmark — kun Storebælt- og Øresundsbroen koster penger, og bare hvis du krysser dem.",
+  "German autobahns are toll-free for cars and motorhomes up to 7.5 t.":
+    "Tyske Autobahn er avgiftsfrie for biler og bobiler opptil 7,5 tonn.",
+  "Dutch motorways are free — only the Westerschelde and Kil tunnels charge.":
+    "Nederlandske motorveier er gratis — kun Westerschelde- og Kil-tunnelen krever avgift.",
+  "Belgian motorways are free for cars; the Liefkenshoek tunnel is the exception.":
+    "Belgiske motorveier er gratis for biler; Liefkenshoek-tunnelen er unntaket.",
+  "Luxembourg motorways are toll-free (and the cheapest fuel on the corridor).":
+    "Luxembourgske motorveier er avgiftsfrie (og har det billigste drivstoffet på strekningen).",
+  "Swedish motorways are free; only Stockholm/Göteborg congestion charges apply.":
+    "Svenske motorveier er gratis; kun rushtidsavgiften i Stockholm/Göteborg gjelder.",
+  "Finnish roads are toll-free.": "Finske veier er avgiftsfrie.",
+  "Estonian roads are toll-free for passenger vehicles.": "Estiske veier er avgiftsfrie for personbiler.",
+  "Latvian roads are toll-free for passenger vehicles.": "Latviske veier er avgiftsfrie for personbiler.",
+  "Lithuanian roads are toll-free for passenger vehicles.": "Litauiske veier er avgiftsfrie for personbiler.",
+  "Only individual toll plazas (M50 eFlow) charge — none on this corridor.":
+    "Kun enkelte bomstasjoner (M50 eFlow) krever avgift — ingen på denne strekningen.",
+  "UK motorways are free apart from the M6 Toll and Dartford Crossing.":
+    "Britiske motorveier er gratis, bortsett fra M6 Toll og Dartford Crossing.",
+  "New Brunswick highways are toll-free.": "Motorveier i New Brunswick er avgiftsfrie.",
+  "BC highways are toll-free since the Port Mann and Golden Ears tolls ended.":
+    "Motorveier i British Columbia er avgiftsfrie siden bompengene på Port Mann og Golden Ears ble avviklet.",
+  "Alberta highways are toll-free.": "Motorveier i Alberta er avgiftsfrie.",
+  "Manitoba highways are toll-free.": "Motorveier i Manitoba er avgiftsfrie.",
+  "Saskatchewan highways are toll-free.": "Motorveier i Saskatchewan er avgiftsfrie.",
+
+  /* ---------------- Vignette optimizer: tier labels ---------------- */
+  "1-Day": "1 dag",
+  "10-Day": "10 dager",
+  "2-Month": "2 måneder",
+  Annual: "Årlig",
+  "7-Day": "7 dager",
+  "1-Month": "1 måned",
+  "30-Day": "30 dager",
+
+  /* ---------------- Tolls guide ---------------- */
+  "🇪🇺 Europe": "🇪🇺 Europa",
+  "🇺🇸 United States": "🇺🇸 USA",
+  "🇨🇦 Canada": "🇨🇦 Canada",
+  "Tolls & vignettes": "Bompenger og vignetter",
+  "Every barrier, badge and sticker — made simple.": "Hver bom, hvert merke og hver vignett — gjort enkelt.",
+  "No guesswork, no fines. Here's what you need in each country, and how to get it before you set off.":
+    "Ingen gjetting, ingen bøter. Her er hva du trenger i hvert land, og hvordan du skaffer det før du drar.",
+  "Austria digital vignette": "Digital vignett i Østerrike",
+  "10-day, 2-month or annual. Plate-linked, activates instantly.":
+    "10 dager, 2 måneder eller årlig. Koblet til skiltnummer, aktiveres umiddelbart.",
+  "Switzerland e-vignette": "E-vignett i Sveits",
+  "Annual only, valid 14 months. Motorcycles need their own.":
+    "Kun årlig, gyldig i 14 måneder. Motorsykler trenger egen vignett.",
+  "France & Italy ticket tolls": "Billettbaserte bomveier i Frankrike og Italia",
+  "Take a ticket, pay on exit. Telepass and Bip&Go tags speed it up.":
+    "Ta en billett, betal ved utkjøring. Telepass og Bip&Go-brikker gjør det raskere.",
+  "Norway AutoPASS": "Norsk AutoPASS",
+  "Automatic plate billing with discounts for registered EVs.":
+    "Automatisk fakturering via skiltgjenkjenning, med rabatt for registrerte elbiler.",
+  "E-ZPass network": "E-ZPass-nettverket",
+  "One transponder covers 19 states from Maine to Illinois.":
+    "Én brikke dekker 19 delstater fra Maine til Illinois.",
+  "SunPass (Florida)": "SunPass (Florida)",
+  "Best value for Turnpike and Miami express lanes.": "Best verdi for Turnpike og ekspressfeltene i Miami.",
+  "FasTrak (California)": "FasTrak (California)",
+  "Required for bridge and express-lane discounts.": "Kreves for rabatt på broer og ekspressfelt.",
+  "Plate-pay tolling": "Bompenger via skiltgjenkjenning",
+  "Rental cars often add a daily admin fee — worth checking first.":
+    "Leiebiler legger ofte til et daglig administrasjonsgebyr — verdt å sjekke på forhånd.",
+  "Cobequid Pass": "Cobequid Pass",
+  "Nova Scotia's only mainline toll — cash and card accepted.":
+    "Nova Scotias eneste bomstasjon på hovedveien — kontant og kort godtas.",
+  "Bridge tolls": "Broavgifter",
+  "Confederation Bridge is charged on the way off PEI only.":
+    "Confederation Bridge koster kun på vei ut av Prince Edward Island.",
 };

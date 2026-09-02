@@ -27,7 +27,7 @@ const GUIDES = [
   {
     region: "🇪🇺 Europa",
     items: [
-      { name: "Digital vignett i Østerrike", detail: "10 dager, 2 måneder eller år. Knyttet til skiltet, aktiveres straks." },
+      { name: "Digital vignett i Østerrike", detail: "10 dager, 2 måneder eller ett år. Knyttet til skiltet, aktiveres straks." },
       { name: "Sveitsisk e-vignett", detail: "Kun årsvignett, gyldig i 14 måneder. Motorsykler trenger sin egen." },
       { name: "Billettbom i Frankrike og Italia", detail: "Ta billett, betal ved utkjøring. Telepass og Bip&Go går raskere." },
       { name: "AutoPASS i Norge", detail: "Automatisk skiltavlesning med rabatter for registrerte elbiler." },

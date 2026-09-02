@@ -605,6 +605,70 @@ export const CONTENT_SV: Record<string, string> = {
   "Nova Scotia's only mainline toll — cash and card accepted.": "Nova Scotias enda huvudvägsavgift — kontant och kort accepteras.",
   "Bridge tolls": "Broavgifter",
   "Confederation Bridge is charged on the way off PEI only.": "Confederation Bridge tar ut avgift enbart när man lämnar Prince Edward Island.",
+
+  /* ---------------- Corridor map: fuel & map extras ---------------- */
+  "Est. rate": "Uppsk. pris",
+  "Petrol 95": "Bensin 95",
+  Diesel: "Diesel",
+  "Open in Google Maps": "Öppna i Google Maps",
+
+  /* ---------------- Trip results: EV optimizer extras ---------------- */
+  "Preferred network": "Föredraget nätverk",
+  "Nearest high-power CCS hub": "Närmaste snabbladdare (CCS)",
+
+  /* ---------------- Route tolls: distance & vignette details ---------------- */
+  "Ticket system, charged per kilometre": "Biljettsystem, avgift per kilometer",
+  "Private concession segments only — state-run e-TOLL motorways are free for cars":
+    "Endast privata koncessionssträckor — statliga e-TOLL-motorvägar är gratis för personbilar",
+  "Remaining concession sections": "Återstående koncessionssträckor",
+  "Includes electronic-only motorways": "Inkluderar motorvägar med enbart elektronisk betalning",
+  "Fixed plaza charges along the corridor": "Fasta betalstationsavgifter längs sträckan",
+  "Automatic tolling — motorcycles pass free": "Automatisk vägtull — motorcyklar passerar gratis",
+  "10-day pass, valid nationwide": "10-dagarsbiljett, giltig i hela landet",
+  "Annual e-vignette, plate-linked (no short tier exists)":
+    "Årlig e-vinjett, kopplad till registreringsskylten (ingen kortare variant finns)",
+  "7-day e-vignette": "7-dagars e-vinjett",
+  "10-day electronic vignette": "10-dagars elektronisk vinjett",
+  "10-day national e-vignette": "10-dagars nationell e-vinjett",
+  "Weekend/weekly e-vignette": "Helg-/veckovinjett (e-vinjett)",
+  "7-day road vignette": "7-dagars vägvinjett",
+
+  /* ---------------- Route tolls: toll-free country/province notes ---------------- */
+  "No motorway toll in Denmark — only the Storebælt and Øresund bridges are charged, and only if you cross them.":
+    "Ingen motorvägsavgift i Danmark — endast Stora Bält- och Öresundsbron kostar, och bara om du korsar dem.",
+  "German autobahns are toll-free for cars and motorhomes up to 7.5 t.":
+    "Tyska Autobahn är avgiftsfria för bilar och husbilar upp till 7,5 ton.",
+  "Dutch motorways are free — only the Westerschelde and Kil tunnels charge.":
+    "Nederländska motorvägar är gratis — endast Westerschelde- och Kil-tunneln tar ut avgift.",
+  "Belgian motorways are free for cars; the Liefkenshoek tunnel is the exception.":
+    "Belgiska motorvägar är gratis för bilar; Liefkenshoek-tunneln är undantaget.",
+  "Luxembourg motorways are toll-free (and the cheapest fuel on the corridor).":
+    "Luxemburgs motorvägar är avgiftsfria (och har det billigaste bränslet på sträckan).",
+  "Swedish motorways are free; only Stockholm/Göteborg congestion charges apply.":
+    "Svenska motorvägar är gratis; endast trängselskatten i Stockholm/Göteborg gäller.",
+  "Finnish roads are toll-free.": "Finska vägar är avgiftsfria.",
+  "Estonian roads are toll-free for passenger vehicles.": "Estniska vägar är avgiftsfria för personbilar.",
+  "Latvian roads are toll-free for passenger vehicles.": "Lettiska vägar är avgiftsfria för personbilar.",
+  "Lithuanian roads are toll-free for passenger vehicles.": "Litauiska vägar är avgiftsfria för personbilar.",
+  "Only individual toll plazas (M50 eFlow) charge — none on this corridor.":
+    "Endast enstaka betalstationer (M50 eFlow) tar ut avgift — inga på den här sträckan.",
+  "UK motorways are free apart from the M6 Toll and Dartford Crossing.":
+    "Brittiska motorvägar är gratis, förutom M6 Toll och Dartford Crossing.",
+  "New Brunswick highways are toll-free.": "Motorvägar i New Brunswick är avgiftsfria.",
+  "BC highways are toll-free since the Port Mann and Golden Ears tolls ended.":
+    "Motorvägar i British Columbia är avgiftsfria sedan avgifterna vid Port Mann och Golden Ears avskaffades.",
+  "Alberta highways are toll-free.": "Motorvägar i Alberta är avgiftsfria.",
+  "Manitoba highways are toll-free.": "Motorvägar i Manitoba är avgiftsfria.",
+  "Saskatchewan highways are toll-free.": "Motorvägar i Saskatchewan är avgiftsfria.",
+
+  /* ---------------- Vignette optimizer: tier labels ---------------- */
+  "1-Day": "1 dag",
+  "10-Day": "10 dagar",
+  "2-Month": "2 månader",
+  Annual: "Årlig",
+  "7-Day": "7 dagar",
+  "1-Month": "1 månad",
+  "30-Day": "30 dagar",
 };
 
 const SV_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

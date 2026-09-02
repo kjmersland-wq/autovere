@@ -37,7 +37,7 @@ const APP_PAGE_META_BASE = {
     },
     scenic: {
       title: "Fjelloverganger og ferjer | AutoVere Norge",
-      description: "Alpepass, kystveier og bilferjer med sesong, høydebegrensninger og booking.",
+      description: "Alpepass, kystveier og bilferjer med sesong, høydebegrensninger og bookingtips.",
     },
     garage: {
       title: "Min Garasje — kjøretøy, bombrikker og turer | AutoVere Norge",
@@ -59,7 +59,7 @@ const APP_PAGE_META_BASE = {
     },
     garage: {
       title: "Mitt Garage — fordon, transpondrar och resor | AutoVere Sverige",
-      description: "Spara fordon, tankvolym och transpondrar samt alla dina sparade resrutter.",
+      description: "Spara fordon, tankvolym och transpondrar samt alla dina sparade reserutter.",
     },
   },
   dk: {

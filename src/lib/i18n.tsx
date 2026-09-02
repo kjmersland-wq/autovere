@@ -313,7 +313,7 @@ const no: Strings = {
     vehicles: { car: "Bil", motorhome: "Bobil", motorcycle: "Motorsykkel" },
     fuels: { petrol: "Bensin", diesel: "Diesel", electric: "Elbil (EV)" },
     oneway: "Enveistur",
-    returnTrip: "Tur–retur / ferie",
+    returnTrip: "Tur-retur / ferie",
     duration: "Reisens lengde",
     origin: "Fra",
     destination: "Til",
@@ -340,7 +340,7 @@ const no: Strings = {
     metric: "Metrisk (km, liter)",
     imperial: "Imperisk (miles, gallon)",
     footnote:
-      "Bompenger, vignetter, drivstoff, lading og ferjer – nøyaktig beregnet for din rute.",
+      "Bompenger, vignetter, drivstoff, lading og ferjer — nøyaktig beregnet for din rute.",
   },
   results: {
     eyebrow: "Turen din er klar",
@@ -395,7 +395,7 @@ const no: Strings = {
     breakdown: "Oversikt per land og region",
     breakdownIntro: "Hvert bompunkt spesifisert, med direkte lenker til de offisielle portalene.",
     vignetteTitle: "🏷️ Smart vignettoptimalisering",
-    returnBadge: (d: number) => `Tur–retur · ${d} ${d > 1 ? "dager" : "dag"} dekket`,
+    returnBadge: (d: number) => `Tur-retur · ${d} ${d > 1 ? "dager" : "dag"} dekket`,
     onewayBadge: "Enveistur · én etappe",
     exempt: "Fritatt",
     recommended: "Anbefalt",
@@ -553,7 +553,8 @@ const no: Strings = {
     strict: "Pass og toll",
   },
   footer: {
-    tagline: "Sømløs ruteplanlegging og kostnadskontroll på tvers av landegrenser.",
+    tagline:
+      "Grensekryssende reiseintelligens — bompenger, vignetter, drivstoff, lading og ferjer for biler, bobiler og turmotorsykler.",
     productBy: "Utviklet av",
     shield: "Transparente beregninger på tvers av grenser. Lenker til offisielle bomdata.",
     quickLinks: "Snarveier",

@@ -19,7 +19,7 @@ export const NO_HOW_IT_WORKS: InfoPageContent = {
     },
     {
       heading: "2 — Vi beregner den reelle kostnaden per kilometer",
-      body: "Hvert land og hver delstat på ruten beregnes for seg, med sitt eget bomsystem — elektroniske vignetter, avstandsbaserte bomstasjoner, byringer eller gratis motorveier — pluss lokale priser på drivstoff og hurtiglading.",
+      body: "Hvert land og hver delstat på ruten beregnes for seg, med sitt eget bomsystem — elektroniske vignetter, avstandsbaserte bomstasjoner, bomringer eller gratis motorveier — pluss lokale priser på drivstoff og hurtiglading.",
       items: [
         "Land-for-land-oversikt over bom og vignetter med detaljer per bomstasjon",
         "Motorsykkelrabatter der operatørene har egne satser",
@@ -41,7 +41,7 @@ export const NO_HOW_IT_WORKS: InfoPageContent = {
   meta: {
     title: "Slik fungerer AutoVere — Reisekostnader på tvers av grenser",
     description:
-      "Se hvordan AutoVere beregner bompenger, vignetter, drivstoff, lading og ferjer land for land for bil, bobil og motorsykkel.",
+      "Se hvordan AutoVere beregner bompenger, vignetter, drivstoff, lading og ferjer land for land for bil, bobil og turmotorsykkel.",
   },
 };
 

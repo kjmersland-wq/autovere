@@ -163,7 +163,7 @@ const NO_TIERS: Tier[] = [
     emoji: "🧭",
     tagline: "Alt du trenger for et første ærlig kostnadsanslag.",
     monthly: "0 €",
-    cta: "Start å planlegge gratis",
+    cta: "Begynn å planlegge gratis",
     features: [
       "Grunnleggende beregning av bompenger, vignetter og drivstoff",
       "OSRM-ruting i Europa, USA og Canada",
@@ -220,7 +220,7 @@ const SV_TIERS: Tier[] = [
       "OSRM-ruttning i Europa, USA och Kanada",
       "En fordonsprofil",
       "Kostnadsutforskare för länder och delstater",
-      "Dela en resglänk",
+      "Dela en reselänk",
     ],
   },
   {
@@ -250,7 +250,7 @@ const SV_TIERS: Tier[] = [
     cta: "Uppgradera till Business",
     features: [
       "Konsolidering av vägtullsfakturor från flera länder",
-      "Teamruttning med delat resbibliotek",
+      "Teamruttning med delat resebibliotek",
       "Profiler för tunga fordon (>3,5 t) och axelbaserade tullar",
       "Förartilldelning och export av kostnadsställen (CSV)",
       "Prioriterad support från KM TECH LABS",
@@ -541,7 +541,7 @@ const COPY_BASE = {
     switch: "Byt plan i betalportalen",
     foot: "Priser i EUR inkl. tillämplig moms. Betalningar och skatt hanteras säkert av Stripe. Kostnadsberäkningar är vägledande — kontrollera alltid officiella tullportaler.",
     checkout: "Säker betalning",
-    freeToast: "Du använder Free-planen — planera på!",
+    freeToast: "Du använder Free-planen — planera loss!",
     signupToast: "Skapa ditt konto först, sedan tar vi dig direkt till säker betalning.",
     portalError: "Det gick inte att öppna betalportalen.",
   },

@@ -44,22 +44,22 @@ const no: RegionPack = {
     eyebrow: "Europa · 30+ land",
     originHint: "Startby eller landemerke (f.eks. München, Oslo, Berlin)",
     destinationHint: "Hvor skal du? (f.eks. Amalfikysten, Alpene, Praha)",
-    tollSystems: ["Vignetter og e-vignetter", "Bomstasjoner med billett", "Lavutslippssoner i byer"],
-    nav: { planner: "Ruteplanlegger", tolls: "Bompenger og vignetter", scenic: "Fjelloverganger og ferger", garage: "Min Garasje" },
+    tollSystems: ["Vignetter og e-vignetter", "Billettbaserte motorveiavgifter", "Lavutslippssoner i byer"],
+    nav: { planner: "Ruteplanlegger", tolls: "Bompenger og vignetter", scenic: "Naturskjønne fjelloverganger og ferger", garage: "Min garasje" },
   },
   us: {
     eyebrow: "USA · 50 delstater",
     originHint: "Startby eller landemerke (f.eks. Seattle, Denver, Miami)",
     destinationHint: "Hvor skal du? (f.eks. Big Sur, Moab, Key West)",
     tollSystems: ["Bomveier og turnpikes i delstatene", "HOV-/ekspressfelt", "Bro- og tunnelbompenger"],
-    nav: { planner: "Ruteplanlegger", tolls: "Bompenger og ekspressfelt", scenic: "Naturskjønne veier og ferger", garage: "Min Garasje" },
+    nav: { planner: "Ruteplanlegger", tolls: "Bompenger og ekspressfelt", scenic: "Naturskjønne veier og ferger", garage: "Min garasje" },
   },
   ca: {
     eyebrow: "Canada · kyst til kyst",
     originHint: "Startby eller landemerke (f.eks. Toronto, Calgary, Halifax)",
     destinationHint: "Hvor skal du? (f.eks. Banff, Tofino, Gaspésie)",
     tollSystems: ["Highway 407 ETR-omkjøring", "Provinsielle bompenger og broer", "BC Ferries-overfarter"],
-    nav: { planner: "Ruteplanlegger", tolls: "Bompenger og bomveier", scenic: "Naturskjønne ruter og ferger", garage: "Min Garasje" },
+    nav: { planner: "Ruteplanlegger", tolls: "Bompenger og bomveier", scenic: "Naturskjønne ruter og ferger", garage: "Min garasje" },
   },
 };
 
