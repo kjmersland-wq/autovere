@@ -944,20 +944,28 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
 /* Root showcase                                                       */
 /* ------------------------------------------------------------------ */
 
+/**
+ * Demonstration mode: the cockpit renders directly so OEM/fleet visitors can
+ * preview it without the email access step. Set DEMO_MODE to false to bring
+ * back the Supabase-backed LoginGate.
+ */
+const DEMO_MODE = true;
+
 export function InCarShowcase() {
   const { signOut } = useAuth();
-  const [authorized, setAuthorized] = useState(false);
+  const [authorized, setAuthorized] = useState(DEMO_MODE);
   const [credentialsOpen, setCredentialsOpen] = useState(false);
 
   const handleLogout = async () => {
     await signOut();
-    setAuthorized(false);
+    setAuthorized(DEMO_MODE);
     toast.success("Logged out.");
   };
 
   if (!authorized) {
     return <LoginGate onAuthorized={() => setAuthorized(true)} />;
   }
+
 
   return (
     <main className="min-h-screen bg-[#05070c] text-white">
