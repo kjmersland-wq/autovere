@@ -132,6 +132,8 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
             })}
           </DropdownMenuContent>
         </DropdownMenu>
+        </div>
+
 
         {user ? (
           <DropdownMenu>
