@@ -107,20 +107,20 @@ export const REGION_COPY: Record<
   eu: {
     eyebrow: "Europe · 30+ countries",
     currency: "€",
-    originHint: "Start city or landmark (e.g., Munich, Oslo, Seattle)",
-    destinationHint: "Where are you heading? (e.g., Amalfi Coast, Banff, Miami)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
   },
   us: {
     eyebrow: "United States · 50 states",
     currency: "$",
-    originHint: "Start city or landmark (e.g., Seattle, Denver, Miami)",
-    destinationHint: "Where are you heading? (e.g., Big Sur, Moab, Key West)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
   },
   ca: {
     eyebrow: "Canada · coast to coast",
     currency: "C$",
-    originHint: "Start city or landmark (e.g., Toronto, Calgary, Halifax)",
-    destinationHint: "Where are you heading? (e.g., Banff, Tofino, Gaspésie)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
   },
 };
 

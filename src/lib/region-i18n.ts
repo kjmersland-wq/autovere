@@ -25,15 +25,15 @@ type RegionPack = Record<RegionKey, RegionStrings>;
 const en: RegionPack = {
   eu: {
     eyebrow: "Europe · 30+ countries",
-    originHint: "Start city or landmark (e.g., Munich, Oslo, Seattle)",
-    destinationHint: "Where are you heading? (e.g., Amalfi Coast, Banff, Miami)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
     tollSystems: ["Vignettes & e-vignettes", "Ticket-based motorway tolls", "Urban low-emission zones"],
     nav: { planner: "Road Trip Planner", tolls: "Tolls & Vignettes", scenic: "Scenic Passes & Ferries", garage: "My Garage" },
   },
   us: {
     eyebrow: "United States · 50 states",
-    originHint: "Start city or landmark (e.g., Seattle, Denver, Miami)",
-    destinationHint: "Where are you heading? (e.g., Big Sur, Moab, Key West)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
     tollSystems: ["State toll roads & turnpikes", "HOV / Express lanes", "Bridge & tunnel tolls"],
     nav: { planner: "Road Trip Planner", tolls: "Tolls & Express Lanes", scenic: "Scenic Byways & Ferries", garage: "My Garage" },
     fuels: { petrol: "Gas" },
@@ -41,8 +41,8 @@ const en: RegionPack = {
   },
   ca: {
     eyebrow: "Canada · coast to coast",
-    originHint: "Start city or landmark (e.g., Toronto, Calgary, Halifax)",
-    destinationHint: "Where are you heading? (e.g., Banff, Tofino, Gaspésie)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
     tollSystems: ["Highway 407 ETR bypass", "Provincial tolls & bridges", "BC Ferries crossings"],
     nav: { planner: "Road Trip Planner", tolls: "Tolls & Bridges", scenic: "Scenic Routes & Ferries", garage: "My Garage" },
     fuels: { petrol: "Gas" },
@@ -53,15 +53,15 @@ const en: RegionPack = {
 const no: RegionPack = {
   eu: {
     eyebrow: "Europa · 30+ land",
-    originHint: "Startby eller landemerke (f.eks. München, Oslo, Berlin)",
-    destinationHint: "Hvor skal du? (f.eks. Amalfikysten, Alpene, Praha)",
+    originHint: "Hvor henter du bilen?",
+    destinationHint: "Hvor tar veien deg?",
     tollSystems: ["Vignetter og e-vignetter", "Billettbaserte motorveiavgifter", "Lavutslippssoner i byer"],
     nav: { planner: "Ruteplanlegger", tolls: "Bompenger og vignetter", scenic: "Naturskjønne fjelloverganger og ferger", garage: "Min garasje" },
   },
   us: {
     eyebrow: "USA · 50 delstater",
-    originHint: "Startby eller landemerke (f.eks. Seattle, Denver, Miami)",
-    destinationHint: "Hvor skal du? (f.eks. Big Sur, Moab, Key West)",
+    originHint: "Hvor henter du bilen?",
+    destinationHint: "Hvor tar veien deg?",
     tollSystems: ["Bomveier og turnpikes i delstatene", "HOV-/ekspressfelt", "Bro- og tunnelbompenger"],
     nav: { planner: "Ruteplanlegger", tolls: "Bompenger og ekspressfelt", scenic: "Naturskjønne veier og ferger", garage: "Min garasje" },
     fuels: { petrol: "Bensin" },
@@ -69,8 +69,8 @@ const no: RegionPack = {
   },
   ca: {
     eyebrow: "Canada · kyst til kyst",
-    originHint: "Startby eller landemerke (f.eks. Toronto, Calgary, Halifax)",
-    destinationHint: "Hvor skal du? (f.eks. Banff, Tofino, Gaspésie)",
+    originHint: "Hvor henter du bilen?",
+    destinationHint: "Hvor tar veien deg?",
     tollSystems: ["Highway 407 ETR-omkjøring", "Provinsielle bompenger og broer", "BC Ferries-overfarter"],
     nav: { planner: "Ruteplanlegger", tolls: "Bompenger og bruer", scenic: "Naturskjønne ruter og ferger", garage: "Min garasje" },
     fuels: { petrol: "Bensin" },
@@ -81,15 +81,15 @@ const no: RegionPack = {
 const fr: RegionPack = {
   eu: {
     eyebrow: "Europe · plus de 30 pays",
-    originHint: "Ville ou lieu de départ (ex. : Munich, Oslo, Lyon)",
-    destinationHint: "Où allez-vous ? (ex. : côte amalfitaine, Alpes, Prague)",
+    originHint: "Où récupérez-vous la voiture ?",
+    destinationHint: "Où la route vous mène-t-elle ?",
     tollSystems: ["Vignettes et e-vignettes", "Péages autoroutiers à ticket", "Zones à faibles émissions urbaines"],
     nav: { planner: "Planificateur de road trip", tolls: "Péages et vignettes", scenic: "Cols panoramiques et ferries", garage: "Mon garage" },
   },
   us: {
     eyebrow: "États-Unis · 50 États",
-    originHint: "Ville ou lieu de départ (ex. : Seattle, Denver, Miami)",
-    destinationHint: "Où allez-vous ? (ex. : Big Sur, Moab, Key West)",
+    originHint: "Où récupérez-vous la voiture ?",
+    destinationHint: "Où la route vous mène-t-elle ?",
     tollSystems: ["Autoroutes à péage des États", "Voies HOV / express", "Péages de ponts et tunnels"],
     nav: { planner: "Planificateur de road trip", tolls: "Péages et voies express", scenic: "Routes panoramiques et ferries", garage: "Mon garage" },
     fuels: { petrol: "Essence" },
@@ -97,8 +97,8 @@ const fr: RegionPack = {
   },
   ca: {
     eyebrow: "Canada · d'un océan à l'autre",
-    originHint: "Ville ou lieu de départ (ex. : Toronto, Calgary, Halifax)",
-    destinationHint: "Où allez-vous ? (ex. : Banff, Tofino, Gaspésie)",
+    originHint: "Où récupérez-vous la voiture ?",
+    destinationHint: "Où la route vous mène-t-elle ?",
     tollSystems: ["Contournement de l'autoroute 407 ETR", "Péages et ponts provinciaux", "Traversées BC Ferries"],
     nav: { planner: "Planificateur de road trip", tolls: "Péages et ponts", scenic: "Routes panoramiques et traversiers", garage: "Mon garage" },
     fuels: { petrol: "Essence" },
@@ -109,15 +109,15 @@ const fr: RegionPack = {
 const de: RegionPack = {
   eu: {
     eyebrow: "Europa · über 30 Länder",
-    originHint: "Startstadt oder Wahrzeichen (z. B. München, Oslo, Wien)",
-    destinationHint: "Wohin geht die Reise? (z. B. Amalfiküste, Alpen, Prag)",
+    originHint: "Wo holst du das Auto ab?",
+    destinationHint: "Wohin führt dich die Straße?",
     tollSystems: ["Vignetten & E-Vignetten", "Ticketbasierte Autobahnmaut", "Städtische Umweltzonen"],
     nav: { planner: "Roadtrip-Planer", tolls: "Maut & Vignetten", scenic: "Panoramapässe & Fähren", garage: "Meine Garage" },
   },
   us: {
     eyebrow: "USA · 50 Bundesstaaten",
-    originHint: "Startstadt oder Wahrzeichen (z. B. Seattle, Denver, Miami)",
-    destinationHint: "Wohin geht die Reise? (z. B. Big Sur, Moab, Key West)",
+    originHint: "Wo holst du das Auto ab?",
+    destinationHint: "Wohin führt dich die Straße?",
     tollSystems: ["Mautstraßen & Turnpikes der Bundesstaaten", "HOV-/Express-Spuren", "Brücken- und Tunnelmaut"],
     nav: { planner: "Roadtrip-Planer", tolls: "Maut & Express-Spuren", scenic: "Panoramastraßen & Fähren", garage: "Meine Garage" },
     fuels: { petrol: "Benzin" },
@@ -125,8 +125,8 @@ const de: RegionPack = {
   },
   ca: {
     eyebrow: "Kanada · von Küste zu Küste",
-    originHint: "Startstadt oder Wahrzeichen (z. B. Toronto, Calgary, Halifax)",
-    destinationHint: "Wohin geht die Reise? (z. B. Banff, Tofino, Gaspésie)",
+    originHint: "Wo holst du das Auto ab?",
+    destinationHint: "Wohin führt dich die Straße?",
     tollSystems: ["Highway 407 ETR – Umfahrung", "Provinzielle Maut & Brücken", "BC-Ferries-Überfahrten"],
     nav: { planner: "Roadtrip-Planer", tolls: "Maut & Brücken", scenic: "Panoramarouten & Fähren", garage: "Meine Garage" },
     fuels: { petrol: "Benzin" },
@@ -137,15 +137,15 @@ const de: RegionPack = {
 const nl: RegionPack = {
   eu: {
     eyebrow: "Europa · 30+ landen",
-    originHint: "Startstad of oriëntatiepunt (bijv. München, Oslo, Utrecht)",
-    destinationHint: "Waar ga je heen? (bijv. Amalfikust, Alpen, Praag)",
+    originHint: "Waar haal je de auto op?",
+    destinationHint: "Waar brengt de weg je?",
     tollSystems: ["Vignetten & e-vignetten", "Tolwegen met ticket", "Stedelijke milieuzones"],
     nav: { planner: "Roadtripplanner", tolls: "Tol & vignetten", scenic: "Panoramapassen & veerboten", garage: "Mijn garage" },
   },
   us: {
     eyebrow: "Verenigde Staten · 50 staten",
-    originHint: "Startstad of oriëntatiepunt (bijv. Seattle, Denver, Miami)",
-    destinationHint: "Waar ga je heen? (bijv. Big Sur, Moab, Key West)",
+    originHint: "Waar haal je de auto op?",
+    destinationHint: "Waar brengt de weg je?",
     tollSystems: ["Tolwegen & turnpikes per staat", "HOV-/expressstroken", "Brug- en tunneltol"],
     nav: { planner: "Roadtripplanner", tolls: "Tol & expressstroken", scenic: "Panoramaroutes & veerboten", garage: "Mijn garage" },
     fuels: { petrol: "Benzine" },
@@ -153,8 +153,8 @@ const nl: RegionPack = {
   },
   ca: {
     eyebrow: "Canada · van kust tot kust",
-    originHint: "Startstad of oriëntatiepunt (bijv. Toronto, Calgary, Halifax)",
-    destinationHint: "Waar ga je heen? (bijv. Banff, Tofino, Gaspésie)",
+    originHint: "Waar haal je de auto op?",
+    destinationHint: "Waar brengt de weg je?",
     tollSystems: ["Highway 407 ETR-omleiding", "Provinciale tol & bruggen", "BC Ferries-overtochten"],
     nav: { planner: "Roadtripplanner", tolls: "Tol & bruggen", scenic: "Panoramaroutes & veerboten", garage: "Mijn garage" },
     fuels: { petrol: "Benzine" },
@@ -165,15 +165,15 @@ const nl: RegionPack = {
 const sv: RegionPack = {
   eu: {
     eyebrow: "Europa · 30+ länder",
-    originHint: "Startstad eller landmärke (t.ex. München, Oslo, Stockholm)",
-    destinationHint: "Vart är du på väg? (t.ex. Amalfikusten, Alperna, Prag)",
+    originHint: "Var hämtar du bilen?",
+    destinationHint: "Vart tar vägen dig?",
     tollSystems: ["Vinjetter och e-vinjetter", "Biljettbaserade motorvägsavgifter", "Miljözoner i städer"],
     nav: { planner: "Roadtrip-planerare", tolls: "Vägavgifter och vinjetter", scenic: "Panoramapass och färjor", garage: "Mitt garage" },
   },
   us: {
     eyebrow: "USA · 50 delstater",
-    originHint: "Startstad eller landmärke (t.ex. Seattle, Denver, Miami)",
-    destinationHint: "Vart är du på väg? (t.ex. Big Sur, Moab, Key West)",
+    originHint: "Var hämtar du bilen?",
+    destinationHint: "Vart tar vägen dig?",
     tollSystems: ["Delstatliga betalvägar och turnpikes", "HOV-/expressfiler", "Bro- och tunnelavgifter"],
     nav: { planner: "Roadtrip-planerare", tolls: "Vägavgifter och expressfiler", scenic: "Natursköna vägar och färjor", garage: "Mitt garage" },
     fuels: { petrol: "Bensin" },
@@ -181,8 +181,8 @@ const sv: RegionPack = {
   },
   ca: {
     eyebrow: "Kanada · kust till kust",
-    originHint: "Startstad eller landmärke (t.ex. Toronto, Calgary, Halifax)",
-    destinationHint: "Vart är du på väg? (t.ex. Banff, Tofino, Gaspésie)",
+    originHint: "Var hämtar du bilen?",
+    destinationHint: "Vart tar vägen dig?",
     tollSystems: ["Highway 407 ETR-förbifart", "Provinsiella vägavgifter och broar", "BC Ferries-överfarter"],
     nav: { planner: "Roadtrip-planerare", tolls: "Vägavgifter och broar", scenic: "Natursköna rutter och färjor", garage: "Mitt garage" },
     fuels: { petrol: "Bensin" },
@@ -193,15 +193,15 @@ const sv: RegionPack = {
 const da: RegionPack = {
   eu: {
     eyebrow: "Europa · 30+ lande",
-    originHint: "Startby eller vartegn (f.eks. München, Oslo, København)",
-    destinationHint: "Hvor skal du hen? (f.eks. Amalfikysten, Alperne, Prag)",
+    originHint: "Hvor henter du bilen?",
+    destinationHint: "Hvor bringer vejen dig?",
     tollSystems: ["Vignetter og e-vignetter", "Billetbaserede motorvejsafgifter", "Miljøzoner i byerne"],
     nav: { planner: "Roadtrip-planlægger", tolls: "Vejafgifter og vignetter", scenic: "Panoramapas og færger", garage: "Min garage" },
   },
   us: {
     eyebrow: "USA · 50 delstater",
-    originHint: "Startby eller vartegn (f.eks. Seattle, Denver, Miami)",
-    destinationHint: "Hvor skal du hen? (f.eks. Big Sur, Moab, Key West)",
+    originHint: "Hvor henter du bilen?",
+    destinationHint: "Hvor bringer vejen dig?",
     tollSystems: ["Delstatslige betalingsveje og turnpikes", "HOV-/ekspresbaner", "Bro- og tunnelafgifter"],
     nav: { planner: "Roadtrip-planlægger", tolls: "Vejafgifter og ekspresbaner", scenic: "Naturskønne veje og færger", garage: "Min garage" },
     fuels: { petrol: "Benzin" },
@@ -209,8 +209,8 @@ const da: RegionPack = {
   },
   ca: {
     eyebrow: "Canada · kyst til kyst",
-    originHint: "Startby eller vartegn (f.eks. Toronto, Calgary, Halifax)",
-    destinationHint: "Hvor skal du hen? (f.eks. Banff, Tofino, Gaspésie)",
+    originHint: "Hvor henter du bilen?",
+    destinationHint: "Hvor bringer vejen dig?",
     tollSystems: ["Highway 407 ETR-omfartsvej", "Provinsielle vejafgifter og broer", "BC Ferries-overfarter"],
     nav: { planner: "Roadtrip-planlægger", tolls: "Vejafgifter og broer", scenic: "Naturskønne ruter og færger", garage: "Min garage" },
     fuels: { petrol: "Benzin" },
@@ -221,15 +221,15 @@ const da: RegionPack = {
 const pl: RegionPack = {
   eu: {
     eyebrow: "Europa · ponad 30 krajów",
-    originHint: "Miasto startowe lub punkt orientacyjny (np. Monachium, Oslo, Kraków)",
-    destinationHint: "Dokąd jedziesz? (np. Wybrzeże Amalfi, Alpy, Praga)",
+    originHint: "Gdzie odbierasz auto?",
+    destinationHint: "Dokąd prowadzi Cię droga?",
     tollSystems: ["Winiety i e-winiety", "Autostrady biletowe", "Miejskie strefy czystego transportu"],
     nav: { planner: "Planer podróży", tolls: "Opłaty i winiety", scenic: "Widokowe przełęcze i promy", garage: "Mój garaż" },
   },
   us: {
     eyebrow: "USA · 50 stanów",
-    originHint: "Miasto startowe lub punkt orientacyjny (np. Seattle, Denver, Miami)",
-    destinationHint: "Dokąd jedziesz? (np. Big Sur, Moab, Key West)",
+    originHint: "Gdzie odbierasz auto?",
+    destinationHint: "Dokąd prowadzi Cię droga?",
     tollSystems: ["Stanowe drogi płatne i turnpike", "Pasy HOV / ekspresowe", "Opłaty za mosty i tunele"],
     nav: { planner: "Planer podróży", tolls: "Opłaty i pasy ekspresowe", scenic: "Trasy widokowe i promy", garage: "Mój garaż" },
     fuels: { petrol: "Benzyna" },
@@ -237,8 +237,8 @@ const pl: RegionPack = {
   },
   ca: {
     eyebrow: "Kanada · od oceanu do oceanu",
-    originHint: "Miasto startowe lub punkt orientacyjny (np. Toronto, Calgary, Halifax)",
-    destinationHint: "Dokąd jedziesz? (np. Banff, Tofino, Gaspésie)",
+    originHint: "Gdzie odbierasz auto?",
+    destinationHint: "Dokąd prowadzi Cię droga?",
     tollSystems: ["Objazd autostradą 407 ETR", "Prowincjonalne opłaty i mosty", "Przeprawy BC Ferries"],
     nav: { planner: "Planer podróży", tolls: "Opłaty i mosty", scenic: "Trasy widokowe i promy", garage: "Mój garaż" },
     fuels: { petrol: "Benzyna" },
@@ -249,15 +249,15 @@ const pl: RegionPack = {
 const es: RegionPack = {
   eu: {
     eyebrow: "Europa · más de 30 países",
-    originHint: "Ciudad o lugar de salida (p. ej., Múnich, Oslo, Madrid)",
-    destinationHint: "¿Adónde te diriges? (p. ej., Costa Amalfitana, Alpes, Praga)",
+    originHint: "¿Dónde recoges el coche?",
+    destinationHint: "¿Adónde te lleva la carretera?",
     tollSystems: ["Viñetas y viñetas electrónicas", "Peajes de autopista por ticket", "Zonas urbanas de bajas emisiones"],
     nav: { planner: "Planificador de viajes", tolls: "Peajes y viñetas", scenic: "Puertos panorámicos y ferris", garage: "Mi garaje" },
   },
   us: {
     eyebrow: "Estados Unidos · 50 estados",
-    originHint: "Ciudad o lugar de salida (p. ej., Seattle, Denver, Miami)",
-    destinationHint: "¿Adónde te diriges? (p. ej., Big Sur, Moab, Key West)",
+    originHint: "¿Dónde recoges el coche?",
+    destinationHint: "¿Adónde te lleva la carretera?",
     tollSystems: ["Autopistas de peaje estatales y turnpikes", "Carriles HOV / exprés", "Peajes de puentes y túneles"],
     nav: { planner: "Planificador de viajes", tolls: "Peajes y carriles exprés", scenic: "Rutas panorámicas y ferris", garage: "Mi garaje" },
     fuels: { petrol: "Gasolina" },
@@ -265,8 +265,8 @@ const es: RegionPack = {
   },
   ca: {
     eyebrow: "Canadá · de costa a costa",
-    originHint: "Ciudad o lugar de salida (p. ej., Toronto, Calgary, Halifax)",
-    destinationHint: "¿Adónde te diriges? (p. ej., Banff, Tofino, Gaspésie)",
+    originHint: "¿Dónde recoges el coche?",
+    destinationHint: "¿Adónde te lleva la carretera?",
     tollSystems: ["Circunvalación de peaje Highway 407 ETR", "Peajes y puentes provinciales", "Travesías de BC Ferries"],
     nav: { planner: "Planificador de viajes", tolls: "Peajes y puentes", scenic: "Rutas panorámicas y ferris", garage: "Mi garaje" },
     fuels: { petrol: "Gasolina" },
@@ -277,15 +277,15 @@ const es: RegionPack = {
 const it: RegionPack = {
   eu: {
     eyebrow: "Europa · oltre 30 paesi",
-    originHint: "Città o luogo di partenza (es. Monaco, Oslo, Milano)",
-    destinationHint: "Dove sei diretto? (es. Costiera Amalfitana, Alpi, Praga)",
+    originHint: "Dove ritiri l'auto?",
+    destinationHint: "Dove ti porta la strada?",
     tollSystems: ["Vignette ed e-vignette", "Pedaggi autostradali a biglietto", "Zone a basse emissioni urbane"],
     nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e vignette", scenic: "Passi panoramici e traghetti", garage: "Il mio garage" },
   },
   us: {
     eyebrow: "Stati Uniti · 50 stati",
-    originHint: "Città o luogo di partenza (es. Seattle, Denver, Miami)",
-    destinationHint: "Dove sei diretto? (es. Big Sur, Moab, Key West)",
+    originHint: "Dove ritiri l'auto?",
+    destinationHint: "Dove ti porta la strada?",
     tollSystems: ["Autostrade a pedaggio statali e turnpike", "Corsie HOV / express", "Pedaggi di ponti e tunnel"],
     nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e corsie express", scenic: "Strade panoramiche e traghetti", garage: "Il mio garage" },
     fuels: { petrol: "Benzina" },
@@ -293,8 +293,8 @@ const it: RegionPack = {
   },
   ca: {
     eyebrow: "Canada · da costa a costa",
-    originHint: "Città o luogo di partenza (es. Toronto, Calgary, Halifax)",
-    destinationHint: "Dove sei diretto? (es. Banff, Tofino, Gaspésie)",
+    originHint: "Dove ritiri l'auto?",
+    destinationHint: "Dove ti porta la strada?",
     tollSystems: ["Circonvallazione a pedaggio Highway 407 ETR", "Pedaggi e ponti provinciali", "Traversate BC Ferries"],
     nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e ponti", scenic: "Percorsi panoramici e traghetti", garage: "Il mio garage" },
     fuels: { petrol: "Benzina" },
@@ -305,8 +305,8 @@ const it: RegionPack = {
 const us: RegionPack = {
   eu: {
     eyebrow: "Europe · 30+ countries",
-    originHint: "Start city or landmark (e.g., Munich, Oslo, Seattle)",
-    destinationHint: "Where are you heading? (e.g., Amalfi Coast, Banff, Miami)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
     tollSystems: [
       "Digital vignettes & toll stickers",
       "Ticket-based motorway tolls",
@@ -318,8 +318,8 @@ const us: RegionPack = {
   },
   us: {
     eyebrow: "United States · 50 states",
-    originHint: "Start city or landmark (e.g., Seattle, Denver, Miami)",
-    destinationHint: "Where are you heading? (e.g., Big Sur, Moab, Key West)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
     tollSystems: ["State toll roads & turnpikes", "HOV / Express lanes", "Bridge & tunnel tolls"],
     nav: { planner: "Road Trip Planner", tolls: "Tolls & Express Lanes", scenic: "Scenic Byways & Ferries", garage: "My Garage" },
     fuels: { petrol: "Gas" },
@@ -327,8 +327,8 @@ const us: RegionPack = {
   },
   ca: {
     eyebrow: "Canada · coast to coast",
-    originHint: "Start city or landmark (e.g., Toronto, Calgary, Halifax)",
-    destinationHint: "Where are you heading? (e.g., Banff, Tofino, Gaspésie)",
+    originHint: "Where are you picking up the car?",
+    destinationHint: "Where is the road taking you?",
     tollSystems: ["Highway 407 ETR bypass", "Provincial tolls & bridges", "BC Ferries crossings"],
     nav: { planner: "Road Trip Planner", tolls: "Tolls & Bridges", scenic: "Scenic Routes & Ferries", garage: "My Garage" },
     fuels: { petrol: "Gas" },
