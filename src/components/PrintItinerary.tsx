@@ -307,11 +307,23 @@ export function PrintItinerary({
         </div>
 
         <header className="print-block border-b border-border pb-5">
-          <div className="flex items-center gap-2">
-            <img src={autovereLogo} alt="AutoVere" width={28} height={28} className="size-7 rounded-md" />
-            <p className="text-lg font-semibold tracking-tight">
-              Auto<span className="text-primary">Vere</span>
-            </p>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <img src={autovereLogo} alt="AutoVere" width={28} height={28} className="size-7 rounded-md" />
+              <p className="text-lg font-semibold tracking-tight">
+                Auto<span className="text-primary">Vere</span>{" "}
+                <span className="font-normal text-foreground/70">{tr("Road Trip Dossier")}</span>
+              </p>
+            </div>
+            <div className="text-right text-[11px] leading-5 text-foreground/70">
+              <p>{date}</p>
+              <p>
+                {tr("Trip ref")}: <span className="font-semibold">{tripRef}</span>
+              </p>
+              <p className="font-semibold">
+                {tr("Currency")}: {display.code}
+              </p>
+            </div>
           </div>
           <h1 className="mt-2 text-xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-1 text-sm text-foreground/70">
