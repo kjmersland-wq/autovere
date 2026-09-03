@@ -11,6 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import { AuthModal } from "@/components/AuthModal";
 import { AuthProvider } from "@/lib/auth";
+import { LocaleAutoDetect } from "@/components/LocaleAutoDetect";
 import { CurrencyProvider } from "@/lib/currency";
 import { SiteFooter } from "@/components/SiteFooter";
 import { Toaster } from "@/components/ui/sonner";
