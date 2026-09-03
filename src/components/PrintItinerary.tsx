@@ -354,13 +354,22 @@ export function PrintItinerary({
 
         <section className="print-block mt-6">
           <h2 className="print-h2">{tr("Route corridor snapshot")}</h2>
-          <RouteSnapshot
-            seed={`${origin}-${destination}-${trip.variant}`}
-            origin={origin}
-            destination={destination}
-            waypoints={checkpoints}
-            coords={trip.corridor?.coords ?? []}
-          />
+          {staticMap && !mapFailed ? (
+            <img
+              src={staticMap}
+              onError={() => setMapFailed(true)}
+              alt={`${origin} → ${destination}`}
+              className="print-map mt-3 h-[320px] w-full rounded-xl border border-border object-cover"
+            />
+          ) : (
+            <RouteSnapshot
+              seed={`${origin}-${destination}-${trip.variant}`}
+              origin={origin}
+              destination={destination}
+              waypoints={checkpoints}
+              coords={trip.corridor?.coords ?? []}
+            />
+          )}
         </section>
 
         <section className="print-block mt-6">
