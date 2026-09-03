@@ -200,19 +200,14 @@ export const Route = createFileRoute("/$lang/$page")({
           { property: "og:description", content: rDesc },
           { property: "og:type", content: "website" },
           { property: "og:url", content: url },
-          { property: "og:image", content: regionImage },
-          { property: "og:image:width", content: "1200" },
-          { property: "og:image:height", content: "630" },
+          ...ogImageMeta(regionImage),
           { name: "twitter:card", content: "summary_large_image" },
-          { name: "twitter:image", content: regionImage },
         ],
         links: [{ rel: "canonical", href: url }],
       };
     }
 
-    const image = absUrl(
-      `/og/autovere-og-${prefix === "pl" || prefix === "no" ? prefix : "en"}.jpg`,
-    );
+    const image = ogImageUrl(prefix);
     const info = infoFor(params.lang, params.page);
     const localized = INFO_BY_LANG[prefix] != null;
 
@@ -239,9 +234,8 @@ export const Route = createFileRoute("/$lang/$page")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
-        { property: "og:image", content: image },
+        ...ogImageMeta(image),
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: image },
       ],
       links: [{ rel: "canonical", href: url }],
       ...(info && params.page === "faq" ? { scripts: faqScript(info.sections) } : {}),
