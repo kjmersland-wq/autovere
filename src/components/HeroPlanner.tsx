@@ -344,7 +344,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               )}
             </div>
 
-            <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
+            <div data-tour="places" className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
               <PlaceAutocomplete
                 value={origin}
                 onValueChange={(v) => {
