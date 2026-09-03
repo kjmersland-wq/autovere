@@ -23,6 +23,37 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
 
 type PageMeta = { title: string; description: string };
 
+/** Localized 1200x630 social share images, one per language tree. */
+const OG_IMAGE_BY_PREFIX: Record<LocalePrefix, string> = {
+  no: "/og/og-no.jpg",
+  se: "/og/og-sv.jpg",
+  dk: "/og/og-da.jpg",
+  usa: "/og/og-us.jpg",
+  de: "/og/og-de.jpg",
+  nl: "/og/og-nl.jpg",
+  fr: "/og/og-fr.jpg",
+  pl: "/og/og-pl.jpg",
+  es: "/og/og-es.jpg",
+  it: "/og/og-it.jpg",
+};
+
+/** Absolute URL of the share image for a language prefix (null = English root). */
+export function ogImageUrl(prefix: LocalePrefix | null | undefined): string {
+  return absUrl(prefix ? (OG_IMAGE_BY_PREFIX[prefix] ?? "/og-image.jpg") : "/og-image.jpg");
+}
+
+/** The og:image / secure_url / twitter:image trio for a fully qualified image URL. */
+export function ogImageMeta(image: string) {
+  return [
+    { property: "og:image", content: image },
+    { property: "og:image:secure_url", content: image },
+    { property: "og:image:type", content: "image/jpeg" },
+    { property: "og:image:width", content: "1200" },
+    { property: "og:image:height", content: "630" },
+    { name: "twitter:image", content: image },
+  ];
+}
+
 /** Titles for the app pages that have no per-language info content. */
 const APP_PAGE_META_BASE = {
   no: {

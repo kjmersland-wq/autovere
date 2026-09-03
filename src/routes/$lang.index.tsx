@@ -3,7 +3,8 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { ShareButton } from "@/components/ShareButton";
 import { LOCALE_LANDING } from "@/lib/dictionaries";
-import { isLocalePrefix, LOCALE_ROUTES } from "@/lib/locales";
+import { isLocalePrefix, LOCALE_ROUTES, type LocalePrefix } from "@/lib/locales";
+import { ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 function landingFor(lang: string) {
   const entry = LOCALE_ROUTES.find((l) => l.prefix === lang);
@@ -18,9 +19,7 @@ export const Route = createFileRoute("/$lang/")({
     const c = landingFor(params.lang);
     if (!c) return { meta: [{ title: "AutoVere" }] };
     const url = `https://www.autovere.com/${params.lang}`;
-    const image = `https://www.autovere.com/og/autovere-og-${
-      params.lang === "pl" || params.lang === "no" ? params.lang : "en"
-    }.jpg`;
+    const image = ogImageUrl(params.lang as LocalePrefix);
     return {
       meta: [
         { title: c.metaTitle },
@@ -29,11 +28,8 @@ export const Route = createFileRoute("/$lang/")({
         { property: "og:description", content: c.metaDescription },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
-        { property: "og:image", content: image },
-        { property: "og:image:width", content: "1200" },
-        { property: "og:image:height", content: "630" },
+        ...ogImageMeta(image),
         { name: "twitter:card", content: "summary_large_image" },
-        { name: "twitter:image", content: image },
       ],
       links: [{ rel: "canonical", href: url }],
     };
