@@ -30,9 +30,19 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  * needed for that.
  */
 
-function getAdminEmail(): string | null {
-  const email = process.env["IN_CAR_ADMIN_EMAIL"];
-  return email && email.trim() ? email.trim() : null;
+/** Owner account, plus any extra emails configured via IN_CAR_ADMIN_EMAIL (comma-separated). */
+const DEFAULT_ADMIN_EMAILS = ["kjmersland@gmail.com"];
+
+function getAdminEmails(): string[] {
+  const configured = (process.env["IN_CAR_ADMIN_EMAIL"] ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  return Array.from(new Set([...DEFAULT_ADMIN_EMAILS, ...configured]));
+}
+
+function isAdminEmail(email: string): boolean {
+  return getAdminEmails().includes(email.trim().toLowerCase());
 }
 
 const requestAccessSchema = z.object({
