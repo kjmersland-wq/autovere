@@ -2,7 +2,7 @@ import { Suspense, lazy, useMemo, useState } from "react";
 import { ClientOnly } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { Fuel, Map as MapIcon, Navigation, Plus, Radar } from "lucide-react";
+import { Fuel, Map as MapIcon, Plus, Radar } from "lucide-react";
 
 import {
   Accordion,
@@ -38,8 +38,10 @@ import {
 } from "@/lib/trip-data";
 import { convert, currencyFromSymbol, formatCurrency, useMoney } from "@/lib/currency";
 
+import SendToCarHub from "@/components/SendToCarHub";
+
 const LiveMap = lazy(() => import("@/components/LiveMap"));
-const SendToCarHub = lazy(() => import("@/components/SendToCarHub"));
+
 
 const STATUS_COLOR: Record<string, string> = {
   open: "#34d399",
