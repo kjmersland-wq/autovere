@@ -9,6 +9,7 @@ import { CONTENT_DA, DA_PATTERNS } from "@/lib/content-da";
 import { CONTENT_DE, DE_PATTERNS } from "@/lib/content-de";
 import { CONTENT_ES, ES_PATTERNS } from "@/lib/content-es";
 import { CONTENT_FR, FR_PATTERNS } from "@/lib/content-fr";
+import { CONTENT_IT, IT_PATTERNS } from "@/lib/content-it";
 import { CONTENT_NL, NL_PATTERNS } from "@/lib/content-nl";
 import { CONTENT_NO } from "@/lib/content-no";
 import { CONTENT_PL } from "@/lib/content-pl";
@@ -602,8 +603,7 @@ const STRINGS_BASE = {
 export const STRINGS: Record<Locale, Strings> = {
   ...STRINGS_BASE,
   es: withFallback("es"),
-  // Placeholder: English strings until translations land.
-  it: STRINGS_BASE.en,
+  it: withFallback("it"),
 };
 
 export function useT(): Strings {
@@ -688,6 +688,7 @@ const CONTENT_DICTS: Partial<Record<Locale, Record<string, string>>> = {
   nl: CONTENT_NL,
   fr: CONTENT_FR,
   es: CONTENT_ES,
+  it: CONTENT_IT,
 };
 
 const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
@@ -699,6 +700,7 @@ const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
   nl: NL_PATTERNS,
   fr: FR_PATTERNS,
   es: ES_PATTERNS,
+  it: IT_PATTERNS,
 };
 
 export function useTr(): (value: string) => string {

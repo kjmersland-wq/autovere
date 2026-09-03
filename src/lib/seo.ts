@@ -179,8 +179,28 @@ const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>>
         "Guarda tus coches, autocaravanas y motos, sus capacidades de depósito y dispositivos de telepeaje, además de cada itinerario listo para descargar en GPX.",
     },
   },
-  // Placeholder: English metadata until translations land.
-  it: {},
+  it: {
+    planner: {
+      title: "Pianifica il viaggio — pedaggi, carburante e traghetti | AutoVere Italia",
+      description:
+        "Pianifica il percorso e scopri pedaggi, vignette, carburante, ricarica elettrica e traghetti in un budget chiaro per auto, camper e moto.",
+    },
+    tolls: {
+      title: "Pedaggi e vignette spiegati — Europa, USA e Canada | AutoVere Italia",
+      description:
+        "Guida chiara e aggiornata su pedaggi, vignette e Telepass in Europa, Stati Uniti e Canada, per auto, camper e moto.",
+    },
+    scenic: {
+      title: "Passi di montagna e traghetti — le strade che meritano la deviazione | AutoVere Italia",
+      description:
+        "Passi alpini, strade costiere e traghetti per auto in Europa, Stati Uniti e Canada, con stagionalità, limiti di altezza e consigli di prenotazione.",
+    },
+    garage: {
+      title: "Il mio Garage e i viaggi — veicoli, Telepass e percorsi salvati | AutoVere Italia",
+      description:
+        "Salva le tue auto, i camper e le moto, la capacità del serbatoio e i dispositivi di telepedaggio, oltre a ogni itinerario pronto per il download in GPX.",
+    },
+  },
 };
 
 export function appPageMeta(prefix: LocalePrefix, page: LocalePage): PageMeta | null {

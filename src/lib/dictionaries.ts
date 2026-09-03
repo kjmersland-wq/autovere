@@ -7,6 +7,7 @@ import { DA_DICT } from "@/lib/dict-da";
 import { DE_DICT } from "@/lib/dict-de";
 import { ES_DICT } from "@/lib/dict-es";
 import { FR_DICT } from "@/lib/dict-fr";
+import { IT_DICT } from "@/lib/dict-it";
 import { NL_DICT } from "@/lib/dict-nl";
 import { PL_DICT } from "@/lib/dict-pl";
 import { SV_DICT } from "@/lib/dict-sv";
@@ -21,6 +22,7 @@ export const PARTIAL_DICTS: Record<string, Dict> = {
   fr: FR_DICT,
   pl: PL_DICT,
   es: ES_DICT,
+  it: IT_DICT,
 };
 
 /** Hero copy per language for the localized landing page. */
@@ -91,14 +93,13 @@ export const LOCALE_LANDING: Record<
     metaDescription:
       "Planifica tu viaje por carretera con peajes, viñetas, combustible, carga y ferris exactos para coches, autocaravanas y motos.",
   },
-  // Placeholder: English copy until translations land.
   it: {
-    eyebrow: "Europe · 30+ countries",
-    title: "Plan it once. Enjoy every kilometre.",
+    eyebrow: "Europa · oltre 30 paesi",
+    title: "Pianificalo una volta. Goditi ogni chilometro.",
     subtitle:
-      "Tell us where you're starting and where you're dreaming of — we'll handle tolls, vignettes, fuel, charging and ferries.",
-    metaTitle: "AutoVere Italia — Tolls, vignettes and road trip costs",
+      "Dicci da dove parti e dove sogni di arrivare — pensiamo noi a pedaggi, vignette, carburante, ricarica e traghetti.",
+    metaTitle: "AutoVere Italia — Pedaggi, vignette e costi di viaggio",
     metaDescription:
-      "Plan your road trip with exact tolls, vignettes, fuel, charging and ferry costs for cars, motorhomes and motorcycles.",
+      "Pianifica il tuo viaggio su strada con pedaggi, vignette, carburante, ricarica e traghetti precisi per auto, camper e moto.",
   },
 };

@@ -90,6 +90,14 @@ const COPY: Record<
     esimNote: "Datos móviles eSIM — sin sorpresas de itinerancia",
     ferry: "Compara billetes de ferry",
   },
+  it: {
+    title: "Utile per questo viaggio",
+    car: "Confronta il noleggio auto",
+    bike: "Noleggia una moto o uno scooter",
+    esim: "Resta connesso all'estero",
+    esimNote: "Dati mobili eSIM — nessuna sorpresa di roaming",
+    ferry: "Confronta i biglietti dei traghetti",
+  },
 };
 
 const pill =

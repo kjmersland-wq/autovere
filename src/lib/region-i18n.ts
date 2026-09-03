@@ -231,7 +231,31 @@ const es: RegionPack = {
   },
 };
 
-const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it: en };
+const it: RegionPack = {
+  eu: {
+    eyebrow: "Europa · oltre 30 paesi",
+    originHint: "Città o luogo di partenza (es. Monaco, Oslo, Milano)",
+    destinationHint: "Dove sei diretto? (es. Costiera Amalfitana, Alpi, Praga)",
+    tollSystems: ["Vignette ed e-vignette", "Pedaggi autostradali a biglietto", "Zone a basse emissioni urbane"],
+    nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e vignette", scenic: "Passi panoramici e traghetti", garage: "Il mio garage" },
+  },
+  us: {
+    eyebrow: "Stati Uniti · 50 stati",
+    originHint: "Città o luogo di partenza (es. Seattle, Denver, Miami)",
+    destinationHint: "Dove sei diretto? (es. Big Sur, Moab, Key West)",
+    tollSystems: ["Autostrade a pedaggio statali e turnpike", "Corsie HOV / express", "Pedaggi di ponti e tunnel"],
+    nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e corsie express", scenic: "Strade panoramiche e traghetti", garage: "Il mio garage" },
+  },
+  ca: {
+    eyebrow: "Canada · da costa a costa",
+    originHint: "Città o luogo di partenza (es. Toronto, Calgary, Halifax)",
+    destinationHint: "Dove sei diretto? (es. Banff, Tofino, Gaspésie)",
+    tollSystems: ["Circonvallazione a pedaggio Highway 407 ETR", "Pedaggi e ponti provinciali", "Traversate BC Ferries"],
+    nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e autostrade a pedaggio", scenic: "Percorsi panoramici e traghetti", garage: "Il mio garage" },
+  },
+};
+
+const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it };
 
 export function regionStrings(locale: Locale, region: RegionKey): RegionStrings {
   return (PACKS[locale] ?? en)[region];

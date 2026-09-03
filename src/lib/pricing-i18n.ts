@@ -513,6 +513,57 @@ const ES_TIERS: Tier[] = [
   },
 ];
 
+const IT_TIERS: Tier[] = [
+  {
+    id: "free",
+    name: "Free",
+    emoji: "🧭",
+    tagline: "Tutto quello che ti serve per una prima stima onesta.",
+    monthly: "0 €",
+    cta: "Inizia a pianificare gratis",
+    features: [
+      "Calcolo di base di pedaggi, vignette e carburante",
+      "Instradamento OSRM in Europa, negli USA e in Canada",
+      "Un profilo veicolo",
+      "Esplora i costi per paese e stato",
+      "Condividi un link di viaggio",
+    ],
+  },
+  {
+    id: "pro",
+    name: "AutoVere Pro",
+    emoji: "✨",
+    tagline: "Per chi vive per il prossimo passo di montagna.",
+    monthly: "4,99 €",
+    yearly: "39 €",
+    cta: "Passa a Pro",
+    highlight: true,
+    features: [
+      "Garage multi-veicolo (auto, camper, moto)",
+      "Esportazione GPX e KML verso Garmin, TomTom e CarPlay",
+      "Avvisi in tempo reale su passi di montagna e traghetti",
+      "Itinerario offline passo-passo e pacchetti da stampare",
+      "Sconti pedaggio per la moto e radar di sicurezza per il conducente",
+      "Viaggi salvati illimitati",
+    ],
+  },
+  {
+    id: "fleet",
+    name: "AutoVere Business / Flotta",
+    emoji: "🚛",
+    tagline: "Operazioni transfrontaliere, centralizzate.",
+    monthly: "19 €",
+    cta: "Passa a Business",
+    features: [
+      "Consolidamento delle fatture di pedaggio multi-paese",
+      "Instradamento di squadra con libreria di viaggi condivisa",
+      "Profili per veicoli pesanti (>3,5 t) e pedaggi per asse",
+      "Assegnazione conducenti ed esportazione centri di costo (CSV)",
+      "Supporto prioritario di KM TECH LABS",
+    ],
+  },
+];
+
 export const TIERS = EN_TIERS;
 export const TIERS_PL = PL_TIERS;
 
@@ -526,7 +577,7 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   fr: FR_TIERS,
   pl: PL_TIERS,
   es: ES_TIERS,
-  it: EN_TIERS,
+  it: IT_TIERS,
 };
 
 const COPY_BASE = {
@@ -728,9 +779,31 @@ const COPY_BASE = {
     signupToast: "Crea primero tu cuenta y te llevaremos directo al pago seguro.",
     portalError: "No se pudo abrir el portal de facturación.",
   },
+  it: {
+    onPlan: "Il tuo piano:",
+    retrying: " — nuovo tentativo di pagamento",
+    until: (d) => `L'accesso resta attivo fino al ${d}.`,
+    renews: (d) => `Si rinnova il ${d}.`,
+    active: "Abbonamento attivo.",
+    manage: "Gestisci fatturazione",
+    monthly: "Mensile",
+    yearly: "Annuale · risparmia il 35%",
+    forever: "per sempre",
+    perYear: "all'anno",
+    perMonth: "al mese",
+    mostLoved: "Il più scelto",
+    proFine: "4,99 €/mese o 39 €/anno — annulla quando vuoi.",
+    current: "Il tuo piano attuale",
+    switch: "Cambia piano nel portale di fatturazione",
+    foot: "Prezzi in EUR, IVA applicabile inclusa. Pagamenti e imposte gestiti in sicurezza da Stripe. Le stime di costo restano indicative — verifica sempre sui portali ufficiali dei pedaggi.",
+    checkout: "Pagamento sicuro",
+    freeToast: "Sei sul piano Free — buona pianificazione!",
+    signupToast: "Crea prima il tuo account: ti porteremo direttamente al pagamento sicuro.",
+    portalError: "Impossibile aprire il portale di fatturazione.",
+  },
 } satisfies Partial<Record<Locale, PricingCopy>>;
 
-const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.en };
+const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.it };
 
 const HERO_BASE = {
   en: {
@@ -787,9 +860,15 @@ const HERO_BASE = {
     intro:
       "Todos los planes empiezan con cifras honestas. Mejora tu plan cuando quieras un garaje completo, navegación offline y facturación de peajes para flotas — cancela cuando termine la temporada.",
   },
+  it: {
+    eyebrow: "Piani e prezzi",
+    title: "Scegli il piano più adatto al tuo prossimo viaggio.",
+    intro:
+      "Ogni piano parte da numeri onesti. Passa a un livello superiore quando vuoi un garage completo, la navigazione offline e la fatturazione dei pedaggi per la tua flotta — annulla quando finisce la stagione.",
+  },
 };
 
-const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.en };
+const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.it };
 
 /**
  * Regional price overrides. The tier structure, features and copy stay identical

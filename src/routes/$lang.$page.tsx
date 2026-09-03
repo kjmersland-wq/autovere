@@ -49,6 +49,14 @@ import {
   FR_TERMS,
 } from "@/lib/global-content-fr";
 import {
+  IT_FAQ,
+  IT_HOW_IT_WORKS,
+  IT_PARTNERS,
+  IT_PRICING,
+  IT_PRIVACY,
+  IT_TERMS,
+} from "@/lib/global-content-it";
+import {
   NL_FAQ,
   NL_HOW_IT_WORKS,
   NL_PARTNERS,
@@ -149,6 +157,14 @@ const INFO_BY_LANG: Record<string, typeof INFO> = {
     partners: ES_PARTNERS,
     privacy: ES_PRIVACY,
     terms: ES_TERMS,
+  },
+  it: {
+    faq: IT_FAQ,
+    "how-it-works": IT_HOW_IT_WORKS,
+    pricing: IT_PRICING,
+    partners: IT_PARTNERS,
+    privacy: IT_PRIVACY,
+    terms: IT_TERMS,
   },
 };
 
