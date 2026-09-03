@@ -117,6 +117,52 @@ function RouteSnapshot({
   );
 }
 
+/** Google's encoded-polyline algorithm — needed for the Static Maps URL. */
+function encodePolyline(coords: [number, number][]) {
+  let lastLat = 0;
+  let lastLng = 0;
+  let out = "";
+  const enc = (v: number) => {
+    let val = v < 0 ? ~(v << 1) : v << 1;
+    let chunk = "";
+    while (val >= 0x20) {
+      chunk += String.fromCharCode((0x20 | (val & 0x1f)) + 63);
+      val >>= 5;
+    }
+    chunk += String.fromCharCode(val + 63);
+    return chunk;
+  };
+  for (const [lat, lng] of coords) {
+    const la = Math.round(lat * 1e5);
+    const ln = Math.round(lng * 1e5);
+    out += enc(la - lastLat) + enc(ln - lastLng);
+    lastLat = la;
+    lastLng = ln;
+  }
+  return out;
+}
+
+/** Sharp raster map for the printed dossier — canvas maps print blank. */
+function staticMapUrl(coords: [number, number][]) {
+  const key = import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY"] as string | undefined;
+  if (!key || coords.length < 2) return "";
+  const step = Math.max(1, Math.ceil(coords.length / 90));
+  const thin = coords.filter((_, i) => i % step === 0 || i === coords.length - 1);
+  const start = thin[0]!;
+  const end = thin[thin.length - 1]!;
+  const params = new URLSearchParams({
+    size: "640x320",
+    scale: "2",
+    maptype: "roadmap",
+    format: "png",
+    key,
+  });
+  params.append("path", `weight:4|color:0x1d4ed8ff|enc:${encodePolyline(thin)}`);
+  params.append("markers", `color:0x16a34a|label:A|${start[0].toFixed(5)},${start[1].toFixed(5)}`);
+  params.append("markers", `color:0xdc2626|label:B|${end[0].toFixed(5)},${end[1].toFixed(5)}`);
+  return `https://maps.googleapis.com/maps/api/staticmap?${params.toString()}`;
+}
+
 function QrPanel({ url }: { url: string }) {
   const [svg, setSvg] = useState<string>("");
 
@@ -196,6 +242,18 @@ export function PrintItinerary({
     return `${base}?${params.toString()}`;
   }, [origin, destination, vehicle, fuel, trip.variant]);
 
+  const staticMap = useMemo(() => staticMapUrl(trip.corridor?.coords ?? []), [trip.corridor]);
+  const [mapFailed, setMapFailed] = useState(false);
+
+  /** Stable, human-quotable reference for this dossier. */
+  const tripRef = useMemo(() => {
+    const seed = `${origin}|${destination}|${trip.variant}|${new Date().toDateString()}`;
+    let h = 0;
+    for (let i = 0; i < seed.length; i += 1) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+    return `AV-${h.toString(36).toUpperCase().padStart(6, "0").slice(0, 6)}`;
+  }, [origin, destination, trip.variant]);
+
+
   const navGoogle = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin || "")}&destination=${encodeURIComponent(destination || "")}&travelmode=driving`;
   const navApple = `https://maps.apple.com/?saddr=${encodeURIComponent(origin || "")}&daddr=${encodeURIComponent(destination || "")}&dirflg=d`;
 
@@ -261,11 +319,23 @@ export function PrintItinerary({
         </div>
 
         <header className="print-block border-b border-border pb-5">
-          <div className="flex items-center gap-2">
-            <img src={autovereLogo} alt="AutoVere" width={28} height={28} className="size-7 rounded-md" />
-            <p className="text-lg font-semibold tracking-tight">
-              Auto<span className="text-primary">Vere</span>
-            </p>
+          <div className="flex flex-wrap items-start justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <img src={autovereLogo} alt="AutoVere" width={28} height={28} className="size-7 rounded-md" />
+              <p className="text-lg font-semibold tracking-tight">
+                Auto<span className="text-primary">Vere</span>{" "}
+                <span className="font-normal text-foreground/70">{tr("Road Trip Dossier")}</span>
+              </p>
+            </div>
+            <div className="text-right text-[11px] leading-5 text-foreground/70">
+              <p>{date}</p>
+              <p>
+                {tr("Trip ref")}: <span className="font-semibold">{tripRef}</span>
+              </p>
+              <p className="font-semibold">
+                {tr("Currency")}: {display.code}
+              </p>
+            </div>
           </div>
           <h1 className="mt-2 text-xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-1 text-sm text-foreground/70">
@@ -296,13 +366,22 @@ export function PrintItinerary({
 
         <section className="print-block mt-6">
           <h2 className="print-h2">{tr("Route corridor snapshot")}</h2>
-          <RouteSnapshot
-            seed={`${origin}-${destination}-${trip.variant}`}
-            origin={origin}
-            destination={destination}
-            waypoints={checkpoints}
-            coords={trip.corridor?.coords ?? []}
-          />
+          {staticMap && !mapFailed ? (
+            <img
+              src={staticMap}
+              onError={() => setMapFailed(true)}
+              alt={`${origin} → ${destination}`}
+              className="print-map mt-3 h-[320px] w-full rounded-xl border border-border object-cover"
+            />
+          ) : (
+            <RouteSnapshot
+              seed={`${origin}-${destination}-${trip.variant}`}
+              origin={origin}
+              destination={destination}
+              waypoints={checkpoints}
+              coords={trip.corridor?.coords ?? []}
+            />
+          )}
         </section>
 
         <section className="print-block mt-6">

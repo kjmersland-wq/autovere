@@ -265,6 +265,19 @@
     print-color-adjust: exact;
   }
 
+  .print-portal,
+  .print-portal * {
+    overflow: visible !important;
+    max-height: none !important;
+  }
+
+  .print-sheet img {
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+    display: block !important;
+    max-width: 100% !important;
+  }
+
   .print-sheet .print-total-row td {
     border-top: 2px solid #0a0f1d !important;
   }
