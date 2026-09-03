@@ -117,6 +117,52 @@ function RouteSnapshot({
   );
 }
 
+/** Google's encoded-polyline algorithm — needed for the Static Maps URL. */
+function encodePolyline(coords: [number, number][]) {
+  let lastLat = 0;
+  let lastLng = 0;
+  let out = "";
+  const enc = (v: number) => {
+    let val = v < 0 ? ~(v << 1) : v << 1;
+    let chunk = "";
+    while (val >= 0x20) {
+      chunk += String.fromCharCode((0x20 | (val & 0x1f)) + 63);
+      val >>= 5;
+    }
+    chunk += String.fromCharCode(val + 63);
+    return chunk;
+  };
+  for (const [lat, lng] of coords) {
+    const la = Math.round(lat * 1e5);
+    const ln = Math.round(lng * 1e5);
+    out += enc(la - lastLat) + enc(ln - lastLng);
+    lastLat = la;
+    lastLng = ln;
+  }
+  return out;
+}
+
+/** Sharp raster map for the printed dossier — canvas maps print blank. */
+function staticMapUrl(coords: [number, number][]) {
+  const key = import.meta.env["VITE_LOVABLE_CONNECTOR_GOOGLE_MAPS_BROWSER_KEY"] as string | undefined;
+  if (!key || coords.length < 2) return "";
+  const step = Math.max(1, Math.ceil(coords.length / 90));
+  const thin = coords.filter((_, i) => i % step === 0 || i === coords.length - 1);
+  const start = thin[0]!;
+  const end = thin[thin.length - 1]!;
+  const params = new URLSearchParams({
+    size: "640x320",
+    scale: "2",
+    maptype: "roadmap",
+    format: "png",
+    key,
+  });
+  params.append("path", `weight:4|color:0x1d4ed8ff|enc:${encodePolyline(thin)}`);
+  params.append("markers", `color:0x16a34a|label:A|${start[0].toFixed(5)},${start[1].toFixed(5)}`);
+  params.append("markers", `color:0xdc2626|label:B|${end[0].toFixed(5)},${end[1].toFixed(5)}`);
+  return `https://maps.googleapis.com/maps/api/staticmap?${params.toString()}`;
+}
+
 function QrPanel({ url }: { url: string }) {
   const [svg, setSvg] = useState<string>("");
 
