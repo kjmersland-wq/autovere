@@ -36,7 +36,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { changeInCarCredentials, logoutInCar, requestInCarMagicLink } from "@/lib/in-car-auth.functions";
+import {
+  changeInCarCredentials,
+  loginWithMasterKey,
+  logoutInCar,
+  requestInCarMagicLink,
+} from "@/lib/in-car-auth.functions";
 import { sendContactMessage } from "@/lib/contact.functions";
 import {
   COCKPIT_STRINGS,
@@ -53,15 +58,22 @@ import { cn } from "@/lib/utils";
 /* Auth gate                                                           */
 /* ------------------------------------------------------------------ */
 
-function LoginGate({ linkInvalid = false }: { linkInvalid?: boolean }) {
+function LoginGate({ linkInvalid = false, onSuccess }: { linkInvalid?: boolean; onSuccess: () => void }) {
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
+  const [smtpFailed, setSmtpFailed] = useState(false);
+
+  const [masterKeyOpen, setMasterKeyOpen] = useState(false);
+  const [masterKey, setMasterKey] = useState("");
+  const [masterKeyError, setMasterKeyError] = useState<string | null>(null);
+  const [masterKeySending, setMasterKeySending] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setSmtpFailed(false);
     setSending(true);
     try {
       const result = await requestInCarMagicLink({ data: { email } });
@@ -69,11 +81,33 @@ function LoginGate({ linkInvalid = false }: { linkInvalid?: boolean }) {
         setSent(true);
       } else {
         setError(result.error ?? "Access restricted to authorized executive emails.");
+        if (result.smtpFailed) {
+          setSmtpFailed(true);
+          setMasterKeyOpen(true);
+        }
       }
     } catch {
       setError("Access restricted to authorized executive emails.");
     } finally {
       setSending(false);
+    }
+  };
+
+  const submitMasterKey = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setMasterKeyError(null);
+    setMasterKeySending(true);
+    try {
+      const result = await loginWithMasterKey({ data: { key: masterKey } });
+      if (result.ok) {
+        onSuccess();
+      } else {
+        setMasterKeyError("Invalid credentials or unauthorized access.");
+      }
+    } catch {
+      setMasterKeyError("Invalid credentials or unauthorized access.");
+    } finally {
+      setMasterKeySending(false);
     }
   };
 
@@ -117,37 +151,89 @@ function LoginGate({ linkInvalid = false }: { linkInvalid?: boolean }) {
             </p>
           </div>
         ) : (
-          <form onSubmit={submit} className="mt-8 space-y-4">
-            <div className="space-y-1.5">
-              <Label htmlFor="incar-email" className="text-xs uppercase tracking-[0.14em] text-white/50">
-                Corporate email
-              </Label>
-              <Input
-                id="incar-email"
-                type="email"
-                autoComplete="username"
-                required
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@oem.com"
-                className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
-              />
+          <>
+            <form onSubmit={submit} className="mt-8 space-y-4">
+              <div className="space-y-1.5">
+                <Label htmlFor="incar-email" className="text-xs uppercase tracking-[0.14em] text-white/50">
+                  Corporate email
+                </Label>
+                <Input
+                  id="incar-email"
+                  type="email"
+                  autoComplete="username"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="you@oem.com"
+                  className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
+                />
+              </div>
+
+              {error && (
+                <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                  {error}
+                </p>
+              )}
+
+              <Button
+                type="submit"
+                disabled={sending}
+                className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
+              >
+                {sending ? "Sending…" : "Send Access Link"}
+              </Button>
+            </form>
+
+            <div className="mt-4 text-center">
+              <button
+                type="button"
+                onClick={() => setMasterKeyOpen((v) => !v)}
+                className="text-xs text-white/35 underline-offset-4 transition-colors hover:text-white/60 hover:underline"
+              >
+                Or enter Master Key
+              </button>
             </div>
 
-            {error && (
-              <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
-                {error}
-              </p>
-            )}
+            {masterKeyOpen && (
+              <form onSubmit={submitMasterKey} className="mt-4 space-y-3 border-t border-white/10 pt-4">
+                {smtpFailed && (
+                  <p className="rounded-lg border border-amber-400/25 bg-amber-400/10 px-3 py-2 text-xs text-amber-200">
+                    Email delivery unavailable. Enter your Master Key below to unlock.
+                  </p>
+                )}
+                <div className="space-y-1.5">
+                  <Label htmlFor="incar-master-key" className="text-xs uppercase tracking-[0.14em] text-white/50">
+                    Master key
+                  </Label>
+                  <Input
+                    id="incar-master-key"
+                    type="password"
+                    autoComplete="off"
+                    required
+                    value={masterKey}
+                    onChange={(e) => setMasterKey(e.target.value)}
+                    placeholder="••••••••••"
+                    className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
+                  />
+                </div>
 
-            <Button
-              type="submit"
-              disabled={sending}
-              className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
-            >
-              {sending ? "Sending…" : "Send Access Link"}
-            </Button>
-          </form>
+                {masterKeyError && (
+                  <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                    {masterKeyError}
+                  </p>
+                )}
+
+                <Button
+                  type="submit"
+                  disabled={masterKeySending}
+                  variant="outline"
+                  className="h-11 w-full border-white/15 bg-white/[0.03] text-sm font-semibold text-white hover:bg-white/[0.06]"
+                >
+                  {masterKeySending ? "Verifying…" : "Unlock with Master Key"}
+                </Button>
+              </form>
+            )}
+          </>
         )}
 
         <p className="mt-6 text-center text-[11px] text-white/30">
@@ -774,7 +860,7 @@ export function InCarShowcase({
   };
 
   if (!authorized) {
-    return <LoginGate linkInvalid={linkInvalid} />;
+    return <LoginGate linkInvalid={linkInvalid} onSuccess={() => setAuthorized(true)} />;
   }
 
   return (

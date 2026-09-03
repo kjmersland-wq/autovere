@@ -166,7 +166,7 @@ const magicLinkRequestSchema = z.object({
 
 export const requestInCarMagicLink = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => magicLinkRequestSchema.parse(data))
-  .handler(async ({ data }): Promise<{ ok: boolean; error?: string }> => {
+  .handler(async ({ data }): Promise<{ ok: boolean; error?: string; smtpFailed?: boolean }> => {
     const creds = await getEffectiveCredentials();
     const restricted = { ok: false, error: "Access restricted to authorized executive emails." } as const;
     if (!creds) return restricted;
@@ -197,9 +197,41 @@ export const requestInCarMagicLink = createServerFn({ method: "POST" })
         ].join("\n"),
       });
     } catch {
-      return { ok: false, error: "Couldn't send the access link — please try again shortly." };
+      return {
+        ok: false,
+        error: "Couldn't send the access link — please try again shortly.",
+        smtpFailed: true,
+      };
     }
 
+    return { ok: true };
+  });
+
+/**
+ * Last-resort access when outbound email is down. Matches
+ * IN_CAR_ADMIN_PASSWORD directly — no hardcoded fallback value, so this
+ * option simply isn't available if the env var isn't configured, the same
+ * fail-closed behaviour as the rest of the gate.
+ */
+function getMasterKey(): string | null {
+  const configured = process.env["IN_CAR_ADMIN_PASSWORD"];
+  return configured && configured.trim() ? configured : null;
+}
+
+const masterKeySchema = z.object({
+  key: z.string().min(1).max(200),
+});
+
+export const loginWithMasterKey = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => masterKeySchema.parse(data))
+  .handler(async ({ data }): Promise<{ ok: boolean }> => {
+    const expected = getMasterKey();
+    if (!expected || !safeEqual(data.key, expected)) return { ok: false };
+
+    const creds = await getEffectiveCredentials();
+    if (!creds) return { ok: false };
+
+    setSessionCookie(creds.email, creds.sessionSecret);
     return { ok: true };
   });
 
