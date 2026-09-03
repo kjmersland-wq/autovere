@@ -51,6 +51,7 @@ import { getRouteGeo, type RouteGeo } from "@/lib/route-geo.functions";
 import { getEnergyPrices, type EnergyPrices } from "@/lib/energy-prices.functions";
 import { PlaceAutocomplete, type PlaceHit } from "@/components/PlaceAutocomplete";
 import { useLocale, useT, useTr } from "@/lib/i18n";
+import { startTour, tourCopy } from "@/lib/tour";
 import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
 
