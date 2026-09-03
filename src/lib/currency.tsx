@@ -128,6 +128,30 @@ const LOCALE_DEFAULT_CURRENCY: Partial<Record<string, CurrencyCode>> = {
   us: "USD",
 };
 
+/** Currency implied by the visitor's browser language, used only on cold visits. */
+export function currencyFromBrowserLanguage(): CurrencyCode | null {
+  if (typeof navigator === "undefined") return null;
+  const tags = [...(navigator.languages ?? []), navigator.language].filter(Boolean).map((l) => l.toLowerCase());
+  for (const tag of tags) {
+    const [lang = "", regionRaw = ""] = tag.split("-");
+    const region = regionRaw.toUpperCase();
+    if (region === "US") return "USD";
+    if (region === "CA") return "CAD";
+    if (region === "GB") return "GBP";
+    if (region === "CH") return "CHF";
+    if (region === "IS") return "ISK";
+    if (lang === "nb" || lang === "nn" || lang === "no") return "NOK";
+    if (lang === "sv") return "SEK";
+    if (lang === "da") return "DKK";
+    if (lang === "pl") return "PLN";
+    if (lang === "is") return "ISK";
+    if (["de", "nl", "fr", "es", "it", "pt", "fi", "el", "ga", "et", "lv", "lt", "sk", "sl"].includes(lang))
+      return "EUR";
+    if (lang === "en") return "GBP";
+  }
+  return null;
+}
+
 export function CurrencyProvider({ children }: { children: ReactNode }) {
   const [currency, setCurrencyState] = useState<CurrencyCode>("EUR");
   // Reactive pathname (not window.location.pathname read once) — client-side navigation between
@@ -155,9 +179,17 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
       setCurrencyState("USD");
       return;
     }
-    const localeDefault = LOCALE_DEFAULT_CURRENCY[codeFromPath(pathname)];
+    const code = codeFromPath(pathname);
+    if (code === "en") {
+      // Root (language-neutral) pages: honour the visitor's browser locale on a cold visit.
+      const detected = currencyFromBrowserLanguage();
+      setCurrencyState(detected ?? "GBP");
+      return;
+    }
+    const localeDefault = LOCALE_DEFAULT_CURRENCY[code];
     setCurrencyState(localeDefault ?? "EUR");
   }, [pathname]);
+
 
 
   const setCurrency = useCallback((c: CurrencyCode) => {
