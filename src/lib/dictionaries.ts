@@ -102,4 +102,13 @@ export const LOCALE_LANDING: Record<
     metaDescription:
       "Pianifica il tuo viaggio su strada con pedaggi, vignette, carburante, ricarica e traghetti precisi per auto, camper e moto.",
   },
+  no: {
+    eyebrow: "Europa · 30+ land",
+    title: "Planlegg én gang. Nyt hver kilometer.",
+    subtitle:
+      "Fortell oss hvor du starter og hvor du drømmer om å reise – vi tar oss av bompenger, ekspressfelt, drivstoff, lading og ferger.",
+    metaTitle: "AutoVere Norge — Bompenger, vignetter og reisekostnader",
+    metaDescription:
+      "Planlegg bilferien med nøyaktige bompenger, vignetter, drivstoff, lading og ferger for bil, bobil og motorsykkel.",
+  },
 };
