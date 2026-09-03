@@ -441,7 +441,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             </div>
 
 
-            <div className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3">
+            <div
+              data-tour="preferences"
+              className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3"
+            >
               <Toggle
                 label={t.hero.scenic}
                 checked={scenic}
