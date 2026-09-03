@@ -269,7 +269,14 @@
     border-top: 2px solid #0a0f1d !important;
   }
 
+  .print-sheet .print-map {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    max-height: 92mm;
+  }
+
   @page {
+    size: A4;
     margin: 16mm;
   }
 }

@@ -9,6 +9,7 @@ import { CLEARANCE_ADVISORIES, detectLezZones, tagsForRegion } from "@/lib/compl
 import { corridorPolyline, pointAt } from "@/lib/corridor-map";
 import { buildTripGpx, downloadFile, tripFileBase } from "@/lib/trip-export";
 import type { FuelKey, RegionKey, TripEstimate, VehicleKey } from "@/lib/trip-data";
+import { useTr } from "@/lib/i18n";
 
 const VEHICLE_LABEL: Record<VehicleKey, string> = {
   car: "🚗 Passenger car",
@@ -47,6 +48,7 @@ function RouteSnapshot({
   waypoints: string[];
   coords: [number, number][];
 }) {
+  const tr = useTr();
   const line = useMemo(() => {
     if (coords.length > 3) {
       // Equirectangular projection of the real polyline into the 100x50 band.
@@ -107,9 +109,9 @@ function RouteSnapshot({
         <circle cx={end.x} cy={end.y} r="1.9" fill="#dc2626" stroke="#fff" strokeWidth="0.6" />
       </svg>
       <figcaption className="flex flex-wrap items-center justify-between gap-2 border-t border-border px-3 py-2 text-[11px] text-muted-foreground">
-        <span>🟢 {origin || "Start"}</span>
-        <span>🔵 {marks.length} intermediate checkpoints</span>
-        <span>🔴 {destination || "Destination"}</span>
+        <span>🟢 {origin || tr("Start")}</span>
+        <span>🔵 {marks.length} {tr("intermediate checkpoints")}</span>
+        <span>🔴 {destination || tr("Destination")}</span>
       </figcaption>
     </figure>
   );
@@ -162,6 +164,7 @@ export function PrintItinerary({
   region?: RegionKey;
   onClose: () => void;
 }) {
+  const tr = useTr();
   const m = useMoney(trip.currency);
   const { currency } = useCurrency();
   const display = CURRENCY_BY_CODE[currency];
@@ -171,7 +174,7 @@ export function PrintItinerary({
   const perUnit = distanceValue > 0 ? trip.budget / distanceValue : 0;
   const unitLabel = imperial ? "mile" : "km";
 
-  const title = `${origin || "Your start"} → ${destination || "Your destination"}`;
+  const title = `${origin || tr("Your start")} → ${destination || tr("Your destination")}`;
   const date = new Date().toLocaleDateString("en-GB", {
     day: "numeric",
     month: "long",
@@ -217,14 +220,14 @@ export function PrintItinerary({
         real?.distanceLabel ??
         `${legDistance.toLocaleString("en-GB", { maximumFractionDigits: 0 })} ${imperial ? "mi" : "km"}`,
       cost: m.fmt(segment.total),
-      checkpoints: segment.lines.map((l) => l.place).join(" · ") || "No barrier stops",
+      checkpoints: segment.lines.map((l) => l.place).join(" · ") || tr("No barrier stops"),
       border:
         corridor?.borders[i] ??
         (corridor
-          ? "Arrival"
+          ? tr("Arrival")
           : i < trip.segments.length - 1
             ? `${segment.country} → ${trip.segments[i + 1]!.country}`
-            : "Arrival"),
+            : tr("Arrival")),
     };
   });
 
@@ -242,17 +245,17 @@ export function PrintItinerary({
       <div className="print-sheet glass-panel mx-auto my-6 w-full max-w-3xl rounded-2xl p-6 sm:p-8">
         <div className="no-print mb-6 flex flex-wrap items-center justify-between gap-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
-            PDF export preview
+            {tr("PDF export preview")}
           </p>
           <div className="flex flex-wrap gap-2">
             <Button size="sm" onClick={() => window.print()}>
-              <Printer className="size-4" /> Download PDF / Print
+              <Printer className="size-4" /> {tr("Download PDF / Print")}
             </Button>
             <Button size="sm" variant="secondary" onClick={downloadGpx}>
               <Download className="size-4" /> GPX
             </Button>
             <Button size="sm" variant="outline" onClick={onClose}>
-              <X className="size-4" /> Close
+              <X className="size-4" /> {tr("Close")}
             </Button>
           </div>
         </div>
@@ -266,19 +269,19 @@ export function PrintItinerary({
           </div>
           <h1 className="mt-2 text-xl font-semibold tracking-tight">{title}</h1>
           <p className="mt-1 text-sm text-foreground/70">
-            Road trip cost itinerary · Prepared {date} · All figures in {display.code} ({display.label})
+            {tr("Road trip cost itinerary")} · {tr("Prepared")} {date} · {tr("All figures in")} {display.code} ({display.label})
           </p>
           <dl className="mt-3 grid grid-cols-4 gap-2">
             {(
               [
-                ["Distance", trip.distanceLabel],
-                ["Driving time", trip.driveTime],
-                ["Total cost", m.fmt(trip.budget, 0)],
-                [`Per ${unitLabel}`, m.fmt(perUnit, 2)],
-                ["Tolls & vignettes", m.fmt(trip.tolls)],
-                ["Ferries & passes", m.fmt(trip.ferries)],
-                [trip.energyLabel, m.fmt(trip.energyCost)],
-                ["Energy used", trip.energyAmount],
+                [tr("Distance"), trip.distanceLabel],
+                [tr("Driving time"), trip.driveTime],
+                [tr("Total cost"), m.fmt(trip.budget, 0)],
+                [`${tr("Per")} ${unitLabel}`, m.fmt(perUnit, 2)],
+                [tr("Tolls & vignettes"), m.fmt(trip.tolls)],
+                [tr("Ferries & passes"), m.fmt(trip.ferries)],
+                [tr(trip.energyLabel), m.fmt(trip.energyCost)],
+                [tr("Energy used"), trip.energyAmount],
               ] as [string, string][]
             ).map(([k, v]) => (
               <div key={k} className="rounded-xl border border-border px-3 py-2">
@@ -292,7 +295,7 @@ export function PrintItinerary({
         </header>
 
         <section className="print-block mt-6">
-          <h2 className="print-h2">Route corridor snapshot</h2>
+          <h2 className="print-h2">{tr("Route corridor snapshot")}</h2>
           <RouteSnapshot
             seed={`${origin}-${destination}-${trip.variant}`}
             origin={origin}
@@ -303,29 +306,29 @@ export function PrintItinerary({
         </section>
 
         <section className="print-block mt-6">
-          <h2 className="print-h2">Vehicle profile</h2>
+          <h2 className="print-h2">{tr("Vehicle profile")}</h2>
           <table className="print-table mt-3 w-full text-sm">
             <tbody>
               <tr>
-                <th scope="row">Vehicle</th>
-                <td>{VEHICLE_LABEL[vehicle]}</td>
+                <th scope="row">{tr("Vehicle")}</th>
+                <td>{tr(VEHICLE_LABEL[vehicle])}</td>
               </tr>
               <tr>
-                <th scope="row">Fuel / power</th>
-                <td>{FUEL_LABEL[fuel]}</td>
+                <th scope="row">{tr("Fuel / power")}</th>
+                <td>{tr(FUEL_LABEL[fuel])}</td>
               </tr>
               <tr>
-                <th scope="row">Consumption</th>
+                <th scope="row">{tr("Consumption")}</th>
                 <td>{consumptionFor(vehicle, fuel, trip.units)}</td>
               </tr>
               <tr>
-                <th scope="row">Units</th>
-                <td>{imperial ? "Imperial — miles, MPG, $/gal" : "Metric — km, L/100 km, price per litre"}</td>
+                <th scope="row">{tr("Units")}</th>
+                <td>{tr(imperial ? "Imperial — miles, MPG, $/gal" : "Metric — km, L/100 km, price per litre")}</td>
               </tr>
               <tr>
-                <th scope="row">Route profile</th>
+                <th scope="row">{tr("Route profile")}</th>
                 <td className="capitalize">
-                  {trip.variant} · {trip.tripType === "return" ? "Return trip" : "One-way"}
+                  {tr(trip.variant)} · {tr(trip.tripType === "return" ? "Return trip" : "One-way")}
                 </td>
               </tr>
             </tbody>
@@ -333,13 +336,13 @@ export function PrintItinerary({
         </section>
 
         <section className="print-block mt-6">
-          <h2 className="print-h2">Cost intelligence — country &amp; state breakdown</h2>
+          <h2 className="print-h2">{tr("Cost intelligence — country & state breakdown")}</h2>
           <table className="print-table mt-3 w-full text-sm">
             <thead>
               <tr>
-                <th scope="col" className="text-left">Country</th>
-                <th scope="col" className="text-left">Distance &amp; checkpoints</th>
-                <th scope="col" className="text-right">Local</th>
+                <th scope="col" className="text-left">{tr("Country")}</th>
+                <th scope="col" className="text-left">{tr("Distance & checkpoints")}</th>
+                <th scope="col" className="text-right">{tr("Local")}</th>
                 <th scope="col" className="text-right">{display.code}</th>
               </tr>
             </thead>
@@ -352,7 +355,7 @@ export function PrintItinerary({
                     <td className="font-semibold">{segment.country}</td>
                     <td className="text-foreground/70">
                       {real?.distanceLabel ? `${real.distanceLabel} · ` : ""}
-                      {segment.lines.map((l) => l.place).join(" · ") || "No barrier stops"}
+                      {segment.lines.map((l) => l.place).join(" · ") || tr("No barrier stops")}
                     </td>
                     <td className="text-right">{nat.text}</td>
                     <td className="text-right font-semibold">{m.fmt(segment.total)}</td>
@@ -360,27 +363,28 @@ export function PrintItinerary({
                 );
               })}
               <tr className="print-total-row">
-                <td colSpan={3} className="font-semibold">Total tolls, vignettes &amp; ferries</td>
+                <td colSpan={3} className="font-semibold">{tr("Total tolls, vignettes & ferries")}</td>
                 <td className="text-right font-semibold">{m.fmt(trip.tolls + trip.ferries)}</td>
               </tr>
             </tbody>
           </table>
           <p className="mt-2 text-xs text-muted-foreground">
-            Local column shows the currency actually charged at the barrier. {RATES_UPDATED}
+            {tr("Local column shows the currency actually charged at the barrier.")} {RATES_UPDATED}
           </p>
         </section>
 
         <section className="print-block mt-6">
-          <h2 className="print-h2">⚠️ Vignette &amp; toll pass checklist</h2>
+          <h2 className="print-h2">⚠️ {tr("Vignette & toll pass checklist")}</h2>
           <p className="mt-2 text-sm text-foreground/75">
-            Buy these before you cross the border — on-the-spot fines apply in Austria, Switzerland,
-            Slovenia and Czechia, and Ontario&apos;s 407 ETR bills unregistered plates at a premium.
+            {tr(
+              "Buy these before you cross the border — on-the-spot fines apply in Austria, Switzerland, Slovenia and Czechia, and Ontario's 407 ETR bills unregistered plates at a premium.",
+            )}
           </p>
           <ul className="mt-3 grid gap-2 text-sm">
             {trip.vignette?.items.map((v) => (
               <li key={v.code} className="print-block rounded-lg border border-border px-3 py-2">
                 <span className="font-semibold">☐ {v.flag} {v.country}</span> — {v.system}:{" "}
-                {v.exempt ? "Exempt for this vehicle" : `${v.currency}${v.cost.toFixed(2)} · ${v.recommendation}`}
+                {v.exempt ? tr("Exempt for this vehicle") : `${v.currency}${v.cost.toFixed(2)} · ${v.recommendation}`}
               </li>
             ))}
             {portals.map(({ country, line }) => (
@@ -388,7 +392,7 @@ export function PrintItinerary({
                 <span className="font-semibold">☐ {line.place}</span> — {line.detail}
                 {line.portal && (
                   <span className="block text-xs text-muted-foreground">
-                    Official portal: {line.portal.label} —{" "}
+                    {tr("Official portal")}: {line.portal.label} —{" "}
                     <a href={line.portal.url} target="_blank" rel="noopener noreferrer">
                       {line.portal.url}
                     </a>
@@ -410,12 +414,12 @@ export function PrintItinerary({
         <section className="print-block mt-6">
           <h2 className="print-h2">
             {vehicle === "motorhome"
-              ? "🚐 Motorhome advisories — clearance, weight & low-emission zones"
+              ? `🚐 ${tr("Motorhome advisories — clearance, weight & low-emission zones")}`
               : vehicle === "motorcycle"
-                ? "🏍️ Rider advisories — surface, weather & safety radar"
+                ? `🏍️ ${tr("Rider advisories — surface, weather & safety radar")}`
                 : fuel === "electric"
-                  ? "⚡ EV advisories — charging intervals & networks"
-                  : "🚗 Driver advisories"}
+                  ? `⚡ ${tr("EV advisories — charging intervals & networks")}`
+                  : `🚗 ${tr("Driver advisories")}`}
           </h2>
 
           {vehicle === "motorhome" && (
@@ -462,8 +466,8 @@ export function PrintItinerary({
         <section className="print-block mt-6">
           <h2 className="print-h2">
             {trip.optimizer.mode === "ev"
-              ? "⚡ Recommended charging intervals"
-              : "⛽ Recommended fuel stops"}
+              ? `⚡ ${tr("Recommended charging intervals")}`
+              : `⛽ ${tr("Recommended fuel stops")}`}
           </h2>
           <p className="mt-2 text-sm text-foreground/75">
             {trip.optimizer.rangeLabel} · {trip.optimizer.bufferLabel}
@@ -472,9 +476,9 @@ export function PrintItinerary({
             <thead>
               <tr>
                 <th scope="col" className="text-left">#</th>
-                <th scope="col" className="text-left">Stop</th>
-                <th scope="col" className="text-left">At</th>
-                <th scope="col" className="text-left">Power / network</th>
+                <th scope="col" className="text-left">{tr("Stop")}</th>
+                <th scope="col" className="text-left">{tr("At")}</th>
+                <th scope="col" className="text-left">{tr("Power / network")}</th>
               </tr>
             </thead>
             <tbody>
@@ -489,7 +493,7 @@ export function PrintItinerary({
                   <td>
                     {s.power}
                     {s.networks.length ? ` · ${s.networks.join(", ")}` : ""}
-                    {s.fallback ? " · nearest high-power CCS hub" : ""}
+                    {s.fallback ? ` · ${tr("nearest high-power CCS hub")}` : ""}
                   </td>
                 </tr>
               ))}
@@ -497,51 +501,51 @@ export function PrintItinerary({
           </table>
           {trip.optimizer.preferredNetwork && (
             <p className="mt-2 text-xs font-semibold">
-              ⭐ Preferred network: {trip.optimizer.preferredNetwork} — highlighted stops are served by it.
+              ⭐ {tr("Preferred network")}: {trip.optimizer.preferredNetwork}
             </p>
           )}
           {trip.optimizer.networks.length > 0 && (
             <p className="mt-2 text-xs text-muted-foreground">
-              Networks on this corridor: {trip.optimizer.networks.join(" · ")}
+              {tr("Networks on this corridor")}: {trip.optimizer.networks.join(" · ")}
             </p>
           )}
         </section>
 
         <section className="print-block mt-6">
-          <h2 className="print-h2">Step-by-step itinerary &amp; border crossings</h2>
+          <h2 className="print-h2">{tr("Step-by-step itinerary & border crossings")}</h2>
           <ol className="mt-3 grid gap-3 text-sm">
             {legs.map((leg) => (
               <li key={leg.country} className="print-block rounded-lg border border-border px-3 py-2">
                 <p className="font-semibold">
-                  Leg {leg.index} · {leg.country} — {leg.distance} · {leg.cost}
+                  {tr("Leg")} {leg.index} · {leg.country} — {leg.distance} · {leg.cost}
                 </p>
-                <p className="mt-1 text-foreground/80">Checkpoints: {leg.checkpoints}</p>
-                <p className="text-xs text-muted-foreground">Crossing: {leg.border}</p>
+                <p className="mt-1 text-foreground/80">{tr("Checkpoints")}: {leg.checkpoints}</p>
+                <p className="text-xs text-muted-foreground">{tr("Crossing")}: {leg.border}</p>
               </li>
             ))}
           </ol>
         </section>
 
         <section className="print-block mt-6 border-t border-border pt-5">
-          <h2 className="print-h2">Live route &amp; navigation</h2>
+          <h2 className="print-h2">{tr("Live route & navigation")}</h2>
           <div className="mt-3 flex flex-wrap items-center gap-4">
             <QrPanel url={liveUrl} />
             <div className="min-w-[220px] flex-1 text-sm">
-              <p className="font-semibold">Scan to reopen this route on autovere.com</p>
+              <p className="font-semibold">{tr("Scan to reopen this route on autovere.com")}</p>
               <p className="mt-1 break-all text-xs text-muted-foreground">{liveUrl}</p>
               <div className="no-print mt-3 flex flex-wrap gap-2">
                 <Button asChild size="sm" variant="outline">
                   <a href={navGoogle} target="_blank" rel="noopener noreferrer">
-                    <MapPin className="size-4" /> Google Maps
+                    <MapPin className="size-4" /> {tr("Open in Google Maps")}
                   </a>
                 </Button>
                 <Button asChild size="sm" variant="outline">
                   <a href={navApple} target="_blank" rel="noopener noreferrer">
-                    <MapPin className="size-4" /> Apple Maps
+                    <MapPin className="size-4" /> {tr("Open in Apple Maps")}
                   </a>
                 </Button>
                 <Button size="sm" variant="secondary" onClick={downloadGpx}>
-                  <Download className="size-4" /> GPX file
+                  <Download className="size-4" /> {tr("GPX file")}
                 </Button>
               </div>
             </div>
@@ -549,9 +553,9 @@ export function PrintItinerary({
         </section>
 
         <footer className="print-block mt-6 border-t border-border pt-4 text-xs text-muted-foreground">
-          AutoVere · autovere.com — indicative planning estimates.{" "}
-          {rateNote(m.base, currency) || "Base currency shown."} Verify final prices with the official
-          toll, vignette and ferry operators before travelling.
+          AutoVere · autovere.com — {tr("indicative planning estimates.")}{" "}
+          {rateNote(m.base, currency) || tr("Base currency shown.")}{" "}
+          {tr("Verify final prices with the official toll, vignette and ferry operators before travelling.")}
         </footer>
       </div>
     </div>
