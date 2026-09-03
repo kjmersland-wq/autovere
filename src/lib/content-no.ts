@@ -6,6 +6,8 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_NO: Record<string, string> = {
+  Fuel: "Drivstoff",
+  "Export to PDF / Print itinerary": "Eksporter til PDF / skriv ut reiseplan",
   "Send to car & navigation": "Send til bil og navigasjon",
   "Send to car (Tesla / app)": "Send til bil (Tesla / app)",
   "Print itinerary (PDF)": "Skriv ut reiseplan (PDF)",

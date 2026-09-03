@@ -392,7 +392,7 @@ export function TripResults({
           <Share2 className="size-4" /> {t.results.share}
         </Button>
         <Button size="lg" variant="outline" onClick={() => setPrinting(true)}>
-          <Printer className="size-4" /> Export to PDF / Print itinerary
+          <Printer className="size-4" /> {tr("Export to PDF / Print itinerary")}
         </Button>
       </div>
 
