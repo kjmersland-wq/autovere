@@ -103,8 +103,10 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
     };
   }, [user, needsPassword, onAuthorized]);
 
-  // Step 1: request an access link.
+  // Step 1: request an access link (or sign in directly with a password).
+  const [mode, setMode] = useState<"link" | "password">("link");
   const [email, setEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -114,6 +116,14 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
     setError(null);
     setSending(true);
     try {
+      if (mode === "password") {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password: loginPassword,
+        });
+        if (signInError) setError("Feil e-post eller passord.");
+        return;
+      }
       const result = await requestInCarAccess({ data: { email } });
       if (result.ok) {
         setSent(true);
@@ -126,6 +136,7 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
       setSending(false);
     }
   };
+
 
   // Steps 3–4: set the initial (or new) password after clicking the link.
   const [password, setPassword] = useState("");
