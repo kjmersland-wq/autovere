@@ -87,8 +87,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:site_name", content: "AutoVere" },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_GB" },
+      { property: "og:image", content: "https://www.autovere.com/og-image.jpg" },
+      { property: "og:image:secure_url", content: "https://www.autovere.com/og-image.jpg" },
+      { property: "og:image:type", content: "image/jpeg" },
+      { property: "og:image:width", content: "1200" },
+      { property: "og:image:height", content: "630" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@autovere" },
+      { name: "twitter:site", content: "@autoverehq" },
+      { name: "twitter:image", content: "https://www.autovere.com/og-image.jpg" },
           ],
     links: [
       {
