@@ -329,6 +329,41 @@ export function TripResults({
         />
       </div>
 
+      {/* Instant clarity trio — the three answers every driver wants first. */}
+      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+        <div className="glass-panel rounded-2xl p-6 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            🛣️ {t.results.tollsBadge}
+          </p>
+          <p className="mt-3 text-5xl font-semibold tracking-tight text-primary sm:text-6xl">
+            {m.fmt(trip.tolls, 0)}
+          </p>
+          <p className="mt-2 text-sm text-foreground/70">{t.results.tollsShort}</p>
+        </div>
+        <div className="glass-panel rounded-2xl p-6 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            ⛽ {trip.energyLabel}
+          </p>
+          <p className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+            {m.fmt(trip.energyCost, 0)}
+          </p>
+          <p className="mt-2 text-sm text-foreground/70">{t.results.energyHint(trip.energyAmount)}</p>
+        </div>
+        <div className="glass-panel rounded-2xl p-6 text-center">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+            {t.intel.crossTitle}
+          </p>
+          <p className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+            {trip.corridor ? Math.max(trip.corridor.countries.length - 1, 0) : 0}
+          </p>
+          <p className="mt-2 text-sm text-foreground/70">
+            {trip.corridor && trip.corridor.countries.length > 0
+              ? trip.corridor.countries.map((c) => `${c.flag} ${c.country}`).join(" · ")
+              : t.results.exempt}
+          </p>
+        </div>
+      </div>
+
       <div className="mt-5 flex flex-wrap gap-2">
         <SubtotalBadge emoji="🛣️" label={t.results.tollsBadge} value={m.fmt(trip.tolls)} />
         <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={m.fmt(trip.energyCost)} />
