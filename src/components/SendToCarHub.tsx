@@ -90,7 +90,11 @@ export default function SendToCarHub({
             <Apple className="mr-1 size-4" /> {tr("Open in Apple Maps")}
           </a>
         </Button>
-        <Button size="sm" variant="outline" onClick={() => window.print()}>
+        <Button
+          size="sm"
+          variant="outline"
+          onClick={() => window.dispatchEvent(new CustomEvent("autovere:print"))}
+        >
           <Printer className="mr-1 size-4" /> {tr("Print itinerary (PDF)")}
         </Button>
       </div>
