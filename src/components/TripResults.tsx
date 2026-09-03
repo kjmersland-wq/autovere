@@ -162,6 +162,13 @@ export function TripResults({
   const locale = useLocale();
   const [active, setActive] = useState<RouteVariantKey>("fastest");
   const [printing, setPrinting] = useState(false);
+  // "Print itinerary" anywhere on the page must open the dossier first —
+  // printing the live page directly produced a blank sheet.
+  useEffect(() => {
+    const open = () => setPrinting(true);
+    window.addEventListener("autovere:print", open);
+    return () => window.removeEventListener("autovere:print", open);
+  }, []);
   const [rvMode, setRvMode] = useState(isMotorhome);
   const [savePrompt, setSavePrompt] = useState(false);
   /** Operator picked interactively from the charging network pills. */
