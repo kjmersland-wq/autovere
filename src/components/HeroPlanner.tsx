@@ -276,6 +276,15 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
           </h1>
           <p className="mt-4 max-w-2xl text-base text-foreground/80 sm:text-lg">{subtitle}</p>
 
+          <button
+            type="button"
+            onClick={() => startTour(locale)}
+            className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
+          >
+            {tourCopy(locale).trigger}
+          </button>
+
+
           <form
             onSubmit={(e) => {
               e.preventDefault();
