@@ -29,14 +29,14 @@ export function LocaleAutoDetect() {
       const [langRaw = "", regionRaw = ""] = tag.split("-");
       const region = regionRaw.toUpperCase();
       if (langRaw === "en" && region === "US") {
-        void navigate({ to: "/usa" });
+        void navigate({ to: "/usa" as never });
         return;
       }
       if (langRaw === "en") return; // English visitors stay on the root tree
       const lang = langRaw === "nb" || langRaw === "nn" ? "no" : langRaw;
       const match = LOCALE_ROUTES.find((l) => l.code === lang);
       if (match) {
-        void navigate({ to: `/${match.prefix}` });
+        void navigate({ to: `/${match.prefix}` as never });
         return;
       }
     }
