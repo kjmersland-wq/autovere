@@ -330,7 +330,7 @@ export function TripResults({
       </div>
 
       {/* Instant clarity trio — the three answers every driver wants first. */}
-      <div className="mt-6 grid gap-4 sm:grid-cols-3">
+      <div data-tour="results" className="mt-6 grid gap-4 sm:grid-cols-3">
         <div className="glass-panel rounded-2xl p-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
             🛣️ {t.results.tollsBadge}
