@@ -51,6 +51,7 @@ import { getRouteGeo, type RouteGeo } from "@/lib/route-geo.functions";
 import { getEnergyPrices, type EnergyPrices } from "@/lib/energy-prices.functions";
 import { PlaceAutocomplete, type PlaceHit } from "@/components/PlaceAutocomplete";
 import { useLocale, useT, useTr } from "@/lib/i18n";
+import { startTour, tourCopy } from "@/lib/tour";
 import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
 
@@ -276,6 +277,15 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
           </h1>
           <p className="mt-4 max-w-2xl text-base text-foreground/80 sm:text-lg">{subtitle}</p>
 
+          <button
+            type="button"
+            onClick={() => startTour(locale)}
+            className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
+          >
+            {tourCopy(locale).trigger}
+          </button>
+
+
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -344,7 +354,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               )}
             </div>
 
-            <div className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
+            <div data-tour="places" className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
               <PlaceAutocomplete
                 value={origin}
                 onValueChange={(v) => {
@@ -441,7 +451,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             </div>
 
 
-            <div className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3">
+            <div
+              data-tour="preferences"
+              className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3"
+            >
               <Toggle
                 label={t.hero.scenic}
                 checked={scenic}
