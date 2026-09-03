@@ -11,6 +11,7 @@ import { IT_DICT } from "@/lib/dict-it";
 import { NL_DICT } from "@/lib/dict-nl";
 import { PL_DICT } from "@/lib/dict-pl";
 import { SV_DICT } from "@/lib/dict-sv";
+import { US_DICT } from "@/lib/dict-us";
 
 type Dict = Record<string, unknown>;
 
@@ -23,6 +24,7 @@ export const PARTIAL_DICTS: Record<string, Dict> = {
   pl: PL_DICT,
   es: ES_DICT,
   it: IT_DICT,
+  us: US_DICT,
 };
 
 /** Hero copy per language for the localized landing page. */
@@ -110,5 +112,14 @@ export const LOCALE_LANDING: Record<
     metaTitle: "AutoVere Norge — Bompenger, vignetter og reisekostnader",
     metaDescription:
       "Planlegg bilferien med nøyaktige bompenger, vignetter, drivstoff, lading og ferger for bil, bobil og motorsykkel.",
+  },
+  us: {
+    eyebrow: "Europe · 30+ countries",
+    title: "Plan it once. Enjoy every mile of the road trip.",
+    subtitle:
+      "Tell us where you're rolling out from and where you're dreaming of — we'll handle highway passes & toll tags, gas, charging and ferries, so you can hit the road with total peace of mind.",
+    metaTitle: "AutoVere — American English Europe Road Trip Planner",
+    metaDescription:
+      "Plan your European road trip in plain American English — highway passes & toll tags, gas, charging and ferries mapped out for your car, RV or motorcycle.",
   },
 };

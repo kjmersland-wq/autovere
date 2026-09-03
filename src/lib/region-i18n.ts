@@ -282,7 +282,41 @@ const it: RegionPack = {
   },
 };
 
-const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it };
+const us: RegionPack = {
+  eu: {
+    eyebrow: "Europe · 30+ countries",
+    originHint: "Start city or landmark (e.g., Munich, Oslo, Seattle)",
+    destinationHint: "Where are you heading? (e.g., Amalfi Coast, Banff, Miami)",
+    tollSystems: [
+      "Digital vignettes & toll stickers",
+      "Ticket-based motorway tolls",
+      "Restricted City Zones (ZTL / Clean Air)",
+    ],
+    nav: { planner: "Road Trip Planner", tolls: "Tolls & Toll Passes", scenic: "Scenic Passes & Ferries", garage: "My Garage" },
+    fuels: { petrol: "Gas" },
+    vehicles: { motorhome: "RV / Camper" },
+  },
+  us: {
+    eyebrow: "United States · 50 states",
+    originHint: "Start city or landmark (e.g., Seattle, Denver, Miami)",
+    destinationHint: "Where are you heading? (e.g., Big Sur, Moab, Key West)",
+    tollSystems: ["State toll roads & turnpikes", "HOV / Express lanes", "Bridge & tunnel tolls"],
+    nav: { planner: "Road Trip Planner", tolls: "Tolls & Express Lanes", scenic: "Scenic Byways & Ferries", garage: "My Garage" },
+    fuels: { petrol: "Gas" },
+    vehicles: { motorhome: "RV / Camper" },
+  },
+  ca: {
+    eyebrow: "Canada · coast to coast",
+    originHint: "Start city or landmark (e.g., Toronto, Calgary, Halifax)",
+    destinationHint: "Where are you heading? (e.g., Banff, Tofino, Gaspésie)",
+    tollSystems: ["Highway 407 ETR bypass", "Provincial tolls & bridges", "BC Ferries crossings"],
+    nav: { planner: "Road Trip Planner", tolls: "Tolls & Toll Highways", scenic: "Scenic Routes & Ferries", garage: "My Garage" },
+    fuels: { petrol: "Gas" },
+    vehicles: { motorhome: "RV / Camper" },
+  },
+};
+
+const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us };
 
 export function regionStrings(locale: Locale, region: RegionKey): RegionStrings {
   return (PACKS[locale] ?? en)[region];

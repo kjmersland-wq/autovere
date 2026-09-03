@@ -78,7 +78,9 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const fuelLabel = (key: FuelKey) => rs.fuels?.[key] ?? t.hero.fuels[key];
   const vehicleLabel = (key: VehicleKey) => rs.vehicles?.[key] ?? t.hero.vehicles[key];
   const defaults = REGION_DEFAULTS[region];
-  const imperial = defaults.units === "imperial";
+  // The US locale defaults to miles regardless of region — an American planning
+  // a European trip still thinks in miles, even though the region itself is metric.
+  const imperial = defaults.units === "imperial" || locale === "us";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
   const [fuel, setFuel] = useState<FuelKey>("petrol");
   const [origin, setOrigin] = useState("");

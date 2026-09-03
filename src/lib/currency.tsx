@@ -125,6 +125,7 @@ const LOCALE_DEFAULT_CURRENCY: Partial<Record<string, CurrencyCode>> = {
   es: "EUR",
   it: "EUR",
   pl: "PLN",
+  us: "USD",
 };
 
 export function CurrencyProvider({ children }: { children: ReactNode }) {

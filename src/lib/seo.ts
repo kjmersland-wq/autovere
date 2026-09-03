@@ -18,6 +18,7 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
   pl: "Polska",
   es: "España",
   it: "Italia",
+  usa: "United States",
 };
 
 type PageMeta = { title: string; description: string };
@@ -157,6 +158,7 @@ const APP_PAGE_META_BASE = {
 
 const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
   ...APP_PAGE_META_BASE,
+  usa: {},
   es: {
     planner: {
       title: "Planificador de viajes por carretera — peajes, combustible y ferris | AutoVere España",

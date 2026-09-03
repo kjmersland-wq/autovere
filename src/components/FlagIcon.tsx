@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type FlagCode = "GB" | "NO" | "SE" | "DK" | "DE" | "NL" | "FR" | "PL" | "ES" | "IT";
+export type FlagCode = "GB" | "NO" | "SE" | "DK" | "US" | "DE" | "NL" | "FR" | "PL" | "ES" | "IT";
 
 type FlagProps = { code: FlagCode; className?: string; title?: string };
 
@@ -37,6 +37,41 @@ const FLAGS: Record<FlagCode, { label: string; svg: React.ReactNode }> = {
   NO: { label: "Norway", svg: <NordicCross field="#BA0C2F" cross="#FFFFFF" inner="#00205B" /> },
   SE: { label: "Sweden", svg: <NordicCross field="#005293" cross="#FECB00" /> },
   DK: { label: "Denmark", svg: <NordicCross field="#C60C30" cross="#FFFFFF" /> },
+  US: {
+    label: "United States",
+    svg: (
+      <>
+        <rect width="60" height="40" fill="#B22234" />
+        <rect y="3.08" width="60" height="3.08" fill="#FFFFFF" />
+        <rect y="9.23" width="60" height="3.08" fill="#FFFFFF" />
+        <rect y="15.38" width="60" height="3.08" fill="#FFFFFF" />
+        <rect y="21.54" width="60" height="3.08" fill="#FFFFFF" />
+        <rect y="27.69" width="60" height="3.08" fill="#FFFFFF" />
+        <rect y="33.85" width="60" height="3.08" fill="#FFFFFF" />
+        <rect width="24" height="21.54" fill="#3C3B6E" />
+        <g fill="#FFFFFF">
+          <circle cx="4" cy="3.5" r="1" />
+          <circle cx="9" cy="3.5" r="1" />
+          <circle cx="14" cy="3.5" r="1" />
+          <circle cx="19" cy="3.5" r="1" />
+          <circle cx="6.5" cy="7" r="1" />
+          <circle cx="11.5" cy="7" r="1" />
+          <circle cx="16.5" cy="7" r="1" />
+          <circle cx="4" cy="10.5" r="1" />
+          <circle cx="9" cy="10.5" r="1" />
+          <circle cx="14" cy="10.5" r="1" />
+          <circle cx="19" cy="10.5" r="1" />
+          <circle cx="6.5" cy="14" r="1" />
+          <circle cx="11.5" cy="14" r="1" />
+          <circle cx="16.5" cy="14" r="1" />
+          <circle cx="4" cy="17.5" r="1" />
+          <circle cx="9" cy="17.5" r="1" />
+          <circle cx="14" cy="17.5" r="1" />
+          <circle cx="19" cy="17.5" r="1" />
+        </g>
+      </>
+    ),
+  },
   DE: {
     label: "Germany",
     svg: (
