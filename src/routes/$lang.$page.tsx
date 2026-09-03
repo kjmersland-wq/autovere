@@ -89,7 +89,7 @@ import {
   type LocalePage,
   type LocalePrefix,
 } from "@/lib/locales";
-import { absUrl, appPageMeta, faqScript, regionalize } from "@/lib/seo";
+import { absUrl, appPageMeta, faqScript, ogImageMeta, ogImageUrl, regionalize } from "@/lib/seo";
 
 const INFO = {
   faq: GLOBAL_FAQ,
