@@ -36,12 +36,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  changeInCarCredentials,
-  loginWithMasterKey,
-  logoutInCar,
-  requestInCarMagicLink,
-} from "@/lib/in-car-auth.functions";
+import { checkInCarAuthorized, requestInCarAccess } from "@/lib/in-car-auth.functions";
+import { useAuth } from "@/lib/auth";
+import { supabase } from "@/integrations/supabase/client";
 import { sendContactMessage } from "@/lib/contact.functions";
 import {
   COCKPIT_STRINGS,
@@ -58,33 +55,70 @@ import { cn } from "@/lib/utils";
 /* Auth gate                                                           */
 /* ------------------------------------------------------------------ */
 
-function LoginGate({ linkInvalid = false, onSuccess }: { linkInvalid?: boolean; onSuccess: () => void }) {
+/** True once, on first render, if we've landed via a Supabase invite/recovery link. */
+function landedViaAuthLink(): boolean {
+  if (typeof window === "undefined") return false;
+  const hash = window.location.hash;
+  return hash.includes("type=invite") || hash.includes("type=recovery");
+}
+
+function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
+  const { user } = useAuth();
+
+  const [needsPassword, setNeedsPassword] = useState(landedViaAuthLink);
+  const [checking, setChecking] = useState(false);
+  const [restricted, setRestricted] = useState(false);
+
+  // Supabase fires this event specifically when a session was just
+  // established from an invite/recovery link — a more reliable signal than
+  // the URL hash alone, since detectSessionInUrl may consume it before this
+  // component mounts.
+  useEffect(() => {
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === "PASSWORD_RECOVERY") setNeedsPassword(true);
+    });
+    return () => data.subscription.unsubscribe();
+  }, []);
+
+  useEffect(() => {
+    if (!user || needsPassword) return;
+    let alive = true;
+    setChecking(true);
+    setRestricted(false);
+    checkInCarAuthorized()
+      .then((ok) => {
+        if (!alive) return;
+        setChecking(false);
+        if (ok) onAuthorized();
+        else setRestricted(true);
+      })
+      .catch(() => {
+        if (alive) {
+          setChecking(false);
+          setRestricted(true);
+        }
+      });
+    return () => {
+      alive = false;
+    };
+  }, [user, needsPassword, onAuthorized]);
+
+  // Step 1: request an access link.
   const [email, setEmail] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
-  const [smtpFailed, setSmtpFailed] = useState(false);
 
-  const [masterKeyOpen, setMasterKeyOpen] = useState(false);
-  const [masterKey, setMasterKey] = useState("");
-  const [masterKeyError, setMasterKeyError] = useState<string | null>(null);
-  const [masterKeySending, setMasterKeySending] = useState(false);
-
-  const submit = async (e: React.FormEvent) => {
+  const submitEmail = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setSmtpFailed(false);
     setSending(true);
     try {
-      const result = await requestInCarMagicLink({ data: { email } });
+      const result = await requestInCarAccess({ data: { email } });
       if (result.ok) {
         setSent(true);
       } else {
         setError(result.error ?? "Access restricted to authorized executive emails.");
-        if (result.smtpFailed) {
-          setSmtpFailed(true);
-          setMasterKeyOpen(true);
-        }
       }
     } catch {
       setError("Access restricted to authorized executive emails.");
@@ -93,21 +127,34 @@ function LoginGate({ linkInvalid = false, onSuccess }: { linkInvalid?: boolean; 
     }
   };
 
-  const submitMasterKey = async (e: React.FormEvent) => {
+  // Steps 3–4: set the initial (or new) password after clicking the link.
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [settingPassword, setSettingPassword] = useState(false);
+
+  const submitPassword = async (e: React.FormEvent) => {
     e.preventDefault();
-    setMasterKeyError(null);
-    setMasterKeySending(true);
+    setPasswordError(null);
+
+    if (password !== confirmPassword) {
+      setPasswordError("Password and confirmation do not match.");
+      return;
+    }
+
+    setSettingPassword(true);
     try {
-      const result = await loginWithMasterKey({ data: { key: masterKey } });
-      if (result.ok) {
-        onSuccess();
-      } else {
-        setMasterKeyError("Invalid credentials or unauthorized access.");
+      const { error: updateError } = await supabase.auth.updateUser({ password });
+      if (updateError) {
+        setPasswordError(updateError.message);
+        return;
       }
+      if (typeof window !== "undefined") window.history.replaceState(null, "", "/partners/in-car");
+      setNeedsPassword(false);
     } catch {
-      setMasterKeyError("Invalid credentials or unauthorized access.");
+      setPasswordError("Couldn't set your password — please try again.");
     } finally {
-      setMasterKeySending(false);
+      setSettingPassword(false);
     }
   };
 
@@ -137,13 +184,70 @@ function LoginGate({ linkInvalid = false, onSuccess }: { linkInvalid?: boolean; 
           Confidential demonstration portal for OEM &amp; Fleet partners.
         </p>
 
-        {linkInvalid && !sent && (
-          <p className="mt-6 rounded-lg border border-amber-400/25 bg-amber-400/10 px-3 py-2 text-center text-xs text-amber-200">
-            Access link expired or invalid. Please request a new one.
-          </p>
-        )}
+        {needsPassword ? (
+          <form onSubmit={submitPassword} className="mt-8 space-y-4">
+            <p className="text-center text-sm text-white/60">Create your password to enter the cockpit simulator.</p>
+            <div className="space-y-1.5">
+              <Label htmlFor="incar-new-password" className="text-xs uppercase tracking-[0.14em] text-white/50">
+                Password
+              </Label>
+              <Input
+                id="incar-new-password"
+                type="password"
+                autoComplete="new-password"
+                required
+                minLength={6}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="incar-confirm-password" className="text-xs uppercase tracking-[0.14em] text-white/50">
+                Confirm password
+              </Label>
+              <Input
+                id="incar-confirm-password"
+                type="password"
+                autoComplete="new-password"
+                required
+                minLength={6}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
+              />
+            </div>
 
-        {sent ? (
+            {passwordError && (
+              <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                {passwordError}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              disabled={settingPassword}
+              className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
+            >
+              {settingPassword ? "Setting password…" : "Set password & enter"}
+            </Button>
+          </form>
+        ) : restricted ? (
+          <div className="mt-8 space-y-4 text-center">
+            <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+              Access restricted to authorized executive emails.
+            </p>
+            <button
+              type="button"
+              onClick={() => void supabase.auth.signOut()}
+              className="text-xs text-white/40 underline-offset-4 transition-colors hover:text-white/70 hover:underline"
+            >
+              Sign out and try a different account
+            </button>
+          </div>
+        ) : checking ? (
+          <p className="mt-8 text-center text-sm text-white/50">Checking access…</p>
+        ) : sent ? (
           <div className="mt-8 rounded-2xl border border-emerald-400/25 bg-emerald-400/10 p-5 text-center">
             <p className="text-sm font-semibold text-emerald-200">Secure access link sent to {email}.</p>
             <p className="mt-1.5 text-xs leading-relaxed text-emerald-200/70">
@@ -151,89 +255,37 @@ function LoginGate({ linkInvalid = false, onSuccess }: { linkInvalid?: boolean; 
             </p>
           </div>
         ) : (
-          <>
-            <form onSubmit={submit} className="mt-8 space-y-4">
-              <div className="space-y-1.5">
-                <Label htmlFor="incar-email" className="text-xs uppercase tracking-[0.14em] text-white/50">
-                  Corporate email
-                </Label>
-                <Input
-                  id="incar-email"
-                  type="email"
-                  autoComplete="username"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="you@oem.com"
-                  className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
-                />
-              </div>
-
-              {error && (
-                <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
-                  {error}
-                </p>
-              )}
-
-              <Button
-                type="submit"
-                disabled={sending}
-                className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
-              >
-                {sending ? "Sending…" : "Send Access Link"}
-              </Button>
-            </form>
-
-            <div className="mt-4 text-center">
-              <button
-                type="button"
-                onClick={() => setMasterKeyOpen((v) => !v)}
-                className="text-xs text-white/35 underline-offset-4 transition-colors hover:text-white/60 hover:underline"
-              >
-                Or enter Master Key
-              </button>
+          <form onSubmit={submitEmail} className="mt-8 space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="incar-email" className="text-xs uppercase tracking-[0.14em] text-white/50">
+                Corporate email
+              </Label>
+              <Input
+                id="incar-email"
+                type="email"
+                autoComplete="username"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@oem.com"
+                className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
+              />
             </div>
 
-            {masterKeyOpen && (
-              <form onSubmit={submitMasterKey} className="mt-4 space-y-3 border-t border-white/10 pt-4">
-                {smtpFailed && (
-                  <p className="rounded-lg border border-amber-400/25 bg-amber-400/10 px-3 py-2 text-xs text-amber-200">
-                    Email delivery unavailable. Enter your Master Key below to unlock.
-                  </p>
-                )}
-                <div className="space-y-1.5">
-                  <Label htmlFor="incar-master-key" className="text-xs uppercase tracking-[0.14em] text-white/50">
-                    Master key
-                  </Label>
-                  <Input
-                    id="incar-master-key"
-                    type="password"
-                    autoComplete="off"
-                    required
-                    value={masterKey}
-                    onChange={(e) => setMasterKey(e.target.value)}
-                    placeholder="••••••••••"
-                    className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
-                  />
-                </div>
-
-                {masterKeyError && (
-                  <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
-                    {masterKeyError}
-                  </p>
-                )}
-
-                <Button
-                  type="submit"
-                  disabled={masterKeySending}
-                  variant="outline"
-                  className="h-11 w-full border-white/15 bg-white/[0.03] text-sm font-semibold text-white hover:bg-white/[0.06]"
-                >
-                  {masterKeySending ? "Verifying…" : "Unlock with Master Key"}
-                </Button>
-              </form>
+            {error && (
+              <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                {error}
+              </p>
             )}
-          </>
+
+            <Button
+              type="submit"
+              disabled={sending}
+              className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
+            >
+              {sending ? "Sending…" : "Send Access Link"}
+            </Button>
+          </form>
         )}
 
         <p className="mt-6 text-center text-[11px] text-white/30">
@@ -709,42 +761,50 @@ function ContactSection() {
 /* ------------------------------------------------------------------ */
 
 function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
-  const [currentPassword, setCurrentPassword] = useState("");
   const [newEmail, setNewEmail] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [info, setInfo] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
 
   const reset = () => {
-    setCurrentPassword("");
     setNewEmail("");
     setNewPassword("");
     setConfirmPassword("");
     setError(null);
+    setInfo(null);
   };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
+    setInfo(null);
 
-    if (newPassword !== confirmPassword) {
+    if (!newEmail && !newPassword) {
+      setError("Enter a new email and/or a new password.");
+      return;
+    }
+    if (newPassword && newPassword !== confirmPassword) {
       setError("New password and confirmation do not match.");
       return;
     }
 
     setSaving(true);
     try {
-      const result = await changeInCarCredentials({
-        data: { currentPassword, newEmail, newPassword, confirmPassword },
-      });
-      if (result.ok) {
-        toast.success("Credentials updated successfully.");
-        reset();
-        onOpenChange(false);
-      } else {
-        setError(result.error ?? "Couldn't update credentials.");
+      const attrs: { email?: string; password?: string } = {};
+      if (newEmail) attrs.email = newEmail;
+      if (newPassword) attrs.password = newPassword;
+      const { error: updateError } = await supabase.auth.updateUser(attrs);
+      if (updateError) {
+        setError(updateError.message);
+        return;
       }
+      toast.success("Credentials updated successfully.");
+      if (newEmail) setInfo("Check your new email inbox to confirm the change.");
+      setNewPassword("");
+      setConfirmPassword("");
+      setNewEmail("");
     } catch {
       setError("Couldn't update credentials — please try again.");
     } finally {
@@ -764,29 +824,16 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
         <DialogHeader>
           <DialogTitle>Account Credentials</DialogTitle>
           <DialogDescription className="text-white/50">
-            Update the corporate email and password used to access this portal.
+            Update the email or password used to access this portal.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="cc-current" className="text-white/60">Current password</Label>
-            <Input
-              id="cc-current"
-              type="password"
-              autoComplete="current-password"
-              required
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              className="border-white/15 bg-white/[0.04] text-white"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="cc-email" className="text-white/60">New admin email</Label>
+            <Label htmlFor="cc-email" className="text-white/60">New email (optional)</Label>
             <Input
               id="cc-email"
               type="email"
               autoComplete="username"
-              required
               value={newEmail}
               onChange={(e) => setNewEmail(e.target.value)}
               className="border-white/15 bg-white/[0.04] text-white"
@@ -794,13 +841,12 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="cc-new" className="text-white/60">New password</Label>
+              <Label htmlFor="cc-new" className="text-white/60">New password (optional)</Label>
               <Input
                 id="cc-new"
                 type="password"
                 autoComplete="new-password"
-                required
-                minLength={10}
+                minLength={6}
                 value={newPassword}
                 onChange={(e) => setNewPassword(e.target.value)}
                 className="border-white/15 bg-white/[0.04] text-white"
@@ -812,8 +858,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
                 id="cc-confirm"
                 type="password"
                 autoComplete="new-password"
-                required
-                minLength={10}
+                minLength={6}
                 value={confirmPassword}
                 onChange={(e) => setConfirmPassword(e.target.value)}
                 className="border-white/15 bg-white/[0.04] text-white"
@@ -824,6 +869,11 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
           {error && (
             <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
               {error}
+            </p>
+          )}
+          {info && (
+            <p className="rounded-lg border border-emerald-400/25 bg-emerald-400/10 px-3 py-2 text-sm text-emerald-200">
+              {info}
             </p>
           )}
 
@@ -840,27 +890,19 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
 /* Root showcase                                                       */
 /* ------------------------------------------------------------------ */
 
-export function InCarShowcase({
-  initialAuthorized = false,
-  linkInvalid = false,
-}: {
-  initialAuthorized?: boolean;
-  linkInvalid?: boolean;
-}) {
-  // The route loader already checks the session cookie (and verifies any
-  // magic-link token) server-side, so `initialAuthorized` is always
-  // authoritative for the current render — no redundant client-side re-check.
-  const [authorized, setAuthorized] = useState(initialAuthorized);
+export function InCarShowcase() {
+  const { signOut } = useAuth();
+  const [authorized, setAuthorized] = useState(false);
   const [credentialsOpen, setCredentialsOpen] = useState(false);
 
   const handleLogout = async () => {
-    await logoutInCar();
+    await signOut();
     setAuthorized(false);
     toast.success("Logged out.");
   };
 
   if (!authorized) {
-    return <LoginGate linkInvalid={linkInvalid} onSuccess={() => setAuthorized(true)} />;
+    return <LoginGate onAuthorized={() => setAuthorized(true)} />;
   }
 
   return (
