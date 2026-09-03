@@ -72,6 +72,11 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const rs = regionStrings(locale, region);
   const originHint = rs.originHint;
   const destinationHint = rs.destinationHint;
+  // Region overrides the base locale word when the concept has a distinct regional
+  // term (e.g. US English "Gas" vs European "Petrol"; a motorhome bridged as
+  // "Autocaravana / RV" for Spanish speakers driving American routes).
+  const fuelLabel = (key: FuelKey) => rs.fuels?.[key] ?? t.hero.fuels[key];
+  const vehicleLabel = (key: VehicleKey) => rs.vehicles?.[key] ?? t.hero.vehicles[key];
   const defaults = REGION_DEFAULTS[region];
   const imperial = defaults.units === "imperial";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
@@ -292,7 +297,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   )}
                 >
                   <span>{v.emoji}</span>
-                  {t.hero.vehicles[v.key]}
+                  {vehicleLabel(v.key)}
                 </button>
               ))}
 
@@ -460,7 +465,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   )}
                 >
                   <span>{f.emoji}</span>
-                  {t.hero.fuels[f.key]}
+                  {fuelLabel(f.key)}
                 </button>
               ))}
             </div>

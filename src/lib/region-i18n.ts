@@ -1,9 +1,14 @@
 import type { Locale } from "@/lib/i18n";
-import type { RegionKey } from "@/lib/trip-data";
+import type { FuelKey, RegionKey, VehicleKey } from "@/lib/trip-data";
 
 /**
  * Region-specific UI strings, translated per language.
  * Region (eu/us/ca) and language are independent — every region reads from here.
+ *
+ * `fuels`/`vehicles` are optional per-region overrides of the base locale dict's
+ * `hero.fuels`/`hero.vehicles` labels — used so the same language can call the same
+ * concept by its correct regional term (e.g. English "Petrol" in Europe vs "Gas" in the
+ * US; a motorhome bridged as "Autocaravana / RV" for Spanish speakers driving in the US).
  */
 export type RegionStrings = {
   eyebrow: string;
@@ -11,6 +16,8 @@ export type RegionStrings = {
   destinationHint: string;
   tollSystems: string[];
   nav: { planner: string; tolls: string; scenic: string; garage: string };
+  fuels?: Partial<Record<FuelKey, string>>;
+  vehicles?: Partial<Record<VehicleKey, string>>;
 };
 
 type RegionPack = Record<RegionKey, RegionStrings>;
@@ -29,6 +36,8 @@ const en: RegionPack = {
     destinationHint: "Where are you heading? (e.g., Big Sur, Moab, Key West)",
     tollSystems: ["State toll roads & turnpikes", "HOV / Express lanes", "Bridge & tunnel tolls"],
     nav: { planner: "Road Trip Planner", tolls: "Tolls & Express Lanes", scenic: "Scenic Byways & Ferries", garage: "My Garage" },
+    fuels: { petrol: "Gas" },
+    vehicles: { motorhome: "RV / Motorhome" },
   },
   ca: {
     eyebrow: "Canada · coast to coast",
@@ -53,6 +62,8 @@ const no: RegionPack = {
     destinationHint: "Hvor skal du? (f.eks. Big Sur, Moab, Key West)",
     tollSystems: ["Bomveier og turnpikes i delstatene", "HOV-/ekspressfelt", "Bro- og tunnelbompenger"],
     nav: { planner: "Ruteplanlegger", tolls: "Bompenger og ekspressfelt", scenic: "Naturskjønne veier og ferger", garage: "Min garasje" },
+    fuels: { petrol: "Bensin" },
+    vehicles: { motorhome: "Bobil / RV" },
   },
   ca: {
     eyebrow: "Canada · kyst til kyst",
@@ -77,6 +88,8 @@ const fr: RegionPack = {
     destinationHint: "Où allez-vous ? (ex. : Big Sur, Moab, Key West)",
     tollSystems: ["Autoroutes à péage des États", "Voies HOV / express", "Péages de ponts et tunnels"],
     nav: { planner: "Planificateur de road trip", tolls: "Péages et voies express", scenic: "Routes panoramiques et ferries", garage: "Mon garage" },
+    fuels: { petrol: "Essence" },
+    vehicles: { motorhome: "Camping-car / RV" },
   },
   ca: {
     eyebrow: "Canada · d'un océan à l'autre",
@@ -101,6 +114,8 @@ const de: RegionPack = {
     destinationHint: "Wohin geht die Reise? (z. B. Big Sur, Moab, Key West)",
     tollSystems: ["Mautstraßen & Turnpikes der Bundesstaaten", "HOV-/Express-Spuren", "Brücken- und Tunnelmaut"],
     nav: { planner: "Roadtrip-Planer", tolls: "Maut & Express-Spuren", scenic: "Panoramastraßen & Fähren", garage: "Meine Garage" },
+    fuels: { petrol: "Benzin" },
+    vehicles: { motorhome: "Wohnmobil / RV" },
   },
   ca: {
     eyebrow: "Kanada · von Küste zu Küste",
@@ -125,6 +140,8 @@ const nl: RegionPack = {
     destinationHint: "Waar ga je heen? (bijv. Big Sur, Moab, Key West)",
     tollSystems: ["Tolwegen & turnpikes per staat", "HOV-/expressstroken", "Brug- en tunneltol"],
     nav: { planner: "Roadtripplanner", tolls: "Tol & expressstroken", scenic: "Panoramaroutes & veerboten", garage: "Mijn garage" },
+    fuels: { petrol: "Benzine" },
+    vehicles: { motorhome: "Camper / RV" },
   },
   ca: {
     eyebrow: "Canada · van kust tot kust",
@@ -149,6 +166,8 @@ const sv: RegionPack = {
     destinationHint: "Vart är du på väg? (t.ex. Big Sur, Moab, Key West)",
     tollSystems: ["Delstatliga betalvägar och turnpikes", "HOV-/expressfiler", "Bro- och tunnelavgifter"],
     nav: { planner: "Roadtrip-planerare", tolls: "Vägavgifter och expressfiler", scenic: "Natursköna vägar och färjor", garage: "Mitt garage" },
+    fuels: { petrol: "Bensin" },
+    vehicles: { motorhome: "Husbil / RV" },
   },
   ca: {
     eyebrow: "Kanada · kust till kust",
@@ -173,6 +192,8 @@ const da: RegionPack = {
     destinationHint: "Hvor skal du hen? (f.eks. Big Sur, Moab, Key West)",
     tollSystems: ["Delstatslige betalingsveje og turnpikes", "HOV-/ekspresbaner", "Bro- og tunnelafgifter"],
     nav: { planner: "Roadtrip-planlægger", tolls: "Vejafgifter og ekspresbaner", scenic: "Naturskønne veje og færger", garage: "Min garage" },
+    fuels: { petrol: "Benzin" },
+    vehicles: { motorhome: "Autocamper / RV" },
   },
   ca: {
     eyebrow: "Canada · kyst til kyst",
@@ -197,6 +218,8 @@ const pl: RegionPack = {
     destinationHint: "Dokąd jedziesz? (np. Big Sur, Moab, Key West)",
     tollSystems: ["Stanowe drogi płatne i turnpike", "Pasy HOV / ekspresowe", "Opłaty za mosty i tunele"],
     nav: { planner: "Planer podróży", tolls: "Opłaty i pasy ekspresowe", scenic: "Trasy widokowe i promy", garage: "Mój garaż" },
+    fuels: { petrol: "Benzyna" },
+    vehicles: { motorhome: "Kamper / RV" },
   },
   ca: {
     eyebrow: "Kanada · od oceanu do oceanu",
@@ -221,6 +244,8 @@ const es: RegionPack = {
     destinationHint: "¿Adónde te diriges? (p. ej., Big Sur, Moab, Key West)",
     tollSystems: ["Autopistas de peaje estatales y turnpikes", "Carriles HOV / exprés", "Peajes de puentes y túneles"],
     nav: { planner: "Planificador de viajes", tolls: "Peajes y carriles exprés", scenic: "Rutas panorámicas y ferris", garage: "Mi garaje" },
+    fuels: { petrol: "Gasolina" },
+    vehicles: { motorhome: "Autocaravana / RV" },
   },
   ca: {
     eyebrow: "Canadá · de costa a costa",
@@ -245,6 +270,8 @@ const it: RegionPack = {
     destinationHint: "Dove sei diretto? (es. Big Sur, Moab, Key West)",
     tollSystems: ["Autostrade a pedaggio statali e turnpike", "Corsie HOV / express", "Pedaggi di ponti e tunnel"],
     nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e corsie express", scenic: "Strade panoramiche e traghetti", garage: "Il mio garage" },
+    fuels: { petrol: "Benzina" },
+    vehicles: { motorhome: "Camper / RV" },
   },
   ca: {
     eyebrow: "Canada · da costa a costa",
