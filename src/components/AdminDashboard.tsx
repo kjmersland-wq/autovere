@@ -21,7 +21,10 @@ import { ArrowLeft, Printer, RefreshCcw, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
 import { getAdminOverview, type AdminOverview } from "@/lib/admin.functions";
+
 
 const COUNTRY_NO: Record<string, string> = {
   NO: "🇳🇴 Norge",
@@ -80,27 +83,103 @@ function Panel({ title, children }: { title: string; children: React.ReactNode }
   );
 }
 
+const OWNER_EMAIL = "kjmersland@gmail.com";
+
+function OwnerLogin() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+    setBusy(true);
+    const { error: signInError } = await supabase.auth.signInWithPassword({
+      email: email.trim(),
+      password,
+    });
+    setBusy(false);
+    if (signInError) setError("Feil e-post eller passord.");
+    else if (email.trim().toLowerCase() !== OWNER_EMAIL) setError("Kun eierkontoen har tilgang.");
+  };
+
+  return (
+    <main className="flex min-h-screen items-center justify-center px-5 py-16">
+      <form onSubmit={submit} className="glass-panel w-full max-w-sm space-y-4 rounded-2xl p-8">
+        <h1 className="text-2xl font-semibold tracking-tight">Admin-innlogging</h1>
+        <p className="text-sm text-foreground/60">Kun for eierkontoen.</p>
+        <input
+          type="email"
+          required
+          autoComplete="email"
+          placeholder="E-post"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          className="h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"
+        />
+        <input
+          type="password"
+          required
+          autoComplete="current-password"
+          placeholder="Passord"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          className="h-11 w-full rounded-lg border border-border bg-background px-3 text-sm"
+        />
+        {error && <p className="text-sm text-destructive">{error}</p>}
+        <Button type="submit" className="w-full" disabled={busy}>
+          {busy ? "Logger inn…" : "Logg inn"}
+        </Button>
+      </form>
+    </main>
+  );
+}
+
 export function AdminDashboard() {
   const fetchOverview = useServerFn(getAdminOverview);
+  const { user, loading: authLoading } = useAuth();
+  const isOwner = (user?.email ?? "").toLowerCase() === OWNER_EMAIL;
   const [data, setData] = useState<AdminOverview | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   const load = () => {
     setLoading(true);
-    fetchOverview()
-      .then((result) => {
+    setError(null);
+    void (async () => {
+      try {
+        // Ensure the bearer token exists before the RPC, otherwise the
+        // authenticated server fn rejects the request with a 401.
+        const { data: sessionData } = await supabase.auth.getSession();
+        if (!sessionData.session?.access_token) {
+          setLoading(false);
+          return;
+        }
+        const result = await fetchOverview();
         setData(result);
-        setError(null);
-      })
-      .catch(() => setError("Kunne ikke hente data. Er du logget inn som eier?"))
-      .finally(() => setLoading(false));
+      } catch {
+        setError("Kunne ikke hente data. Prøv å oppdatere siden.");
+      } finally {
+        setLoading(false);
+      }
+    })();
   };
 
   useEffect(() => {
+    if (!isOwner) {
+      setLoading(false);
+      return;
+    }
     load();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [isOwner]);
+
+  if (authLoading) {
+    return <main className="flex min-h-screen items-center justify-center text-foreground/60">Laster…</main>;
+  }
+  if (!isOwner) return <OwnerLogin />;
+
 
   const trend =
     data && data.traffic.prev7 > 0
