@@ -149,7 +149,7 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
     setPasswordError(null);
 
     if (password !== confirmPassword) {
-      setPasswordError("Password and confirmation do not match.");
+      setPasswordError("Passordene er ikke like.");
       return;
     }
 
@@ -826,11 +826,11 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
     setInfo(null);
 
     if (!newEmail && !newPassword) {
-      setError("Enter a new email and/or a new password.");
+      setError("Skriv inn ny e-post og/eller nytt passord.");
       return;
     }
     if (newPassword && newPassword !== confirmPassword) {
-      setError("New password and confirmation do not match.");
+      setError("Passordene er ikke like.");
       return;
     }
 
@@ -844,7 +844,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
         setError(updateError.message);
         return;
       }
-      toast.success("Credentials updated successfully.");
+      toast.success("Innlogging oppdatert.");
       if (newEmail) setInfo("Check your new email inbox to confirm the change.");
       setNewPassword("");
       setConfirmPassword("");
@@ -866,14 +866,14 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
     >
       <DialogContent className="border-white/10 bg-[#0a0e17] text-white sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Account Credentials</DialogTitle>
+          <DialogTitle>Endre passord</DialogTitle>
           <DialogDescription className="text-white/50">
-            Update the email or password used to access this portal.
+            Oppdater e-post eller passord for denne portalen.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="cc-email" className="text-white/60">New email (optional)</Label>
+            <Label htmlFor="cc-email" className="text-white/60">Ny e-post (valgfritt)</Label>
             <Input
               id="cc-email"
               type="email"
@@ -885,7 +885,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="cc-new" className="text-white/60">New password (optional)</Label>
+              <Label htmlFor="cc-new" className="text-white/60">Nytt passord (valgfritt)</Label>
               <Input
                 id="cc-new"
                 type="password"
@@ -897,7 +897,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="cc-confirm" className="text-white/60">Confirm password</Label>
+              <Label htmlFor="cc-confirm" className="text-white/60">Gjenta passord</Label>
               <Input
                 id="cc-confirm"
                 type="password"
@@ -922,7 +922,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
           )}
 
           <Button type="submit" disabled={saving} className="h-11 w-full bg-primary font-semibold text-primary-foreground hover:opacity-90">
-            {saving ? "Saving…" : "Update credentials"}
+            {saving ? "Lagrer…" : "Lagre endringer"}
           </Button>
         </form>
       </DialogContent>
@@ -971,7 +971,7 @@ export function InCarShowcase() {
               onClick={() => setCredentialsOpen(true)}
               className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-white/60 transition-colors hover:text-white"
             >
-              <KeyRound className="size-3.5" /> Account Credentials
+              <KeyRound className="size-3.5" /> Endre passord
             </button>
             <button
               type="button"
