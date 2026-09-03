@@ -114,7 +114,7 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
 
 
   // Step 1: request an access link (or sign in directly with a password).
-  const [mode, setMode] = useState<"link" | "password">("link");
+  const [mode, setMode] = useState<"link" | "password">("password");
   const [email, setEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -944,12 +944,8 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
 /* Root showcase                                                       */
 /* ------------------------------------------------------------------ */
 
-/**
- * Demonstration mode: the cockpit renders directly so OEM/fleet visitors can
- * preview it without the email access step. Set DEMO_MODE to false to bring
- * back the Supabase-backed LoginGate.
- */
-const DEMO_MODE = true;
+/** Access gate is active: only authorized executive accounts reach the cockpit. */
+const DEMO_MODE = false;
 
 export function InCarShowcase() {
   const { signOut } = useAuth();
