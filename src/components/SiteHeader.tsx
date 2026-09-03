@@ -91,7 +91,11 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           ))}
         </nav>
 
-        <CurrencySelector className="ml-auto shrink-0 lg:ml-0" />
+        <div
+          data-tour="locale"
+          className="ml-auto flex shrink-0 items-center gap-2 lg:ml-0"
+        >
+        <CurrencySelector />
 
         <DropdownMenu>
           <DropdownMenuTrigger className="inline-flex shrink-0 items-center gap-2 rounded-full border border-border bg-background/50 px-2.5 py-1.5 text-sm font-semibold tracking-wide transition-colors hover:bg-background/80 sm:px-3 lg:ml-0">
