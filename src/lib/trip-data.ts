@@ -917,6 +917,26 @@ export const QUICK_ROUTES: QuickRoute[] = [
     regions: ["ca"],
     evBadge: "⚡ EV saves ~62% (~$97 CAD) vs petrol",
   },
+  {
+    key: "vancouver-banff",
+    emoji: "🏞️",
+    label: "Vancouver, BC → Banff, AB",
+    origin: "Vancouver, BC",
+    destination: "Banff, AB",
+    via: "Trans-Canada Hwy / Coquihalla · no tolls",
+    regions: ["ca"],
+    evBadge: "⚡ EV saves ~60% (~$88 CAD) vs gas",
+  },
+  {
+    key: "seattle-vancouver",
+    emoji: "🌉",
+    label: "Seattle, WA → Vancouver, BC",
+    origin: "Seattle, WA",
+    destination: "Vancouver, BC",
+    via: "I-5 → BC-99 · Peace Arch border crossing · no tolls",
+    regions: ["us", "ca"],
+    evBadge: "⚡ EV saves ~58% (~$22 CAD) vs gas",
+  },
 ];
 
 export type TransponderKey = "autopass" | "telepass" | "sunpass";

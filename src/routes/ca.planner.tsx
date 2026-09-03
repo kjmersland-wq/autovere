@@ -37,8 +37,8 @@ function CaPlanner() {
       <HeroPlanner
         region="ca"
         eyebrow="Canada · coast to coast"
-        title="Know the true cost of every kilometre."
-        subtitle="Provincial tolls, bridges, fuel, EV charging and ferries for cars, campervans and touring motorcycles — mapped before you leave."
+        title="Welcome to the open road, coast to coast."
+        subtitle="Tell us where you're starting and where you're headed — we'll map every toll, bridge, gas stop, EV charging point and ferry in Canadian dollars for cars, RVs and touring motorcycles."
       />
     </main>
   );

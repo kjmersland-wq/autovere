@@ -44,7 +44,9 @@ const en: RegionPack = {
     originHint: "Start city or landmark (e.g., Toronto, Calgary, Halifax)",
     destinationHint: "Where are you heading? (e.g., Banff, Tofino, Gaspésie)",
     tollSystems: ["Highway 407 ETR bypass", "Provincial tolls & bridges", "BC Ferries crossings"],
-    nav: { planner: "Road Trip Planner", tolls: "Tolls & Toll Highways", scenic: "Scenic Routes & Ferries", garage: "My Garage" },
+    nav: { planner: "Road Trip Planner", tolls: "Tolls & Bridges", scenic: "Scenic Routes & Ferries", garage: "My Garage" },
+    fuels: { petrol: "Gas" },
+    vehicles: { motorhome: "RV / Motorhome" },
   },
 };
 
@@ -70,7 +72,9 @@ const no: RegionPack = {
     originHint: "Startby eller landemerke (f.eks. Toronto, Calgary, Halifax)",
     destinationHint: "Hvor skal du? (f.eks. Banff, Tofino, Gaspésie)",
     tollSystems: ["Highway 407 ETR-omkjøring", "Provinsielle bompenger og broer", "BC Ferries-overfarter"],
-    nav: { planner: "Ruteplanlegger", tolls: "Bompenger og bomveier", scenic: "Naturskjønne ruter og ferger", garage: "Min garasje" },
+    nav: { planner: "Ruteplanlegger", tolls: "Bompenger og bruer", scenic: "Naturskjønne ruter og ferger", garage: "Min garasje" },
+    fuels: { petrol: "Bensin" },
+    vehicles: { motorhome: "Bobil / RV" },
   },
 };
 
@@ -96,7 +100,9 @@ const fr: RegionPack = {
     originHint: "Ville ou lieu de départ (ex. : Toronto, Calgary, Halifax)",
     destinationHint: "Où allez-vous ? (ex. : Banff, Tofino, Gaspésie)",
     tollSystems: ["Contournement de l'autoroute 407 ETR", "Péages et ponts provinciaux", "Traversées BC Ferries"],
-    nav: { planner: "Planificateur de road trip", tolls: "Péages et autoroutes à péage", scenic: "Routes panoramiques et traversiers", garage: "Mon garage" },
+    nav: { planner: "Planificateur de road trip", tolls: "Péages et ponts", scenic: "Routes panoramiques et traversiers", garage: "Mon garage" },
+    fuels: { petrol: "Essence" },
+    vehicles: { motorhome: "VR / Camping-car" },
   },
 };
 
@@ -122,7 +128,9 @@ const de: RegionPack = {
     originHint: "Startstadt oder Wahrzeichen (z. B. Toronto, Calgary, Halifax)",
     destinationHint: "Wohin geht die Reise? (z. B. Banff, Tofino, Gaspésie)",
     tollSystems: ["Highway 407 ETR – Umfahrung", "Provinzielle Maut & Brücken", "BC-Ferries-Überfahrten"],
-    nav: { planner: "Roadtrip-Planer", tolls: "Maut & Mautautobahnen", scenic: "Panoramarouten & Fähren", garage: "Meine Garage" },
+    nav: { planner: "Roadtrip-Planer", tolls: "Maut & Brücken", scenic: "Panoramarouten & Fähren", garage: "Meine Garage" },
+    fuels: { petrol: "Benzin" },
+    vehicles: { motorhome: "Wohnmobil / RV" },
   },
 };
 
@@ -148,7 +156,9 @@ const nl: RegionPack = {
     originHint: "Startstad of oriëntatiepunt (bijv. Toronto, Calgary, Halifax)",
     destinationHint: "Waar ga je heen? (bijv. Banff, Tofino, Gaspésie)",
     tollSystems: ["Highway 407 ETR-omleiding", "Provinciale tol & bruggen", "BC Ferries-overtochten"],
-    nav: { planner: "Roadtripplanner", tolls: "Tol & tolwegen", scenic: "Panoramaroutes & veerboten", garage: "Mijn garage" },
+    nav: { planner: "Roadtripplanner", tolls: "Tol & bruggen", scenic: "Panoramaroutes & veerboten", garage: "Mijn garage" },
+    fuels: { petrol: "Benzine" },
+    vehicles: { motorhome: "Camper / RV" },
   },
 };
 
@@ -174,7 +184,9 @@ const sv: RegionPack = {
     originHint: "Startstad eller landmärke (t.ex. Toronto, Calgary, Halifax)",
     destinationHint: "Vart är du på väg? (t.ex. Banff, Tofino, Gaspésie)",
     tollSystems: ["Highway 407 ETR-förbifart", "Provinsiella vägavgifter och broar", "BC Ferries-överfarter"],
-    nav: { planner: "Roadtrip-planerare", tolls: "Vägavgifter och betalvägar", scenic: "Natursköna rutter och färjor", garage: "Mitt garage" },
+    nav: { planner: "Roadtrip-planerare", tolls: "Vägavgifter och broar", scenic: "Natursköna rutter och färjor", garage: "Mitt garage" },
+    fuels: { petrol: "Bensin" },
+    vehicles: { motorhome: "Husbil / RV" },
   },
 };
 
@@ -200,7 +212,9 @@ const da: RegionPack = {
     originHint: "Startby eller vartegn (f.eks. Toronto, Calgary, Halifax)",
     destinationHint: "Hvor skal du hen? (f.eks. Banff, Tofino, Gaspésie)",
     tollSystems: ["Highway 407 ETR-omfartsvej", "Provinsielle vejafgifter og broer", "BC Ferries-overfarter"],
-    nav: { planner: "Roadtrip-planlægger", tolls: "Vejafgifter og betalingsveje", scenic: "Naturskønne ruter og færger", garage: "Min garage" },
+    nav: { planner: "Roadtrip-planlægger", tolls: "Vejafgifter og broer", scenic: "Naturskønne ruter og færger", garage: "Min garage" },
+    fuels: { petrol: "Benzin" },
+    vehicles: { motorhome: "Autocamper / RV" },
   },
 };
 
@@ -226,7 +240,9 @@ const pl: RegionPack = {
     originHint: "Miasto startowe lub punkt orientacyjny (np. Toronto, Calgary, Halifax)",
     destinationHint: "Dokąd jedziesz? (np. Banff, Tofino, Gaspésie)",
     tollSystems: ["Objazd autostradą 407 ETR", "Prowincjonalne opłaty i mosty", "Przeprawy BC Ferries"],
-    nav: { planner: "Planer podróży", tolls: "Opłaty i autostrady płatne", scenic: "Trasy widokowe i promy", garage: "Mój garaż" },
+    nav: { planner: "Planer podróży", tolls: "Opłaty i mosty", scenic: "Trasy widokowe i promy", garage: "Mój garaż" },
+    fuels: { petrol: "Benzyna" },
+    vehicles: { motorhome: "Kamper / RV" },
   },
 };
 
@@ -252,7 +268,9 @@ const es: RegionPack = {
     originHint: "Ciudad o lugar de salida (p. ej., Toronto, Calgary, Halifax)",
     destinationHint: "¿Adónde te diriges? (p. ej., Banff, Tofino, Gaspésie)",
     tollSystems: ["Circunvalación de peaje Highway 407 ETR", "Peajes y puentes provinciales", "Travesías de BC Ferries"],
-    nav: { planner: "Planificador de viajes", tolls: "Peajes y autopistas de peaje", scenic: "Rutas panorámicas y ferris", garage: "Mi garaje" },
+    nav: { planner: "Planificador de viajes", tolls: "Peajes y puentes", scenic: "Rutas panorámicas y ferris", garage: "Mi garaje" },
+    fuels: { petrol: "Gasolina" },
+    vehicles: { motorhome: "Autocaravana / RV" },
   },
 };
 
@@ -278,7 +296,9 @@ const it: RegionPack = {
     originHint: "Città o luogo di partenza (es. Toronto, Calgary, Halifax)",
     destinationHint: "Dove sei diretto? (es. Banff, Tofino, Gaspésie)",
     tollSystems: ["Circonvallazione a pedaggio Highway 407 ETR", "Pedaggi e ponti provinciali", "Traversate BC Ferries"],
-    nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e autostrade a pedaggio", scenic: "Percorsi panoramici e traghetti", garage: "Il mio garage" },
+    nav: { planner: "Pianificatore di viaggio", tolls: "Pedaggi e ponti", scenic: "Percorsi panoramici e traghetti", garage: "Il mio garage" },
+    fuels: { petrol: "Benzina" },
+    vehicles: { motorhome: "Camper / RV" },
   },
 };
 
@@ -310,7 +330,7 @@ const us: RegionPack = {
     originHint: "Start city or landmark (e.g., Toronto, Calgary, Halifax)",
     destinationHint: "Where are you heading? (e.g., Banff, Tofino, Gaspésie)",
     tollSystems: ["Highway 407 ETR bypass", "Provincial tolls & bridges", "BC Ferries crossings"],
-    nav: { planner: "Road Trip Planner", tolls: "Tolls & Toll Highways", scenic: "Scenic Routes & Ferries", garage: "My Garage" },
+    nav: { planner: "Road Trip Planner", tolls: "Tolls & Bridges", scenic: "Scenic Routes & Ferries", garage: "My Garage" },
     fuels: { petrol: "Gas" },
     vehicles: { motorhome: "RV / Camper" },
   },

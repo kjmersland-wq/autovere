@@ -40,8 +40,8 @@ function CaPage() {
       <HeroPlanner
         region="ca"
         eyebrow="Canada · coast to coast"
-        title="Know the true cost of every kilometre."
-        subtitle="Smart provincial toll, bridge, fuel, charging, and ferry intelligence for cars, campervans, and touring motorcycles. Plan with total peace of mind."
+        title="Welcome to the open road, coast to coast."
+        subtitle="Smart provincial toll, bridge, gas, charging, and ferry intelligence — priced in Canadian dollars for cars, RVs and touring motorcycles. Plan your next road trip with total peace of mind."
       />
       <div className="mx-auto w-full max-w-6xl px-4 pb-14">
         <ShareButton variant="bar" lang="en" url="https://www.autovere.com/ca" />
