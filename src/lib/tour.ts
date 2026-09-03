@@ -315,6 +315,9 @@ export function startTour(locale: string) {
     prevBtnText: copy.prev,
     doneBtnText: copy.done,
     progressText: "{{current}} / {{total}}",
+    showButtons: ["previous", "next", "close"],
+    closeBtnText: copy.close,
+    overlayClickBehavior: "close",
     onDestroyed: markSeen,
     steps: [
       {
