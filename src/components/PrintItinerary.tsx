@@ -242,6 +242,18 @@ export function PrintItinerary({
     return `${base}?${params.toString()}`;
   }, [origin, destination, vehicle, fuel, trip.variant]);
 
+  const staticMap = useMemo(() => staticMapUrl(trip.corridor?.coords ?? []), [trip.corridor]);
+  const [mapFailed, setMapFailed] = useState(false);
+
+  /** Stable, human-quotable reference for this dossier. */
+  const tripRef = useMemo(() => {
+    const seed = `${origin}|${destination}|${trip.variant}|${new Date().toDateString()}`;
+    let h = 0;
+    for (let i = 0; i < seed.length; i += 1) h = (h * 31 + seed.charCodeAt(i)) >>> 0;
+    return `AV-${h.toString(36).toUpperCase().padStart(6, "0").slice(0, 6)}`;
+  }, [origin, destination, trip.variant]);
+
+
   const navGoogle = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(origin || "")}&destination=${encodeURIComponent(destination || "")}&travelmode=driving`;
   const navApple = `https://maps.apple.com/?saddr=${encodeURIComponent(origin || "")}&daddr=${encodeURIComponent(destination || "")}&dirflg=d`;
 
