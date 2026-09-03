@@ -7,6 +7,7 @@ import {
   CheckCircle2,
   Gift,
   Handshake,
+  Lock,
   Mail,
   Route as RouteIcon,
   Send,
@@ -581,6 +582,15 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
           </form>
         </DialogContent>
       </Dialog>
+
+      <div className="border-t border-white/5 py-6 text-center">
+        <a
+          href="/partners/in-car"
+          className="inline-flex items-center gap-1.5 text-xs text-muted-foreground/50 transition-colors hover:text-muted-foreground"
+        >
+          <Lock className="size-3" /> OEM &amp; In-Car Intelligence Portal
+        </a>
+      </div>
     </main>
   );
 }

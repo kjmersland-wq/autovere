@@ -6,6 +6,7 @@ import {
   Car,
   Fuel,
   Gauge,
+  KeyRound,
   LogOut,
   MapPin,
   Radar,
@@ -18,6 +19,13 @@ import { toast } from "sonner";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
@@ -28,7 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { loginInCar, logoutInCar } from "@/lib/in-car-auth.functions";
+import { changeInCarCredentials, loginInCar, logoutInCar } from "@/lib/in-car-auth.functions";
 import { sendContactMessage } from "@/lib/contact.functions";
 import {
   COCKPIT_STRINGS,
@@ -611,6 +619,138 @@ function ContactSection() {
 }
 
 /* ------------------------------------------------------------------ */
+/* Account credentials modal                                           */
+/* ------------------------------------------------------------------ */
+
+function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange: (open: boolean) => void }) {
+  const [currentPassword, setCurrentPassword] = useState("");
+  const [newEmail, setNewEmail] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+
+  const reset = () => {
+    setCurrentPassword("");
+    setNewEmail("");
+    setNewPassword("");
+    setConfirmPassword("");
+    setError(null);
+  };
+
+  const submit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
+
+    if (newPassword !== confirmPassword) {
+      setError("New password and confirmation do not match.");
+      return;
+    }
+
+    setSaving(true);
+    try {
+      const result = await changeInCarCredentials({
+        data: { currentPassword, newEmail, newPassword, confirmPassword },
+      });
+      if (result.ok) {
+        toast.success("Credentials updated successfully.");
+        reset();
+        onOpenChange(false);
+      } else {
+        setError(result.error ?? "Couldn't update credentials.");
+      }
+    } catch {
+      setError("Couldn't update credentials — please try again.");
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  return (
+    <Dialog
+      open={open}
+      onOpenChange={(next) => {
+        if (!next) reset();
+        onOpenChange(next);
+      }}
+    >
+      <DialogContent className="border-white/10 bg-[#0a0e17] text-white sm:max-w-md">
+        <DialogHeader>
+          <DialogTitle>Account Credentials</DialogTitle>
+          <DialogDescription className="text-white/50">
+            Update the corporate email and password used to access this portal.
+          </DialogDescription>
+        </DialogHeader>
+        <form onSubmit={submit} className="space-y-4">
+          <div className="space-y-1.5">
+            <Label htmlFor="cc-current" className="text-white/60">Current password</Label>
+            <Input
+              id="cc-current"
+              type="password"
+              autoComplete="current-password"
+              required
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              className="border-white/15 bg-white/[0.04] text-white"
+            />
+          </div>
+          <div className="space-y-1.5">
+            <Label htmlFor="cc-email" className="text-white/60">New admin email</Label>
+            <Input
+              id="cc-email"
+              type="email"
+              autoComplete="username"
+              required
+              value={newEmail}
+              onChange={(e) => setNewEmail(e.target.value)}
+              className="border-white/15 bg-white/[0.04] text-white"
+            />
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <div className="space-y-1.5">
+              <Label htmlFor="cc-new" className="text-white/60">New password</Label>
+              <Input
+                id="cc-new"
+                type="password"
+                autoComplete="new-password"
+                required
+                minLength={10}
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="border-white/15 bg-white/[0.04] text-white"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <Label htmlFor="cc-confirm" className="text-white/60">Confirm password</Label>
+              <Input
+                id="cc-confirm"
+                type="password"
+                autoComplete="new-password"
+                required
+                minLength={10}
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                className="border-white/15 bg-white/[0.04] text-white"
+              />
+            </div>
+          </div>
+
+          {error && (
+            <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+              {error}
+            </p>
+          )}
+
+          <Button type="submit" disabled={saving} className="h-11 w-full bg-primary font-semibold text-primary-foreground hover:opacity-90">
+            {saving ? "Saving…" : "Update credentials"}
+          </Button>
+        </form>
+      </DialogContent>
+    </Dialog>
+  );
+}
+
+/* ------------------------------------------------------------------ */
 /* Root showcase                                                       */
 /* ------------------------------------------------------------------ */
 
@@ -619,6 +759,7 @@ export function InCarShowcase({ initialAuthorized = false }: { initialAuthorized
   // client navigation alike), so `initialAuthorized` is always authoritative
   // for the current render — no redundant client-side re-check is needed.
   const [authorized, setAuthorized] = useState(initialAuthorized);
+  const [credentialsOpen, setCredentialsOpen] = useState(false);
 
   const handleLogout = async () => {
     await logoutInCar();
@@ -646,14 +787,25 @@ export function InCarShowcase({ initialAuthorized = false }: { initialAuthorized
           <Badge className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-[11px] font-semibold tracking-[0.14em] text-amber-200">
             KM TECH LABS • NEXT-GEN AUTOMOTIVE INTELLIGENCE
           </Badge>
-          <button
-            type="button"
-            onClick={() => void handleLogout()}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-white/60 transition-colors hover:text-white"
-          >
-            <LogOut className="size-3.5" /> Log out
-          </button>
+          <div className="flex shrink-0 items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setCredentialsOpen(true)}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-white/60 transition-colors hover:text-white"
+            >
+              <KeyRound className="size-3.5" /> Account Credentials
+            </button>
+            <button
+              type="button"
+              onClick={() => void handleLogout()}
+              className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-white/60 transition-colors hover:text-white"
+            >
+              <LogOut className="size-3.5" /> Log out
+            </button>
+          </div>
         </div>
+
+        <CredentialsModal open={credentialsOpen} onOpenChange={setCredentialsOpen} />
 
         <div className="relative mx-auto mt-8 max-w-4xl">
           <h1 className="text-4xl font-semibold leading-[1.05] tracking-tight text-white sm:text-6xl">
