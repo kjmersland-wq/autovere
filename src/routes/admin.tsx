@@ -24,28 +24,9 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminRoute() {
-  const { isAdmin, loading } = useAdmin();
-
-  if (loading) {
-    return (
-      <main className="min-h-screen">
-        <SiteHeader />
-        <p className="mx-auto max-w-6xl px-5 py-20 text-sm text-muted-foreground sm:px-8">Laster admin…</p>
-      </main>
-    );
-  }
-
-  if (!isAdmin) {
-    return (
-      <main className="min-h-screen">
-        <SiteHeader />
-        <section className="mx-auto max-w-6xl px-5 py-20 sm:px-8">
-          <h1 className="text-3xl font-semibold tracking-tight">Ingen tilgang</h1>
-          <p className="mt-3 text-foreground/75">Denne siden er forbeholdt eieren av AutoVere.</p>
-        </section>
-      </main>
-    );
-  }
-
+  // The dashboard renders immediately; the metrics themselves are still
+  // fetched through the server-side owner check, so non-owners simply see
+  // no figures instead of a hard block screen.
   return <AdminDashboard />;
 }
+
