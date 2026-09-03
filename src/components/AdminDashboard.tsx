@@ -21,7 +21,10 @@ import { ArrowLeft, Printer, RefreshCcw, ShieldCheck } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/lib/auth";
 import { getAdminOverview, type AdminOverview } from "@/lib/admin.functions";
+
 
 const COUNTRY_NO: Record<string, string> = {
   NO: "🇳🇴 Norge",
