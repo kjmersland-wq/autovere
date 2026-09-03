@@ -6,6 +6,7 @@
 import { DA_DICT } from "@/lib/dict-da";
 import { DE_DICT } from "@/lib/dict-de";
 import { ES_DICT } from "@/lib/dict-es";
+import { FI_DICT } from "@/lib/dict-fi";
 import { FR_DICT } from "@/lib/dict-fr";
 import { IT_DICT } from "@/lib/dict-it";
 import { NL_DICT } from "@/lib/dict-nl";
@@ -25,6 +26,7 @@ export const PARTIAL_DICTS: Record<string, Dict> = {
   es: ES_DICT,
   it: IT_DICT,
   us: US_DICT,
+  fi: FI_DICT,
 };
 
 /** Hero copy per language for the localized landing page. */
@@ -121,5 +123,14 @@ export const LOCALE_LANDING: Record<
     metaTitle: "AutoVere — American English Europe Road Trip Planner",
     metaDescription:
       "Plan your European road trip in plain American English — highway passes & toll tags, gas, charging and ferries mapped out for your car, RV or motorcycle.",
+  },
+  fi: {
+    eyebrow: "Eurooppa · yli 30 maata",
+    title: "Tee unelmiesi autoreissusta totta – ilman yllätyksiä",
+    subtitle:
+      "Kaikki tietullit, vinjetit, polttoaine- ja latauskulut selkeästi laskettuna ennen matkaan lähtöä.",
+    metaTitle: "AutoVere Suomi – Suunnittele täydellinen automatka Eurooppaan",
+    metaDescription:
+      "Unohda tietullien ja latauskulujen arvuuttelu. AutoVere laskee koko matkasi kulut etukäteen – helppoa, tarkkaa ja vaivatonta.",
   },
 };

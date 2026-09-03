@@ -19,6 +19,7 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
   es: "España",
   it: "Italia",
   usa: "United States",
+  fi: "Suomi",
 };
 
 type PageMeta = { title: string; description: string };
@@ -35,6 +36,7 @@ const OG_IMAGE_BY_PREFIX: Record<LocalePrefix, string> = {
   pl: "/og/og-pl.jpg",
   es: "/og/og-es.jpg",
   it: "/og/og-it.jpg",
+  fi: "/og/og-fi.png",
 };
 
 /** Absolute URL of the share image for a language prefix (null = English root). */
@@ -47,7 +49,7 @@ export function ogImageMeta(image: string) {
   return [
     { property: "og:image", content: image },
     { property: "og:image:secure_url", content: image },
-    { property: "og:image:type", content: "image/jpeg" },
+    { property: "og:image:type", content: image.endsWith(".png") ? "image/png" : "image/jpeg" },
     { property: "og:image:width", content: "1200" },
     { property: "og:image:height", content: "630" },
     { name: "twitter:image", content: image },
@@ -190,6 +192,7 @@ const APP_PAGE_META_BASE = {
 const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
   ...APP_PAGE_META_BASE,
   usa: {},
+  fi: {},
   es: {
     planner: {
       title: "Planificador de viajes por carretera — peajes, combustible y ferris | AutoVere España",

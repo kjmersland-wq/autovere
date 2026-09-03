@@ -53,6 +53,7 @@ export const DATE_LOCALE: Record<Locale, string> = {
   es: "es-ES",
   it: "it-IT",
   us: "en-US",
+  fi: "fi-FI",
 };
 
 const EN_TIERS: Tier[] = [
@@ -580,6 +581,7 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   es: ES_TIERS,
   it: IT_TIERS,
   us: EN_TIERS,
+  fi: EN_TIERS,
 };
 
 const COPY_BASE = {
@@ -805,7 +807,7 @@ const COPY_BASE = {
   },
 } satisfies Partial<Record<Locale, PricingCopy>>;
 
-const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.it, us: COPY_BASE.en };
+const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.it, us: COPY_BASE.en, fi: COPY_BASE.en };
 
 const HERO_BASE = {
   en: {
@@ -870,7 +872,7 @@ const HERO_BASE = {
   },
 };
 
-const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.it, us: HERO_BASE.en };
+const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.it, us: HERO_BASE.en, fi: HERO_BASE.en };
 
 /**
  * Regional price overrides. The tier structure, features and copy stay identical

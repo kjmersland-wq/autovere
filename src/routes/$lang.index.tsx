@@ -20,12 +20,17 @@ export const Route = createFileRoute("/$lang/")({
     if (!c) return { meta: [{ title: "AutoVere" }] };
     const url = `https://www.autovere.com/${params.lang}`;
     const image = ogImageUrl(params.lang as LocalePrefix);
+    const isFi = params.lang === "fi";
+    const ogTitle = isFi ? "Tiedä jokaisen kilometrin todellinen hinta | AutoVere" : c.metaTitle;
+    const ogDescription = isFi
+      ? "Suunnittele unohtumaton automatka. Tarkat tietullit, polttoaineet ja EV-lataukset suoraan autosi navigaattoriin."
+      : c.metaDescription;
     return {
       meta: [
         { title: c.metaTitle },
         { name: "description", content: c.metaDescription },
-        { property: "og:title", content: c.metaTitle },
-        { property: "og:description", content: c.metaDescription },
+        { property: "og:title", content: ogTitle },
+        { property: "og:description", content: ogDescription },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
         ...ogImageMeta(image),

@@ -3,7 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import type { CostGroupKey } from "@/lib/country-costs";
 import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 
-export type Locale = "en" | "no" | "sv" | "da" | "us" | "de" | "nl" | "fr" | "pl" | "es" | "it";
+export type Locale = "en" | "no" | "sv" | "da" | "fi" | "us" | "de" | "nl" | "fr" | "pl" | "es" | "it";
 
 import { CONTENT_DA, DA_PATTERNS } from "@/lib/content-da";
 import { CONTENT_DE, DE_PATTERNS } from "@/lib/content-de";
@@ -606,6 +606,7 @@ export const STRINGS: Record<Locale, Strings> = {
   es: withFallback("es"),
   it: withFallback("it"),
   us: withFallback("us"),
+  fi: withFallback("fi"),
 };
 
 export function useT(): Strings {

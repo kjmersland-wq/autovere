@@ -22,6 +22,7 @@ export const LANGUAGES: { code: string; flag: FlagCode; label: string }[] = [
   { code: "no", flag: "NO", label: "Norsk" },
   { code: "sv", flag: "SE", label: "Svenska" },
   { code: "da", flag: "DK", label: "Dansk" },
+  { code: "fi", flag: "FI", label: "Suomi" },
   { code: "us", flag: "US", label: "US" },
   { code: "de", flag: "DE", label: "Deutsch" },
   { code: "nl", flag: "NL", label: "Nederlands" },
@@ -92,7 +93,7 @@ export const REGION_DEFAULTS: Record<RegionKey, RegionDefaults> = {
 /** Region is independent from language: /us, /ca, /fr/us, /no/ca all resolve here. */
 export function regionFromPath(pathname: string): RegionKey {
   const parts = pathname.replace(/^\/+/, "").split("/").filter(Boolean);
-  const LANGS = ["no", "se", "dk", "usa", "de", "nl", "fr", "pl"];
+  const LANGS = ["no", "se", "dk", "fi", "usa", "de", "nl", "fr", "pl"];
   const first = parts[0] ?? "";
   const seg = LANGS.includes(first) ? (parts[1] ?? "") : first;
   if (seg === "us") return "us";

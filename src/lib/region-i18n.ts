@@ -336,7 +336,35 @@ const us: RegionPack = {
   },
 };
 
-const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us };
+const fi: RegionPack = {
+  eu: {
+    eyebrow: "Eurooppa · yli 30 maata",
+    originHint: "Lähtökaupunki tai maamerkki (esim. München, Oslo, Berliini)",
+    destinationHint: "Minne olet menossa? (esim. Amalfin rannikko, Alpit, Praha)",
+    tollSystems: ["Vinjetit ja e-vinjetit", "Lipulliset moottoritietullit", "Kaupunkien matalapäästöalueet"],
+    nav: { planner: "Suunnittele oma matkasi", tolls: "Tietullit ja vinjetit", scenic: "Maisemareitit ja lautat", garage: "Oma autotalli" },
+  },
+  us: {
+    eyebrow: "Yhdysvallat · 50 osavaltiota",
+    originHint: "Lähtökaupunki tai maamerkki (esim. Seattle, Denver, Miami)",
+    destinationHint: "Minne olet menossa? (esim. Big Sur, Moab, Key West)",
+    tollSystems: ["Osavaltioiden maksulliset moottoritiet", "HOV- / pikakaistat", "Silta- ja tunnelitullit"],
+    nav: { planner: "Suunnittele oma matkasi", tolls: "Tietullit ja pikakaistat", scenic: "Maisemareitit ja lautat", garage: "Oma autotalli" },
+    fuels: { petrol: "Bensiini" },
+    vehicles: { motorhome: "Matkailuauto / RV" },
+  },
+  ca: {
+    eyebrow: "Kanada · rannikolta rannikolle",
+    originHint: "Lähtökaupunki tai maamerkki (esim. Toronto, Calgary, Halifax)",
+    destinationHint: "Minne olet menossa? (esim. Banff, Tofino, Gaspésie)",
+    tollSystems: ["Highway 407 ETR -kiertotie", "Provinssien tullit ja sillat", "BC Ferries -ylitykset"],
+    nav: { planner: "Suunnittele oma matkasi", tolls: "Tietullit ja sillat", scenic: "Maisemareitit ja lautat", garage: "Oma autotalli" },
+    fuels: { petrol: "Bensiini" },
+    vehicles: { motorhome: "Matkailuauto / RV" },
+  },
+};
+
+const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us, fi };
 
 export function regionStrings(locale: Locale, region: RegionKey): RegionStrings {
   return (PACKS[locale] ?? en)[region];
