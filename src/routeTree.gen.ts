@@ -49,6 +49,7 @@ import { Route as NoPrivacyRouteImport } from './routes/no.privacy'
 import { Route as NoScenicRouteImport } from './routes/no.scenic'
 import { Route as NoTermsRouteImport } from './routes/no.terms'
 import { Route as NoTollsRouteImport } from './routes/no.tolls'
+import { Route as PartnersInCarRouteImport } from './routes/partners_.in-car'
 import { Route as PlPricingRouteImport } from './routes/pl.pricing'
 import { Route as UsIndexRouteImport } from './routes/us.index'
 import { Route as UsFaqRouteImport } from './routes/us.faq'
@@ -267,6 +268,11 @@ const NoTollsRoute = NoTollsRouteImport.update({
   path: '/no/tolls',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PartnersInCarRoute = PartnersInCarRouteImport.update({
+  id: '/partners_/in-car',
+  path: '/partners/in-car',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PlPricingRoute = PlPricingRouteImport.update({
   id: '/pl/pricing',
   path: '/pl/pricing',
@@ -392,6 +398,7 @@ export interface FileRoutesByFullPath {
   '/no/scenic': typeof NoScenicRoute
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
+  '/partners/in-car': typeof PartnersInCarRoute
   '/pl/pricing': typeof PlPricingRoute
   '/us/faq': typeof UsFaqRoute
   '/us/garage': typeof UsGarageRoute
@@ -449,6 +456,7 @@ export interface FileRoutesByTo {
   '/no/scenic': typeof NoScenicRoute
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
+  '/partners/in-car': typeof PartnersInCarRoute
   '/pl/pricing': typeof PlPricingRoute
   '/us/faq': typeof UsFaqRoute
   '/us/garage': typeof UsGarageRoute
@@ -509,6 +517,7 @@ export interface FileRoutesById {
   '/no/scenic': typeof NoScenicRoute
   '/no/terms': typeof NoTermsRoute
   '/no/tolls': typeof NoTollsRoute
+  '/partners_/in-car': typeof PartnersInCarRoute
   '/pl/pricing': typeof PlPricingRoute
   '/us/faq': typeof UsFaqRoute
   '/us/garage': typeof UsGarageRoute
@@ -570,6 +579,7 @@ export interface FileRouteTypes {
     | '/no/scenic'
     | '/no/terms'
     | '/no/tolls'
+    | '/partners/in-car'
     | '/pl/pricing'
     | '/us/faq'
     | '/us/garage'
@@ -627,6 +637,7 @@ export interface FileRouteTypes {
     | '/no/scenic'
     | '/no/terms'
     | '/no/tolls'
+    | '/partners/in-car'
     | '/pl/pricing'
     | '/us/faq'
     | '/us/garage'
@@ -686,6 +697,7 @@ export interface FileRouteTypes {
     | '/no/scenic'
     | '/no/terms'
     | '/no/tolls'
+    | '/partners_/in-car'
     | '/pl/pricing'
     | '/us/faq'
     | '/us/garage'
@@ -737,6 +749,7 @@ export interface RootRouteChildren {
   NoScenicRoute: typeof NoScenicRoute
   NoTermsRoute: typeof NoTermsRoute
   NoTollsRoute: typeof NoTollsRoute
+  PartnersInCarRoute: typeof PartnersInCarRoute
   PlPricingRoute: typeof PlPricingRoute
   LangIndexRoute: typeof LangIndexRoute
   NoIndexRoute: typeof NoIndexRoute
@@ -1026,6 +1039,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof NoTollsRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/partners_/in-car': {
+      id: '/partners_/in-car'
+      path: '/partners/in-car'
+      fullPath: '/partners/in-car'
+      preLoaderRoute: typeof PartnersInCarRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/pl/pricing': {
       id: '/pl/pricing'
       path: '/pl/pricing'
@@ -1241,6 +1261,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoScenicRoute: NoScenicRoute,
   NoTermsRoute: NoTermsRoute,
   NoTollsRoute: NoTollsRoute,
+  PartnersInCarRoute: PartnersInCarRoute,
   PlPricingRoute: PlPricingRoute,
   LangIndexRoute: LangIndexRoute,
   NoIndexRoute: NoIndexRoute,
