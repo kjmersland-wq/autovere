@@ -1,8 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { AdminDashboard } from "@/components/AdminDashboard";
-import { SiteHeader } from "@/components/SiteHeader";
-import { useAdmin } from "@/hooks/useAdmin";
+
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
