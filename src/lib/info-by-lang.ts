@@ -9,6 +9,7 @@ import {
 import { DA_FAQ, DA_HOW_IT_WORKS, DA_PARTNERS, DA_PRICING, DA_PRIVACY, DA_TERMS } from "@/lib/global-content-da";
 import { DE_FAQ, DE_HOW_IT_WORKS, DE_PARTNERS, DE_PRICING, DE_PRIVACY, DE_TERMS } from "@/lib/global-content-de";
 import { ES_FAQ, ES_HOW_IT_WORKS, ES_PARTNERS, ES_PRICING, ES_PRIVACY, ES_TERMS } from "@/lib/global-content-es";
+import { FI_FAQ, FI_PRIVACY, FI_TERMS } from "@/lib/global-content-fi";
 import { FR_FAQ, FR_HOW_IT_WORKS, FR_PARTNERS, FR_PRICING, FR_PRIVACY, FR_TERMS } from "@/lib/global-content-fr";
 import { IT_FAQ, IT_HOW_IT_WORKS, IT_PARTNERS, IT_PRICING, IT_PRIVACY, IT_TERMS } from "@/lib/global-content-it";
 import { NO_FAQ, NO_HOW_IT_WORKS, NO_PARTNERS, NO_PRICING, NO_PRIVACY, NO_TERMS } from "@/lib/global-content-no";
@@ -38,6 +39,7 @@ export const INFO_BY_LANG: Record<string, InfoSet> = {
   fr: { faq: FR_FAQ, "how-it-works": FR_HOW_IT_WORKS, pricing: FR_PRICING, partners: FR_PARTNERS, privacy: FR_PRIVACY, terms: FR_TERMS },
   es: { faq: ES_FAQ, "how-it-works": ES_HOW_IT_WORKS, pricing: ES_PRICING, partners: ES_PARTNERS, privacy: ES_PRIVACY, terms: ES_TERMS },
   it: { faq: IT_FAQ, "how-it-works": IT_HOW_IT_WORKS, pricing: IT_PRICING, partners: IT_PARTNERS, privacy: IT_PRIVACY, terms: IT_TERMS },
+  fi: { faq: FI_FAQ, "how-it-works": GLOBAL_HOW_IT_WORKS, pricing: GLOBAL_PRICING, partners: GLOBAL_PARTNERS, privacy: FI_PRIVACY, terms: FI_TERMS },
 };
 
 export function infoForLang(lang: string, page: string) {

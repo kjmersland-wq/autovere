@@ -392,6 +392,40 @@ export const TOUR_COPY: Record<string, TourCopy> = {
       },
     ],
   },
+  fi: {
+    trigger: "💡 Pikaopas",
+    next: "Seuraava",
+    prev: "Takaisin",
+    done: "Valmis",
+    close: "Sulje / Ohita",
+    steps: [
+      {
+        title: "1. Kieli ja valuutta",
+        description:
+          "Valitse haluamasi kieli ja valuutta täältä. Muunnamme automaattisesti kaikki tietullit, polttoainehinnat ja vinjetit.",
+      },
+      {
+        title: "2. Minne matka suuntautuu?",
+        description:
+          "Kirjoita lähtöpaikka ja määränpää — tai napauta jotakin suosituista reiteistä alla saadaksesi arvion heti.",
+      },
+      {
+        title: "3. Räätälöi matkasi",
+        description:
+          "Aseta matkailuauto, sähköauto tai bensiiniauto, ja valitse, haluatko nauttia vuoristosolista vai välttää maksullisia teitä.",
+      },
+      {
+        title: "4. Tulokset ja Oma Autotalli",
+        description:
+          "Saat koko kustannusyhteenvedon yhdellä klikkauksella. Tilaajat voivat tallentaa matkoja Omaan Autotalliin ja toistaa matkan milloin tahansa tuorein hinnoin.",
+      },
+      {
+        title: "5. Lähetä autoon ja navigaattoriin",
+        description:
+          "Lähetä reitti suoraan Tesla-sovellukseen, avaa se auton näytöllä Apple CarPlayn / Android Auton kautta, tai tulosta matkasuunnitelma omalla kielelläsi.",
+      },
+    ],
+  },
 };
 
 export function tourCopy(locale: string): TourCopy {

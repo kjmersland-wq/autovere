@@ -40,6 +40,7 @@ import {
   ES_PRIVACY,
   ES_TERMS,
 } from "@/lib/global-content-es";
+import { FI_FAQ, FI_PRIVACY, FI_TERMS } from "@/lib/global-content-fi";
 import {
   FR_FAQ,
   FR_HOW_IT_WORKS,
@@ -165,6 +166,14 @@ const INFO_BY_LANG: Record<string, typeof INFO> = {
     partners: IT_PARTNERS,
     privacy: IT_PRIVACY,
     terms: IT_TERMS,
+  },
+  fi: {
+    faq: FI_FAQ,
+    "how-it-works": GLOBAL_HOW_IT_WORKS,
+    pricing: GLOBAL_PRICING,
+    partners: GLOBAL_PARTNERS,
+    privacy: FI_PRIVACY,
+    terms: FI_TERMS,
   },
 };
 

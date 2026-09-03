@@ -566,6 +566,57 @@ const IT_TIERS: Tier[] = [
   },
 ];
 
+const FI_TIERS: Tier[] = [
+  {
+    id: "free",
+    name: "Free",
+    emoji: "🧭",
+    tagline: "Kaikki, mitä tarvitset ensimmäiseen rehelliseen kustannusarvioon.",
+    monthly: "0 €",
+    cta: "Aloita suunnittelu ilmaiseksi",
+    features: [
+      "Tietullien, vinjettien ja polttoaineen peruskustannuslaskelmat",
+      "OSRM-reititys Euroopassa, USA:ssa ja Kanadassa",
+      "Yksi ajoneuvoprofiili",
+      "Maa- ja osavaltiokohtainen kustannusselain",
+      "Jaa matkalinkki",
+    ],
+  },
+  {
+    id: "pro",
+    name: "AutoVere Pro",
+    emoji: "✨",
+    tagline: "Matkailijalle, joka elää seuraavaa vuoristosolaa varten.",
+    monthly: "4,99 €",
+    yearly: "39 €",
+    cta: "Päivitä Prohon",
+    highlight: true,
+    features: [
+      "Monen ajoneuvon autotalli (auto, matkailuauto, moottoripyörä)",
+      "GPX- ja KML-vienti Garminiin, TomTomiin ja CarPlayhin",
+      "Reaaliaikaiset hälytykset vuoristosoluista ja lautoista",
+      "Offline-reittiopas ja tulostuspaketit",
+      "Moottoripyörien tietullialennukset ja kuljettajan turvallisuustutka",
+      "Rajattomasti tallennettuja matkoja",
+    ],
+  },
+  {
+    id: "fleet",
+    name: "AutoVere Business / Kalusto",
+    emoji: "🚛",
+    tagline: "Rajat ylittävä toiminta, koottuna yhteen.",
+    monthly: "19 €",
+    cta: "Päivitä Businekseen",
+    features: [
+      "Monen maan tietullilaskujen yhdistäminen",
+      "Tiimin reititys jaetulla matkakirjastolla",
+      "Raskaan kaluston profiilit (>3,5 t) ja akselipohjaiset tietullit",
+      "Kuljettajien osoittaminen ja kustannuspaikkaviennit (CSV)",
+      "Ensisijainen tuki KM TECH LABSilta",
+    ],
+  },
+];
+
 export const TIERS = EN_TIERS;
 export const TIERS_PL = PL_TIERS;
 
@@ -581,7 +632,7 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   es: ES_TIERS,
   it: IT_TIERS,
   us: EN_TIERS,
-  fi: EN_TIERS,
+  fi: FI_TIERS,
 };
 
 const COPY_BASE = {
@@ -805,9 +856,31 @@ const COPY_BASE = {
     signupToast: "Crea prima il tuo account: ti porteremo direttamente al pagamento sicuro.",
     portalError: "Impossibile aprire il portale di fatturazione.",
   },
+  fi: {
+    onPlan: "Tilauksesi:",
+    retrying: " — maksuyritys toistetaan",
+    until: (d) => `Käyttöoikeus on voimassa ${d} asti.`,
+    renews: (d) => `Uusiutuu ${d}.`,
+    active: "Aktiivinen tilaus.",
+    manage: "Hallinnoi laskutusta",
+    monthly: "Kuukausittain",
+    yearly: "Vuosittain - säästä 35%",
+    forever: "ikuisesti",
+    perYear: "vuodessa",
+    perMonth: "kuukaudessa",
+    mostLoved: "Suosituin",
+    proFine: "4,99 €/kk tai 39 €/vuosi — peru milloin tahansa.",
+    current: "Nykyinen tilauksesi",
+    switch: "Vaihda tilausta laskutusportaalissa",
+    foot: "Hinnat euroissa sis. soveltuva ALV. Maksut ja verot käsittelee turvallisesti Stripe. Kustannusarviot ovat suuntaa-antavia — tarkista aina viralliset tietullipalvelut.",
+    checkout: "Turvallinen maksu",
+    freeToast: "Käytät Free-tilausta — suunnittele vapaasti!",
+    signupToast: "Luo tili ensin, niin viemme sinut suoraan turvalliseen maksuun.",
+    portalError: "Laskutusportaalia ei voitu avata.",
+  },
 } satisfies Partial<Record<Locale, PricingCopy>>;
 
-const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.it, us: COPY_BASE.en, fi: COPY_BASE.en };
+const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.it, us: COPY_BASE.en, fi: COPY_BASE.fi };
 
 const HERO_BASE = {
   en: {
@@ -870,9 +943,15 @@ const HERO_BASE = {
     intro:
       "Ogni piano parte da numeri onesti. Passa a un livello superiore quando vuoi un garage completo, la navigazione offline e la fatturazione dei pedaggi per la tua flotta — annulla quando finisce la stagione.",
   },
+  fi: {
+    eyebrow: "Suunnitelmat ja hinnat",
+    title: "Valitse matkaasi parhaiten sopiva tilaus",
+    intro:
+      "Jokainen tilaus alkaa rehellisillä luvuilla. Päivitä kattavampaan versioon, kun haluat tallentaa useampia ajoneuvoja ja viedä reitit navigaattoriin.",
+  },
 };
 
-const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.it, us: HERO_BASE.en, fi: HERO_BASE.en };
+const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.it, us: HERO_BASE.en, fi: HERO_BASE.fi };
 
 /**
  * Regional price overrides. The tier structure, features and copy stay identical
