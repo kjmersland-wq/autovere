@@ -386,6 +386,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               />
               <Button
                 type="submit"
+                data-tour="calculate"
                 size="lg"
                 disabled={calculating}
                 className="h-12 px-8 text-base font-semibold"
