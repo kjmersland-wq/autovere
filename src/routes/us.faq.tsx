@@ -16,6 +16,8 @@ export const Route = createFileRoute("/us/faq")({
       { property: "og:type", content: "website" },
       { property: "og:url", content: absUrl("/us/faq") },
       { property: "og:image", content: "https://www.autovere.com/og/og-us.jpg" },
+      { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-us.jpg" },
+      { property: "og:image:type", content: "image/jpeg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },
       { property: "og:image:alt", content: "AutoVere — know the true cost of every mile" },
