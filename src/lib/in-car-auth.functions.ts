@@ -9,6 +9,12 @@ import { z } from "zod";
  * Deliberately independent of the Supabase user-auth system — this page is a
  * single shared executive-preview login, not a customer account.
  *
+ * Login itself is passwordless: requestInCarMagicLink emails a time-limited
+ * (1 hour) link to the configured admin address, and verifyInCarMagicLink
+ * validates it and opens the session. The password machinery below
+ * (hashPassword/verifyPasswordHash) is unrelated to logging in — it's kept
+ * only for changeInCarCredentials' "current password" re-verification step.
+ *
  * Credentials live in a single-row Supabase table (in_car_admin_credentials,
  * service-role only — see supabase/migrations) so an admin can change the
  * email/password from inside the dashboard and have it survive restarts and
@@ -122,20 +128,91 @@ async function requireActiveSession(): Promise<EffectiveCredentials | null> {
   return creds;
 }
 
-const loginSchema = z.object({
+const MAGIC_LINK_TTL_MS = 60 * 60 * 1000; // 1 hour
+
+/**
+ * Stateless magic-link token: base64url(JSON payload) + HMAC signature, signed
+ * with the same session secret used for the session cookie itself. No token
+ * storage is needed — expiry and authenticity are both verified from the
+ * token's own contents, and rotating the session secret (e.g. via
+ * changeInCarCredentials) invalidates any outstanding unused links too.
+ */
+function createMagicLinkToken(email: string, secret: string): string {
+  const payload = Buffer.from(JSON.stringify({ email, exp: Date.now() + MAGIC_LINK_TTL_MS })).toString("base64url");
+  const sig = createHmac("sha256", secret).update(`magic:${payload}`).digest("hex");
+  return `${payload}.${sig}`;
+}
+
+function verifyMagicLinkToken(token: string, expectedEmail: string, secret: string): boolean {
+  const [payload, sig] = token.split(".");
+  if (!payload || !sig) return false;
+  const expectedSig = createHmac("sha256", secret).update(`magic:${payload}`).digest("hex");
+  if (!safeEqual(sig, expectedSig)) return false;
+
+  let parsed: { email?: unknown; exp?: unknown };
+  try {
+    parsed = JSON.parse(Buffer.from(payload, "base64url").toString("utf8"));
+  } catch {
+    return false;
+  }
+  if (typeof parsed.exp !== "number" || Date.now() > parsed.exp) return false;
+  if (typeof parsed.email !== "string") return false;
+  return safeEqual(parsed.email.trim().toLowerCase(), expectedEmail.trim().toLowerCase());
+}
+
+const magicLinkRequestSchema = z.object({
   email: z.string().trim().min(1).max(200),
-  password: z.string().min(1).max(200),
 });
 
-export const loginInCar = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => loginSchema.parse(data))
+export const requestInCarMagicLink = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => magicLinkRequestSchema.parse(data))
+  .handler(async ({ data }): Promise<{ ok: boolean; error?: string }> => {
+    const creds = await getEffectiveCredentials();
+    const restricted = { ok: false, error: "Access restricted to authorized executive emails." } as const;
+    if (!creds) return restricted;
+
+    const emailMatches = safeEqual(data.email.trim().toLowerCase(), creds.email.trim().toLowerCase());
+    if (!emailMatches) return restricted;
+
+    const token = createMagicLinkToken(creds.email, creds.sessionSecret);
+
+    try {
+      const { absUrl } = await import("@/lib/seo");
+      const { sendMail } = await import("@/lib/smtp.server");
+      const link = `${absUrl("/partners/in-car")}?token=${token}`;
+      await sendMail({
+        to: creds.email,
+        fromName: "AutoVere / KM TECH LABS",
+        subject: "Your AutoVere In-Car Intelligence access link",
+        text: [
+          "AutoVere In-Car Intelligence — Executive Preview",
+          "",
+          "Use the secure link below to enter the cockpit simulator. It's valid for 1 hour and tied to this email address only.",
+          "",
+          link,
+          "",
+          "If you didn't request this, you can safely ignore this email.",
+          "",
+          "— KM TECH LABS",
+        ].join("\n"),
+      });
+    } catch {
+      return { ok: false, error: "Couldn't send the access link — please try again shortly." };
+    }
+
+    return { ok: true };
+  });
+
+const magicLinkVerifySchema = z.object({
+  token: z.string().trim().min(1).max(4000),
+});
+
+export const verifyInCarMagicLink = createServerFn({ method: "POST" })
+  .inputValidator((data: unknown) => magicLinkVerifySchema.parse(data))
   .handler(async ({ data }): Promise<{ ok: boolean }> => {
     const creds = await getEffectiveCredentials();
     if (!creds) return { ok: false };
-
-    const emailMatches = safeEqual(data.email.trim().toLowerCase(), creds.email.trim().toLowerCase());
-    const passwordMatches = creds.verify(data.password);
-    if (!emailMatches || !passwordMatches) return { ok: false };
+    if (!verifyMagicLinkToken(data.token, creds.email, creds.sessionSecret)) return { ok: false };
 
     setSessionCookie(creds.email, creds.sessionSecret);
     return { ok: true };

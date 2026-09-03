@@ -36,7 +36,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { changeInCarCredentials, loginInCar, logoutInCar } from "@/lib/in-car-auth.functions";
+import { changeInCarCredentials, logoutInCar, requestInCarMagicLink } from "@/lib/in-car-auth.functions";
 import { sendContactMessage } from "@/lib/contact.functions";
 import {
   COCKPIT_STRINGS,
@@ -53,27 +53,27 @@ import { cn } from "@/lib/utils";
 /* Auth gate                                                           */
 /* ------------------------------------------------------------------ */
 
-function LoginGate({ onSuccess }: { onSuccess: () => void }) {
+function LoginGate({ linkInvalid = false }: { linkInvalid?: boolean }) {
   const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [sending, setSending] = useState(false);
+  const [sent, setSent] = useState(false);
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError(null);
-    setLoading(true);
+    setSending(true);
     try {
-      const result = await loginInCar({ data: { email, password } });
+      const result = await requestInCarMagicLink({ data: { email } });
       if (result.ok) {
-        onSuccess();
+        setSent(true);
       } else {
-        setError("Invalid credentials or unauthorized access.");
+        setError(result.error ?? "Access restricted to authorized executive emails.");
       }
     } catch {
-      setError("Invalid credentials or unauthorized access.");
+      setError("Access restricted to authorized executive emails.");
     } finally {
-      setLoading(false);
+      setSending(false);
     }
   };
 
@@ -103,52 +103,52 @@ function LoginGate({ onSuccess }: { onSuccess: () => void }) {
           Confidential demonstration portal for OEM &amp; Fleet partners.
         </p>
 
-        <form onSubmit={submit} className="mt-8 space-y-4">
-          <div className="space-y-1.5">
-            <Label htmlFor="incar-email" className="text-xs uppercase tracking-[0.14em] text-white/50">
-              Corporate email
-            </Label>
-            <Input
-              id="incar-email"
-              type="email"
-              autoComplete="username"
-              required
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@oem.com"
-              className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
-            />
-          </div>
-          <div className="space-y-1.5">
-            <Label htmlFor="incar-password" className="text-xs uppercase tracking-[0.14em] text-white/50">
-              Password
-            </Label>
-            <Input
-              id="incar-password"
-              type="password"
-              autoComplete="current-password"
-              required
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••"
-              className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
-            />
-          </div>
+        {linkInvalid && !sent && (
+          <p className="mt-6 rounded-lg border border-amber-400/25 bg-amber-400/10 px-3 py-2 text-center text-xs text-amber-200">
+            Access link expired or invalid. Please request a new one.
+          </p>
+        )}
 
-          {error && (
-            <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
-              {error}
+        {sent ? (
+          <div className="mt-8 rounded-2xl border border-emerald-400/25 bg-emerald-400/10 p-5 text-center">
+            <p className="text-sm font-semibold text-emerald-200">Secure access link sent to {email}.</p>
+            <p className="mt-1.5 text-xs leading-relaxed text-emerald-200/70">
+              Check your inbox to enter the cockpit simulator.
             </p>
-          )}
+          </div>
+        ) : (
+          <form onSubmit={submit} className="mt-8 space-y-4">
+            <div className="space-y-1.5">
+              <Label htmlFor="incar-email" className="text-xs uppercase tracking-[0.14em] text-white/50">
+                Corporate email
+              </Label>
+              <Input
+                id="incar-email"
+                type="email"
+                autoComplete="username"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="you@oem.com"
+                className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
+              />
+            </div>
 
-          <Button
-            type="submit"
-            disabled={loading}
-            className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
-          >
-            {loading ? "Verifying…" : "Access Simulator"}
-          </Button>
-        </form>
+            {error && (
+              <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+                {error}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              disabled={sending}
+              className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
+            >
+              {sending ? "Sending…" : "Send Access Link"}
+            </Button>
+          </form>
+        )}
 
         <p className="mt-6 text-center text-[11px] text-white/30">
           Access is restricted to authorized executive accounts only.
@@ -754,10 +754,16 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
 /* Root showcase                                                       */
 /* ------------------------------------------------------------------ */
 
-export function InCarShowcase({ initialAuthorized = false }: { initialAuthorized?: boolean }) {
-  // The route loader already checks the session cookie server-side (SSR and
-  // client navigation alike), so `initialAuthorized` is always authoritative
-  // for the current render — no redundant client-side re-check is needed.
+export function InCarShowcase({
+  initialAuthorized = false,
+  linkInvalid = false,
+}: {
+  initialAuthorized?: boolean;
+  linkInvalid?: boolean;
+}) {
+  // The route loader already checks the session cookie (and verifies any
+  // magic-link token) server-side, so `initialAuthorized` is always
+  // authoritative for the current render — no redundant client-side re-check.
   const [authorized, setAuthorized] = useState(initialAuthorized);
   const [credentialsOpen, setCredentialsOpen] = useState(false);
 
@@ -768,7 +774,7 @@ export function InCarShowcase({ initialAuthorized = false }: { initialAuthorized
   };
 
   if (!authorized) {
-    return <LoginGate onSuccess={() => setAuthorized(true)} />;
+    return <LoginGate linkInvalid={linkInvalid} />;
   }
 
   return (
