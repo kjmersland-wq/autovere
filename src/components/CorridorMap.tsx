@@ -2,7 +2,7 @@ import { Suspense, lazy, useMemo, useState } from "react";
 import { ClientOnly } from "@tanstack/react-router";
 import { useServerFn } from "@tanstack/react-start";
 import { useQuery } from "@tanstack/react-query";
-import { Fuel, Map as MapIcon, Plus, Radar } from "lucide-react";
+import { Fuel, Map as MapIcon, Navigation, Plus, Radar } from "lucide-react";
 
 import {
   Accordion,
@@ -19,8 +19,6 @@ import {
   buildCorridorPois,
   buildFuelStops,
   operatorColor,
-  corridorPolyline,
-  pointAt,
   type LayerKey,
 } from "@/lib/corridor-map";
 import { useT, useTr } from "@/lib/i18n";
@@ -89,12 +87,10 @@ export function CorridorMap({
     ferry: true,
     view: true,
   });
-  const [hover, setHover] = useState<string | null>(null);
 
   const from = origin || t.map.yourStart;
   const to = destination || t.map.yourDestination;
 
-  const line = useMemo(() => corridorPolyline(`${from}|${to}|${trip.variant}`), [from, to, trip.variant]);
 
   const passes = useMemo(
     () =>
@@ -144,9 +140,15 @@ export function CorridorMap({
   });
   const geo = geoQuery.data ?? null;
 
+  /** Real routed polyline: geocoded corridor first, calculated trip corridor as backup. */
+  const mapCoords: [number, number][] = useMemo(
+    () => (geo?.coords?.length ? geo.coords : (trip.corridor?.coords ?? [])),
+    [geo, trip.corridor?.coords],
+  );
+
   const liveMarkers = useMemo(() => {
-    if (!geo) return [];
-    const c = geo.coords;
+    const c = mapCoords;
+    if (c.length < 2) return [];
     return pois
       .filter((p) => layers[p.layer] && !(isElectric && p.layer === "fuel"))
       .map((p) => {
@@ -183,10 +185,21 @@ export function CorridorMap({
           mapUrl: poiMapUrl(p.name, `${from} ${to}`),
         };
       });
-  }, [geo, pois, layers, tr, from, to, t, m.display, isElectric]);
+  }, [mapCoords, pois, layers, tr, from, to, t, m.display, isElectric]);
 
-  const path = line.map((p, i) => `${i === 0 ? "M" : "L"}${p.x.toFixed(2)},${p.y.toFixed(2)}`).join(" ");
   const visible = pois.filter((p) => layers[p.layer]);
+
+  /** Deep links for CarPlay / phone handoff, with routed waypoints where available. */
+  const waypointParam = useMemo(() => {
+    if (mapCoords.length < 4) return "";
+    const picks = [0.25, 0.5, 0.75].map(
+      (f) => mapCoords[Math.round(f * (mapCoords.length - 1))]!,
+    );
+    return picks.map(([lat, lng]) => `${lat.toFixed(5)},${lng.toFixed(5)}`).join("|");
+  }, [mapCoords]);
+
+  const googleDirUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(from)}&destination=${encodeURIComponent(to)}&travelmode=driving${waypointParam ? `&waypoints=${encodeURIComponent(waypointParam)}` : ""}`;
+  const appleDirUrl = `https://maps.apple.com/?saddr=${encodeURIComponent(from)}&daddr=${encodeURIComponent(to)}&dirflg=d`;
 
   const sourceGroups = useMemo(() => {
     const map = new Map<string, typeof fuelStops>();
@@ -334,79 +347,41 @@ export function CorridorMap({
         </div>
       )}
 
-      {/* Map canvas */}
-      {geo && geo.coords.length > 1 ? (
-        <div className="relative mt-5 overflow-hidden rounded-2xl border border-border bg-[#070c18]">
-          <ClientOnly fallback={<div className="h-[320px] w-full animate-pulse bg-background/40 sm:h-[420px]" />}>
-            <Suspense fallback={<div className="h-[320px] w-full animate-pulse bg-background/40 sm:h-[420px]" />}>
+      {/* Send to car / navigation */}
+      <div className="mt-5 flex flex-wrap gap-2">
+        <Button asChild size="sm" variant="secondary">
+          <a href={googleDirUrl} target="_blank" rel="noopener noreferrer">
+            <Navigation className="mr-1 size-4" /> {tr("Open in Google Maps")}
+          </a>
+        </Button>
+        <Button asChild size="sm" variant="outline">
+          <a href={appleDirUrl} target="_blank" rel="noopener noreferrer">
+            <Navigation className="mr-1 size-4" /> {tr("Open in Apple Maps")}
+          </a>
+        </Button>
+      </div>
+
+      {/* Interactive map canvas — real routed polyline with POI markers */}
+      <div className="relative mt-3 overflow-hidden rounded-2xl border border-border bg-[#070c18]">
+        {mapCoords.length > 1 ? (
+          <ClientOnly fallback={<div className="h-[450px] w-full animate-pulse bg-background/40" />}>
+            <Suspense fallback={<div className="h-[450px] w-full animate-pulse bg-background/40" />}>
               <LiveMap
-                coords={geo.coords}
+                coords={mapCoords}
                 markers={liveMarkers}
                 fromLabel={from}
                 toLabel={to}
                 openLabel={tr("Open in Google Maps")}
               />
-
             </Suspense>
           </ClientOnly>
-        </div>
-      ) : (
-      <div className="relative mt-5 overflow-hidden rounded-2xl border border-border bg-[#070c18]">
-        <svg viewBox="0 0 100 100" className="h-[320px] w-full sm:h-[420px]" preserveAspectRatio="none">
-          <defs>
-            <linearGradient id="corridor-stroke" x1="0" y1="0" x2="1" y2="0">
-              <stop offset="0%" stopColor="#f59e0b" />
-              <stop offset="100%" stopColor="#fb923c" />
-            </linearGradient>
-            <pattern id="corridor-grid" width="8" height="8" patternUnits="userSpaceOnUse">
-              <path d="M8 0H0V8" fill="none" stroke="rgba(148,163,184,0.10)" strokeWidth="0.25" />
-            </pattern>
-          </defs>
-          <rect width="100" height="100" fill="url(#corridor-grid)" />
-          <path d={path} fill="none" stroke="url(#corridor-stroke)" strokeWidth="2.6" strokeLinecap="round" opacity="0.25" />
-          <path d={path} fill="none" stroke="url(#corridor-stroke)" strokeWidth="1.1" strokeLinecap="round" />
-          {visible.map((p) => {
-            const pt = pointAt(line, p.progress);
-            const color =
-              p.layer === "pass"
-                ? STATUS_COLOR[p.status ?? "open"]!
-                : MAP_LAYERS.find((l) => l.key === p.layer)!.color;
-            return (
-              <circle
-                key={p.id}
-                cx={pt.x}
-                cy={pt.y}
-                r={hover === p.id ? 2.2 : 1.4}
-                fill={color}
-                stroke="#070c18"
-                strokeWidth="0.5"
-                onMouseEnter={() => setHover(p.id)}
-                onMouseLeave={() => setHover(null)}
-                className="cursor-pointer transition-all"
-              />
-            );
-          })}
-          <circle cx={line[0]!.x} cy={line[0]!.y} r="1.9" fill="#e2e8f0" />
-          <circle cx={line[line.length - 1]!.x} cy={line[line.length - 1]!.y} r="1.9" fill="#f59e0b" />
-        </svg>
-
-        <span className="pointer-events-none absolute left-4 top-3 rounded-full bg-background/70 px-3 py-1 text-[11px] text-foreground/80">
-          📍 {from}
-        </span>
-        <span className="pointer-events-none absolute bottom-3 right-4 rounded-full bg-background/70 px-3 py-1 text-[11px] text-foreground/80">
-          🏁 {to}
-        </span>
-        {hover && (
-          <div className="pointer-events-none absolute left-1/2 top-3 -translate-x-1/2 rounded-xl border border-border bg-background/90 px-3 py-2 text-center text-xs shadow-lg">
-            <p className="font-semibold">{tr(pois.find((p) => p.id === hover)?.name ?? "")}</p>
-            <p className="text-foreground/70">
-              {tr(pois.find((p) => p.id === hover)?.detail ?? "")} ·{" "}
-              {pois.find((p) => p.id === hover)?.atLabel} {t.map.tooltipIn}
-            </p>
+        ) : (
+          <div className="flex h-[450px] w-full items-center justify-center bg-background/40 text-sm text-muted-foreground">
+            🛰️ {from} → {to}…
           </div>
         )}
       </div>
-      )}
+
       {geoQuery.isLoading && (
         <p className="mt-2 text-[11px] text-muted-foreground">🛰️ {from} → {to}…</p>
       )}
