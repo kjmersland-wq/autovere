@@ -8,6 +8,7 @@ export type Locale = "en" | "no" | "sv" | "da" | "fi" | "us" | "de" | "nl" | "fr
 import { CONTENT_DA, DA_PATTERNS } from "@/lib/content-da";
 import { CONTENT_DE, DE_PATTERNS } from "@/lib/content-de";
 import { CONTENT_ES, ES_PATTERNS } from "@/lib/content-es";
+import { CONTENT_FI } from "@/lib/content-fi";
 import { CONTENT_FR, FR_PATTERNS } from "@/lib/content-fr";
 import { CONTENT_IT, IT_PATTERNS } from "@/lib/content-it";
 import { CONTENT_NL, NL_PATTERNS } from "@/lib/content-nl";
@@ -693,6 +694,7 @@ const CONTENT_DICTS: Partial<Record<Locale, Record<string, string>>> = {
   es: CONTENT_ES,
   it: CONTENT_IT,
   us: CONTENT_US,
+  fi: CONTENT_FI,
 };
 
 const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
