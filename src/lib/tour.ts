@@ -1,5 +1,5 @@
 /**
- * Opt-in 4-step product tour (driver.js).
+ * Opt-in 5-step product tour (driver.js).
  * Never auto-starts: `startTour()` is only called from the "Quick tour" pill.
  */
 import { driver } from "driver.js";
@@ -14,7 +14,7 @@ export type TourCopy = {
   prev: string;
   done: string;
   close: string;
-  steps: [Step, Step, Step, Step];
+  steps: [Step, Step, Step, Step, Step];
 };
 
 export const TOUR_COPY: Record<string, TourCopy> = {
@@ -45,6 +45,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         description:
           "Get the full cost overview in one click. Subscribers can save trips to My Garage and repeat the journey any time with fresh prices.",
       },
+      {
+        title: "5. Send to car & navigation",
+        description:
+          "Push the route straight to the Tesla app, open it on your car screen via Apple CarPlay / Android Auto, or print the itinerary in your language.",
+      },
     ],
   },
   no: {
@@ -73,6 +78,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         title: "4. Resultat & Min Garasje",
         description:
           "Få full kostnadsoversikt med ett klikk. Abonnenter kan lagre turer i Min Garasje og gjenta reisen når som helst med ferske priser.",
+      },
+      {
+        title: "5. Send til bil & navigasjon",
+        description:
+          "Send ruten rett til Tesla-appen, åpne den på bilskjermen via Apple CarPlay / Android Auto, eller print ut reiseplanen på ditt språk.",
       },
     ],
   },
@@ -103,6 +113,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         description:
           "Få hela kostnadsöversikten med ett klick. Prenumeranter kan spara resor i Mitt Garage och upprepa turen när som helst med färska priser.",
       },
+      {
+        title: "5. Skicka till bilen & navigation",
+        description:
+          "Skicka rutten direkt till Tesla-appen, öppna den på bilskärmen via Apple CarPlay / Android Auto, eller skriv ut reseplanen på ditt språk.",
+      },
     ],
   },
   da: {
@@ -131,6 +146,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         title: "4. Resultat & Min Garage",
         description:
           "Få det fulde omkostningsoverblik med ét klik. Abonnenter kan gemme ture i Min Garage og gentage rejsen når som helst med friske priser.",
+      },
+      {
+        title: "5. Send til bilen & navigation",
+        description:
+          "Send ruten direkte til Tesla-appen, åbn den på bilskærmen via Apple CarPlay / Android Auto, eller print rejseplanen på dit sprog.",
       },
     ],
   },
@@ -161,6 +181,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         description:
           "Get your full cost breakdown in one click. Members can save trips to My Garage and rerun them any time with fresh prices.",
       },
+      {
+        title: "5. Send to car & navigation",
+        description:
+          "Push the route straight to the Tesla app, open it on your dash via Apple CarPlay / Android Auto, or print the itinerary for the glovebox.",
+      },
     ],
   },
   de: {
@@ -189,6 +214,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         title: "4. Ergebnis & Meine Garage",
         description:
           "Volle Kostenübersicht mit einem Klick. Abonnenten speichern Reisen in Meiner Garage und wiederholen sie jederzeit mit aktuellen Preisen.",
+      },
+      {
+        title: "5. Ans Auto senden & Navigation",
+        description:
+          "Senden Sie die Route direkt an die Tesla-App, öffnen Sie sie über Apple CarPlay / Android Auto im Fahrzeug, oder drucken Sie den Reiseplan in Ihrer Sprache.",
       },
     ],
   },
@@ -219,6 +249,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         description:
           "Volledig kostenoverzicht met één klik. Abonnees bewaren ritten in Mijn Garage en herhalen ze altijd met actuele prijzen.",
       },
+      {
+        title: "5. Naar de auto sturen & navigatie",
+        description:
+          "Stuur de route direct naar de Tesla-app, open hem in de auto via Apple CarPlay / Android Auto, of print de reisplanning in jouw taal.",
+      },
     ],
   },
   fr: {
@@ -247,6 +282,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         title: "4. Résultats et Mon Garage",
         description:
           "Obtenez tout le budget en un clic. Les abonnés enregistrent leurs trajets dans Mon Garage et les relancent avec des prix actualisés.",
+      },
+      {
+        title: "5. Envoyer à la voiture et navigation",
+        description:
+          "Envoyez l'itinéraire directement à l'app Tesla, ouvrez-le sur l'écran du véhicule via Apple CarPlay / Android Auto, ou imprimez le carnet de route dans votre langue.",
       },
     ],
   },
@@ -277,6 +317,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         description:
           "Pełny przegląd kosztów jednym kliknięciem. Subskrybenci zapisują trasy w Moim Garażu i powtarzają je z aktualnymi cenami.",
       },
+      {
+        title: "5. Wyślij do auta i nawigacja",
+        description:
+          "Wyślij trasę prosto do aplikacji Tesla, otwórz ją na ekranie auta przez Apple CarPlay / Android Auto lub wydrukuj plan podróży w swoim języku.",
+      },
     ],
   },
   es: {
@@ -306,6 +351,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         description:
           "Todo el presupuesto en un clic. Los suscriptores guardan viajes en Mi Garaje y los repiten cuando quieran con precios actualizados.",
       },
+      {
+        title: "5. Enviar al coche y navegación",
+        description:
+          "Envía la ruta directamente a la app de Tesla, ábrela en la pantalla del coche con Apple CarPlay / Android Auto, o imprime el itinerario en tu idioma.",
+      },
     ],
   },
   it: {
@@ -334,6 +384,11 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         title: "4. Risultati e Il Mio Garage",
         description:
           "Il budget completo con un clic. Gli abbonati salvano i viaggi ne Il Mio Garage e li ripetono con prezzi aggiornati.",
+      },
+      {
+        title: "5. Invia all'auto e navigazione",
+        description:
+          "Invia il percorso direttamente all'app Tesla, aprilo sullo schermo dell'auto con Apple CarPlay / Android Auto, oppure stampa l'itinerario nella tua lingua.",
       },
     ],
   },
@@ -402,6 +457,14 @@ export function startTour(locale: string) {
           description: copy.steps[3].description,
           side: "top",
           align: "end",
+        },
+      },
+      {
+        element: "#send-to-car-hub",
+        popover: {
+          title: copy.steps[4].title,
+          description: copy.steps[4].description,
+          side: "top",
         },
       },
     ],

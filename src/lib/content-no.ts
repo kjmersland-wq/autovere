@@ -6,6 +6,14 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_NO: Record<string, string> = {
+  Fuel: "Drivstoff",
+  "Export to PDF / Print itinerary": "Eksporter til PDF / skriv ut reiseplan",
+  "Send to car & navigation": "Send til bil og navigasjon",
+  "Send to car (Tesla / app)": "Send til bil (Tesla / app)",
+  "Print itinerary (PDF)": "Skriv ut reiseplan (PDF)",
+  "Scan to send to your car": "Skann for å sende til bilen",
+  "Scan the code with your phone camera, then share the route into your car app (Tesla, Polestar, MyBMW, CarPlay or Android Auto).":
+    "Skann koden med mobilkameraet, og del ruten videre til bilappen din (Tesla, Polestar, MyBMW, CarPlay eller Android Auto).",
   /* ---------------- Print / PDF itinerary ---------------- */
   "PDF export preview": "Forhåndsvisning av PDF",
   "Download PDF / Print": "Last ned PDF / skriv ut",

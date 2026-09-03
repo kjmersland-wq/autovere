@@ -323,7 +323,7 @@ export function TripResults({
         <MetricCard label={t.results.distance} value={trip.distanceLabel} hint={t.results.distanceHint} />
         <MetricCard label={t.results.driveTime} value={trip.driveTime} hint={t.results.driveTimeHint} />
         <MetricCard
-          label={trip.energyLabel}
+          label={tr(trip.energyLabel)}
           value={m.fmt(trip.energyCost)}
           hint={t.results.energyHint(trip.energyAmount)}
         />
@@ -342,7 +342,7 @@ export function TripResults({
         </div>
         <div className="glass-panel rounded-2xl p-6 text-center">
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            ⛽ {trip.energyLabel}
+            ⛽ {tr(trip.energyLabel)}
           </p>
           <p className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
             {m.fmt(trip.energyCost, 0)}
@@ -366,7 +366,7 @@ export function TripResults({
 
       <div className="mt-5 flex flex-wrap gap-2">
         <SubtotalBadge emoji="🛣️" label={t.results.tollsBadge} value={m.fmt(trip.tolls)} />
-        <SubtotalBadge emoji="⛽" label={`${trip.energyLabel}`} value={m.fmt(trip.energyCost)} />
+        <SubtotalBadge emoji="⛽" label={tr(trip.energyLabel)} value={m.fmt(trip.energyCost)} />
         <SubtotalBadge emoji="⛴️" label={t.results.ferriesBadge} value={m.fmt(trip.ferries)} />
       </div>
 
@@ -392,7 +392,7 @@ export function TripResults({
           <Share2 className="size-4" /> {t.results.share}
         </Button>
         <Button size="lg" variant="outline" onClick={() => setPrinting(true)}>
-          <Printer className="size-4" /> Export to PDF / Print itinerary
+          <Printer className="size-4" /> {tr("Export to PDF / Print itinerary")}
         </Button>
       </div>
 
