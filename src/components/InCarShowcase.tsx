@@ -85,23 +85,33 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
     let alive = true;
     setChecking(true);
     setRestricted(false);
-    checkInCarAuthorized()
-      .then((ok) => {
+    void (async () => {
+      try {
+        // The bearer token is attached from the persisted session; if it is
+        // not ready yet the server fn would 401, so bail out instead.
+        const { data } = await supabase.auth.getSession();
+        if (!alive) return;
+        if (!data.session?.access_token) {
+          setChecking(false);
+          return;
+        }
+        const ok = await checkInCarAuthorized();
         if (!alive) return;
         setChecking(false);
         if (ok) onAuthorized();
         else setRestricted(true);
-      })
-      .catch(() => {
+      } catch {
         if (alive) {
           setChecking(false);
           setRestricted(true);
         }
-      });
+      }
+    })();
     return () => {
       alive = false;
     };
   }, [user, needsPassword, onAuthorized]);
+
 
   // Step 1: request an access link (or sign in directly with a password).
   const [mode, setMode] = useState<"link" | "password">("link");
