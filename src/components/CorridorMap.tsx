@@ -39,6 +39,7 @@ import {
 import { convert, currencyFromSymbol, formatCurrency, useMoney } from "@/lib/currency";
 
 const LiveMap = lazy(() => import("@/components/LiveMap"));
+const SendToCarHub = lazy(() => import("@/components/SendToCarHub"));
 
 const STATUS_COLOR: Record<string, string> = {
   open: "#34d399",
@@ -200,6 +201,7 @@ export function CorridorMap({
 
   const googleDirUrl = `https://www.google.com/maps/dir/?api=1&origin=${encodeURIComponent(from)}&destination=${encodeURIComponent(to)}&travelmode=driving${waypointParam ? `&waypoints=${encodeURIComponent(waypointParam)}` : ""}`;
   const appleDirUrl = `https://maps.apple.com/?saddr=${encodeURIComponent(from)}&daddr=${encodeURIComponent(to)}&dirflg=d`;
+  const shareUrl = googleDirUrl;
 
   const sourceGroups = useMemo(() => {
     const map = new Map<string, typeof fuelStops>();
@@ -347,19 +349,13 @@ export function CorridorMap({
         </div>
       )}
 
-      {/* Send to car / navigation */}
-      <div className="mt-5 flex flex-wrap gap-2">
-        <Button asChild size="sm" variant="secondary">
-          <a href={googleDirUrl} target="_blank" rel="noopener noreferrer">
-            <Navigation className="mr-1 size-4" /> {tr("Open in Google Maps")}
-          </a>
-        </Button>
-        <Button asChild size="sm" variant="outline">
-          <a href={appleDirUrl} target="_blank" rel="noopener noreferrer">
-            <Navigation className="mr-1 size-4" /> {tr("Open in Apple Maps")}
-          </a>
-        </Button>
-      </div>
+      {/* Send to car / navigation hub */}
+      <SendToCarHub
+        googleUrl={googleDirUrl}
+        appleUrl={appleDirUrl}
+        shareUrl={shareUrl}
+        title={`${from} → ${to}`}
+      />
 
       {/* Interactive map canvas — real routed polyline with POI markers */}
       <div className="relative mt-3 overflow-hidden rounded-2xl border border-border bg-[#070c18]">
