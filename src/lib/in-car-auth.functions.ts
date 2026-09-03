@@ -52,10 +52,10 @@ const requestAccessSchema = z.object({
 export const requestInCarAccess = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => requestAccessSchema.parse(data))
   .handler(async ({ data }): Promise<{ ok: boolean; error?: string }> => {
-    const adminEmail = getAdminEmail();
+    const adminEmail = data.email.trim().toLowerCase();
     const restricted = { ok: false, error: "Access restricted to authorized executive emails." } as const;
-    if (!adminEmail) return restricted;
-    if (data.email.trim().toLowerCase() !== adminEmail.toLowerCase()) return restricted;
+    if (!isAdminEmail(adminEmail)) return restricted;
+
 
     try {
       const { absUrl } = await import("@/lib/seo");
