@@ -86,8 +86,6 @@ export const requestInCarAccess = createServerFn({ method: "POST" })
 export const checkInCarAuthorized = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<boolean> => {
-    const adminEmail = getAdminEmail();
-    if (!adminEmail) return false;
     const email = context.claims.email;
-    return typeof email === "string" && email.trim().toLowerCase() === adminEmail.toLowerCase();
+    return typeof email === "string" && isAdminEmail(email);
   });
