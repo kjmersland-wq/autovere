@@ -316,8 +316,15 @@ export function startTour(locale: string) {
     doneBtnText: copy.done,
     progressText: "{{current}} / {{total}}",
     showButtons: ["previous", "next", "close"],
-    closeBtnText: copy.close,
     overlayClickBehavior: "close",
+    onPopoverRender: (popover) => {
+      const btn = popover.closeButton;
+      btn.textContent = copy.close;
+      btn.setAttribute("aria-label", copy.close);
+      btn.style.width = "auto";
+      btn.style.fontSize = "0.75rem";
+      btn.style.padding = "0 0.35rem";
+    },
     onDestroyed: markSeen,
     steps: [
       {
