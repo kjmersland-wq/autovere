@@ -122,3 +122,87 @@ export const FI_TERMS: InfoPageContent = {
       "AutoVeren käyttöehdot KM TECH LABSilta: suuntaa-antavat arviot, turvallinen käyttö, kolmannen osapuolen linkit, vastuunrajoitus ja sovellettava laki.",
   },
 };
+
+export const FI_HOW_IT_WORKS: InfoPageContent = {
+  eyebrow: "Näin se toimii",
+  title: "Näin AutoVere toimii — Rajat ylittävän automatkan kustannusten suunnittelu",
+  intro:
+    "Karkeasta ideasta tarkasti hinnoiteltuun automatkaan kolmessa selkeässä vaiheessa. AutoVere muuntaa lähtöpaikkasi ja määränpääsi läpinäkyväksi kokonaiskuvaksi: tietullit, vinjetit, polttoaineet, sähköauton lataukset ja lauttamaksut – autoille, matkailuautoille ja moottoripyörille.",
+  sections: [
+    {
+      heading: "1 — Kerro matkastasi",
+      body: "Syötä lähtöpaikka ja määränpää, valitse ajoneuvotyyppi ja käyttövoima sekä reittipreferenssit, kuten maisemareitit, maksullisten teiden välttäminen tai lauttojen sisällyttäminen.",
+      items: [
+        "Profiilit henkilöautoille, matkailuautoille/retkeilyautoille tai moottoripyörille.",
+        "Bensiini, diesel tai sähkö omilla tankki-, akku- ja kulutuslukemillasi.",
+        "Tietullilaitteet ja -tunnisteet, kuten AutoPASS, Telepass, Bip&Go, SunPass tai E-ZPass.",
+      ],
+    },
+    {
+      heading: "2 — Laskemme jokaisen kilometrin todellisen kustannuksen",
+      body: "Reittisi jokainen maa tai osavaltio hinnoitellaan erikseen paikallisen tietullimallin mukaan – sähköiset vinjetit, etäisyyspohjaiset tullit, kaupunkien tullivyöhykkeet tai maksuttomat moottoritiet – huomioiden paikalliset polttoaineiden ja pikalatauksen hinnat.",
+      items: [
+        "Maakohtainen tietulli- ja vinjettierittely tarkistuspisteineen.",
+        "Moottoripyöräalennukset huomioidaan automaattisesti, mikäli operaattori tarjoaa alemman maksuluokan.",
+        "Lautat ja vuoristosolat omina erillisinä kuluinaan.",
+        "Älykäs polttoaineen ja latauksen optimointi 75 % toimintamatkamarginaalilla.",
+      ],
+    },
+    {
+      heading: "3 — Lähde tien päälle",
+      body: "Vie GPX-tiedosto navigaattoriisi, tallenna reittisuunnitelma Oma autotalli -osioon tai jaa se matkakumppaneillesi. Jokainen tietullierä linkittää suoraan viralliseen portaaliin, jotta voit maksaa tai ostaa tarvittavat luvat ennen rajan ylittämistä.",
+      links: [
+        { label: "ASFINAG (Itävalta)", url: "https://www.asfinag.at/" },
+        { label: "AutoPASS (Norja)", url: "https://www.autopass.no/" },
+        { label: "Telepass (Italia)", url: "https://www.telepass.com/" },
+      ],
+    },
+  ],
+  note: DISCLAIMER_FI,
+  meta: {
+    title: "Näin AutoVere toimii – rajat ylittävän automatkan kustannusten suunnittelu | AutoVere",
+    description:
+      "Näin AutoVere laskee tietullit, vinjetit, polttoaineen, sähköauton latauksen ja lauttamaksut maittain autoille, matkailuautoille ja moottoripyörille.",
+  },
+};
+
+export const FI_PARTNERS: InfoPageContent = {
+  eyebrow: "Kumppanit",
+  title: "Viralliset tietullioperaattorit ja yhteistyökumppanit",
+  intro:
+    "Teemme yhteistyötä niiden toimijoiden kanssa, jotka pitävät tiet liikkeessä. AutoVere ohjaa virallisten tietullioperaattoreiden palveluihin ja tekee yhteistyötä matkailu-, vuokraus- ja motoristialan yritysten kanssa Euroopassa, Yhdysvalloissa ja Kanadassa.",
+  sections: [
+    {
+      heading: "Viralliset tietulli- ja vinjettioperaattorit, joihin linkitämme",
+      body: "Kaikki ostot tapahtuvat aina operaattorin omalla virallisella sivustolla. Emme koskaan toimi välikätenä emmekä peri jälleenmyyntilisiä.",
+      links: [
+        { label: "ASFINAG — Itävalta", url: "https://www.asfinag.at/" },
+        { label: "via.admin.ch — Sveitsi", url: "https://via.admin.ch/" },
+        { label: "AutoPASS — Norja", url: "https://www.autopass.no/" },
+        { label: "Telepass — Italia", url: "https://www.telepass.com/" },
+        { label: "DARS — Slovenia", url: "https://www.dars.si/" },
+        { label: "407 ETR — Ontario", url: "https://www.407etr.com/" },
+        { label: "SunPass — Florida", url: "https://www.sunpass.com/" },
+      ],
+    },
+    {
+      heading: "Ketkä ovat kumppaneitamme",
+      items: [
+        "Matkailuautojen ja retkeilyautojen vuokraamot, jotka haluavat tarjota asiakkailleen läpinäkyvät matkakustannusarviot.",
+        "Moottoripyörämatkojen järjestäjät ja ajokerhot, jotka suunnittelevat alppi- ja vuonoreittejä.",
+        "Latausverkostot ja reittisuunnittelusovellukset.",
+        "Matkailuorganisaatiot ja matkailualueet (DMO), jotka edistävät maisemateitä, rannikkoreittejä ja lauttayhteyksiä.",
+      ],
+    },
+    {
+      heading: "Tee yhteistyötä kanssamme",
+      body: "Oletko tietullioperaattori, lauttayhtiö, latausoperaattori, leirintäalue tai matkanjärjestäjä? Ota yhteyttä kumppanuustiimiimme ja tule osaksi verkostoa.",
+    },
+  ],
+  note: DISCLAIMER_FI,
+  meta: {
+    title: "Kumppanit – viralliset tietullioperaattorit ja matkailukumppanit | AutoVere",
+    description:
+      "AutoVere linkittää suoraan virallisiin tietulli- ja vinjettioperaattoreihin ja tekee yhteistyötä vuokraamoiden, matkanjärjestäjien ja latausverkostojen kanssa.",
+  },
+};

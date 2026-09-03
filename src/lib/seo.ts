@@ -192,7 +192,18 @@ const APP_PAGE_META_BASE = {
 const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
   ...APP_PAGE_META_BASE,
   usa: {},
-  fi: {},
+  fi: {
+    scenic: {
+      title: "Maisemareitit ja lautat | AutoVere Suomi",
+      description:
+        "Reitit, joista puhutaan vielä vuosienkin päästä. Kausittain avoinna olevat solatiet, rannikkotiet, leirintäalueet ja autolautat – kartoilla, kuvilla ja suorilla varauslinkeillä.",
+    },
+    garage: {
+      title: "Oma autotalli — Ajoneuvot, tietullilaitteet ja matkat | AutoVere Suomi",
+      description:
+        "Tallenna ajoneuvoprofiilisi, hallinnoi tietullilaitteita ja pidä suunnitellut matkasi tallessa suoraan laitteellasi.",
+    },
+  },
   es: {
     planner: {
       title: "Planificador de viajes por carretera — peajes, combustible y ferris | AutoVere España",
