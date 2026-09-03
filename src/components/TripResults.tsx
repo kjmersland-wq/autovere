@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship } from "lucide-react";
 import { toast } from "sonner";
 import { tripTrackPoints } from "@/lib/trip-export";
