@@ -30,9 +30,19 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  * needed for that.
  */
 
-function getAdminEmail(): string | null {
-  const email = process.env["IN_CAR_ADMIN_EMAIL"];
-  return email && email.trim() ? email.trim() : null;
+/** Owner account, plus any extra emails configured via IN_CAR_ADMIN_EMAIL (comma-separated). */
+const DEFAULT_ADMIN_EMAILS = ["kjmersland@gmail.com"];
+
+function getAdminEmails(): string[] {
+  const configured = (process.env["IN_CAR_ADMIN_EMAIL"] ?? "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+  return Array.from(new Set([...DEFAULT_ADMIN_EMAILS, ...configured]));
+}
+
+function isAdminEmail(email: string): boolean {
+  return getAdminEmails().includes(email.trim().toLowerCase());
 }
 
 const requestAccessSchema = z.object({
@@ -42,10 +52,10 @@ const requestAccessSchema = z.object({
 export const requestInCarAccess = createServerFn({ method: "POST" })
   .inputValidator((data: unknown) => requestAccessSchema.parse(data))
   .handler(async ({ data }): Promise<{ ok: boolean; error?: string }> => {
-    const adminEmail = getAdminEmail();
+    const adminEmail = data.email.trim().toLowerCase();
     const restricted = { ok: false, error: "Access restricted to authorized executive emails." } as const;
-    if (!adminEmail) return restricted;
-    if (data.email.trim().toLowerCase() !== adminEmail.toLowerCase()) return restricted;
+    if (!isAdminEmail(adminEmail)) return restricted;
+
 
     try {
       const { absUrl } = await import("@/lib/seo");
@@ -76,8 +86,6 @@ export const requestInCarAccess = createServerFn({ method: "POST" })
 export const checkInCarAuthorized = createServerFn({ method: "GET" })
   .middleware([requireSupabaseAuth])
   .handler(async ({ context }): Promise<boolean> => {
-    const adminEmail = getAdminEmail();
-    if (!adminEmail) return false;
     const email = context.claims.email;
-    return typeof email === "string" && email.trim().toLowerCase() === adminEmail.toLowerCase();
+    return typeof email === "string" && isAdminEmail(email);
   });

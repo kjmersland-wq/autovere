@@ -103,8 +103,10 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
     };
   }, [user, needsPassword, onAuthorized]);
 
-  // Step 1: request an access link.
+  // Step 1: request an access link (or sign in directly with a password).
+  const [mode, setMode] = useState<"link" | "password">("link");
   const [email, setEmail] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
@@ -114,6 +116,14 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
     setError(null);
     setSending(true);
     try {
+      if (mode === "password") {
+        const { error: signInError } = await supabase.auth.signInWithPassword({
+          email: email.trim(),
+          password: loginPassword,
+        });
+        if (signInError) setError("Feil e-post eller passord.");
+        return;
+      }
       const result = await requestInCarAccess({ data: { email } });
       if (result.ok) {
         setSent(true);
@@ -127,6 +137,7 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
     }
   };
 
+
   // Steps 3–4: set the initial (or new) password after clicking the link.
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -138,7 +149,7 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
     setPasswordError(null);
 
     if (password !== confirmPassword) {
-      setPasswordError("Password and confirmation do not match.");
+      setPasswordError("Passordene er ikke like.");
       return;
     }
 
@@ -186,10 +197,13 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
 
         {needsPassword ? (
           <form onSubmit={submitPassword} className="mt-8 space-y-4">
-            <p className="text-center text-sm text-white/60">Create your password to enter the cockpit simulator.</p>
+            <p className="text-center text-lg font-semibold text-white">Opprett ditt passord</p>
+            <p className="text-center text-sm text-white/55">
+              Velg et personlig passord for å åpne cockpiten.
+            </p>
             <div className="space-y-1.5">
               <Label htmlFor="incar-new-password" className="text-xs uppercase tracking-[0.14em] text-white/50">
-                Password
+                Nytt passord
               </Label>
               <Input
                 id="incar-new-password"
@@ -204,7 +218,7 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
             </div>
             <div className="space-y-1.5">
               <Label htmlFor="incar-confirm-password" className="text-xs uppercase tracking-[0.14em] text-white/50">
-                Confirm password
+                Gjenta passord
               </Label>
               <Input
                 id="incar-confirm-password"
@@ -229,7 +243,7 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
               disabled={settingPassword}
               className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
             >
-              {settingPassword ? "Setting password…" : "Set password & enter"}
+              {settingPassword ? "Lagrer…" : "Lagre passord og gå til cockpit"}
             </Button>
           </form>
         ) : restricted ? (
@@ -242,23 +256,25 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
               onClick={() => void supabase.auth.signOut()}
               className="text-xs text-white/40 underline-offset-4 transition-colors hover:text-white/70 hover:underline"
             >
-              Sign out and try a different account
+              Logg ut og prøv en annen konto
             </button>
           </div>
         ) : checking ? (
-          <p className="mt-8 text-center text-sm text-white/50">Checking access…</p>
+          <p className="mt-8 text-center text-sm text-white/50">Sjekker tilgang…</p>
         ) : sent ? (
           <div className="mt-8 rounded-2xl border border-emerald-400/25 bg-emerald-400/10 p-5 text-center">
-            <p className="text-sm font-semibold text-emerald-200">Secure access link sent to {email}.</p>
+            <p className="text-sm font-semibold text-emerald-200">
+              En sikker lenke er sendt til din e-post.
+            </p>
             <p className="mt-1.5 text-xs leading-relaxed text-emerald-200/70">
-              Check your inbox to enter the cockpit simulator.
+              Klikk på lenken for å sette passord og åpne cockpiten.
             </p>
           </div>
         ) : (
           <form onSubmit={submitEmail} className="mt-8 space-y-4">
             <div className="space-y-1.5">
               <Label htmlFor="incar-email" className="text-xs uppercase tracking-[0.14em] text-white/50">
-                Corporate email
+                E-post
               </Label>
               <Input
                 id="incar-email"
@@ -267,10 +283,27 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
                 required
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder="you@oem.com"
+                placeholder="deg@selskap.com"
                 className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
               />
             </div>
+
+            {mode === "password" && (
+              <div className="space-y-1.5">
+                <Label htmlFor="incar-login-password" className="text-xs uppercase tracking-[0.14em] text-white/50">
+                  Passord
+                </Label>
+                <Input
+                  id="incar-login-password"
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  className="h-11 border-white/15 bg-white/[0.04] text-white placeholder:text-white/30"
+                />
+              </div>
+            )}
 
             {error && (
               <p className="rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
@@ -283,13 +316,24 @@ function LoginGate({ onAuthorized }: { onAuthorized: () => void }) {
               disabled={sending}
               className="h-12 w-full bg-primary text-base font-semibold text-primary-foreground shadow-[0_0_30px_rgba(245,158,11,0.25)] hover:opacity-90"
             >
-              {sending ? "Sending…" : "Send Access Link"}
+              {sending ? "Sender…" : mode === "password" ? "Logg inn" : "Send Tilgangslenke"}
             </Button>
+
+            <button
+              type="button"
+              onClick={() => {
+                setError(null);
+                setMode(mode === "password" ? "link" : "password");
+              }}
+              className="block w-full text-center text-xs text-white/40 underline-offset-4 transition-colors hover:text-white/70 hover:underline"
+            >
+              {mode === "password" ? "Bruk tilgangslenke på e-post i stedet" : "Logg inn med e-post og passord"}
+            </button>
           </form>
         )}
 
         <p className="mt-6 text-center text-[11px] text-white/30">
-          Access is restricted to authorized executive accounts only.
+          Tilgang er forbeholdt autoriserte lederkontoer.
         </p>
       </div>
     </main>
@@ -782,11 +826,11 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
     setInfo(null);
 
     if (!newEmail && !newPassword) {
-      setError("Enter a new email and/or a new password.");
+      setError("Skriv inn ny e-post og/eller nytt passord.");
       return;
     }
     if (newPassword && newPassword !== confirmPassword) {
-      setError("New password and confirmation do not match.");
+      setError("Passordene er ikke like.");
       return;
     }
 
@@ -800,7 +844,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
         setError(updateError.message);
         return;
       }
-      toast.success("Credentials updated successfully.");
+      toast.success("Innlogging oppdatert.");
       if (newEmail) setInfo("Check your new email inbox to confirm the change.");
       setNewPassword("");
       setConfirmPassword("");
@@ -822,14 +866,14 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
     >
       <DialogContent className="border-white/10 bg-[#0a0e17] text-white sm:max-w-md">
         <DialogHeader>
-          <DialogTitle>Account Credentials</DialogTitle>
+          <DialogTitle>Endre passord</DialogTitle>
           <DialogDescription className="text-white/50">
-            Update the email or password used to access this portal.
+            Oppdater e-post eller passord for denne portalen.
           </DialogDescription>
         </DialogHeader>
         <form onSubmit={submit} className="space-y-4">
           <div className="space-y-1.5">
-            <Label htmlFor="cc-email" className="text-white/60">New email (optional)</Label>
+            <Label htmlFor="cc-email" className="text-white/60">Ny e-post (valgfritt)</Label>
             <Input
               id="cc-email"
               type="email"
@@ -841,7 +885,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label htmlFor="cc-new" className="text-white/60">New password (optional)</Label>
+              <Label htmlFor="cc-new" className="text-white/60">Nytt passord (valgfritt)</Label>
               <Input
                 id="cc-new"
                 type="password"
@@ -853,7 +897,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
               />
             </div>
             <div className="space-y-1.5">
-              <Label htmlFor="cc-confirm" className="text-white/60">Confirm password</Label>
+              <Label htmlFor="cc-confirm" className="text-white/60">Gjenta passord</Label>
               <Input
                 id="cc-confirm"
                 type="password"
@@ -878,7 +922,7 @@ function CredentialsModal({ open, onOpenChange }: { open: boolean; onOpenChange:
           )}
 
           <Button type="submit" disabled={saving} className="h-11 w-full bg-primary font-semibold text-primary-foreground hover:opacity-90">
-            {saving ? "Saving…" : "Update credentials"}
+            {saving ? "Lagrer…" : "Lagre endringer"}
           </Button>
         </form>
       </DialogContent>
@@ -927,7 +971,7 @@ export function InCarShowcase() {
               onClick={() => setCredentialsOpen(true)}
               className="inline-flex items-center gap-1.5 rounded-full border border-white/15 bg-white/[0.03] px-3 py-1.5 text-xs font-medium text-white/60 transition-colors hover:text-white"
             >
-              <KeyRound className="size-3.5" /> Account Credentials
+              <KeyRound className="size-3.5" /> Endre passord
             </button>
             <button
               type="button"
