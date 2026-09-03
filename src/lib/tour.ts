@@ -1,5 +1,5 @@
 /**
- * Opt-in 3-step product tour (driver.js).
+ * Opt-in 4-step product tour (driver.js).
  * Never auto-starts: `startTour()` is only called from the "Quick tour" pill.
  */
 import { driver } from "driver.js";
@@ -14,7 +14,7 @@ export type TourCopy = {
   prev: string;
   done: string;
   close: string;
-  steps: [Step, Step, Step];
+  steps: [Step, Step, Step, Step];
 };
 
 export const TOUR_COPY: Record<string, TourCopy> = {
@@ -26,19 +26,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Close / Skip",
     steps: [
       {
-        title: "1. Where are you heading?",
+        title: "1. Language & Currency",
         description:
-          "Type a city, address or airport in the start and destination fields — or simply tap one of the popular route badges below to fill them instantly.",
+          "Pick your preferred language and currency here. We automatically convert every toll, fuel price and vignette for you.",
       },
       {
-        title: "2. Tailor the route",
+        title: "2. Where to?",
         description:
-          "Prefer scenic mountain passes and coastal detours, dodge every toll road, or include ferry crossings. Your preferences shape the whole calculation.",
+          "Enter your start and destination — or tap one of the popular routes below for an instant calculation.",
       },
       {
-        title: "3. Your full cost overview",
+        title: "3. Tailor your trip",
         description:
-          "Calculate to get an instant breakdown: tolls and vignettes, city emission badges, fuel or charging, ferries and mountain passes — all in one clear budget.",
+          "Set it up for a motorhome, EV or petrol car, and choose whether to enjoy mountain passes or steer clear of toll roads.",
+      },
+      {
+        title: "4. Results & My Garage",
+        description:
+          "Get the full cost overview in one click. Subscribers can save trips to My Garage and repeat the journey any time with fresh prices.",
       },
     ],
   },
@@ -50,19 +55,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Lukk / Hopp over",
     steps: [
       {
-        title: "1. Hvor går turen?",
+        title: "1. Språk og valuta",
         description:
-          "Skriv inn by, adresse eller flyplass i start- og målfeltet — eller trykk på en av de populære rutene under for å fylle ut alt med ett klikk.",
+          "Velg ditt foretrukne språk og valuta her. Vi regner automatisk om alle bompenger, drivstoffpriser og oblater.",
       },
       {
-        title: "2. Skreddersy ruten",
+        title: "2. Hvor går turen?",
         description:
-          "Prioriter naturskjønne fjelloverganger og kystveier, unngå bomveier helt, eller ta med ferjestrekninger. Valgene dine styrer hele beregningen.",
+          "Skriv inn start og stopp, eller klikk på en av de populære rutene under for umiddelbar beregning.",
       },
       {
-        title: "3. Full kostnadsoversikt",
+        title: "3. Skreddersy reisen",
         description:
-          "Beregn og få umiddelbar oversikt: bompenger og vignetter, miljømerker, drivstoff eller lading, ferjer og fjelloverganger — i ett tydelig budsjett.",
+          "Tilpass for bobil, elbil eller bensin, og velg om du vil nyte fjelloverganger eller styre unna bomveier.",
+      },
+      {
+        title: "4. Resultat & Min Garasje",
+        description:
+          "Få full kostnadsoversikt med ett klikk. Abonnenter kan lagre turer i Min Garasje og gjenta reisen når som helst med ferske priser.",
       },
     ],
   },
@@ -74,19 +84,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Stäng / Hoppa över",
     steps: [
       {
-        title: "1. Vart går resan?",
+        title: "1. Språk och valuta",
         description:
-          "Skriv stad, adress eller flygplats i start- och målfältet — eller tryck på en av de populära rutterna nedan för att fylla i direkt.",
+          "Välj ditt språk och din valuta här. Vi räknar automatiskt om alla vägtullar, bränslepriser och vinjetter.",
       },
       {
-        title: "2. Skräddarsy rutten",
+        title: "2. Vart går resan?",
         description:
-          "Prioritera natursköna bergspass och kustvägar, undvik alla vägtullar eller ta med färjor. Dina val styr hela beräkningen.",
+          "Ange start och mål — eller klicka på en av de populära rutterna nedan för en direkt beräkning.",
       },
       {
-        title: "3. Full kostnadsöversikt",
+        title: "3. Skräddarsy resan",
         description:
-          "Beräkna och få direkt en uppdelning: vägtullar och vinjetter, miljömärken, bränsle eller laddning, färjor och bergspass i en tydlig budget.",
+          "Anpassa för husbil, elbil eller bensin, och välj om du vill njuta av bergspass eller undvika vägtullar.",
+      },
+      {
+        title: "4. Resultat & Mitt Garage",
+        description:
+          "Få hela kostnadsöversikten med ett klick. Prenumeranter kan spara resor i Mitt Garage och upprepa turen när som helst med färska priser.",
       },
     ],
   },
@@ -98,19 +113,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Luk / Spring over",
     steps: [
       {
-        title: "1. Hvor går turen hen?",
+        title: "1. Sprog og valuta",
         description:
-          "Skriv by, adresse eller lufthavn i start- og målfeltet — eller tryk på en af de populære ruter nedenfor for at udfylde med ét klik.",
+          "Vælg dit foretrukne sprog og din valuta her. Vi omregner automatisk alle vejafgifter, brændstofpriser og vignetter.",
       },
       {
-        title: "2. Tilpas ruten",
+        title: "2. Hvor går turen hen?",
         description:
-          "Prioritér naturskønne bjergpas og kystveje, undgå alle betalingsveje, eller tag færger med. Dine valg former hele beregningen.",
+          "Indtast start og destination — eller tryk på en af de populære ruter nedenfor for en øjeblikkelig beregning.",
       },
       {
-        title: "3. Fuldt omkostningsoverblik",
+        title: "3. Tilpas turen",
         description:
-          "Beregn og få straks et overblik: vejafgifter og vignetter, miljømærker, brændstof eller opladning, færger og bjergpas i ét klart budget.",
+          "Tilpas til autocamper, elbil eller benzin, og vælg om du vil nyde bjergpas eller undgå betalingsveje.",
+      },
+      {
+        title: "4. Resultat & Min Garage",
+        description:
+          "Få det fulde omkostningsoverblik med ét klik. Abonnenter kan gemme ture i Min Garage og gentage rejsen når som helst med friske priser.",
       },
     ],
   },
@@ -122,19 +142,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Close / Skip",
     steps: [
       {
-        title: "1. Where are you headed?",
+        title: "1. Language & Currency",
         description:
-          "Type a city, address or airport into the start and destination fields — or just tap one of the popular route badges below to fill them instantly.",
+          "Choose your language and currency right here. We automatically convert every toll, gas price and pass for you.",
       },
       {
-        title: "2. Tailor the route",
+        title: "2. Where to?",
         description:
-          "Favor scenic mountain and coastal detours, skip every toll road and express lane, or include ferry crossings. Your picks shape the whole estimate.",
+          "Enter your start and destination — or tap one of the popular routes below for an instant estimate.",
       },
       {
-        title: "3. Your full cost overview",
+        title: "3. Tailor your trip",
         description:
-          "Calculate for an instant breakdown: tolls and toll passes, restricted city zones, gas or charging, ferries and passes — all in one honest budget.",
+          "Set it up for an RV, EV or gas vehicle, and decide whether to enjoy scenic passes or skip toll roads entirely.",
+      },
+      {
+        title: "4. Results & My Garage",
+        description:
+          "Get your full cost breakdown in one click. Members can save trips to My Garage and rerun them any time with fresh prices.",
       },
     ],
   },
@@ -146,19 +171,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Schließen / Überspringen",
     steps: [
       {
-        title: "1. Wohin geht die Reise?",
+        title: "1. Sprache & Währung",
         description:
-          "Geben Sie Stadt, Adresse oder Flughafen in Start- und Zielfeld ein — oder tippen Sie unten auf eine beliebte Route, um beides sofort zu füllen.",
+          "Wählen Sie hier Sprache und Währung. Wir rechnen alle Mautgebühren, Kraftstoffpreise und Vignetten automatisch um.",
       },
       {
-        title: "2. Route anpassen",
+        title: "2. Wohin geht die Reise?",
         description:
-          "Bevorzugen Sie landschaftlich schöne Pässe und Küstenstraßen, meiden Sie jede Mautstraße oder nehmen Sie Fähren mit. Ihre Wahl prägt die Berechnung.",
+          "Geben Sie Start und Ziel ein — oder tippen Sie unten auf eine beliebte Route für eine sofortige Berechnung.",
       },
       {
-        title: "3. Vollständige Kostenübersicht",
+        title: "3. Reise anpassen",
         description:
-          "Berechnen Sie und erhalten Sie sofort die Aufschlüsselung: Maut und Vignetten, Umweltplaketten, Kraftstoff oder Laden, Fähren und Pässe.",
+          "Stellen Sie auf Wohnmobil, E-Auto oder Benziner um und entscheiden Sie, ob Sie Pässe genießen oder Mautstraßen meiden möchten.",
+      },
+      {
+        title: "4. Ergebnis & Meine Garage",
+        description:
+          "Volle Kostenübersicht mit einem Klick. Abonnenten speichern Reisen in Meiner Garage und wiederholen sie jederzeit mit aktuellen Preisen.",
       },
     ],
   },
@@ -170,19 +200,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Sluiten / Overslaan",
     steps: [
       {
-        title: "1. Waar gaat de reis heen?",
+        title: "1. Taal & valuta",
         description:
-          "Typ een stad, adres of luchthaven in het start- en bestemmingsveld — of tik op een populaire route hieronder om alles in één klik in te vullen.",
+          "Kies hier je taal en valuta. We rekenen alle tol, brandstofprijzen en vignetten automatisch om.",
       },
       {
-        title: "2. Stem de route af",
+        title: "2. Waar gaat de reis heen?",
         description:
-          "Kies voor schilderachtige bergpassen en kustwegen, vermijd elke tolweg of neem veerboten mee. Jouw voorkeuren bepalen de hele berekening.",
+          "Vul start en bestemming in — of tik op een populaire route hieronder voor een directe berekening.",
       },
       {
-        title: "3. Volledig kostenoverzicht",
+        title: "3. Stem de reis af",
         description:
-          "Bereken en zie direct de uitsplitsing: tol en vignetten, milieuzones, brandstof of laden, veerboten en bergpassen in één helder budget.",
+          "Stel in op camper, EV of benzine en kies of je bergpassen wilt meepakken of tolwegen wilt vermijden.",
+      },
+      {
+        title: "4. Resultaat & Mijn Garage",
+        description:
+          "Volledig kostenoverzicht met één klik. Abonnees bewaren ritten in Mijn Garage en herhalen ze altijd met actuele prijzen.",
       },
     ],
   },
@@ -194,19 +229,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Fermer / Passer",
     steps: [
       {
-        title: "1. Où allez-vous ?",
+        title: "1. Langue et devise",
         description:
-          "Saisissez une ville, une adresse ou un aéroport dans les champs départ et destination — ou touchez un itinéraire populaire ci-dessous pour tout remplir.",
+          "Choisissez ici votre langue et votre devise. Nous convertissons automatiquement péages, prix des carburants et vignettes.",
       },
       {
-        title: "2. Personnalisez l'itinéraire",
+        title: "2. Où allez-vous ?",
         description:
-          "Privilégiez les cols de montagne et les routes côtières, évitez tous les péages ou incluez les traversées en ferry. Vos choix guident le calcul.",
+          "Saisissez le départ et la destination — ou touchez un itinéraire populaire ci-dessous pour un calcul immédiat.",
       },
       {
-        title: "3. Aperçu complet des coûts",
+        title: "3. Personnalisez le voyage",
         description:
-          "Calculez et obtenez le détail immédiat : péages et vignettes, vignettes environnementales, carburant ou recharge, ferries et cols.",
+          "Adaptez pour un camping-car, un véhicule électrique ou essence, et choisissez de savourer les cols ou d'éviter les péages.",
+      },
+      {
+        title: "4. Résultats et Mon Garage",
+        description:
+          "Obtenez tout le budget en un clic. Les abonnés enregistrent leurs trajets dans Mon Garage et les relancent avec des prix actualisés.",
       },
     ],
   },
@@ -218,19 +258,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Zamknij / Pomiń",
     steps: [
       {
-        title: "1. Dokąd jedziesz?",
+        title: "1. Język i waluta",
         description:
-          "Wpisz miasto, adres lub lotnisko w polach startu i celu — albo kliknij jedną z popularnych tras poniżej, aby wypełnić oba pola od razu.",
+          "Wybierz tutaj język i walutę. Automatycznie przeliczamy wszystkie opłaty drogowe, ceny paliwa i winiety.",
       },
       {
-        title: "2. Dopasuj trasę",
+        title: "2. Dokąd jedziesz?",
         description:
-          "Wybierz widokowe przełęcze i drogi nadmorskie, omijaj płatne autostrady lub uwzględnij promy. Twoje ustawienia kształtują całe wyliczenie.",
+          "Wpisz start i cel — albo kliknij jedną z popularnych tras poniżej, aby od razu policzyć koszty.",
       },
       {
-        title: "3. Pełny przegląd kosztów",
+        title: "3. Dopasuj podróż",
         description:
-          "Policz i zobacz natychmiastowy podział: opłaty i winiety, naklejki ekologiczne, paliwo lub ładowanie, promy i przełęcze w jednym budżecie.",
+          "Ustaw kampera, auto elektryczne lub benzynowe i zdecyduj, czy chcesz jechać przez przełęcze, czy omijać płatne drogi.",
+      },
+      {
+        title: "4. Wynik i Mój Garaż",
+        description:
+          "Pełny przegląd kosztów jednym kliknięciem. Subskrybenci zapisują trasy w Moim Garażu i powtarzają je z aktualnymi cenami.",
       },
     ],
   },
@@ -242,19 +287,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Cerrar / Omitir",
     steps: [
       {
-        title: "1. ¿Adónde vas?",
+        title: "1. Idioma y moneda",
         description:
-          "Escribe una ciudad, dirección o aeropuerto en los campos de origen y destino — o toca una de las rutas populares de abajo para rellenarlos al instante.",
+          "Elige aquí tu idioma y tu moneda. Convertimos automáticamente peajes, precios de combustible y viñetas.",
       },
       {
-        title: "2. Personaliza la ruta",
+        title: "2. ¿Adónde vas?",
         description:
-          "Prioriza puertos de montaña y carreteras costeras, evita todos los peajes o incluye travesías en ferry. Tus preferencias guían el cálculo.",
+          "Introduce origen y destino — o toca una de las rutas populares de abajo para calcular al instante.",
       },
       {
-        title: "3. Resumen completo de costes",
+        title: "3. Personaliza el viaje",
         description:
-          "Calcula y obtén el desglose al instante: peajes y viñetas, distintivos ambientales, combustible o recarga, ferris y puertos de montaña.",
+          "Configúralo para autocaravana, eléctrico o gasolina, y decide si disfrutar de los puertos de montaña o evitar peajes.",
+      },
+      {
+        title: "4. Resultados y Mi Garaje",
+        description:
+          "Todo el presupuesto en un clic. Los suscriptores guardan viajes en Mi Garaje y los repiten cuando quieran con precios actualizados.",
       },
     ],
   },
@@ -266,19 +316,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Chiudi / Salta",
     steps: [
       {
-        title: "1. Dove vuoi andare?",
+        title: "1. Lingua e valuta",
         description:
-          "Digita città, indirizzo o aeroporto nei campi di partenza e destinazione — oppure tocca uno degli itinerari popolari qui sotto per compilarli subito.",
+          "Scegli qui lingua e valuta. Convertiamo automaticamente pedaggi, prezzi del carburante e vignette.",
       },
       {
-        title: "2. Personalizza il percorso",
+        title: "2. Dove vuoi andare?",
         description:
-          "Preferisci passi alpini e strade costiere, evita ogni pedaggio o includi i traghetti. Le tue scelte guidano l'intero calcolo.",
+          "Inserisci partenza e destinazione — oppure tocca uno degli itinerari popolari qui sotto per un calcolo immediato.",
       },
       {
-        title: "3. Panoramica completa dei costi",
+        title: "3. Personalizza il viaggio",
         description:
-          "Calcola e ottieni subito il dettaglio: pedaggi e vignette, bollini ambientali, carburante o ricarica, traghetti e valichi in un unico budget.",
+          "Imposta camper, elettrico o benzina e scegli se goderti i valichi alpini o evitare del tutto i pedaggi.",
+      },
+      {
+        title: "4. Risultati e Il Mio Garage",
+        description:
+          "Il budget completo con un clic. Gli abbonati salvano i viaggi ne Il Mio Garage e li ripetono con prezzi aggiornati.",
       },
     ],
   },
@@ -298,10 +353,6 @@ export function startTour(locale: string) {
       /* storage unavailable — tour still works */
     }
   };
-
-  const resultsTarget = document.querySelector('[data-tour="results"]')
-    ? '[data-tour="results"]'
-    : '[data-tour="calculate"]';
 
   const d = driver({
     showProgress: true,
@@ -328,16 +379,30 @@ export function startTour(locale: string) {
     onDestroyed: markSeen,
     steps: [
       {
+        element: '[data-tour="locale"]',
+        popover: {
+          title: copy.steps[0].title,
+          description: copy.steps[0].description,
+          side: "bottom",
+          align: "end",
+        },
+      },
+      {
         element: '[data-tour="places"]',
-        popover: { title: copy.steps[0].title, description: copy.steps[0].description },
+        popover: { title: copy.steps[1].title, description: copy.steps[1].description, side: "bottom" },
       },
       {
         element: '[data-tour="preferences"]',
-        popover: { title: copy.steps[1].title, description: copy.steps[1].description },
+        popover: { title: copy.steps[2].title, description: copy.steps[2].description, side: "top" },
       },
       {
-        element: resultsTarget,
-        popover: { title: copy.steps[2].title, description: copy.steps[2].description },
+        element: '[data-tour="calculate"]',
+        popover: {
+          title: copy.steps[3].title,
+          description: copy.steps[3].description,
+          side: "top",
+          align: "end",
+        },
       },
     ],
   });

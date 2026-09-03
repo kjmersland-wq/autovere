@@ -280,10 +280,11 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
           <button
             type="button"
             onClick={() => startTour(locale)}
-            className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
+            className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-sm font-semibold text-amber-300 transition-colors hover:bg-amber-500/20 hover:text-amber-200"
           >
             {tourCopy(locale).trigger}
           </button>
+
 
 
           <form
@@ -385,6 +386,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               />
               <Button
                 type="submit"
+                data-tour="calculate"
                 size="lg"
                 disabled={calculating}
                 className="h-12 px-8 text-base font-semibold"
