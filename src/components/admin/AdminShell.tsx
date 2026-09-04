@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { ArrowLeft, RefreshCcw } from "lucide-react";
 
@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ADMIN_NAV, type AdminSectionId } from "@/components/admin/adminNav";
 import { SITE_OPTIONS } from "@/components/admin/siteOptions";
+import type { AdminCurrency } from "@/components/admin/adminFormat";
 import { OverviewPanel } from "@/components/admin/sections/OverviewPanel";
 import { TrafficPanel } from "@/components/admin/sections/TrafficPanel";
 import { MarketsPanel } from "@/components/admin/sections/MarketsPanel";
@@ -19,10 +20,14 @@ const ALL_SITES = "__all__";
 function Section({
   section,
   site,
+  currency,
+  onCurrencyChange,
   onNavigate,
 }: {
   section: AdminSectionId;
   site: string | null;
+  currency: AdminCurrency;
+  onCurrencyChange: (c: AdminCurrency) => void;
   onNavigate: (s: AdminSectionId) => void;
 }) {
   switch (section) {
@@ -35,18 +40,39 @@ function Section({
     case "abonnement":
       return <SubscriptionsPanel site={site} />;
     case "okonomi":
-      return <FinancePanel site={site} />;
+      return <FinancePanel site={site} currency={currency} onCurrencyChange={onCurrencyChange} />;
     case "rapporter":
-      return <ReportsPanel site={site} />;
+      return <ReportsPanel site={site} currency={currency} />;
     default:
       return null;
   }
 }
 
+const CURRENCY_STORAGE_KEY = "autovere.admin.currency";
+
 export function AdminShell() {
   const [section, setSection] = useState<AdminSectionId>("oversikt");
   const [siteValue, setSiteValue] = useState<string>(ALL_SITES);
   const [refreshKey, setRefreshKey] = useState(0);
+  const [currency, setCurrency] = useState<AdminCurrency>("NOK");
+
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem(CURRENCY_STORAGE_KEY);
+      if (stored === "NOK" || stored === "EUR" || stored === "USD") setCurrency(stored);
+    } catch {
+      /* storage unavailable */
+    }
+  }, []);
+
+  const handleCurrencyChange = (c: AdminCurrency) => {
+    setCurrency(c);
+    try {
+      localStorage.setItem(CURRENCY_STORAGE_KEY, c);
+    } catch {
+      /* storage unavailable */
+    }
+  };
 
   const site = siteValue === ALL_SITES ? null : siteValue;
 
@@ -113,7 +139,13 @@ export function AdminShell() {
           </nav>
 
           <div key={`${section}-${site}-${refreshKey}`} className="min-w-0">
-            <Section section={section} site={site} onNavigate={setSection} />
+            <Section
+              section={section}
+              site={site}
+              currency={currency}
+              onCurrencyChange={handleCurrencyChange}
+              onNavigate={setSection}
+            />
           </div>
         </div>
       </section>

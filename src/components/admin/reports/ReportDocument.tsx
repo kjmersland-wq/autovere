@@ -2,8 +2,11 @@ import { forwardRef } from "react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Metric } from "@/components/admin/AdminUi";
-import { cf, nf, nfOrUnavailable } from "@/components/admin/adminFormat";
+import { cf, nf, nfOrUnavailable, type AdminCurrency } from "@/components/admin/adminFormat";
+import { convertFromEur, formatAdminCurrency } from "@/components/admin/adminCurrency";
+import { formatCurrency } from "@/lib/currency";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import type { ExchangeRates } from "@/lib/admin-data.functions";
 
 export type ReportKpis = { totalUsers: number | null; activeSubs: number; mrr: number; churnRate: number };
 export type ReportPlanRow = { plan: string; label: string; count: number; mrr: number };
@@ -21,12 +24,28 @@ export const ReportDocument = forwardRef<
     kpis: ReportKpis;
     byPlan: ReportPlanRow[];
     topPaths: ReportPathRow[];
+    currency: AdminCurrency;
+    rates: ExchangeRates | null;
   }
 >(
   (
-    { scopeLabel, isSiteScoped, periodLabel, generatedAtLabel, dailyForPeriod, headlineViews, kpis, byPlan, topPaths },
+    {
+      scopeLabel,
+      isSiteScoped,
+      periodLabel,
+      generatedAtLabel,
+      dailyForPeriod,
+      headlineViews,
+      kpis,
+      byPlan,
+      topPaths,
+      currency,
+      rates,
+    },
     ref,
   ) => {
+    const fmt = (valueEur: number) => formatAdminCurrency(valueEur, currency, rates);
+    const chartByPlan = byPlan.map((p) => ({ ...p, displayMrr: convertFromEur(p.mrr, currency, rates) }));
     return (
       <div ref={ref} className="glass-panel rounded-2xl p-6 print:border print:border-neutral-300 print:bg-white sm:p-8">
         <div className="flex flex-wrap items-start justify-between gap-4 border-b border-border pb-5">
@@ -55,7 +74,11 @@ export const ReportDocument = forwardRef<
           <Metric label="Besøk i perioden" value={nf.format(headlineViews)} />
           <Metric label="Registrerte brukere (globalt)" value={nfOrUnavailable(kpis.totalUsers)} />
           <Metric label="Aktive abonnenter (globalt)" value={nf.format(kpis.activeSubs)} />
-          <Metric label="MRR (globalt)" value={cf.format(kpis.mrr)} />
+          <Metric
+            label="MRR (globalt)"
+            value={fmt(kpis.mrr)}
+            {...(currency !== "EUR" ? { hint: `≈ ${cf.format(kpis.mrr)}` } : {})}
+          />
         </div>
 
         <div className="mt-6" data-report-chart="traffic">
@@ -83,16 +106,16 @@ export const ReportDocument = forwardRef<
 
         <div className="mt-6" data-report-chart="revenue">
           <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-primary print:text-neutral-900">
-            Inntekt per plan (globalt)
+            Inntekt per plan (globalt, {currency})
           </h3>
           <div className="mt-3 h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={byPlan}>
+              <BarChart data={chartByPlan}>
                 <CartesianGrid strokeDasharray="3 3" stroke="rgba(120,120,120,0.15)" />
                 <XAxis dataKey="label" tick={{ fontSize: 11 }} />
                 <YAxis tick={{ fontSize: 11 }} />
-                <Tooltip formatter={(v: number) => [cf.format(v), "MRR"]} />
-                <Bar dataKey="mrr" fill="#34d399" radius={[6, 6, 0, 0]} />
+                <Tooltip formatter={(v: number) => [formatCurrency(v, currency), "MRR"]} />
+                <Bar dataKey="displayMrr" fill="#34d399" radius={[6, 6, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </div>
@@ -100,7 +123,7 @@ export const ReportDocument = forwardRef<
 
         <div className="mt-6" data-report-table="plans">
           <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-primary print:text-neutral-900">
-            Abonnement per plan (globalt)
+            Abonnement per plan (globalt, {currency})
           </h3>
           <Table className="mt-3">
             <TableHeader>
@@ -115,7 +138,7 @@ export const ReportDocument = forwardRef<
                 <TableRow key={p.plan}>
                   <TableCell>{p.label}</TableCell>
                   <TableCell className="text-right">{nf.format(p.count)}</TableCell>
-                  <TableCell className="text-right">{cf.format(p.mrr)}</TableCell>
+                  <TableCell className="text-right">{fmt(p.mrr)}</TableCell>
                 </TableRow>
               ))}
               {byPlan.length === 0 && (

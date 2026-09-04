@@ -37,3 +37,9 @@ export const cf = new Intl.NumberFormat("nb-NO", { style: "currency", currency: 
 export function nfOrUnavailable(value: number | null): string {
   return value === null ? "Ikke tilgjengelig" : nf.format(value);
 }
+
+/** Admin's display currency selector. All revenue is computed/stored in EUR —
+ * these are display-only options, never a base for conversion in the other
+ * direction. */
+export const ADMIN_CURRENCIES = ["NOK", "EUR", "USD"] as const;
+export type AdminCurrency = (typeof ADMIN_CURRENCIES)[number];

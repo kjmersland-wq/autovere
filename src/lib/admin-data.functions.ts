@@ -474,3 +474,38 @@ export const getFinanceBreakdown = createServerFn({ method: "GET" }).handler(
     }
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Valutakurs — live EUR-based rates for display-only conversion in     */
+/* Økonomi/Rapporter. All revenue is computed and stored in EUR         */
+/* (PLAN_MRR above); this never touches those figures, it only lets the */
+/* UI show them in another currency. Source: Frankfurter (frankfurter.dev),*/
+/* a free, keyless API republishing the European Central Bank's daily   */
+/* reference rates — chosen because the only currency mechanism already */
+/* in this codebase (src/lib/currency.tsx's RATES) is explicitly        */
+/* "indicative reference rates... not for settlement", not suitable for */
+/* financial reporting. No rate is ever hardcoded here: on failure this  */
+/* returns an error rather than a fabricated fallback rate.             */
+/* ------------------------------------------------------------------ */
+
+export type ExchangeRates = { EUR: 1; NOK: number; USD: number; asOf: string };
+
+export const getExchangeRates = createServerFn({ method: "GET" }).handler(
+  async (): Promise<AdminDataResult<ExchangeRates>> => {
+    const ctx = await getAdminSupabaseContext();
+    if (!ctx.ok) return ctx.result;
+    try {
+      const res = await fetch("https://api.frankfurter.dev/v1/latest?base=EUR&symbols=NOK,USD");
+      if (!res.ok) return { status: "error", message: "Kunne ikke hente valutakurs." };
+      const json = (await res.json()) as { date?: string; rates?: { NOK?: number; USD?: number } };
+      const nok = json.rates?.NOK;
+      const usd = json.rates?.USD;
+      if (typeof nok !== "number" || typeof usd !== "number") {
+        return { status: "error", message: "Kunne ikke hente valutakurs." };
+      }
+      return { status: "ok", data: { EUR: 1, NOK: nok, USD: usd, asOf: json.date ?? "" } };
+    } catch {
+      return { status: "error", message: "Kunne ikke hente valutakurs." };
+    }
+  },
+);

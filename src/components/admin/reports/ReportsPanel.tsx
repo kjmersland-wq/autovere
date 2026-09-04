@@ -7,10 +7,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { ReportDocument } from "@/components/admin/reports/ReportDocument";
 import { REPORT_PERIODS, periodView, type ReportPeriod } from "@/components/admin/reports/reportPeriod";
 import { useAdminQuery, statusMessage } from "@/components/admin/useAdminQuery";
-import { getGlobalOverview, getSiteBreakdown, getSubscriptionBreakdown } from "@/lib/admin-data.functions";
+import { getExchangeRates, getGlobalOverview, getSiteBreakdown, getSubscriptionBreakdown } from "@/lib/admin-data.functions";
 import { siteLabel } from "@/components/admin/siteOptions";
+import type { AdminCurrency } from "@/components/admin/adminFormat";
 
-export function ReportsPanel({ site }: { site: string | null }) {
+export function ReportsPanel({ site, currency }: { site: string | null; currency: AdminCurrency }) {
   const [period, setPeriod] = useState<ReportPeriod>("30");
   const [exporting, setExporting] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -18,9 +19,11 @@ export function ReportsPanel({ site }: { site: string | null }) {
   const fetchOverview = useServerFn(getGlobalOverview);
   const fetchSites = useServerFn(getSiteBreakdown);
   const fetchSubs = useServerFn(getSubscriptionBreakdown);
+  const fetchRates = useServerFn(getExchangeRates);
   const overview = useAdminQuery(fetchOverview);
   const sites = useAdminQuery(fetchSites);
   const subs = useAdminQuery(fetchSubs);
+  const rates = useAdminQuery(fetchRates);
 
   const loading = overview.loading || sites.loading || subs.loading;
   if (loading || !overview.result || !sites.result || !subs.result) {
@@ -39,6 +42,8 @@ export function ReportsPanel({ site }: { site: string | null }) {
   const globalData = overview.result.data;
   const subsData = subs.result.data;
   const siteRow = site ? sites.result.data.sites.find((s) => s.prefix === site) : null;
+  const ratesData = rates.result?.status === "ok" ? rates.result.data : null;
+  const effectiveCurrency: AdminCurrency = ratesData ? currency : "EUR";
 
   const scopeLabel = site ? siteLabel(site) : "Alle AutoVere";
   const isSiteScoped = !!site;
@@ -72,6 +77,8 @@ export function ReportsPanel({ site }: { site: string | null }) {
         kpis,
         byPlan: subsData.byPlan,
         topPaths,
+        currency: effectiveCurrency,
+        rates: ratesData,
       });
     } finally {
       setExporting(false);
@@ -99,6 +106,9 @@ export function ReportsPanel({ site }: { site: string | null }) {
               ))}
             </SelectContent>
           </Select>
+          <span className="rounded-full border border-border px-3 py-1 text-xs font-semibold text-foreground/70">
+            Valuta: {effectiveCurrency}
+          </span>
         </div>
         <Button onClick={() => void exportPdf()} disabled={exporting}>
           {exporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
@@ -117,6 +127,8 @@ export function ReportsPanel({ site }: { site: string | null }) {
         kpis={kpis}
         byPlan={subsData.byPlan}
         topPaths={topPaths}
+        currency={effectiveCurrency}
+        rates={ratesData}
       />
     </div>
   );

@@ -2,20 +2,50 @@ import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxi
 import { useServerFn } from "@tanstack/react-start";
 
 import { Metric, Panel } from "@/components/admin/AdminUi";
-import { cf } from "@/components/admin/adminFormat";
+import { cf, type AdminCurrency } from "@/components/admin/adminFormat";
+import { AdminCurrencySelector } from "@/components/admin/AdminCurrencySelector";
+import { convertFromEur, formatAdminCurrency } from "@/components/admin/adminCurrency";
+import { formatCurrency } from "@/lib/currency";
 import { useAdminQuery, statusMessage } from "@/components/admin/useAdminQuery";
-import { getFinanceBreakdown } from "@/lib/admin-data.functions";
+import { getExchangeRates, getFinanceBreakdown } from "@/lib/admin-data.functions";
 import { siteLabel } from "@/components/admin/siteOptions";
 
-export function FinancePanel({ site }: { site: string | null }) {
+export function FinancePanel({
+  site,
+  currency,
+  onCurrencyChange,
+}: {
+  site: string | null;
+  currency: AdminCurrency;
+  onCurrencyChange: (c: AdminCurrency) => void;
+}) {
   const fetchFinance = useServerFn(getFinanceBreakdown);
-  const { loading, result } = useAdminQuery(fetchFinance);
+  const fetchRates = useServerFn(getExchangeRates);
+  const finance = useAdminQuery(fetchFinance);
+  const rates = useAdminQuery(fetchRates);
 
-  if (loading || !result) return <p className="text-sm text-muted-foreground">Henter tall …</p>;
-  if (result.status !== "ok") {
-    return <p className="text-sm text-destructive">{statusMessage(result.status, "message" in result ? result.message : undefined)}</p>;
+  if (finance.loading || !finance.result) return <p className="text-sm text-muted-foreground">Henter tall …</p>;
+  if (finance.result.status !== "ok") {
+    return (
+      <p className="text-sm text-destructive">
+        {statusMessage(finance.result.status, "message" in finance.result ? finance.result.message : undefined)}
+      </p>
+    );
   }
-  const { data } = result;
+  const { data } = finance.result;
+
+  // Live rates are best-effort: if they fail to load, fall back to EUR (the
+  // real base currency everything is computed in) rather than blocking the
+  // page or guessing a rate.
+  const ratesData = rates.result?.status === "ok" ? rates.result.data : null;
+  const effectiveCurrency: AdminCurrency = ratesData ? currency : "EUR";
+  const ratesUnavailable = currency !== "EUR" && !rates.loading && !ratesData;
+
+  const fmt = (valueEur: number) => formatAdminCurrency(valueEur, effectiveCurrency, ratesData);
+  const chartData = data.byPlan.map((p) => ({
+    ...p,
+    displayMrr: convertFromEur(p.mrr, effectiveCurrency, ratesData),
+  }));
 
   return (
     <div className="space-y-4">
@@ -25,28 +55,52 @@ export function FinancePanel({ site }: { site: string | null }) {
           nettsted i dataene. Tallene under er globale for hele AutoVere.
         </p>
       )}
+
+      <div className="glass-panel flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4">
+        <span className="text-sm font-medium text-foreground/70">Visningsvaluta</span>
+        <AdminCurrencySelector value={currency} onChange={onCurrencyChange} />
+      </div>
+      {ratesUnavailable && (
+        <p className="rounded-lg border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
+          Valutakurs er ikke tilgjengelig akkurat nå — viser beløp i EUR (grunnvalutaen alt regnes i) inntil kursen
+          er tilbake.
+        </p>
+      )}
+
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Metric label="MRR" value={cf.format(data.mrr)} hint="Løpende månedlig inntekt" />
-        <Metric label="ARR" value={cf.format(data.arr)} hint="Årlig inntektsrate" />
-        <Metric label="ARPU" value={cf.format(data.arpu)} hint="Inntekt per aktiv kunde" />
+        <Metric
+          label="MRR"
+          value={fmt(data.mrr)}
+          hint={effectiveCurrency !== "EUR" ? `≈ ${cf.format(data.mrr)}` : "Løpende månedlig inntekt"}
+        />
+        <Metric label="ARR" value={fmt(data.arr)} hint={effectiveCurrency !== "EUR" ? `≈ ${cf.format(data.arr)}` : "Årlig inntektsrate"} />
+        <Metric
+          label="ARPU"
+          value={fmt(data.arpu)}
+          hint={effectiveCurrency !== "EUR" ? `≈ ${cf.format(data.arpu)}` : "Inntekt per aktiv kunde"}
+        />
         <Metric label="Churn" value={`${data.churnRate} %`} hint="Andel kansellerte av totalt" />
       </div>
+
       <Panel title="Inntektsfordeling per plan">
         <div className="h-64">
           <ResponsiveContainer width="100%" height="100%">
-            <BarChart data={data.byPlan}>
+            <BarChart data={chartData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
               <XAxis dataKey="label" tick={{ fontSize: 11 }} />
               <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip formatter={(v: number) => [cf.format(v), "MRR"]} />
-              <Bar dataKey="mrr" fill="#34d399" radius={[6, 6, 0, 0]} />
+              <Tooltip formatter={(v: number) => [formatCurrency(v, effectiveCurrency), "MRR"]} />
+              <Bar dataKey="displayMrr" fill="#34d399" radius={[6, 6, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>
       </Panel>
+
       <p className="text-xs text-muted-foreground print:text-neutral-600">
-        Beløp er beregnet fra aktive abonnement i EUR eks. Stripe-gebyr. Utbetalinger og avgifter håndteres av
-        Stripe.
+        Beløp er beregnet fra aktive abonnement i EUR eks. Stripe-gebyr, vist i {effectiveCurrency}
+        {ratesData ? ` (kurs fra ${ratesData.asOf || "i dag"}, Den europeiske sentralbanken via frankfurter.dev)` : ""}.
+        Selve abonnements- og Stripe-beløpene er alltid lagret i EUR og endres ikke av valutavalget. Utbetalinger og
+        avgifter håndteres av Stripe.
       </p>
     </div>
   );

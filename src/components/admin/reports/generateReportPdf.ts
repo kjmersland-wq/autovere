@@ -1,4 +1,8 @@
 import type { ReportKpis, ReportPathRow, ReportPlanRow } from "@/components/admin/reports/ReportDocument";
+import { convertFromEur } from "@/components/admin/adminCurrency";
+import { formatCurrency } from "@/lib/currency";
+import type { AdminCurrency } from "@/components/admin/adminFormat";
+import type { ExchangeRates } from "@/lib/admin-data.functions";
 
 const BRAND_AMBER: [number, number, number] = [245, 158, 11]; // matches the site's existing chart/brand accent (#f59e0b)
 const INK: [number, number, number] = [17, 24, 39];
@@ -13,6 +17,8 @@ export type ReportPdfInput = {
   kpis: ReportKpis;
   byPlan: ReportPlanRow[];
   topPaths: ReportPathRow[];
+  currency: AdminCurrency;
+  rates: ExchangeRates | null;
 };
 
 async function captureChart(container: HTMLElement, selector: string, html2canvas: typeof import("html2canvas").default) {
@@ -31,7 +37,10 @@ export async function generateReportPdf({
   kpis,
   byPlan,
   topPaths,
+  currency,
+  rates,
 }: ReportPdfInput) {
+  const money = (valueEur: number) => formatCurrency(convertFromEur(valueEur, currency, rates), currency);
   const [{ jsPDF }, { autoTable }, html2canvasModule] = await Promise.all([
     import("jspdf"),
     import("jspdf-autotable"),
@@ -85,10 +94,7 @@ export async function generateReportPdf({
         kpis.totalUsers === null ? "Ikke tilgjengelig" : new Intl.NumberFormat("nb-NO").format(kpis.totalUsers),
       ],
       ["Aktive abonnenter (globalt)", new Intl.NumberFormat("nb-NO").format(kpis.activeSubs)],
-      [
-        "Månedlig inntekt (globalt)",
-        new Intl.NumberFormat("nb-NO", { style: "currency", currency: "EUR" }).format(kpis.mrr),
-      ],
+      [`Månedlig inntekt (globalt, ${currency})`, money(kpis.mrr)],
       ["Churn (globalt)", `${kpis.churnRate} %`],
     ],
     theme: "grid",
@@ -111,7 +117,7 @@ export async function generateReportPdf({
   ensureSpace(20);
   doc.setFontSize(12);
   doc.setTextColor(...INK);
-  doc.text("Abonnement per plan (globalt)", margin, y);
+  doc.text(`Abonnement per plan (globalt, ${currency})`, margin, y);
   y += 4;
   autoTable(doc, {
     startY: y,
@@ -119,11 +125,7 @@ export async function generateReportPdf({
     head: [["Plan", "Antall", "MRR"]],
     body:
       byPlan.length > 0
-        ? byPlan.map((p) => [
-            p.label,
-            new Intl.NumberFormat("nb-NO").format(p.count),
-            new Intl.NumberFormat("nb-NO", { style: "currency", currency: "EUR" }).format(p.mrr),
-          ])
+        ? byPlan.map((p) => [p.label, new Intl.NumberFormat("nb-NO").format(p.count), money(p.mrr)])
         : [["Ingen aktive abonnement ennå.", "", ""]],
     theme: "striped",
     headStyles: { fillColor: INK },
