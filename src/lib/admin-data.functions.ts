@@ -102,7 +102,7 @@ export const getGlobalOverview = createServerFn({ method: "GET" }).handler(
       const since = new Date(Date.now() - WINDOW_DAYS * DAY_MS).toISOString();
       const [{ data: views, error: viewsError }, { data: subs, error: subsError }, totalUsers] = await Promise.all([
         ctx.supabase.from("page_views").select("path, created_at").gte("created_at", since).limit(50000),
-        ctx.supabase.from("subscriptions").select("price_id, status"),
+        ctx.supabase.from("subscriptions").select("price_id, status").not("stripe_subscription_id", "like", "admin_comp_%"),
         countTotalUsers(),
       ]);
       if (viewsError || subsError) {
@@ -361,7 +361,8 @@ export const getSubscriptionBreakdown = createServerFn({ method: "GET" }).handle
     try {
       const { data: subs, error } = await ctx.supabase
         .from("subscriptions")
-        .select("price_id, status, created_at");
+        .select("price_id, status, created_at")
+        .not("stripe_subscription_id", "like", "admin_comp_%");
       if (error) return { status: "error", message: "Kunne ikke hente abonnementsdata." };
 
       const rows = subs ?? [];
@@ -430,7 +431,10 @@ export const getFinanceBreakdown = createServerFn({ method: "GET" }).handler(
     const ctx = await getAdminSupabaseContext();
     if (!ctx.ok) return ctx.result;
     try {
-      const { data: subs, error } = await ctx.supabase.from("subscriptions").select("price_id, status");
+      const { data: subs, error } = await ctx.supabase
+        .from("subscriptions")
+        .select("price_id, status")
+        .not("stripe_subscription_id", "like", "admin_comp_%");
       if (error) return { status: "error", message: "Kunne ikke hente økonomidata." };
 
       const rows = subs ?? [];
