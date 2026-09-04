@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/lib/auth";
 import { checkAdminAccess, type AdminAccessResult } from "@/lib/admin-auth.functions";
 import { OwnerLoginForm } from "@/components/admin/OwnerLoginForm";
-import { AdminPlaceholder } from "@/components/admin/AdminPlaceholder";
+import { AdminShell } from "@/components/admin/AdminShell";
 
 function StatusCard({ title, body, showLogout }: { title: string; body: string; showLogout: boolean }) {
   const { signOut } = useAuth();
@@ -83,5 +83,5 @@ export function OwnerAdminGate() {
     return <StatusCard title="Uventet feil" body={result.message} showLogout />;
   }
 
-  return <AdminPlaceholder />;
+  return <AdminShell />;
 }

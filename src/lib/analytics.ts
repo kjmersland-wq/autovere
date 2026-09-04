@@ -26,7 +26,7 @@ function regionFor(path: string) {
 
 function localeFor(path: string) {
   const seg = path.split("/")[1] ?? "";
-  return ["no", "se", "dk", "de", "nl", "fr", "pl"].includes(seg) ? seg : "en";
+  return ["no", "se", "dk", "fi", "usa", "de", "nl", "fr", "pl", "es", "it"].includes(seg) ? seg : "en";
 }
 
 function deviceType() {
