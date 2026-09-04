@@ -44,7 +44,7 @@ export const checkAdminAccess = createServerFn({ method: "GET" }).handler(
   async (): Promise<AdminAccessResult> => {
     try {
       const SUPABASE_URL = process.env["SUPABASE_URL"];
-      const SUPABASE_PUBLISHABLE_KEY = process.env["SUPABASE_PUBLISHABLE_KEY"];
+      const SUPABASE_PUBLISHABLE_KEY = process.env["SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_ANON_KEY"];
       if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
         return { status: "error", message: "Supabase er ikke riktig konfigurert på serveren." };
       }
