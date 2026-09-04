@@ -43,8 +43,26 @@ export type AdminAccessResult =
 export const checkAdminAccess = createServerFn({ method: "GET" }).handler(
   async (): Promise<AdminAccessResult> => {
     try {
-      const SUPABASE_URL = process.env["SUPABASE_URL"];
-      const SUPABASE_PUBLISHABLE_KEY = process.env["SUPABASE_PUBLISHABLE_KEY"] || process.env["SUPABASE_ANON_KEY"];
+      // The reserved SUPABASE_URL / SUPABASE_PUBLISHABLE_KEY runtime secrets are not
+      // provisioned in this Lovable Cloud project (confirmed: the Secrets UI rejects
+      // creating them, and the plain process.env lookup below is empty in production).
+      // VITE_SUPABASE_URL / VITE_SUPABASE_PUBLISHABLE_KEY are the Lovable-managed values
+      // that already work for the browser client (src/integrations/supabase/client.ts
+      // uses the same import.meta.env-first pattern). Neither value is secret — the
+      // publishable/anon key and project URL are meant to be public by Supabase's own
+      // design (unlike the service-role key) and are already shipped, in the clear,
+      // inside every visitor's browser bundle. The literal fallback below is that same
+      // already-public value, used only so this admin-only check never depends on
+      // guessing which env var name a given build/runtime environment happens to expose.
+      const SUPABASE_URL =
+        import.meta.env["VITE_SUPABASE_URL"] ||
+        process.env["SUPABASE_URL"] ||
+        "https://idjkeokjhfusbwrnfkat.supabase.co";
+      const SUPABASE_PUBLISHABLE_KEY =
+        import.meta.env["VITE_SUPABASE_PUBLISHABLE_KEY"] ||
+        process.env["SUPABASE_PUBLISHABLE_KEY"] ||
+        process.env["SUPABASE_ANON_KEY"] ||
+        "sb_publishable_Uo59cZvvR8vZpJyXR1gp0w_3vmKXO55";
       if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
         return { status: "error", message: "Supabase er ikke riktig konfigurert på serveren." };
       }
