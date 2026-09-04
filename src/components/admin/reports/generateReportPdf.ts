@@ -80,7 +80,10 @@ export async function generateReportPdf({
     head: [["Nøkkeltall", "Verdi"]],
     body: [
       [`Besøk i perioden (${scopeLabel})`, new Intl.NumberFormat("nb-NO").format(headlineViews)],
-      ["Registrerte brukere (globalt)", new Intl.NumberFormat("nb-NO").format(kpis.totalUsers)],
+      [
+        "Registrerte brukere (globalt)",
+        kpis.totalUsers === null ? "Ikke tilgjengelig" : new Intl.NumberFormat("nb-NO").format(kpis.totalUsers),
+      ],
       ["Aktive abonnenter (globalt)", new Intl.NumberFormat("nb-NO").format(kpis.activeSubs)],
       [
         "Månedlig inntekt (globalt)",

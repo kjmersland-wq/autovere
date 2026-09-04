@@ -1,7 +1,10 @@
 import { createServerFn } from "@tanstack/react-start";
+import { createClient } from "@supabase/supabase-js";
 
 import { getAdminSupabaseContext, type AdminAccessResult } from "@/lib/admin-auth.functions";
 import { LOCALE_ROUTES } from "@/lib/locales";
+import { REGIONS } from "@/lib/trip-data";
+import type { Database } from "@/integrations/supabase/types";
 
 export type AdminDataResult<T> = Exclude<AdminAccessResult, { status: "ok" }> | { status: "ok"; data: T };
 
@@ -40,7 +43,8 @@ export type GlobalOverview = {
     daily: DailyPoint[];
     topPaths: { path: string; views: number }[];
   };
-  totalUsers: number;
+  /** null when the service-role key isn't available to this environment — never fabricated as 0. */
+  totalUsers: number | null;
   subscriptions: { active: number; trialing: number; pastDue: number; canceled: number; total: number };
   finance: { mrr: number; arr: number; arpu: number; churnRate: number; currency: string };
   generatedAt: string;
@@ -52,19 +56,42 @@ const PLAN_MRR: Record<string, number> = {
   business_monthly: 19,
 };
 
-async function countTotalUsers(): Promise<number> {
-  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-  let total = 0;
-  let page = 1;
-  const perPage = 1000;
-  for (;;) {
-    const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage });
-    if (error) throw error;
-    total += data.users.length;
-    if (data.users.length < perPage || page > 50) break;
-    page += 1;
+/**
+ * Total registered users needs the service-role key (auth.admin.listUsers()
+ * isn't reachable via RLS/the publishable key at all). SUPABASE_SERVICE_ROLE_KEY
+ * is a genuine secret — unlike the publishable key/URL, it must never be
+ * hardcoded as a fallback, and it isn't present in this environment (confirmed:
+ * absent from process.env here, and it shares the same reserved SUPABASE_
+ * prefix already confirmed blocked in Lovable Cloud's Secrets UI for the
+ * publishable key). So this degrades to "unavailable" (null) rather than
+ * fabricating 0 or blocking the rest of Oversikt when it can't run.
+ */
+async function countTotalUsers(): Promise<number | null> {
+  const SUPABASE_URL =
+    import.meta.env["VITE_SUPABASE_URL"] ||
+    process.env["SUPABASE_URL"] ||
+    "https://idjkeokjhfusbwrnfkat.supabase.co";
+  const SUPABASE_SERVICE_ROLE_KEY = process.env["SUPABASE_SERVICE_ROLE_KEY"];
+  if (!SUPABASE_SERVICE_ROLE_KEY) return null;
+
+  try {
+    const supabaseAdmin = createClient<Database>(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
+      auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+    });
+    let total = 0;
+    let page = 1;
+    const perPage = 1000;
+    for (;;) {
+      const { data, error } = await supabaseAdmin.auth.admin.listUsers({ page, perPage });
+      if (error) return null;
+      total += data.users.length;
+      if (data.users.length < perPage || page > 50) break;
+      page += 1;
+    }
+    return total;
+  } catch {
+    return null;
   }
-  return total;
 }
 
 export const getGlobalOverview = createServerFn({ method: "GET" }).handler(
@@ -165,7 +192,23 @@ export type SiteRow = {
 
 export type SiteBreakdown = { sites: SiteRow[]; totalViews90: number; generatedAt: string };
 
-const SITE_DEFS = [{ prefix: "en", label: "Engelsk (hovedsiden)", flag: "🌍" }, ...LOCALE_ROUTES];
+// Language sites (LOCALE_ROUTES) are one dimension; /us and /ca are a second,
+// independent dimension (region, with no language prefix) tracked separately
+// in page_views.region — see regionFor()/REGION_PREFIXES in analytics.ts and
+// locales.ts. Both are real, distinct AutoVere sites and are sourced from
+// their existing registries rather than hardcoded here. "eu" is excluded:
+// it's the default region already covered by the language sites above.
+const REGION_ONLY_SITES = REGIONS.filter((r) => r.key !== "eu").map((r) => ({
+  prefix: r.key as string,
+  label: r.label,
+  flag: r.flag,
+}));
+const SITE_DEFS = [
+  { prefix: "en", label: "Engelsk (hovedsiden)", flag: "🌍" },
+  ...LOCALE_ROUTES,
+  ...REGION_ONLY_SITES,
+];
+const REGION_ONLY_KEYS = new Set(REGION_ONLY_SITES.map((s) => s.prefix));
 
 export const getSiteBreakdown = createServerFn({ method: "GET" }).handler(
   async (): Promise<AdminDataResult<SiteBreakdown>> => {
@@ -175,7 +218,7 @@ export const getSiteBreakdown = createServerFn({ method: "GET" }).handler(
       const since = new Date(Date.now() - WINDOW_DAYS * DAY_MS).toISOString();
       const { data: views, error } = await ctx.supabase
         .from("page_views")
-        .select("locale, path, created_at")
+        .select("locale, region, path, created_at")
         .gte("created_at", since)
         .limit(50000);
       if (error) return { status: "error", message: "Kunne ikke hente nettsted-fordeling." };
@@ -191,7 +234,13 @@ export const getSiteBreakdown = createServerFn({ method: "GET" }).handler(
       }
 
       for (const row of rows) {
-        const key = row.locale && perSite.has(row.locale) ? row.locale : "en";
+        // A plain /us or /ca visit has no language prefix (locale defaults to
+        // "en") but does carry its region — attribute those to the region
+        // site rather than folding them into the generic English bucket.
+        // A combined path like /fr/ca keeps its language attribution ("fr"),
+        // matching how the rest of the dashboard already treats locale.
+        const isRegionOnly = row.region && REGION_ONLY_KEYS.has(row.region) && (!row.locale || row.locale === "en");
+        const key = isRegionOnly ? row.region! : row.locale && perSite.has(row.locale) ? row.locale : "en";
         const bucket = perSite.get(key)!;
         const age = now - new Date(row.created_at).getTime();
         bucket.total90 += 1;

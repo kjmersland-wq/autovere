@@ -2,7 +2,7 @@ import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YA
 import { useServerFn } from "@tanstack/react-start";
 
 import { Metric, Panel } from "@/components/admin/AdminUi";
-import { cf, nf } from "@/components/admin/adminFormat";
+import { cf, nf, nfOrUnavailable } from "@/components/admin/adminFormat";
 import { useAdminQuery, statusMessage } from "@/components/admin/useAdminQuery";
 import { getGlobalOverview } from "@/lib/admin-data.functions";
 import type { AdminSectionId } from "@/components/admin/adminNav";
@@ -44,7 +44,7 @@ export function OverviewPanel({ onNavigate }: { onNavigate: (section: AdminSecti
               : `${trend >= 0 ? "▲" : "▼"} ${Math.abs(trend)} % mot forrige uke`
           }
         />
-        <Metric label="Registrerte brukere totalt" value={nf.format(data.totalUsers)} />
+        <Metric label="Registrerte brukere totalt" value={nfOrUnavailable(data.totalUsers)} />
         <Metric
           label="Aktive abonnenter"
           value={nf.format(data.subscriptions.active)}

@@ -31,3 +31,9 @@ export const PIE_COLORS = ["#f59e0b", "#38bdf8", "#a78bfa", "#34d399", "#fb7185"
 
 export const nf = new Intl.NumberFormat("nb-NO");
 export const cf = new Intl.NumberFormat("nb-NO", { style: "currency", currency: "EUR", maximumFractionDigits: 2 });
+
+/** Formats a count that may genuinely be unavailable (e.g. missing service-role
+ * key) — never renders "null"/NaN, and never silently substitutes 0. */
+export function nfOrUnavailable(value: number | null): string {
+  return value === null ? "Ikke tilgjengelig" : nf.format(value);
+}

@@ -2,10 +2,10 @@ import { forwardRef } from "react";
 import { Area, AreaChart, Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 import { Metric } from "@/components/admin/AdminUi";
-import { cf, nf } from "@/components/admin/adminFormat";
+import { cf, nf, nfOrUnavailable } from "@/components/admin/adminFormat";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
-export type ReportKpis = { totalUsers: number; activeSubs: number; mrr: number; churnRate: number };
+export type ReportKpis = { totalUsers: number | null; activeSubs: number; mrr: number; churnRate: number };
 export type ReportPlanRow = { plan: string; label: string; count: number; mrr: number };
 export type ReportPathRow = { path: string; views: number };
 
@@ -53,7 +53,7 @@ export const ReportDocument = forwardRef<
 
         <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
           <Metric label="Besøk i perioden" value={nf.format(headlineViews)} />
-          <Metric label="Registrerte brukere (globalt)" value={nf.format(kpis.totalUsers)} />
+          <Metric label="Registrerte brukere (globalt)" value={nfOrUnavailable(kpis.totalUsers)} />
           <Metric label="Aktive abonnenter (globalt)" value={nf.format(kpis.activeSubs)} />
           <Metric label="MRR (globalt)" value={cf.format(kpis.mrr)} />
         </div>
