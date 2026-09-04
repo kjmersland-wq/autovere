@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
+import { Download, Loader2 } from "lucide-react";
 
 import { Panel } from "@/components/admin/AdminUi";
+import { Button } from "@/components/ui/button";
 import { COUNTRY_NO, PIE_COLORS, REGION_NO, nf } from "@/components/admin/adminFormat";
 import { useAdminQuery, statusMessage } from "@/components/admin/useAdminQuery";
 import { getMarketBreakdown, getSiteBreakdown } from "@/lib/admin-data.functions";
@@ -118,9 +121,63 @@ function BySite() {
   );
 }
 
+function ExportMarketsPdf() {
+  const [exporting, setExporting] = useState(false);
+  const fetchMarkets = useServerFn(getMarketBreakdown);
+  const fetchSites = useServerFn(getSiteBreakdown);
+  const markets = useAdminQuery(fetchMarkets);
+  const sites = useAdminQuery(fetchSites);
+
+  const disabled = exporting || markets.loading || sites.loading || markets.result?.status !== "ok" || sites.result?.status !== "ok";
+
+  const exportPdf = async () => {
+    if (markets.result?.status !== "ok" || sites.result?.status !== "ok") return;
+    setExporting(true);
+    try {
+      const { generateAreaDataPdf } = await import("@/components/admin/pdf/generateAreaDataPdf");
+      await generateAreaDataPdf({
+        areaLabel: "Markeder",
+        periodLabel: "Siste 90 dager",
+        generatedAtLabel: new Date().toLocaleString("nb-NO"),
+        block: {
+          tables: [
+            {
+              title: "Besøk per land",
+              columns: ["Land", "Besøk"],
+              rows: markets.result.data.countries.map((c) => [COUNTRY_NO[c.country] ?? c.country, nf.format(c.views)]),
+            },
+            {
+              title: "Etter AutoVere-nettsted",
+              columns: ["Nettsted", "Besøk (7d)", "Besøk (30d)", "Andel av total"],
+              rows: sites.result.data.sites.map((s) => [
+                `${s.flag} ${s.label}`,
+                nf.format(s.visits7),
+                nf.format(s.visits30),
+                `${s.shareOfTotalPct} %`,
+              ]),
+            },
+          ],
+        },
+      });
+    } finally {
+      setExporting(false);
+    }
+  };
+
+  return (
+    <div className="flex justify-end">
+      <Button variant="outline" size="sm" onClick={() => void exportPdf()} disabled={disabled}>
+        {exporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
+        Eksporter PDF
+      </Button>
+    </div>
+  );
+}
+
 export function MarketsPanel({ site }: { site: string | null }) {
   return (
     <div className="space-y-4">
+      <ExportMarketsPdf />
       {site && (
         <p className="rounded-lg border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
           Markedsdata vises globalt uavhengig av valgt nettsted — besøkendes land og AutoVere-nettsted er to

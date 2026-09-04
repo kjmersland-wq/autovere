@@ -13,6 +13,7 @@ import { TrafficPanel } from "@/components/admin/sections/TrafficPanel";
 import { MarketsPanel } from "@/components/admin/sections/MarketsPanel";
 import { SubscriptionsPanel } from "@/components/admin/sections/SubscriptionsPanel";
 import { FinancePanel } from "@/components/admin/sections/FinancePanel";
+import { AnalysisPanel } from "@/components/admin/sections/AnalysisPanel";
 import { ReportsPanel } from "@/components/admin/reports/ReportsPanel";
 
 const ALL_SITES = "__all__";
@@ -41,6 +42,8 @@ function Section({
       return <SubscriptionsPanel site={site} />;
     case "okonomi":
       return <FinancePanel site={site} currency={currency} onCurrencyChange={onCurrencyChange} />;
+    case "analyse":
+      return <AnalysisPanel currency={currency} />;
     case "rapporter":
       return <ReportsPanel site={site} currency={currency} />;
     default:

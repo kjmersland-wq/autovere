@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
+import { Download, Loader2 } from "lucide-react";
 
 import { Panel } from "@/components/admin/AdminUi";
+import { Button } from "@/components/ui/button";
 import { nf } from "@/components/admin/adminFormat";
 import { useAdminQuery, statusMessage } from "@/components/admin/useAdminQuery";
 import { getGlobalOverview, getSiteBreakdown } from "@/lib/admin-data.functions";
@@ -10,9 +13,51 @@ import { siteLabel } from "@/components/admin/siteOptions";
 type DailyPoint = { date: string; views: number };
 type PathRow = { path: string; views: number };
 
-function TrafficCharts({ daily, topPaths, title }: { daily: DailyPoint[]; topPaths: PathRow[]; title: string }) {
+function TrafficCharts({
+  daily,
+  topPaths,
+  title,
+  scopeLabel,
+}: {
+  daily: DailyPoint[];
+  topPaths: PathRow[];
+  title: string;
+  scopeLabel: string;
+}) {
+  const [exporting, setExporting] = useState(false);
+
+  const exportPdf = async () => {
+    setExporting(true);
+    try {
+      const { generateAreaDataPdf } = await import("@/components/admin/pdf/generateAreaDataPdf");
+      await generateAreaDataPdf({
+        areaLabel: `Trafikk — ${scopeLabel}`,
+        periodLabel: "Siste 30 dager (daglig), siste 90 dager (sider)",
+        generatedAtLabel: new Date().toLocaleString("nb-NO"),
+        block: {
+          tables: [
+            { title: "Besøk per dag", columns: ["Dato", "Besøk"], rows: daily.map((d) => [d.date, nf.format(d.views)]) },
+            {
+              title: "Mest besøkte sider",
+              columns: ["Side", "Besøk"],
+              rows: topPaths.map((p) => [p.path, nf.format(p.views)]),
+            },
+          ],
+        },
+      });
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <>
+      <div className="mb-4 flex justify-end">
+        <Button variant="outline" size="sm" onClick={() => void exportPdf()} disabled={exporting}>
+          {exporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
+          Eksporter PDF
+        </Button>
+      </div>
       <Panel title={title}>
         <div className="h-72">
           <ResponsiveContainer width="100%" height="100%">
@@ -67,6 +112,7 @@ function GlobalTraffic() {
       daily={result.data.traffic.daily}
       topPaths={result.data.traffic.topPaths}
       title="Besøk per dag, hele plattformen (30 dager)"
+      scopeLabel="Alle AutoVere"
     />
   );
 }
@@ -87,6 +133,7 @@ function SiteTraffic({ site }: { site: string }) {
       daily={row.daily}
       topPaths={row.topPaths}
       title={`Besøk per dag — ${siteLabel(site)} (30 dager)`}
+      scopeLabel={siteLabel(site)}
     />
   );
 }

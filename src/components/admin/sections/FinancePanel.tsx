@@ -1,7 +1,10 @@
+import { useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
+import { Download, Loader2 } from "lucide-react";
 
 import { Metric, Panel } from "@/components/admin/AdminUi";
+import { Button } from "@/components/ui/button";
 import { cf, type AdminCurrency } from "@/components/admin/adminFormat";
 import { AdminCurrencySelector } from "@/components/admin/AdminCurrencySelector";
 import { convertFromEur, formatAdminCurrency } from "@/components/admin/adminCurrency";
@@ -23,6 +26,7 @@ export function FinancePanel({
   const fetchRates = useServerFn(getExchangeRates);
   const finance = useAdminQuery(fetchFinance);
   const rates = useAdminQuery(fetchRates);
+  const [exporting, setExporting] = useState(false);
 
   if (finance.loading || !finance.result) return <p className="text-sm text-muted-foreground">Henter tall …</p>;
   if (finance.result.status !== "ok") {
@@ -47,8 +51,43 @@ export function FinancePanel({
     displayMrr: convertFromEur(p.mrr, effectiveCurrency, ratesData),
   }));
 
+  const exportPdf = async () => {
+    setExporting(true);
+    try {
+      const { generateAreaDataPdf } = await import("@/components/admin/pdf/generateAreaDataPdf");
+      await generateAreaDataPdf({
+        areaLabel: "Økonomi",
+        periodLabel: "Nåværende status",
+        generatedAtLabel: new Date().toLocaleString("nb-NO"),
+        block: {
+          kpis: [
+            { label: "MRR", value: fmt(data.mrr) },
+            { label: "ARR", value: fmt(data.arr) },
+            { label: "ARPU", value: fmt(data.arpu) },
+            { label: "Churn", value: `${data.churnRate} %` },
+          ],
+          tables: [
+            {
+              title: `Inntekt per plan (${effectiveCurrency})`,
+              columns: ["Plan", "Antall", "MRR"],
+              rows: data.byPlan.map((p) => [p.label, p.count, fmt(p.mrr)]),
+            },
+          ],
+        },
+      });
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <div className="space-y-4">
+      <div className="flex justify-end">
+        <Button variant="outline" size="sm" onClick={() => void exportPdf()} disabled={exporting}>
+          {exporting ? <Loader2 className="size-4 animate-spin" /> : <Download className="size-4" />}
+          Eksporter PDF
+        </Button>
+      </div>
       {site && (
         <p className="rounded-lg border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">
           Økonomidata kan ikke fordeles per nettsted ({siteLabel(site)}) — ingen kobling mellom abonnement og
