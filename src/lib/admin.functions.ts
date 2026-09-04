@@ -1,7 +1,74 @@
-import { createServerFn } from "@tanstack/react-start";
-import { getRequestHeader } from "@tanstack/react-start/server";
+import { createServerFn, createMiddleware } from "@tanstack/react-start";
+import { getRequest, getRequestHeader } from "@tanstack/react-start/server";
+import { createClient } from "@supabase/supabase-js";
 
-import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import type { Database } from "@/integrations/supabase/types";
+
+function isNewSupabaseApiKey(value: string): boolean {
+  return value.startsWith("sb_publishable_") || value.startsWith("sb_secret_");
+}
+
+function createSupabaseFetch(supabaseKey: string): typeof fetch {
+  return (input, init) => {
+    const headers = new Headers(
+      typeof Request !== "undefined" && input instanceof Request ? input.headers : undefined,
+    );
+    if (init?.headers) {
+      new Headers(init.headers).forEach((value, key) => headers.set(key, value));
+    }
+    if (isNewSupabaseApiKey(supabaseKey) && headers.get("Authorization") === `Bearer ${supabaseKey}`) {
+      headers.delete("Authorization");
+    }
+    headers.set("apikey", supabaseKey);
+    return fetch(input, { ...init, headers });
+  };
+}
+
+/**
+ * Admin-only bearer-token check, scoped to this file so it never touches the
+ * shared requireSupabaseAuth (used by the in-car portal and elsewhere).
+ * Verifies the token via getUser() — a single, direct authenticated request
+ * to Supabase's Auth server — instead of getClaims(), which can take a local
+ * JWT-verification branch (JWKS fetch + WebCrypto) depending on the project's
+ * signing-key configuration. getUser() is Supabase's documented, simplest way
+ * to validate an arbitrary bearer token server-side, with fewer moving parts.
+ */
+const requireAdminSupabaseUser = createMiddleware({ type: "function" }).server(async ({ next }) => {
+  const SUPABASE_URL = process.env["SUPABASE_URL"];
+  const SUPABASE_PUBLISHABLE_KEY = process.env["SUPABASE_PUBLISHABLE_KEY"];
+  if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+    throw new Error(
+      `Missing Supabase environment variable(s): ${[
+        ...(!SUPABASE_URL ? ["SUPABASE_URL"] : []),
+        ...(!SUPABASE_PUBLISHABLE_KEY ? ["SUPABASE_PUBLISHABLE_KEY"] : []),
+      ].join(", ")}. Connect Supabase in Lovable Cloud.`,
+    );
+  }
+
+  const authHeader = getRequest()?.headers.get("authorization");
+  if (!authHeader?.startsWith("Bearer ")) {
+    throw new Error("Unauthorized: No authorization header provided");
+  }
+  const token = authHeader.slice("Bearer ".length);
+  if (!token) {
+    throw new Error("Unauthorized: No token provided");
+  }
+
+  const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+    global: {
+      fetch: createSupabaseFetch(SUPABASE_PUBLISHABLE_KEY),
+      headers: { Authorization: `Bearer ${token}` },
+    },
+    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+  });
+
+  const { data, error } = await supabase.auth.getUser(token);
+  if (error || !data.user) {
+    throw new Error("Unauthorized: Invalid token");
+  }
+
+  return next({ context: { supabase, userId: data.user.id } });
+});
 
 /** Monthly EUR value per plan, used for MRR estimates. */
 const PLAN_MRR: Record<string, number> = {
@@ -63,7 +130,7 @@ export const getVisitorGeo = createServerFn({ method: "GET" }).handler(async () 
 });
 
 export const getAdminOverview = createServerFn({ method: "GET" })
-  .middleware([requireSupabaseAuth])
+  .middleware([requireAdminSupabaseUser])
   .handler(async ({ context }): Promise<AdminOverview> => {
     const { supabase, userId } = context;
 
