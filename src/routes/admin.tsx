@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { AdminDashboard } from "@/components/AdminDashboard";
-
+import { OwnerAdminApp } from "@/components/admin/OwnerAdminApp";
 
 export const Route = createFileRoute("/admin")({
   head: () => ({
@@ -23,9 +22,6 @@ export const Route = createFileRoute("/admin")({
 });
 
 function AdminRoute() {
-  // The dashboard renders immediately; the metrics themselves are still
-  // fetched through the server-side owner check, so non-owners simply see
-  // no figures instead of a hard block screen.
-  return <AdminDashboard />;
+  return <OwnerAdminApp />;
 }
 

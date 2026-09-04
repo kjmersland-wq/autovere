@@ -1,0 +1,157 @@
+import type { AdminOverview } from "@/lib/admin.functions";
+
+const BRAND_AMBER: [number, number, number] = [245, 158, 11]; // matches the site's existing chart/brand accent (#f59e0b)
+const INK: [number, number, number] = [17, 24, 39];
+const MUTED: [number, number, number] = [107, 114, 128];
+
+export type ReportPdfInput = {
+  container: HTMLElement;
+  data: AdminOverview;
+  periodLabel: string;
+  generatedAtLabel: string;
+  headlineViews: number;
+};
+
+async function captureChart(container: HTMLElement, selector: string, html2canvas: typeof import("html2canvas").default) {
+  const node = container.querySelector<HTMLElement>(selector);
+  if (!node) return null;
+  const canvas = await html2canvas(node, { backgroundColor: "#ffffff", scale: 2 });
+  return { dataUrl: canvas.toDataURL("image/png"), width: canvas.width, height: canvas.height };
+}
+
+export async function generateReportPdf({
+  container,
+  data,
+  periodLabel,
+  generatedAtLabel,
+  headlineViews,
+}: ReportPdfInput) {
+  const [{ jsPDF }, { autoTable }, html2canvasModule] = await Promise.all([
+    import("jspdf"),
+    import("jspdf-autotable"),
+    import("html2canvas"),
+  ]);
+  const html2canvas = html2canvasModule.default;
+
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const pageWidth = doc.internal.pageSize.getWidth();
+  const pageHeight = doc.internal.pageSize.getHeight();
+  const margin = 16;
+  const contentWidth = pageWidth - margin * 2;
+  let y = margin;
+
+  const ensureSpace = (needed: number) => {
+    if (y + needed > pageHeight - 20) {
+      doc.addPage();
+      y = margin;
+    }
+  };
+
+  // Cover header
+  doc.setTextColor(...BRAND_AMBER);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(11);
+  doc.text("AUTOVERE", margin, y);
+  y += 9;
+
+  doc.setTextColor(...INK);
+  doc.setFontSize(22);
+  doc.text("Eierrapport", margin, y);
+  y += 9;
+
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(10);
+  doc.setTextColor(...MUTED);
+  doc.text(`Periode: ${periodLabel}`, margin, y);
+  y += 5;
+  doc.text(`Generert: ${generatedAtLabel}`, margin, y);
+  y += 10;
+
+  // KPI summary table
+  autoTable(doc, {
+    startY: y,
+    margin: { left: margin, right: margin },
+    head: [["Nøkkeltall", "Verdi"]],
+    body: [
+      ["Besøk i perioden", new Intl.NumberFormat("nb-NO").format(headlineViews)],
+      ["Aktive abonnenter", new Intl.NumberFormat("nb-NO").format(data.subscriptions.active)],
+      [
+        "Månedlig inntekt (MRR)",
+        new Intl.NumberFormat("nb-NO", { style: "currency", currency: "EUR" }).format(data.finance.mrr),
+      ],
+      ["Churn", `${data.finance.churnRate} %`],
+    ],
+    theme: "grid",
+    headStyles: { fillColor: BRAND_AMBER, textColor: [255, 255, 255] },
+    styles: { fontSize: 10 },
+  });
+  y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
+
+  // Charts (captured from the on-screen preview)
+  for (const selector of ['[data-report-chart="traffic"]', '[data-report-chart="revenue"]']) {
+    const chart = await captureChart(container, selector, html2canvas);
+    if (!chart) continue;
+    const imgHeight = (chart.height / chart.width) * contentWidth;
+    ensureSpace(imgHeight + 6);
+    doc.addImage(chart.dataUrl, "PNG", margin, y, contentWidth, imgHeight);
+    y += imgHeight + 10;
+  }
+
+  // Subscriptions by plan
+  ensureSpace(20);
+  doc.setFontSize(12);
+  doc.setTextColor(...INK);
+  doc.text("Abonnement per plan", margin, y);
+  y += 4;
+  autoTable(doc, {
+    startY: y,
+    margin: { left: margin, right: margin },
+    head: [["Plan", "Antall", "MRR"]],
+    body:
+      data.subscriptions.byPlan.length > 0
+        ? data.subscriptions.byPlan.map((p) => [
+            p.label,
+            new Intl.NumberFormat("nb-NO").format(p.count),
+            new Intl.NumberFormat("nb-NO", { style: "currency", currency: "EUR" }).format(p.mrr),
+          ])
+        : [["Ingen aktive abonnement ennå.", "", ""]],
+    theme: "striped",
+    headStyles: { fillColor: INK },
+    styles: { fontSize: 9 },
+  });
+  y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
+
+  // Top paths
+  ensureSpace(20);
+  doc.setFontSize(12);
+  doc.text("Mest besøkte sider", margin, y);
+  y += 4;
+  autoTable(doc, {
+    startY: y,
+    margin: { left: margin, right: margin },
+    head: [["Side", "Besøk"]],
+    body:
+      data.traffic.paths.length > 0
+        ? data.traffic.paths.map((p) => [p.path, new Intl.NumberFormat("nb-NO").format(p.views)])
+        : [["Ingen registrerte besøk ennå.", ""]],
+    theme: "striped",
+    headStyles: { fillColor: INK },
+    styles: { fontSize: 9 },
+  });
+
+  // Header/footer on every page
+  const pageCount = doc.getNumberOfPages();
+  for (let i = 1; i <= pageCount; i++) {
+    doc.setPage(i);
+    doc.setDrawColor(...MUTED);
+    doc.setLineWidth(0.2);
+    doc.line(margin, pageHeight - 14, pageWidth - margin, pageHeight - 14);
+    doc.setFontSize(8);
+    doc.setTextColor(...MUTED);
+    doc.text("AutoVere · Konfidensielt eierrapport", margin, pageHeight - 9);
+    doc.text(`Side ${i} av ${pageCount}`, pageWidth - margin, pageHeight - 9, { align: "right" });
+  }
+
+  const filename = `autovere-eierrapport-${new Date().toISOString().slice(0, 10)}.pdf`;
+  doc.save(filename);
+}
