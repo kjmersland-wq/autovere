@@ -1,26 +1,30 @@
 import type { AreaAnalysis, Finding } from "@/components/admin/analysis/analysisReport";
+import type { ReportSummary } from "@/components/admin/analysis/analysisPresentation";
+import type { AdminCurrency } from "@/components/admin/adminFormat";
 
 const BRAND_AMBER: [number, number, number] = [245, 158, 11];
 const INK: [number, number, number] = [17, 24, 39];
 const MUTED: [number, number, number] = [107, 114, 128];
+const EMERALD: [number, number, number] = [5, 150, 105];
+const RED: [number, number, number] = [185, 28, 28];
+
+export type AnalysisPdfSummary = ReportSummary & {
+  unusualChanges: Finding[];
+  followUps: Finding[];
+  overallConclusion: string;
+};
 
 export type AnalysisPdfInput = {
   scopeLabel: string;
-  areas: AreaAnalysis[];
-  unusualChanges: Finding[];
-  followUps: Finding[];
-  overallConclusion: string | null;
+  currency: AdminCurrency;
   generatedAtLabel: string;
+  areas: AreaAnalysis[];
+  /** Present only for the "Samlet analyse" export — adds the executive
+   * summary blocks (main conclusion, positive findings, follow-ups). */
+  summary: AnalysisPdfSummary | null;
 };
 
-export async function generateAnalysisPdf({
-  scopeLabel,
-  areas,
-  unusualChanges,
-  followUps,
-  overallConclusion,
-  generatedAtLabel,
-}: AnalysisPdfInput) {
+export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLabel, areas, summary }: AnalysisPdfInput) {
   const [{ jsPDF }, { autoTable }] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
 
   const doc = new jsPDF({ unit: "mm", format: "a4" });
@@ -36,6 +40,7 @@ export async function generateAnalysisPdf({
     }
   };
 
+  // Cover / header
   doc.setTextColor(...BRAND_AMBER);
   doc.setFont("helvetica", "bold");
   doc.setFontSize(11);
@@ -43,75 +48,91 @@ export async function generateAnalysisPdf({
   y += 9;
 
   doc.setTextColor(...INK);
-  doc.setFontSize(20);
-  doc.text(`Analyse — ${scopeLabel}`, margin, y);
+  doc.setFontSize(21);
+  doc.text(summary ? "Samlet analyse — eierrapport" : `Analyse — ${scopeLabel}`, margin, y);
   y += 8;
 
   doc.setFont("helvetica", "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED);
-  doc.text("100 % regelbasert analyse — faste beregninger og terskelverdier, ingen AI.", margin, y);
+  doc.text("Regelbasert analyse — faste beregninger og terskelverdier, ingen AI.", margin, y);
   y += 5;
-  doc.text(`Generert: ${generatedAtLabel}`, margin, y);
+  doc.text(`Periode: Trafikk/nettsteder siste 7/30/90 dager · Abonnement siste 12 måneder · øvrig som øyeblikksbilde`, margin, y);
+  y += 5;
+  doc.text(`Valuta: ${currency}  ·  Generert: ${generatedAtLabel}`, margin, y);
   y += 10;
 
-  const writeFindingsTable = (title: string, findings: Finding[]) => {
-    ensureSpace(16);
+  const writeSectionTitle = (title: string, accent: [number, number, number]) => {
+    ensureSpace(12);
+    doc.setFillColor(...accent);
+    doc.rect(margin, y - 4, 3, 6, "F");
     doc.setFont("helvetica", "bold");
     doc.setFontSize(12);
     doc.setTextColor(...INK);
-    doc.text(title, margin, y);
-    y += 4;
+    doc.text(title, margin + 6, y);
+    y += 7;
+  };
+
+  const writeFindingsTable = (findings: Finding[]) => {
+    ensureSpace(16);
     autoTable(doc, {
       startY: y,
       margin: { left: margin, right: margin },
-      head: [["Funn", "Anbefaling"]],
+      head: [["Konklusjon", "Målt", "Anbefaling"]],
       body:
         findings.length > 0
-          ? findings.map((f) => [f.headline, f.recommendation ?? "—"])
-          : [["Ingen funn.", ""]],
+          ? findings.map((f) => [f.headline, f.metric ?? "—", f.recommendation ?? "—"])
+          : [["Ingen funn.", "", ""]],
       theme: "striped",
-      headStyles: { fillColor: BRAND_AMBER, textColor: [255, 255, 255] },
-      styles: { fontSize: 9, cellWidth: "wrap" },
-      columnStyles: { 0: { cellWidth: 100 } },
+      headStyles: { fillColor: INK },
+      styles: { fontSize: 8.5, cellWidth: "wrap" },
+      columnStyles: { 0: { cellWidth: 65 }, 1: { cellWidth: 45 } },
     });
     y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8;
   };
 
   const writeNotes = (notes: string[]) => {
     if (notes.length === 0) return;
-    ensureSpace(6 * notes.length + 6);
     doc.setFont("helvetica", "italic");
-    doc.setFontSize(9);
+    doc.setFontSize(8.5);
     doc.setTextColor(...MUTED);
     for (const note of notes) {
       const lines = doc.splitTextToSize(`• ${note}`, pageWidth - margin * 2) as string[];
-      ensureSpace(lines.length * 4.5);
+      ensureSpace(lines.length * 4.2 + 2);
       doc.text(lines, margin, y);
-      y += lines.length * 4.5 + 2;
+      y += lines.length * 4.2 + 1.5;
     }
     y += 4;
   };
 
-  if (overallConclusion) {
-    ensureSpace(20);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(12);
-    doc.setTextColor(...INK);
-    doc.text("Samlet konklusjon", margin, y);
-    y += 5;
+  if (summary) {
+    // Hovedkonklusjon
+    writeSectionTitle("Hovedkonklusjon", BRAND_AMBER);
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(10);
-    const lines = doc.splitTextToSize(overallConclusion, pageWidth - margin * 2) as string[];
-    doc.text(lines, margin, y);
-    y += lines.length * 5 + 8;
+    doc.setFontSize(10.5);
+    doc.setTextColor(...INK);
+    const conclusionLines = doc.splitTextToSize(summary.overallConclusion, pageWidth - margin * 2) as string[];
+    ensureSpace(conclusionLines.length * 5 + 4);
+    doc.text(conclusionLines, margin, y);
+    y += conclusionLines.length * 5 + 4;
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(9);
+    doc.setTextColor(...MUTED);
+    doc.text(`Samlet status: ${summary.statusLabel}  ·  Datagrunnlag: ${summary.dataQualityLabel}`, margin, y);
+    y += 10;
+
+    const positiveFindings = areas.flatMap((a) => a.findings).filter((f) => f.severity === "positive");
+    writeSectionTitle("Det som går bra", EMERALD);
+    writeFindingsTable(positiveFindings);
+
+    writeSectionTitle("Bør følges opp", RED);
+    writeFindingsTable(summary.followUps);
   }
 
-  if (unusualChanges.length > 0) writeFindingsTable("Uvanlige endringer", unusualChanges);
-  if (followUps.length > 0) writeFindingsTable("Bør følges opp", followUps);
-
   for (const area of areas) {
-    writeFindingsTable(area.title, area.findings);
+    writeSectionTitle(area.title, BRAND_AMBER);
+    writeFindingsTable(area.findings);
     writeNotes(area.insufficientNotes);
   }
 

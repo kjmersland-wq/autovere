@@ -1,6 +1,7 @@
 import type { GlobalOverview, SiteBreakdown, MarketBreakdown, SubscriptionBreakdown, FinanceBreakdown, ExchangeRates } from "@/lib/admin-data.functions";
 import type { AdminCurrency } from "@/components/admin/adminFormat";
 import { formatAdminCurrency } from "@/components/admin/adminCurrency";
+import { nf } from "@/components/admin/adminFormat";
 import {
   computeTrend,
   sevenDayTrendFromDaily,
@@ -27,7 +28,12 @@ export type AnalysisAreaId = "trafikk" | "nettsteder" | "markeder" | "registreri
 export type Finding = {
   id: string;
   area: AnalysisAreaId;
+  /** The conclusion, in plain language — what the rule found. */
   headline: string;
+  /** The measured numbers behind the conclusion, for display separation
+   * (e.g. "156 besøk siste 7 dager (128 uken før)"). Purely additive/display
+   * — does not change any threshold, classification, or computed value. */
+  metric: string | null;
   recommendation: string | null;
   severity: "positive" | "neutral" | "warning" | "info";
 };
@@ -53,12 +59,19 @@ function nextId(prefix: string) {
   return `${prefix}-${idCounter}`;
 }
 
-function trendFinding(area: AnalysisAreaId, scopeLabel: string, periodLabel: string, trend: ReturnType<typeof computeTrend>): { finding: Finding | null; note: string | null } {
+function trendFinding(
+  area: AnalysisAreaId,
+  scopeLabel: string,
+  periodLabel: string,
+  unitLabel: string,
+  trend: ReturnType<typeof computeTrend>,
+): { finding: Finding | null; note: string | null } {
   if (!trend.sufficient) {
     return { finding: null, note: `Ikke nok data til å vurdere ${periodLabel}-utvikling for ${scopeLabel} (krever et minimumsvolum i begge perioder).` };
   }
   const label = TREND_LABEL_NO[trend.classification];
   const headline = `${scopeLabel} har hatt ${label.toLowerCase()} i trafikk ${periodLabel} (${formatPct(trend.changePct)}).`;
+  const metric = `${nf.format(trend.current)} ${unitLabel} (forrige periode: ${nf.format(trend.previous)})`;
   let recommendation: string | null = null;
   let severity: Finding["severity"] = "neutral";
   if (trend.classification === "strong_growth" || trend.classification === "growth") {
@@ -68,7 +81,7 @@ function trendFinding(area: AnalysisAreaId, scopeLabel: string, periodLabel: str
     recommendation = "Undersøk årsak (tekniske feil, sesongvariasjon, kampanjeslutt).";
     severity = "warning";
   }
-  return { finding: { id: nextId(area), area, headline, recommendation, severity }, note: null };
+  return { finding: { id: nextId(area), area, headline, metric, recommendation, severity }, note: null };
 }
 
 /* ------------------------------------------------------------------ */
@@ -80,12 +93,12 @@ export function analyzeTraffic(overview: GlobalOverview): AreaAnalysis {
   const insufficientNotes: string[] = [];
 
   const weekTrend = computeTrend(overview.traffic.last7, overview.traffic.prev7, MIN_SAMPLE_7D);
-  const week = trendFinding("trafikk", "Total trafikk", "siste 7 dager", weekTrend);
+  const week = trendFinding("trafikk", "Total trafikk", "siste 7 dager", "besøk", weekTrend);
   if (week.finding) findings.push(week.finding);
   if (week.note) insufficientNotes.push(week.note);
 
   const rateTrend = ninetyDayRateTrend(overview.traffic.total90, overview.traffic.last30);
-  const rate = trendFinding("trafikk", "Total trafikk", "siste 90 dager (daglig snittrate)", rateTrend);
+  const rate = trendFinding("trafikk", "Total trafikk", "siste 90 dager (daglig snittrate)", "besøk/30 dager", rateTrend);
   if (rate.finding) findings.push(rate.finding);
   if (rate.note) insufficientNotes.push(rate.note);
 
@@ -116,6 +129,7 @@ export function analyzeSites(siteBreakdown: SiteBreakdown): AreaAnalysis {
       id: nextId("nettsteder"),
       area: "nettsteder",
       headline,
+      metric: `${nf.format(trend.current)} besøk (forrige 7-dagersperiode: ${nf.format(trend.previous)})`,
       recommendation: positive
         ? `Følg utviklingen og vurder økt partneraktivitet/markedsføring på ${site.label}.`
         : `Undersøk årsak til nedgangen på ${site.label} snarest.`,
@@ -134,7 +148,8 @@ export function analyzeSites(siteBreakdown: SiteBreakdown): AreaAnalysis {
     findings.push({
       id: nextId("nettsteder"),
       area: "nettsteder",
-      headline: `${leader.flag} ${leader.label} er AutoVere sitt mest besøkte nettsted siste 90 dager (${leader.visits90} besøk, ${leader.shareOfTotalPct} % av total trafikk).`,
+      headline: `${leader.flag} ${leader.label} er AutoVere sitt mest besøkte nettsted siste 90 dager.`,
+      metric: `${nf.format(leader.visits90)} besøk · ${leader.shareOfTotalPct} % av total trafikk`,
       recommendation: null,
       severity: "info",
     });
@@ -170,7 +185,8 @@ export function analyzeMarkets(marketBreakdown: MarketBreakdown): AreaAnalysis {
     findings.push({
       id: nextId("markeder"),
       area: "markeder",
-      headline: `${top.country} dominerer trafikken (${top.pct} % av total).`,
+      headline: `${top.country} dominerer trafikken.`,
+      metric: `${top.pct} % av total trafikk (${nf.format(top.views)} besøk)`,
       recommendation: "Vurder om avhengigheten av ett marked er en risiko.",
       severity: "warning",
     });
@@ -179,6 +195,7 @@ export function analyzeMarkets(marketBreakdown: MarketBreakdown): AreaAnalysis {
       id: nextId("markeder"),
       area: "markeder",
       headline: "Trafikken er jevnt fordelt mellom flere land.",
+      metric: top ? `Største enkeltland: ${top.country} (${top.pct} %)` : null,
       recommendation: null,
       severity: "positive",
     });
@@ -189,7 +206,8 @@ export function analyzeMarkets(marketBreakdown: MarketBreakdown): AreaAnalysis {
       findings.push({
         id: nextId("markeder"),
         area: "markeder",
-        headline: `${c.country} gir betydelig trafikk (${c.pct} % av total) uten et dedikert AutoVere-nettsted.`,
+        headline: `${c.country} gir betydelig trafikk uten et dedikert AutoVere-nettsted.`,
+        metric: `${c.pct} % av total trafikk (${nf.format(c.views)} besøk)`,
         recommendation: "Vurder om et eget nettsted/marked bør etableres.",
         severity: "info",
       });
@@ -214,7 +232,8 @@ export function analyzeRegistrations(overview: GlobalOverview): AreaAnalysis {
     findings.push({
       id: nextId("registreringer"),
       area: "registreringer",
-      headline: `Totalt ${overview.totalUsers} registrerte brukere (øyeblikksbilde).`,
+      headline: "Nåværende antall registrerte brukere (øyeblikksbilde).",
+      metric: `${nf.format(overview.totalUsers)} registrerte brukere`,
       recommendation: null,
       severity: "info",
     });
@@ -237,7 +256,8 @@ export function analyzeSubscriptions(sub: SubscriptionBreakdown): AreaAnalysis {
     findings.push({
       id: nextId("abonnement"),
       area: "abonnement",
-      headline: `${sub.pastDue} abonnement har forfalt betaling.`,
+      headline: "Abonnement med forfalt betaling krever oppfølging.",
+      metric: `${nf.format(sub.pastDue)} abonnement`,
       recommendation: "Følg opp betalingsproblemer.",
       severity: "warning",
     });
@@ -251,7 +271,8 @@ export function analyzeSubscriptions(sub: SubscriptionBreakdown): AreaAnalysis {
       findings.push({
         id: nextId("abonnement"),
         area: "abonnement",
-        headline: `Høy kanselleringsrate (${churnRate} %).`,
+        headline: "Høy kanselleringsrate.",
+        metric: `${churnRate} % (${nf.format(sub.canceled)} av ${nf.format(sub.total)} abonnement)`,
         recommendation: "Undersøk årsaker (pris, produkt-fit, onboarding).",
         severity: "warning",
       });
@@ -259,7 +280,8 @@ export function analyzeSubscriptions(sub: SubscriptionBreakdown): AreaAnalysis {
       findings.push({
         id: nextId("abonnement"),
         area: "abonnement",
-        headline: `Moderat kanselleringsrate (${churnRate} %).`,
+        headline: "Moderat kanselleringsrate.",
+        metric: `${churnRate} %`,
         recommendation: null,
         severity: "neutral",
       });
@@ -267,7 +289,8 @@ export function analyzeSubscriptions(sub: SubscriptionBreakdown): AreaAnalysis {
       findings.push({
         id: nextId("abonnement"),
         area: "abonnement",
-        headline: `Sunn kanselleringsrate (${churnRate} %).`,
+        headline: "Sunn kanselleringsrate.",
+        metric: `${churnRate} %`,
         recommendation: null,
         severity: "positive",
       });
@@ -281,7 +304,8 @@ export function analyzeSubscriptions(sub: SubscriptionBreakdown): AreaAnalysis {
         findings.push({
           id: nextId("abonnement"),
           area: "abonnement",
-          headline: `Sterk avhengighet av ${topPlan.label} (${pct} % av MRR).`,
+          headline: `Sterk avhengighet av ${topPlan.label}.`,
+          metric: `${pct} % av MRR`,
           recommendation: "Vurder bredere plantilbud/oppsalg.",
           severity: "warning",
         });
@@ -293,7 +317,7 @@ export function analyzeSubscriptions(sub: SubscriptionBreakdown): AreaAnalysis {
     const last = sub.monthly[sub.monthly.length - 1]!;
     const prev = sub.monthly[sub.monthly.length - 2]!;
     const trend = computeTrend(last.count, prev.count, MIN_SAMPLE_MONTHLY_SUBS);
-    const result = trendFinding("abonnement", "Nye abonnement per måned", "måned-mot-måned", trend);
+    const result = trendFinding("abonnement", "Nye abonnement per måned", "måned-mot-måned", "nye abonnement", trend);
     if (result.finding) findings.push(result.finding);
     if (result.note) insufficientNotes.push(result.note);
   } else {
@@ -318,7 +342,8 @@ export function analyzeFinance(
     {
       id: nextId("okonomi"),
       area: "okonomi",
-      headline: `Nåværende status (øyeblikksbilde): MRR ${fmt(finance.mrr)}, ARR ${fmt(finance.arr)}, ARPU ${fmt(finance.arpu)}.`,
+      headline: "Nåværende inntektsstatus (øyeblikksbilde).",
+      metric: `MRR ${fmt(finance.mrr)} · ARR ${fmt(finance.arr)} · ARPU ${fmt(finance.arpu)}`,
       recommendation: null,
       severity: "info",
     },
@@ -332,7 +357,8 @@ export function analyzeFinance(
       findings.push({
         id: nextId("okonomi"),
         area: "okonomi",
-        headline: `Høy kanselleringsrate påvirker inntekten (${finance.churnRate} %).`,
+        headline: "Høy kanselleringsrate påvirker inntekten.",
+        metric: `${finance.churnRate} % churn`,
         recommendation: "Se Abonnement-analysen for oppfølgingspunkter.",
         severity: "warning",
       });
