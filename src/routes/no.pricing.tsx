@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
 import { NO_PRICING } from "@/lib/global-content-no";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 const content = NO_PRICING;
 
@@ -21,6 +22,7 @@ export const Route = createFileRoute("/no/pricing")({
       { name: "twitter:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: absUrl("/no/pricing") }, ...appPageHreflangLinks("pricing")],
   }),
   component: () => <PricingPage />,
 });

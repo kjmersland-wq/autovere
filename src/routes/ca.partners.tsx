@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
 import { PARTNERS } from "@/lib/info-content";
+import { appPageHreflangLinks } from "@/lib/seo";
 
 const content = PARTNERS["ca"];
 
@@ -21,7 +22,10 @@ export const Route = createFileRoute("/ca/partners")({
       { name: "twitter:image", content: "https://www.autovere.com/og/autovere-og-ca.jpg" },
       { name: "thumbnail", content: "https://www.autovere.com/og/autovere-square-ca.jpg" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/ca/partners" }],
+    links: [
+      { rel: "canonical", href: "https://www.autovere.com/ca/partners" },
+      ...appPageHreflangLinks("partners"),
+    ],
   }),
   component: CaPartnersPage,
 });

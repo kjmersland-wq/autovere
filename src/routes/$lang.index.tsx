@@ -4,7 +4,7 @@ import { HeroPlanner } from "@/components/HeroPlanner";
 import { ShareButton } from "@/components/ShareButton";
 import { LOCALE_LANDING } from "@/lib/dictionaries";
 import { isLocalePrefix, LOCALE_ROUTES, type LocalePrefix } from "@/lib/locales";
-import { ogImageMeta, ogImageUrl } from "@/lib/seo";
+import { homepageHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 function landingFor(lang: string) {
   const entry = LOCALE_ROUTES.find((l) => l.prefix === lang);
@@ -36,7 +36,7 @@ export const Route = createFileRoute("/$lang/")({
         ...ogImageMeta(image),
         { name: "twitter:card", content: "summary_large_image" },
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: [{ rel: "canonical", href: url }, ...homepageHreflangLinks()],
     };
   },
   component: LocaleHome,

@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
 import { NO_HOW_IT_WORKS } from "@/lib/global-content-no";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 const content = NO_HOW_IT_WORKS;
 
@@ -20,6 +21,10 @@ export const Route = createFileRoute("/no/how-it-works")({
       { property: "og:image:height", content: "630" },
       { name: "twitter:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [
+      { rel: "canonical", href: absUrl("/no/how-it-works") },
+      ...appPageHreflangLinks("how-it-works"),
     ],
   }),
   component: NoInfoPage,

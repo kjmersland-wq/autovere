@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { ShareButton } from "@/components/ShareButton";
+import { homepageHreflangLinks, homepageScript } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -26,7 +27,8 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: "https://www.autovere.com/og/autovere-og-en.jpg" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/" }],
+    links: [{ rel: "canonical", href: "https://www.autovere.com/" }, ...homepageHreflangLinks()],
+    scripts: homepageScript(),
   }),
   component: Index,
 });

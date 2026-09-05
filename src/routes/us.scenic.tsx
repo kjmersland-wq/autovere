@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { ScenicGuide } from "@/components/ScenicGuide";
+import { appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/us/scenic")({
   head: () => ({
@@ -28,7 +29,10 @@ export const Route = createFileRoute("/us/scenic")({
       { name: "twitter:image:alt", content: "AutoVere USA road trip cost planner" },
       { name: "thumbnail", content: "https://www.autovere.com/og/autovere-square-us.jpg" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/us/scenic" }],
+    links: [
+      { rel: "canonical", href: "https://www.autovere.com/us/scenic" },
+      ...appPageHreflangLinks("scenic"),
+    ],
   }),
   component: ScenicGuide,
 });

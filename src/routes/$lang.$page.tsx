@@ -90,7 +90,7 @@ import {
   type LocalePage,
   type LocalePrefix,
 } from "@/lib/locales";
-import { absUrl, appPageMeta, faqScript, ogImageMeta, ogImageUrl, regionalize } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, appPageMeta, faqScript, ogImageMeta, ogImageUrl, regionalize } from "@/lib/seo";
 
 const INFO = {
   faq: GLOBAL_FAQ,
@@ -246,7 +246,10 @@ export const Route = createFileRoute("/$lang/$page")({
         ...ogImageMeta(image),
         { name: "twitter:card", content: "summary_large_image" },
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: [
+        { rel: "canonical", href: url },
+        ...appPageHreflangLinks(page, page !== "privacy" && page !== "terms"),
+      ],
       ...(info && params.page === "faq" ? { scripts: faqScript(info.sections) } : {}),
     };
   },

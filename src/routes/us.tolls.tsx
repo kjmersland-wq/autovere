@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { TollsGuide } from "@/components/TollsGuide";
+import { appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/us/tolls")({
   head: () => ({
@@ -28,7 +29,10 @@ export const Route = createFileRoute("/us/tolls")({
       { name: "twitter:image:alt", content: "AutoVere USA road trip cost planner" },
       { name: "thumbnail", content: "https://www.autovere.com/og/autovere-square-us.jpg" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/us/tolls" }],
+    links: [
+      { rel: "canonical", href: "https://www.autovere.com/us/tolls" },
+      ...appPageHreflangLinks("tolls"),
+    ],
   }),
   component: TollsGuide,
 });

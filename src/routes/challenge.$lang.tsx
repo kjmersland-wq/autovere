@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { ChallengeLanding } from "@/components/challenge/ChallengeLanding";
 import { challengeContent, isChallengeLang, type ChallengeLang } from "@/lib/challenge-content";
-import { challengeOgImage, ogImageMeta } from "@/lib/seo";
+import { challengeHreflangLinks, challengeOgImage, ogImageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/challenge/$lang")({
   beforeLoad: ({ params }) => {
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/challenge/$lang")({
         { name: "twitter:description", content: c.meta.description },
         ...ogImageMeta(challengeOgImage(params.lang)),
       ],
-      links: [{ rel: "canonical", href: url }],
+      links: [{ rel: "canonical", href: url }, ...challengeHreflangLinks()],
     };
   },
   component: ChallengeLocale,

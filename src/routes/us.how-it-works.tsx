@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
 import { HOW_IT_WORKS } from "@/lib/info-content";
+import { appPageHreflangLinks } from "@/lib/seo";
 
 const content = HOW_IT_WORKS["us"];
 
@@ -25,7 +26,10 @@ export const Route = createFileRoute("/us/how-it-works")({
       { name: "twitter:image:alt", content: "AutoVere USA road trip cost planner" },
       { name: "thumbnail", content: "https://www.autovere.com/og/autovere-square-us.jpg" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/us/how-it-works" }],
+    links: [
+      { rel: "canonical", href: "https://www.autovere.com/us/how-it-works" },
+      ...appPageHreflangLinks("how-it-works"),
+    ],
   }),
   component: UsHowItWorksPage,
 });

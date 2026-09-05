@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
 import { NO_PRIVACY } from "@/lib/global-content-no";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 const content = NO_PRIVACY;
 
@@ -20,6 +21,10 @@ export const Route = createFileRoute("/no/privacy")({
       { property: "og:image:height", content: "630" },
       { name: "twitter:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [
+      { rel: "canonical", href: absUrl("/no/privacy") },
+      ...appPageHreflangLinks("privacy", false),
     ],
   }),
   component: NoInfoPage,

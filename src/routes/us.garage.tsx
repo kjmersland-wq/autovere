@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { GaragePage } from "@/components/GaragePage";
+import { appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/us/garage")({
   head: () => ({
@@ -28,7 +29,10 @@ export const Route = createFileRoute("/us/garage")({
       { name: "twitter:image:alt", content: "AutoVere USA road trip cost planner" },
       { name: "thumbnail", content: "https://www.autovere.com/og/autovere-square-us.jpg" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/us/garage" }],
+    links: [
+      { rel: "canonical", href: "https://www.autovere.com/us/garage" },
+      ...appPageHreflangLinks("garage"),
+    ],
   }),
   component: GaragePage,
 });

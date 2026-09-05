@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
 import { GLOBAL_HOW_IT_WORKS } from "@/lib/global-content";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 const content = GLOBAL_HOW_IT_WORKS;
 
@@ -14,6 +15,10 @@ export const Route = createFileRoute("/how-it-works")({
       { property: "og:description", content: content.meta.description },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [
+      { rel: "canonical", href: absUrl("/how-it-works") },
+      ...appPageHreflangLinks("how-it-works"),
     ],
   }),
   component: GlobalHowItWorks,

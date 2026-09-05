@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PartnersPage } from "@/components/PartnersPage";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/no/partners")({
   head: () => ({
@@ -26,6 +27,7 @@ export const Route = createFileRoute("/no/partners")({
       { name: "twitter:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: absUrl("/no/partners") }, ...appPageHreflangLinks("partners")],
   }),
   component: () => <PartnersPage lang="no" />,
 });

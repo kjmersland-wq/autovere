@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
 import { GLOBAL_TERMS } from "@/lib/global-content";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 const content = GLOBAL_TERMS;
 
@@ -14,6 +15,10 @@ export const Route = createFileRoute("/terms")({
       { property: "og:description", content: content.meta.description },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+    ],
+    links: [
+      { rel: "canonical", href: absUrl("/terms") },
+      ...appPageHreflangLinks("terms", false),
     ],
   }),
   component: GlobalTerms,

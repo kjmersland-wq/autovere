@@ -289,7 +289,141 @@ export function faqScript(sections: InfoSection[]) {
   return [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(sections)) }];
 }
 
+/**
+ * Organization + WebSite + SoftwareApplication JSON-LD for the homepage only
+ * (per Google's guidance, this belongs on the site's home/about context, not
+ * duplicated on every page). Every property here is a real, verifiable fact
+ * already used elsewhere in the app — no ratings, reviews, prices, download
+ * counts or awards, since none of those are genuine.
+ */
+export function homepageJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": `${BASE_URL}/#organization`,
+        name: "AutoVere",
+        url: BASE_URL,
+        sameAs: ["https://twitter.com/autoverehq"],
+        contactPoint: [
+          { "@type": "ContactPoint", email: "support@autovere.com", contactType: "customer support" },
+        ],
+      },
+      {
+        "@type": "WebSite",
+        "@id": `${BASE_URL}/#website`,
+        name: "AutoVere",
+        url: BASE_URL,
+        publisher: { "@id": `${BASE_URL}/#organization` },
+        inLanguage: "en-GB",
+      },
+      {
+        "@type": "SoftwareApplication",
+        name: "AutoVere",
+        url: BASE_URL,
+        applicationCategory: "TravelApplication",
+        operatingSystem: "Web",
+      },
+    ],
+  };
+}
+
+export function homepageScript() {
+  return [{ type: "application/ld+json", children: JSON.stringify(homepageJsonLd()) }];
+}
+
 export const ALL_LOCALE_PATHS = LOCALE_ROUTES.flatMap((l) => [
   `/${l.prefix}`,
   ...LOCALE_PAGES.map((p) => `/${l.prefix}/${p}`),
 ]);
+
+/**
+ * hreflang / html-lang codes for AutoVere's 13 primary markets. Shared by the
+ * homepage, the Challenge pages, and the page-level `lang` attribute — one
+ * source of truth so every signal agrees with every other.
+ */
+export const MARKET_LANG: Record<LocalePrefix | "en" | "ca" | "cafr", string> = {
+  en: "en-GB",
+  no: "nb-NO",
+  se: "sv-SE",
+  dk: "da-DK",
+  fi: "fi-FI",
+  us: "en-US",
+  ca: "en-CA",
+  cafr: "fr-CA",
+  de: "de-DE",
+  nl: "nl-NL",
+  fr: "fr-FR",
+  pl: "pl-PL",
+  es: "es-ES",
+  it: "it-IT",
+};
+
+/** The 13 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
+export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it"] as const;
+
+type AlternateLink = { rel: "alternate"; hreflang: string; href: string };
+
+/** hreflang alternates for the 13 primary-market homepages (/, /no, /se, … /it) + x-default. */
+export function homepageHreflangLinks(): AlternateLink[] {
+  const links: AlternateLink[] = [{ rel: "alternate", hreflang: MARKET_LANG.en, href: absUrl("/") }];
+  for (const prefix of PRIMARY_MARKET_PREFIXES) {
+    links.push({ rel: "alternate", hreflang: MARKET_LANG[prefix], href: absUrl(`/${prefix}`) });
+  }
+  links.push({ rel: "alternate", hreflang: "x-default", href: absUrl("/") });
+  return links;
+}
+
+/** hreflang alternates for the 13 Challenge routes (/challenge, /challenge/no, …) + x-default. */
+export function challengeHreflangLinks(): AlternateLink[] {
+  const links: AlternateLink[] = [{ rel: "alternate", hreflang: MARKET_LANG.en, href: absUrl("/challenge") }];
+  for (const prefix of PRIMARY_MARKET_PREFIXES) {
+    links.push({ rel: "alternate", hreflang: MARKET_LANG[prefix], href: absUrl(`/challenge/${prefix}`) });
+  }
+  links.push({ rel: "alternate", hreflang: "x-default", href: absUrl("/challenge") });
+  return links;
+}
+
+/**
+ * hreflang alternates for a shared app page (planner, tolls, scenic, garage,
+ * faq, how-it-works, pricing, partners) that genuinely exists across every
+ * language tree, the English root, the US market and the Canadian market.
+ * Only call this for a page slug confirmed to exist on all of those — pass
+ * `includeUsCa: false` for privacy/terms, which have no US/CA equivalent
+ * (the US/CA markets use a single combined /legal page instead).
+ */
+export function appPageHreflangLinks(page: LocalePage, includeUsCa = true): AlternateLink[] {
+  const links: AlternateLink[] = [{ rel: "alternate", hreflang: MARKET_LANG.en, href: absUrl(`/${page}`) }];
+  for (const l of LOCALE_ROUTES) {
+    if (l.prefix === "us" && !includeUsCa) continue;
+    links.push({ rel: "alternate", hreflang: MARKET_LANG[l.prefix], href: absUrl(`/${l.prefix}/${page}`) });
+  }
+  if (includeUsCa) {
+    links.push({ rel: "alternate", hreflang: MARKET_LANG.ca, href: absUrl(`/ca/${page}`) });
+  }
+  links.push({ rel: "alternate", hreflang: "x-default", href: absUrl(`/${page}`) });
+  return links;
+}
+
+/**
+ * The correct html `lang` attribute for any AutoVere path, derived directly
+ * from the URL — the same 13-market codes used for hreflang, so the two
+ * signals never disagree. Defaults to en-GB for anything unrecognised
+ * (the English root and its unprefixed app pages).
+ */
+export function htmlLangFor(pathname: string): string {
+  const segments = pathname.replace(/^\/+/, "").split("/").filter(Boolean);
+  const first = segments[0] ?? "";
+  if (first === "challenge") {
+    const second = segments[1] as LocalePrefix | "ca" | undefined;
+    if (second && (second in MARKET_LANG)) return MARKET_LANG[second];
+    return MARKET_LANG.en;
+  }
+  if (first === "ca" && segments[1] === "fr") return MARKET_LANG.cafr;
+  if (first === "ca") return MARKET_LANG.ca;
+  if ((first as LocalePrefix) in MARKET_LANG && LOCALE_ROUTES.some((l) => l.prefix === first)) {
+    return MARKET_LANG[first as LocalePrefix];
+  }
+  return MARKET_LANG.en;
+}

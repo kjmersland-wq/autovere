@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
 import { HOW_IT_WORKS } from "@/lib/info-content";
+import { appPageHreflangLinks } from "@/lib/seo";
 
 const content = HOW_IT_WORKS["ca"];
 
@@ -21,7 +22,10 @@ export const Route = createFileRoute("/ca/how-it-works")({
       { name: "twitter:image", content: "https://www.autovere.com/og/autovere-og-ca.jpg" },
       { name: "thumbnail", content: "https://www.autovere.com/og/autovere-square-ca.jpg" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/ca/how-it-works" }],
+    links: [
+      { rel: "canonical", href: "https://www.autovere.com/ca/how-it-works" },
+      ...appPageHreflangLinks("how-it-works"),
+    ],
   }),
   component: CaHowItWorksPage,
 });

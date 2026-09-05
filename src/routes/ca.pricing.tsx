@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
+import { appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/ca/pricing")({
   head: () => ({
@@ -24,7 +25,10 @@ export const Route = createFileRoute("/ca/pricing")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:image", content: "https://www.autovere.com/og/autovere-og-ca.jpg" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/ca/pricing" }],
+    links: [
+      { rel: "canonical", href: "https://www.autovere.com/ca/pricing" },
+      ...appPageHreflangLinks("pricing"),
+    ],
   }),
   component: () => <PricingPage region="ca" />,
 });

@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { TollsGuide } from "@/components/TollsGuide";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/tolls")({
   head: () => ({
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/tolls")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: absUrl("/tolls") }, ...appPageHreflangLinks("tolls")],
   }),
   component: TollsGuide,
 });
