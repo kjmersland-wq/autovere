@@ -259,6 +259,7 @@ export const SV_DICT: Record<string, unknown> = {
     pricing: "Priser",
     faq: "Vanliga frågor",
     partners: "Partners",
+    challenge: "AutoVere Challenge",
     privacy: "Integritetspolicy",
     terms: "Användarvillkor",
     rights: "Alla rättigheter förbehållna.",

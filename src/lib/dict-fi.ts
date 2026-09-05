@@ -257,6 +257,7 @@ export const FI_DICT: Record<string, unknown> = {
     pricing: "Hinnoittelu",
     faq: "UKK",
     partners: "Kumppanit",
+    challenge: "AutoVere Challenge",
     privacy: "Tietosuojaseloste",
     terms: "Käyttöehdot",
     rights: "Kaikki oikeudet pidätetään.",

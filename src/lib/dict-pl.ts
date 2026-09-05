@@ -259,6 +259,7 @@ export const PL_DICT: Record<string, unknown> = {
     pricing: "Cennik",
     faq: "FAQ",
     partners: "Partnerzy",
+    challenge: "AutoVere Challenge",
     privacy: "Polityka prywatności",
     terms: "Regulamin",
     rights: "Wszelkie prawa zastrzeżone.",

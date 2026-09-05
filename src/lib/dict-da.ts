@@ -259,6 +259,7 @@ export const DA_DICT: Record<string, unknown> = {
     pricing: "Priser",
     faq: "FAQ",
     partners: "Partnere",
+    challenge: "AutoVere Challenge",
     privacy: "Privatlivspolitik",
     terms: "Vilkår og betingelser",
     rights: "Alle rettigheder forbeholdes.",
