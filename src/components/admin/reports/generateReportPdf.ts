@@ -3,6 +3,7 @@ import { convertFromEur } from "@/components/admin/adminCurrency";
 import { formatCurrency } from "@/lib/currency";
 import type { AdminCurrency } from "@/components/admin/adminFormat";
 import type { ExchangeRates } from "@/lib/admin-data.functions";
+import { createPdfDoc, pdfLibsPromise } from "@/components/admin/pdf/pdfDoc";
 
 const BRAND_AMBER: [number, number, number] = [245, 158, 11]; // matches the site's existing chart/brand accent (#f59e0b)
 const INK: [number, number, number] = [17, 24, 39];
@@ -41,14 +42,10 @@ export async function generateReportPdf({
   rates,
 }: ReportPdfInput) {
   const money = (valueEur: number) => formatCurrency(convertFromEur(valueEur, currency, rates), currency);
-  const [{ jsPDF }, { autoTable }, html2canvasModule] = await Promise.all([
-    import("jspdf"),
-    import("jspdf-autotable"),
-    import("html2canvas"),
-  ]);
+  const [[{ jsPDF }, { autoTable }], html2canvasModule] = await Promise.all([pdfLibsPromise, import("html2canvas")]);
   const html2canvas = html2canvasModule.default;
 
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const { doc, font } = await createPdfDoc(jsPDF);
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 16;
@@ -64,7 +61,7 @@ export async function generateReportPdf({
 
   // Cover header
   doc.setTextColor(...BRAND_AMBER);
-  doc.setFont("helvetica", "bold");
+  doc.setFont(font, "bold");
   doc.setFontSize(11);
   doc.text("AUTOVERE", margin, y);
   y += 9;
@@ -74,7 +71,7 @@ export async function generateReportPdf({
   doc.text(`Eierrapport — ${scopeLabel}`, margin, y);
   y += 9;
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont(font, "normal");
   doc.setFontSize(10);
   doc.setTextColor(...MUTED);
   doc.text(`Periode: ${periodLabel}`, margin, y);
@@ -98,8 +95,8 @@ export async function generateReportPdf({
       ["Churn (globalt)", `${kpis.churnRate} %`],
     ],
     theme: "grid",
-    headStyles: { fillColor: BRAND_AMBER, textColor: [255, 255, 255] },
-    styles: { fontSize: 10 },
+    headStyles: { font, fillColor: BRAND_AMBER, textColor: [255, 255, 255] },
+    styles: { font, fontSize: 10 },
   });
   y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
 
@@ -128,8 +125,8 @@ export async function generateReportPdf({
         ? byPlan.map((p) => [p.label, new Intl.NumberFormat("nb-NO").format(p.count), money(p.mrr)])
         : [["Ingen aktive abonnement ennå.", "", ""]],
     theme: "striped",
-    headStyles: { fillColor: INK },
-    styles: { fontSize: 9 },
+    headStyles: { font, fillColor: INK },
+    styles: { font, fontSize: 9 },
   });
   y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
 
@@ -147,8 +144,8 @@ export async function generateReportPdf({
         ? topPaths.map((p) => [p.path, new Intl.NumberFormat("nb-NO").format(p.views)])
         : [["Ingen registrerte besøk ennå.", ""]],
     theme: "striped",
-    headStyles: { fillColor: INK },
-    styles: { fontSize: 9 },
+    headStyles: { font, fillColor: INK },
+    styles: { font, fontSize: 9 },
   });
 
   // Header/footer on every page
@@ -158,6 +155,7 @@ export async function generateReportPdf({
     doc.setDrawColor(...MUTED);
     doc.setLineWidth(0.2);
     doc.line(margin, pageHeight - 14, pageWidth - margin, pageHeight - 14);
+    doc.setFont(font, "normal");
     doc.setFontSize(8);
     doc.setTextColor(...MUTED);
     doc.text("AutoVere · Konfidensielt eierrapport", margin, pageHeight - 9);

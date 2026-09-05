@@ -1,6 +1,7 @@
 import type { AreaAnalysis, Finding } from "@/components/admin/analysis/analysisReport";
 import type { ReportSummary } from "@/components/admin/analysis/analysisPresentation";
 import type { AdminCurrency } from "@/components/admin/adminFormat";
+import { createPdfDoc, pdfLibsPromise } from "@/components/admin/pdf/pdfDoc";
 
 const BRAND_AMBER: [number, number, number] = [245, 158, 11];
 const INK: [number, number, number] = [17, 24, 39];
@@ -25,9 +26,8 @@ export type AnalysisPdfInput = {
 };
 
 export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLabel, areas, summary }: AnalysisPdfInput) {
-  const [{ jsPDF }, { autoTable }] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
-
-  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const [[{ jsPDF }, { autoTable }]] = await Promise.all([pdfLibsPromise]);
+  const { doc, font } = await createPdfDoc(jsPDF);
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
   const margin = 16;
@@ -42,7 +42,7 @@ export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLab
 
   // Cover / header
   doc.setTextColor(...BRAND_AMBER);
-  doc.setFont("helvetica", "bold");
+  doc.setFont(font, "bold");
   doc.setFontSize(11);
   doc.text("AUTOVERE", margin, y);
   y += 9;
@@ -52,7 +52,7 @@ export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLab
   doc.text(summary ? "Samlet analyse — eierrapport" : `Analyse — ${scopeLabel}`, margin, y);
   y += 8;
 
-  doc.setFont("helvetica", "normal");
+  doc.setFont(font, "normal");
   doc.setFontSize(9);
   doc.setTextColor(...MUTED);
   doc.text("Regelbasert analyse — faste beregninger og terskelverdier, ingen AI.", margin, y);
@@ -66,7 +66,7 @@ export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLab
     ensureSpace(12);
     doc.setFillColor(...accent);
     doc.rect(margin, y - 4, 3, 6, "F");
-    doc.setFont("helvetica", "bold");
+    doc.setFont(font, "bold");
     doc.setFontSize(12);
     doc.setTextColor(...INK);
     doc.text(title, margin + 6, y);
@@ -84,8 +84,8 @@ export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLab
           ? findings.map((f) => [f.headline, f.metric ?? "—", f.recommendation ?? "—"])
           : [["Ingen funn.", "", ""]],
       theme: "striped",
-      headStyles: { fillColor: INK },
-      styles: { fontSize: 8.5, cellWidth: "wrap" },
+      headStyles: { font, fillColor: INK },
+      styles: { font, fontSize: 8.5, cellWidth: "wrap" },
       columnStyles: { 0: { cellWidth: 65 }, 1: { cellWidth: 45 } },
     });
     y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 8;
@@ -93,7 +93,7 @@ export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLab
 
   const writeNotes = (notes: string[]) => {
     if (notes.length === 0) return;
-    doc.setFont("helvetica", "italic");
+    doc.setFont(font, "italic");
     doc.setFontSize(8.5);
     doc.setTextColor(...MUTED);
     for (const note of notes) {
@@ -108,7 +108,7 @@ export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLab
   if (summary) {
     // Hovedkonklusjon
     writeSectionTitle("Hovedkonklusjon", BRAND_AMBER);
-    doc.setFont("helvetica", "normal");
+    doc.setFont(font, "normal");
     doc.setFontSize(10.5);
     doc.setTextColor(...INK);
     const conclusionLines = doc.splitTextToSize(summary.overallConclusion, pageWidth - margin * 2) as string[];
@@ -116,7 +116,7 @@ export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLab
     doc.text(conclusionLines, margin, y);
     y += conclusionLines.length * 5 + 4;
 
-    doc.setFont("helvetica", "normal");
+    doc.setFont(font, "normal");
     doc.setFontSize(9);
     doc.setTextColor(...MUTED);
     doc.text(`Samlet status: ${summary.statusLabel}  ·  Datagrunnlag: ${summary.dataQualityLabel}`, margin, y);
@@ -142,6 +142,7 @@ export async function generateAnalysisPdf({ scopeLabel, currency, generatedAtLab
     doc.setDrawColor(...MUTED);
     doc.setLineWidth(0.2);
     doc.line(margin, pageHeight - 14, pageWidth - margin, pageHeight - 14);
+    doc.setFont(font, "normal");
     doc.setFontSize(8);
     doc.setTextColor(...MUTED);
     doc.text("AutoVere · Konfidensielt eierrapport", margin, pageHeight - 9);

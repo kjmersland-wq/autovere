@@ -119,7 +119,7 @@ export function AdminShell() {
         </div>
 
         <div className="mt-8 grid gap-6 md:grid-cols-[16rem_1fr]">
-          <nav className="flex flex-col gap-1 print:hidden">
+          <nav className="flex flex-col gap-1.5 print:hidden">
             {ADMIN_NAV.map((item) => {
               const Icon = item.icon;
               const active = section === item.id;
@@ -128,13 +128,13 @@ export function AdminShell() {
                   key={item.id}
                   type="button"
                   onClick={() => setSection(item.id)}
-                  className={`flex items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
+                  className={`flex items-center gap-3.5 rounded-xl px-4 py-3.5 text-left text-[0.95rem] transition-all duration-150 ${
                     active
-                      ? "bg-primary text-primary-foreground shadow-sm"
-                      : "text-foreground/75 hover:bg-background/60"
+                      ? "bg-primary font-semibold text-primary-foreground shadow-md shadow-primary/20"
+                      : "font-medium text-foreground/80 hover:bg-primary/10 hover:text-foreground"
                   }`}
                 >
-                  <Icon className="size-4" />
+                  <Icon className={`size-5 shrink-0 ${active ? "" : "text-foreground/55"}`} />
                   {item.label}
                 </button>
               );
