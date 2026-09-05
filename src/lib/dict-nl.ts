@@ -259,6 +259,7 @@ export const NL_DICT: Record<string, unknown> = {
     pricing: "Prijzen",
     faq: "Veelgestelde vragen",
     partners: "Partners",
+    challenge: "AutoVere Challenge",
     privacy: "Privacybeleid",
     terms: "Gebruiksvoorwaarden",
     rights: "Alle rechten voorbehouden.",
