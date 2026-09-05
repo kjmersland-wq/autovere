@@ -177,7 +177,23 @@ const EN: ChallengeContent = {
     ],
     footnote: "The calculation you test is the calculation everyone else gets.",
   },
+  freedom: {
+    eyebrow: "Your test, your terms",
+    title: "Choose the journey you want to test.",
+    lines: [
+      "Use one of our suggested routes — or choose your own.",
+      "Choose the car you actually drive.",
+    ],
+    body: "There is no fixed test to pass, no scripted route and no approved car list. The Challenge is yours to design; we simply ask you to publish what you find.",
+    items: [
+      { title: "Any journey", body: "A suggested Challenge route, or the trip you were making anyway." },
+      { title: "Any car", body: "The car in your test fleet or your own driveway — petrol, diesel or electric." },
+      { title: "Full Pro access", body: "The complete AutoVere product, unrestricted, for the duration of your test." },
+      { title: "Your own conclusion", body: "Publish the result exactly as you find it. We do not review it first." },
+    ],
+  },
   journey: {
+
     eyebrow: "Journey selection",
     title: "Drive a suggested route — or one that suits your test.",
     intro:
