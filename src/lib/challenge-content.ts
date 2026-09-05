@@ -115,9 +115,9 @@ const EN: ChallengeContent = {
   hero: {
     kicker: "AutoVere Challenge",
     title: "Put AutoVere to the test.",
-    lede: "Choose your car. Choose your journey. Calculate the real cost with AutoVere. Then drive it and compare the result with what you actually spent.",
+    lede: "Choose the car you actually drive. Choose the journey you want to test. Calculate it in the real AutoVere, drive it, and compare our numbers with what you truly spent.",
     statement: ["Real cars.", "Real journeys.", "Real costs."],
-    primaryCta: "Register for AutoVere Challenge",
+    primaryCta: "Apply for Challenge access",
     secondaryCta: "Explore AutoVere",
     imageCredit: "Photography: Unsplash",
   },
@@ -125,13 +125,14 @@ const EN: ChallengeContent = {
     eyebrow: "A personal invitation to the motoring press",
     title: "We invite you to test AutoVere yourself.",
     paragraphs: [
-      "AutoVere is built to calculate the real cost of a journey — including the costs that are often easy to overlook: tolls, vignettes, ferries, fuel and charging, country by country.",
-      "But we don't expect you to simply take our word for it.",
-      "We invite you to choose a real journey, choose the car you actually drive, use AutoVere as a Pro user, drive the route, and compare the calculation with the real-world result.",
-      "Whatever the numbers say, we would rather you find out for yourself than take a marketing claim on trust.",
+      "If you write about cars, you already know how rarely a journey costs what a calculator says it will. Tolls, vignettes, ferries, fuel and charging add up quietly, country by country — and that is exactly what AutoVere is built to get right.",
+      "We are not going to ask you to take our word for it.",
+      "We would rather hand you the keys: pick a real journey, pick the car sitting on your driveway, use AutoVere as a Pro user, drive the route, and hold our calculation up against your receipts.",
+      "If we are close, that is a story worth telling. If we are off, we want to know — and we would rather hear it from you than never hear it at all.",
     ],
-    signature: "KM TECH LABS — Kristiansand, Norway",
+    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs, Kristiansand, Norway",
   },
+
   steps: {
     eyebrow: "How the Challenge works",
     title: "Six calm steps, from invitation to result.",
