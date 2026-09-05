@@ -2,6 +2,7 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { ChallengeLanding } from "@/components/challenge/ChallengeLanding";
 import { CHALLENGE_EN } from "@/lib/challenge-content";
+import { challengeOgImage, ogImageMeta } from "@/lib/seo";
 
 const URL = "https://www.autovere.com/challenge";
 
@@ -17,6 +18,7 @@ export const Route = createFileRoute("/challenge/")({
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: CHALLENGE_EN.meta.title },
       { name: "twitter:description", content: CHALLENGE_EN.meta.description },
+      ...ogImageMeta(challengeOgImage(null)),
     ],
     links: [{ rel: "canonical", href: URL }],
   }),
