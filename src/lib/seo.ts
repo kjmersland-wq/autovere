@@ -44,6 +44,13 @@ export function ogImageUrl(prefix: LocalePrefix | null | undefined): string {
   return absUrl(prefix ? (OG_IMAGE_BY_PREFIX[prefix] ?? "/og-image.jpg") : "/og-image.jpg");
 }
 
+/** Localized 1200x630 Challenge share images. `null`/unknown = English (GB) master. */
+export function challengeOgImage(lang?: string | null): string {
+  const langs = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it"];
+  const key = lang && langs.includes(lang) ? lang : "gb";
+  return absUrl(`/og/challenge-${key}.jpg`);
+}
+
 /** The og:image / secure_url / twitter:image trio for a fully qualified image URL. */
 export function ogImageMeta(image: string) {
   return [
