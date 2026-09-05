@@ -1442,6 +1442,269 @@ const FI: ChallengeContent = {
   languageLabel: "Challenge omalla kielelläsi",
 };
 
+const US: ChallengeContent = {
+  meta: {
+    title: "AutoVere Challenge — Road-Test AutoVere Yourself",
+    description:
+      "Test AutoVere on real road trips, with real cars and real-world costs. We're inviting automotive journalists to run the numbers, drive it, and compare.",
+  },
+  badge: "Challenge",
+  hero: {
+    kicker: "AutoVere Challenge",
+    title: "Road-test AutoVere yourself.",
+    lede: "Pick the car you actually drive. Pick the trip you want to test. Run the numbers in the real AutoVere, drive it, then compare our figures to what you actually spent.",
+    statement: ["Real cars.", "Real trips.", "Real costs."],
+    primaryCta: "Apply for Challenge Access",
+    secondaryCta: "Explore AutoVere",
+    imageCredit: "Photo credit: Unsplash",
+  },
+  invitation: {
+    eyebrow: "A Personal Invitation to the Automotive Press",
+    title: "We're inviting you to road-test AutoVere yourself.",
+    paragraphs: [
+      "If you cover cars for a living, you already know how rarely a trip costs what a calculator says it will. Tolls, toll passes, ferries, gas and charging stack up quietly, state by state and country by country — and that's exactly what AutoVere is built to get right.",
+      "We're not going to ask you to just take our word for it.",
+      "We'd rather hand you the keys: pick a real trip, pick the car sitting in your driveway, use AutoVere as a Pro user, drive the route, and hold our numbers up against your receipts.",
+      "If we're right, that's a story worth telling. If we're off, we want to know about it — we'd rather hear it from you than never hear it at all.",
+    ],
+    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs, Kristiansand, Norway",
+  },
+  steps: {
+    eyebrow: "How the Challenge Works",
+    title: "Six simple steps, from sign-up to results.",
+    intro:
+      "None of this is a demo environment. From step five on, you're using the exact same AutoVere every other traveler uses.",
+    items: [
+      { number: "01", title: "Sign Up", body: "Sign up as a member of the automotive press." },
+      {
+        number: "02",
+        title: "Get Verified",
+        body: "AutoVere reviews your request and activates your Challenge access.",
+      },
+      {
+        number: "03",
+        title: "Pick Your Trip",
+        body: "Choose one of AutoVere's suggested Challenge routes, or set up a trip of your own.",
+      },
+      {
+        number: "04",
+        title: "Pick Your Car",
+        body: "Select the vehicle you're actually testing — gas, diesel, or electric.",
+      },
+      {
+        number: "05",
+        title: "Run the Numbers & Drive",
+        body: "Use the regular AutoVere experience as a Pro user. Run the numbers, then drive it for real.",
+      },
+      {
+        number: "06",
+        title: "Compare",
+        body: "Enter your actual trip costs and compare them to the AutoVere estimate.",
+      },
+    ],
+  },
+  notCalculator: {
+    eyebrow: "One Product, Not a Press Demo",
+    title: "Your Challenge runs inside the real AutoVere — not a separate press build.",
+    body: "AutoVere Challenge is the front door and the whole testing setup — not a second, dumbed-down calculator built just for journalists. There's no limited press version, no curated sandbox, and no separate numbers.",
+    flow: [
+      "Challenge Landing Page",
+      "Journalist Sign-Up",
+      "AutoVere Verification",
+      "Challenge Pro Access",
+      "The Regular AutoVere Product",
+      "Your Challenge Results",
+    ],
+    footnote: "The math you're testing is the same math everyone else gets.",
+  },
+  freedom: {
+    eyebrow: "Your Test, Your Rules",
+    title: "Pick the trip you want to test.",
+    lines: [
+      "Use one of our suggested routes — or pick your own.",
+      "Drive the car you actually own.",
+    ],
+    body: "There's no fixed test to pass, no scripted route, and no approved car list. The Challenge is yours to design — we just ask that you publish what you find.",
+    items: [
+      { title: "Any Trip", body: "A suggested Challenge route, or the trip you were taking anyway." },
+      { title: "Any Car", body: "The car in your test fleet or sitting in your own driveway — gas, diesel, or electric." },
+      { title: "Full Pro Access", body: "The complete AutoVere product, no restrictions, for the length of your test." },
+      { title: "Your Own Call", body: "Publish the result exactly as you find it. We don't review it first." },
+    ],
+  },
+  journey: {
+    eyebrow: "Pick Your Trip",
+    title: "Drive a suggested route — or one that fits your test.",
+    intro:
+      "Two ways to run your Challenge. Both use the same engine, the same data sources, and the same state-by-state, country-by-country breakdown.",
+    options: [
+      {
+        label: "Option 01",
+        title: "A Suggested Challenge Route",
+        body: "For each country, AutoVere lines up three suggested routes, covering different areas and different kinds of driving.",
+        bullets: ["Short", "Medium", "Long"],
+      },
+      {
+        label: "Option 02",
+        title: "Test Your Own Trip",
+        body: "Pick any real-world trip that fits your test — the drive you were already planning is often the most revealing. For example: Bergen–Trondheim, Warsaw–Kraków, Route 66 (Chicago–Santa Monica).",
+        bullets: ["Your Route", "Your Schedule", "Your Conditions"],
+      },
+    ],
+  },
+  vehicles: {
+    eyebrow: "Pick Your Vehicle",
+    title: "Test the car that's actually in your driveway.",
+    intro:
+      "Pick your powertrain, then choose the specific vehicle from AutoVere's existing vehicle database. No separate car list just for the Challenge.",
+    items: [
+      {
+        label: "Gas",
+        body: "Fuel economy, gas prices, and tolls — priced out along your route, state by state and country by country.",
+        image:
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=70",
+        alt: "Blue coupe parked on a desert road at sunset",
+      },
+      {
+        label: "Diesel",
+        body: "Long-haul fuel economy, plus weight and axle classes where they apply.",
+        image:
+          "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1200&q=70",
+        alt: "White SUV on a snowy forest road",
+      },
+      {
+        label: "Electric",
+        body: "Battery size, consumption, charging stops, and network pricing along the way.",
+        image:
+          "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=70",
+        alt: "Charging cable plugged into an EV",
+      },
+    ],
+  },
+  evCompare: {
+    eyebrow: "Same Trip, Electric",
+    title: "What would this trip have cost in an EV?",
+    body: "Once you've run the numbers on your own trip, you can run the identical route in an EV and see what the figures say. Sometimes it's cheaper. Sometimes charging, tolls, and detours change the math. AutoVere shows you the numbers either way.",
+    exampleLabel: "Illustrative example — not an actual AutoVere result",
+    rows: [
+      { label: "Your Car", sub: "Diesel", amountEur: 96.4 },
+      { label: "Same Trip in an EV", sub: "Electric", amountEur: 68.2 },
+    ],
+    differenceLabel: "Potential Difference",
+    differenceAmountEur: 28.2,
+    caveat: "Example figures only — we're not claiming an EV is always cheaper.",
+  },
+  reality: {
+    eyebrow: "Prediction vs. Reality",
+    title: "The part most tools quietly skip.",
+    body: "The Challenge compares what AutoVere estimated before you hit the road with what the trip actually cost once you got there. That comparison belongs to you — including the days it doesn't make us look good.",
+    exampleLabel: "Illustrative example — not an actual AutoVere result",
+    calculation: { label: "AutoVere Estimate", amountEur: 96.4 },
+    actual: { label: "Actual Trip Cost", amountEur: 99.1 },
+    difference: { label: "Difference", value: "+2.8%" },
+    caveat: "We don't promise a specific accuracy percentage. The point is your own result.",
+  },
+  founder: {
+    eyebrow: "The Man Behind AutoVere",
+    title: "Why I Built AutoVere",
+    opening:
+      "It started with a simple question: Why is it still so hard to know what a road trip is actually going to cost?",
+    paragraphs: [
+      "I'm 74 years old. After more than 40 years in construction, I retired in 2020.",
+      "A year later, instead of slowing down, I started building something completely different.",
+      "I'd spent years driving across Europe. The more I traveled, the more I kept running into the same problem: planning a long trip usually meant hunting for information in a bunch of different places.",
+      "Tolls. Toll passes. Ferries. Gas. EV charging. Different routes. Different countries. Different costs.",
+      "I figured there had to be a better way.",
+      "So I started building AutoVere.",
+      "What started as a personal project has grown into something a lot bigger — and I'm not doing it alone. My son's part of this too.",
+      "Together, we're building AutoVere around something that's always mattered to me: if it's worth doing, it's worth doing right.",
+      "That means using real data, official sources, algorithms, and math to figure out the cost of your trip.",
+      "Not guesswork. Not a black box.",
+      "The goal is simple: give people a clearer picture of what a trip is probably going to cost before they leave the driveway — and help them make smarter calls on routes, cars, and travel.",
+      "What started in Kristiansand has grown way beyond Norway — and way beyond Europe.",
+      "AutoVere's already up and running in the US and Canada, not just Europe — with the goal of becoming a global automotive intelligence platform for anyone who travels by road.",
+    ],
+    closing: [
+      "But building something and believing in it isn't enough.",
+      "I want it tested in the real world.",
+      "That's why we created the AutoVere Challenge.",
+      "I don't want automotive journalists just taking my word for it.",
+      "Pick a real car. Pick a real trip. Run the numbers with AutoVere. Drive it. Then compare the result to what actually happened.",
+      "No special demo. No script.",
+      "Just AutoVere — and the road.",
+      "If it holds up, we'll be proud of it.",
+      "If it gets something wrong, we want to know.",
+      "Because the best way to prove AutoVere works isn't to tell you it does.",
+      "It's to let you test it yourself.",
+    ],
+    name: "Kjell Mersland, 74",
+    role: "Founder, AutoVere",
+    note: "Building AutoVere together with my son",
+    alt: "Kjell Mersland, founder of AutoVere",
+    emphasis: [
+      "I'm 74 years old.",
+      "My son's part of this too.",
+      "Not guesswork. Not a black box.",
+      "AutoVere's already up and running in the US and Canada, not just Europe",
+      "I want it tested in the real world.",
+      "It's to let you test it yourself.",
+    ],
+  },
+  report: {
+    eyebrow: "Challenge Report",
+    title: "Your Trip. Your Result.",
+    body: "Once the trip's done, you get a professional Challenge result you can reference, publish, or challenge us on.",
+    contents: [
+      "Route",
+      "Vehicle",
+      "Powertrain",
+      "AutoVere Estimate",
+      "Actual Trip Cost",
+      "Difference",
+      "EV Comparison",
+      "Date",
+      "Challenge ID",
+    ],
+    future: "Coming soon: a permanent web result, a shareable link, and a PDF report.",
+    cta: "View This Trip in AutoVere",
+    ctaNote:
+      "After a Challenge, the trip and its settings can be reopened right inside the regular AutoVere product, so you can keep exploring it.",
+  },
+  register: {
+    eyebrow: "Automotive Press Access",
+    title: "Apply for AutoVere Challenge Access",
+    body: "Part of the automotive press? We'd love to have you road-test AutoVere yourself. Apply for Challenge access, and once you're approved, use AutoVere as a Pro user while you run your test.",
+    fields: {
+      name: "Full Name",
+      email: "Work Email",
+      outlet: "Publication or Channel",
+      role: "Role",
+      country: "Country",
+      message: "The Trip and Car You'd Like to Test",
+    },
+    placeholders: {
+      name: "Alex Rivera",
+      email: "alex@publication.com",
+      outlet: "Publication, website, or channel",
+      role: "Automotive journalist, reviewer, editor…",
+      country: "United States",
+      message: "Optional — tell us what you're planning to test",
+    },
+    submit: "Apply for Challenge Access",
+    note: "A quick verification step keeps Challenge access limited to working journalists. Once you're approved, your account gets upgraded to Pro for the test — no separate press tool, no restrictions.",
+    successTitle: "Thanks — we've got your application.",
+    successBody:
+      "Challenge access is rolling out gradually. Your details are only stored in this browser for now, and we'll follow up with you personally as soon as verification opens up.",
+  },
+  finalCta: {
+    title: "Ready to road-test AutoVere?",
+    body: "Pick a trip. Pick your car. Drive it. Compare the results.",
+    primary: "Join the AutoVere Challenge",
+    secondary: "Explore AutoVere",
+  },
+  languageLabel: "Challenge in Your Language",
+};
+
 /** Language URLs for the Challenge page. English/GB is the root /challenge. */
 export const CHALLENGE_LANGS = [
   { prefix: "no", label: "Norsk", flag: "🇳🇴" },
@@ -1493,6 +1756,7 @@ const CHALLENGE_CONTENT_BY_LANG: Partial<Record<ChallengeLang, ChallengeContent>
   se: SE,
   dk: DK,
   fi: FI,
+  us: US,
 };
 
 export function challengeContent(lang?: string | undefined): ChallengeContent {
