@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2, MapPin } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { challengeContent, CHALLENGE_LANGS, type ChallengeLang } from "@/lib/challenge-content";
+import founderPhoto from "@/assets/kjell-mersland.jpg.asset.json";
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=2000&q=75";
@@ -17,6 +18,28 @@ type Props = { lang?: ChallengeLang | undefined };
 
 function Eyebrow({ children }: { children: string }) {
   return <p className="text-xs uppercase tracking-[0.28em] text-primary/90">{children}</p>;
+}
+
+/** Subtle emphasis on a few key founder phrases — no extra styling elsewhere. */
+const EMPHASIS = [
+  "I am 74 years old.",
+  "My son is part of the journey too.",
+  "Not guesses. Not a black box.",
+  "What started in Kristiansand is now being built for Europe.",
+  "I want them to test it.",
+];
+
+function emphasise(text: string) {
+  const hit = EMPHASIS.find((phrase) => text.includes(phrase));
+  if (!hit) return text;
+  const [before, after] = text.split(hit);
+  return (
+    <>
+      {before}
+      <em className="not-italic font-medium text-foreground">{hit}</em>
+      {after}
+    </>
+  );
 }
 
 export function ChallengeLanding({ lang }: Props) {
@@ -363,6 +386,46 @@ export function ChallengeLanding({ lang }: Props) {
               </li>
             ))}
           </ul>
+        </div>
+      </section>
+
+      {/* Founder story */}
+      <section className="border-t border-white/10">
+        <div className="mx-auto grid w-full max-w-7xl gap-14 px-6 py-24 sm:px-8 md:py-32 lg:grid-cols-[1.05fr_0.95fr] lg:gap-20">
+          <div>
+            <Eyebrow>{c.founder.eyebrow}</Eyebrow>
+            <h2 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl md:text-5xl">
+              {c.founder.title}
+            </h2>
+            <p className="mt-8 text-xl leading-relaxed text-foreground/90 sm:text-2xl">
+              {c.founder.opening}
+            </p>
+            <div className="mt-8 space-y-5 text-base leading-relaxed text-muted-foreground">
+              {c.founder.paragraphs.map((p) => (
+                <p key={p}>{emphasise(p)}</p>
+              ))}
+            </div>
+            <div className="mt-10 space-y-5 border-l border-primary/40 pl-6 text-base leading-relaxed text-foreground/85">
+              {c.founder.closing.map((p) => (
+                <p key={p}>{emphasise(p)}</p>
+              ))}
+            </div>
+          </div>
+          <figure className="lg:sticky lg:top-28 lg:self-start">
+            <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02]">
+              <img
+                src={founderPhoto.url}
+                alt={c.founder.alt}
+                loading="lazy"
+                className="aspect-[4/5] w-full object-cover object-top"
+              />
+            </div>
+            <figcaption className="mt-5 text-sm text-foreground/80">
+              <span className="font-medium text-foreground">{c.founder.name}</span>
+              <span className="mt-1 block text-muted-foreground">{c.founder.role}</span>
+              <span className="mt-3 block text-xs italic text-muted-foreground">{c.founder.note}</span>
+            </figcaption>
+          </figure>
         </div>
       </section>
 

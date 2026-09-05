@@ -76,6 +76,17 @@ export type ChallengeContent = {
     difference: { label: string; value: string };
     caveat: string;
   };
+  founder: {
+    eyebrow: string;
+    title: string;
+    opening: string;
+    paragraphs: string[];
+    closing: string[];
+    name: string;
+    role: string;
+    note: string;
+    alt: string;
+  };
   report: {
     eyebrow: string;
     title: string;
@@ -264,6 +275,32 @@ const EN: ChallengeContent = {
     actual: { label: "Actual journey cost", value: "€99.10" },
     difference: { label: "Difference", value: "+2.8%" },
     caveat: "We do not promise a specific accuracy percentage. Your own result is the point.",
+  },
+  founder: {
+    eyebrow: "The person behind AutoVere",
+    title: "Why I built AutoVere",
+    opening:
+      "It started with a simple question: why is it still so difficult to know what a road trip will actually cost?",
+    paragraphs: [
+      "I am 74 years old. After more than 40 years in the construction industry, I retired in 2020. A year later, instead of slowing down, I started building something completely different.",
+      "For many years, I had travelled extensively by car through Europe. And the more I travelled, the more I noticed the same problem: planning a long journey often meant searching for information in several different places.",
+      "Tolls. Vignettes. Ferries. Fuel. EV charging. Different routes. Different countries. Different costs.",
+      "I thought there had to be a better way. So I started building AutoVere.",
+      "What began as an idea has since grown into a much bigger project — and I am not doing it alone. My son is part of the journey too. Together, we are developing AutoVere with the ambition of creating something that can be useful to drivers far beyond Norway.",
+      "I have always believed that if something is worth building, it should be built properly. That is why AutoVere is based on real data, official sources, algorithms and mathematics. Not guesses. Not a black box.",
+      "The goal is simple: give drivers a clearer picture of what a journey is likely to cost before they leave home — and help them make better choices about routes, cars and travel.",
+      "What started in Kristiansand is now being built for Europe.",
+    ],
+    closing: [
+      "And perhaps the most important part is this: I don't just want people to believe that AutoVere works. I want them to test it.",
+      "That is why we created the AutoVere Challenge. Choose a real car. Choose a real journey. Calculate it with AutoVere. Drive it. Then compare the result with what actually happened. No special demonstration. No prepared result. Just AutoVere — and the road.",
+      "If it performs well, we will be proud of it. If it gets something wrong, we want to know.",
+      "Because the best way to prove AutoVere is not to tell you that it works. It's to let you test it.",
+    ],
+    name: "Kjell Mersland, 74",
+    role: "Founder, AutoVere",
+    note: "Building AutoVere together with my son",
+    alt: "Kjell Mersland, founder of AutoVere",
   },
   report: {
     eyebrow: "Challenge report",
