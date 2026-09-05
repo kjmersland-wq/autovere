@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 
 import { useT, useLocale } from "@/lib/i18n";
-import { prefixFromPath } from "@/lib/locales";
+import { prefixForCode, prefixFromPath } from "@/lib/locales";
 import { regionFromPath } from "@/lib/trip-data";
 
 const YEAR = new Date().getFullYear();
