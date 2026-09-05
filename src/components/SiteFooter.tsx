@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 
 import { useT, useLocale } from "@/lib/i18n";
-import { prefixForCode, prefixFromPath } from "@/lib/locales";
+import { LOCALE_ROUTES, prefixForCode, prefixFromPath } from "@/lib/locales";
 import { regionFromPath } from "@/lib/trip-data";
 
 const YEAR = new Date().getFullYear();
@@ -139,6 +139,13 @@ export function SiteFooter() {
                     🇪🇺 {t.header.regions.eu}
                   </Link>
                 </li>
+                {LOCALE_ROUTES.filter((l) => l.prefix !== "us").map((l) => (
+                  <li key={l.prefix}>
+                    <a href={`/${l.prefix}`} className="transition-colors hover:text-foreground">
+                      {l.flag} {l.label}
+                    </a>
+                  </li>
+                ))}
                 <li>
                   <a href="/us" className="transition-colors hover:text-foreground">
                     🇺🇸 USA

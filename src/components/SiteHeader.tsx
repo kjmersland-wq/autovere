@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import { ChevronDown, LogOut, Menu, UserRound } from "lucide-react";
 
 import { CurrencySelector } from "@/components/CurrencySelector";
@@ -43,7 +43,6 @@ function challengeLangFromPath(pathname: string): string | null {
 
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const navigate = useNavigate();
   const activeRegion = region ?? regionFromPath(pathname);
   const t = useT();
   const locale = useLocale();
@@ -142,11 +141,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               return (
                 <DropdownMenuItem
                   key={l.code}
-                  onSelect={() => {
-                    const target = languageTarget(l.code);
-                    if (target !== pathname) void navigate({ to: target as "/" });
-                  }}
-                  aria-label={l.label}
+                  asChild
                   className={cn(
                     "flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-semibold tracking-wide transition-colors",
                     active
@@ -154,8 +149,10 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                       : "text-foreground focus:bg-foreground/10 focus:text-foreground",
                   )}
                 >
-                  <FlagIcon code={l.flag} className="h-4 w-6" />
-                  <span>{l.flag}</span>
+                  <Link to={languageTarget(l.code) as "/"} aria-label={l.label}>
+                    <FlagIcon code={l.flag} className="h-4 w-6" />
+                    <span>{l.flag}</span>
+                  </Link>
                 </DropdownMenuItem>
               );
             })}
@@ -278,15 +275,11 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               {LANGUAGES.map((l) => {
                 const active = l.code === lang.code;
                 return (
-                  <button
+                  <Link
                     key={l.code}
-                    type="button"
+                    to={languageTarget(l.code) as "/"}
                     aria-label={l.label}
-                    onClick={() => {
-                      setOpen(false);
-                      const target = languageTarget(l.code);
-                      if (target !== pathname) void navigate({ to: target as "/" });
-                    }}
+                    onClick={() => setOpen(false)}
                     className={cn(
                       "flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-semibold tracking-wide transition-colors",
                       active
@@ -296,7 +289,7 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                   >
                     <FlagIcon code={l.flag} className="h-4 w-6" />
                     <span>{l.flag}</span>
-                  </button>
+                  </Link>
                 );
               })}
             </div>

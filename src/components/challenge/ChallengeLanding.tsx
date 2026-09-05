@@ -18,6 +18,18 @@ const ROAD_IMAGE =
 
 type Props = { lang?: ChallengeLang | undefined };
 
+/** The main app's homepage for this Challenge locale — "ca" is a region, not a language prefix. */
+function appHomeFor(lang: ChallengeLang | undefined): string {
+  if (!lang) return "/";
+  if (lang === "ca") return "/ca";
+  return `/${lang}`;
+}
+
+function appPlannerFor(lang: ChallengeLang | undefined): string {
+  const home = appHomeFor(lang);
+  return home === "/" ? "/planner" : `${home}/planner`;
+}
+
 function Eyebrow({ children }: { children: string }) {
   return <p className="text-xs uppercase tracking-[0.28em] text-primary/90">{children}</p>;
 }
@@ -97,7 +109,7 @@ export function ChallengeLanding({ lang }: Props) {
               variant="outline"
               className="rounded-full border-white/25 bg-white/5 px-7 text-sm font-semibold uppercase tracking-[0.12em] backdrop-blur"
             >
-              <Link to="/">{c.hero.secondaryCta}</Link>
+              <Link to={appHomeFor(lang) as "/"}>{c.hero.secondaryCta}</Link>
             </Button>
           </div>
           <p className="mt-10 text-[0.7rem] uppercase tracking-[0.2em] text-foreground/40">
@@ -370,7 +382,7 @@ export function ChallengeLanding({ lang }: Props) {
               variant="outline"
               className="mt-8 rounded-full border-primary/40 px-6 text-sm font-semibold uppercase tracking-[0.12em] text-primary hover:bg-primary/10"
             >
-              <Link to="/planner">
+              <Link to={appPlannerFor(lang) as "/planner"}>
                 {c.report.cta}
                 <ArrowRight className="size-4" />
               </Link>
@@ -518,7 +530,7 @@ export function ChallengeLanding({ lang }: Props) {
             variant="outline"
             className="rounded-full border-white/25 px-7 text-sm font-semibold uppercase tracking-[0.12em]"
           >
-            <Link to="/">{c.finalCta.secondary}</Link>
+            <Link to={appHomeFor(lang) as "/"}>{c.finalCta.secondary}</Link>
           </Button>
         </div>
 

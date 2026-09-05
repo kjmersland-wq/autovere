@@ -1,4 +1,5 @@
 import type { FlagCode } from "@/components/FlagIcon";
+import { LOCALE_ROUTES } from "@/lib/locales";
 import { DEFAULT_KWH_EUR, operatorKwhEur } from "@/lib/market-rates";
 import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import type { RouteGeo } from "@/lib/route-geo.functions";
@@ -93,9 +94,11 @@ export const REGION_DEFAULTS: Record<RegionKey, RegionDefaults> = {
 /** Region is independent from language: /us, /ca, /fr/us, /no/ca all resolve here. */
 export function regionFromPath(pathname: string): RegionKey {
   const parts = pathname.replace(/^\/+/, "").split("/").filter(Boolean);
-  const LANGS = ["no", "se", "dk", "fi", "us", "de", "nl", "fr", "pl"];
   const first = parts[0] ?? "";
-  const seg = LANGS.includes(first) ? (parts[1] ?? "") : first;
+  if (first === "us") return "us";
+  if (first === "ca") return "ca";
+  // Matrix routes only: /<language>/<region>/<page>, e.g. /fr/us/planner.
+  const seg = LOCALE_ROUTES.some((l) => l.prefix === first) ? (parts[1] ?? "") : first;
   if (seg === "us") return "us";
   if (seg === "ca") return "ca";
   return "eu";

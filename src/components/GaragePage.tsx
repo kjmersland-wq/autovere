@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { Link, useRouterState } from "@tanstack/react-router";
 import {
   Bookmark,
   Car,
@@ -37,6 +37,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useGarageText } from "@/lib/garage-i18n";
+import { buildPath, splitPath } from "@/lib/locales";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { CURRENCIES, useCurrency } from "@/lib/currency";
@@ -106,6 +107,10 @@ export function GaragePage() {
   const { user, openAuth, signOut } = useAuth();
   const { t: tx, isNo, isDa, isDe, isNl, isFr, isPl, isEs, isIt, isFi, meta: tmeta } = useGarageText();
   const { isAdmin } = useAdmin();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { prefix, region } = splitPath(pathname);
+  const pricingHref = buildPath({ prefix, region, page: "pricing" });
+  const faqHref = buildPath({ prefix, region, page: "faq" });
   const { tier, isActive } = useSubscription();
   const { currency, setCurrency } = useCurrency();
 
@@ -608,7 +613,7 @@ export function GaragePage() {
                 </p>
                 {!isAdmin && (
                   <Button className="mt-4" asChild>
-                    <Link to={isNo ? "/no/pricing" : "/pricing"}>{tx("Se abonnementene")}</Link>
+                    <Link to={pricingHref as "/pricing"}>{tx("Se abonnementene")}</Link>
                   </Button>
                 )}
               </Panel>
@@ -713,7 +718,7 @@ export function GaragePage() {
                     {tx("Svar på de vanligste spørsmålene om ruter, bompenger, vignetter og lading.")}
                   </p>
                   <Button className="mt-4" asChild>
-                    <Link to={isNo ? "/no/faq" : "/faq"}>
+                    <Link to={faqHref as "/faq"}>
                       <HelpCircle className="size-4" /> {tx("Åpne hjelp og FAQ")}
                     </Link>
                   </Button>
