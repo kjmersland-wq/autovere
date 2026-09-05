@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
 import { Download, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Metric, Panel } from "@/components/admin/AdminUi";
 import { Button } from "@/components/ui/button";
@@ -27,6 +28,10 @@ export function FinancePanel({
   const finance = useAdminQuery(fetchFinance);
   const rates = useAdminQuery(fetchRates);
   const [exporting, setExporting] = useState(false);
+
+  useEffect(() => {
+    void import("@/components/admin/pdf/generateAreaDataPdf");
+  }, []);
 
   if (finance.loading || !finance.result) return <p className="text-sm text-muted-foreground">Henter tall …</p>;
   if (finance.result.status !== "ok") {
@@ -75,6 +80,8 @@ export function FinancePanel({
           ],
         },
       });
+    } catch {
+      toast.error("Kunne ikke generere PDF. Prøv igjen.");
     } finally {
       setExporting(false);
     }

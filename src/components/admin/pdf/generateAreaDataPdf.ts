@@ -12,10 +12,18 @@ export type AreaDataPdfInput = {
   generatedAtLabel: string;
 };
 
+// Started as soon as this module is imported (not when the button is
+// clicked), so callers can warm it on mount via a bare
+// `import("@/components/admin/pdf/generateAreaDataPdf")`. jsPDF/autotable are
+// ~450KB combined; loading them only after the click risked the browser's
+// click-to-download window expiring before doc.save() ran, which fails
+// silently (no thrown error) in some browsers.
+const libsPromise = Promise.all([import("jspdf"), import("jspdf-autotable")]);
+
 /** Plain data-dump PDF of one existing Admin tab — no rule evaluation, no
  * recommendations, just the numbers/tables already shown on screen. */
 export async function generateAreaDataPdf({ areaLabel, block, periodLabel, generatedAtLabel }: AreaDataPdfInput) {
-  const [{ jsPDF }, { autoTable }] = await Promise.all([import("jspdf"), import("jspdf-autotable")]);
+  const [{ jsPDF }, { autoTable }] = await libsPromise;
 
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();

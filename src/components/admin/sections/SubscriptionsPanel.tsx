@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
 import { Download, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Panel } from "@/components/admin/AdminUi";
 import { Button } from "@/components/ui/button";
@@ -14,6 +15,10 @@ export function SubscriptionsPanel({ site }: { site: string | null }) {
   const fetchSubs = useServerFn(getSubscriptionBreakdown);
   const { loading, result } = useAdminQuery(fetchSubs);
   const [exporting, setExporting] = useState(false);
+
+  useEffect(() => {
+    void import("@/components/admin/pdf/generateAreaDataPdf");
+  }, []);
 
   if (loading || !result) return <p className="text-sm text-muted-foreground">Henter tall …</p>;
   if (result.status !== "ok") {
@@ -48,6 +53,8 @@ export function SubscriptionsPanel({ site }: { site: string | null }) {
           ],
         },
       });
+    } catch {
+      toast.error("Kunne ikke generere PDF. Prøv igjen.");
     } finally {
       setExporting(false);
     }

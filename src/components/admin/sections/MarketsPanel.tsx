@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Bar, BarChart, CartesianGrid, Cell, Legend, Pie, PieChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
 import { Download, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Panel } from "@/components/admin/AdminUi";
 import { Button } from "@/components/ui/button";
@@ -130,6 +131,10 @@ function ExportMarketsPdf() {
 
   const disabled = exporting || markets.loading || sites.loading || markets.result?.status !== "ok" || sites.result?.status !== "ok";
 
+  useEffect(() => {
+    void import("@/components/admin/pdf/generateAreaDataPdf");
+  }, []);
+
   const exportPdf = async () => {
     if (markets.result?.status !== "ok" || sites.result?.status !== "ok") return;
     setExporting(true);
@@ -159,6 +164,8 @@ function ExportMarketsPdf() {
           ],
         },
       });
+    } catch {
+      toast.error("Kunne ikke generere PDF. Prøv igjen.");
     } finally {
       setExporting(false);
     }

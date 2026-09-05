@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
 import { Download, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Panel } from "@/components/admin/AdminUi";
 import { Button } from "@/components/ui/button";
@@ -26,6 +27,10 @@ function TrafficCharts({
 }) {
   const [exporting, setExporting] = useState(false);
 
+  useEffect(() => {
+    void import("@/components/admin/pdf/generateAreaDataPdf");
+  }, []);
+
   const exportPdf = async () => {
     setExporting(true);
     try {
@@ -45,6 +50,8 @@ function TrafficCharts({
           ],
         },
       });
+    } catch {
+      toast.error("Kunne ikke generere PDF. Prøv igjen.");
     } finally {
       setExporting(false);
     }

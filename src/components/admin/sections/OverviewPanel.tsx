@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import { useServerFn } from "@tanstack/react-start";
 import { Download, Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Metric, Panel } from "@/components/admin/AdminUi";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,10 @@ export function OverviewPanel({ onNavigate }: { onNavigate: (section: AdminSecti
   const fetchOverview = useServerFn(getGlobalOverview);
   const { loading, result } = useAdminQuery(fetchOverview);
   const [exporting, setExporting] = useState(false);
+
+  useEffect(() => {
+    void import("@/components/admin/pdf/generateAreaDataPdf");
+  }, []);
 
   if (loading || !result) return <p className="text-sm text-muted-foreground">Henter tall …</p>;
   if (result.status !== "ok") {
@@ -53,6 +58,8 @@ export function OverviewPanel({ onNavigate }: { onNavigate: (section: AdminSecti
           ],
         },
       });
+    } catch {
+      toast.error("Kunne ikke generere PDF. Prøv igjen.");
     } finally {
       setExporting(false);
     }
