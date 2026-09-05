@@ -4,7 +4,8 @@ import { ArrowRight, CheckCircle2, MapPin } from "lucide-react";
 
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
-import { challengeContent, CHALLENGE_LANGS, type ChallengeLang } from "@/lib/challenge-content";
+import { CHALLENGE_CURRENCY, CHALLENGE_LANGS, challengeContent, type ChallengeLang } from "@/lib/challenge-content";
+import { convert, formatCurrency } from "@/lib/currency";
 // Served from public/ so the photo resolves on every host (custom domains don't proxy /__l5e asset URLs).
 const FOUNDER_PHOTO_URL = "/kjell-mersland.jpg";
 
@@ -39,6 +40,8 @@ export function ChallengeLanding({ lang }: Props) {
   const c = challengeContent(lang);
   const base = lang ? `/challenge/${lang}` : "/challenge";
   const [sent, setSent] = useState(false);
+  const currency = CHALLENGE_CURRENCY[lang ?? "en"];
+  const money = (amountEur: number) => formatCurrency(convert(amountEur, "EUR", currency), currency);
 
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -301,14 +304,16 @@ export function ChallengeLanding({ lang }: Props) {
                       <p className="text-sm font-medium text-foreground">{row.label}</p>
                       <p className="text-xs uppercase tracking-wide text-muted-foreground">{row.sub}</p>
                     </div>
-                    <p className="text-2xl font-semibold tabular-nums text-foreground">{row.value}</p>
+                    <p className="text-2xl font-semibold tabular-nums text-foreground">{money(row.amountEur)}</p>
                   </div>
                 ))}
                 <div className="flex items-end justify-between gap-4 pt-1">
                   <p className="text-sm font-medium uppercase tracking-wide text-teal">
                     {c.evCompare.differenceLabel}
                   </p>
-                  <p className="text-3xl font-semibold tabular-nums text-teal">{c.evCompare.differenceValue}</p>
+                  <p className="text-3xl font-semibold tabular-nums text-teal">
+                    {money(c.evCompare.differenceAmountEur)}
+                  </p>
                 </div>
               </div>
               <p className="mt-6 text-xs leading-relaxed text-muted-foreground">{c.evCompare.caveat}</p>
@@ -326,7 +331,11 @@ export function ChallengeLanding({ lang }: Props) {
                 {c.reality.exampleLabel}
               </p>
               <div className="mt-6 grid gap-6 sm:grid-cols-3">
-                {[c.reality.calculation, c.reality.actual, c.reality.difference].map((cell, i) => (
+                {[
+                  { label: c.reality.calculation.label, text: money(c.reality.calculation.amountEur) },
+                  { label: c.reality.actual.label, text: money(c.reality.actual.amountEur) },
+                  { label: c.reality.difference.label, text: c.reality.difference.value },
+                ].map((cell, i) => (
                   <div key={cell.label}>
                     <p className="text-xs uppercase tracking-wide text-muted-foreground">{cell.label}</p>
                     <p
@@ -334,7 +343,7 @@ export function ChallengeLanding({ lang }: Props) {
                         i === 2 ? "text-primary" : "text-foreground"
                       }`}
                     >
-                      {cell.value}
+                      {cell.text}
                     </p>
                   </div>
                 ))}

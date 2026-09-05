@@ -5,7 +5,14 @@
  * version served at /challenge; every other language lives at /challenge/<prefix>.
  * Translations can be added later by filling CHALLENGE_CONTENT_BY_LANG; any
  * missing language falls back to English so the page never breaks.
+ *
+ * Money in the illustrative example figures (evCompare, reality) is stored as a
+ * plain EUR amount and converted at render time with AutoVere's existing currency
+ * system (src/lib/currency.tsx — the same convert()/formatCurrency() used for
+ * pricing everywhere else), so no locale ever hardcodes a Euro string.
  */
+
+import type { CurrencyCode } from "@/lib/currency";
 
 export type ChallengeStep = { number: string; title: string; body: string };
 export type ChallengeCard = { title: string; body: string };
@@ -61,9 +68,10 @@ export type ChallengeContent = {
     title: string;
     body: string;
     exampleLabel: string;
-    rows: { label: string; sub: string; value: string }[];
+    /** Amounts in EUR — converted to the locale's own currency at render time. */
+    rows: { label: string; sub: string; amountEur: number }[];
     differenceLabel: string;
-    differenceValue: string;
+    differenceAmountEur: number;
     caveat: string;
   };
   reality: {
@@ -71,8 +79,10 @@ export type ChallengeContent = {
     title: string;
     body: string;
     exampleLabel: string;
-    calculation: { label: string; value: string };
-    actual: { label: string; value: string };
+    /** Amounts in EUR — converted to the locale's own currency at render time. */
+    calculation: { label: string; amountEur: number };
+    actual: { label: string; amountEur: number };
+    /** A relative percentage, not a currency amount — shown verbatim in every locale. */
     difference: { label: string; value: string };
     caveat: string;
   };
@@ -261,11 +271,11 @@ const EN: ChallengeContent = {
     body: "After calculating your own journey, you can run the identical route with an electric vehicle and see what the numbers say. Sometimes it is cheaper. Sometimes charging, tolls and detours change the picture. AutoVere shows the calculation either way.",
     exampleLabel: "Illustrative example — not a real AutoVere result",
     rows: [
-      { label: "Your car", sub: "Diesel", value: "€96.40" },
-      { label: "Same journey with an EV", sub: "Electric", value: "€68.20" },
+      { label: "Your car", sub: "Diesel", amountEur: 96.4 },
+      { label: "Same journey with an EV", sub: "Electric", amountEur: 68.2 },
     ],
     differenceLabel: "Potential difference",
-    differenceValue: "€28.20",
+    differenceAmountEur: 28.2,
     caveat: "Example figures only. We do not claim an EV is always cheaper.",
   },
   reality: {
@@ -273,8 +283,8 @@ const EN: ChallengeContent = {
     title: "The part most tools quietly avoid.",
     body: "The Challenge compares what AutoVere calculated before you set off with what the journey actually cost once you arrived. That comparison belongs to you — including the days it does not flatter us.",
     exampleLabel: "Illustrative example — not a real AutoVere result",
-    calculation: { label: "AutoVere calculation", value: "€96.40" },
-    actual: { label: "Actual journey cost", value: "€99.10" },
+    calculation: { label: "AutoVere calculation", amountEur: 96.4 },
+    actual: { label: "Actual journey cost", amountEur: 99.1 },
     difference: { label: "Difference", value: "+2.8%" },
     caveat: "We do not promise a specific accuracy percentage. Your own result is the point.",
   },
@@ -525,11 +535,11 @@ const NO: ChallengeContent = {
     body: "Etter at du har beregnet din egen reise, kan du kjøre den samme ruten med en elbil og se hva tallene sier. Noen ganger blir det billigere. Andre ganger endrer lading, bompenger og omveier bildet. AutoVere viser deg tallene, uansett hva de sier.",
     exampleLabel: "Illustrerende eksempel — ikke et reelt AutoVere-resultat",
     rows: [
-      { label: "Bilen din", sub: "Diesel", value: "€96,40" },
-      { label: "Samme reise med elbil", sub: "Elektrisk", value: "€68,20" },
+      { label: "Bilen din", sub: "Diesel", amountEur: 96.4 },
+      { label: "Samme reise med elbil", sub: "Elektrisk", amountEur: 68.2 },
     ],
     differenceLabel: "Mulig differanse",
-    differenceValue: "€28,20",
+    differenceAmountEur: 28.2,
     caveat: "Kun eksempeltall. Vi påstår ikke at elbil alltid er billigere.",
   },
   reality: {
@@ -537,8 +547,8 @@ const NO: ChallengeContent = {
     title: "Delen de fleste verktøy stille unngår.",
     body: "Challengen sammenligner det AutoVere beregnet før du kjørte av gårde, med det reisen faktisk kostet når du var fremme. Den sammenligningen tilhører deg — også de dagene den ikke smigrer oss.",
     exampleLabel: "Illustrerende eksempel — ikke et reelt AutoVere-resultat",
-    calculation: { label: "AutoVere-beregning", value: "€96,40" },
-    actual: { label: "Faktisk reisekostnad", value: "€99,10" },
+    calculation: { label: "AutoVere-beregning", amountEur: 96.4 },
+    actual: { label: "Faktisk reisekostnad", amountEur: 99.1 },
     difference: { label: "Differanse", value: "+2,8 %" },
     caveat: "Vi lover ingen bestemt treffsikkerhet i prosent. Poenget er ditt eget resultat.",
   },
@@ -663,6 +673,30 @@ export type ChallengeLang = (typeof CHALLENGE_LANGS)[number]["prefix"];
 export function isChallengeLang(value: string): value is ChallengeLang {
   return CHALLENGE_LANGS.some((l) => l.prefix === value);
 }
+
+/**
+ * Fixed display currency for each Challenge locale's illustrative example figures.
+ * Mirrors the app's existing per-locale currency defaults (LOCALE_DEFAULT_CURRENCY in
+ * src/lib/currency.tsx) under Challenge's own prefix naming — "se" and "dk" are Challenge's
+ * URL prefixes for Swedish/Danish, while the shared currency map keys them "sv"/"da".
+ * English/GB (the master, no prefix) is intentionally pinned to EUR so /challenge's
+ * rendered output is unaffected — its "real" locale default (GBP) is deliberately not
+ * used here, matching the existing master figures rather than changing them.
+ */
+export const CHALLENGE_CURRENCY: Record<ChallengeLang | "en", CurrencyCode> = {
+  en: "EUR",
+  no: "NOK",
+  se: "SEK",
+  dk: "DKK",
+  fi: "EUR",
+  us: "USD",
+  de: "EUR",
+  nl: "EUR",
+  fr: "EUR",
+  pl: "PLN",
+  es: "EUR",
+  it: "EUR",
+};
 
 /** Per-language overrides. Missing languages fall back to English. */
 const CHALLENGE_CONTENT_BY_LANG: Partial<Record<ChallengeLang, ChallengeContent>> = {
