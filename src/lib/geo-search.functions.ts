@@ -149,7 +149,7 @@ async function photonSearch(query: string, region: keyof typeof REGION_FOCUS): P
 }
 
 export const searchPlaces = createServerFn({ method: "GET" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         query: z.string().min(2).max(120),

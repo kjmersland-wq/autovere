@@ -336,7 +336,7 @@ async function buildRouteGeo(
 const point = z.object({ name: z.string().min(1).max(160), lat: z.number(), lng: z.number() });
 
 export const getRouteGeo = createServerFn({ method: "GET" })
-  .inputValidator((data) =>
+  .validator((data) =>
     z
       .object({
         origin: z.string().min(2).max(160),

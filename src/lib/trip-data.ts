@@ -134,6 +134,8 @@ export type TollLine = {
   portal?: { label: string; url: string };
   /** Motorcycles ride free (e.g. Norwegian city rings) */
   freeForMotorcycle?: boolean;
+  /** Country-specific motorcycle price factor for this line (vignettes only). Falls back to a generic discount when absent. */
+  motoFactor?: number;
 };
 
 export type SafetySection = { heading: string; items: string[] };
@@ -594,9 +596,13 @@ export function estimateTrip(
       // Multi-day vignettes stay valid for the whole return trip — only distance
       // tolls and ferry tickets are charged twice.
       const returnFactor = isReturn && !isVignetteLine(l) ? 2 : 1;
+      // Vignette lines carry their own researched country-specific motorcycle
+      // price factor (e.g. Austria 0.4, Hungary 0.65); fall back to a generic
+      // discount for lines that don't document one (mainly distance tolls).
+      const lineMotoFactor = isMoto ? (l.motoFactor ?? 0.6) : 1;
       return {
         ...l,
-        amount: isMoto && l.freeForMotorcycle ? 0 : round2(l.amount * factor * returnFactor),
+        amount: isMoto && l.freeForMotorcycle ? 0 : round2(l.amount * factor * lineMotoFactor * returnFactor),
         badge: isMoto && l.freeForMotorcycle
           ? "Free for motorcycles"
           : (l.badge ?? (returnFactor === 2 ? "Return trip ×2" : undefined)),
@@ -608,10 +614,9 @@ export function estimateTrip(
   let segments = geo ? buildRouteSegments(geo).segments : [];
   if (!includeFerries) segments = segments.filter((s) => !s.country.includes("Ferries"));
 
-  const motoFactor = isMoto ? 0.6 : 1;
   segments = segments.map((s) => {
     const tollFactor = s.country.includes("Ferries") ? 1 : tuning.toll;
-    const lines = mapLines(s.lines, tollFactor * motoFactor);
+    const lines = mapLines(s.lines, tollFactor);
     return { ...s, lines, total: round2(lines.reduce((sum, l) => sum + l.amount, 0)) };
 
   });

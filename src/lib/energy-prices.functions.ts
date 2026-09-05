@@ -88,7 +88,7 @@ async function loadSnapshot(): Promise<Snapshot> {
 const round3 = (n: number) => Math.round(n * 1000) / 1000;
 
 export const getEnergyPrices = createServerFn({ method: "GET" })
-  .inputValidator((data) => z.object({ region: z.enum(["eu", "us", "ca"]).default("eu") }).parse(data))
+  .validator((data) => z.object({ region: z.enum(["eu", "us", "ca"]).default("eu") }).parse(data))
   .handler(async ({ data }): Promise<EnergyPrices> => {
     const s = await loadSnapshot();
     const updated = new Date(s.at).toISOString();

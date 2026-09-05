@@ -15,7 +15,7 @@ const contactSchema = z.object({
 export type ContactPayload = z.infer<typeof contactSchema>;
 
 export const sendContactMessage = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => contactSchema.parse(data))
+  .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
     const { sendMail } = await import("@/lib/smtp.server");
     const to = process.env["CONTACT_TO_EMAIL"] || process.env["GMAIL_USER"] || "";

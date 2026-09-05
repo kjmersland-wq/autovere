@@ -315,6 +315,7 @@ export function buildRouteSegments(geo: RouteGeo): RouteSegments {
         const vl: TollLine = { place: v.place, detail: v.detail, amount: v.amount, portal: v.portal };
         if (v.badge) vl.badge = v.badge;
         if (v.motoFactor === 0) vl.freeForMotorcycle = true;
+        if (v.motoFactor !== undefined) vl.motoFactor = v.motoFactor;
         bucket.push(vl);
       }
       if (line) bucket.push(line);

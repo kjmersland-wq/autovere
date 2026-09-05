@@ -50,7 +50,7 @@ const requestAccessSchema = z.object({
 });
 
 export const requestInCarAccess = createServerFn({ method: "POST" })
-  .inputValidator((data: unknown) => requestAccessSchema.parse(data))
+  .validator((data: unknown) => requestAccessSchema.parse(data))
   .handler(async ({ data }): Promise<{ ok: boolean; error?: string }> => {
     const adminEmail = data.email.trim().toLowerCase();
     const restricted = { ok: false, error: "Access restricted to authorized executive emails." } as const;
