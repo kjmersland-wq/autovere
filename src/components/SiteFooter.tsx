@@ -104,6 +104,11 @@ export function SiteFooter() {
         <div>
           <p className="text-sm font-semibold text-foreground">{t.footer.company}</p>
           <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li>
+              <Link to={challengeHref as "/challenge"} className="transition-colors hover:text-foreground">
+                {t.footer.challenge}
+              </Link>
+            </li>
             {companyLinks.map((l) => (
               <li key={l.label}>
                 <a href={l.to} className="transition-colors hover:text-foreground">
