@@ -115,6 +115,34 @@ export function ChallengeLanding({ lang }: Props) {
         </div>
       </section>
 
+      {/* Journalist freedom */}
+      <section className="border-t border-white/10 bg-white/[0.02]">
+        <div className="mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 md:py-28">
+          <Eyebrow>{c.freedom.eyebrow}</Eyebrow>
+          <h2 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl">
+            {c.freedom.title}
+          </h2>
+          <div className="mt-6 space-y-2 text-xl font-medium tracking-tight text-foreground/85 sm:text-2xl">
+            {c.freedom.lines.map((line) => (
+              <p key={line}>{line}</p>
+            ))}
+          </div>
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted-foreground">{c.freedom.body}</p>
+          <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            {c.freedom.items.map((item) => (
+              <article key={item.title} className="rounded-3xl border border-white/10 bg-background/40 p-6">
+                <CheckCircle2 className="size-5 text-teal" />
+                <h3 className="mt-4 text-base font-semibold uppercase tracking-[0.12em] text-foreground">
+                  {item.title}
+                </h3>
+                <p className="mt-2.5 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </div>
+      </section>
+
+
       {/* How it works */}
       <section className="border-y border-white/10 bg-white/[0.02]">
         <div className="mx-auto w-full max-w-7xl px-6 py-24 sm:px-8 md:py-28">
