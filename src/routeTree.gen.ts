@@ -37,6 +37,7 @@ import { Route as CaPlannerRouteImport } from './routes/ca.planner'
 import { Route as CaPricingRouteImport } from './routes/ca.pricing'
 import { Route as CaScenicRouteImport } from './routes/ca.scenic'
 import { Route as CaTollsRouteImport } from './routes/ca.tolls'
+import { Route as ChallengeIndexRouteImport } from './routes/challenge.index'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as NoIndexRouteImport } from './routes/no.index'
 import { Route as NoFaqRouteImport } from './routes/no.faq'
@@ -207,6 +208,11 @@ const CaTollsRoute = CaTollsRouteImport.update({
   id: '/tolls',
   path: '/tolls',
   getParentRoute: () => CaRoute,
+} as any)
+const ChallengeIndexRoute = ChallengeIndexRouteImport.update({
+  id: '/challenge/',
+  path: '/challenge/',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
   id: '/checkout/return',
@@ -411,6 +417,7 @@ export interface FileRoutesByFullPath {
   '/us/tolls': typeof UsTollsRoute
   '/$lang/': typeof LangIndexRoute
   '/ca/': typeof CaIndexRoute
+  '/challenge/': typeof ChallengeIndexRoute
   '/no/': typeof NoIndexRoute
   '/us/': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
@@ -469,6 +476,7 @@ export interface FileRoutesByTo {
   '/us/tolls': typeof UsTollsRoute
   '/$lang': typeof LangIndexRoute
   '/ca': typeof CaIndexRoute
+  '/challenge': typeof ChallengeIndexRoute
   '/no': typeof NoIndexRoute
   '/us': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
@@ -530,6 +538,7 @@ export interface FileRoutesById {
   '/us/tolls': typeof UsTollsRoute
   '/$lang/': typeof LangIndexRoute
   '/ca/': typeof CaIndexRoute
+  '/challenge/': typeof ChallengeIndexRoute
   '/no/': typeof NoIndexRoute
   '/us/': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
@@ -592,6 +601,7 @@ export interface FileRouteTypes {
     | '/us/tolls'
     | '/$lang/'
     | '/ca/'
+    | '/challenge/'
     | '/no/'
     | '/us/'
     | '/$lang/$region/$page'
@@ -650,6 +660,7 @@ export interface FileRouteTypes {
     | '/us/tolls'
     | '/$lang'
     | '/ca'
+    | '/challenge'
     | '/no'
     | '/us'
     | '/$lang/$region/$page'
@@ -710,6 +721,7 @@ export interface FileRouteTypes {
     | '/us/tolls'
     | '/$lang/'
     | '/ca/'
+    | '/challenge/'
     | '/no/'
     | '/us/'
     | '/$lang/$region/$page'
@@ -752,6 +764,7 @@ export interface RootRouteChildren {
   PartnersInCarRoute: typeof PartnersInCarRoute
   PlPricingRoute: typeof PlPricingRoute
   LangIndexRoute: typeof LangIndexRoute
+  ChallengeIndexRoute: typeof ChallengeIndexRoute
   NoIndexRoute: typeof NoIndexRoute
   LangRegionPageRoute: typeof LangRegionPageRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
@@ -954,6 +967,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/ca/tolls'
       preLoaderRoute: typeof CaTollsRouteImport
       parentRoute: typeof CaRoute
+    }
+    '/challenge/': {
+      id: '/challenge/'
+      path: '/challenge'
+      fullPath: '/challenge/'
+      preLoaderRoute: typeof ChallengeIndexRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/checkout/return': {
       id: '/checkout/return'
@@ -1264,6 +1284,7 @@ const rootRouteChildren: RootRouteChildren = {
   PartnersInCarRoute: PartnersInCarRoute,
   PlPricingRoute: PlPricingRoute,
   LangIndexRoute: LangIndexRoute,
+  ChallengeIndexRoute: ChallengeIndexRoute,
   NoIndexRoute: NoIndexRoute,
   LangRegionPageRoute: LangRegionPageRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
