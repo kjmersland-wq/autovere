@@ -29,7 +29,7 @@ export function LocaleAutoDetect() {
       const [langRaw = "", regionRaw = ""] = tag.split("-");
       const region = regionRaw.toUpperCase();
       if (langRaw === "en" && region === "US") {
-        void navigate({ to: "/usa" as never });
+        void navigate({ to: "/us" as never });
         return;
       }
       if (langRaw === "en") return; // English visitors stay on the root tree

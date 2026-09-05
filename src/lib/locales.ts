@@ -4,7 +4,7 @@ export const LOCALE_ROUTES = [
   { prefix: "se", code: "sv", label: "Svenska", flag: "🇸🇪" },
   { prefix: "dk", code: "da", label: "Dansk", flag: "🇩🇰" },
   { prefix: "fi", code: "fi", label: "Suomi", flag: "🇫🇮" },
-  { prefix: "usa", code: "us", label: "US English", flag: "🇺🇸" },
+  { prefix: "us", code: "us", label: "US English", flag: "🇺🇸" },
   { prefix: "de", code: "de", label: "Deutsch", flag: "🇩🇪" },
   { prefix: "nl", code: "nl", label: "Nederlands", flag: "🇳🇱" },
   { prefix: "fr", code: "fr", label: "Français", flag: "🇫🇷" },
