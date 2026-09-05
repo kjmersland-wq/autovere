@@ -22,17 +22,8 @@ function Eyebrow({ children }: { children: string }) {
 }
 
 /** Subtle emphasis on a few key founder phrases — no extra styling elsewhere. */
-const EMPHASIS = [
-  "I am 74 years old.",
-  "My son is part of the journey too.",
-  "Not guesses. Not a black box.",
-  "AutoVere is already launched in the USA and Canada as well as Europe",
-  "I want it to be tested in the real world.",
-  "It's to let you test it.",
-];
-
-function emphasise(text: string) {
-  const hit = EMPHASIS.find((phrase) => text.includes(phrase));
+function emphasise(text: string, phrases: readonly string[]) {
+  const hit = phrases.find((phrase) => text.includes(phrase));
   if (!hit) return text;
   const [before, after] = text.split(hit);
   return (
@@ -404,12 +395,12 @@ export function ChallengeLanding({ lang }: Props) {
             </p>
             <div className="mt-8 space-y-5 text-base leading-relaxed text-muted-foreground">
               {c.founder.paragraphs.map((p) => (
-                <p key={p}>{emphasise(p)}</p>
+                <p key={p}>{emphasise(p, c.founder.emphasis)}</p>
               ))}
             </div>
             <div className="mt-10 space-y-5 border-l border-primary/40 pl-6 text-base leading-relaxed text-foreground/85">
               {c.founder.closing.map((p) => (
-                <p key={p}>{emphasise(p)}</p>
+                <p key={p}>{emphasise(p, c.founder.emphasis)}</p>
               ))}
             </div>
           </div>
