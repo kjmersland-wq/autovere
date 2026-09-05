@@ -1179,6 +1179,269 @@ const DK: ChallengeContent = {
   languageLabel: "Challenge på dit sprog",
 };
 
+const FI: ChallengeContent = {
+  meta: {
+    title: "AutoVere Challenge — pane AutoVere koetteelle",
+    description:
+      "Testaa AutoVerea oikeilla matkoilla, oikeilla autoilla ja todellisilla kustannuksilla. Kutsumme autotoimittajat laskemaan, ajamaan ja vertailemaan.",
+  },
+  badge: "Challenge",
+  hero: {
+    kicker: "AutoVere Challenge",
+    title: "Pane AutoVere koetteelle.",
+    lede: "Valitse auto, jolla oikeasti ajat. Valitse matka, jota haluat testata. Laske se aidossa AutoVeressa, aja se — ja vertaile lukujamme siihen, mitä todella kulutit.",
+    statement: ["Oikeat autot.", "Oikeat matkat.", "Oikeat kustannukset."],
+    primaryCta: "Hae Challenge-pääsyä",
+    secondaryCta: "Tutustu AutoVereen",
+    imageCredit: "Kuva: Unsplash",
+  },
+  invitation: {
+    eyebrow: "Henkilökohtainen kutsu autotoimittajille",
+    title: "Kutsumme sinut testaamaan AutoVerea itse.",
+    paragraphs: [
+      "Jos kirjoitat autoista, tiedät jo, miten harvoin matka maksaa sen, minkä laskuri lupasi etukäteen. Tietullit, vinjetit, lautat, polttoaine ja lataus kasautuvat hiljaa maittain — ja juuri sen AutoVere on rakennettu laskemaan oikein.",
+      "Emme pyydä sinua vain luottamaan sokeasti meihin.",
+      "Annamme sinulle mieluummin avaimet: valitse oikea matka, valitse auto, joka on omalla pihallasi, käytä AutoVerea Pro-käyttäjänä, aja reitti — ja vertaa laskelmaamme kuitteihisi.",
+      "Jos osumme oikeaan, siitä kannattaa kertoa. Jos osumme väärään, haluamme tietää sen — kuulemme sen mieluummin sinulta kuin että se ei tulisi koskaan ilmi.",
+    ],
+    signature: "Kjell Mersland — AutoVeren perustaja · KM Tech Labs, Kristiansand, Norja",
+  },
+  steps: {
+    eyebrow: "Näin Challenge toimii",
+    title: "Kuusi selkeää vaihetta kutsusta tulokseen.",
+    intro:
+      "Mikään tässä ei ole demoympäristö. Viidennestä vaiheesta lähtien käytät täsmälleen samaa AutoVerea kuin kaikki muut matkailijat.",
+    items: [
+      { number: "01", title: "Rekisteröidy", body: "Ilmoittaudu mukaan autotoimittajana." },
+      {
+        number: "02",
+        title: "Vahvistus",
+        body: "AutoVere käy hakemuksesi läpi ja aktivoi Challenge-pääsysi.",
+      },
+      {
+        number: "03",
+        title: "Valitse matkasi",
+        body: "Valitse joko AutoVeren ehdottama Challenge-reitti tai kokoa oma matkasi.",
+      },
+      {
+        number: "04",
+        title: "Valitse autosi",
+        body: "Valitse ajoneuvo, jota oikeasti testaat — bensiini, diesel tai sähkö.",
+      },
+      {
+        number: "05",
+        title: "Laske ja aja",
+        body: "Käytä tavallista AutoVere-kokemusta Pro-käyttäjänä. Laske matka ja aja se sitten oikeasti.",
+      },
+      {
+        number: "06",
+        title: "Vertaile",
+        body: "Syötä, mitä matka oikeasti maksoi, ja vertaile sitä AutoVere-laskelmaan.",
+      },
+    ],
+  },
+  notCalculator: {
+    eyebrow: "Yksi tuote, ei lehdistödemoa",
+    title: "Challengesi tapahtuu aidon AutoVere-kokemuksen sisällä.",
+    body: "AutoVere Challenge on sisäänkäynti ja koko testausmalli — ei toista, yksinkertaistettua laskuria, joka on rakennettu erityisesti toimittajia varten. Mitään rajattua lehdistöversiota, valmiiksi rakennettua hiekkalaatikkoa tai omia lukuja ei ole.",
+    flow: [
+      "Challenge-aloitussivu",
+      "Toimittajarekisteröinti",
+      "AutoVere-vahvistus",
+      "Challenge Pro -pääsy",
+      "Tavallinen AutoVere-tuote",
+      "Oma Challenge-tuloksesi",
+    ],
+    footnote: "Laskelma, jota testaat, on sama laskelma, jonka kaikki muutkin saavat.",
+  },
+  freedom: {
+    eyebrow: "Oma testisi, omat ehtosi",
+    title: "Valitse matka, jota haluat testata.",
+    lines: [
+      "Käytä jotain ehdottamistamme reiteistä — tai valitse oma.",
+      "Valitse auto, jolla ajat arjessa.",
+    ],
+    body: "Läpäistävää testiä, käsikirjoitettua reittiä tai hyväksyttyjen autojen listaa ei ole. Challenge on sinun muotoiltavanasi — pyydämme vain, että julkaiset sen, mitä löydät.",
+    items: [
+      { title: "Mikä tahansa matka", body: "Ehdotettu Challenge-reitti tai matka, jonka olisit tehnyt joka tapauksessa." },
+      { title: "Mikä tahansa auto", body: "Auto testiflotassasi tai omalla pihallasi — bensiini, diesel tai sähkö." },
+      { title: "Täysi Pro-pääsy", body: "Koko AutoVere-tuote, ilman rajoituksia, koko testijakson ajan." },
+      { title: "Oma johtopäätöksesi", body: "Julkaise tulos juuri sellaisena kuin löydät sen. Emme lue sitä läpi etukäteen." },
+    ],
+  },
+  journey: {
+    eyebrow: "Valitse matka",
+    title: "Aja ehdotettua reittiä — tai sellaista, joka sopii testiisi.",
+    intro:
+      "Challengesi voi toteuttaa kahdella tavalla. Molemmat käyttävät samaa laskentamoottoria, samoja tietolähteitä ja samaa maakohtaista erittelyä.",
+    options: [
+      {
+        label: "Vaihtoehto 01",
+        title: "Ehdotettu Challenge-reitti",
+        body: "AutoVere tarjoaa jokaiselle maalle kolme ehdotettua reittiä, jotka kattavat eri alueita ja erilaista ajamista.",
+        bullets: ["Lyhyt", "Keskipitkä", "Pitkä"],
+      },
+      {
+        label: "Vaihtoehto 02",
+        title: "Testaa omaa matkaasi",
+        body: "Valitse realistinen matka, joka sopii testiisi — matka, jonka olisit tehnyt joka tapauksessa, on usein kaikkein paljastavin. Esimerkkinä: Helsinki–Rovaniemi, Warszawa–Kraków, Los Angeles–San Diego.",
+        bullets: ["Oma reittisi", "Oma aikataulusi", "Omat ajo-olosuhteesi"],
+      },
+    ],
+  },
+  vehicles: {
+    eyebrow: "Valitse ajoneuvo",
+    title: "Testaa autoa, joka oikeasti on pihallasi.",
+    intro:
+      "Valitse käyttövoima ja sen jälkeen tarkka auto AutoVeren olemassa olevasta ajoneuvodatasta. Challengelle ei ole erillistä autolistaa.",
+    items: [
+      {
+        label: "Bensiini",
+        body: "Kulutus, polttoainehinnat ja tietullit laskettuna maittain reittisi varrella.",
+        image:
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=70",
+        alt: "Sininen coupé pysäköitynä autiomaan tiellä auringonlaskussa",
+      },
+      {
+        label: "Diesel",
+        body: "Polttoainetalous pitkillä matkoilla sekä paino- ja akseliluokat, joissa tietullioperaattorit soveltavat niitä.",
+        image:
+          "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1200&q=70",
+        alt: "Valkoinen maastoauto lumisella metsätiellä",
+      },
+      {
+        label: "Sähkö",
+        body: "Akun koko, kulutus, latauspysähdykset ja verkkohinnat reitin varrella.",
+        image:
+          "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=70",
+        alt: "Latauskaapeli kytkettynä sähköautoon",
+      },
+    ],
+  },
+  evCompare: {
+    eyebrow: "Sama matka sähköautolla",
+    title: "Mitä tämä matka olisi maksanut sähköautolla?",
+    body: "Kun olet laskenut matkasi, voit ajaa saman reitin sähköautolla ja katsoa, mitä luvut kertovat. Joskus se on halvempi. Toisinaan lataus, tietullit ja kiertotiet muuttavat kuvan. AutoVere näyttää luvut joka tapauksessa.",
+    exampleLabel: "Havainnollistava esimerkki — ei todellinen AutoVere-tulos",
+    rows: [
+      { label: "Autosi", sub: "Diesel", amountEur: 96.4 },
+      { label: "Sama matka sähköautolla", sub: "Sähkö", amountEur: 68.2 },
+    ],
+    differenceLabel: "Mahdollinen ero",
+    differenceAmountEur: 28.2,
+    caveat: "Vain esimerkkilukuja. Emme väitä, että sähköauto on aina halvempi.",
+  },
+  reality: {
+    eyebrow: "Arvio kohtaa todellisuuden",
+    title: "Osa, jota useimmat työkalut hiljaa välttävät.",
+    body: "Challenge vertaa sitä, mitä AutoVere laski ennen matkaan lähtöä, siihen, mitä matka todella maksoi perillä. Se vertailu kuuluu sinulle — myös niinä päivinä, jolloin se ei mairittele meitä.",
+    exampleLabel: "Havainnollistava esimerkki — ei todellinen AutoVere-tulos",
+    calculation: { label: "AutoVere-laskelma", amountEur: 96.4 },
+    actual: { label: "Todellinen matkakustannus", amountEur: 99.1 },
+    difference: { label: "Ero", value: "+2,8 %" },
+    caveat: "Emme lupaa tarkkaa prosentuaalista osumatarkkuutta. Pointti on omassa tuloksessasi.",
+  },
+  founder: {
+    eyebrow: "Mies AutoVeren takana",
+    title: "Miksi rakensin AutoVeren",
+    opening:
+      "Kaikki alkoi yksinkertaisesta kysymyksestä: Miksi on yhä niin vaikeaa tietää, mitä autolla matkustaminen oikeasti maksaa?",
+    paragraphs: [
+      "Olen 74-vuotias. Yli 40 vuoden jälkeen rakennusalalla jäin eläkkeelle vuonna 2020.",
+      "Vuotta myöhemmin, sen sijaan että olisin hidastanut, aloin rakentaa jotain aivan uutta.",
+      "Olin ajanut vuosikausia ristiin rastiin Euroopassa. Mitä enemmän matkustin, sitä selvemmin näin saman ongelman: pitkän matkan suunnittelu tarkoitti yleensä tiedon etsimistä monesta eri paikasta.",
+      "Tietullit. Vinjetit. Lautat. Polttoaine. Lataus. Eri reitit. Eri maat. Eri kustannukset.",
+      "Ajattelin, että täytyy olla parempi tapa.",
+      "Joten aloin rakentaa AutoVerea.",
+      "Se, mikä alkoi henkilökohtaisena ideana, on kasvanut paljon suuremmaksi hankkeeksi. Enkä tee sitä yksin — poikani on myös mukana tässä matkassa.",
+      "Yhdessä rakennamme AutoVerea periaatteen pohjalta, joka on aina merkinnyt minulle paljon: jos jotain on syytä tehdä, se kannattaa tehdä kunnolla.",
+      "Se tarkoittaa, että käytämme aitoa dataa, virallisia lähteitä, algoritmeja ja matematiikkaa matkan laskemiseen.",
+      "Ei arvailua. Ei mustaa laatikkoa.",
+      "Tavoite on yksinkertainen: antaa ihmisille selkeämpi kuva siitä, mitä matka todennäköisesti tulee maksamaan ennen kotoa lähtöä — ja auttaa heitä tekemään parempia valintoja reitin, auton ja matkustustavan suhteen.",
+      "Se, mikä alkoi Kristiansandista, Norjasta, on kasvanut kauas Norjan ja Euroopan ulkopuolelle.",
+      "AutoVere on jo lanseerattu Yhdysvalloissa ja Kanadassa Euroopan lisäksi, ja kunnianhimomme on tulla globaaliksi automatkailun tietoalustaksi kaikille, jotka liikkuvat teillä.",
+    ],
+    closing: [
+      "Mutta jonkin rakentaminen ja siihen uskominen ei riitä.",
+      "Haluan, että se testataan oikeassa maailmassa.",
+      "Siksi loimme AutoVere Challengen.",
+      "En halua, että autotoimittajat vain luottavat sanaani.",
+      "Valitse oikea auto. Valitse oikea matka. Laske se AutoVerella. Aja se. Vertaa sitten tulosta siihen, mikä todella tapahtui.",
+      "Ei erikoisnäytöstä. Ei ennalta sovittua tulosta.",
+      "Vain AutoVere — ja tie.",
+      "Jos se toimii hyvin, olemme siitä ylpeitä.",
+      "Jos jokin menee pieleen, haluamme tietää siitä.",
+      "Sillä paras tapa todistaa, että AutoVere toimii, ei ole väittää sitä.",
+      "Se on antaa sinun testata sitä itse.",
+    ],
+    name: "Kjell Mersland, 74-vuotias",
+    role: "AutoVeren perustaja",
+    note: "Rakennan AutoVerea yhdessä poikani kanssa",
+    alt: "Kjell Mersland, AutoVeren perustaja",
+    emphasis: [
+      "Olen 74-vuotias.",
+      "poikani on myös mukana tässä matkassa.",
+      "Ei arvailua. Ei mustaa laatikkoa.",
+      "AutoVere on jo lanseerattu Yhdysvalloissa ja Kanadassa Euroopan lisäksi",
+      "Haluan, että se testataan oikeassa maailmassa.",
+      "Se on antaa sinun testata sitä itse.",
+    ],
+  },
+  report: {
+    eyebrow: "Challenge-raportti",
+    title: "Matkasi. Tuloksesi.",
+    body: "Kun matka on suoritettu, saat ammattimaisen Challenge-tuloksen, johon voit viitata, jonka voit julkaista tai jonka perusteella voit haastaa meidät.",
+    contents: [
+      "Reitti",
+      "Ajoneuvo",
+      "Käyttövoima",
+      "AutoVere-laskelma",
+      "Todellinen matkakustannus",
+      "Ero",
+      "Sähköautovertailu",
+      "Päivämäärä",
+      "Challenge-tunnus",
+    ],
+    future: "Suunnitteilla: pysyvä verkkotulos, jaettava linkki ja PDF-raportti.",
+    cta: "Katso tämä matka AutoVeressa",
+    ctaNote:
+      "Challengen jälkeen matka ja sen parametrit voidaan avata uudelleen tavallisessa AutoVere-tuotteessa, joten voit jatkaa sen tutkimista.",
+  },
+  register: {
+    eyebrow: "Pääsy autotoimittajille",
+    title: "Hae pääsyä AutoVere Challengeen",
+    body: "Oletko osa autotoimittajakuntaa? Haluaisimme mielellämme, että testaat AutoVerea itse. Hae Challenge-pääsyä — kun hakemuksesi on hyväksytty, käytät AutoVerea Pro-käyttäjänä koko testijakson ajan.",
+    fields: {
+      name: "Koko nimi",
+      email: "Työsähköposti",
+      outlet: "Julkaisu tai kanava",
+      role: "Rooli",
+      country: "Maa",
+      message: "Matka ja auto, joita haluaisit testata",
+    },
+    placeholders: {
+      name: "Kaisa Virtanen",
+      email: "kaisa@julkaisu.fi",
+      outlet: "Julkaisu, verkkosivu tai kanava",
+      role: "Autotoimittaja, arvostelija, päätoimittaja…",
+      country: "Suomi",
+      message: "Valinnainen — kerro, mitä aiot testata",
+    },
+    submit: "Hae Challenge-pääsyä",
+    note: "Nopea vahvistusvaihe varmistaa, että Challenge-pääsy on varattu aktiivisesti työskenteleville toimittajille. Kun hakemuksesi on hyväksytty, tilisi päivitetään Pro-tasolle testijakson ajaksi — ei erillistä lehdistötyökalua, ei rajoituksia.",
+    successTitle: "Kiitos — olemme vastaanottaneet hakemuksesi.",
+    successBody:
+      "Challenge-pääsyä otetaan käyttöön vähitellen. Tietosi tallennetaan toistaiseksi vain tähän selaimeen, ja otamme sinuun henkilökohtaisesti yhteyttä heti, kun vahvistus avautuu.",
+  },
+  finalCta: {
+    title: "Valmiina panemaan AutoVeren koetteelle?",
+    body: "Valitse matka. Valitse autosi. Aja se. Vertaile tulosta.",
+    primary: "Liity mukaan AutoVere Challengeen",
+    secondary: "Tutustu AutoVereen",
+  },
+  languageLabel: "Challenge omalla kielelläsi",
+};
+
 /** Language URLs for the Challenge page. English/GB is the root /challenge. */
 export const CHALLENGE_LANGS = [
   { prefix: "no", label: "Norsk", flag: "🇳🇴" },
@@ -1229,6 +1492,7 @@ const CHALLENGE_CONTENT_BY_LANG: Partial<Record<ChallengeLang, ChallengeContent>
   no: NO,
   se: SE,
   dk: DK,
+  fi: FI,
 };
 
 export function challengeContent(lang?: string | undefined): ChallengeContent {
