@@ -286,9 +286,9 @@ const EN: ChallengeContent = {
       "After a Challenge, the journey and its parameters can be opened again inside the normal AutoVere product, so you can keep exploring it.",
   },
   register: {
-    eyebrow: "Press registration",
-    title: "Are you a member of the automotive press?",
-    body: "We'd love to have you test AutoVere. Register for AutoVere Challenge access and use AutoVere as a Pro user while conducting your test. Verification simply helps us keep Challenge access with working journalists.",
+    eyebrow: "Automotive press access",
+    title: "Apply for AutoVere Challenge access",
+    body: "Are you a member of the automotive press? We'd love to have you test AutoVere yourself. Apply for Challenge access and, once approved, use AutoVere as a Pro user while conducting your test.",
     fields: {
       name: "Full name",
       email: "Work email",
@@ -305,12 +305,13 @@ const EN: ChallengeContent = {
       country: "Norway",
       message: "Optional — tell us what you plan to test",
     },
-    submit: "Register for AutoVere Challenge",
-    note: "Registration opens shortly. Leave your details and we'll come back to you personally with Challenge access.",
-    successTitle: "Thank you — your request is noted.",
+    submit: "Apply for Challenge access",
+    note: "A quick verification step keeps Challenge access with working journalists. Once approved, your account is upgraded to Pro for the test — no separate press tool, no restrictions.",
+    successTitle: "Thank you — we've got your application.",
     successBody:
-      "Challenge registration is not open yet. Your details are kept in this browser only for now, and we'll be in touch personally as soon as verification opens.",
+      "Challenge access is being rolled out gradually. Your details are kept in this browser only for now, and we'll come back to you personally as soon as verification opens.",
   },
+
   finalCta: {
     title: "Ready to put AutoVere to the test?",
     body: "Choose a journey. Choose your car. Drive it. Compare the result.",
