@@ -5,6 +5,7 @@ import { ArrowRight, CheckCircle2, MapPin } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { challengeContent, CHALLENGE_LANGS, type ChallengeLang } from "@/lib/challenge-content";
+import founderPhoto from "@/assets/kjell-mersland.jpg.asset.json";
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=2000&q=75";
