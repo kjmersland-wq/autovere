@@ -38,6 +38,7 @@ import { Route as CaPricingRouteImport } from './routes/ca.pricing'
 import { Route as CaScenicRouteImport } from './routes/ca.scenic'
 import { Route as CaTollsRouteImport } from './routes/ca.tolls'
 import { Route as ChallengeIndexRouteImport } from './routes/challenge.index'
+import { Route as ChallengeLangRouteImport } from './routes/challenge.$lang'
 import { Route as CheckoutReturnRouteImport } from './routes/checkout.return'
 import { Route as NoIndexRouteImport } from './routes/no.index'
 import { Route as NoFaqRouteImport } from './routes/no.faq'
@@ -212,6 +213,11 @@ const CaTollsRoute = CaTollsRouteImport.update({
 const ChallengeIndexRoute = ChallengeIndexRouteImport.update({
   id: '/challenge/',
   path: '/challenge/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ChallengeLangRoute = ChallengeLangRouteImport.update({
+  id: '/challenge/$lang',
+  path: '/challenge/$lang',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CheckoutReturnRoute = CheckoutReturnRouteImport.update({
@@ -393,6 +399,7 @@ export interface FileRoutesByFullPath {
   '/ca/pricing': typeof CaPricingRoute
   '/ca/scenic': typeof CaScenicRoute
   '/ca/tolls': typeof CaTollsRoute
+  '/challenge/$lang': typeof ChallengeLangRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -452,6 +459,7 @@ export interface FileRoutesByTo {
   '/ca/pricing': typeof CaPricingRoute
   '/ca/scenic': typeof CaScenicRoute
   '/ca/tolls': typeof CaTollsRoute
+  '/challenge/$lang': typeof ChallengeLangRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -514,6 +522,7 @@ export interface FileRoutesById {
   '/ca/pricing': typeof CaPricingRoute
   '/ca/scenic': typeof CaScenicRoute
   '/ca/tolls': typeof CaTollsRoute
+  '/challenge/$lang': typeof ChallengeLangRoute
   '/checkout/return': typeof CheckoutReturnRoute
   '/no/faq': typeof NoFaqRoute
   '/no/garage': typeof NoGarageRoute
@@ -577,6 +586,7 @@ export interface FileRouteTypes {
     | '/ca/pricing'
     | '/ca/scenic'
     | '/ca/tolls'
+    | '/challenge/$lang'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -636,6 +646,7 @@ export interface FileRouteTypes {
     | '/ca/pricing'
     | '/ca/scenic'
     | '/ca/tolls'
+    | '/challenge/$lang'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -697,6 +708,7 @@ export interface FileRouteTypes {
     | '/ca/pricing'
     | '/ca/scenic'
     | '/ca/tolls'
+    | '/challenge/$lang'
     | '/checkout/return'
     | '/no/faq'
     | '/no/garage'
@@ -750,6 +762,7 @@ export interface RootRouteChildren {
   TollsRoute: typeof TollsRoute
   UsRoute: typeof UsRouteWithChildren
   LangPageRoute: typeof LangPageRoute
+  ChallengeLangRoute: typeof ChallengeLangRoute
   CheckoutReturnRoute: typeof CheckoutReturnRoute
   NoFaqRoute: typeof NoFaqRoute
   NoGarageRoute: typeof NoGarageRoute
@@ -973,6 +986,13 @@ declare module '@tanstack/react-router' {
       path: '/challenge'
       fullPath: '/challenge/'
       preLoaderRoute: typeof ChallengeIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/challenge/$lang': {
+      id: '/challenge/$lang'
+      path: '/challenge/$lang'
+      fullPath: '/challenge/$lang'
+      preLoaderRoute: typeof ChallengeLangRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/checkout/return': {
@@ -1270,6 +1290,7 @@ const rootRouteChildren: RootRouteChildren = {
   TollsRoute: TollsRoute,
   UsRoute: UsRouteWithChildren,
   LangPageRoute: LangPageRoute,
+  ChallengeLangRoute: ChallengeLangRoute,
   CheckoutReturnRoute: CheckoutReturnRoute,
   NoFaqRoute: NoFaqRoute,
   NoGarageRoute: NoGarageRoute,
