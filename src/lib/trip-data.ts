@@ -136,6 +136,8 @@ export type TollLine = {
   freeForMotorcycle?: boolean;
   /** Country-specific motorcycle price factor for this line (vignettes only). Falls back to a generic discount when absent. */
   motoFactor?: number;
+  /** True for a multi-day vignette/sticker line — stays valid for the whole return trip, unlike distance tolls and ferry tickets. */
+  isVignette?: boolean;
 };
 
 export type SafetySection = { heading: string; items: string[] };
@@ -589,13 +591,11 @@ export function estimateTrip(
 
   const isMoto = vehicle === "motorcycle";
   const round2 = (n: number) => Math.round(n * 100) / 100;
-  const isVignetteLine = (l: TollLine) =>
-    /vignette|vinjeta|matrica|e-znamka|dalnice|sticker/i.test(`${l.place} ${l.detail ?? ""}`);
   const mapLines = (lines: TollLine[], factor: number) =>
     lines.map((l) => {
       // Multi-day vignettes stay valid for the whole return trip — only distance
       // tolls and ferry tickets are charged twice.
-      const returnFactor = isReturn && !isVignetteLine(l) ? 2 : 1;
+      const returnFactor = isReturn && !l.isVignette ? 2 : 1;
       // Vignette lines carry their own researched country-specific motorcycle
       // price factor (e.g. Austria 0.4, Hungary 0.65); fall back to a generic
       // discount for lines that don't document one (mainly distance tolls).

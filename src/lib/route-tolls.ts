@@ -312,7 +312,7 @@ export function buildRouteSegments(geo: RouteGeo): RouteSegments {
       const bucket = perLabel.get(label)!;
       if (rule.vignette && !bucket.some((l) => l.place === rule.vignette!.place)) {
         const v = rule.vignette;
-        const vl: TollLine = { place: v.place, detail: v.detail, amount: v.amount, portal: v.portal };
+        const vl: TollLine = { place: v.place, detail: v.detail, amount: v.amount, portal: v.portal, isVignette: true };
         if (v.badge) vl.badge = v.badge;
         if (v.motoFactor === 0) vl.freeForMotorcycle = true;
         if (v.motoFactor !== undefined) vl.motoFactor = v.motoFactor;
