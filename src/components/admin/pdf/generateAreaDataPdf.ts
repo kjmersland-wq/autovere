@@ -9,6 +9,8 @@ const ACCENT: [number, number, number] = [245, 158, 11]; // AutoVere amber — a
 const BORDER: [number, number, number] = [226, 232, 240]; // hairlines, card borders
 const TABLE_HEAD_BG: [number, number, number] = [248, 250, 252];
 
+const numberFormat = new Intl.NumberFormat("nb-NO");
+
 export type AreaPdfTable = { title: string; columns: string[]; rows: (string | number)[][] };
 export type ChartSeriesPoint = { label: string; value: number };
 export type AreaPdfChart = { title: string; type: "area" | "bar"; series: ChartSeriesPoint[] };
@@ -21,7 +23,7 @@ export type AreaDataPdfInput = {
   generatedAtLabel: string;
 };
 
-const LOGO_EXPORT_SIZE = 160; // px — the source asset is 1024×1024; the PDF only ever shows it at ~12mm.
+const LOGO_EXPORT_SIZE = 160; // px — the source asset is 1024×1024; the PDF only ever shows it at ~13mm.
 
 async function loadLogoDataUrl(): Promise<string | null> {
   try {
@@ -49,30 +51,99 @@ async function loadLogoDataUrl(): Promise<string | null> {
 const libsPromise = Promise.all([import("jspdf"), import("jspdf-autotable")]);
 const logoPromise = loadLogoDataUrl();
 
-function truncate(text: string, max: number): string {
-  return text.length > max ? `${text.slice(0, max - 1)}…` : text;
+type Doc = import("jspdf").jsPDF;
+
+/** Shrinks font-size (never below `minSize`) until `text` fits on one line
+ * within `maxWidth` — used for KPI values so long content (e.g. "Ikke
+ * tilgjengelig") is never truncated and never forced into a mid-word wrap. */
+function fitSingleLine(doc: Doc, text: string, maxWidth: number, startSize: number, minSize: number): number {
+  let size = startSize;
+  doc.setFontSize(size);
+  while (size > minSize && doc.getTextWidth(text) > maxWidth) {
+    size -= 0.5;
+    doc.setFontSize(size);
+  }
+  return size;
+}
+
+/** Word-wraps `text` to at most `maxLines`, shrinking font-size first if the
+ * text genuinely needs more room than that — real word boundaries only, no
+ * mid-word breaks under normal (non-pathological) label lengths. */
+function fitWrappedLines(
+  doc: Doc,
+  text: string,
+  maxWidth: number,
+  startSize: number,
+  minSize: number,
+  maxLines: number,
+): { lines: string[]; size: number } {
+  let size = startSize;
+  doc.setFontSize(size);
+  let lines: string[] = doc.splitTextToSize(text, maxWidth);
+  while (lines.length > maxLines && size > minSize) {
+    size -= 0.4;
+    doc.setFontSize(size);
+    lines = doc.splitTextToSize(text, maxWidth);
+  }
+  return { lines: lines.slice(0, maxLines), size };
+}
+
+/** Truncates to fit `maxWidth` at the doc's current font, only as a last
+ * resort for chart category labels (never used for KPI values or table
+ * data — those must always show in full). */
+function truncateToWidth(doc: Doc, text: string, maxWidth: number): string {
+  if (doc.getTextWidth(text) <= maxWidth) return text;
+  let end = text.length;
+  while (end > 1 && doc.getTextWidth(`${text.slice(0, end)}…`) > maxWidth) end -= 1;
+  return `${text.slice(0, end)}…`;
+}
+
+/** A small amber tick + bold section title — the same accent language as the
+ * KPI cards, used consistently above every section so the report reads as
+ * one designed document rather than stacked, unrelated blocks. */
+function sectionTitle(doc: Doc, x: number, y: number, text: string): void {
+  doc.setFillColor(...ACCENT);
+  doc.rect(x, y - 3.2, 1.4, 4.4, "F");
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(12);
+  doc.setTextColor(...INK);
+  doc.text(text, x + 4, y);
+}
+
+/** The widest formatted axis label at the current font — used to size the
+ * chart's left gutter dynamically so large numbers (thousands+) never
+ * collide with the plot area. */
+function axisGutterWidth(doc: Doc, maxVal: number, gridLines: number): number {
+  let widest = 0;
+  for (let i = 0; i <= gridLines; i++) {
+    const label = numberFormat.format(Math.round((maxVal / gridLines) * i));
+    widest = Math.max(widest, doc.getTextWidth(label));
+  }
+  return widest + 4;
 }
 
 /** A filled, closed polygon area chart with light gridlines — drawn as
  * native vector paths (no rasterized canvas), so it stays crisp at any zoom
  * or print resolution. */
 function drawAreaChart(
-  doc: import("jspdf").jsPDF,
+  doc: Doc,
   { x, y, width, height, series }: { x: number; y: number; width: number; height: number; series: ChartSeriesPoint[] },
 ) {
   if (series.length === 0) return;
   const values = series.map((s) => s.value);
   const maxVal = Math.max(...values, 1);
-  const plotLeft = x + 13;
-  const plotRight = x + width - 2;
-  const plotTop = y + 3;
-  const plotBottom = y + height - 8;
-  const plotWidth = plotRight - plotLeft;
-  const plotHeight = plotBottom - plotTop;
   const gridLines = 4;
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(6.5);
+  doc.setFontSize(7);
+  const gutter = axisGutterWidth(doc, maxVal, gridLines);
+  const plotLeft = x + gutter;
+  const plotRight = x + width - 3;
+  const plotTop = y + 4;
+  const plotBottom = y + height - 10;
+  const plotWidth = plotRight - plotLeft;
+  const plotHeight = plotBottom - plotTop;
+
   for (let i = 0; i <= gridLines; i++) {
     const v = (maxVal / gridLines) * i;
     const gy = plotBottom - (plotHeight * i) / gridLines;
@@ -80,7 +151,7 @@ function drawAreaChart(
     doc.setLineWidth(0.15);
     doc.line(plotLeft, gy, plotRight, gy);
     doc.setTextColor(...MUTED);
-    doc.text(String(Math.round(v)), plotLeft - 2, gy + 1, { align: "right" });
+    doc.text(numberFormat.format(Math.round(v)), plotLeft - 3, gy + 1, { align: "right" });
   }
 
   const stepX = series.length > 1 ? plotWidth / (series.length - 1) : 0;
@@ -90,7 +161,7 @@ function drawAreaChart(
   }));
 
   doc.saveGraphicsState();
-  doc.setGState(doc.GState({ opacity: 0.16 }));
+  doc.setGState(doc.GState({ opacity: 0.14 }));
   doc.setFillColor(...ACCENT);
   doc.moveTo(pts[0]!.px, plotBottom);
   for (const p of pts) doc.lineTo(p.px, p.py);
@@ -100,42 +171,47 @@ function drawAreaChart(
   doc.restoreGraphicsState();
 
   doc.setDrawColor(...ACCENT);
-  doc.setLineWidth(0.55);
+  doc.setLineWidth(0.6);
   for (let i = 0; i < pts.length - 1; i++) {
     doc.line(pts[i]!.px, pts[i]!.py, pts[i + 1]!.px, pts[i + 1]!.py);
   }
   if (series.length <= 12) {
-    doc.setFillColor(...ACCENT);
-    for (const p of pts) doc.circle(p.px, p.py, 0.7, "F");
+    doc.setFillColor(255, 255, 255);
+    doc.setDrawColor(...ACCENT);
+    doc.setLineWidth(0.5);
+    for (const p of pts) doc.circle(p.px, p.py, 0.9, "FD");
   }
 
+  doc.setFont("helvetica", "normal");
   doc.setTextColor(...MUTED);
-  doc.setFontSize(6.5);
+  doc.setFontSize(7);
   const labelIdxs =
     series.length <= 6 ? series.map((_, i) => i) : [0, Math.floor((series.length - 1) / 2), series.length - 1];
   for (const i of labelIdxs) {
-    doc.text(series[i]!.label, pts[i]!.px, plotBottom + 5, { align: "center" });
+    doc.text(series[i]!.label, pts[i]!.px, plotBottom + 6, { align: "center" });
   }
 }
 
 /** A simple vertical bar chart, same visual language as the area chart. */
 function drawBarChart(
-  doc: import("jspdf").jsPDF,
+  doc: Doc,
   { x, y, width, height, series }: { x: number; y: number; width: number; height: number; series: ChartSeriesPoint[] },
 ) {
   if (series.length === 0) return;
   const shown = series.slice(0, 8); // keep it legible — a dense bar chart isn't a clean one
   const maxVal = Math.max(...shown.map((s) => s.value), 1);
-  const plotLeft = x + 13;
-  const plotRight = x + width - 2;
-  const plotTop = y + 3;
-  const plotBottom = y + height - 8;
-  const plotWidth = plotRight - plotLeft;
-  const plotHeight = plotBottom - plotTop;
   const gridLines = 4;
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(6.5);
+  doc.setFontSize(7);
+  const gutter = axisGutterWidth(doc, maxVal, gridLines);
+  const plotLeft = x + gutter;
+  const plotRight = x + width - 3;
+  const plotTop = y + 4;
+  const plotBottom = y + height - 10;
+  const plotWidth = plotRight - plotLeft;
+  const plotHeight = plotBottom - plotTop;
+
   for (let i = 0; i <= gridLines; i++) {
     const v = (maxVal / gridLines) * i;
     const gy = plotBottom - (plotHeight * i) / gridLines;
@@ -143,42 +219,47 @@ function drawBarChart(
     doc.setLineWidth(0.15);
     doc.line(plotLeft, gy, plotRight, gy);
     doc.setTextColor(...MUTED);
-    doc.text(String(Math.round(v)), plotLeft - 2, gy + 1, { align: "right" });
+    doc.text(numberFormat.format(Math.round(v)), plotLeft - 3, gy + 1, { align: "right" });
   }
 
   const n = shown.length;
   const slot = plotWidth / n;
-  const barWidth = Math.min(12, slot * 0.55);
-  doc.setFont("helvetica", "bold");
+  const barWidth = Math.min(14, slot * 0.5);
   shown.forEach((s, i) => {
     const barH = maxVal > 0 ? (s.value / maxVal) * plotHeight : 0;
     const bx = plotLeft + slot * i + (slot - barWidth) / 2;
     const by = plotBottom - barH;
     doc.setFillColor(...ACCENT);
-    doc.roundedRect(bx, by, barWidth, Math.max(barH, 0.01), 0.5, 0.5, "F");
-    doc.setTextColor(...INK);
-    doc.setFontSize(6.5);
-    doc.text(String(Math.round(s.value)), bx + barWidth / 2, by - 1.2, { align: "center" });
-    doc.setTextColor(...MUTED);
-    doc.setFont("helvetica", "normal");
-    doc.text(truncate(s.label, 12), plotLeft + slot * i + slot / 2, plotBottom + 5, { align: "center" });
+    doc.roundedRect(bx, by, barWidth, Math.max(barH, 0.01), 0.6, 0.6, "F");
+
     doc.setFont("helvetica", "bold");
+    doc.setFontSize(7);
+    doc.setTextColor(...INK);
+    doc.text(numberFormat.format(Math.round(s.value)), bx + barWidth / 2, by - 1.5, { align: "center" });
+
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(7);
+    doc.setTextColor(...MUTED);
+    doc.text(truncateToWidth(doc, s.label, slot - 1), plotLeft + slot * i + slot / 2, plotBottom + 6, {
+      align: "center",
+    });
   });
 }
 
 /** Elegant KPI cards (label + big value, thin amber accent tick) in place of
- * a plain data table — reads like an executive summary, not a spreadsheet. */
-function drawKpiCards(
-  doc: import("jspdf").jsPDF,
-  x: number,
-  y: number,
-  width: number,
-  kpis: { label: string; value: string }[],
-): number {
-  const perRow = Math.min(kpis.length, 5);
-  const gap = 4;
+ * a plain data table — reads like an executive summary, not a spreadsheet.
+ * Values always render on one line at a size that guarantees they fit —
+ * never wrapped mid-word, never truncated. */
+function drawKpiCards(doc: Doc, x: number, y: number, width: number, kpis: { label: string; value: string }[]): number {
+  const gap = 5;
+  // Balanced row layout for the KPI counts this app actually produces (2–5) —
+  // a flat 5-per-row squeezed cards too narrow for longer values/labels
+  // ("Ikke tilgjengelig") and forced jsPDF into mid-word breaks.
+  const perRow = kpis.length <= 4 ? Math.max(kpis.length, 1) : kpis.length === 5 ? 3 : 4;
   const cardW = (width - gap * (perRow - 1)) / perRow;
-  const cardH = 22;
+  const cardH = 26;
+  const pad = 6;
+  const textMaxWidth = cardW - pad - 3;
 
   kpis.forEach((k, i) => {
     const row = Math.floor(i / perRow);
@@ -189,23 +270,23 @@ function drawKpiCards(
     doc.setDrawColor(...BORDER);
     doc.setLineWidth(0.2);
     doc.setFillColor(255, 255, 255);
-    doc.roundedRect(cx, cy, cardW, cardH, 1.6, 1.6, "FD");
+    doc.roundedRect(cx, cy, cardW, cardH, 1.8, 1.8, "FD");
     doc.setFillColor(...ACCENT);
-    doc.roundedRect(cx, cy, 1.3, cardH, 0.65, 0.65, "F");
+    doc.roundedRect(cx, cy, 1.4, cardH, 0.7, 0.7, "F");
 
     doc.setFont("helvetica", "normal");
-    doc.setFontSize(7);
     doc.setTextColor(...MUTED);
-    doc.text(k.label.toUpperCase(), cx + 5, cy + 7.5, { maxWidth: cardW - 8 });
+    const { lines: labelLines } = fitWrappedLines(doc, k.label.toUpperCase(), textMaxWidth, 7.2, 6, 2);
+    doc.text(labelLines, cx + pad, cy + 8);
 
     doc.setFont("helvetica", "bold");
-    doc.setFontSize(14.5);
     doc.setTextColor(...INK);
-    doc.text(k.value, cx + 5, cy + 16.5, { maxWidth: cardW - 8 });
+    fitSingleLine(doc, k.value, textMaxWidth, 15.5, 8.5);
+    doc.text(k.value, cx + pad, cy + cardH - 6.5);
   });
 
   const rows = Math.ceil(kpis.length / perRow);
-  return y + rows * (cardH + gap) - gap;
+  return y + rows * cardH + (rows - 1) * gap;
 }
 
 /** Premium, print-first PDF export of one existing Admin tab — white page,
@@ -218,18 +299,18 @@ export async function generateAreaDataPdf({ areaLabel, block, periodLabel, gener
   const doc = new jsPDF({ unit: "mm", format: "a4" });
   const pageWidth = doc.internal.pageSize.getWidth();
   const pageHeight = doc.internal.pageSize.getHeight();
-  const margin = 18;
+  const margin = 20;
   let y = margin;
 
   const ensureSpace = (needed: number) => {
-    if (y + needed > pageHeight - 22) {
+    if (y + needed > pageHeight - 24) {
       doc.addPage();
       y = margin;
     }
   };
 
-  // Header: logo + wordmark
-  const logoSize = 12;
+  // Header: logo + wordmark, precisely centered against each other.
+  const logoSize = 13;
   if (logoDataUrl) {
     try {
       doc.addImage(logoDataUrl, "PNG", margin, y, logoSize, logoSize);
@@ -237,10 +318,10 @@ export async function generateAreaDataPdf({ areaLabel, block, periodLabel, gener
       /* a corrupt/unreadable logo asset must never block the export */
     }
   }
-  const textX = margin + (logoDataUrl ? logoSize + 4 : 0);
-  const wordmarkY = y + logoSize / 2 + 2;
+  const textX = margin + (logoDataUrl ? logoSize + 5 : 0);
+  const wordmarkY = y + logoSize / 2 + 2.2;
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(15);
+  doc.setFontSize(16);
   doc.setTextColor(...INK);
   doc.text("Auto", textX, wordmarkY);
   doc.setTextColor(...ACCENT);
@@ -249,58 +330,59 @@ export async function generateAreaDataPdf({ areaLabel, block, periodLabel, gener
   doc.setFont("helvetica", "normal");
   doc.setFontSize(8);
   doc.setTextColor(...MUTED);
-  doc.text("Konfidensiell rapport", pageWidth - margin, wordmarkY, { align: "right" });
+  doc.text("KONFIDENSIELL RAPPORT", pageWidth - margin, wordmarkY, { align: "right" });
 
-  y += logoSize + 6;
+  y += logoSize + 7;
   doc.setDrawColor(...BORDER);
   doc.setLineWidth(0.3);
   doc.line(margin, y, pageWidth - margin, y);
-  y += 10;
+  y += 13;
 
+  // Title: stronger executive hierarchy — larger, tracked headline; the
+  // period/generated line stays clearly visible but visually secondary.
   doc.setFont("helvetica", "bold");
-  doc.setFontSize(20);
+  doc.setFontSize(25);
   doc.setTextColor(...INK);
+  doc.setCharSpace(0.15);
   doc.text(areaLabel, margin, y);
-  y += 7;
+  doc.setCharSpace(0);
+  y += 8.5;
 
   doc.setFont("helvetica", "normal");
-  doc.setFontSize(9);
+  doc.setFontSize(8.5);
   doc.setTextColor(...MUTED);
-  doc.text(`${periodLabel}  ·  Generert ${generatedAtLabel}`, margin, y);
-  y += 11;
+  doc.text(periodLabel.toUpperCase(), margin, y);
+  doc.text(`GENERERT ${generatedAtLabel}`.toUpperCase(), pageWidth - margin, y, { align: "right" });
+  y += 13;
 
   if (block.kpis && block.kpis.length > 0) {
-    const perRow = Math.min(block.kpis.length, 5);
+    const perRow = block.kpis.length <= 4 ? block.kpis.length : block.kpis.length === 5 ? 3 : 4;
     const rows = Math.ceil(block.kpis.length / perRow);
-    ensureSpace(rows * 26);
+    ensureSpace(rows * 30 + 10);
+    sectionTitle(doc, margin, y, "Nøkkeltall");
+    y += 8;
     y = drawKpiCards(doc, margin, y, pageWidth - margin * 2, block.kpis);
-    y += 10;
+    y += 13;
   }
 
   if (block.chart && block.chart.series.length > 0) {
-    const chartHeight = 52;
-    ensureSpace(chartHeight + 14);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11.5);
-    doc.setTextColor(...INK);
-    doc.text(block.chart.title, margin, y);
-    y += 5;
+    const chartHeight = 80;
+    ensureSpace(chartHeight + 18);
+    sectionTitle(doc, margin, y, block.chart.title);
+    y += 7;
     doc.setDrawColor(...BORDER);
     doc.setLineWidth(0.2);
     doc.roundedRect(margin, y, pageWidth - margin * 2, chartHeight, 2, 2, "D");
     const chartArgs = { x: margin, y, width: pageWidth - margin * 2, height: chartHeight, series: block.chart.series };
     if (block.chart.type === "area") drawAreaChart(doc, chartArgs);
     else drawBarChart(doc, chartArgs);
-    y += chartHeight + 10;
+    y += chartHeight + 13;
   }
 
   for (const table of block.tables ?? []) {
-    ensureSpace(20);
-    doc.setFont("helvetica", "bold");
-    doc.setFontSize(11.5);
-    doc.setTextColor(...INK);
-    doc.text(table.title, margin, y);
-    y += 5;
+    ensureSpace(24);
+    sectionTitle(doc, margin, y, table.title);
+    y += 7;
     autoTable(doc, {
       startY: y,
       margin: { left: margin, right: margin },
@@ -314,12 +396,16 @@ export async function generateAreaDataPdf({ areaLabel, block, periodLabel, gener
         lineColor: BORDER,
         lineWidth: 0.15,
         fontSize: 9,
+        cellPadding: 3.4,
       },
-      bodyStyles: { textColor: BODY, lineColor: BORDER, lineWidth: 0.1 },
+      bodyStyles: { textColor: BODY, lineColor: BORDER, lineWidth: 0.1, cellPadding: 3.4 },
       alternateRowStyles: { fillColor: [252, 252, 253] },
-      styles: { fontSize: 9, cellPadding: 3 },
+      styles: { fontSize: 9.5 },
+      tableLineColor: BORDER,
+      tableLineWidth: 0.15,
+      columnStyles: { [table.columns.length - 1]: { halign: "right" } },
     });
-    y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 10;
+    y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 13;
   }
 
   const pageCount = doc.getNumberOfPages();
@@ -327,12 +413,12 @@ export async function generateAreaDataPdf({ areaLabel, block, periodLabel, gener
     doc.setPage(i);
     doc.setDrawColor(...BORDER);
     doc.setLineWidth(0.2);
-    doc.line(margin, pageHeight - 14, pageWidth - margin, pageHeight - 14);
+    doc.line(margin, pageHeight - 15, pageWidth - margin, pageHeight - 15);
     doc.setFont("helvetica", "normal");
     doc.setFontSize(7.5);
     doc.setTextColor(...MUTED);
-    doc.text("AutoVere · Konfidensielt", margin, pageHeight - 9);
-    doc.text(`Side ${i} av ${pageCount}`, pageWidth - margin, pageHeight - 9, { align: "right" });
+    doc.text("AutoVere · Konfidensielt", margin, pageHeight - 10);
+    doc.text(`Side ${i} av ${pageCount}`, pageWidth - margin, pageHeight - 10, { align: "right" });
   }
 
   const safeArea = areaLabel.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "");
