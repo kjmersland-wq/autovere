@@ -36,12 +36,20 @@ export type ChallengeContent = {
     flow: string[];
     footnote: string;
   };
+  freedom: {
+    eyebrow: string;
+    title: string;
+    lines: string[];
+    body: string;
+    items: ChallengeCard[];
+  };
   journey: {
     eyebrow: string;
     title: string;
     intro: string;
     options: { label: string; title: string; body: string; bullets: string[] }[];
   };
+
   vehicles: {
     eyebrow: string;
     title: string;
