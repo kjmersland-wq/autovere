@@ -1968,6 +1968,269 @@ const DE: ChallengeContent = {
   languageLabel: "Challenge in Ihrer Sprache",
 };
 
+const NL: ChallengeContent = {
+  meta: {
+    title: "AutoVere Challenge — zet AutoVere op de proef",
+    description:
+      "Test AutoVere op echte reizen, met echte auto's en reële kosten. We nodigen de autopers uit om te rekenen, te rijden en te vergelijken.",
+  },
+  badge: "Challenge",
+  hero: {
+    kicker: "AutoVere Challenge",
+    title: "Zet AutoVere op de proef.",
+    lede: "Kies de auto die je echt rijdt. Kies de reis die je wilt testen. Bereken alles in de echte AutoVere, rij de route — en vergelijk onze cijfers met wat je daadwerkelijk hebt uitgegeven.",
+    statement: ["Echte auto's.", "Echte reizen.", "Echte kosten."],
+    primaryCta: "Vraag Challenge-toegang aan",
+    secondaryCta: "Ontdek AutoVere",
+    imageCredit: "Foto: Unsplash",
+  },
+  invitation: {
+    eyebrow: "Een persoonlijke uitnodiging aan de autopers",
+    title: "We nodigen je uit om AutoVere zelf te testen.",
+    paragraphs: [
+      "Als je over auto's schrijft, weet je het al: een reis kost zelden wat een rekentool vooraf beloofde. Tol, vignetten, veerboten, brandstof en laden stapelen zich stilletjes op, land voor land — en precies dat is waar AutoVere voor gebouwd is.",
+      "We vragen je niet om ons zomaar blindelings te vertrouwen.",
+      "We geven je liever de sleutels: kies een echte reis, kies de auto die op je oprit staat, gebruik AutoVere als Pro-gebruiker, rijd de route — en leg onze berekening naast je bonnetjes.",
+      "Hebben we gelijk, dan is dat een verhaal waard om te vertellen. Zitten we ernaast, dan willen we het weten — we horen het liever van jou dan dat het nooit aan het licht komt.",
+    ],
+    signature: "Kjell Mersland — oprichter van AutoVere · KM Tech Labs, Kristiansand, Noorwegen",
+  },
+  steps: {
+    eyebrow: "Zo werkt de Challenge",
+    title: "Zes heldere stappen, van uitnodiging tot resultaat.",
+    intro:
+      "Niets hiervan is een demo-omgeving. Vanaf stap vijf gebruik je exact dezelfde AutoVere die elke andere reiziger gebruikt.",
+    items: [
+      { number: "01", title: "Registreren", body: "Meld je aan als onderdeel van de autopers." },
+      {
+        number: "02",
+        title: "Verificatie",
+        body: "AutoVere beoordeelt je aanvraag en activeert je Challenge-toegang.",
+      },
+      {
+        number: "03",
+        title: "Reis kiezen",
+        body: "Kies een van de door AutoVere voorgestelde Challenge-routes, of stel je eigen reis samen.",
+      },
+      {
+        number: "04",
+        title: "Auto kiezen",
+        body: "Kies het voertuig dat je daadwerkelijk test — benzine, diesel of elektrisch.",
+      },
+      {
+        number: "05",
+        title: "Berekenen & rijden",
+        body: "Gebruik de gewone AutoVere-ervaring als Pro-gebruiker. Bereken de reis, en rijd hem daarna echt.",
+      },
+      {
+        number: "06",
+        title: "Vergelijken",
+        body: "Vul in wat de reis daadwerkelijk heeft gekost, en vergelijk dat met de AutoVere-berekening.",
+      },
+    ],
+  },
+  notCalculator: {
+    eyebrow: "Eén product, geen persdemo",
+    title: "Je Challenge speelt zich af binnen de echte AutoVere.",
+    body: "AutoVere Challenge is de toegangspoort en het complete testconcept — geen tweede, versimpelde rekentool speciaal gebouwd voor journalisten. Er is geen beperkte persversie, geen voorbereide sandbox en geen eigen cijfers.",
+    flow: [
+      "Challenge-startpagina",
+      "Registratie voor journalisten",
+      "AutoVere-verificatie",
+      "Challenge Pro-toegang",
+      "Het gewone AutoVere-product",
+      "Jouw Challenge-resultaat",
+    ],
+    footnote: "De berekening die je test, is dezelfde berekening die iedereen krijgt.",
+  },
+  freedom: {
+    eyebrow: "Jouw test, jouw voorwaarden",
+    title: "Kies de reis die je wilt testen.",
+    lines: [
+      "Gebruik een van onze voorgestelde routes — of kies je eigen.",
+      "Rijd de auto die je daadwerkelijk bezit.",
+    ],
+    body: "Er is geen vaste test om te doorstaan, geen voorgeschreven route en geen goedgekeurde autolijst. Jij bepaalt hoe de Challenge eruitziet — we vragen alleen dat je publiceert wat je vindt.",
+    items: [
+      { title: "Elke reis", body: "Een voorgestelde Challenge-route, of de reis die je toch al zou maken." },
+      { title: "Elke auto", body: "De auto in je testvloot of op je eigen oprit — benzine, diesel of elektrisch." },
+      { title: "Volledige Pro-toegang", body: "Het complete AutoVere-product, zonder beperkingen, voor de hele testperiode." },
+      { title: "Jouw eigen conclusie", body: "Publiceer het resultaat precies zoals je het aantreft. Wij lezen het van tevoren niet na." },
+    ],
+  },
+  journey: {
+    eyebrow: "Reis kiezen",
+    title: "Rijd een voorgestelde route — of een die bij jouw test past.",
+    intro:
+      "Er zijn twee manieren om je Challenge uit te voeren. Beide gebruiken dezelfde rekenmethode, dezelfde databronnen en dezelfde uitsplitsing per land.",
+    options: [
+      {
+        label: "Optie 01",
+        title: "Een voorgestelde Challenge-route",
+        body: "Voor elk land biedt AutoVere drie voorgestelde routes, die verschillende regio's en soorten rijden dekken.",
+        bullets: ["Kort", "Middellang", "Lang"],
+      },
+      {
+        label: "Optie 02",
+        title: "Test je eigen reis",
+        body: "Kies een realistische reis die bij jouw test past — de rit die je toch al zou maken, is vaak het meest onthullend. Bijvoorbeeld: Amsterdam–Nice, Warschau–Krakau, Los Angeles–San Diego.",
+        bullets: ["Jouw route", "Jouw planning", "Jouw rijomstandigheden"],
+      },
+    ],
+  },
+  vehicles: {
+    eyebrow: "Voertuig kiezen",
+    title: "Test de auto die daadwerkelijk op je oprit staat.",
+    intro:
+      "Kies de aandrijving, en kies vervolgens de specifieke auto uit de bestaande AutoVere-voertuiggegevens. Geen aparte autolijst voor de Challenge.",
+    items: [
+      {
+        label: "Benzine",
+        body: "Verbruik, brandstofprijzen en tol berekend per land langs je route.",
+        image:
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=70",
+        alt: "Blauwe coupé geparkeerd op een woestijnweg bij zonsondergang",
+      },
+      {
+        label: "Diesel",
+        body: "Brandstofverbruik op lange afstanden, plus gewichts- en asklassen waar tolexploitanten die toepassen.",
+        image:
+          "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1200&q=70",
+        alt: "Witte SUV op een besneeuwde bosweg",
+      },
+      {
+        label: "Elektrisch",
+        body: "Batterijcapaciteit, verbruik, laadstops en netwerkprijzen langs de route.",
+        image:
+          "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=70",
+        alt: "Laadkabel aangesloten op een elektrische auto",
+      },
+    ],
+  },
+  evCompare: {
+    eyebrow: "Dezelfde reis met een elektrische auto",
+    title: "Wat had deze reis met een elektrische auto gekost?",
+    body: "Zodra je je eigen reis hebt berekend, kun je dezelfde route rijden met een elektrische auto en zien wat de cijfers zeggen. Soms is het goedkoper. Soms veranderen laden, tol en omwegen het beeld. AutoVere laat de cijfers hoe dan ook zien.",
+    exampleLabel: "Illustratief voorbeeld — geen echt AutoVere-resultaat",
+    rows: [
+      { label: "Jouw auto", sub: "Diesel", amountEur: 96.4 },
+      { label: "Dezelfde reis met elektrische auto", sub: "Elektrisch", amountEur: 68.2 },
+    ],
+    differenceLabel: "Mogelijk verschil",
+    differenceAmountEur: 28.2,
+    caveat: "Alleen voorbeeldcijfers. We beweren niet dat een elektrische auto altijd goedkoper is.",
+  },
+  reality: {
+    eyebrow: "Schatting versus werkelijkheid",
+    title: "Het deel dat de meeste tools stilletjes vermijden.",
+    body: "De Challenge vergelijkt wat AutoVere vooraf berekende met wat de reis daadwerkelijk heeft gekost bij aankomst. Die vergelijking is van jou — ook op de dagen dat die ons niet vleit.",
+    exampleLabel: "Illustratief voorbeeld — geen echt AutoVere-resultaat",
+    calculation: { label: "AutoVere-berekening", amountEur: 96.4 },
+    actual: { label: "Werkelijke reiskosten", amountEur: 99.1 },
+    difference: { label: "Verschil", value: "+2,8%" },
+    caveat: "We beloven geen exact nauwkeurigheidspercentage. Het gaat om jouw eigen resultaat.",
+  },
+  founder: {
+    eyebrow: "De man achter AutoVere",
+    title: "Waarom ik AutoVere heb gebouwd",
+    opening:
+      "Het begon met een simpele vraag: waarom is het nog steeds zo moeilijk om te weten wat een reis met de auto daadwerkelijk gaat kosten?",
+    paragraphs: [
+      "Ik ben 74 jaar. Na meer dan 40 jaar in de bouw ging ik in 2020 met pensioen.",
+      "Een jaar later begon ik, in plaats van rustiger aan te doen, iets compleet anders op te bouwen.",
+      "Ik had jarenlang kris-kras door Europa gereden. Hoe meer ik reisde, hoe duidelijker ik hetzelfde probleem zag: een lange reis plannen betekende meestal op allerlei plekken naar informatie zoeken.",
+      "Tol. Vignetten. Veerboten. Brandstof. Laden. Andere routes. Andere landen. Andere kosten.",
+      "Ik dacht dat er een betere manier moest zijn.",
+      "Dus begon ik AutoVere te bouwen.",
+      "Wat begon als een persoonlijk idee, is uitgegroeid tot een veel groter project. En ik doe het niet alleen — mijn zoon is ook onderdeel van deze reis.",
+      "Samen bouwen we AutoVere op een principe dat voor mij altijd belangrijk is geweest: als iets de moeite waard is om te doen, is het de moeite waard om het goed te doen.",
+      "Dat betekent dat we echte data, officiële bronnen, algoritmes en wiskunde gebruiken om de reis te berekenen.",
+      "Geen giswerk. Geen zwarte doos.",
+      "Het doel is simpel: mensen een duidelijker beeld geven van wat een reis waarschijnlijk gaat kosten voordat ze van huis vertrekken — en hen helpen betere keuzes te maken over route, auto en manier van reizen.",
+      "Wat in Kristiansand begon, is inmiddels ver voorbij Noorwegen en Europa gegroeid.",
+      "AutoVere is naast Europa inmiddels ook gelanceerd in de VS en Canada, met de ambitie om een wereldwijd platform voor reisintelligentie te worden voor iedereen die de weg op gaat.",
+    ],
+    closing: [
+      "Maar iets bouwen en erin geloven is niet genoeg.",
+      "Ik wil dat het in de echte wereld wordt getest.",
+      "Daarom hebben we de AutoVere Challenge in het leven geroepen.",
+      "Ik wil niet dat de autopers mij zomaar op mijn woord gelooft.",
+      "Kies een echte auto. Kies een echte reis. Bereken hem met AutoVere. Rijd hem. Vergelijk daarna het resultaat met wat er werkelijk is gebeurd.",
+      "Geen speciale vertoning. Geen voorbereid resultaat.",
+      "Alleen AutoVere — en de weg.",
+      "Als het goed werkt, zijn we daar trots op.",
+      "Als er iets misgaat, willen we het weten.",
+      "Want de beste manier om te bewijzen dat AutoVere werkt, is niet om het te beweren.",
+      "Het is om je het zelf te laten testen.",
+    ],
+    name: "Kjell Mersland, 74",
+    role: "Oprichter van AutoVere",
+    note: "Ik bouw AutoVere samen met mijn zoon",
+    alt: "Kjell Mersland, oprichter van AutoVere",
+    emphasis: [
+      "Ik ben 74 jaar.",
+      "mijn zoon is ook onderdeel van deze reis.",
+      "Geen giswerk. Geen zwarte doos.",
+      "AutoVere is naast Europa inmiddels ook gelanceerd in de VS en Canada",
+      "Ik wil dat het in de echte wereld wordt getest.",
+      "Het is om je het zelf te laten testen.",
+    ],
+  },
+  report: {
+    eyebrow: "Challenge-rapport",
+    title: "Jouw reis. Jouw resultaat.",
+    body: "Zodra de reis is afgerond, ontvang je een professioneel Challenge-resultaat waarnaar je kunt verwijzen, dat je kunt publiceren of waarmee je ons kunt uitdagen.",
+    contents: [
+      "Route",
+      "Voertuig",
+      "Aandrijving",
+      "AutoVere-berekening",
+      "Werkelijke reiskosten",
+      "Verschil",
+      "Vergelijking met elektrische auto",
+      "Datum",
+      "Challenge-ID",
+    ],
+    future: "Gepland: een permanent webresultaat, een deelbare link en een pdf-rapport.",
+    cta: "Bekijk deze reis in AutoVere",
+    ctaNote:
+      "Na een Challenge kunnen de reis en de bijbehorende instellingen opnieuw worden geopend in het gewone AutoVere-product, zodat je verder kunt blijven verkennen.",
+  },
+  register: {
+    eyebrow: "Toegang voor de autopers",
+    title: "Vraag toegang aan tot de AutoVere Challenge",
+    body: "Maak je deel uit van de autopers? We zouden het geweldig vinden als je AutoVere zelf test. Vraag Challenge-toegang aan, en gebruik AutoVere na goedkeuring als Pro-gebruiker tijdens je test.",
+    fields: {
+      name: "Volledige naam",
+      email: "Zakelijk e-mailadres",
+      outlet: "Publicatie of kanaal",
+      role: "Functie",
+      country: "Land",
+      message: "De reis en auto die je wilt testen",
+    },
+    placeholders: {
+      name: "Sanne de Vries",
+      email: "sanne@publicatie.nl",
+      outlet: "Publicatie, website of kanaal",
+      role: "Autojournalist, recensent, hoofdredacteur…",
+      country: "Nederland",
+      message: "Optioneel — vertel ons wat je van plan bent te testen",
+    },
+    submit: "Vraag Challenge-toegang aan",
+    note: "Een korte verificatiestap zorgt ervoor dat Challenge-toegang voorbehouden blijft aan actief werkende journalisten. Na goedkeuring wordt je account voor de testperiode geüpgraded naar Pro — geen apart perstool, geen beperkingen.",
+    successTitle: "Bedankt — we hebben je aanvraag ontvangen.",
+    successBody:
+      "Challenge-toegang wordt geleidelijk uitgerold. Je gegevens worden voorlopig alleen in deze browser bewaard, en we nemen persoonlijk contact met je op zodra de verificatie start.",
+  },
+  finalCta: {
+    title: "Klaar om AutoVere op de proef te zetten?",
+    body: "Kies een reis. Kies je auto. Rijd hem. Vergelijk het resultaat.",
+    primary: "Doe mee aan de AutoVere Challenge",
+    secondary: "Ontdek AutoVere",
+  },
+  languageLabel: "Challenge in jouw taal",
+};
+
 /** Language URLs for the Challenge page. English/GB is the root /challenge. */
 export const CHALLENGE_LANGS = [
   { prefix: "no", label: "Norsk", flag: "🇳🇴" },
@@ -2021,6 +2284,7 @@ const CHALLENGE_CONTENT_BY_LANG: Partial<Record<ChallengeLang, ChallengeContent>
   fi: FI,
   us: US,
   de: DE,
+  nl: NL,
 };
 
 export function challengeContent(lang?: string | undefined): ChallengeContent {
