@@ -5,7 +5,8 @@ import { ArrowRight, CheckCircle2, MapPin } from "lucide-react";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 import { challengeContent, CHALLENGE_LANGS, type ChallengeLang } from "@/lib/challenge-content";
-import founderPhoto from "@/assets/kjell-mersland.jpg.asset.json";
+// Served from public/ so the photo resolves on every host (custom domains don't proxy /__l5e asset URLs).
+const FOUNDER_PHOTO_URL = "/kjell-mersland.jpg";
 
 const HERO_IMAGE =
   "https://images.unsplash.com/photo-1494905998402-395d579af36f?auto=format&fit=crop&w=2000&q=75";
@@ -414,7 +415,7 @@ export function ChallengeLanding({ lang }: Props) {
           <figure className="lg:sticky lg:top-28 lg:self-start">
             <div className="overflow-hidden rounded-3xl border border-white/10 bg-white/[0.02]">
               <img
-                src={founderPhoto.url}
+                src={FOUNDER_PHOTO_URL}
                 alt={c.founder.alt}
                 loading="lazy"
                 className="aspect-[4/5] w-full object-cover object-top"
