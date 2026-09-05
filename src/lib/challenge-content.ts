@@ -916,6 +916,269 @@ const SE: ChallengeContent = {
   languageLabel: "Challenge på ditt språk",
 };
 
+const DK: ChallengeContent = {
+  meta: {
+    title: "AutoVere Challenge — sæt AutoVere på prøve",
+    description:
+      "Test AutoVere på rigtige rejser, med rigtige biler og reelle omkostninger. Vi inviterer bilpressen til at beregne, køre og sammenligne.",
+  },
+  badge: "Challenge",
+  hero: {
+    kicker: "AutoVere Challenge",
+    title: "Sæt AutoVere på prøve.",
+    lede: "Vælg bilen du kører til daglig. Vælg rejsen du vil teste. Beregn den i den rigtige AutoVere, kør den — og sammenlign vores tal med det, du reelt brugte.",
+    statement: ["Rigtige biler.", "Rigtige rejser.", "Rigtige omkostninger."],
+    primaryCta: "Ansøg om Challenge-adgang",
+    secondaryCta: "Udforsk AutoVere",
+    imageCredit: "Foto: Unsplash",
+  },
+  invitation: {
+    eyebrow: "En personlig invitation til bilpressen",
+    title: "Vi inviterer dig til at teste AutoVere selv.",
+    paragraphs: [
+      "Skriver du om biler, ved du det allerede: en rejse ender sjældent med at koste det, en kalkulator lovede på forhånd. Vejafgifter, vignetter, færger, brændstof og opladning lægger sig oveni, land for land — og det er præcis det, AutoVere er bygget til at ramme rigtigt.",
+      "Vi beder dig ikke om bare at stole blindt på os.",
+      "Vi giver dig hellere nøglerne selv: vælg en rigtig rejse, vælg bilen der står i din indkørsel, brug AutoVere som Pro-bruger, kør ruten — og hold vores beregning op mod dine kvitteringer.",
+      "Rammer vi rigtigt, er det en historie værd at fortælle. Rammer vi forkert, vil vi gerne vide det — vi hører det hellere fra dig, end at det aldrig kommer frem.",
+    ],
+    signature: "Kjell Mersland — grundlægger af AutoVere · KM Tech Labs, Kristiansand, Norge",
+  },
+  steps: {
+    eyebrow: "Sådan fungerer Challenge",
+    title: "Seks tydelige trin, fra invitation til resultat.",
+    intro:
+      "Intet her er et demomiljø. Fra trin fem bruger du nøjagtig den samme AutoVere, som alle andre rejsende gør.",
+    items: [
+      { number: "01", title: "Registrer dig", body: "Meld dig som en del af bilpressen." },
+      {
+        number: "02",
+        title: "Bliv verificeret",
+        body: "AutoVere gennemgår din ansøgning og aktiverer din Challenge-adgang.",
+      },
+      {
+        number: "03",
+        title: "Vælg din rejse",
+        body: "Vælg en af AutoVeres foreslåede Challenge-ruter, eller sæt din egen rejse op.",
+      },
+      {
+        number: "04",
+        title: "Vælg din bil",
+        body: "Vælg køretøjet du skal teste — benzin, diesel eller elektrisk.",
+      },
+      {
+        number: "05",
+        title: "Beregn og kør",
+        body: "Brug den almindelige AutoVere-oplevelse som Pro-bruger. Beregn rejsen, og kør den så for alvor.",
+      },
+      {
+        number: "06",
+        title: "Sammenlign",
+        body: "Indtast hvad rejsen reelt kostede, og sammenlign med AutoVere-beregningen.",
+      },
+    ],
+  },
+  notCalculator: {
+    eyebrow: "Ét produkt, ingen pressedemo",
+    title: "Din Challenge foregår inde i den rigtige AutoVere-oplevelse.",
+    body: "AutoVere Challenge er døråbneren og selve testforløbet — ikke endnu en forenklet kalkulator bygget specielt til journalister. Der findes ingen begrænset presseversion, ingen tilrettelagt sandkasse og ingen egne tal.",
+    flow: [
+      "Challenge-forsiden",
+      "Journalistregistrering",
+      "AutoVere-verificering",
+      "Challenge Pro-adgang",
+      "Det almindelige AutoVere-produkt",
+      "Dit Challenge-resultat",
+    ],
+    footnote: "Beregningen du tester, er den samme beregning, alle andre får.",
+  },
+  freedom: {
+    eyebrow: "Din test, dine betingelser",
+    title: "Vælg rejsen du vil teste.",
+    lines: [
+      "Brug en af vores foreslåede ruter — eller vælg din egen.",
+      "Vælg bilen du kører til daglig.",
+    ],
+    body: "Der findes ingen facitliste at bestå, ingen fastlagt rute og ingen godkendt billiste. Challengen er din at forme — vi beder bare om, at du offentliggør det, du finder.",
+    items: [
+      { title: "Valgfri rejse", body: "En foreslået Challenge-rute, eller turen du alligevel skulle ud på." },
+      { title: "Valgfri bil", body: "Bilen i din testflåde eller din egen indkørsel — benzin, diesel eller elektrisk." },
+      { title: "Fuld Pro-adgang", body: "Hele AutoVere-produktet, uden begrænsninger, i hele testperioden." },
+      { title: "Din egen konklusion", body: "Offentliggør resultatet præcis som du finder det. Vi læser det ikke igennem først." },
+    ],
+  },
+  journey: {
+    eyebrow: "Vælg rejse",
+    title: "Kør en foreslået rute — eller en der passer til din test.",
+    intro:
+      "To måder at gennemføre din Challenge på. Begge bruger samme beregningsmotor, samme datakilder og samme land-for-land-opdeling.",
+    options: [
+      {
+        label: "Mulighed 01",
+        title: "En foreslået Challenge-rute",
+        body: "For hvert land tilbyder AutoVere tre foreslåede ruter, der dækker forskellige regioner og forskellige typer kørsel.",
+        bullets: ["Kort", "Mellemlang", "Lang"],
+      },
+      {
+        label: "Mulighed 02",
+        title: "Test din egen rejse",
+        body: "Vælg en realistisk rejse, der passer til din test — turen du alligevel skulle ud på, er ofte den mest afslørende. Eksempel: København–Aarhus, Warszawa–Kraków, Los Angeles–San Diego.",
+        bullets: ["Din rute", "Din tidsplan", "Dine kørselsforhold"],
+      },
+    ],
+  },
+  vehicles: {
+    eyebrow: "Vælg køretøj",
+    title: "Test bilen der faktisk står i din indkørsel.",
+    intro:
+      "Vælg drivmiddel, og vælg derefter den konkrete bil fra AutoVeres eksisterende køretøjsdata. Ingen selvstændig billiste til Challenge.",
+    items: [
+      {
+        label: "Benzin",
+        body: "Forbrug, brændstofpriser og vejafgifter beregnet land for land langs din rute.",
+        image:
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=70",
+        alt: "Blå coupé parkeret på en ørkenvej ved solnedgang",
+      },
+      {
+        label: "Diesel",
+        body: "Brændstoføkonomi på lange strækninger, samt vægt- og akselklasser hvor afgiftsoperatørerne bruger dem.",
+        image:
+          "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1200&q=70",
+        alt: "Hvid SUV på en snedækket skovvej",
+      },
+      {
+        label: "Elektrisk",
+        body: "Batteristørrelse, forbrug, ladestop og netværkspriser langs ruten.",
+        image:
+          "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=70",
+        alt: "Ladekabel tilsluttet en elbil",
+      },
+    ],
+  },
+  evCompare: {
+    eyebrow: "Samme rejse med elbil",
+    title: "Hvad ville denne rejse have kostet med elbil?",
+    body: "Når du har beregnet din egen rejse, kan du køre den samme rute med en elbil og se, hvad tallene siger. Nogle gange bliver det billigere. Andre gange ændrer opladning, vejafgifter og omveje billedet. AutoVere viser dig tallene, uanset hvad de siger.",
+    exampleLabel: "Illustrativt eksempel — ikke et reelt AutoVere-resultat",
+    rows: [
+      { label: "Din bil", sub: "Diesel", amountEur: 96.4 },
+      { label: "Samme rejse med elbil", sub: "Elektrisk", amountEur: 68.2 },
+    ],
+    differenceLabel: "Mulig forskel",
+    differenceAmountEur: 28.2,
+    caveat: "Kun eksempeltal. Vi påstår ikke, at elbil altid er billigere.",
+  },
+  reality: {
+    eyebrow: "Beregning møder virkelighed",
+    title: "Den del de fleste værktøjer stille undgår.",
+    body: "Challengen sammenligner det, AutoVere beregnede, før du kørte hjemmefra, med det rejsen reelt kostede, da du var fremme. Den sammenligning tilhører dig — også de dage, den ikke smigrer os.",
+    exampleLabel: "Illustrativt eksempel — ikke et reelt AutoVere-resultat",
+    calculation: { label: "AutoVere-beregning", amountEur: 96.4 },
+    actual: { label: "Reel rejseomkostning", amountEur: 99.1 },
+    difference: { label: "Forskel", value: "+2,8 %" },
+    caveat: "Vi lover ingen bestemt nøjagtighed i procent. Pointen er dit eget resultat.",
+  },
+  founder: {
+    eyebrow: "Manden bag AutoVere",
+    title: "Hvorfor jeg byggede AutoVere",
+    opening:
+      "Det startede med et enkelt spørgsmål: Hvor svært er det stadig at vide, hvad en roadtrip reelt kommer til at koste?",
+    paragraphs: [
+      "Jeg er 74 år. Efter mere end 40 år i byggebranchen gik jeg på pension i 2020.",
+      "Året efter — i stedet for at trappe ned — begyndte jeg at bygge noget helt andet.",
+      "I mange år havde jeg kørt på kryds og tværs gennem Europa. Jo mere jeg rejste, desto tydeligere så jeg det samme problem: at planlægge en lang rejse betød som regel at lede efter oplysninger på en håndfuld forskellige steder.",
+      "Vejafgifter. Vignetter. Færger. Brændstof. Opladning. Forskellige ruter. Forskellige lande. Forskellige omkostninger.",
+      "Jeg tænkte, der måtte findes en bedre måde.",
+      "Så jeg begyndte at bygge AutoVere.",
+      "Det, der begyndte som en personlig idé, er vokset til et langt større projekt. Og jeg gør det ikke alene — min søn er også med på rejsen.",
+      "Sammen bygger vi AutoVere på et princip, der altid har betydet meget for mig: er noget værd at gøre, er det værd at gøre ordentligt.",
+      "Det betyder, at vi bruger rigtige data, officielle kilder, algoritmer og matematik til at beregne rejsen.",
+      "Ikke gætværk. Ikke en sort boks.",
+      "Målet er enkelt: give folk et klarere billede af, hvad en rejse sandsynligvis kommer til at koste, før de kører hjemmefra — og hjælpe dem med at træffe bedre valg om rute, bil og rejse.",
+      "Det, der startede i Kristiansand, Norge, er vokset langt ud over både Norge og Europa.",
+      "AutoVere er allerede lanceret i USA og Canada, ud over Europa — med en klar ambition: at blive en global rejseintelligensplatform for alle, der færdes på vejen.",
+    ],
+    closing: [
+      "Men at bygge noget og tro på det er ikke nok.",
+      "Jeg vil have det testet i den virkelige verden.",
+      "Derfor skabte vi AutoVere Challenge.",
+      "Jeg vil ikke have, at bilpressen bare skal tage mine ord for gode varer.",
+      "Vælg en rigtig bil. Vælg en rigtig rejse. Beregn den med AutoVere. Kør den. Sammenlign så resultatet med det, der faktisk skete.",
+      "Ingen særlig forestilling. Intet forudbestemt facit.",
+      "Bare AutoVere — og vejen.",
+      "Går det godt, bliver vi stolte af det.",
+      "Går noget galt, vil vi gerne vide det.",
+      "For den bedste måde at bevise, at AutoVere virker, er ikke at påstå det.",
+      "Det er at lade dig teste det selv.",
+    ],
+    name: "Kjell Mersland, 74 år",
+    role: "Grundlægger af AutoVere",
+    note: "Bygger AutoVere sammen med min søn",
+    alt: "Kjell Mersland, grundlægger af AutoVere",
+    emphasis: [
+      "Jeg er 74 år.",
+      "min søn er også med på rejsen.",
+      "Ikke gætværk. Ikke en sort boks.",
+      "AutoVere er allerede lanceret i USA og Canada, ud over Europa",
+      "Jeg vil have det testet i den virkelige verden.",
+      "Det er at lade dig teste det selv.",
+    ],
+  },
+  report: {
+    eyebrow: "Challenge-rapport",
+    title: "Din rejse. Dit resultat.",
+    body: "Når rejsen er afsluttet, får du et professionelt Challenge-resultat, du kan henvise til, offentliggøre eller udfordre os på.",
+    contents: [
+      "Rute",
+      "Køretøj",
+      "Drivmiddel",
+      "AutoVere-beregning",
+      "Reel rejseomkostning",
+      "Forskel",
+      "Elbilsammenligning",
+      "Dato",
+      "Challenge-ID",
+    ],
+    future: "Planlagt: et permanent webresultat, et link du kan dele, og en PDF-rapport.",
+    cta: "Se denne rejse i AutoVere",
+    ctaNote:
+      "Efter en Challenge kan rejsen og dens parametre åbnes igen inde i det almindelige AutoVere-produkt, så du kan blive ved med at udforske den.",
+  },
+  register: {
+    eyebrow: "Adgang for bilpressen",
+    title: "Ansøg om adgang til AutoVere Challenge",
+    body: "Er du en del af bilpressen? Vi vil meget gerne have, at du tester AutoVere selv. Ansøg om Challenge-adgang — når din ansøgning er godkendt, bruger du AutoVere som Pro-bruger i hele testperioden.",
+    fields: {
+      name: "Fulde navn",
+      email: "Arbejds-e-mail",
+      outlet: "Medie eller kanal",
+      role: "Rolle",
+      country: "Land",
+      message: "Rejsen og bilen du gerne vil teste",
+    },
+    placeholders: {
+      name: "Kirsten Nielsen",
+      email: "kirsten@medie.dk",
+      outlet: "Medie, hjemmeside eller kanal",
+      role: "Bilskribent, anmelder, redaktør…",
+      country: "Danmark",
+      message: "Valgfrit — fortæl os hvad du planlægger at teste",
+    },
+    submit: "Ansøg om Challenge-adgang",
+    note: "Et hurtigt verificeringstrin sikrer, at Challenge-adgang forbeholdes journalister i aktivt arbejde. Når du er godkendt, opgraderes din konto til Pro i testperioden — intet separat presseværktøj, ingen begrænsninger.",
+    successTitle: "Tak — vi har modtaget din ansøgning.",
+    successBody:
+      "Challenge-adgangen rulles gradvist ud. Dine oplysninger gemmes indtil videre kun i denne browser, og vi kontakter dig personligt, så snart verificeringen åbner.",
+  },
+  finalCta: {
+    title: "Klar til at sætte AutoVere på prøve?",
+    body: "Vælg en rejse. Vælg din bil. Kør den. Sammenlign resultatet.",
+    primary: "Vær med i AutoVere Challenge",
+    secondary: "Udforsk AutoVere",
+  },
+  languageLabel: "Challenge på dit sprog",
+};
+
 /** Language URLs for the Challenge page. English/GB is the root /challenge. */
 export const CHALLENGE_LANGS = [
   { prefix: "no", label: "Norsk", flag: "🇳🇴" },
@@ -965,6 +1228,7 @@ export const CHALLENGE_CURRENCY: Record<ChallengeLang | "en", CurrencyCode> = {
 const CHALLENGE_CONTENT_BY_LANG: Partial<Record<ChallengeLang, ChallengeContent>> = {
   no: NO,
   se: SE,
+  dk: DK,
 };
 
 export function challengeContent(lang?: string | undefined): ChallengeContent {
