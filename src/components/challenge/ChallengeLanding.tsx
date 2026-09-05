@@ -26,8 +26,9 @@ const EMPHASIS = [
   "I am 74 years old.",
   "My son is part of the journey too.",
   "Not guesses. Not a black box.",
-  "What started in Kristiansand is now being built for Europe.",
-  "I want them to test it.",
+  "AutoVere is already launched in the USA and Canada as well as Europe",
+  "I want it to be tested in the real world.",
+  "It's to let you test it.",
 ];
 
 function emphasise(text: string) {
