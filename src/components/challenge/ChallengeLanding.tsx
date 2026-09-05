@@ -3,7 +3,6 @@ import { Link } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, MapPin } from "lucide-react";
 
 import { SiteHeader } from "@/components/SiteHeader";
-import { SiteFooter } from "@/components/SiteFooter";
 import { Button } from "@/components/ui/button";
 import { challengeContent, CHALLENGE_LANGS, type ChallengeLang } from "@/lib/challenge-content";
 
@@ -460,8 +459,6 @@ export function ChallengeLanding({ lang }: Props) {
           </div>
         </div>
       </section>
-
-      <SiteFooter />
     </div>
   );
 }
