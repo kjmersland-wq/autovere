@@ -42,6 +42,7 @@ const en = {
     plansMenu: "✨ Plans & upgrade",
     signOut: "Sign out",
     toggleNav: "Toggle navigation",
+    challenge: "AutoVere Challenge",
   },
   hero: {
     vehicles: { car: "Car", motorhome: "Motorhome", motorcycle: "Motorcycle" } as Record<VehicleKey, string>,
@@ -313,6 +314,7 @@ const no: Strings = {
     plansMenu: "✨ Abonnement og oppgradering",
     signOut: "Logg ut",
     toggleNav: "Vis/skjul meny",
+    challenge: "AutoVere Challenge",
   },
   hero: {
     vehicles: { car: "Bil", motorhome: "Bobil", motorcycle: "Motorsykkel" },

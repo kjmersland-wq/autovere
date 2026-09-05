@@ -1,7 +1,7 @@
 import { Link, useRouterState } from "@tanstack/react-router";
 
 import { useT, useLocale } from "@/lib/i18n";
-import { prefixFromPath } from "@/lib/locales";
+import { prefixForCode, prefixFromPath } from "@/lib/locales";
 import { regionFromPath } from "@/lib/trip-data";
 
 const YEAR = new Date().getFullYear();
@@ -11,7 +11,7 @@ export function SiteFooter() {
   const region = regionFromPath(pathname);
   const t = useT();
   const locale = useLocale();
-  const challengeHref = locale === "en" ? "/challenge" : `/challenge/${locale}`;
+  const challengeHref = locale === "en" ? "/challenge" : `/challenge/${prefixForCode(locale) ?? locale}`;
   const langPrefix = prefixFromPath(pathname);
   const euHome = langPrefix ? `/${langPrefix}` : "/";
   const isFrench = pathname.startsWith("/ca/fr");

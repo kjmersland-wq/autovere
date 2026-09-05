@@ -18,7 +18,7 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
   pl: "Polska",
   es: "España",
   it: "Italia",
-  usa: "United States",
+  us: "United States",
   fi: "Suomi",
 };
 
@@ -29,7 +29,7 @@ const OG_IMAGE_BY_PREFIX: Record<LocalePrefix, string> = {
   no: "/og/og-no.jpg",
   se: "/og/og-sv.jpg",
   dk: "/og/og-da.jpg",
-  usa: "/og/og-us.jpg",
+  us: "/og/og-us.jpg",
   de: "/og/og-de.jpg",
   nl: "/og/og-nl.jpg",
   fr: "/og/og-fr.jpg",
@@ -191,7 +191,7 @@ const APP_PAGE_META_BASE = {
 
 const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>> = {
   ...APP_PAGE_META_BASE,
-  usa: {},
+  us: {},
   fi: {
     scenic: {
       title: "Maisemareitit ja lautat | AutoVere Suomi",

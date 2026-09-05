@@ -7,7 +7,8 @@ import { LocaleLink } from "@/components/LocaleLink";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useAuth } from "@/lib/auth";
 import { useLocale, useT } from "@/lib/i18n";
-import { pathForCode, pathForRegion } from "@/lib/locales";
+import { pathForCode, pathForRegion, prefixForCode } from "@/lib/locales";
+import { isChallengeLang } from "@/lib/challenge-content";
 
 import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
 import {
@@ -32,17 +33,39 @@ function regionLabel(to: string, region: RegionKey, locale: Parameters<typeof re
   return nav[key];
 }
 
+/** Extract the language slug from /challenge or /challenge/<lang>. */
+function challengeLangFromPath(pathname: string): string | null {
+  if (pathname === "/challenge") return "en";
+  const m = pathname.match(/^\/challenge\/([^/]+)$/);
+  if (m && isChallengeLang(m[1]!)) return m[1]!;
+  return null;
+}
+
 export function SiteHeader({ region }: { region?: RegionKey }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const navigate = useNavigate();
   const activeRegion = region ?? regionFromPath(pathname);
   const t = useT();
   const locale = useLocale();
-  const [lang, setLang] = useState(
-    () => LANGUAGES.find((l) => l.code === locale) ?? LANGUAGES[0]!,
-  );
+  const challengeLang = challengeLangFromPath(pathname);
+  const isChallenge = challengeLang !== null;
+  const displayLocale = challengeLang ?? locale;
+  const lang = LANGUAGES.find((l) => l.code === displayLocale) ?? LANGUAGES[0]!;
   const [open, setOpen] = useState(false);
   const { user, openAuth, signOut } = useAuth();
+
+  const challengeHref = displayLocale === "en"
+    ? "/challenge"
+    : `/challenge/${prefixForCode(displayLocale) ?? displayLocale}`;
+
+  function languageTarget(code: string): string {
+    if (isChallenge) {
+      if (code === "en") return "/challenge";
+      const prefix = prefixForCode(code);
+      return prefix ? `/challenge/${prefix}` : `/challenge/${code}`;
+    }
+    return pathForCode(pathname, code);
+  }
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-border bg-background/70 backdrop-blur-xl">
@@ -89,6 +112,13 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               {regionLabel(l.to, activeRegion, locale) ?? t.header.nav[l.to] ?? l.label}
             </LocaleLink>
           ))}
+          <Link
+            to={challengeHref as "/challenge"}
+            className="group flex items-center text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+          >
+            <span className="mr-1.5 inline-block size-1.5 rounded-full bg-primary" />
+            {t.header.challenge}
+          </Link>
         </nav>
 
         <div
@@ -113,9 +143,8 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                 <DropdownMenuItem
                   key={l.code}
                   onSelect={() => {
-                    setLang(l);
-                    const target = pathForCode(pathname, l.code);
-                    if (target !== pathname) void navigate({ to: target });
+                    const target = languageTarget(l.code);
+                    if (target !== pathname) void navigate({ to: target as "/" });
                   }}
                   aria-label={l.label}
                   className={cn(
@@ -227,6 +256,14 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                   {regionLabel(l.to, activeRegion, locale) ?? t.header.nav[l.to] ?? l.label}
                 </LocaleLink>
               ))}
+              <Link
+                to={challengeHref as "/challenge"}
+                onClick={() => setOpen(false)}
+                className="flex items-center rounded-xl px-3 py-2.5 text-sm font-medium text-foreground/85 transition-colors hover:bg-muted"
+              >
+                <span className="mr-2 inline-block size-1.5 rounded-full bg-primary" />
+                {t.header.challenge}
+              </Link>
               <LocaleLink
                 to="/pricing"
                 onClick={() => setOpen(false)}
@@ -246,10 +283,9 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
                     type="button"
                     aria-label={l.label}
                     onClick={() => {
-                      setLang(l);
                       setOpen(false);
-                      const target = pathForCode(pathname, l.code);
-                      if (target !== pathname) void navigate({ to: target });
+                      const target = languageTarget(l.code);
+                      if (target !== pathname) void navigate({ to: target as "/" });
                     }}
                     className={cn(
                       "flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm font-semibold tracking-wide transition-colors",
