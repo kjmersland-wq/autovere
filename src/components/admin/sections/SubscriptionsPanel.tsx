@@ -39,16 +39,16 @@ export function SubscriptionsPanel({ site }: { site: string | null }) {
             { label: "Totalt registrert", value: nf.format(data.total) },
             { label: "Kansellert", value: nf.format(data.canceled) },
           ],
+          chart: {
+            title: "Nye abonnement per måned",
+            type: "bar",
+            series: data.monthly.map((m) => ({ label: m.month, value: m.count })),
+          },
           tables: [
             {
               title: "Abonnement per plan",
               columns: ["Plan", "Antall", "MRR (EUR)"],
               rows: data.byPlan.map((p) => [p.label, nf.format(p.count), cf.format(p.mrr)]),
-            },
-            {
-              title: "Nye abonnement per måned",
-              columns: ["Måned", "Nye"],
-              rows: data.monthly.map((m) => [m.month, nf.format(m.count)]),
             },
           ],
         },

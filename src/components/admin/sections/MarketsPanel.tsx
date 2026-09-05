@@ -145,6 +145,14 @@ function ExportMarketsPdf() {
         periodLabel: "Siste 90 dager",
         generatedAtLabel: new Date().toLocaleString("nb-NO"),
         block: {
+          chart: {
+            title: "Besøk per land (topp 8)",
+            type: "bar",
+            series: markets.result.data.countries.map((c) => ({
+              label: COUNTRY_NO[c.country] ?? c.country,
+              value: c.views,
+            })),
+          },
           tables: [
             {
               title: "Besøk per land",

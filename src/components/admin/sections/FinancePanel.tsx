@@ -71,6 +71,11 @@ export function FinancePanel({
             { label: "ARPU", value: fmt(data.arpu) },
             { label: "Churn", value: `${data.churnRate} %` },
           ],
+          chart: {
+            title: `Inntektsfordeling per plan (${effectiveCurrency})`,
+            type: "bar",
+            series: chartData.map((p) => ({ label: p.label, value: p.displayMrr })),
+          },
           tables: [
             {
               title: `Inntekt per plan (${effectiveCurrency})`,

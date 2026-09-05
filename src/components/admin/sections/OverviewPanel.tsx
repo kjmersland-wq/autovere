@@ -49,6 +49,11 @@ export function OverviewPanel({ onNavigate }: { onNavigate: (section: AdminSecti
             { label: "Aktive abonnenter", value: nf.format(data.subscriptions.active) },
             { label: "Månedlig inntekt (MRR, EUR)", value: cf.format(data.finance.mrr) },
           ],
+          chart: {
+            title: "Besøk per dag, hele plattformen",
+            type: "area",
+            series: data.traffic.daily.map((d) => ({ label: d.date.slice(5), value: d.views })),
+          },
           tables: [
             {
               title: "Mest besøkte sider",

@@ -40,8 +40,12 @@ function TrafficCharts({
         periodLabel: "Siste 30 dager (daglig), siste 90 dager (sider)",
         generatedAtLabel: new Date().toLocaleString("nb-NO"),
         block: {
+          chart: {
+            title: "Besøk per dag",
+            type: "area",
+            series: daily.map((d) => ({ label: d.date.slice(5), value: d.views })),
+          },
           tables: [
-            { title: "Besøk per dag", columns: ["Dato", "Besøk"], rows: daily.map((d) => [d.date, nf.format(d.views)]) },
             {
               title: "Mest besøkte sider",
               columns: ["Side", "Besøk"],
