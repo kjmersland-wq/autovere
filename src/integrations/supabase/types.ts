@@ -26,6 +26,8 @@ export type Database = {
           referrer: string | null
           region: string | null
           session_id: string | null
+          user_id: string | null
+          visitor_id: string | null
         }
         Insert: {
           city?: string | null
@@ -38,6 +40,8 @@ export type Database = {
           referrer?: string | null
           region?: string | null
           session_id?: string | null
+          user_id?: string | null
+          visitor_id?: string | null
         }
         Update: {
           city?: string | null
@@ -50,6 +54,56 @@ export type Database = {
           referrer?: string | null
           region?: string | null
           session_id?: string | null
+          user_id?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: []
+      }
+      product_events: {
+        Row: {
+          city: string | null
+          country: string | null
+          created_at: string
+          device: string | null
+          event_name: string
+          id: string
+          locale: string | null
+          metadata: Json
+          path: string | null
+          region: string | null
+          session_id: string | null
+          user_id: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string | null
+          event_name: string
+          id?: string
+          locale?: string | null
+          metadata?: Json
+          path?: string | null
+          region?: string | null
+          session_id?: string | null
+          user_id?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          city?: string | null
+          country?: string | null
+          created_at?: string
+          device?: string | null
+          event_name?: string
+          id?: string
+          locale?: string | null
+          metadata?: Json
+          path?: string | null
+          region?: string | null
+          session_id?: string | null
+          user_id?: string | null
+          visitor_id?: string | null
         }
         Relationships: []
       }
