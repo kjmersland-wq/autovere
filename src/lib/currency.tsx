@@ -4,7 +4,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { codeFromPath } from "@/lib/locales";
 import { regionFromPath } from "@/lib/trip-data";
 
-export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF" | "ISK" | "PLN" | "JPY";
+export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF" | "ISK" | "PLN" | "JPY" | "CNY";
 
 export type CurrencyDef = {
   code: CurrencyCode;
@@ -28,6 +28,7 @@ export const CURRENCIES: CurrencyDef[] = [
   { code: "ISK", emoji: "🇮🇸", symbol: "kr", label: "Icelandic Króna", suffix: true, decimals: 0 },
   { code: "PLN", emoji: "🇵🇱", symbol: "zł", label: "Polish Złoty", suffix: true, decimals: 2 },
   { code: "JPY", emoji: "🇯🇵", symbol: "¥", label: "Japanese Yen", decimals: 0 },
+  { code: "CNY", emoji: "🇨🇳", symbol: "¥", label: "Chinese Yuan Renminbi", decimals: 2 },
 ];
 
 export const CURRENCY_BY_CODE: Record<CurrencyCode, CurrencyDef> = Object.fromEntries(
@@ -47,6 +48,7 @@ export const RATES: Record<CurrencyCode, number> = {
   ISK: 150,
   PLN: 4.31,
   JPY: 163,
+  CNY: 7.85,
 };
 
 export const RATES_UPDATED = "Indicative reference rates — refreshed for planning, not for settlement.";
@@ -131,6 +133,7 @@ const LOCALE_DEFAULT_CURRENCY: Partial<Record<string, CurrencyCode>> = {
   fi: "EUR",
   pt: "EUR",
   ja: "JPY",
+  zh: "CNY",
 };
 
 /** Currency implied by the visitor's browser language, used only on cold visits. */
@@ -151,6 +154,7 @@ export function currencyFromBrowserLanguage(): CurrencyCode | null {
     if (lang === "pl") return "PLN";
     if (lang === "is") return "ISK";
     if (lang === "ja") return "JPY";
+    if (lang === "zh") return "CNY";
     if (["de", "nl", "fr", "es", "it", "pt", "fi", "el", "ga", "et", "lv", "lt", "sk", "sl"].includes(lang))
       return "EUR";
     if (lang === "en") return "GBP";

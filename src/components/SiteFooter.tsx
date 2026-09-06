@@ -66,7 +66,7 @@ export function SiteFooter() {
             {t.footer.productBy}
           </p>
           <p className="text-sm font-semibold text-foreground">KM TECH LABS</p>
-          <p className="text-sm text-muted-foreground">{locale === "no" || locale === "sv" || locale === "da" ? "Kristiansand, Norge" : locale === "pl" ? "Kristiansand, Norwegia" : locale === "de" ? "Kristiansand, Norwegen" : locale === "nl" ? "Kristiansand, Noorwegen" : locale === "fr" ? "Kristiansand, Norvège" : locale === "es" ? "Kristiansand, Noruega" : locale === "it" ? "Kristiansand, Norvegia" : locale === "fi" ? "Kristiansand, Norja" : locale === "pt" ? "Kristiansand, Noruega" : locale === "ja" ? "クリスチャンサン（ノルウェー）" : "Kristiansand, Norway"}</p>
+          <p className="text-sm text-muted-foreground">{locale === "no" || locale === "sv" || locale === "da" ? "Kristiansand, Norge" : locale === "pl" ? "Kristiansand, Norwegia" : locale === "de" ? "Kristiansand, Norwegen" : locale === "nl" ? "Kristiansand, Noorwegen" : locale === "fr" ? "Kristiansand, Norvège" : locale === "es" ? "Kristiansand, Noruega" : locale === "it" ? "Kristiansand, Norvegia" : locale === "fi" ? "Kristiansand, Norja" : locale === "pt" ? "Kristiansand, Noruega" : locale === "ja" ? "クリスチャンサン（ノルウェー）" : locale === "zh" ? "挪威克里斯蒂安桑" : "Kristiansand, Norway"}</p>
           <p className="mt-5 inline-flex max-w-xs items-start gap-2 rounded-xl border border-amber-300/25 bg-amber-300/10 px-3 py-2 text-xs leading-relaxed text-amber-200">
             <span aria-hidden="true">🛡️</span>
             <span>

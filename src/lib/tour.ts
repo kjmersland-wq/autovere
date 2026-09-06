@@ -494,6 +494,36 @@ export const TOUR_COPY: Record<string, TourCopy> = {
       },
     ],
   },
+  zh: {
+    trigger: "💡 使用指南",
+    next: "下一步",
+    prev: "上一步",
+    done: "完成",
+    close: "关闭／跳过",
+    steps: [
+      {
+        title: "1. 选择语言和货币",
+        description: "在这里选择你的语言和货币偏好，过路费、油费和通行证费用会自动为你换算。",
+      },
+      {
+        title: "2. 输入行程",
+        description: "填写出发地和目的地即可，也可以直接选择下方的热门路线，立即查看费用。",
+      },
+      {
+        title: "3. 设置车辆信息",
+        description: "选择房车、电动车或燃油车，还可以设置是否走风景山路，或是否避开收费道路。",
+      },
+      {
+        title: "4. 查看结果并保存到车库",
+        description: "一键查看完整费用明细。开通会员后，可将行程保存到我的车库，随时用最新价格重新计算。",
+      },
+      {
+        title: "5. 发送到车载导航",
+        description:
+          "可以直接将路线发送到Tesla应用，或通过Apple CarPlay／Android Auto在车机屏幕上打开，也支持导出中文版行程单。",
+      },
+    ],
+  },
 };
 
 export function tourCopy(locale: string): TourCopy {

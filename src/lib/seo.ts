@@ -22,6 +22,7 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
   fi: "Suomi",
   pt: "Portugal",
   ja: "日本",
+  zh: "中国",
 };
 
 type PageMeta = { title: string; description: string };
@@ -45,6 +46,8 @@ const OG_IMAGE_BY_PREFIX: Record<LocalePrefix, string> = {
   pt: "/og-image.jpg",
   // Same reasoning: no dedicated og-ja.jpg exists yet.
   ja: "/og-image.jpg",
+  // Same reasoning: no dedicated og-zh.jpg exists yet.
+  zh: "/og-image.jpg",
 };
 
 /** Absolute URL of the share image for a language prefix (null = English root). */
@@ -306,6 +309,27 @@ const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>>
       description: "愛車やタンク容量、ETCカードの情報を保存し、これまで計画した旅程をいつでも呼び出せます。",
     },
   },
+  zh: {
+    planner: {
+      title: "自驾游路线规划 — 过路费、油费与渡轮费用 | AutoVere 中国",
+      description:
+        "输入出发地和目的地，即可清楚了解过路费、通行证、燃油、充电和渡轮的全部费用，适用于轿车、房车和摩托车。",
+    },
+    tolls: {
+      title: "欧洲、美国和加拿大的过路费与通行证详解 | AutoVere 中国",
+      description:
+        "清晰实用的过路费、通行证和电子收费系统指南，涵盖欧洲、美国和加拿大，适用于轿车、房车和摩托车。",
+    },
+    scenic: {
+      title: "值得绕行的山路与渡轮 | AutoVere 中国",
+      description:
+        "阿尔卑斯山口、沿海公路和渡轮航线的通行季节、限高信息与预订建议，助你规划一次顺畅的自驾之旅。",
+    },
+    garage: {
+      title: "我的车库 — 车辆、通行设备与已保存的行程 | AutoVere 中国",
+      description: "保存你的车辆信息和油箱容量，随时查看已规划的行程，并支持导出为GPX格式。",
+    },
+  },
 };
 
 export function appPageMeta(prefix: LocalePrefix, page: LocalePage): PageMeta | null {
@@ -411,10 +435,11 @@ export const MARKET_LANG: Record<LocalePrefix | "en" | "ca" | "cafr", string> = 
   it: "it-IT",
   pt: "pt-PT",
   ja: "ja-JP",
+  zh: "zh-CN",
 };
 
-/** The 14 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
-export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it", "pt", "ja"] as const;
+/** The 15 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
+export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it", "pt", "ja", "zh"] as const;
 
 type AlternateLink = { rel: "alternate"; hreflang: string; href: string };
 

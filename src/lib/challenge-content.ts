@@ -3801,6 +3801,257 @@ const PT: ChallengeContent = {
   languageLabel: "O Challenge na tua língua",
 };
 
+const ZH: ChallengeContent = {
+  meta: {
+    title: "AutoVere Challenge — 用真实旅途检验AutoVere",
+    description:
+      "用真实的旅途、真实的车辆和真实的花费来检验AutoVere。我们诚挚邀请汽车媒体人参与计算、驾驶与对比。",
+  },
+  badge: "Challenge",
+  hero: {
+    kicker: "AutoVere Challenge",
+    title: "让真实的旅途，来检验AutoVere。",
+    lede: "选择您平时驾驶的车辆，选择您想验证的行程。用真正的AutoVere完成计算，实际驾驶这段旅程，再将我们的计算结果与您真实花费的费用做对比。",
+    statement: ["真实的车辆。", "真实的旅途。", "真实的花费。"],
+    primaryCta: "申请Challenge资格",
+    secondaryCta: "了解AutoVere",
+    imageCredit: "图片来源：Unsplash",
+  },
+  invitation: {
+    eyebrow: "写给汽车媒体人的一封邀请",
+    title: "请亲自验证AutoVere。",
+    paragraphs: [
+      "如果您从事汽车媒体工作，一定深有体会：旅途的实际花费，很少会与计算器给出的数字完全吻合。过路费、通行证、渡轮、燃油和充电费用，会随着一程程跨越国境悄悄累积——而这正是AutoVere着力解决的问题。",
+      "我们并不希望您仅凭一面之词就相信这一点。",
+      "我们更愿意把钥匙交到您手上：选一段真实的行程，开您车库里那辆真正的车，以Pro用户身份使用AutoVere，把这段路实际开完，再将我们的计算结果与您的真实收据对照。",
+      "如果数字相近，这会是一个值得报道的故事。如果有出入，我们同样想知道——比起被悄悄略过，我们更希望这份反馈来自您。",
+    ],
+    signature: "Kjell Mersland — AutoVere创始人 · KM Tech Labs，克里斯蒂安桑，挪威",
+  },
+  steps: {
+    eyebrow: "Challenge如何进行",
+    title: "从邀请到结果，六个从容的步骤。",
+    intro: "这里没有任何演示环境。从第五步开始，您使用的就是与所有其他用户完全相同的AutoVere。",
+    items: [
+      { number: "01", title: "注册", body: "以汽车媒体身份完成注册。" },
+      { number: "02", title: "审核确认", body: "AutoVere审核您的申请，并开通Challenge权限。" },
+      {
+        number: "03",
+        title: "选择行程",
+        body: "从AutoVere推荐的Challenge路线中选择，或自行决定行程。",
+      },
+      {
+        number: "04",
+        title: "选择车辆",
+        body: "选择您实际测试的车辆——汽油、柴油或电动车均可。",
+      },
+      {
+        number: "05",
+        title: "计算并出发",
+        body: "以Pro用户身份使用普通版AutoVere。先计算行程，再实际驾驶。",
+      },
+      {
+        number: "06",
+        title: "对比结果",
+        body: "输入实际产生的旅途费用，与AutoVere的计算结果进行对比。",
+      },
+    ],
+  },
+  notCalculator: {
+    eyebrow: "这是一款产品，而非媒体演示版",
+    title: "您的Challenge，就在真实的AutoVere中进行。",
+    body: "AutoVere Challenge是进入AutoVere、并对其加以检验的入口，而不是专为媒体打造的简化版计算器。这里没有限量版的媒体工具，没有特别搭建的测试环境，也没有另一套数字。",
+    flow: [
+      "Challenge落地页",
+      "媒体注册",
+      "AutoVere审核",
+      "Challenge Pro权限",
+      "普通版AutoVere产品",
+      "您的Challenge结果",
+    ],
+    footnote: "您所检验的计算方式，与所有其他用户所使用的完全相同。",
+  },
+  freedom: {
+    eyebrow: "您的检验，您来定义",
+    title: "自由选择您想检验的行程。",
+    lines: ["使用我们推荐的路线，或自行决定行程。", "开您平时驾驶的那辆车即可。"],
+    body: "没有固定的及格标准，没有指定路线，也没有认可车型清单。Challenge的内容由您决定，我们唯一的期待，是您如实公开自己的发现。",
+    items: [
+      { title: "任意行程", body: "推荐的Challenge路线，或您原本就计划的旅途，都可以。" },
+      { title: "任意车辆", body: "测试车队里的车，或您自己车库里的车——汽油、柴油、电动车均可。" },
+      { title: "完整Pro权限", body: "检验期间，可不受限制地使用AutoVere的全部功能。" },
+      { title: "属于您自己的结论", body: "把发现的结果如实公开。我们不会提前审核。" },
+    ],
+  },
+  journey: {
+    eyebrow: "行程选择",
+    title: "驾驶推荐路线，或选择更适合您检验的路线。",
+    intro: "Challenge有两种进行方式，都使用同一套计算引擎、同一批数据来源，以及同样的分国费用明细。",
+    options: [
+      {
+        label: "选项01",
+        title: "推荐的Challenge路线",
+        body: "针对每个国家，AutoVere都会提供三条推荐路线，覆盖不同地区与不同驾驶方式。",
+        bullets: ["短途", "中途", "长途"],
+      },
+      {
+        label: "选项02",
+        title: "检验您自己的行程",
+        body: "选择一段与您的检验相符、真实可行的行程。往往您原本就打算进行的那趟旅途，最能体现真实情况。仅供参考：卑尔根—特隆赫姆、华沙—克拉科夫、洛杉矶—圣地亚哥。",
+        bullets: ["自己的路线", "自己的时间安排", "自己的路况"],
+      },
+    ],
+  },
+  vehicles: {
+    eyebrow: "车辆选择",
+    title: "用您车库里那辆真正的车来测试。",
+    intro: "先选择动力类型，再从AutoVere现有的车辆数据中选出具体车型。Challenge不设单独的车辆清单。",
+    items: [
+      {
+        label: "汽油",
+        body: "沿途各国的油耗、油价与过路费均逐一计算。",
+        image:
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=70",
+        alt: "夕阳下停在沙漠公路旁的蓝色双门轿跑车",
+      },
+      {
+        label: "柴油",
+        body: "计算长途油耗的同时，也会考虑部分运营商采用的车重与轴数分级收费。",
+        image:
+          "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1200&q=70",
+        alt: "行驶在积雪森林道路上的白色SUV",
+      },
+      {
+        label: "电动车",
+        body: "计算电池容量、电耗、沿途所需的充电次数，以及沿线充电网络的费用。",
+        image:
+          "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=70",
+        alt: "正在充电的电动车充电线",
+      },
+    ],
+  },
+  evCompare: {
+    eyebrow: "同一行程，换成电动车",
+    title: "如果换成电动车，这趟旅途会花多少钱？",
+    body: "在计算完您自己的行程后，您可以用同一条路线再计算一次电动车版本，看看结果如何。有时电动车更省钱，有时充电、过路费和绕行又会改变结果。无论哪种情况，AutoVere都会如实呈现计算结果。",
+    exampleLabel: "示例数据——并非AutoVere的真实计算结果",
+    rows: [
+      { label: "您的车", sub: "柴油", amountEur: 96.4 },
+      { label: "同一行程换成电动车", sub: "电动车", amountEur: 68.2 },
+    ],
+    differenceLabel: "预计差额",
+    differenceAmountEur: 28.2,
+    caveat: "以上仅为示例，我们并不认为电动车总是更划算。",
+  },
+  reality: {
+    eyebrow: "预估与实际",
+    title: "大多数工具悄悄回避的部分。",
+    body: "Challenge会将您出发前AutoVere计算出的费用，与旅途结束后实际产生的花费进行对比。这个结果属于您自己——即便某一天的结果并不那么有利于我们。",
+    exampleLabel: "示例数据——并非AutoVere的真实计算结果",
+    calculation: { label: "AutoVere计算结果", amountEur: 96.4 },
+    actual: { label: "实际旅途花费", amountEur: 99.1 },
+    difference: { label: "差额", value: "+2.8%" },
+    caveat: "我们不会承诺某个具体的准确率。真正重要的，是您自己得出的结果。",
+  },
+  founder: {
+    eyebrow: "AutoVere背后的人",
+    title: "我为什么要做AutoVere",
+    opening:
+      "一切始于一个很简单的问题：为什么直到今天，弄清楚一趟自驾旅途究竟要花多少钱，依然这么难？",
+    paragraphs: [
+      "我今年74岁。在建筑行业工作了40多年后，我于2020年退休。",
+      "一年后，我没有选择安享清闲，而是开始着手做一件完全不同的事情。",
+      "多年来，我一直驾车穿梭在欧洲各地旅行。走得越多，越发现同一个问题反复出现：规划一趟长途旅行，往往需要在好几个不同的地方分别查找信息。",
+      "过路费、通行证、渡轮、燃油、电动车充电——换一条路线、换一个国家，费用就完全不同。",
+      "我当时就想，一定有更好的办法。",
+      "于是，我开始着手打造AutoVere。",
+      "这个最初只是个人想法的项目，如今已经发展成规模大得多的事业——而这并非我一个人的努力，我的儿子也一路参与其中。",
+      "我们始终坚持一个对我而言一直很重要的原则：一件事如果值得做，就应该认真做好。",
+      "这意味着，我们使用真实数据、官方信息来源、算法与数学模型来计算旅途费用。",
+      "不是凭猜测，也不是一个黑箱。",
+      "我们的目标很简单：让人们在出发前，就能更清楚地知道这趟旅途大概要花多少钱，并帮助他们在路线、车辆和行程安排上做出更好的选择。",
+      "从克里斯蒂安桑起步的这个项目，如今已经走出了挪威，走出了欧洲。",
+      "AutoVere目前已经在欧洲、美国和加拿大同步上线，我们的目标，是成为服务全球自驾出行人群的汽车信息平台。",
+    ],
+    closing: [
+      "但仅仅把一件事做出来，并且相信它，还远远不够。",
+      "我希望它能在真实的世界里接受检验。",
+      "这正是我们创建AutoVere Challenge的原因。",
+      "我不希望汽车媒体人只是听我一面之词。",
+      "选一辆真实的车，选一段真实的旅途，用AutoVere完成计算，实际把它开完，再把结果和真实发生的情况做对比。",
+      "没有特别准备的演示，也没有提前安排好的结果。",
+      "只有AutoVere，和这条路。",
+      "如果结果不错，我们会为此感到骄傲。",
+      "如果哪里出了错，我们也想知道。",
+      "因为证明AutoVere真正有用的最好方式，从来都不是靠我们自己说。",
+      "而是让您亲自试一试。",
+    ],
+    name: "Kjell Mersland，74岁",
+    role: "AutoVere创始人",
+    note: "与儿子一起打造AutoVere",
+    alt: "AutoVere创始人 Kjell Mersland",
+    emphasis: [
+      "我今年74岁。",
+      "我的儿子也一路参与其中。",
+      "不是凭猜测，也不是一个黑箱。",
+      "AutoVere目前已经在欧洲、美国和加拿大同步上线",
+      "我希望它能在真实的世界里接受检验。",
+      "而是让您亲自试一试。",
+    ],
+  },
+  report: {
+    eyebrow: "Challenge报告",
+    title: "您的旅途，您的结果。",
+    body: "旅途结束后，您将获得一份正式的Challenge结果，可供引用、公开发表，也可以据此对我们提出质疑。",
+    contents: [
+      "路线",
+      "车辆",
+      "动力类型",
+      "AutoVere计算结果",
+      "实际旅途花费",
+      "差额",
+      "电动车对比",
+      "日期",
+      "Challenge编号",
+    ],
+    future: "计划推出：常驻网页版结果、可分享链接，以及PDF报告。",
+    cta: "在AutoVere中查看这趟旅途",
+    ctaNote: "Challenge结束后，这趟旅途及其参数仍可在普通版AutoVere中随时重新打开，继续探索。",
+  },
+  register: {
+    eyebrow: "汽车媒体专属通道",
+    title: "申请AutoVere Challenge资格",
+    body: "您是汽车媒体从业者吗？我们很期待您能亲自体验AutoVere。申请Challenge资格，获批后即可在检验期间以Pro用户身份使用AutoVere。",
+    fields: {
+      name: "姓名",
+      email: "工作邮箱",
+      outlet: "媒体或频道名称",
+      role: "职务",
+      country: "国家",
+      message: "您想测试的行程与车辆",
+    },
+    placeholders: {
+      name: "李明",
+      email: "liming@publication.com",
+      outlet: "媒体、网站或频道名称",
+      role: "汽车媒体人、评测人、编辑等",
+      country: "中国",
+      message: "选填——欢迎告诉我们您的测试计划",
+    },
+    submit: "申请Challenge资格",
+    note: "简单的审核流程，是为了让Challenge权限真正提供给在职媒体人。审核通过后，您的账户将在检验期间升级为Pro——没有单独的媒体工具，也没有额外限制。",
+    successTitle: "感谢您，我们已收到您的申请。",
+    successBody: "Challenge权限正在逐步开放中。您目前填写的信息暂时仅保存在此浏览器中，审核开放后我们会第一时间与您联系。",
+  },
+  finalCta: {
+    title: "准备好亲自检验AutoVere了吗？",
+    body: "选一段行程，选一辆车，出发，再对比结果。",
+    primary: "加入AutoVere Challenge",
+    secondary: "了解AutoVere",
+  },
+  languageLabel: "切换到您的语言查看Challenge",
+};
+
 export const CHALLENGE_LANGS = [
   { prefix: "no", label: "Norsk", flag: "🇳🇴" },
   { prefix: "se", label: "Svenska", flag: "🇸🇪" },
@@ -3816,6 +4067,7 @@ export const CHALLENGE_LANGS = [
   { prefix: "it", label: "Italiano", flag: "🇮🇹" },
   { prefix: "pt", label: "Português", flag: "🇵🇹" },
   { prefix: "ja", label: "日本語", flag: "🇯🇵" },
+  { prefix: "zh", label: "简体中文", flag: "🇨🇳" },
 ] as const;
 
 export type ChallengeLang = (typeof CHALLENGE_LANGS)[number]["prefix"];
@@ -3849,6 +4101,7 @@ export const CHALLENGE_CURRENCY: Record<ChallengeLang | "en", CurrencyCode> = {
   it: "EUR",
   pt: "EUR",
   ja: "EUR",
+  zh: "EUR",
 };
 
 /** Per-language overrides. Missing languages fall back to English. */
@@ -3866,6 +4119,7 @@ const CHALLENGE_CONTENT_BY_LANG: Partial<Record<ChallengeLang, ChallengeContent>
   it: IT,
   pt: PT,
   ja: JA,
+  zh: ZH,
 };
 
 export function challengeContent(lang?: string | undefined): ChallengeContent {

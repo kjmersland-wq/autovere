@@ -15,6 +15,7 @@ import { PL_DICT } from "@/lib/dict-pl";
 import { PT_DICT } from "@/lib/dict-pt";
 import { SV_DICT } from "@/lib/dict-sv";
 import { US_DICT } from "@/lib/dict-us";
+import { ZH_DICT } from "@/lib/dict-zh";
 
 type Dict = Record<string, unknown>;
 
@@ -31,6 +32,7 @@ export const PARTIAL_DICTS: Record<string, Dict> = {
   us: US_DICT,
   fi: FI_DICT,
   ja: JA_DICT,
+  zh: ZH_DICT,
 };
 
 /** Hero copy per language for the localized landing page. */
@@ -154,5 +156,13 @@ export const LOCALE_LANDING: Record<
     metaTitle: "AutoVere 日本語版 — 海外ロードトリップの通行料金・燃料費プランナー",
     metaDescription:
       "ヨーロッパ、カナダ、アメリカのロードトリップを日本語で計画。通行料金、ビニエット、燃料費、充電費、フェリー代まで、車・キャンピングカー・バイク向けに正確に算出します。",
+  },
+  zh: {
+    eyebrow: "欧洲 · 加拿大 · 美国，30 多个国家和地区",
+    title: "一次规划，处处安心上路。",
+    subtitle: "告诉我们你从哪里出发、想去哪里——过路费、电子通行凭证、燃油、充电和渡轮费用，AutoVere 都帮你提前算好。",
+    metaTitle: "AutoVere 中文版 — 海外自驾过路费与油耗规划",
+    metaDescription:
+      "为你在欧洲、加拿大和美国的自驾之旅提供中文服务，精准计算过路费、电子通行凭证、燃油、充电和渡轮费用，覆盖轿车、房车与摩托车。",
   },
 };

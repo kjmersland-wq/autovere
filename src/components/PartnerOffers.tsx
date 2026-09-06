@@ -114,6 +114,14 @@ const COPY: Record<
     esimNote: "eSIMデータ通信 — ローミング料金の心配なし",
     ferry: "フェリーチケットを比較する",
   },
+  zh: {
+    title: "本次行程实用服务",
+    car: "比较租车价格",
+    bike: "租一辆摩托车或踏板车",
+    esim: "境外也能随时上网",
+    esimNote: "eSIM流量套餐 — 无需担心漫游费用",
+    ferry: "比较渡轮票价",
+  },
 };
 
 const pill =

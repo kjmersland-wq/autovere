@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type FlagCode = "GB" | "NO" | "SE" | "DK" | "FI" | "US" | "DE" | "NL" | "FR" | "PL" | "ES" | "IT" | "PT" | "JP";
+export type FlagCode = "GB" | "NO" | "SE" | "DK" | "FI" | "US" | "DE" | "NL" | "FR" | "PL" | "ES" | "IT" | "PT" | "JP" | "CN";
 
 type FlagProps = { code: FlagCode; className?: string; title?: string };
 
@@ -146,6 +146,19 @@ const FLAGS: Record<FlagCode, { label: string; svg: React.ReactNode }> = {
       <>
         <rect width="60" height="40" fill="#FFFFFF" />
         <circle cx="30" cy="20" r="12" fill="#BC002D" />
+      </>
+    ),
+  },
+  CN: {
+    label: "China",
+    svg: (
+      <>
+        <rect width="60" height="40" fill="#DE2910" />
+        <circle cx="12" cy="9" r="4.2" fill="#FFDE00" />
+        <circle cx="24" cy="4" r="1.4" fill="#FFDE00" />
+        <circle cx="27.5" cy="8.5" r="1.4" fill="#FFDE00" />
+        <circle cx="26.5" cy="13.5" r="1.4" fill="#FFDE00" />
+        <circle cx="22" cy="16" r="1.4" fill="#FFDE00" />
       </>
     ),
   },

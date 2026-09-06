@@ -97,6 +97,14 @@ import {
   SV_PRIVACY,
   SV_TERMS,
 } from "@/lib/global-content-sv";
+import {
+  ZH_FAQ,
+  ZH_HOW_IT_WORKS,
+  ZH_PARTNERS,
+  ZH_PRICING,
+  ZH_PRIVACY,
+  ZH_TERMS,
+} from "@/lib/global-content-zh";
 import { LocalizedRegionPage } from "@/components/LocalizedRegionPage";
 import {
   isLocalePage,
@@ -206,6 +214,14 @@ const INFO_BY_LANG: Record<string, typeof INFO> = {
     partners: JA_PARTNERS,
     privacy: JA_PRIVACY,
     terms: JA_TERMS,
+  },
+  zh: {
+    faq: ZH_FAQ,
+    "how-it-works": ZH_HOW_IT_WORKS,
+    pricing: ZH_PRICING,
+    partners: ZH_PARTNERS,
+    privacy: ZH_PRIVACY,
+    terms: ZH_TERMS,
   },
 };
 

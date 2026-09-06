@@ -420,7 +420,35 @@ const ja: RegionPack = {
   },
 };
 
-const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us, fi, pt, ja };
+const zh: RegionPack = {
+  eu: {
+    eyebrow: "欧洲 · 30多个国家",
+    originHint: "您计划在哪里取车？",
+    destinationHint: "这段旅程将带您去向何方？",
+    tollSystems: ["电子通行证与纸质通行证", "按票计费的高速公路过路费", "城市低排放限行区"],
+    nav: { planner: "自驾路线规划", tolls: "过路费与电子通行证", scenic: "绝美山口与渡轮", garage: "我的车库" },
+  },
+  us: {
+    eyebrow: "美国 · 50个州",
+    originHint: "您计划在哪里取车？",
+    destinationHint: "这段旅程将带您去向何方？",
+    tollSystems: ["各州收费公路", "HOV/快速通道", "桥梁与隧道过路费"],
+    nav: { planner: "自驾路线规划", tolls: "过路费与快速通道", scenic: "绝美景观公路与渡轮", garage: "我的车库" },
+    fuels: { petrol: "汽油" },
+    vehicles: { motorhome: "房车" },
+  },
+  ca: {
+    eyebrow: "加拿大 · 横跨东西海岸",
+    originHint: "您计划在哪里取车？",
+    destinationHint: "这段旅程将带您去向何方？",
+    tollSystems: ["407高速公路ETR绕行路段", "省级过路费与桥梁", "卑诗渡轮（BC Ferries）航线"],
+    nav: { planner: "自驾路线规划", tolls: "过路费与桥梁", scenic: "绝美景观路线与渡轮", garage: "我的车库" },
+    fuels: { petrol: "汽油" },
+    vehicles: { motorhome: "房车" },
+  },
+};
+
+const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us, fi, pt, ja, zh };
 
 export function regionStrings(locale: Locale, region: RegionKey): RegionStrings {
   return (PACKS[locale] ?? en)[region];

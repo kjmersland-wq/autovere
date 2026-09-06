@@ -56,6 +56,7 @@ export const DATE_LOCALE: Record<Locale, string> = {
   us: "en-US",
   fi: "fi-FI",
   ja: "ja-JP",
+  zh: "zh-CN",
 };
 
 const EN_TIERS: Tier[] = [
@@ -721,6 +722,57 @@ const JA_TIERS: Tier[] = [
   },
 ];
 
+const ZH_TIERS: Tier[] = [
+  {
+    id: "free",
+    name: "Free",
+    emoji: "🧭",
+    tagline: "先看清真实的费用，再决定要不要上路——完全免费。",
+    monthly: "0 €",
+    cta: "免费开始规划",
+    features: [
+      "基础的过路费、电子通行凭证与油耗计算",
+      "覆盖欧洲、美国与加拿大全境的OSRM路线规划",
+      "可保存1辆车",
+      "按国家/州查询费用参考",
+      "分享行程链接",
+    ],
+  },
+  {
+    id: "pro",
+    name: "AutoVere Pro",
+    emoji: "✨",
+    tagline: "献给总是惦记着下一个山口的旅行者。",
+    monthly: "4,99 €",
+    yearly: "39 €",
+    cta: "升级至 Pro",
+    highlight: true,
+    features: [
+      "多车库管理（汽车、房车、摩托车）",
+      "支持导出GPX与KML格式，适配Garmin、TomTom与CarPlay",
+      "山口与渡轮实时提醒",
+      "离线逐向导航与可打印行程手册",
+      "摩托车通行优惠与骑行安全提醒",
+      "行程保存数量不限",
+    ],
+  },
+  {
+    id: "fleet",
+    name: "AutoVere Business / 车队版",
+    emoji: "🚛",
+    tagline: "跨国运营，账单统一管理。",
+    monthly: "19 €",
+    cta: "升级至 Business",
+    features: [
+      "多国过路费账单一站整合",
+      "团队路线共享库",
+      "重型车辆（超过3.5吨）与按轴计费方案",
+      "司机分配与成本中心导出（CSV）",
+      "KM TECH LABS 优先支持",
+    ],
+  },
+];
+
 export const TIERS = EN_TIERS;
 export const TIERS_PL = PL_TIERS;
 
@@ -739,6 +791,7 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   us: EN_TIERS,
   fi: FI_TIERS,
   ja: JA_TIERS,
+  zh: ZH_TIERS,
 };
 
 const COPY_BASE = {
@@ -1028,6 +1081,28 @@ const COPY_BASE = {
     signupToast: "まずはアカウントを作成してください。そのあと、安全なお支払い画面にご案内します。",
     portalError: "請求ポータルを開けませんでした。",
   },
+  zh: {
+    onPlan: "您当前的套餐：",
+    retrying: "（付款重试中）",
+    until: (d) => `访问权限将保留至${d}。`,
+    renews: (d) => `将于${d}续费。`,
+    active: "订阅已生效。",
+    manage: "管理账单",
+    monthly: "按月",
+    yearly: "按年 · 立省35%",
+    forever: "长期免费",
+    perYear: "/年",
+    perMonth: "/月",
+    mostLoved: "最受欢迎",
+    proFine: "每月4.99欧元或每年39欧元——随时可以取消。",
+    current: "您当前的套餐",
+    switch: "在账单管理页面更换套餐",
+    foot: "价格以欧元计价，已含适用增值税。付款与税务处理由Stripe安全完成。费用预估仅供参考——请以官方过路费平台的信息为准。",
+    checkout: "安全支付",
+    freeToast: "您正在使用免费套餐——尽情规划旅程吧。",
+    signupToast: "请先创建账户，随后我们会立即为您跳转至安全支付页面。",
+    portalError: "账单管理页面暂时无法打开。",
+  },
 } satisfies Partial<Record<Locale, PricingCopy>>;
 
 const COPY: Record<Locale, PricingCopy> = {
@@ -1038,6 +1113,7 @@ const COPY: Record<Locale, PricingCopy> = {
   us: COPY_BASE.en,
   fi: COPY_BASE.fi,
   ja: COPY_BASE.ja,
+  zh: COPY_BASE.zh,
 };
 
 const HERO_BASE = {
@@ -1119,6 +1195,12 @@ const HERO_BASE = {
     intro:
       "どのプランも、正直な数字から始まります。ガレージを増やしたいとき、オフラインナビや複数国のフリート請求管理が必要になったときにアップグレードを——シーズンが終わればいつでも解約できます。",
   },
+  zh: {
+    eyebrow: "套餐与价格",
+    title: "选择契合你下一段旅程的套餐。",
+    intro:
+      "每个套餐都从真实、诚实的数字开始。当你需要完整的车库管理、离线导航，或跨国车队的过路费账单管理时，再考虑升级——季节结束时随时可以取消。",
+  },
 };
 
 const HERO: Record<Locale, PricingHero> = {
@@ -1129,6 +1211,7 @@ const HERO: Record<Locale, PricingHero> = {
   us: HERO_BASE.en,
   fi: HERO_BASE.fi,
   ja: HERO_BASE.ja,
+  zh: HERO_BASE.zh,
 };
 
 /**

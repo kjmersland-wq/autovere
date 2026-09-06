@@ -3,7 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import type { CostGroupKey } from "@/lib/country-costs";
 import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 
-export type Locale = "en" | "no" | "sv" | "da" | "fi" | "us" | "de" | "nl" | "fr" | "pl" | "es" | "it" | "pt" | "ja";
+export type Locale = "en" | "no" | "sv" | "da" | "fi" | "us" | "de" | "nl" | "fr" | "pl" | "es" | "it" | "pt" | "ja" | "zh";
 
 import { CONTENT_DA, DA_PATTERNS } from "@/lib/content-da";
 import { CONTENT_DE, DE_PATTERNS } from "@/lib/content-de";
@@ -18,6 +18,7 @@ import { CONTENT_PL } from "@/lib/content-pl";
 import { CONTENT_PT, PT_PATTERNS } from "@/lib/content-pt";
 import { CONTENT_SV, SV_PATTERNS } from "@/lib/content-sv";
 import { CONTENT_US } from "@/lib/content-us";
+import { CONTENT_ZH, ZH_PATTERNS } from "@/lib/content-zh";
 import { codeFromPath } from "@/lib/locales";
 import { PARTIAL_DICTS } from "@/lib/dictionaries";
 
@@ -616,6 +617,7 @@ export const STRINGS: Record<Locale, Strings> = {
   us: withFallback("us"),
   fi: withFallback("fi"),
   ja: withFallback("ja"),
+  zh: withFallback("zh"),
 };
 
 export function useT(): Strings {
@@ -705,6 +707,7 @@ const CONTENT_DICTS: Partial<Record<Locale, Record<string, string>>> = {
   us: CONTENT_US,
   fi: CONTENT_FI,
   ja: CONTENT_JA,
+  zh: CONTENT_ZH,
 };
 
 const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
@@ -719,6 +722,7 @@ const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
   it: IT_PATTERNS,
   pt: PT_PATTERNS,
   ja: JA_PATTERNS,
+  zh: ZH_PATTERNS,
 };
 
 export function useTr(): (value: string) => string {

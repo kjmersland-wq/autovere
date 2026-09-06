@@ -19,6 +19,7 @@ export const COUNTRY_NO: Record<string, string> = {
   US: "🇺🇸 USA",
   CA: "🇨🇦 Canada",
   JP: "🇯🇵 Japan",
+  CN: "🇨🇳 Kina",
   Ukjent: "🌍 Ukjent",
 };
 

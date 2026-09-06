@@ -18,6 +18,7 @@ import { NL_FAQ, NL_HOW_IT_WORKS, NL_PARTNERS, NL_PRICING, NL_PRIVACY, NL_TERMS 
 import { PL_FAQ, PL_HOW_IT_WORKS, PL_PARTNERS, PL_PRICING, PL_PRIVACY, PL_TERMS } from "@/lib/global-content-pl";
 import { PT_FAQ, PT_HOW_IT_WORKS, PT_PARTNERS, PT_PRICING, PT_PRIVACY, PT_TERMS } from "@/lib/global-content-pt";
 import { SV_FAQ, SV_HOW_IT_WORKS, SV_PARTNERS, SV_PRICING, SV_PRIVACY, SV_TERMS } from "@/lib/global-content-sv";
+import { ZH_FAQ, ZH_HOW_IT_WORKS, ZH_PARTNERS, ZH_PRICING, ZH_PRIVACY, ZH_TERMS } from "@/lib/global-content-zh";
 
 const EN = {
   faq: GLOBAL_FAQ,
@@ -44,6 +45,7 @@ export const INFO_BY_LANG: Record<string, InfoSet> = {
   fi: { faq: FI_FAQ, "how-it-works": FI_HOW_IT_WORKS, pricing: GLOBAL_PRICING, partners: FI_PARTNERS, privacy: FI_PRIVACY, terms: FI_TERMS },
   pt: { faq: PT_FAQ, "how-it-works": PT_HOW_IT_WORKS, pricing: PT_PRICING, partners: PT_PARTNERS, privacy: PT_PRIVACY, terms: PT_TERMS },
   ja: { faq: JA_FAQ, "how-it-works": JA_HOW_IT_WORKS, pricing: JA_PRICING, partners: JA_PARTNERS, privacy: JA_PRIVACY, terms: JA_TERMS },
+  zh: { faq: ZH_FAQ, "how-it-works": ZH_HOW_IT_WORKS, pricing: ZH_PRICING, partners: ZH_PARTNERS, privacy: ZH_PRIVACY, terms: ZH_TERMS },
 };
 
 export function infoForLang(lang: string, page: string) {

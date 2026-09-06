@@ -105,7 +105,7 @@ const SETTINGS_KEY = "autovere.accountSettings";
 
 export function GaragePage() {
   const { user, openAuth, signOut } = useAuth();
-  const { t: tx, isNo, isDa, isDe, isNl, isFr, isPl, isEs, isIt, isFi, isPt, isJa, meta: tmeta } = useGarageText();
+  const { t: tx, isNo, isDa, isDe, isNl, isFr, isPl, isEs, isIt, isFi, isPt, isJa, isZh, meta: tmeta } = useGarageText();
   const { isAdmin } = useAdmin();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { prefix, region } = splitPath(pathname);
@@ -413,9 +413,9 @@ export function GaragePage() {
                       <p className="mt-1 text-xs text-muted-foreground">{tmeta(t.when)}</p>
                       {(t.tolls !== undefined || t.energyCost !== undefined) && (
                         <dl className="mt-4 grid grid-cols-3 gap-3 rounded-xl border border-border bg-background/40 p-3 text-center">
-                          <Cell label={tx("Bom")} value={fmt(t.currency, t.tolls, isNo ? "nb-NO" : isDa ? "da-DK" : isDe ? "de-DE" : isNl ? "nl-NL" : isFr ? "fr-FR" : isPl ? "pl-PL" : isEs ? "es-ES" : isIt ? "it-IT" : isFi ? "fi-FI" : isPt ? "pt-PT" : isJa ? "ja-JP" : "en-US")} />
-                          <Cell label={tx("Ferjer")} value={fmt(t.currency, t.ferries, isNo ? "nb-NO" : isDa ? "da-DK" : isDe ? "de-DE" : isNl ? "nl-NL" : isFr ? "fr-FR" : isPl ? "pl-PL" : isEs ? "es-ES" : isIt ? "it-IT" : isFi ? "fi-FI" : isPt ? "pt-PT" : isJa ? "ja-JP" : "en-US")} />
-                          <Cell label={tx("Energi")} value={fmt(t.currency, t.energyCost, isNo ? "nb-NO" : isDa ? "da-DK" : isDe ? "de-DE" : isNl ? "nl-NL" : isFr ? "fr-FR" : isPl ? "pl-PL" : isEs ? "es-ES" : isIt ? "it-IT" : isFi ? "fi-FI" : isPt ? "pt-PT" : isJa ? "ja-JP" : "en-US")} />
+                          <Cell label={tx("Bom")} value={fmt(t.currency, t.tolls, isNo ? "nb-NO" : isDa ? "da-DK" : isDe ? "de-DE" : isNl ? "nl-NL" : isFr ? "fr-FR" : isPl ? "pl-PL" : isEs ? "es-ES" : isIt ? "it-IT" : isFi ? "fi-FI" : isPt ? "pt-PT" : isJa ? "ja-JP" : isZh ? "zh-CN" : "en-US")} />
+                          <Cell label={tx("Ferjer")} value={fmt(t.currency, t.ferries, isNo ? "nb-NO" : isDa ? "da-DK" : isDe ? "de-DE" : isNl ? "nl-NL" : isFr ? "fr-FR" : isPl ? "pl-PL" : isEs ? "es-ES" : isIt ? "it-IT" : isFi ? "fi-FI" : isPt ? "pt-PT" : isJa ? "ja-JP" : isZh ? "zh-CN" : "en-US")} />
+                          <Cell label={tx("Energi")} value={fmt(t.currency, t.energyCost, isNo ? "nb-NO" : isDa ? "da-DK" : isDe ? "de-DE" : isNl ? "nl-NL" : isFr ? "fr-FR" : isPl ? "pl-PL" : isEs ? "es-ES" : isIt ? "it-IT" : isFi ? "fi-FI" : isPt ? "pt-PT" : isJa ? "ja-JP" : isZh ? "zh-CN" : "en-US")} />
                         </dl>
                       )}
                       <div className="mt-4 flex flex-wrap gap-2">
