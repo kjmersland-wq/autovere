@@ -3284,6 +3284,260 @@ const IT: ChallengeContent = {
 };
 
 /** Language URLs for the Challenge page. English/GB is the root /challenge. */
+const JA: ChallengeContent = {
+  meta: {
+    title: "AutoVere Challenge — AutoVereを実際の旅で試す",
+    description:
+      "実際の旅、実際のクルマ、実際の費用でAutoVereをお試しいただけます。自動車ジャーナリストの皆様に、計算・走行・比較へのご参加をお願いしています。",
+  },
+  badge: "Challenge",
+  hero: {
+    kicker: "AutoVere Challenge",
+    title: "AutoVereを、実際の旅で試してください。",
+    lede: "普段ご自身が運転されている車をお選びください。試してみたい旅程をお選びください。本物のAutoVereで計算し、実際に走ってみて、私たちの計算結果と実際にかかった費用を比べてみてください。",
+    statement: ["本物のクルマ。", "本物の旅。", "本物の費用。"],
+    primaryCta: "Challengeへの参加を申し込む",
+    secondaryCta: "AutoVereについて詳しく見る",
+    imageCredit: "写真提供：Unsplash",
+  },
+  invitation: {
+    eyebrow: "自動車ジャーナリストの皆様への、個人的なご招待",
+    title: "AutoVereを、ご自身の目で確かめてください。",
+    paragraphs: [
+      "自動車について書かれている方なら、旅の費用が事前の見積もり通りになることがどれほど少ないか、よくご存じかと思います。通行料金、ビネット、フェリー、燃料費、充電費用は、国境を越えるたびに静かに積み重なっていきます。AutoVereは、まさにこの部分を正確に計算するために作られました。",
+      "私たちの言葉を、そのまま信じていただく必要はありません。",
+      "むしろ、鍵をお渡ししたいのです。実際の旅程を選び、いつも運転している車を選び、Proユーザーとして AutoVereを使い、実際にその道を走ってみてください。そして、私たちの計算結果をご自身の領収書と照らし合わせてみてください。",
+      "もし数字が近ければ、それは記事にする価値のある話になるはずです。もしずれていたら、私たちはそれを知りたいのです。黙って見過ごされるより、あなたから教えていただくほうが、ずっとありがたいのです。",
+    ],
+    signature: "Kjell Mersland — AutoVere創業者・KM Tech Labs、クリスチャンサン、ノルウェー",
+  },
+  steps: {
+    eyebrow: "Challengeの流れ",
+    title: "招待から結果まで、6つの落ち着いたステップ。",
+    intro: "ここには、デモ用の環境は一切ありません。5番目のステップからは、他のすべての利用者と同じAutoVereをお使いいただきます。",
+    items: [
+      { number: "01", title: "登録", body: "自動車ジャーナリストとして登録してください。" },
+      { number: "02", title: "確認", body: "AutoVereがお申し込み内容を確認し、Challengeへのアクセスを有効にします。" },
+      {
+        number: "03",
+        title: "旅程を選ぶ",
+        body: "AutoVereが提案するChallenge向けルートからお選びいただくか、ご自身で旅程をお決めください。",
+      },
+      {
+        number: "04",
+        title: "車を選ぶ",
+        body: "実際にテストする車両をお選びください — ガソリン、ディーゼル、電気自動車のいずれでも構いません。",
+      },
+      {
+        number: "05",
+        title: "計算して走る",
+        body: "Proユーザーとして、通常のAutoVereをお使いください。旅程を計算し、そのあと実際に走ってみてください。",
+      },
+      {
+        number: "06",
+        title: "比較する",
+        body: "実際にかかった旅の費用を入力し、AutoVereの計算結果と比較してください。",
+      },
+    ],
+  },
+  notCalculator: {
+    eyebrow: "報道向けの特別版ではなく、ひとつの製品",
+    title: "あなたのChallengeは、本物のAutoVereの中で行われます。",
+    body: "AutoVere Challengeは、AutoVereへの入り口であり、検証の仕組みそのものです。ジャーナリスト向けに作られた簡易版の計算機ではありません。制限された報道用バージョンも、用意された検証環境も、別の数字も存在しません。",
+    flow: [
+      "Challengeのランディングページ",
+      "ジャーナリスト登録",
+      "AutoVereによる確認",
+      "Challenge Proアクセス",
+      "通常のAutoVere製品",
+      "あなたのChallenge結果",
+    ],
+    footnote: "あなたが試す計算は、他のすべての利用者が受け取る計算とまったく同じものです。",
+  },
+  freedom: {
+    eyebrow: "あなたの検証、あなたのルール",
+    title: "試したい旅程を、自由にお選びください。",
+    lines: [
+      "おすすめのルートをお使いいただくか、ご自身で旅程をお決めください。",
+      "普段お使いの車で、そのままお試しください。",
+    ],
+    body: "決まった合格基準も、指定されたルートも、承認された車種リストもありません。Challengeの内容はあなた次第です。私たちがお願いするのは、見つけたことをそのまま公開していただくことだけです。",
+    items: [
+      { title: "どんな旅程でも", body: "おすすめのChallengeルートでも、もともと予定していた旅でも構いません。" },
+      { title: "どんな車でも", body: "テスト車両でも、普段ご自身が運転している車でも — ガソリン、ディーゼル、電気自動車、いずれでも。" },
+      { title: "Pro機能をすべて", body: "検証期間中、AutoVereの全機能を制限なくお使いいただけます。" },
+      { title: "あなた自身の結論", body: "見つけた結果を、そのまま公開してください。私たちが事前に確認することはありません。" },
+    ],
+  },
+  journey: {
+    eyebrow: "旅程の選択",
+    title: "おすすめのルートを走る、あるいは検証に合ったルートを選ぶ。",
+    intro: "Challengeの進め方は2通りです。どちらも同じ計算エンジン、同じデータソース、同じ国別の内訳を使用します。",
+    options: [
+      {
+        label: "選択肢01",
+        title: "おすすめのChallengeルート",
+        body: "各国ごとに、AutoVereは地域や走行スタイルの異なる3つのおすすめルートをご用意しています。",
+        bullets: ["短距離", "中距離", "長距離"],
+      },
+      {
+        label: "選択肢02",
+        title: "ご自身の旅程で試す",
+        body: "検証にふさわしい、現実的な旅程を自由にお選びください。もともと予定していた旅こそ、最も本音の結果が出ることも少なくありません。例：ベルゲン〜トロンハイム、ワルシャワ〜クラクフ、ロサンゼルス〜サンディエゴ。",
+        bullets: ["自分のルート", "自分のスケジュール", "自分の走行条件"],
+      },
+    ],
+  },
+  vehicles: {
+    eyebrow: "車両の選択",
+    title: "実際にお持ちの車で試してください。",
+    intro: "パワートレインを選んだあと、AutoVereに既にある車両データから具体的な車種をお選びください。Challenge専用の車両リストはありません。",
+    items: [
+      {
+        label: "ガソリン",
+        body: "ルート沿いの各国ごとに、燃費・燃料価格・通行料金を計算します。",
+        image:
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=70",
+        alt: "夕暮れの砂漠の道に停まる青いクーペ",
+      },
+      {
+        label: "ディーゼル",
+        body: "長距離走行時の燃費に加え、事業者が適用する重量区分や軸数区分も考慮します。",
+        image:
+          "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1200&q=70",
+        alt: "雪の森の道を走る白いSUV",
+      },
+      {
+        label: "電気自動車",
+        body: "バッテリー容量、電費、充電の回数、ルート沿いの充電ネットワークの料金を計算します。",
+        image:
+          "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=70",
+        alt: "電気自動車に接続された充電ケーブル",
+      },
+    ],
+  },
+  evCompare: {
+    eyebrow: "同じ旅程を電気自動車で",
+    title: "この旅を電気自動車で走ったら、費用はどうなるでしょうか。",
+    body: "ご自身の旅程を計算したあと、同じルートを電気自動車で計算してみることができます。電気自動車のほうが安くなることもあれば、充電や通行料金、迂回によって結果が変わることもあります。AutoVereは、どちらの場合も正直に計算結果をお見せします。",
+    exampleLabel: "参考例です — 実際のAutoVereの計算結果ではありません",
+    rows: [
+      { label: "あなたの車", sub: "ディーゼル", amountEur: 96.4 },
+      { label: "同じ旅を電気自動車で", sub: "電気自動車", amountEur: 68.2 },
+    ],
+    differenceLabel: "想定される差額",
+    differenceAmountEur: 28.2,
+    caveat: "あくまで参考例です。電気自動車が常に安いとは限りません。",
+  },
+  reality: {
+    eyebrow: "予測と実際の結果",
+    title: "多くのツールが、そっと避けている部分です。",
+    body: "Challengeでは、出発前にAutoVereが計算した金額と、実際に旅を終えたときにかかった費用を比較します。この結果はあなた自身のものです — 私たちにとって都合の良くない日であっても。",
+    exampleLabel: "参考例です — 実際のAutoVereの計算結果ではありません",
+    calculation: { label: "AutoVereの計算結果", amountEur: 96.4 },
+    actual: { label: "実際にかかった費用", amountEur: 99.1 },
+    difference: { label: "差", value: "+2.8%" },
+    caveat: "特定の精度をお約束するものではありません。大切なのは、あなた自身の結果です。",
+  },
+  founder: {
+    eyebrow: "AutoVereを作った人",
+    title: "なぜ、私はAutoVereを作ったのか",
+    opening: "きっかけは、ひとつのシンプルな疑問でした。なぜ今でも、旅にかかる本当の費用を知ることがこんなに難しいのだろう、と。",
+    paragraphs: [
+      "私は74歳です。建設業に40年以上携わったのち、2020年に引退しました。",
+      "その1年後、ゆっくり過ごす代わりに、まったく違う何かを作り始めることにしました。",
+      "長年、私は車でヨーロッパ各地を旅してきました。旅を重ねるほど、いつも同じ問題に気づかされました。長距離の旅を計画するには、たいてい、いくつもの異なる場所で情報を探さなければならなかったのです。",
+      "通行料金。ビネット。フェリー。燃料費。EVの充電費用。ルートが変われば、国が変われば、費用も変わります。",
+      "もっと良い方法があるはずだと思いました。",
+      "そうして、AutoVereを作り始めたのです。",
+      "個人的な思いつきから始まったこの取り組みは、今ではずっと大きなプロジェクトになりました。そして、これは私ひとりの仕事ではありません。息子も、この旅に加わってくれています。",
+      "私たちは、ずっと大切にしてきたひとつの考え方を軸に、AutoVereを作り続けています。それは、やる価値のあることは、きちんとやるべきだ、ということです。",
+      "そのために、実際のデータ、公式の情報源、アルゴリズムと数学を使って、旅の費用を計算しています。",
+      "当て推量ではありません。ブラックボックスでもありません。",
+      "目指していることはシンプルです。出発する前に、旅にかかる費用をより明確に知っていただくこと。そして、ルートや車、旅の計画について、より良い選択をする手助けをすることです。",
+      "クリスチャンサンから始まったこの取り組みは、今ではノルウェーやヨーロッパの枠を超えて広がっています。",
+      "AutoVereはすでにヨーロッパに加え、アメリカとカナダでも展開しています。目指しているのは、車で旅するすべての人のための、世界規模の情報基盤になることです。",
+    ],
+    closing: [
+      "けれど、何かを作り、それを信じるだけでは十分ではありません。",
+      "現実の世界で試されてほしいと、私は思っています。",
+      "だからこそ、AutoVere Challengeを作りました。",
+      "自動車ジャーナリストの皆様に、私の言葉をそのまま信じていただきたくはありません。",
+      "本物の車を選んでください。本物の旅を選んでください。AutoVereで計算してください。実際に走ってください。そして、その結果を実際に起きたことと比べてみてください。",
+      "特別なデモンストレーションはありません。用意された結果もありません。",
+      "あるのは、AutoVereと、道だけです。",
+      "うまくいけば、私たちはそれを誇りに思います。",
+      "もし何か間違っていたら、それを知りたいと思っています。",
+      "AutoVereが本当に役立つことを証明する一番の方法は、言葉で伝えることではないからです。",
+      "それは、あなた自身に試していただくことです。",
+    ],
+    name: "Kjell Mersland、74歳",
+    role: "AutoVere創業者",
+    note: "息子とともにAutoVereを作っています",
+    alt: "AutoVere創業者、Kjell Mersland",
+    emphasis: [
+      "私は74歳です。",
+      "息子も、この旅に加わってくれています。",
+      "当て推量ではありません。ブラックボックスでもありません。",
+      "AutoVereはすでにヨーロッパに加え、アメリカとカナダでも展開しています",
+      "現実の世界で試されてほしいと、私は思っています。",
+      "それは、あなた自身に試していただくことです。",
+    ],
+  },
+  report: {
+    eyebrow: "Challengeレポート",
+    title: "あなたの旅。あなたの結果。",
+    body: "旅を終えると、引用・公開、そして私たちへの反証にもお使いいただける、正式なChallenge結果を受け取ることができます。",
+    contents: [
+      "ルート",
+      "車両",
+      "パワートレイン",
+      "AutoVereの計算結果",
+      "実際の旅の費用",
+      "差額",
+      "電気自動車との比較",
+      "日付",
+      "Challenge ID",
+    ],
+    future: "今後の予定：常設のWeb結果ページ、共有可能なリンク、PDFレポート。",
+    cta: "この旅をAutoVereで見る",
+    ctaNote: "Challenge終了後も、その旅とパラメータは通常のAutoVere内でいつでも開き直すことができ、引き続き探っていただけます。",
+  },
+  register: {
+    eyebrow: "自動車ジャーナリストの方へ",
+    title: "AutoVere Challengeへの参加を申し込む",
+    body: "自動車ジャーナリストの方でしょうか。ぜひご自身でAutoVereをお試しいただきたいと思っています。Challengeへの参加をお申し込みいただき、承認後は検証期間中、Proユーザーとしてご利用いただけます。",
+    fields: {
+      name: "お名前",
+      email: "仕事用メールアドレス",
+      outlet: "媒体名・チャンネル名",
+      role: "ご担当",
+      country: "国",
+      message: "試してみたい旅程と車",
+    },
+    placeholders: {
+      name: "山田太郎",
+      email: "taro@publication.jp",
+      outlet: "媒体名、ウェブサイト、チャンネル名",
+      role: "自動車ジャーナリスト、レビュアー、編集者など…",
+      country: "日本",
+      message: "任意 — 試してみたい内容を教えてください",
+    },
+    submit: "Challengeへの参加を申し込む",
+    note: "簡単な確認手続きにより、Challengeへのアクセスは現役のジャーナリストの方に限らせていただいています。承認後は、検証期間中アカウントがProにアップグレードされます — 報道専用のツールはなく、制限もありません。",
+    successTitle: "ありがとうございます。お申し込みを受け付けました。",
+    successBody: "Challengeへのアクセスは、順次ご案内しています。現時点でのご入力内容はこのブラウザにのみ保存されており、確認手続きが始まり次第、あらためて個別にご連絡いたします。",
+  },
+  finalCta: {
+    title: "AutoVereを、実際に試してみませんか。",
+    body: "旅程を選び、車を選び、走り、結果を比べてください。",
+    primary: "AutoVere Challengeに参加する",
+    secondary: "AutoVereについて詳しく見る",
+  },
+  languageLabel: "あなたの言語でChallengeを見る",
+};
+
+/** Language URLs for the Challenge page. English/GB is the root /challenge. */
 const PT: ChallengeContent = {
   meta: {
     title: "AutoVere Challenge — põe o AutoVere à prova",
@@ -3561,6 +3815,7 @@ export const CHALLENGE_LANGS = [
   { prefix: "es", label: "Español", flag: "🇪🇸" },
   { prefix: "it", label: "Italiano", flag: "🇮🇹" },
   { prefix: "pt", label: "Português", flag: "🇵🇹" },
+  { prefix: "ja", label: "日本語", flag: "🇯🇵" },
 ] as const;
 
 export type ChallengeLang = (typeof CHALLENGE_LANGS)[number]["prefix"];
@@ -3593,6 +3848,7 @@ export const CHALLENGE_CURRENCY: Record<ChallengeLang | "en", CurrencyCode> = {
   es: "EUR",
   it: "EUR",
   pt: "EUR",
+  ja: "EUR",
 };
 
 /** Per-language overrides. Missing languages fall back to English. */
@@ -3609,6 +3865,7 @@ const CHALLENGE_CONTENT_BY_LANG: Partial<Record<ChallengeLang, ChallengeContent>
   es: ES,
   it: IT,
   pt: PT,
+  ja: JA,
 };
 
 export function challengeContent(lang?: string | undefined): ChallengeContent {

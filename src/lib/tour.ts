@@ -460,6 +460,40 @@ export const TOUR_COPY: Record<string, TourCopy> = {
       },
     ],
   },
+  ja: {
+    trigger: "💡 使い方ガイド",
+    next: "次へ",
+    prev: "戻る",
+    done: "完了",
+    close: "閉じる／スキップ",
+    steps: [
+      {
+        title: "1. 言語と通貨を選ぶ",
+        description:
+          "ご希望の言語と通貨をここで選択できます。通行料金や燃料費、ビニエット代はすべて自動で換算されます。",
+      },
+      {
+        title: "2. 目的地を入力",
+        description:
+          "出発地と目的地を入力するだけです。人気のルートを選んで、すぐに費用を計算することもできます。",
+      },
+      {
+        title: "3. 車両に合わせて調整",
+        description:
+          "キャンピングカー、EV、ガソリン車など、車両タイプを選択できます。山道を楽しむか、有料道路を避けるかも自由に設定可能です。",
+      },
+      {
+        title: "4. 結果とマイガレージ",
+        description:
+          "ワンクリックで費用の全体像がわかります。ご登録いただくと、旅程をマイガレージに保存し、最新料金でいつでも再計算できます。",
+      },
+      {
+        title: "5. 車のナビへ送信",
+        description:
+          "ルートをそのままTeslaアプリへ送信したり、Apple CarPlay／Android Auto経由で車の画面に表示したりできます。日本語での印刷にも対応しています。",
+      },
+    ],
+  },
 };
 
 export function tourCopy(locale: string): TourCopy {

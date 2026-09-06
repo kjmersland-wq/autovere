@@ -32,6 +32,7 @@ export const LANGUAGES: { code: string; flag: FlagCode; label: string }[] = [
   { code: "es", flag: "ES", label: "Español" },
   { code: "it", flag: "IT", label: "Italiano" },
   { code: "pt", flag: "PT", label: "Português" },
+  { code: "ja", flag: "JP", label: "日本語" },
 ];
 
 export const NAV_LINKS = [

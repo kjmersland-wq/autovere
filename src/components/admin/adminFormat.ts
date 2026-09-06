@@ -18,6 +18,7 @@ export const COUNTRY_NO: Record<string, string> = {
   IE: "🇮🇪 Irland",
   US: "🇺🇸 USA",
   CA: "🇨🇦 Canada",
+  JP: "🇯🇵 Japan",
   Ukjent: "🌍 Ukjent",
 };
 

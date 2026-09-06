@@ -3,7 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import type { CostGroupKey } from "@/lib/country-costs";
 import type { FuelKey, RouteVariantKey, VehicleKey } from "@/lib/trip-data";
 
-export type Locale = "en" | "no" | "sv" | "da" | "fi" | "us" | "de" | "nl" | "fr" | "pl" | "es" | "it" | "pt";
+export type Locale = "en" | "no" | "sv" | "da" | "fi" | "us" | "de" | "nl" | "fr" | "pl" | "es" | "it" | "pt" | "ja";
 
 import { CONTENT_DA, DA_PATTERNS } from "@/lib/content-da";
 import { CONTENT_DE, DE_PATTERNS } from "@/lib/content-de";
@@ -11,6 +11,7 @@ import { CONTENT_ES, ES_PATTERNS } from "@/lib/content-es";
 import { CONTENT_FI } from "@/lib/content-fi";
 import { CONTENT_FR, FR_PATTERNS } from "@/lib/content-fr";
 import { CONTENT_IT, IT_PATTERNS } from "@/lib/content-it";
+import { CONTENT_JA, JA_PATTERNS } from "@/lib/content-ja";
 import { CONTENT_NL, NL_PATTERNS } from "@/lib/content-nl";
 import { CONTENT_NO } from "@/lib/content-no";
 import { CONTENT_PL } from "@/lib/content-pl";
@@ -614,6 +615,7 @@ export const STRINGS: Record<Locale, Strings> = {
   pt: withFallback("pt"),
   us: withFallback("us"),
   fi: withFallback("fi"),
+  ja: withFallback("ja"),
 };
 
 export function useT(): Strings {
@@ -702,6 +704,7 @@ const CONTENT_DICTS: Partial<Record<Locale, Record<string, string>>> = {
   pt: CONTENT_PT,
   us: CONTENT_US,
   fi: CONTENT_FI,
+  ja: CONTENT_JA,
 };
 
 const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
@@ -715,6 +718,7 @@ const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
   es: ES_PATTERNS,
   it: IT_PATTERNS,
   pt: PT_PATTERNS,
+  ja: JA_PATTERNS,
 };
 
 export function useTr(): (value: string) => string {

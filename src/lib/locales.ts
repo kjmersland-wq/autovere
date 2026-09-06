@@ -12,6 +12,7 @@ export const LOCALE_ROUTES = [
   { prefix: "es", code: "es", label: "Español", flag: "🇪🇸" },
   { prefix: "it", code: "it", label: "Italiano", flag: "🇮🇹" },
   { prefix: "pt", code: "pt", label: "Português", flag: "🇵🇹" },
+  { prefix: "ja", code: "ja", label: "日本語", flag: "🇯🇵" },
 ] as const;
 
 export type LocalePrefix = (typeof LOCALE_ROUTES)[number]["prefix"];

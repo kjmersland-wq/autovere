@@ -82,6 +82,14 @@ import {
   PT_TERMS,
 } from "@/lib/global-content-pt";
 import {
+  JA_FAQ,
+  JA_HOW_IT_WORKS,
+  JA_PARTNERS,
+  JA_PRICING,
+  JA_PRIVACY,
+  JA_TERMS,
+} from "@/lib/global-content-ja";
+import {
   SV_FAQ,
   SV_HOW_IT_WORKS,
   SV_PARTNERS,
@@ -190,6 +198,14 @@ const INFO_BY_LANG: Record<string, typeof INFO> = {
     partners: PT_PARTNERS,
     privacy: PT_PRIVACY,
     terms: PT_TERMS,
+  },
+  ja: {
+    faq: JA_FAQ,
+    "how-it-works": JA_HOW_IT_WORKS,
+    pricing: JA_PRICING,
+    partners: JA_PARTNERS,
+    privacy: JA_PRIVACY,
+    terms: JA_TERMS,
   },
 };
 

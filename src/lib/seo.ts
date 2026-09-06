@@ -21,6 +21,7 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
   us: "United States",
   fi: "Suomi",
   pt: "Portugal",
+  ja: "日本",
 };
 
 type PageMeta = { title: string; description: string };
@@ -42,6 +43,8 @@ const OG_IMAGE_BY_PREFIX: Record<LocalePrefix, string> = {
   // image via the same "/og-image.jpg" ogImageUrl() already uses for an
   // unmapped prefix, rather than risk reusing another market's image.
   pt: "/og-image.jpg",
+  // Same reasoning: no dedicated og-ja.jpg exists yet.
+  ja: "/og-image.jpg",
 };
 
 /** Absolute URL of the share image for a language prefix (null = English root). */
@@ -282,6 +285,27 @@ const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>>
         "Guarde os seus carros, autocaravanas e motas, a capacidade do depósito e os dispositivos Via Verde, além de cada itinerário pronto a descarregar em GPX.",
     },
   },
+  ja: {
+    planner: {
+      title: "ロードトリップ・プランナー — 通行料金・燃料・フェリー | AutoVere 日本",
+      description:
+        "ルートを入力するだけで、通行料金、ビニエット、燃料、充電、フェリーの費用をまとめて確認できます。車・キャンピングカー・バイクに対応。",
+    },
+    tolls: {
+      title: "通行料金とビニエットのすべて — ヨーロッパ・アメリカ・カナダ | AutoVere 日本",
+      description:
+        "ヨーロッパ、アメリカ、カナダの通行料金・ビニエット・ETCカードのしくみを、車・キャンピングカー・バイク別にわかりやすく解説します。",
+    },
+    scenic: {
+      title: "絶景の峠道とフェリー | AutoVere 日本",
+      description:
+        "アルプスの峠道、海沿いのドライブルート、カーフェリーの営業期間や高さ制限、予約のコツをまとめました。",
+    },
+    garage: {
+      title: "マイガレージ — 車両・ETCカード・旅の記録 | AutoVere 日本",
+      description: "愛車やタンク容量、ETCカードの情報を保存し、これまで計画した旅程をいつでも呼び出せます。",
+    },
+  },
 };
 
 export function appPageMeta(prefix: LocalePrefix, page: LocalePage): PageMeta | null {
@@ -386,10 +410,11 @@ export const MARKET_LANG: Record<LocalePrefix | "en" | "ca" | "cafr", string> = 
   es: "es-ES",
   it: "it-IT",
   pt: "pt-PT",
+  ja: "ja-JP",
 };
 
-/** The 13 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
-export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it", "pt"] as const;
+/** The 14 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
+export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it", "pt", "ja"] as const;
 
 type AlternateLink = { rel: "alternate"; hreflang: string; href: string };
 

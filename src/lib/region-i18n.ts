@@ -392,7 +392,35 @@ const pt: RegionPack = {
   },
 };
 
-const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us, fi, pt };
+const ja: RegionPack = {
+  eu: {
+    eyebrow: "ヨーロッパ・30か国以上",
+    originHint: "車の受け取り場所はどちらですか？",
+    destinationHint: "この旅は、どこへ向かいますか？",
+    tollSystems: ["ビニエット・電子ビニエット", "チケット制の高速道路料金", "都市部の低排出ガスゾーン"],
+    nav: { planner: "ロードトリッププランナー", tolls: "通行料金・ビニエット", scenic: "絶景の峠道・フェリー", garage: "マイガレージ" },
+  },
+  us: {
+    eyebrow: "アメリカ・50州",
+    originHint: "車の受け取り場所はどちらですか？",
+    destinationHint: "この旅は、どこへ向かいますか？",
+    tollSystems: ["州営の有料道路・ターンパイク", "HOV・エクスプレスレーン", "橋・トンネルの通行料金"],
+    nav: { planner: "ロードトリッププランナー", tolls: "通行料金・エクスプレスレーン", scenic: "絶景ルート・フェリー", garage: "マイガレージ" },
+    fuels: { petrol: "ガソリン" },
+    vehicles: { motorhome: "キャンピングカー" },
+  },
+  ca: {
+    eyebrow: "カナダ・大西洋から太平洋まで",
+    originHint: "車の受け取り場所はどちらですか？",
+    destinationHint: "この旅は、どこへ向かいますか？",
+    tollSystems: ["ハイウェイ407 ETRのバイパス", "州・準州の通行料金と橋", "BCフェリーの航路"],
+    nav: { planner: "ロードトリッププランナー", tolls: "通行料金・橋", scenic: "絶景ルート・フェリー", garage: "マイガレージ" },
+    fuels: { petrol: "ガソリン" },
+    vehicles: { motorhome: "キャンピングカー" },
+  },
+};
+
+const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us, fi, pt, ja };
 
 export function regionStrings(locale: Locale, region: RegionKey): RegionStrings {
   return (PACKS[locale] ?? en)[region];

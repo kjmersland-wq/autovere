@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 
-export type FlagCode = "GB" | "NO" | "SE" | "DK" | "FI" | "US" | "DE" | "NL" | "FR" | "PL" | "ES" | "IT" | "PT";
+export type FlagCode = "GB" | "NO" | "SE" | "DK" | "FI" | "US" | "DE" | "NL" | "FR" | "PL" | "ES" | "IT" | "PT" | "JP";
 
 type FlagProps = { code: FlagCode; className?: string; title?: string };
 
@@ -137,6 +137,15 @@ const FLAGS: Record<FlagCode, { label: string; svg: React.ReactNode }> = {
       <>
         <rect width="60" height="40" fill="#FF0000" />
         <rect width="24" height="40" fill="#006600" />
+      </>
+    ),
+  },
+  JP: {
+    label: "Japan",
+    svg: (
+      <>
+        <rect width="60" height="40" fill="#FFFFFF" />
+        <circle cx="30" cy="20" r="12" fill="#BC002D" />
       </>
     ),
   },

@@ -9,6 +9,7 @@ import { ES_DICT } from "@/lib/dict-es";
 import { FI_DICT } from "@/lib/dict-fi";
 import { FR_DICT } from "@/lib/dict-fr";
 import { IT_DICT } from "@/lib/dict-it";
+import { JA_DICT } from "@/lib/dict-ja";
 import { NL_DICT } from "@/lib/dict-nl";
 import { PL_DICT } from "@/lib/dict-pl";
 import { PT_DICT } from "@/lib/dict-pt";
@@ -29,6 +30,7 @@ export const PARTIAL_DICTS: Record<string, Dict> = {
   pt: PT_DICT,
   us: US_DICT,
   fi: FI_DICT,
+  ja: JA_DICT,
 };
 
 /** Hero copy per language for the localized landing page. */
@@ -143,5 +145,14 @@ export const LOCALE_LANDING: Record<
     metaTitle: "AutoVere Suomi – Suunnittele täydellinen automatka Eurooppaan",
     metaDescription:
       "Unohda tietullien ja latauskulujen arvuuttelu. AutoVere laskee koko matkasi kulut etukäteen – helppoa, tarkkaa ja vaivatonta.",
+  },
+  ja: {
+    eyebrow: "ヨーロッパ・カナダ・アメリカ 30か国以上",
+    title: "計画は一度、旅の喜びはどこまでも。",
+    subtitle:
+      "出発地と憧れの目的地を教えてください。通行料金、ビニエット、燃料費、充電費、フェリー代まで、AutoVereがまとめて計算します。",
+    metaTitle: "AutoVere 日本語版 — 海外ロードトリップの通行料金・燃料費プランナー",
+    metaDescription:
+      "ヨーロッパ、カナダ、アメリカのロードトリップを日本語で計画。通行料金、ビニエット、燃料費、充電費、フェリー代まで、車・キャンピングカー・バイク向けに正確に算出します。",
   },
 };

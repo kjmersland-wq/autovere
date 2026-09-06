@@ -55,6 +55,7 @@ export const DATE_LOCALE: Record<Locale, string> = {
   pt: "pt-PT",
   us: "en-US",
   fi: "fi-FI",
+  ja: "ja-JP",
 };
 
 const EN_TIERS: Tier[] = [
@@ -669,6 +670,57 @@ const PT_TIERS: Tier[] = [
   },
 ];
 
+const JA_TIERS: Tier[] = [
+  {
+    id: "free",
+    name: "Free",
+    emoji: "🧭",
+    tagline: "まずは無料で、正直な費用の目安から。",
+    monthly: "0 €",
+    cta: "無料で始める",
+    features: [
+      "通行料金・ビニエット・燃料費の基本計算",
+      "ヨーロッパ・アメリカ・カナダ全域のOSRMルート検索",
+      "車両登録1台まで",
+      "国・州別の費用データベース",
+      "旅のリンクを共有",
+    ],
+  },
+  {
+    id: "pro",
+    name: "AutoVere Pro",
+    emoji: "✨",
+    tagline: "次の峠道を待ちわびる旅人のために。",
+    monthly: "4,99 €",
+    yearly: "39 €",
+    cta: "Proにアップグレード",
+    highlight: true,
+    features: [
+      "複数車両のガレージ管理（車・キャンピングカー・バイク）",
+      "Garmin・TomTom・CarPlayへのGPX/KMLエクスポート",
+      "山岳峠・フェリーのリアルタイム通知",
+      "オフライン旅程表と印刷パック",
+      "バイクの通行料金割引・安全レーダー",
+      "旅の保存件数は無制限",
+    ],
+  },
+  {
+    id: "fleet",
+    name: "AutoVere Business / フリート",
+    emoji: "🚛",
+    tagline: "国境をまたぐ運行管理を、ひとつにまとめて。",
+    monthly: "19 €",
+    cta: "Businessにアップグレード",
+    features: [
+      "複数国にまたがる通行料金請求の一元管理",
+      "チームでのルート共有ライブラリ",
+      "大型車両（3.5t超）プロファイルと車軸別課金対応",
+      "ドライバー割り当てとコストセンターのCSVエクスポート",
+      "KM TECH LABSによる優先サポート",
+    ],
+  },
+];
+
 export const TIERS = EN_TIERS;
 export const TIERS_PL = PL_TIERS;
 
@@ -686,6 +738,7 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   pt: PT_TIERS,
   us: EN_TIERS,
   fi: FI_TIERS,
+  ja: JA_TIERS,
 };
 
 const COPY_BASE = {
@@ -953,9 +1006,39 @@ const COPY_BASE = {
     signupToast: "Luo tili ensin, niin viemme sinut suoraan turvalliseen maksuun.",
     portalError: "Laskutusportaalia ei voitu avata.",
   },
+  ja: {
+    onPlan: "現在のプラン：",
+    retrying: "（お支払いを再試行中）",
+    until: (d) => `${d}まで引き続きご利用いただけます。`,
+    renews: (d) => `${d}に更新されます。`,
+    active: "有効なサブスクリプションです。",
+    manage: "請求情報を管理",
+    monthly: "月払い",
+    yearly: "年払い・35%お得",
+    forever: "ずっと無料",
+    perYear: "年あたり",
+    perMonth: "月あたり",
+    mostLoved: "人気No.1",
+    proFine: "月額4.99€、または年額39€——いつでも解約できます。",
+    current: "現在のプラン",
+    switch: "請求ポータルでプランを変更",
+    foot: "価格は該当するVATを含むEUR表示です。お支払いと税務処理はStripeが安全に行います。費用の見積もりはあくまで目安ですので、必ず公式の通行料金ポータルでご確認ください。",
+    checkout: "安全なお支払い",
+    freeToast: "Freeプランをご利用中です。さっそく計画を立てましょう。",
+    signupToast: "まずはアカウントを作成してください。そのあと、安全なお支払い画面にご案内します。",
+    portalError: "請求ポータルを開けませんでした。",
+  },
 } satisfies Partial<Record<Locale, PricingCopy>>;
 
-const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.it, pt: COPY_BASE.pt, us: COPY_BASE.en, fi: COPY_BASE.fi };
+const COPY: Record<Locale, PricingCopy> = {
+  ...COPY_BASE,
+  es: COPY_BASE.es,
+  it: COPY_BASE.it,
+  pt: COPY_BASE.pt,
+  us: COPY_BASE.en,
+  fi: COPY_BASE.fi,
+  ja: COPY_BASE.ja,
+};
 
 const HERO_BASE = {
   en: {
@@ -1030,9 +1113,23 @@ const HERO_BASE = {
     intro:
       "Jokainen tilaus alkaa rehellisillä luvuilla. Päivitä kattavampaan versioon, kun haluat tallentaa useampia ajoneuvoja ja viedä reitit navigaattoriin.",
   },
+  ja: {
+    eyebrow: "プランと料金",
+    title: "これからの旅に合うプランを選びましょう。",
+    intro:
+      "どのプランも、正直な数字から始まります。ガレージを増やしたいとき、オフラインナビや複数国のフリート請求管理が必要になったときにアップグレードを——シーズンが終わればいつでも解約できます。",
+  },
 };
 
-const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.it, pt: HERO_BASE.pt, us: HERO_BASE.en, fi: HERO_BASE.fi };
+const HERO: Record<Locale, PricingHero> = {
+  ...HERO_BASE,
+  es: HERO_BASE.es,
+  it: HERO_BASE.it,
+  pt: HERO_BASE.pt,
+  us: HERO_BASE.en,
+  fi: HERO_BASE.fi,
+  ja: HERO_BASE.ja,
+};
 
 /**
  * Regional price overrides. The tier structure, features and copy stay identical

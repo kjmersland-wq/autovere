@@ -106,6 +106,14 @@ const COPY: Record<
     esimNote: "Dados móveis eSIM — sem surpresas de roaming",
     ferry: "Compare bilhetes de ferry",
   },
+  ja: {
+    title: "この旅に役立つサービス",
+    car: "レンタカーを比較する",
+    bike: "バイク・スクーターをレンタルする",
+    esim: "海外でもネットに接続",
+    esimNote: "eSIMデータ通信 — ローミング料金の心配なし",
+    ferry: "フェリーチケットを比較する",
+  },
 };
 
 const pill =
