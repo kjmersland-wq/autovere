@@ -94,8 +94,13 @@ export function pdfSafeText(text: string): string {
 
 /** Hiragana + Katakana (incl. phonetic extensions) — present in essentially
  * all real Japanese text, and absent from Chinese. An unambiguous "this is
- * Japanese" signal. */
-const KANA_RE = /[぀-ヿㇰ-ㇿ]/;
+ * Japanese" signal. Deliberately excludes U+30FB (KATAKANA MIDDLE DOT, ・):
+ * that codepoint sits in the Katakana block but is used as plain separator
+ * punctuation in this app's Chinese content too (e.g. "现已开放・海拔2429米"),
+ * so including it here misrouted whole Chinese strings to the Japanese font
+ * — which lacks glyphs for Simplified-only characters — dropping or
+ * corrupting them. */
+const KANA_RE = /[぀-ヺー-ヿㇰ-ㇿ]/;
 /** CJK Unified Ideographs + extensions + compatibility + fullwidth forms —
  * the Han script block shared by Japanese Kanji and Chinese Hanzi. Unicode
  * gives many (not all) Han characters a single shared codepoint regardless
@@ -107,10 +112,13 @@ const HAN_RE = /[㐀-䶿一-鿿豈-﫿＀-￯]/;
 /** The small, fixed set of pure-Kanji Japanese strings this app actually
  * produces that contain no Hiragana/Katakana at all (so KANA_RE alone
  * can't catch them) — e.g. LOCALE_ROUTES' ja label "日本語" is three Kanji
- * with zero kana. These are developer-controlled constants, not arbitrary
- * text, so an explicit allowlist is both correct and sufficient; anything
- * else that's Han-only defaults to the Chinese font. */
-const JA_HAN_ONLY_MARKERS = ["日本語", "日本"];
+ * with zero kana, and ScenicGuide/content-ja entries like "…開通" and
+ * "装備・法定携行品" use 開/備 (Japanese kyūjitai forms, distinct codepoints
+ * from Simplified Chinese's 开/备 — never produced by any zh content).
+ * These are developer-controlled constants, not arbitrary text, so an
+ * explicit allowlist is both correct and sufficient; anything else that's
+ * Han-only defaults to the Chinese font. */
+const JA_HAN_ONLY_MARKERS = ["日本語", "日本", "開通", "装備"];
 
 type ScriptFont = typeof PDF_JA_FONT_FAMILY | typeof PDF_ZH_FONT_FAMILY | null;
 function scriptFontFor(text: string, hasJa: boolean, hasZh: boolean): ScriptFont {
