@@ -364,7 +364,35 @@ const fi: RegionPack = {
   },
 };
 
-const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us, fi };
+const pt: RegionPack = {
+  eu: {
+    eyebrow: "Europa · mais de 30 países",
+    originHint: "Onde vai levantar o carro?",
+    destinationHint: "Para onde o leva a estrada?",
+    tollSystems: ["Vinhetas e vinhetas eletrónicas", "Portagens de autoestrada com bilhete", "Zonas urbanas de baixas emissões"],
+    nav: { planner: "Planeador de Viagens", tolls: "Portagens e Vinhetas", scenic: "Passos Panorâmicos e Ferries", garage: "A Minha Garagem" },
+  },
+  us: {
+    eyebrow: "Estados Unidos · 50 estados",
+    originHint: "Onde vai levantar o carro?",
+    destinationHint: "Para onde o leva a estrada?",
+    tollSystems: ["Autoestradas com portagem estatais", "Vias HOV / Express", "Portagens de pontes e túneis"],
+    nav: { planner: "Planeador de Viagens", tolls: "Portagens e Vias Express", scenic: "Estradas Panorâmicas e Ferries", garage: "A Minha Garagem" },
+    fuels: { petrol: "Gasolina" },
+    vehicles: { motorhome: "Autocaravana / RV" },
+  },
+  ca: {
+    eyebrow: "Canadá · de costa a costa",
+    originHint: "Onde vai levantar o carro?",
+    destinationHint: "Para onde o leva a estrada?",
+    tollSystems: ["Contorno com portagem da Highway 407 ETR", "Portagens e pontes provinciais", "Travessias da BC Ferries"],
+    nav: { planner: "Planeador de Viagens", tolls: "Portagens e Pontes", scenic: "Rotas Panorâmicas e Ferries", garage: "A Minha Garagem" },
+    fuels: { petrol: "Gasolina" },
+    vehicles: { motorhome: "Autocaravana / RV" },
+  },
+};
+
+const PACKS: Record<Locale, RegionPack> = { en, no, sv, da, de, nl, fr, pl, es, it, us, fi, pt };
 
 export function regionStrings(locale: Locale, region: RegionKey): RegionStrings {
   return (PACKS[locale] ?? en)[region];

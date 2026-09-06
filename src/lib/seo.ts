@@ -20,6 +20,7 @@ export const LOCALE_MARKET: Record<LocalePrefix, string> = {
   it: "Italia",
   us: "United States",
   fi: "Suomi",
+  pt: "Portugal",
 };
 
 type PageMeta = { title: string; description: string };
@@ -37,6 +38,10 @@ const OG_IMAGE_BY_PREFIX: Record<LocalePrefix, string> = {
   es: "/og/og-es.jpg",
   it: "/og/og-it.jpg",
   fi: "/og/og-fi.png",
+  // No dedicated og-pt.jpg exists yet — falls through to the generic root
+  // image via the same "/og-image.jpg" ogImageUrl() already uses for an
+  // unmapped prefix, rather than risk reusing another market's image.
+  pt: "/og-image.jpg",
 };
 
 /** Absolute URL of the share image for a language prefix (null = English root). */
@@ -255,6 +260,28 @@ const APP_PAGE_META: Record<LocalePrefix, Partial<Record<LocalePage, PageMeta>>>
         "Salva le tue auto, i camper e le moto, la capacità del serbatoio e i dispositivi di telepedaggio, oltre a ogni itinerario pronto per il download in GPX.",
     },
   },
+  pt: {
+    planner: {
+      title: "Planeador de viagem — portagens, combustível e ferries | AutoVere Portugal",
+      description:
+        "Planeie a rota e veja portagens, vinhetas, combustível, carregamento elétrico e ferries num orçamento claro para carro, autocaravana e mota.",
+    },
+    tolls: {
+      title: "Portagens e vinhetas explicadas — Europa, EUA e Canadá | AutoVere Portugal",
+      description:
+        "Guia claro e atualizado sobre portagens, vinhetas e dispositivos Via Verde na Europa, nos Estados Unidos e no Canadá, para carro, autocaravana e mota.",
+    },
+    scenic: {
+      title: "Passos de montanha e ferries — as estradas que merecem o desvio | AutoVere Portugal",
+      description:
+        "Passos alpinos, estradas costeiras e ferries para veículos na Europa, nos Estados Unidos e no Canadá, com épocas, limites de altura e dicas de reserva.",
+    },
+    garage: {
+      title: "A Minha Garagem e viagens — veículos, Via Verde e rotas guardadas | AutoVere Portugal",
+      description:
+        "Guarde os seus carros, autocaravanas e motas, a capacidade do depósito e os dispositivos Via Verde, além de cada itinerário pronto a descarregar em GPX.",
+    },
+  },
 };
 
 export function appPageMeta(prefix: LocalePrefix, page: LocalePage): PageMeta | null {
@@ -358,10 +385,11 @@ export const MARKET_LANG: Record<LocalePrefix | "en" | "ca" | "cafr", string> = 
   pl: "pl-PL",
   es: "es-ES",
   it: "it-IT",
+  pt: "pt-PT",
 };
 
 /** The 13 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
-export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it"] as const;
+export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it", "pt"] as const;
 
 type AlternateLink = { rel: "alternate"; hreflang: string; href: string };
 

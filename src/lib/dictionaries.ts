@@ -11,6 +11,7 @@ import { FR_DICT } from "@/lib/dict-fr";
 import { IT_DICT } from "@/lib/dict-it";
 import { NL_DICT } from "@/lib/dict-nl";
 import { PL_DICT } from "@/lib/dict-pl";
+import { PT_DICT } from "@/lib/dict-pt";
 import { SV_DICT } from "@/lib/dict-sv";
 import { US_DICT } from "@/lib/dict-us";
 
@@ -25,6 +26,7 @@ export const PARTIAL_DICTS: Record<string, Dict> = {
   pl: PL_DICT,
   es: ES_DICT,
   it: IT_DICT,
+  pt: PT_DICT,
   us: US_DICT,
   fi: FI_DICT,
 };
@@ -123,6 +125,15 @@ export const LOCALE_LANDING: Record<
     metaTitle: "AutoVere — American English Europe Road Trip Planner",
     metaDescription:
       "Plan your European road trip in plain American English — highway passes & toll tags, gas, charging and ferries mapped out for your car, RV or motorcycle.",
+  },
+  pt: {
+    eyebrow: "Europa · mais de 30 países",
+    title: "Planeie uma vez. Aproveite cada quilómetro.",
+    subtitle:
+      "Diga-nos de onde parte e para onde sonha chegar — nós tratamos de portagens, vinhetas, combustível, carregamento e ferries.",
+    metaTitle: "AutoVere Portugal — Portagens, vinhetas e custos de viagem",
+    metaDescription:
+      "Planeie a sua viagem de carro com portagens, vinhetas, combustível, carregamento e ferries calculados com precisão para automóvel, autocaravana e mota.",
   },
   fi: {
     eyebrow: "Eurooppa · yli 30 maata",

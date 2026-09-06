@@ -8,6 +8,7 @@ import { GARAGE_FR, MONTHS_FR } from "@/lib/garage-fr";
 import { GARAGE_IT, MONTHS_IT } from "@/lib/garage-it";
 import { GARAGE_NL, MONTHS_NL } from "@/lib/garage-nl";
 import { GARAGE_PL } from "@/lib/garage-pl";
+import { GARAGE_PT, MONTHS_PT } from "@/lib/garage-pt";
 import { GARAGE_SV, MONTHS_SV } from "@/lib/garage-sv";
 import { prefixFromPath } from "@/lib/locales";
 
@@ -193,6 +194,7 @@ const GARAGE_DICTS: Record<string, Record<string, string>> = {
   es: GARAGE_ES,
   it: GARAGE_IT,
   fi: GARAGE_FI,
+  pt: GARAGE_PT,
 };
 
 const META_RULES: Record<
@@ -209,6 +211,7 @@ const META_RULES: Record<
   es: { budget: "presupuesto", saved: "Guardado", hm: "$1 h $2 min", months: MONTHS_ES },
   it: { budget: "budget", saved: "Salvato", hm: "$1 h $2 min", months: MONTHS_IT },
   fi: { budget: "budjetti", saved: "Tallennettu", hm: "$1 t $2 min", months: MONTHS_FI },
+  pt: { budget: "orçamento", saved: "Guardado", hm: "$1 h $2 min", months: MONTHS_PT },
 };
 
 /** Localise generated trip meta strings ("1,420 km · 14h 30m · €318 budget", "Saved 12 Aug"). */
@@ -237,6 +240,7 @@ export function useGarageText(): {
   isEs: boolean;
   isIt: boolean;
   isFi: boolean;
+  isPt: boolean;
   meta: (text: string) => string;
 } {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
@@ -250,6 +254,7 @@ export function useGarageText(): {
   const isEs = prefix === "es";
   const isIt = prefix === "it";
   const isFi = prefix === "fi";
+  const isPt = prefix === "pt";
   const t: GarageT = (no) => {
     if (isNo) return no;
     const dict = prefix ? GARAGE_DICTS[prefix] : undefined;
@@ -257,5 +262,5 @@ export function useGarageText(): {
     return GARAGE_EN[no] ?? no;
   };
   const meta = (text: string) => localizeTripMeta(text, prefix);
-  return { t, isNo, isDa, isDe, isNl, isFr, isPl, isEs, isIt, isFi, meta };
+  return { t, isNo, isDa, isDe, isNl, isFr, isPl, isEs, isIt, isFi, isPt, meta };
 }

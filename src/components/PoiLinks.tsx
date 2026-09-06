@@ -17,6 +17,7 @@ const LABELS: Record<string, { map: string; web: string; book: string }> = {
   it: { map: "Mappa", web: "Sito web e foto", book: "Prenota online" },
   es: { map: "Mapa", web: "Sitio web y fotos", book: "Reservar online" },
   fi: { map: "Kartta", web: "Verkkosivusto ja kuvat", book: "Varaa verkossa" },
+  pt: { map: "Mapa", web: "Site e fotos", book: "Reservar online" },
 };
 
 const linkClass =

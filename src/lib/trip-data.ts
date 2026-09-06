@@ -31,6 +31,7 @@ export const LANGUAGES: { code: string; flag: FlagCode; label: string }[] = [
   { code: "pl", flag: "PL", label: "Polski" },
   { code: "es", flag: "ES", label: "Español" },
   { code: "it", flag: "IT", label: "Italiano" },
+  { code: "pt", flag: "PT", label: "Português" },
 ];
 
 export const NAV_LINKS = [

@@ -426,6 +426,40 @@ export const TOUR_COPY: Record<string, TourCopy> = {
       },
     ],
   },
+  pt: {
+    trigger: "💡 Tour rápido",
+    next: "Seguinte",
+    prev: "Anterior",
+    done: "Concluído",
+    close: "Fechar / Saltar",
+    steps: [
+      {
+        title: "1. Idioma e moeda",
+        description:
+          "Escolha aqui o seu idioma e moeda preferidos. Convertemos automaticamente todas as portagens, preços de combustível e vinhetas.",
+      },
+      {
+        title: "2. Para onde vai?",
+        description:
+          "Indique o ponto de partida e o destino — ou toque numa das rotas populares abaixo para um cálculo imediato.",
+      },
+      {
+        title: "3. Personalize a sua viagem",
+        description:
+          "Configure para autocaravana, elétrico ou a gasolina, e escolha se prefere desfrutar dos passos de montanha ou evitar as portagens.",
+      },
+      {
+        title: "4. Resultados e A Minha Garagem",
+        description:
+          "Obtenha o resumo completo dos custos com um clique. Os subscritores podem guardar viagens na Minha Garagem e repeti-las quando quiserem, com preços atualizados.",
+      },
+      {
+        title: "5. Enviar para o carro e navegação",
+        description:
+          "Envie a rota diretamente para a aplicação Tesla, abra-a no ecrã do carro via Apple CarPlay / Android Auto, ou imprima o itinerário no seu idioma.",
+      },
+    ],
+  },
 };
 
 export function tourCopy(locale: string): TourCopy {

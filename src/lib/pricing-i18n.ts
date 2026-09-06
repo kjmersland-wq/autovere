@@ -52,6 +52,7 @@ export const DATE_LOCALE: Record<Locale, string> = {
   pl: "pl-PL",
   es: "es-ES",
   it: "it-IT",
+  pt: "pt-PT",
   us: "en-US",
   fi: "fi-FI",
 };
@@ -617,6 +618,57 @@ const FI_TIERS: Tier[] = [
   },
 ];
 
+const PT_TIERS: Tier[] = [
+  {
+    id: "free",
+    name: "Free",
+    emoji: "🧭",
+    tagline: "Tudo o que precisa para uma primeira estimativa honesta.",
+    monthly: "0 €",
+    cta: "Começar a planear grátis",
+    features: [
+      "Cálculo básico de portagens, vinhetas e combustível",
+      "Rota OSRM em toda a Europa, nos EUA e no Canadá",
+      "Um perfil de veículo",
+      "Explorador de custos por país e estado",
+      "Partilhar um link de viagem",
+    ],
+  },
+  {
+    id: "pro",
+    name: "AutoVere Pro",
+    emoji: "✨",
+    tagline: "Para quem vive para a próxima passagem de montanha.",
+    monthly: "4,99 €",
+    yearly: "39 €",
+    cta: "Passar a Pro",
+    highlight: true,
+    features: [
+      "Garagem multi-veículo (carro, autocaravana, mota)",
+      "Exportação GPX e KML para Garmin, TomTom e CarPlay",
+      "Alertas em tempo real de passagens de montanha e ferries",
+      "Itinerário offline passo a passo e pacotes para imprimir",
+      "Descontos de portagem para motas e radar de segurança do condutor",
+      "Viagens guardadas ilimitadas",
+    ],
+  },
+  {
+    id: "fleet",
+    name: "AutoVere Business / Frota",
+    emoji: "🚛",
+    tagline: "Operações transfronteiriças, tudo num só lugar.",
+    monthly: "19 €",
+    cta: "Passar a Business",
+    features: [
+      "Consolidação de faturas de portagem multi-país",
+      "Planeamento de equipa com bibliotecas de viagens partilhadas",
+      "Perfis de veículos pesados (>3,5 t) e portagens por eixo",
+      "Atribuição de condutores e exportação de centros de custo (CSV)",
+      "Suporte prioritário da KM TECH LABS",
+    ],
+  },
+];
+
 export const TIERS = EN_TIERS;
 export const TIERS_PL = PL_TIERS;
 
@@ -631,6 +683,7 @@ const TIERS_BY_LOCALE: Record<Locale, Tier[]> = {
   pl: PL_TIERS,
   es: ES_TIERS,
   it: IT_TIERS,
+  pt: PT_TIERS,
   us: EN_TIERS,
   fi: FI_TIERS,
 };
@@ -856,6 +909,28 @@ const COPY_BASE = {
     signupToast: "Crea prima il tuo account: ti porteremo direttamente al pagamento sicuro.",
     portalError: "Impossibile aprire il portale di fatturazione.",
   },
+  pt: {
+    onPlan: "O seu plano:",
+    retrying: " — a repetir o pagamento",
+    until: (d) => `O acesso mantém-se até ${d}.`,
+    renews: (d) => `Renova a ${d}.`,
+    active: "Subscrição ativa.",
+    manage: "Gerir faturação",
+    monthly: "Mensal",
+    yearly: "Anual · poupe 35%",
+    forever: "para sempre",
+    perYear: "por ano",
+    perMonth: "por mês",
+    mostLoved: "O mais escolhido",
+    proFine: "4,99 €/mês ou 39 €/ano — cancele quando quiser.",
+    current: "O seu plano atual",
+    switch: "Mudar de plano no portal de faturação",
+    foot: "Preços em EUR com o IVA aplicável incluído. Pagamentos e impostos geridos com segurança pela Stripe. As estimativas de custo são indicativas — confirme sempre nos portais oficiais de portagens.",
+    checkout: "Pagamento seguro",
+    freeToast: "Está no plano Free — boas viagens a planear!",
+    signupToast: "Crie primeiro a sua conta e depois levamo-lo diretamente ao pagamento seguro.",
+    portalError: "Não foi possível abrir o portal de faturação.",
+  },
   fi: {
     onPlan: "Tilauksesi:",
     retrying: " — maksuyritys toistetaan",
@@ -880,7 +955,7 @@ const COPY_BASE = {
   },
 } satisfies Partial<Record<Locale, PricingCopy>>;
 
-const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.it, us: COPY_BASE.en, fi: COPY_BASE.fi };
+const COPY: Record<Locale, PricingCopy> = { ...COPY_BASE, es: COPY_BASE.es, it: COPY_BASE.it, pt: COPY_BASE.pt, us: COPY_BASE.en, fi: COPY_BASE.fi };
 
 const HERO_BASE = {
   en: {
@@ -943,6 +1018,12 @@ const HERO_BASE = {
     intro:
       "Ogni piano parte da numeri onesti. Passa a un livello superiore quando vuoi un garage completo, la navigazione offline e la fatturazione dei pedaggi per la tua flotta — annulla quando finisce la stagione.",
   },
+  pt: {
+    eyebrow: "Planos e preços",
+    title: "Escolha o plano que combina com a sua próxima estrada.",
+    intro:
+      "Todos os planos começam com números honestos. Faça upgrade quando quiser uma garagem completa, navegação offline e faturação de portagens para frotas — cancele quando a época terminar.",
+  },
   fi: {
     eyebrow: "Suunnitelmat ja hinnat",
     title: "Valitse matkaasi parhaiten sopiva tilaus",
@@ -951,7 +1032,7 @@ const HERO_BASE = {
   },
 };
 
-const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.it, us: HERO_BASE.en, fi: HERO_BASE.fi };
+const HERO: Record<Locale, PricingHero> = { ...HERO_BASE, es: HERO_BASE.es, it: HERO_BASE.it, pt: HERO_BASE.pt, us: HERO_BASE.en, fi: HERO_BASE.fi };
 
 /**
  * Regional price overrides. The tier structure, features and copy stay identical

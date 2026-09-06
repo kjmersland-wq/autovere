@@ -74,6 +74,14 @@ import {
   PL_TERMS,
 } from "@/lib/global-content-pl";
 import {
+  PT_FAQ,
+  PT_HOW_IT_WORKS,
+  PT_PARTNERS,
+  PT_PRICING,
+  PT_PRIVACY,
+  PT_TERMS,
+} from "@/lib/global-content-pt";
+import {
   SV_FAQ,
   SV_HOW_IT_WORKS,
   SV_PARTNERS,
@@ -174,6 +182,14 @@ const INFO_BY_LANG: Record<string, typeof INFO> = {
     partners: FI_PARTNERS,
     privacy: FI_PRIVACY,
     terms: FI_TERMS,
+  },
+  pt: {
+    faq: PT_FAQ,
+    "how-it-works": PT_HOW_IT_WORKS,
+    pricing: PT_PRICING,
+    partners: PT_PARTNERS,
+    privacy: PT_PRIVACY,
+    terms: PT_TERMS,
   },
 };
 

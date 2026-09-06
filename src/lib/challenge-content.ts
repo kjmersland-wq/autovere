@@ -3284,6 +3284,269 @@ const IT: ChallengeContent = {
 };
 
 /** Language URLs for the Challenge page. English/GB is the root /challenge. */
+const PT: ChallengeContent = {
+  meta: {
+    title: "AutoVere Challenge — põe o AutoVere à prova",
+    description:
+      "Põe o AutoVere à prova em viagens reais, com carros reais e custos reais. Convidamos a imprensa automóvel a calcular, conduzir e comparar.",
+  },
+  badge: "Challenge",
+  hero: {
+    kicker: "AutoVere Challenge",
+    title: "Põe o AutoVere à prova.",
+    lede: "Escolhe o carro que realmente conduzes. Escolhe a viagem que queres testar. Calcula-a no verdadeiro AutoVere, conduz — e compara os nossos números com o que realmente gastaste.",
+    statement: ["Carros reais.", "Viagens reais.", "Custos reais."],
+    primaryCta: "Pede acesso ao Challenge",
+    secondaryCta: "Conhece o AutoVere",
+    imageCredit: "Foto: Unsplash",
+  },
+  invitation: {
+    eyebrow: "Um convite pessoal à imprensa automóvel",
+    title: "Convidamos-te a testar o AutoVere pessoalmente.",
+    paragraphs: [
+      "Se escreves sobre automóveis, já sabes: uma viagem raramente custa o que um calculador promete à partida. Portagens, vinhetas, ferries, combustível e carregamento vão-se somando em silêncio, país após país — e é exatamente isto que o AutoVere foi pensado para calcular bem.",
+      "Não te pedimos simplesmente que acredites na nossa palavra.",
+      "Preferimos dar-te as chaves: escolhe uma viagem verdadeira, escolhe o carro que tens na garagem, usa o AutoVere como utilizador Pro, conduz o percurso — e compara o nosso cálculo com os teus recibos.",
+      "Se tivermos razão, é uma história que vale a pena contar. Se estivermos errados, queremos sabê-lo — preferimos saber por ti do que nunca vir a descobrir.",
+    ],
+    signature: "Kjell Mersland — fundador do AutoVere · KM Tech Labs, Kristiansand, Noruega",
+  },
+  steps: {
+    eyebrow: "Como funciona o Challenge",
+    title: "Seis passos simples, do convite ao resultado.",
+    intro:
+      "Nada disto é um ambiente de demonstração. A partir do quinto passo, usas exatamente o mesmo AutoVere que todos os outros viajantes.",
+    items: [
+      { number: "01", title: "Regista-te", body: "Regista-te como membro da imprensa automóvel." },
+      {
+        number: "02",
+        title: "Verificação",
+        body: "O AutoVere analisa o teu pedido e ativa o teu acesso ao Challenge.",
+      },
+      {
+        number: "03",
+        title: "Escolhe a viagem",
+        body: "Escolhe um dos percursos Challenge sugeridos pelo AutoVere, ou cria uma viagem só tua.",
+      },
+      {
+        number: "04",
+        title: "Escolhe o carro",
+        body: "Escolhe o veículo que estás mesmo a testar — gasolina, gasóleo ou elétrico.",
+      },
+      {
+        number: "05",
+        title: "Calcula e conduz",
+        body: "Usa a experiência normal do AutoVere como utilizador Pro. Calcula a viagem, depois conduz-a de verdade.",
+      },
+      {
+        number: "06",
+        title: "Compara",
+        body: "Introduz quanto custou realmente a viagem e compara com o cálculo do AutoVere.",
+      },
+    ],
+  },
+  notCalculator: {
+    eyebrow: "Um único produto, não uma demonstração para a imprensa",
+    title: "O teu Challenge decorre dentro do verdadeiro AutoVere.",
+    body: "O AutoVere Challenge é a porta de entrada e toda a estrutura do teste — não é uma segunda calculadora simplificada criada só para jornalistas. Não existe uma versão de imprensa limitada, nem um ambiente de teste à parte, nem números diferentes.",
+    flow: [
+      "Página de destino do Challenge",
+      "Registo de jornalistas",
+      "Verificação AutoVere",
+      "Acesso Pro ao Challenge",
+      "O produto AutoVere normal",
+      "O teu resultado Challenge",
+    ],
+    footnote: "O cálculo que estás a testar é o mesmo cálculo que todos os outros recebem.",
+  },
+  freedom: {
+    eyebrow: "O teu teste, as tuas regras",
+    title: "Escolhe a viagem que queres testar.",
+    lines: [
+      "Usa um dos nossos percursos sugeridos — ou escolhe um teu.",
+      "Conduz o carro que realmente tens.",
+    ],
+    body: "Não há nenhum teste fixo para passar, nenhum percurso obrigatório e nenhuma lista de carros aprovados. O Challenge é definido por ti — só te pedimos que publiques o que descobrires.",
+    items: [
+      { title: "Qualquer viagem", body: "Um percurso Challenge sugerido, ou a viagem que já ias fazer de qualquer forma." },
+      { title: "Qualquer carro", body: "O carro da tua frota de testes ou o que tens na garagem — gasolina, gasóleo ou elétrico." },
+      { title: "Acesso Pro completo", body: "O AutoVere completo, sem restrições, durante toda a duração do teste." },
+      { title: "A tua conclusão", body: "Publica o resultado exatamente como o encontraste. Não o revemos antes." },
+    ],
+  },
+  journey: {
+    eyebrow: "Escolhe a viagem",
+    title: "Conduz um percurso sugerido — ou um que sirva o teu teste.",
+    intro:
+      "Há duas formas de conduzires o teu Challenge. Ambas usam o mesmo motor de cálculo, as mesmas fontes de dados e a mesma divisão país a país.",
+    options: [
+      {
+        label: "Opção 01",
+        title: "Um percurso Challenge sugerido",
+        body: "Para cada país, o AutoVere sugere três percursos, cobrindo regiões diferentes e estilos de condução diferentes.",
+        bullets: ["Curto", "Médio", "Longo"],
+      },
+      {
+        label: "Opção 02",
+        title: "Testa a tua própria viagem",
+        body: "Escolhe uma viagem realista que sirva o teu teste — o trajeto que já ias fazer de qualquer forma costuma ser o mais revelador. Por exemplo: Lisboa–Porto, Varsóvia–Cracóvia, Los Angeles–San Diego.",
+        bullets: ["A tua rota", "O teu horário", "As tuas condições de condução"],
+      },
+    ],
+  },
+  vehicles: {
+    eyebrow: "Escolhe o veículo",
+    title: "Testa o carro que tens mesmo na garagem.",
+    intro:
+      "Escolhe o tipo de motorização e depois seleciona o carro específico entre os dados de veículos já existentes no AutoVere. Não há nenhuma lista de carros separada para o Challenge.",
+    items: [
+      {
+        label: "Gasolina",
+        body: "Consumos, preços de combustível e portagens calculados país a país ao longo do teu percurso.",
+        image:
+          "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=1200&q=70",
+        alt: "Cupé azul estacionado numa estrada deserta ao pôr do sol",
+      },
+      {
+        label: "Gasóleo",
+        body: "Consumos em longas distâncias, além de classes de peso e de eixo onde os operadores de portagens as aplicam.",
+        image:
+          "https://images.unsplash.com/photo-1517524008697-84bbe3c3fd98?auto=format&fit=crop&w=1200&q=70",
+        alt: "SUV branco numa estrada florestal coberta de neve",
+      },
+      {
+        label: "Elétrico",
+        body: "Capacidade da bateria, consumos, paragens para carregar e tarifas das redes ao longo do percurso.",
+        image:
+          "https://images.unsplash.com/photo-1593941707882-a5bba14938c7?auto=format&fit=crop&w=1200&q=70",
+        alt: "Cabo de carregamento ligado a um carro elétrico",
+      },
+    ],
+  },
+  evCompare: {
+    eyebrow: "A mesma viagem em elétrico",
+    title: "Quanto teria custado esta viagem com um carro elétrico?",
+    body: "Depois de calculares a tua viagem, podes percorrer o mesmo itinerário com um carro elétrico e ver o que dizem os números. Às vezes custa menos. Outras vezes, o carregamento, as portagens e os desvios mudam o panorama. O AutoVere mostra sempre o cálculo.",
+    exampleLabel: "Exemplo ilustrativo — não é um resultado real do AutoVere",
+    rows: [
+      { label: "O teu carro", sub: "Gasóleo", amountEur: 96.4 },
+      { label: "A mesma viagem em elétrico", sub: "Elétrico", amountEur: 68.2 },
+    ],
+    differenceLabel: "Diferença potencial",
+    differenceAmountEur: 28.2,
+    caveat: "Apenas valores de exemplo. Não afirmamos que um carro elétrico custa sempre menos.",
+  },
+  reality: {
+    eyebrow: "A estimativa contra a realidade",
+    title: "A parte que a maioria das ferramentas evita em silêncio.",
+    body: "O Challenge compara o que o AutoVere tinha calculado antes da partida com o que a viagem realmente custou na chegada. Esta comparação é tua — mesmo nos dias em que não nos favorece.",
+    exampleLabel: "Exemplo ilustrativo — não é um resultado real do AutoVere",
+    calculation: { label: "Cálculo AutoVere", amountEur: 96.4 },
+    actual: { label: "Custo real da viagem", amountEur: 99.1 },
+    difference: { label: "Diferença", value: "+2,8%" },
+    caveat: "Não prometemos uma percentagem de precisão específica. O que importa é o teu resultado.",
+  },
+  founder: {
+    eyebrow: "O homem por trás do AutoVere",
+    title: "Porque construí o AutoVere",
+    opening:
+      "Tudo começou com uma pergunta simples: porque é que ainda é tão difícil saber quanto vai custar mesmo uma viagem de carro?",
+    paragraphs: [
+      "Tenho 74 anos. Depois de mais de 40 anos na construção civil, reformei-me em 2020.",
+      "Um ano depois, em vez de abrandar, comecei a construir algo completamente diferente.",
+      "Durante anos percorri a Europa de carro, de lés a lés. Quanto mais viajava, mais claramente via o mesmo problema: planear uma viagem longa significava, normalmente, procurar informação em muitos sítios diferentes.",
+      "Portagens. Vinhetas. Ferries. Combustível. Carregamento. Percursos diferentes. Países diferentes. Custos diferentes.",
+      "Pensei que tinha de haver uma forma melhor.",
+      "Foi assim que comecei a construir o AutoVere.",
+      "O que começou como uma ideia pessoal tornou-se um projeto muito maior. E não o estou a fazer sozinho — também o meu filho faz parte desta viagem.",
+      "Juntos, construímos o AutoVere sobre um princípio que sempre me importou muito: se vale a pena fazer algo, vale a pena fazê-lo bem.",
+      "Isto significa usar dados reais, fontes oficiais, algoritmos e matemática para calcular a viagem.",
+      "Sem suposições. Sem caixa negra.",
+      "O objetivo é simples: dar às pessoas uma ideia mais clara de quanto uma viagem provavelmente vai custar, ainda antes de saírem de casa — e ajudá-las a tomar melhores decisões sobre o percurso, o carro e a forma de viajar.",
+      "O que começou em Kristiansand cresceu hoje muito além da Noruega e da Europa.",
+      "O AutoVere já foi lançado nos Estados Unidos e no Canadá, além da Europa, com a ambição de se tornar uma plataforma global de inteligência de viagem para quem quer que se ponha a caminho.",
+    ],
+    closing: [
+      "Mas construir algo e acreditar nisso não basta.",
+      "Quero que seja testado no mundo real.",
+      "Foi por isso que criámos o AutoVere Challenge.",
+      "Não quero que a imprensa automóvel acredite simplesmente na minha palavra.",
+      "Escolhe um carro real. Escolhe uma viagem real. Calcula-a com o AutoVere. Conduz. Depois compara o resultado com o que realmente aconteceu.",
+      "Nenhuma demonstração especial. Nenhum resultado preparado antecipadamente.",
+      "Só o AutoVere — e a estrada.",
+      "Se funcionar bem, teremos orgulho nisso.",
+      "Se alguma coisa correr mal, queremos sabê-lo.",
+      "Porque a melhor forma de provar que o AutoVere funciona não é dizê-lo.",
+      "É deixar que o testes tu mesmo.",
+    ],
+    name: "Kjell Mersland, 74 anos",
+    role: "Fundador do AutoVere",
+    note: "Construo o AutoVere junto com o meu filho",
+    alt: "Kjell Mersland, fundador do AutoVere",
+    emphasis: [
+      "Tenho 74 anos.",
+      "também o meu filho faz parte desta viagem.",
+      "Sem suposições. Sem caixa negra.",
+      "O AutoVere já foi lançado nos Estados Unidos e no Canadá, além da Europa",
+      "Quero que seja testado no mundo real.",
+      "É deixar que o testes tu mesmo.",
+    ],
+  },
+  report: {
+    eyebrow: "Relatório Challenge",
+    title: "A tua viagem. O teu resultado.",
+    body: "Depois de terminares a viagem, recebes um resultado Challenge profissional que podes citar, publicar ou usar para nos desafiar.",
+    contents: [
+      "Percurso",
+      "Veículo",
+      "Motorização",
+      "Cálculo AutoVere",
+      "Custo real da viagem",
+      "Diferença",
+      "Comparação elétrico",
+      "Data",
+      "ID do Challenge",
+    ],
+    future: "Em preparação: um resultado permanente na web, uma hiperligação partilhável e um relatório em PDF.",
+    cta: "Vê esta viagem no AutoVere",
+    ctaNote:
+      "Depois de um Challenge, a viagem e os seus parâmetros podem ser reabertos no AutoVere normal, para continuares a explorá-la.",
+  },
+  register: {
+    eyebrow: "Acesso para a imprensa automóvel",
+    title: "Pede acesso ao AutoVere Challenge",
+    body: "Fazes parte da imprensa automóvel? Gostávamos que testasses o AutoVere pessoalmente. Pede acesso ao Challenge e, assim que for aprovado, usa o AutoVere como utilizador Pro durante toda a duração do teste.",
+    fields: {
+      name: "Nome completo",
+      email: "Email profissional",
+      outlet: "Publicação ou canal",
+      role: "Função",
+      country: "País",
+      message: "A viagem e o carro que gostarias de testar",
+    },
+    placeholders: {
+      name: "Mariana Costa",
+      email: "mariana@publicacao.pt",
+      outlet: "Publicação, site ou canal",
+      role: "Jornalista automóvel, piloto de testes, editor-chefe…",
+      country: "Portugal",
+      message: "Opcional — conta-nos o que pretendes testar",
+    },
+    submit: "Pede acesso ao Challenge",
+    note: "Um pequeno passo de verificação garante que o acesso ao Challenge fica reservado a jornalistas em atividade. Assim que for aprovado, a tua conta passa a Pro durante o teste — sem ferramenta de imprensa separada, sem restrições.",
+    successTitle: "Obrigado — recebemos o teu pedido.",
+    successBody:
+      "O acesso ao Challenge está a ser ativado de forma gradual. Os teus dados ficam, por agora, guardados apenas neste navegador, e entraremos em contacto contigo pessoalmente assim que a verificação estiver ativa.",
+  },
+  finalCta: {
+    title: "Pronto para pôr o AutoVere à prova?",
+    body: "Escolhe uma viagem. Escolhe o teu carro. Conduz. Compara o resultado.",
+    primary: "Participa no AutoVere Challenge",
+    secondary: "Conhece o AutoVere",
+  },
+  languageLabel: "O Challenge na tua língua",
+};
+
 export const CHALLENGE_LANGS = [
   { prefix: "no", label: "Norsk", flag: "🇳🇴" },
   { prefix: "se", label: "Svenska", flag: "🇸🇪" },
@@ -3297,6 +3560,7 @@ export const CHALLENGE_LANGS = [
   { prefix: "pl", label: "Polski", flag: "🇵🇱" },
   { prefix: "es", label: "Español", flag: "🇪🇸" },
   { prefix: "it", label: "Italiano", flag: "🇮🇹" },
+  { prefix: "pt", label: "Português", flag: "🇵🇹" },
 ] as const;
 
 export type ChallengeLang = (typeof CHALLENGE_LANGS)[number]["prefix"];
@@ -3328,6 +3592,7 @@ export const CHALLENGE_CURRENCY: Record<ChallengeLang | "en", CurrencyCode> = {
   pl: "PLN",
   es: "EUR",
   it: "EUR",
+  pt: "EUR",
 };
 
 /** Per-language overrides. Missing languages fall back to English. */
@@ -3343,6 +3608,7 @@ const CHALLENGE_CONTENT_BY_LANG: Partial<Record<ChallengeLang, ChallengeContent>
   pl: PL,
   es: ES,
   it: IT,
+  pt: PT,
 };
 
 export function challengeContent(lang?: string | undefined): ChallengeContent {

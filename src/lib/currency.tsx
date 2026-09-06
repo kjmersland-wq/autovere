@@ -127,6 +127,7 @@ const LOCALE_DEFAULT_CURRENCY: Partial<Record<string, CurrencyCode>> = {
   pl: "PLN",
   us: "USD",
   fi: "EUR",
+  pt: "EUR",
 };
 
 /** Currency implied by the visitor's browser language, used only on cold visits. */
