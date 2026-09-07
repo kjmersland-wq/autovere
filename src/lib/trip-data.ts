@@ -2,6 +2,7 @@ import type { FlagCode } from "@/components/FlagIcon";
 import { LOCALE_ROUTES } from "@/lib/locales";
 import { DEFAULT_KWH_EUR, operatorKwhEur } from "@/lib/market-rates";
 import type { EnergyPrices } from "@/lib/energy-prices.functions";
+import { GENERATED_EV_CHARGING_POIS } from "@/lib/ev-charging-pois.generated";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { filterByCorridor } from "@/lib/corridor-filter";
@@ -1234,6 +1235,7 @@ export interface EvChargingPoi {
   note: string;
   website: string;
   price?: string;
+  source?: string;
 }
 
 export const ENGLISH_ONLY_POI_IDS = new Set([
@@ -1514,7 +1516,7 @@ export const RV_POIS: Record<RegionKey, RvPoi[]> = {
   ],
 };
 
-export const EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
+const CURATED_EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
   eu: [
     { id: "ev-eu-ionity-koege", lat: 55.4705, lng: 12.1862, network: "IONITY", name: "IONITY Koge", where: "Koge, Denmark", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public motorway access", note: "A useful south-of-Copenhagen top-up before the Rodby ferry or the E47/E55 run into Germany.", website: "https://ionity.eu/" },
     { id: "ev-eu-clever-nyborg", lat: 55.312, lng: 10.803, network: "Clever", name: "Clever Nyborg", where: "Nyborg, Denmark", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Handy before or after the Great Belt crossing, with food and rest stops close by.", website: "https://clever.dk/" },
@@ -1593,6 +1595,12 @@ export const EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
     { id: "ev-ca-petro-canada-moncton", lat: 46.087, lng: -64.778, network: "Petro-Canada eV", name: "Petro-Canada eV Moncton", where: "Moncton, New Brunswick", connectors: "CCS", power: "DC fast charging", access: "Public Petro-Canada app/card access", note: "Handy for Bay of Fundy, PEI and Nova Scotia road-trip connections.", website: "https://www.petro-canada.ca/en/personal/fuel/ev-fast-charge-network" },
     { id: "ev-ca-flo-st-johns", lat: 47.561, lng: -52.712, network: "FLO", name: "FLO St. John's", where: "St. John's, Newfoundland", connectors: "CCS", power: "DC fast charging", access: "Public FLO app/card access", note: "Useful eastern Newfoundland hub before longer coastal drives.", website: "https://www.flo.com/" },
   ],
+};
+
+export const EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
+  eu: [...CURATED_EV_CHARGING_POIS.eu, ...GENERATED_EV_CHARGING_POIS.eu],
+  us: [...CURATED_EV_CHARGING_POIS.us, ...GENERATED_EV_CHARGING_POIS.us],
+  ca: [...CURATED_EV_CHARGING_POIS.ca, ...GENERATED_EV_CHARGING_POIS.ca],
 };
 
 /* ------------------------------------------------------------------ *
