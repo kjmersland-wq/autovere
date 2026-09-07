@@ -6,7 +6,9 @@ import { cf, nf, nfOrUnavailable, type AdminCurrency } from "@/components/admin/
 import { convertFromEur, formatAdminCurrency } from "@/components/admin/adminCurrency";
 import { formatCurrency } from "@/lib/currency";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
-import type { ExchangeRates } from "@/lib/admin-data.functions";
+import { eventLabel, funnelFindings } from "@/components/admin/productEvents";
+import type { ExchangeRates, ProductEventStats } from "@/lib/admin-data.functions";
+
 
 export type ReportKpis = { totalUsers: number | null; activeSubs: number; mrr: number; churnRate: number };
 export type ReportPlanRow = { plan: string; label: string; count: number; mrr: number };
@@ -26,6 +28,7 @@ export const ReportDocument = forwardRef<
     topPaths: ReportPathRow[];
     currency: AdminCurrency;
     rates: ExchangeRates | null;
+    events: ProductEventStats | null;
   }
 >(
   (
@@ -41,7 +44,9 @@ export const ReportDocument = forwardRef<
       topPaths,
       currency,
       rates,
+      events,
     },
+
     ref,
   ) => {
     const fmt = (valueEur: number) => formatAdminCurrency(valueEur, currency, rates);
@@ -180,7 +185,76 @@ export const ReportDocument = forwardRef<
             </TableBody>
           </Table>
         </div>
+
+        <div className="mt-6" data-report-table="events">
+          <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-primary print:text-neutral-900">
+            Produkthendelser (globalt, siste 30 dager)
+          </h3>
+          {!events ? (
+            <p className="mt-3 text-sm text-muted-foreground print:text-neutral-600">
+              Produkthendelser er ikke tilgjengelig for denne rapporten.
+            </p>
+          ) : (
+            <>
+              <div className="mt-3 grid gap-4 sm:grid-cols-3">
+                <Metric label="Beregninger startet" value={nf.format(events.funnel.calculateClicked)} />
+                <Metric
+                  label="Fullført beregning"
+                  value={`${nf.format(events.funnel.tripCalculated)} · ${events.funnel.calcSuccessRate} %`}
+                />
+                <Metric
+                  label="Resultat vist"
+                  value={`${nf.format(events.funnel.resultViewed)} · ${events.funnel.resultViewRate} %`}
+                />
+              </div>
+              <div className="mt-3 h-56">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart data={events.byEvent.map((e) => ({ label: eventLabel(e.event), value: e.last30 }))}>
+                    <CartesianGrid strokeDasharray="3 3" stroke="rgba(120,120,120,0.15)" />
+                    <XAxis dataKey="label" tick={{ fontSize: 10 }} interval={0} height={60} angle={-15} textAnchor="end" />
+                    <YAxis tick={{ fontSize: 11 }} allowDecimals={false} />
+                    <Tooltip formatter={(v: number) => [nf.format(v), "Hendelser"]} />
+                    <Bar dataKey="value" fill="#38bdf8" radius={[6, 6, 0, 0]} />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <Table className="mt-3">
+                <TableHeader>
+                  <TableRow>
+                    <TableHead>Hendelse</TableHead>
+                    <TableHead className="text-right">7 dager</TableHead>
+                    <TableHead className="text-right">30 dager</TableHead>
+                    <TableHead className="text-right">Unike besøkende</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {events.byEvent.map((e) => (
+                    <TableRow key={e.event}>
+                      <TableCell>{eventLabel(e.event)}</TableCell>
+                      <TableCell className="text-right">{nf.format(e.last7)}</TableCell>
+                      <TableCell className="text-right">{nf.format(e.last30)}</TableCell>
+                      <TableCell className="text-right">{nf.format(e.visitors)}</TableCell>
+                    </TableRow>
+                  ))}
+                  {events.byEvent.length === 0 && (
+                    <TableRow>
+                      <TableCell colSpan={4} className="text-center text-muted-foreground">
+                        Ingen registrerte hendelser ennå.
+                      </TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+              </Table>
+              <ul className="mt-3 space-y-1 text-xs text-muted-foreground print:text-neutral-700">
+                {funnelFindings(events).map((f) => (
+                  <li key={f.text}>• {f.text}</li>
+                ))}
+              </ul>
+            </>
+          )}
+        </div>
       </div>
+
     );
   },
 );

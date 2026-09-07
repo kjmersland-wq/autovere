@@ -15,6 +15,8 @@ import {
 import { buildAnalysisReport, type AnalysisReport, type Finding, type AreaAnalysis, type AnalysisAreaId } from "@/components/admin/analysis/analysisReport";
 import { summarizeReport, type Tone } from "@/components/admin/analysis/analysisPresentation";
 import type { AdminCurrency } from "@/components/admin/adminFormat";
+import { ProductEventsPanel } from "@/components/admin/sections/ProductEventsPanel";
+
 
 const TONE_ACCENT: Record<Tone, string> = {
   positive: "border-emerald-400/30 bg-emerald-400/10 text-emerald-200",
@@ -329,7 +331,16 @@ export function AnalysisPanel({ currency }: { currency: AdminCurrency }) {
         ))}
       </div>
 
+      {/* 5b. Produkthendelser — planleggertrakt og funksjonsbruk */}
+      <div className="space-y-3">
+        <h3 className="text-sm font-semibold uppercase tracking-[0.16em] text-primary">
+          Produkthendelser — planleggertrakt
+        </h3>
+        <ProductEventsPanel />
+      </div>
+
       {/* 6. Samlet konklusjon */}
+
       <div className="overflow-hidden rounded-2xl border border-primary/30 bg-primary/5">
         <div className="border-b border-primary/20 px-6 py-3">
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">Samlet konklusjon</p>

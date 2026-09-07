@@ -52,6 +52,8 @@ import { getEnergyPrices, type EnergyPrices } from "@/lib/energy-prices.function
 import { PlaceAutocomplete, type PlaceHit } from "@/components/PlaceAutocomplete";
 import { useLocale, useT, useTr } from "@/lib/i18n";
 import { startTour, tourCopy } from "@/lib/tour";
+import { trackEvent } from "@/lib/analytics";
+
 import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
 
@@ -171,6 +173,14 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       document.getElementById("trip-results")?.scrollIntoView({ behavior: "smooth" }),
     );
 
+  // The results dashboard has become visible for this calculation.
+  useEffect(() => {
+    if (!trip) return;
+    void trackEvent("result_viewed", { region, vehicle, fuel });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [trip]);
+
+
   const effectiveDuration = tripType === "return" ? durationDays : 1;
   const routeFn = useServerFn(getRouteGeo);
   const pricesFn = useServerFn(getEnergyPrices);
@@ -193,6 +203,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
    */
   const runCalculation = async (from: string, to: string, extra: number) => {
     setCalculating(true);
+    void trackEvent("calculate_clicked", { region, vehicle, fuel, hasOrigin: Boolean(from.trim()), hasDestination: Boolean(to.trim()) });
+
     let resolved: RouteGeo | null = null;
     if (from.trim().length > 1 && to.trim().length > 1) {
       try {
@@ -237,6 +249,15 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     setFerryCrossings(ferries ? detectFerryCrossings(region, from, to, places) : []);
     setBadges(detectEmissionBadges(region, from, to, places));
     setCalculating(false);
+    void trackEvent("trip_calculated", {
+      region,
+      vehicle,
+      fuel,
+      tripType,
+      resolved: Boolean(resolved),
+      countries: resolved ? resolved.countries.length : 0,
+    });
+
     if (!resolved && from.trim() && to.trim()) {
       toast.error("Couldn't resolve those places — pick a suggestion from the dropdown and try again.");
     }
