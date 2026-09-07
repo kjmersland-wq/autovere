@@ -68,6 +68,18 @@ export const CHARGING_NETWORKS = [
   "BC Hydro EV",
   "Circuit Electrique",
   "Ivy Charging Network",
+  "Blink",
+  "Rivian Adventure Network",
+  "Francis Energy",
+  "EV Connect",
+  "EVCS",
+  "Red E",
+  "ChargeNet",
+  "Izivia",
+  "Freshmile",
+  "ENGIE Vianeo",
+  "DRIVECO",
+  "Atlante France",
 ] as const;
 
 export const ALL_NETWORKS = "All networks";

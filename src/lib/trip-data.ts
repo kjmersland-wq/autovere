@@ -2,6 +2,7 @@ import type { FlagCode } from "@/components/FlagIcon";
 import { LOCALE_ROUTES } from "@/lib/locales";
 import { DEFAULT_KWH_EUR, operatorKwhEur } from "@/lib/market-rates";
 import type { EnergyPrices } from "@/lib/energy-prices.functions";
+import { GENERATED_AFDC_EV_CHARGING_POIS } from "@/lib/ev-charging-pois-afdc.generated";
 import { GENERATED_EV_CHARGING_POIS } from "@/lib/ev-charging-pois.generated";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
@@ -1598,9 +1599,9 @@ const CURATED_EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
 };
 
 export const EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
-  eu: [...CURATED_EV_CHARGING_POIS.eu, ...GENERATED_EV_CHARGING_POIS.eu],
-  us: [...CURATED_EV_CHARGING_POIS.us, ...GENERATED_EV_CHARGING_POIS.us],
-  ca: [...CURATED_EV_CHARGING_POIS.ca, ...GENERATED_EV_CHARGING_POIS.ca],
+  eu: [...CURATED_EV_CHARGING_POIS.eu, ...GENERATED_EV_CHARGING_POIS.eu, ...GENERATED_AFDC_EV_CHARGING_POIS.eu],
+  us: [...CURATED_EV_CHARGING_POIS.us, ...GENERATED_EV_CHARGING_POIS.us, ...GENERATED_AFDC_EV_CHARGING_POIS.us],
+  ca: [...CURATED_EV_CHARGING_POIS.ca, ...GENERATED_EV_CHARGING_POIS.ca, ...GENERATED_AFDC_EV_CHARGING_POIS.ca],
 };
 
 /* ------------------------------------------------------------------ *
