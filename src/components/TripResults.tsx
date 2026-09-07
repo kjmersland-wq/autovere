@@ -43,6 +43,7 @@ import { cn } from "@/lib/utils";
 import {
   ROUTE_VARIANTS,
   applyNetworkFilter,
+  ENGLISH_ONLY_POI_IDS,
   RV_POIS,
   SCENIC_HIGHLIGHTS,
   detectScandiBridges,
@@ -182,8 +183,10 @@ export function TripResults({
   );
   // Everything "along the route" is filtered against the real polyline.
   const corridorCoords = trip.corridor?.coords;
-  const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25);
-  const rvPois = filterByCorridor(RV_POIS[region], corridorCoords, 25);
+  const showEnglishOnlyPois = locale === "en" || locale === "us";
+  const isVisiblePoi = (id: string) => showEnglishOnlyPois || !ENGLISH_ONLY_POI_IDS.has(id);
+  const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
+  const rvPois = filterByCorridor(RV_POIS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
   const m = useMoney(trip.currency);
   const nativePrice = (value: number, symbol: string) =>
     formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
@@ -883,7 +886,7 @@ export function TripResults({
               <p className="mt-1 text-xs text-muted-foreground">{tr(h.where)}</p>
               <p className="mt-2 text-sm text-foreground/80">{tr(h.note)}</p>
               <p className="mt-3 text-xs font-medium text-primary">{t.results.open}: {tr(h.season)}</p>
-              <PoiLinks kind="pass" name={h.name} where={h.where} region={region} />
+              <PoiLinks kind="pass" name={h.name} where={h.where} region={region} website={h.website} />
               <Button
                 size="sm"
                 variant="secondary"
@@ -919,7 +922,7 @@ export function TripResults({
                       </span>
                     ))}
                   </div>
-                  <PoiLinks kind="camp" name={p.name} where={p.where} region={region} />
+                  <PoiLinks kind="camp" name={p.name} where={p.where} region={region} website={p.website} />
                   <Button
                     size="sm"
                     variant="secondary"
