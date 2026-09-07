@@ -10,6 +10,8 @@ import { nf } from "@/components/admin/adminFormat";
 import { useAdminQuery, statusMessage } from "@/components/admin/useAdminQuery";
 import { getGlobalOverview, getSiteBreakdown } from "@/lib/admin-data.functions";
 import { siteLabel } from "@/components/admin/siteOptions";
+import { ProductEventsPanel } from "@/components/admin/sections/ProductEventsPanel";
+
 
 type DailyPoint = { date: string; views: number };
 type PathRow = { path: string; views: number };
@@ -150,5 +152,16 @@ function SiteTraffic({ site }: { site: string }) {
 }
 
 export function TrafficPanel({ site }: { site: string | null }) {
-  return site === null ? <GlobalTraffic /> : <SiteTraffic site={site} />;
+  return (
+    <div className="space-y-8">
+      {site === null ? <GlobalTraffic /> : <SiteTraffic site={site} />}
+      <div>
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-primary">
+          Produkthendelser (hele plattformen)
+        </h2>
+        <ProductEventsPanel />
+      </div>
+    </div>
+  );
 }
+

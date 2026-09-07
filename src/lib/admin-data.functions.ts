@@ -283,6 +283,118 @@ export const getSiteBreakdown = createServerFn({ method: "GET" }).handler(
 );
 
 /* ------------------------------------------------------------------ */
+/* Produkthendelser — feature usage recorded in product_events         */
+/* ------------------------------------------------------------------ */
+
+export type ProductEventStats = {
+  total90: number;
+  last7: number;
+  prev7: number;
+  last30: number;
+  daily: DailyPoint[];
+  byEvent: { event: string; last7: number; last30: number; total90: number; visitors: number }[];
+  funnel: {
+    calculateClicked: number;
+    tripCalculated: number;
+    resultViewed: number;
+    /** Share of clicks that produced a finished calculation, in percent. */
+    calcSuccessRate: number;
+    /** Share of finished calculations whose results were actually viewed. */
+    resultViewRate: number;
+  };
+  generatedAt: string;
+};
+
+export const getProductEvents = createServerFn({ method: "GET" }).handler(
+  async (): Promise<AdminDataResult<ProductEventStats>> => {
+    const ctx = await getAdminSupabaseContext();
+    if (!ctx.ok) return ctx.result;
+    try {
+      const since = new Date(Date.now() - WINDOW_DAYS * DAY_MS).toISOString();
+      const { data: rows, error } = await ctx.supabase
+        .from("product_events")
+        .select("event_name, visitor_id, created_at")
+        .gte("created_at", since)
+        .limit(50000);
+      if (error) return { status: "error", message: "Kunne ikke hente produkthendelser." };
+
+      const now = Date.now();
+      const daily = emptyDaily();
+      let last7 = 0;
+      let prev7 = 0;
+      let last30 = 0;
+      const per = new Map<
+        string,
+        { last7: number; last30: number; total90: number; visitors: Set<string> }
+      >();
+
+      for (const row of rows ?? []) {
+        const age = now - new Date(row.created_at).getTime();
+        const bucket =
+          per.get(row.event_name) ?? { last7: 0, last30: 0, total90: 0, visitors: new Set<string>() };
+        bucket.total90 += 1;
+        if (row.visitor_id) bucket.visitors.add(row.visitor_id);
+        if (age <= 7 * DAY_MS) {
+          last7 += 1;
+          bucket.last7 += 1;
+        } else if (age <= 14 * DAY_MS) {
+          prev7 += 1;
+        }
+        if (age <= 30 * DAY_MS) {
+          last30 += 1;
+          bucket.last30 += 1;
+          const key = dayKey(row.created_at);
+          if (daily.has(key)) daily.set(key, (daily.get(key) ?? 0) + 1);
+        }
+        per.set(row.event_name, bucket);
+      }
+
+      const byEvent = [...per.entries()]
+        .map(([event, b]) => ({
+          event,
+          last7: b.last7,
+          last30: b.last30,
+          total90: b.total90,
+          visitors: b.visitors.size,
+        }))
+        .sort((a, b) => b.total90 - a.total90);
+
+      const count = (name: string) => per.get(name)?.last30 ?? 0;
+      const calculateClicked = count("calculate_clicked");
+      const tripCalculated = count("trip_calculated");
+      const resultViewed = count("result_viewed");
+
+      return {
+        status: "ok",
+        data: {
+          total90: (rows ?? []).length,
+          last7,
+          prev7,
+          last30,
+          daily: toDailyArray(daily),
+          byEvent,
+          funnel: {
+            calculateClicked,
+            tripCalculated,
+            resultViewed,
+            calcSuccessRate: calculateClicked
+              ? Math.round((tripCalculated / calculateClicked) * 1000) / 10
+              : 0,
+            resultViewRate: tripCalculated
+              ? Math.round((resultViewed / tripCalculated) * 1000) / 10
+              : 0,
+          },
+          generatedAt: new Date().toISOString(),
+        },
+      };
+    } catch {
+      return { status: "error", message: "Kunne ikke hente produkthendelser." };
+    }
+  },
+);
+
+
+/* ------------------------------------------------------------------ */
 /* Markeder — visitor geo-country + region (existing dimension)        */
 /* ------------------------------------------------------------------ */
 
