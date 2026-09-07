@@ -10,6 +10,7 @@ import { corridorPolyline, pointAt } from "@/lib/corridor-map";
 import { buildTripGpx, downloadFile, tripFileBase } from "@/lib/trip-export";
 import type { FuelKey, RegionKey, TripEstimate, VehicleKey } from "@/lib/trip-data";
 import { useTr } from "@/lib/i18n";
+import { trackEvent } from "@/lib/analytics";
 
 const VEHICLE_LABEL: Record<VehicleKey, string> = {
   car: "🚗 Passenger car",
@@ -291,6 +292,7 @@ export function PrintItinerary({
 
 
   const downloadGpx = () => {
+    void trackEvent("export_gpx", { source: "itinerary" });
     downloadFile(
       buildTripGpx(trip, origin, destination),
       `${tripFileBase(origin, destination)}.gpx`,
@@ -306,7 +308,13 @@ export function PrintItinerary({
             {tr("PDF export preview")}
           </p>
           <div className="flex flex-wrap gap-2">
-            <Button size="sm" onClick={() => window.print()}>
+            <Button
+              size="sm"
+              onClick={() => {
+                void trackEvent("export_pdf", { source: "itinerary" });
+                window.print();
+              }}
+            >
               <Printer className="size-4" /> {tr("Download PDF / Print")}
             </Button>
             <Button size="sm" variant="secondary" onClick={downloadGpx}>

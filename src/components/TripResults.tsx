@@ -18,6 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAuth } from "@/lib/auth";
+import { trackEvent } from "@/lib/analytics";
 import { Switch } from "@/components/ui/switch";
 import { PartnerOffers } from "@/components/PartnerOffers";
 
@@ -225,6 +226,7 @@ export function TripResults({
   };
 
   const saveTrip = () => {
+    void trackEvent("save_trip_clicked", { signedIn: Boolean(user), countries: trip.segments.length });
     if (!user) {
       setSavePrompt(true);
       return;
