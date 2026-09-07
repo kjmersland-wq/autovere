@@ -92,6 +92,48 @@ export const TOLL_TAGS = [
 const VEHICLE_KEY = "autovere.vehicles";
 const ACTIVE_VEHICLE_KEY = "autovere.activeVehicle";
 export const TRIPS_KEY = "autovere.savedTrips";
+const TRAVEL_PROFILE_KEY = "autovere.travelProfile";
+
+/** A child in the travel party, with an approximate (not exact) age. */
+export type TravelChild = {
+  id: string;
+  age: number | "";
+};
+
+/** Optional foundation data for a future personalized-POI feature. */
+export type TravelProfile = {
+  adults: number;
+  children: TravelChild[];
+  interests: string[];
+};
+
+/** Broad predefined interests — deliberately not free-text, so future POI matching can rely on fixed keys. */
+export const TRAVEL_INTERESTS = [
+  "Natur og turer",
+  "Strand og bading",
+  "Museer og kultur",
+  "Fornøyelsesparker",
+  "Dyreliv og dyrepark",
+  "Vannsport",
+  "Vintersport",
+  "Mat og lokal matkultur",
+  "Historie og slott",
+  "Shopping",
+  "Nattliv",
+  "Lekeplasser og familievennlig",
+  "Sykling",
+  "Fotografering og utsikt",
+  "Avslapning og spa",
+  "Sport og adventure",
+  "Camping og friluftsliv",
+  "Festivaler og arrangementer",
+] as const;
+
+export const DEFAULT_TRAVEL_PROFILE: TravelProfile = {
+  adults: 2,
+  children: [],
+  interests: [],
+};
 
 export const DEFAULT_VEHICLES: GarageVehicle[] = [
   {
@@ -242,6 +284,31 @@ export function loadActiveVehicle(): GarageVehicle | null {
   const id = loadActiveVehicleId();
   if (!id) return null;
   return loadVehicles().find((v) => v.id === id) ?? null;
+}
+
+/** Optional travel-party profile — foundation data only, no POI matching yet. */
+export function loadTravelProfile(): TravelProfile {
+  if (typeof window === "undefined") return DEFAULT_TRAVEL_PROFILE;
+  try {
+    const raw = localStorage.getItem(TRAVEL_PROFILE_KEY);
+    if (!raw) return DEFAULT_TRAVEL_PROFILE;
+    const parsed = JSON.parse(raw) as Partial<TravelProfile>;
+    return {
+      adults: typeof parsed.adults === "number" ? parsed.adults : DEFAULT_TRAVEL_PROFILE.adults,
+      children: Array.isArray(parsed.children) ? parsed.children : [],
+      interests: Array.isArray(parsed.interests) ? parsed.interests : [],
+    };
+  } catch {
+    return DEFAULT_TRAVEL_PROFILE;
+  }
+}
+
+export function saveTravelProfile(profile: TravelProfile) {
+  try {
+    localStorage.setItem(TRAVEL_PROFILE_KEY, JSON.stringify(profile));
+  } catch {
+    /* storage unavailable */
+  }
 }
 
 /** Pull the first number out of a free-text field such as "18 kWh/100 km". */
