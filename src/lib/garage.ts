@@ -20,23 +20,54 @@ export type GarageVehicle = {
 };
 
 /** Charging operators the planner can prioritise along a corridor. */
-export const CHARGING_NETWORKS = [
+export const BASE_CHARGING_NETWORKS = [
   "All networks",
   "Tesla Supercharger",
-  "Ionity",
+  "IONITY",
   "EnBW mobility+",
   "Fastned",
-  "GreenWay Polska",
-  "Orlen Charge",
+  "GreenWay",
+  "ORLEN Charge",
   "Allego",
   "Recharge",
   "Mer",
   "Clever",
   "Electrify America",
-  "EvGo",
+  "EVgo",
   "Electrify Canada",
   "FLO",
   "Petro-Canada eV",
+] as const;
+
+export const CHARGING_NETWORKS = [
+  ...BASE_CHARGING_NETWORKS,
+  "Aral pulse",
+  "Shell Recharge",
+  "bp pulse",
+  "Electra",
+  "Powerdot",
+  "Lidl",
+  "Kaufland",
+  "Elocity",
+  "Eleport",
+  "Polenergia",
+  "Circle K",
+  "E.ON Drive",
+  "Vattenfall InCharge",
+  "CEZ",
+  "Smatrics",
+  "TotalEnergies",
+  "Enel X Way",
+  "Free To X",
+  "Zunder",
+  "Iberdrola",
+  "Spirii",
+  "Gridserve",
+  "InstaVolt",
+  "ChargePoint",
+  "BC Hydro EV",
+  "Circuit Electrique",
+  "Ivy Charging Network",
 ] as const;
 
 export const ALL_NETWORKS = "All networks";

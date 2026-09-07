@@ -117,7 +117,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       name: active.name,
       kwhPer100: active.kwhPer100 ?? parseNumber(active.consumption),
       batteryKwh: active.batteryKwh ?? parseNumber(active.tank),
-      network: active.network,
+      network: active.network?.includes(",") ? undefined : active.network,
       bufferPct: active.bufferPct,
     });
     if (active.fuel === "ev") setFuel("electric");

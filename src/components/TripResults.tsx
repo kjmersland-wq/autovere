@@ -44,6 +44,7 @@ import {
   ROUTE_VARIANTS,
   applyNetworkFilter,
   ENGLISH_ONLY_POI_IDS,
+  EV_CHARGING_POIS,
   RV_POIS,
   SCENIC_HIGHLIGHTS,
   detectScandiBridges,
@@ -187,6 +188,9 @@ export function TripResults({
   const isVisiblePoi = (id: string) => showEnglishOnlyPois || !ENGLISH_ONLY_POI_IDS.has(id);
   const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
   const rvPois = filterByCorridor(RV_POIS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
+  const evChargingPois = showEnglishOnlyPois && fuel === "electric"
+    ? filterByCorridor(EV_CHARGING_POIS[region], corridorCoords, 30)
+    : [];
   const m = useMoney(trip.currency);
   const nativePrice = (value: number, symbol: string) =>
     formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
@@ -316,6 +320,54 @@ export function TripResults({
       <div className="glass-panel mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl px-5 py-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+
+      {evChargingPois.length > 0 && (
+        <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">⚡</span>
+            <h3 className="text-lg font-semibold tracking-tight">EV charging hubs along this route</h3>
+          </div>
+          <p className="mt-1 text-sm text-foreground/70">
+            Reliable high-power stops near your corridor, so the charging part of the day feels calm and easy.
+          </p>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {evChargingPois.map((p) => (
+              <article key={p.id} className="rounded-2xl border border-border bg-background/40 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">{p.network}</p>
+                <p className="mt-2 text-sm font-semibold">{p.name}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{p.where}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.connectors}
+                  </span>
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.power}
+                  </span>
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.access}
+                  </span>
+                  {p.price && (
+                    <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+                      {p.price}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-3 text-sm text-foreground/80">{p.note}</p>
+                <PoiLinks kind="ev" name={p.name} where={p.where} region={region} website={p.website} />
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="mt-3"
+                  onClick={() => onAddStop?.(p.name)}
+                >
+                  {t.results.addStop}
+                </Button>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
             {t.results.displayCurrency}
           </p>
           <p className="mt-1 text-xs text-foreground/70">

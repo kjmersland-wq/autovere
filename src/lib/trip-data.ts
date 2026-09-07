@@ -280,8 +280,8 @@ export function applyNetworkFilter(
 }
 
 const EV_NETWORKS: Record<RegionKey, string[]> = {
-  eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego"],
-  us: ["Electrify America", "Tesla Supercharger", "EVgo"],
+  eu: ["IONITY", "Fastned", "Tesla Supercharger", "Allego", "EnBW mobility+", "Aral pulse", "Shell Recharge", "bp pulse", "Electra", "Powerdot", "GreenWay", "ORLEN Charge", "Circle K"],
+  us: ["Electrify America", "Tesla Supercharger", "EVgo", "ChargePoint", "Shell Recharge", "bp pulse"],
   ca: [
     "FLO",
     "Tesla Supercharger",
@@ -291,32 +291,33 @@ const EV_NETWORKS: Record<RegionKey, string[]> = {
     "BC Hydro EV",
     "ChargePoint Canada",
     "Ivy Charging Network (ON)",
+    "Shell Recharge",
   ],
 };
 
 /** Charging networks that actually operate in each country on the corridor. */
 const COUNTRY_EV_NETWORKS: Record<string, string[]> = {
-  DK: ["Clever", "Ionity", "Tesla Supercharger", "Spirii"],
-  DE: ["Ionity", "EnBW mobility+", "Tesla Supercharger", "Aral pulse"],
-  PL: ["GreenWay Polska", "Ionity", "Orlen Charge", "Tesla Supercharger"],
-  NL: ["Fastned", "Allego", "Ionity", "Tesla Supercharger"],
-  BE: ["Fastned", "Ionity", "Allego", "Tesla Supercharger"],
-  FR: ["Ionity", "TotalEnergies", "Tesla Supercharger", "Electra"],
-  IT: ["Ionity", "Enel X Way", "Tesla Supercharger", "Free To X"],
-  ES: ["Iberdrola", "Ionity", "Tesla Supercharger", "Zunder"],
-  NO: ["Recharge", "Ionity", "Tesla Supercharger", "Mer"],
-  SE: ["Recharge", "Ionity", "Tesla Supercharger", "Mer"],
-  FI: ["Kesko K-Lataus", "Ionity", "Tesla Supercharger"],
-  AT: ["Ionity", "Smatrics", "Tesla Supercharger"],
-  CH: ["Ionity", "MOVE", "Tesla Supercharger"],
-  CZ: ["ČEZ Futur/E", "Ionity", "Tesla Supercharger"],
-  SK: ["ZSE Drive", "Ionity", "Tesla Supercharger"],
-  HU: ["MOL Plugee", "Ionity", "Tesla Supercharger"],
-  SI: ["Petrol", "Ionity", "Tesla Supercharger"],
-  HR: ["ELEN", "Ionity", "Tesla Supercharger"],
-  US: ["Electrify America", "Tesla Supercharger", "EVgo"],
-  CA: ["FLO", "Tesla Supercharger", "Petro-Canada eV", "Electrify Canada"],
-  GB: ["Ionity", "InstaVolt", "Tesla Supercharger", "Gridserve"],
+  DK: ["Clever", "IONITY", "Tesla Supercharger", "Spirii", "E.ON Drive", "Circle K"],
+  DE: ["IONITY", "EnBW mobility+", "Tesla Supercharger", "Aral pulse", "Shell Recharge", "E.ON Drive", "Fastned", "Allego"],
+  PL: ["GreenWay", "ORLEN Charge", "IONITY", "Tesla Supercharger", "Elocity", "Eleport", "Polenergia", "Lidl", "Kaufland"],
+  NL: ["Fastned", "Allego", "IONITY", "Tesla Supercharger", "Shell Recharge", "Powerdot"],
+  BE: ["Fastned", "IONITY", "Allego", "Tesla Supercharger", "Powerdot", "TotalEnergies"],
+  FR: ["IONITY", "TotalEnergies", "Tesla Supercharger", "Electra", "Powerdot", "Allego", "Fastned"],
+  IT: ["IONITY", "Enel X Way", "Tesla Supercharger", "Free To X", "Ewiva", "Be Charge"],
+  ES: ["Iberdrola", "IONITY", "Tesla Supercharger", "Zunder", "Powerdot", "Endesa X"],
+  NO: ["Recharge", "IONITY", "Tesla Supercharger", "Mer", "Circle K", "Eviny"],
+  SE: ["Recharge", "IONITY", "Tesla Supercharger", "Mer", "Circle K", "Vattenfall InCharge"],
+  FI: ["Kesko K-Lataus", "IONITY", "Tesla Supercharger", "Recharge", "ABC-lataus"],
+  AT: ["IONITY", "Smatrics", "Tesla Supercharger", "E.ON Drive", "Shell Recharge"],
+  CH: ["IONITY", "MOVE", "Tesla Supercharger", "Fastned", "GOFAST"],
+  CZ: ["CEZ", "IONITY", "Tesla Supercharger", "E.ON Drive", "PREpoint"],
+  SK: ["ZSE Drive", "IONITY", "Tesla Supercharger", "GreenWay"],
+  HU: ["MOL Plugee", "IONITY", "Tesla Supercharger", "E.ON Drive"],
+  SI: ["Petrol", "IONITY", "Tesla Supercharger", "E.ON Drive"],
+  HR: ["ELEN", "IONITY", "Tesla Supercharger", "Petrol"],
+  US: ["Electrify America", "Tesla Supercharger", "EVgo", "ChargePoint", "Shell Recharge", "bp pulse"],
+  CA: ["FLO", "Tesla Supercharger", "Petro-Canada eV", "Electrify Canada", "BC Hydro EV", "ChargePoint Canada", "Ivy Charging Network (ON)", "Circuit Électrique (QC)"],
+  GB: ["IONITY", "InstaVolt", "Tesla Supercharger", "Gridserve", "bp pulse", "Shell Recharge", "Osprey"],
 };
 
 function buildOptimizer(
@@ -1220,6 +1221,21 @@ export interface RvPoi {
   website?: string;
 }
 
+export interface EvChargingPoi {
+  id: string;
+  lat: number;
+  lng: number;
+  network: string;
+  name: string;
+  where: string;
+  connectors: string;
+  power: string;
+  access: string;
+  note: string;
+  website: string;
+  price?: string;
+}
+
 export const ENGLISH_ONLY_POI_IDS = new Set([
   "eu-dalsnibba",
   "eu-aurlandsfjellet",
@@ -1495,6 +1511,87 @@ export const RV_POIS: Record<RegionKey, RvPoi[]> = {
     { id: "ca-cavendish", lat: 46.498, lng: -63.402, emoji: "🚐", name: "Cavendish Campground", where: "Prince Edward Island National Park", note: "Easy PEI north-shore base after the Confederation Bridge crossing.", services: ["Serviced sites", "Showers", "Beach access"], website: "https://parks.canada.ca/pn-np/pe/pei-ipe/activ/camping/cavendish" },
     { id: "ca-gros-morne-green-point", lat: 49.677, lng: -57.96, emoji: "🚐", name: "Green Point Campground", where: "Gros Morne National Park, Newfoundland", note: "Coastal Parks Canada campground on the Viking Trail, with big sunset potential.", services: ["Campground", "Kitchen shelter", "Ocean access"], website: "https://parks.canada.ca/pn-np/nl/grosmorne/activ/camping" },
     { id: "ca-tombstone", lat: 64.404, lng: -138.374, emoji: "🚐", name: "Tombstone Territorial Park Campground", where: "Dempster Highway, Yukon", note: "Remote gravel-road staging point; arrive self-sufficient and check current conditions.", services: ["Dry camping", "Outhouses", "Visitor centre nearby"], website: "https://yukon.ca/en/outdoor-recreation-and-wildlife/camping/site/tombstone-mountain-campground" },
+  ],
+};
+
+export const EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
+  eu: [
+    { id: "ev-eu-ionity-koege", lat: 55.4705, lng: 12.1862, network: "IONITY", name: "IONITY Koge", where: "Koge, Denmark", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public motorway access", note: "A useful south-of-Copenhagen top-up before the Rodby ferry or the E47/E55 run into Germany.", website: "https://ionity.eu/" },
+    { id: "ev-eu-clever-nyborg", lat: 55.312, lng: 10.803, network: "Clever", name: "Clever Nyborg", where: "Nyborg, Denmark", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Handy before or after the Great Belt crossing, with food and rest stops close by.", website: "https://clever.dk/" },
+    { id: "ev-eu-enbw-hamburg-stillhorn", lat: 53.475, lng: 10.017, network: "EnBW mobility+", name: "EnBW Hamburg-Stillhorn", where: "A1 near Hamburg, Germany", connectors: "CCS", power: "High-power DC charging", access: "Public charging with EnBW app/card and roaming", note: "A reliable northern Germany hub on the Denmark-Hamburg corridor.", website: "https://www.enbw.com/e-mobility/" },
+    { id: "ev-eu-aral-hannover", lat: 52.335, lng: 9.807, network: "Aral pulse", name: "Aral pulse Hannover", where: "Hannover, Germany", connectors: "CCS", power: "Ultra-fast DC charging", access: "Public station access", note: "Good mid-Germany stop on A2/A7 style transit days, with fuel-station services nearby.", website: "https://www.aral.de/en/global/retail/pulse.html" },
+    { id: "ev-eu-fastned-kaarst", lat: 51.224, lng: 6.642, network: "Fastned", name: "Fastned Kaarst", where: "A57 near Dusseldorf, Germany", connectors: "CCS", power: "High-power DC charging", access: "Public contactless/app access", note: "Bright, easy canopies close to the Dutch-German corridor around Dusseldorf.", website: "https://www.fastnedcharging.com/" },
+    { id: "ev-eu-ionity-brohltal", lat: 50.456, lng: 7.303, network: "IONITY", name: "IONITY Brohltal Ost", where: "A61, Germany", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public motorway service access", note: "A strong Rhine corridor top-up between Cologne, Koblenz and southern Germany.", website: "https://ionity.eu/" },
+    { id: "ev-eu-tesla-hilden", lat: 51.171, lng: 6.93, network: "Tesla Supercharger", name: "Tesla Supercharger Hilden", where: "Hilden, Germany", connectors: "CCS", power: "DC fast charging", access: "Tesla app access; some sites open to non-Tesla vehicles", note: "Large Rhine-Ruhr charging stop with food options nearby.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-eu-allego-venlo", lat: 51.37, lng: 6.172, network: "Allego", name: "Allego Venlo", where: "Venlo, Netherlands", connectors: "CCS", power: "DC fast charging", access: "Public roaming/app access", note: "Useful border-area stop between the Netherlands and Germany.", website: "https://www.allego.eu/" },
+    { id: "ev-eu-fastned-de-watering", lat: 51.895, lng: 4.447, network: "Fastned", name: "Fastned De Watering", where: "A20 Rotterdam, Netherlands", connectors: "CCS", power: "High-power DC charging", access: "Public contactless/app access", note: "Good Rotterdam-area stop for ferry, port and western Netherlands routes.", website: "https://www.fastnedcharging.com/" },
+    { id: "ev-eu-shell-antwerp", lat: 51.213, lng: 4.402, network: "Shell Recharge", name: "Shell Recharge Antwerp", where: "Antwerp, Belgium", connectors: "CCS", power: "DC fast charging", access: "Public Shell Recharge and roaming access", note: "Practical city-edge charging on Benelux transit routes.", website: "https://shellrecharge.com/" },
+    { id: "ev-eu-electra-paris", lat: 48.844, lng: 2.374, network: "Electra", name: "Electra Paris-Bercy", where: "Paris, France", connectors: "CCS", power: "Fast DC charging", access: "Public app/card access", note: "A useful urban fast-charge option before leaving Paris for the autoroute network.", website: "https://www.go-electra.com/" },
+    { id: "ev-eu-total-beaune", lat: 47.02, lng: 4.839, network: "TotalEnergies", name: "TotalEnergies Beaune", where: "A6 Burgundy, France", connectors: "CCS", power: "High-power DC charging", access: "Public motorway service access", note: "Well placed on the classic Paris-Lyon-Mediterranean route.", website: "https://services.totalenergies.fr/mobilite-electrique" },
+    { id: "ev-eu-ionity-macon", lat: 46.312, lng: 4.827, network: "IONITY", name: "IONITY Macon Saint-Albain", where: "A6, France", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public motorway service access", note: "A strong long-distance stop between Burgundy, Lyon and the Alps.", website: "https://ionity.eu/" },
+    { id: "ev-eu-powerdot-avignon", lat: 43.943, lng: 4.807, network: "Powerdot", name: "Powerdot Avignon", where: "Avignon, France", connectors: "CCS", power: "DC fast charging", access: "Public app/roaming access", note: "Convenient before Provence, Verdon and Mediterranean detours.", website: "https://www.powerdot.eu/" },
+    { id: "ev-eu-ionity-aosta", lat: 45.739, lng: 7.326, network: "IONITY", name: "IONITY Aosta", where: "Aosta Valley, Italy", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public motorway access", note: "Helpful Alpine charging before Mont Blanc, Gran San Bernardo or northern Italy routes.", website: "https://ionity.eu/" },
+    { id: "ev-eu-free-to-x-modena", lat: 44.652, lng: 10.925, network: "Free To X", name: "Free To X Modena", where: "A1, Italy", connectors: "CCS", power: "High-power DC charging", access: "Public motorway service access", note: "A useful Po Valley fast-charge point between Milan, Bologna and Florence.", website: "https://freeto-x.it/" },
+    { id: "ev-eu-enel-garda", lat: 45.439, lng: 10.692, network: "Enel X Way", name: "Enel X Way Peschiera del Garda", where: "Lake Garda, Italy", connectors: "CCS", power: "DC fast charging", access: "Public app/roaming access", note: "Well placed for Lake Garda stays and the Brenner-Verona corridor.", website: "https://www.enelxway.com/" },
+    { id: "ev-eu-smatrics-zell", lat: 47.323, lng: 12.798, network: "Smatrics", name: "Smatrics Zell am See", where: "Salzburg, Austria", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Good overnight-area charger before the Grossglockner High Alpine Road.", website: "https://smatrics.com/" },
+    { id: "ev-eu-ionity-angath", lat: 47.507, lng: 12.072, network: "IONITY", name: "IONITY Angath", where: "A12 Tyrol, Austria", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public motorway service access", note: "Strong Tyrol corridor stop for Innsbruck, Brenner and Salzburg routes.", website: "https://ionity.eu/" },
+    { id: "ev-eu-gofast-gotthard", lat: 46.55, lng: 8.592, network: "GOFAST", name: "GOFAST Gotthard", where: "Airolo, Switzerland", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Useful near the Gotthard approaches, especially before Alpine weather changes.", website: "https://gofast.swiss/" },
+    { id: "ev-eu-greenway-krakow", lat: 50.043, lng: 19.998, network: "GreenWay", name: "GreenWay Krakow", where: "Krakow, Poland", connectors: "CCS", power: "DC fast charging", access: "Public GreenWay app/card access", note: "A practical southern Poland hub for Krakow, Zakopane and Slovakia corridors.", website: "https://greenwaypolska.pl/" },
+    { id: "ev-eu-orlen-poznan", lat: 52.406, lng: 16.925, network: "ORLEN Charge", name: "ORLEN Charge Poznan", where: "Poznan, Poland", connectors: "CCS", power: "DC fast charging", access: "Public station access", note: "Good west-central Poland charging on Germany-Warsaw transit days.", website: "https://orlencharge.pl/" },
+    { id: "ev-eu-elocity-warsaw", lat: 52.229, lng: 21.012, network: "Elocity", name: "Elocity Warsaw", where: "Warsaw, Poland", connectors: "CCS", power: "DC fast charging", access: "Public app/roaming access", note: "Urban Warsaw option for route starts, returns and hotel-area charging.", website: "https://elo.city/" },
+    { id: "ev-eu-eleport-tallinn", lat: 59.437, lng: 24.753, network: "Eleport", name: "Eleport Tallinn", where: "Tallinn, Estonia", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Useful Baltic hub around ferry arrivals and the Via Baltica corridor.", website: "https://eleport.com/" },
+    { id: "ev-eu-cez-prague", lat: 50.075, lng: 14.438, network: "CEZ", name: "CEZ Prague", where: "Prague, Czechia", connectors: "CCS", power: "DC fast charging", access: "Public CEZ app/card access", note: "Good city-area network coverage for Prague starts and cross-country trips.", website: "https://www.cez.cz/en/charging-stations" },
+    { id: "ev-eu-ionity-brno", lat: 49.195, lng: 16.607, network: "IONITY", name: "IONITY Brno", where: "Brno, Czechia", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public motorway access", note: "A useful Moravia stop between Prague, Vienna, Bratislava and Poland.", website: "https://ionity.eu/" },
+    { id: "ev-eu-circlek-oslo", lat: 59.912, lng: 10.75, network: "Circle K", name: "Circle K Oslo fast charging", where: "Oslo, Norway", connectors: "CCS", power: "DC fast charging", access: "Public station/app access", note: "Helpful before long E6, E18 or mountain-route departures from Oslo.", website: "https://www.circlek.no/elbillading" },
+    { id: "ev-eu-ionity-dombas", lat: 62.075, lng: 9.124, network: "IONITY", name: "IONITY Dombas", where: "Dombas, Norway", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public route charging", note: "A key inland Norway stop where E6, Dovre and mountain routes meet.", website: "https://ionity.eu/" },
+    { id: "ev-eu-recharge-geiranger", lat: 62.101, lng: 7.206, network: "Recharge", name: "Recharge Geiranger", where: "Geiranger, Norway", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Useful fjord top-up before ferry, Dalsnibba or the road towards Stryn.", website: "https://rechargeinfra.com/" },
+    { id: "ev-eu-mer-trondheim", lat: 63.43, lng: 10.395, network: "Mer", name: "Mer Trondheim", where: "Trondheim, Norway", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Good hub for E6 northbound, Atlantic Road detours and central Norway routing.", website: "https://no.mer.eco/" },
+    { id: "ev-eu-vattenfall-stockholm", lat: 59.329, lng: 18.068, network: "Vattenfall InCharge", name: "Vattenfall InCharge Stockholm", where: "Stockholm, Sweden", connectors: "CCS", power: "DC fast charging", access: "Public InCharge app/card access", note: "Useful around Stockholm starts, ferry arrivals and E4 corridor trips.", website: "https://incharge.vattenfall.se/" },
+    { id: "ev-eu-circlek-umea", lat: 63.825, lng: 20.263, network: "Circle K", name: "Circle K Umea", where: "Umea, Sweden", connectors: "CCS", power: "DC fast charging", access: "Public station/app access", note: "A reassuring northern Sweden stop for long E4 days.", website: "https://www.circlek.se/elbilsladdning" },
+    { id: "ev-eu-k-lataus-helsinki", lat: 60.17, lng: 24.938, network: "Kesko K-Lataus", name: "K-Lataus Helsinki", where: "Helsinki, Finland", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Good city and ferry-area coverage before Finnish road-trip legs.", website: "https://www.k-lataus.fi/" },
+    { id: "ev-eu-abc-oulu", lat: 65.012, lng: 25.465, network: "ABC-lataus", name: "ABC-lataus Oulu", where: "Oulu, Finland", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Useful on the long E75/E8 northern Finland corridors.", website: "https://www.abcasemat.fi/lataus" },
+    { id: "ev-eu-gridserve-folkestone", lat: 51.095, lng: 1.121, network: "Gridserve", name: "Gridserve Folkestone", where: "Kent, United Kingdom", connectors: "CCS", power: "High-power DC charging", access: "Public contactless/app access", note: "A sensible top-up before the Channel Tunnel or Dover-Calais crossings.", website: "https://www.gridserve.com/" },
+    { id: "ev-eu-bp-pulse-birmingham", lat: 52.486, lng: -1.89, network: "bp pulse", name: "bp pulse Birmingham", where: "Birmingham, United Kingdom", connectors: "CCS", power: "Rapid and ultra-fast DC charging", access: "Public bp pulse app/card access", note: "Good Midlands coverage for north-south UK road trips.", website: "https://www.bppulse.co.uk/" },
+    { id: "ev-eu-instavolt-winchester", lat: 51.062, lng: -1.316, network: "InstaVolt", name: "InstaVolt Winchester", where: "Hampshire, United Kingdom", connectors: "CCS", power: "Rapid DC charging", access: "Public contactless access", note: "A handy A34/M3 corridor stop between the South Coast, London and the Midlands.", website: "https://instavolt.co.uk/" },
+  ],
+  us: [
+    { id: "ev-us-tesla-buellton", lat: 34.613, lng: -120.193, network: "Tesla Supercharger", name: "Tesla Supercharger Buellton", where: "Buellton, California", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access; some sites open to non-Tesla vehicles", note: "A classic Highway 101 / Central Coast charging stop before Santa Barbara or Pismo.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-us-electrify-america-pismo", lat: 35.142, lng: -120.636, network: "Electrify America", name: "Electrify America Pismo Beach", where: "Pismo Beach, California", connectors: "CCS", power: "DC fast charging up to 350 kW where available", access: "Public app/card access", note: "Well placed for Pacific Coast Highway and US-101 road days.", website: "https://www.electrifyamerica.com/" },
+    { id: "ev-us-tesla-kettleman", lat: 36.01, lng: -119.961, network: "Tesla Supercharger", name: "Tesla Supercharger Kettleman City", where: "Kettleman City, California", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "A major I-5 California charging hub between the Bay Area, LA and Yosemite detours.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-us-electrify-america-bakersfield", lat: 35.373, lng: -119.019, network: "Electrify America", name: "Electrify America Bakersfield", where: "Bakersfield, California", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Useful before Tehachapi, Death Valley approaches or Central Valley transit.", website: "https://www.electrifyamerica.com/" },
+    { id: "ev-us-evgo-las-vegas", lat: 36.17, lng: -115.14, network: "EVgo", name: "EVgo Las Vegas", where: "Las Vegas, Nevada", connectors: "CCS", power: "DC fast charging", access: "Public EVgo app/card access", note: "Good urban hub before desert drives towards Utah, Arizona or Death Valley.", website: "https://www.evgo.com/" },
+    { id: "ev-us-electrify-america-st-george", lat: 37.096, lng: -113.568, network: "Electrify America", name: "Electrify America St. George", where: "St. George, Utah", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Helpful for Zion, Bryce and I-15 corridor planning.", website: "https://www.electrifyamerica.com/" },
+    { id: "ev-us-tesla-moab", lat: 38.573, lng: -109.55, network: "Tesla Supercharger", name: "Tesla Supercharger Moab", where: "Moab, Utah", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "A key charging base for Arches, Canyonlands and Scenic Byway 12 loops.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-us-chargepoint-grand-junction", lat: 39.063, lng: -108.55, network: "ChargePoint", name: "ChargePoint Grand Junction", where: "Grand Junction, Colorado", connectors: "CCS", power: "DC fast charging", access: "Public ChargePoint app/card access", note: "Good western Colorado hub before I-70 mountain sections or Moab detours.", website: "https://www.chargepoint.com/" },
+    { id: "ev-us-electrify-america-frisco", lat: 39.574, lng: -106.098, network: "Electrify America", name: "Electrify America Frisco", where: "Frisco, Colorado", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Useful before Rocky Mountain passes, ski towns and I-70 weather windows.", website: "https://www.electrifyamerica.com/" },
+    { id: "ev-us-tesla-cody", lat: 44.526, lng: -109.056, network: "Tesla Supercharger", name: "Tesla Supercharger Cody", where: "Cody, Wyoming", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "A practical Beartooth, Chief Joseph and Yellowstone-area charging stop.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-us-electrify-america-bozeman", lat: 45.679, lng: -111.039, network: "Electrify America", name: "Electrify America Bozeman", where: "Bozeman, Montana", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Helpful on I-90 and Yellowstone approach routes.", website: "https://www.electrifyamerica.com/" },
+    { id: "ev-us-tesla-kalispell", lat: 48.198, lng: -114.316, network: "Tesla Supercharger", name: "Tesla Supercharger Kalispell", where: "Kalispell, Montana", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "Useful Glacier National Park staging stop before Going-to-the-Sun Road.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-us-electrify-america-port-angeles", lat: 48.118, lng: -123.43, network: "Electrify America", name: "Electrify America Port Angeles", where: "Port Angeles, Washington", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Good Olympic Peninsula charging before Hurricane Ridge or ferry connections.", website: "https://www.electrifyamerica.com/" },
+    { id: "ev-us-tesla-bend", lat: 44.058, lng: -121.315, network: "Tesla Supercharger", name: "Tesla Supercharger Bend", where: "Bend, Oregon", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "A strong central Oregon hub for Cascade Lakes, US-97 and volcanic byways.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-us-electrify-america-troutdale", lat: 45.54, lng: -122.387, network: "Electrify America", name: "Electrify America Troutdale", where: "Troutdale, Oregon", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Well placed before the Historic Columbia River Highway and Gorge routes.", website: "https://www.electrifyamerica.com/" },
+    { id: "ev-us-chargepoint-asheville", lat: 35.595, lng: -82.551, network: "ChargePoint", name: "ChargePoint Asheville", where: "Asheville, North Carolina", connectors: "CCS", power: "DC fast charging", access: "Public ChargePoint app/card access", note: "Useful Blue Ridge Parkway and Smokies charging around Asheville.", website: "https://www.chargepoint.com/" },
+    { id: "ev-us-tesla-knoxville", lat: 35.96, lng: -83.92, network: "Tesla Supercharger", name: "Tesla Supercharger Knoxville", where: "Knoxville, Tennessee", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "Good base for Tail of the Dragon, Cherohala Skyway and Smokies routes.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-us-evgo-orlando", lat: 28.538, lng: -81.379, network: "EVgo", name: "EVgo Orlando", where: "Orlando, Florida", connectors: "CCS", power: "DC fast charging", access: "Public EVgo app/card access", note: "Useful central Florida hub before Turnpike, Space Coast or Keys approaches.", website: "https://www.evgo.com/" },
+    { id: "ev-us-electrify-america-key-largo", lat: 25.086, lng: -80.447, network: "Electrify America", name: "Electrify America Key Largo", where: "Key Largo, Florida", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "A helpful first Keys stop before the long Overseas Highway run.", website: "https://www.electrifyamerica.com/" },
+    { id: "ev-us-tesla-bar-harbor", lat: 44.387, lng: -68.204, network: "Tesla Supercharger", name: "Tesla Supercharger Bar Harbor", where: "Bar Harbor, Maine", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "Good Acadia National Park charging close to Park Loop Road.", website: "https://www.tesla.com/supercharger" },
+  ],
+  ca: [
+    { id: "ev-ca-flo-quebec", lat: 46.813, lng: -71.208, network: "FLO", name: "FLO Quebec City", where: "Quebec City, Quebec", connectors: "CCS", power: "DC fast charging", access: "Public FLO app/card access", note: "Useful St. Lawrence corridor hub between Montreal, Charlevoix and the Maritimes.", website: "https://www.flo.com/" },
+    { id: "ev-ca-circuit-charlevoix", lat: 47.442, lng: -70.506, network: "Circuit Electrique", name: "Circuit Electrique Baie-Saint-Paul", where: "Charlevoix, Quebec", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "A well-placed stop for Route du Fleuve and Saguenay side trips.", website: "https://lecircuitelectrique.com/" },
+    { id: "ev-ca-tesla-montreal", lat: 45.501, lng: -73.567, network: "Tesla Supercharger", name: "Tesla Supercharger Montreal", where: "Montreal, Quebec", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "Good city hub before Autoroute 20, Ottawa or Quebec City routes.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-ca-ivy-kingston", lat: 44.231, lng: -76.486, network: "Ivy Charging Network", name: "Ivy Kingston", where: "Kingston, Ontario", connectors: "CCS", power: "DC fast charging", access: "Public Ivy app/card access", note: "A friendly halfway-style stop on the Toronto-Ottawa-Montreal corridor.", website: "https://ivycharge.com/" },
+    { id: "ev-ca-petro-canada-barrie", lat: 44.389, lng: -79.69, network: "Petro-Canada eV", name: "Petro-Canada eV Barrie", where: "Barrie, Ontario", connectors: "CCS", power: "DC fast charging", access: "Public Petro-Canada app/card access", note: "Useful before cottage-country, Algonquin and Highway 400 routes.", website: "https://www.petro-canada.ca/en/personal/fuel/ev-fast-charge-network" },
+    { id: "ev-ca-electrify-canada-canmore", lat: 51.089, lng: -115.359, network: "Electrify Canada", name: "Electrify Canada Canmore", where: "Canmore, Alberta", connectors: "CCS", power: "DC fast charging up to 350 kW where available", access: "Public app/card access", note: "Excellent Banff gateway charging before Bow Valley, Lake Louise and Icefields Parkway days.", website: "https://www.electrify-canada.ca/" },
+    { id: "ev-ca-tesla-calgary", lat: 51.045, lng: -114.071, network: "Tesla Supercharger", name: "Tesla Supercharger Calgary", where: "Calgary, Alberta", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "Good urban launch point for Banff, Drumheller and prairie-to-Rockies trips.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-ca-flo-banff", lat: 51.178, lng: -115.57, network: "FLO", name: "FLO Banff", where: "Banff, Alberta", connectors: "CCS", power: "DC fast charging", access: "Public FLO app/card access", note: "Useful top-up inside the Bow Valley before mountain weather and park-road detours.", website: "https://www.flo.com/" },
+    { id: "ev-ca-petro-canada-golden", lat: 51.299, lng: -116.963, network: "Petro-Canada eV", name: "Petro-Canada eV Golden", where: "Golden, British Columbia", connectors: "CCS", power: "DC fast charging", access: "Public Petro-Canada app/card access", note: "A reassuring Trans-Canada stop between Yoho, Glacier and Rogers Pass.", website: "https://www.petro-canada.ca/en/personal/fuel/ev-fast-charge-network" },
+    { id: "ev-ca-bc-hydro-squamish", lat: 49.701, lng: -123.155, network: "BC Hydro EV", name: "BC Hydro EV Squamish", where: "Squamish, British Columbia", connectors: "CCS", power: "DC fast charging", access: "Public BC Hydro EV app/card access", note: "Perfectly placed on the Sea-to-Sky Highway between Vancouver and Whistler.", website: "https://electricvehicles.bchydro.com/charge/public-charging" },
+    { id: "ev-ca-tesla-whistler", lat: 50.116, lng: -122.957, network: "Tesla Supercharger", name: "Tesla Supercharger Whistler", where: "Whistler, British Columbia", connectors: "NACS; CCS availability varies by adapter/site", power: "DC fast charging", access: "Tesla app access", note: "Good mountain-town hub before Pemberton, Duffey Lake Road or the return to Vancouver.", website: "https://www.tesla.com/supercharger" },
+    { id: "ev-ca-bc-hydro-nanaimo", lat: 49.166, lng: -123.94, network: "BC Hydro EV", name: "BC Hydro EV Nanaimo", where: "Nanaimo, British Columbia", connectors: "CCS", power: "DC fast charging", access: "Public BC Hydro EV app/card access", note: "Useful Island Highway charging after ferry arrivals or before Tofino routes.", website: "https://electricvehicles.bchydro.com/charge/public-charging" },
+    { id: "ev-ca-flo-halifax", lat: 44.648, lng: -63.575, network: "FLO", name: "FLO Halifax", where: "Halifax, Nova Scotia", connectors: "CCS", power: "DC fast charging", access: "Public FLO app/card access", note: "Good city hub before Cabot Trail, Fundy and ferry-linked Maritime routes.", website: "https://www.flo.com/" },
+    { id: "ev-ca-petro-canada-moncton", lat: 46.087, lng: -64.778, network: "Petro-Canada eV", name: "Petro-Canada eV Moncton", where: "Moncton, New Brunswick", connectors: "CCS", power: "DC fast charging", access: "Public Petro-Canada app/card access", note: "Handy for Bay of Fundy, PEI and Nova Scotia road-trip connections.", website: "https://www.petro-canada.ca/en/personal/fuel/ev-fast-charge-network" },
+    { id: "ev-ca-flo-st-johns", lat: 47.561, lng: -52.712, network: "FLO", name: "FLO St. John's", where: "St. John's, Newfoundland", connectors: "CCS", power: "DC fast charging", access: "Public FLO app/card access", note: "Useful eastern Newfoundland hub before longer coastal drives.", website: "https://www.flo.com/" },
   ],
 };
 

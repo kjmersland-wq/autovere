@@ -43,6 +43,7 @@ import { useAuth } from "@/lib/auth";
 import { CURRENCIES, useCurrency } from "@/lib/currency";
 import {
   ALL_NETWORKS,
+  BASE_CHARGING_NETWORKS,
   CHARGING_NETWORKS,
   DEFAULT_TRAVEL_PROFILE,
   FUEL_LABEL,
@@ -120,6 +121,8 @@ export function GaragePage() {
   const { currency, setCurrency } = useCurrency();
   // Travel party is a Pro-only foundation feature, scoped to the default English .com site only.
   const isDefaultEnglishSite = !prefix && !region;
+  const isEnglishSite = !prefix || prefix === "us";
+  const chargingNetworkOptions = isEnglishSite ? CHARGING_NETWORKS : BASE_CHARGING_NETWORKS;
   const canUseTravelProfile = isDefaultEnglishSite && (isAdmin || hasAtLeast("pro"));
 
   const [section, setSection] = useState<SectionId>("overview");
@@ -289,6 +292,25 @@ export function GaragePage() {
       ...draft,
       tags: draft.tags.includes(tag) ? draft.tags.filter((t) => t !== tag) : [...draft.tags, tag],
     });
+  };
+
+  const selectedChargingNetworks = (network?: string) =>
+    !network || network === ALL_NETWORKS
+      ? []
+      : network.split(",").map((n) => n.trim()).filter(Boolean);
+
+  const chargingNetworkLabel = (network?: string) => {
+    const selected = selectedChargingNetworks(network);
+    return selected.length > 0 ? selected.join(", ") : tx("Alle nettverk");
+  };
+
+  const toggleChargingNetwork = (network: string) => {
+    if (!draft) return;
+    const selected = selectedChargingNetworks(draft.network);
+    const next = selected.includes(network)
+      ? selected.filter((n) => n !== network)
+      : [...selected, network];
+    setDraft({ ...draft, network: next.length > 0 ? next.join(", ") : ALL_NETWORKS });
   };
 
   const saveSettings = () => {
@@ -557,7 +579,7 @@ export function GaragePage() {
                           <p className="mt-1 text-xs text-muted-foreground">
                             {v.kwhPer100 ? `${v.kwhPer100} kWh/100 km` : tx("Forbruk ikke satt")}
                             {v.batteryKwh ? ` · ${v.batteryKwh} kWh ${tx("batteri")}` : ""}
-                            {` · 🔌 ${v.network && v.network !== ALL_NETWORKS ? v.network : tx("Alle nettverk")}`}
+                            {` · 🔌 ${chargingNetworkLabel(v.network)}`}
                           </p>
                         )}
                         <Button
@@ -1085,18 +1107,36 @@ export function GaragePage() {
                   </div>
                   <div className="grid gap-2 sm:col-span-2">
                     <Label htmlFor="v-network">{tx("Foretrukket ladenettverk")}</Label>
-                    <select
-                      id="v-network"
-                      value={draft.network ?? ALL_NETWORKS}
-                      onChange={(e) => setDraft({ ...draft, network: e.target.value })}
-                      className="h-10 rounded-md border border-border bg-background/60 px-3 text-sm"
-                    >
-                      {CHARGING_NETWORKS.map((n) => (
-                        <option key={n} value={n} className="bg-card text-foreground">
-                          {n === ALL_NETWORKS ? tx("Alle nettverk") : n}
-                        </option>
-                      ))}
-                    </select>
+                    <div id="v-network" className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDraft({ ...draft, network: ALL_NETWORKS })}
+                        className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                          selectedChargingNetworks(draft.network).length === 0
+                            ? "border-primary bg-primary/15 text-primary"
+                            : "border-border text-foreground/70 hover:bg-background/60"
+                        }`}
+                      >
+                        {tx("Alle nettverk")}
+                      </button>
+                      {chargingNetworkOptions.filter((n) => n !== ALL_NETWORKS).map((n) => {
+                        const selected = selectedChargingNetworks(draft.network).includes(n);
+                        return (
+                          <button
+                            key={n}
+                            type="button"
+                            onClick={() => toggleChargingNetwork(n)}
+                            className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                              selected
+                                ? "border-primary bg-primary/15 text-primary"
+                                : "border-border text-foreground/70 hover:bg-background/60"
+                            }`}
+                          >
+                            {n}
+                          </button>
+                        );
+                      })}
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       {tx("Ladestopp langs ruten prioriteres for dette nettverket når det finnes i nærheten.")}
                     </p>
