@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
+import { trackEvent } from "@/lib/analytics";
 import { useLocale } from "@/lib/i18n";
 import { pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib/pricing-i18n";
 import { billingReturnUrl, checkoutReturnUrl, getStripeEnvironment, PRICE_IDS } from "@/lib/stripe";
@@ -32,6 +33,7 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
         : PRICE_IDS.proMonthly;
 
   const upgrade = (tier: Tier) => {
+    void trackEvent("pro_upgrade_clicked", { tier: tier.id, cycle, signedIn: Boolean(user) });
     if (tier.id === "free") {
       toast.success(L.freeToast);
       return;

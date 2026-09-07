@@ -4,6 +4,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { useT } from "@/lib/i18n";
+import { trackEvent } from "@/lib/analytics";
 import { money, type TripEstimate } from "@/lib/trip-data";
 import { buildTripGpx, downloadFile, escapeXml } from "@/lib/trip-export";
 
@@ -95,6 +96,7 @@ export function RouteExportPanel({
   const base = `autovere-${slug(`${origin}-${destination}`, "road-trip")}`;
 
   const exportGpx = () => {
+    void trackEvent("export_gpx", { source: "export-panel" });
     downloadFile(buildTripGpx(trip, origin, destination), `${base}.gpx`, "application/gpx+xml");
     toast.success(t.export.gpxToast);
   };
@@ -123,6 +125,7 @@ export function RouteExportPanel({
   ];
 
   const printItinerary = () => {
+    void trackEvent("export_pdf", { source: "export-panel" });
     const rows = trip.segments
       .map(
         (s) => `
