@@ -30,7 +30,7 @@ export const FI_FAQ: InfoPageContent = {
     },
     {
       heading: "Tarvitsenko tilin?",
-      body: "Et. Voit suunnitella ja viedä reitin ilman rekisteröitymistä. Oma autotalli tallentaa ajoneuvosi ja matkasi omalle laitteellesi, joten mikään ei poistu selaimestasi, ellet itse päätä jakaa sitä.",
+      body: "Et. Välitön laskenta — tiliä ei tarvita esikatseluun. Oma autotalli tallentaa ajoneuvosi ja matkasi omalle laitteellesi; viennit (GPX, PDF-matkasuunnitelma, lähetä autoon) avautuvat kertamaksuisella 14 päivän Trip Passilla tai Pro-tilauksella.",
     },
   ],
   note: DISCLAIMER_FI,

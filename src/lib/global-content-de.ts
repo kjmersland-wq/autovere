@@ -117,7 +117,7 @@ export const DE_FAQ: InfoPageContent = {
     },
     {
       heading: "Brauche ich ein Konto?",
-      body: "Nein. Sie können ohne Anmeldung planen und exportieren. Meine Garage speichert Ihre Fahrzeuge und Reisen lokal auf Ihrem eigenen Gerät, sodass nichts Ihren Browser verlässt, es sei denn, Sie teilen es selbst.",
+      body: "Nein. Sofortige Berechnung — für die Vorschau ist kein Konto nötig. Meine Garage speichert Ihre Fahrzeuge und Reisen lokal auf Ihrem eigenen Gerät; Exporte (GPX, PDF-Reiseplan, Send-to-Car) werden mit dem einmaligen 14-Tage-Trip Pass oder Pro freigeschaltet.",
     },
   ],
   note: DISCLAIMER,

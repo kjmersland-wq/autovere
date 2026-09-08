@@ -117,7 +117,7 @@ export const PT_FAQ: InfoPageContent = {
     },
     {
       heading: "Preciso de ter conta?",
-      body: "Não. Pode planear e exportar sem se registar. A Minha Garagem guarda os seus veículos e viagens no seu próprio dispositivo, por isso nada sai do seu navegador a não ser que opte por partilhar.",
+      body: "Não. Cálculo instantâneo — sem conta para pré-visualizar. A Minha Garagem guarda os seus veículos e viagens no seu próprio dispositivo; as exportações (GPX, itinerário PDF, enviar para o carro) são desbloqueadas com o Trip Pass único de 14 dias ou com o Pro.",
     },
   ],
   note: DISCLAIMER,

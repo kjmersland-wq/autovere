@@ -117,7 +117,7 @@ export const FR_FAQ: InfoPageContent = {
     },
     {
       heading: "Ai-je besoin d'un compte ?",
-      body: "Non. Vous pouvez planifier et exporter sans vous inscrire. Mon Garage enregistre vos véhicules et vos voyages localement sur votre appareil, donc rien ne quitte votre navigateur à moins que vous ne choisissiez de le partager.",
+      body: "Non. Calcul instantané — aucun compte requis pour l'aperçu. Mon Garage enregistre vos véhicules et vos voyages localement sur votre appareil ; les exports (GPX, itinéraire PDF, envoi vers la voiture) se débloquent avec le Trip Pass unique de 14 jours ou avec Pro.",
     },
   ],
   note: DISCLAIMER,

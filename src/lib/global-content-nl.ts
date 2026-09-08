@@ -117,7 +117,7 @@ export const NL_FAQ: InfoPageContent = {
     },
     {
       heading: "Heb ik een account nodig?",
-      body: "Nee. Je kunt plannen en exporteren zonder je te registreren. Mijn Garage bewaart je voertuigen en reizen lokaal op je eigen apparaat, zodat er niets je browser verlaat, tenzij je ervoor kiest om het te delen.",
+      body: "Nee. Directe berekening — geen account nodig voor een voorbeeld. Mijn Garage bewaart je voertuigen en reizen lokaal op je eigen apparaat; exporteren (GPX, PDF-reisschema, naar-auto-sturen) ontgrendel je met de eenmalige Trip Pass van 14 dagen of met Pro.",
     },
   ],
   note: DISCLAIMER,
