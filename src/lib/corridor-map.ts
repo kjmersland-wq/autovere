@@ -32,10 +32,55 @@ export type EvCharger = {
   connector: "CCS" | "CHAdeMO";
 };
 
+/* ------------------------------------------------------------------ */
+/* Verified fuel/service stations (src/data/fuel_stations_eu.json)      */
+/*                                                                      */
+/* Sourced from OpenStreetMap (Overpass API): real, named motorway and  */
+/* RV-relevant fuel stations across the same 16 countries as the EV     */
+/* dataset. Loaded lazily by the caller, same rationale as EvCharger.   */
+/* ------------------------------------------------------------------ */
+
+export type FuelStation = {
+  id: string;
+  name: string;
+  brand: string;
+  lat: number;
+  lon: number;
+  country: string;
+  has_lpg: boolean;
+  has_dump_station: boolean;
+  is_24_7: boolean;
+};
+
+/** ISO-3166-1 alpha-2 -> full country name, for the countries the fuel
+ * dataset covers — needed to look up pump rates in COUNTRY_FUEL, which is
+ * keyed by name rather than by code. */
+const FUEL_COUNTRY_NAMES: Record<string, string> = {
+  NO: "Norway",
+  SE: "Sweden",
+  DK: "Denmark",
+  DE: "Germany",
+  AT: "Austria",
+  CH: "Switzerland",
+  IT: "Italy",
+  FR: "France",
+  NL: "Netherlands",
+  CZ: "Czechia",
+  SI: "Slovenia",
+  ES: "Spain",
+  PL: "Poland",
+  SK: "Slovakia",
+  BE: "Belgium",
+  HR: "Croatia",
+};
+
 /** How close a real hub must be to the actual routed polyline to count as
  * "along this trip" — matches the buffer used for mountain-pass/border
  * corridor filtering elsewhere in this codebase. */
 const EV_CORRIDOR_RADIUS_KM = 15;
+
+/** Same corridor buffer as EV chargers, applied to real fuel/service stations. */
+const FUEL_CORRIDOR_RADIUS_KM = 15;
 
 /** Loose, bidirectional match so "Ionity" (the vehicle-settings option) and
  * "IONITY" (the dataset's canonical name) — or a longer variant like
@@ -81,6 +126,30 @@ function evChargersAlongCorridor(
   const preferred = near.filter((c) => networkMatches(c.network, preferredNetwork));
   const rest = near.filter((c) => !preferred.includes(c));
   return [...preferred, ...rest];
+}
+
+/** Vehicle-specific "how relevant is this station" boost — RVs care about
+ * LPG/dump stations, motorcycles care about round-the-clock forecourts.
+ * Cars get no boost, so results stay corridor-order (nearest-first isn't
+ * tracked here; buildCorridorPois only needs a relevance ordering for pins). */
+function fuelRelevance(station: FuelStation, vehicle: VehicleKey | undefined): number {
+  if (vehicle === "motorhome") return (station.has_lpg ? 1 : 0) + (station.has_dump_station ? 1 : 0);
+  if (vehicle === "motorcycle") return station.is_24_7 ? 1 : 0;
+  return 0;
+}
+
+/** Real fuel/service stations within FUEL_CORRIDOR_RADIUS_KM of the routed
+ * polyline, with vehicle-relevant amenities (LPG/dump station for RVs,
+ * 24/7 for motorcycles) sorted first. Empty when there's no real routed
+ * polyline yet, matching the "only ever real, verified stations" rule. */
+function fuelStationsAlongCorridor(
+  allStations: FuelStation[],
+  coords: LatLng[] | undefined | null,
+  vehicle: VehicleKey | undefined,
+): FuelStation[] {
+  if (!coords || coords.length === 0) return [];
+  const near = allStations.filter((s) => distanceToCorridorKm(coords, { lat: s.lat, lng: s.lon }) <= FUEL_CORRIDOR_RADIUS_KM);
+  return [...near].sort((a, b) => fuelRelevance(b, vehicle) - fuelRelevance(a, vehicle));
 }
 
 /* ------------------------------------------------------------------ */
@@ -252,6 +321,8 @@ export function buildCorridorPois({
   passes,
   preferredNetwork,
   evChargers = [],
+  fuelStations = [],
+  vehicle,
 }: {
   region: RegionKey;
   trip: TripEstimate;
@@ -266,6 +337,12 @@ export function buildCorridorPois({
    * loaded by the caller — omitted/empty simply means no "ev" pins render,
    * never a fallback to invented ones. */
   evChargers?: EvCharger[];
+  /** The verified fuel/service station dataset (src/data/fuel_stations_eu.json),
+   * lazily loaded by the caller — omitted/empty means the "fuel" layer falls
+   * back to the synthetic placeholder stations rather than real ones. */
+  fuelStations?: FuelStation[];
+  /** Vehicle type, so RV/motorcycle-relevant stations sort first among real hits. */
+  vehicle?: VehicleKey;
 }): CorridorPoi[] {
   const rnd = makeRandom(seedFrom(`${origin}|${destination}|${trip.variant}|${region}`));
   const total = Math.max(60, trip.distanceKm);
@@ -299,22 +376,22 @@ export function buildCorridorPois({
     });
   }
 
-  const fuelCount = Math.min(6, Math.max(3, Math.round(total / 190)));
-  for (let i = 0; i < fuelCount; i += 1) {
-    const p = (i + 0.55) / (fuelCount + 0.4);
-    const brand = FUEL_BRANDS[region][Math.floor(rnd() * FUEL_BRANDS[region].length)]!;
-    const country = trip.segments.length
-      ? trip.segments[Math.min(trip.segments.length - 1, Math.floor(p * trip.segments.length))]!.country
-      : region === "us"
-        ? "United States"
-        : region === "ca"
-          ? "Canada"
-          : "Europe";
-    const rate = countryFuelEur(country);
-    push("fuel", p, `${brand} service station`, "24/7 · restrooms · café", {
+  // Real stations only (src/data/fuel_stations_eu.json — EU coverage today,
+  // same "never invented" rule as the "ev" layer above). Vehicle-relevant
+  // amenities (LPG/dump station for RVs, 24/7 for motorcycles) sort first.
+  const fuelStops = fuelStationsAlongCorridor(fuelStations, trip.corridor?.coords, vehicle).slice(0, 8);
+  for (const station of fuelStops) {
+    const p = nearestProgress(trip.corridor?.coords, station.lat, station.lon);
+    const rate = countryFuelEur(FUEL_COUNTRY_NAMES[station.country] ?? station.country);
+    const amenities =
+      [station.is_24_7 ? "24/7" : null, station.has_lpg ? "LPG" : null, station.has_dump_station ? "dump station" : null]
+        .filter(Boolean)
+        .join(" · ") || "forecourt";
+    push("fuel", p, station.name || station.brand, amenities, {
       price: `€${rate.petrol.toFixed(2)}/L`,
       petrolEur: rate.petrol,
       dieselEur: rate.diesel,
+      icon: brandIcon(`${station.brand} ${station.name}`, "fuel"),
     });
   }
 

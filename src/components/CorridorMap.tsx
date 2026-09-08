@@ -20,6 +20,7 @@ import {
   buildFuelStops,
   operatorColor,
   type EvCharger,
+  type FuelStation,
   type LayerKey,
 } from "@/lib/corridor-map";
 import { useT, useTr } from "@/lib/i18n";
@@ -126,6 +127,15 @@ export function CorridorMap({
   });
   const evChargers = evChargersQuery.data ?? [];
 
+  // Same lazy-loading approach as evChargersQuery above.
+  const fuelStationsQuery = useQuery({
+    queryKey: ["fuel-stations-eu"],
+    queryFn: async () => (await import("@/data/fuel_stations_eu.json")).default as FuelStation[],
+    staleTime: Number.POSITIVE_INFINITY,
+    retry: 0,
+  });
+  const fuelStations = fuelStationsQuery.data ?? [];
+
   const pois = useMemo(
     () =>
       buildCorridorPois({
@@ -137,8 +147,10 @@ export function CorridorMap({
         passes,
         preferredNetwork,
         evChargers,
+        fuelStations,
+        vehicle,
       }),
-    [region, trip, from, to, ferryCrossings, passes, preferredNetwork, evChargers],
+    [region, trip, from, to, ferryCrossings, passes, preferredNetwork, evChargers, fuelStations, vehicle],
   );
 
   const fuelStops = useMemo(

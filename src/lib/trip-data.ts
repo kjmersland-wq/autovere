@@ -8,7 +8,7 @@ import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { filterByCorridor, haversineKm } from "@/lib/corridor-filter";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
-import type { EvCharger } from "@/lib/corridor-map";
+import type { EvCharger, FuelStation } from "@/lib/corridor-map";
 
 export type { TripType };
 
@@ -344,6 +344,42 @@ function nearestChargerNear(chargers: EvCharger[], lat: number, lng: number, max
  * near the point, not directly on the routed line. */
 const CHARGING_STOP_SEARCH_KM = 60;
 
+/** Closest verified real fuel/service station to a point, within maxKm —
+ * null (never a fabricated fallback) when nothing real is that close.
+ * Vehicle-relevant amenities can outweigh a few extra km of distance
+ * (LPG/dump station for RVs, round-the-clock forecourts for motorcycles)
+ * but never override the maxKm cap itself. */
+function nearestFuelStationNear(
+  stations: FuelStation[],
+  lat: number,
+  lng: number,
+  maxKm: number,
+  vehicle: VehicleKey,
+): FuelStation | null {
+  let best: FuelStation | null = null;
+  let bestScore = Number.NEGATIVE_INFINITY;
+  for (const s of stations) {
+    const km = haversineKm(lat, lng, s.lat, s.lon);
+    if (km > maxKm) continue;
+    const amenityBoost =
+      vehicle === "motorhome"
+        ? (s.has_lpg ? 8 : 0) + (s.has_dump_station ? 12 : 0)
+        : vehicle === "motorcycle"
+          ? (s.is_24_7 ? 6 : 0)
+          : 0;
+    const score = amenityBoost - km;
+    if (score > bestScore) {
+      bestScore = score;
+      best = s;
+    }
+  }
+  return best;
+}
+
+/** Same 60km search radius used for EV charging-hub matching, applied to
+ * real fuel/service stations for non-EV vehicles too. */
+const FUEL_STOP_SEARCH_KM = CHARGING_STOP_SEARCH_KM;
+
 function buildOptimizer(
   region: RegionKey,
   vehicle: VehicleKey,
@@ -354,6 +390,7 @@ function buildOptimizer(
   profile?: VehicleProfile | null,
   pricePerKwh?: number,
   evChargers: EvCharger[] = [],
+  fuelStations: FuelStation[] = [],
 ): EnergyOptimizer {
   const isEv = fuel === "electric";
   const tank = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 18 : 55;
@@ -439,6 +476,40 @@ function buildOptimizer(
       };
     }
 
+    const refuelNote = `Recommended refuel — keeps you above the ${bufferPct}% reserve on a ${d(fullRange)} tank range.`;
+
+    // Prefer a real, verified station (src/data/fuel_stations_eu.json) near
+    // this leg's point, same 60km search radius as the EV hub match above.
+    // RVs weight LPG/dump-station amenities, motorcycles weight 24/7
+    // forecourts. Falls back to the generic placeholder below (never a
+    // fabricated station) when nothing real is close enough.
+    const realFuelStop = !isEv && point ? nearestFuelStationNear(fuelStations, point.lat, point.lng, FUEL_STOP_SEARCH_KM, vehicle) : null;
+
+    if (realFuelStop) {
+      const relevant =
+        vehicle === "motorhome"
+          ? realFuelStop.has_lpg || realFuelStop.has_dump_station
+          : vehicle === "motorcycle"
+            ? realFuelStop.is_24_7
+            : false;
+      const amenities = [
+        realFuelStop.is_24_7 ? "open 24/7" : null,
+        vehicle === "motorhome" && realFuelStop.has_lpg ? "LPG refill" : null,
+        vehicle === "motorhome" && realFuelStop.has_dump_station ? "dump station" : null,
+      ]
+        .filter(Boolean)
+        .join(" & ");
+      return {
+        name: realFuelStop.name || realFuelStop.brand,
+        atKm,
+        atLabel: d(atKm),
+        power: realFuelStop.is_24_7 ? "24/7 forecourt" : "Forecourt",
+        networks: [realFuelStop.brand],
+        note: amenities ? `${realFuelStop.name} — ${amenities}. ${refuelNote}` : `${realFuelStop.name}. ${refuelNote}`,
+        ...(vehicle === "motorhome" || vehicle === "motorcycle" ? { preferred: relevant, fallback: !relevant } : {}),
+      };
+    }
+
     const { list: local, hit } = orderNetworks(corridorNetworks(point?.code));
     return {
       name: point ? `${point.place || point.country} (${point.country})` : `Stop at ${d(atKm)}`,
@@ -452,7 +523,7 @@ function buildOptimizer(
             ? `${wanted} hub on this leg. ${chargeNote}`
             : `No ${wanted} site in this battery window — nearest high-power CCS hub is ${local[0]}. ${chargeNote}`
           : chargeNote
-        : `Recommended refuel — keeps you above the ${bufferPct}% reserve on a ${d(fullRange)} tank range.`,
+        : refuelNote,
       ...(isEv ? { kwhNeeded, legLabel: d(legKm) } : {}),
       ...(isEv ? { pricePerKwh: operatorKwhEur(local[0]!) || pricePerKwh || DEFAULT_KWH_EUR } : {}),
       ...(isEv && wanted ? { preferred: hit, fallback: !hit } : {}),
@@ -636,6 +707,7 @@ export function estimateTrip(
   prices: EnergyPrices | null = null,
   profile: VehicleProfile | null = null,
   evChargers: EvCharger[] = [],
+  fuelStations: FuelStation[] = [],
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -778,7 +850,7 @@ export function estimateTrip(
     corridor,
     safety: safetyFor(region, vehicle, geo),
     pricePerKwh,
-    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh, evChargers),
+    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh, evChargers, fuelStations),
     vignette:
       activeVariant === "tollfree"
         ? null
@@ -810,6 +882,16 @@ export function loadEvChargers(): Promise<EvCharger[]> {
   return evChargersPromise;
 }
 
+/** Lazily loads and caches the verified fuel/service station dataset for the
+ * lifetime of the session — same rationale and pattern as loadEvChargers. */
+let fuelStationsPromise: Promise<FuelStation[]> | null = null;
+export function loadFuelStations(): Promise<FuelStation[]> {
+  fuelStationsPromise ??= import("@/data/fuel_stations_eu.json")
+    .then((m) => m.default as FuelStation[])
+    .catch(() => []);
+  return fuelStationsPromise;
+}
+
 export function estimateAllVariants(
   region: RegionKey,
   vehicle: VehicleKey,
@@ -824,8 +906,9 @@ export function estimateAllVariants(
   prices: EnergyPrices | null = null,
   profile: VehicleProfile | null = null,
   evChargers: EvCharger[] = [],
+  fuelStations: FuelStation[] = [],
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays, geo, prices, profile, evChargers] as const;
+  const args = [extraStops, tripType, durationDays, geo, prices, profile, evChargers, fuelStations] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
