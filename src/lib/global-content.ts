@@ -4,32 +4,39 @@ const DISCLAIMER = "Indicative estimates only — verify with official portals."
 
 export const GLOBAL_HOW_IT_WORKS: InfoPageContent = {
   eyebrow: "How it works",
-  title: "From a rough idea to a costed road trip in three calm steps.",
+  title: "Plan, price, and drive — in three high-impact steps.",
   intro:
-    "AutoVere turns a start and a destination into a transparent, cross-border cost picture — tolls, vignettes, fuel, charging and ferries — for cars, motorhomes and touring motorcycles.",
+    "AutoVere turns a start and a destination into a transparent, cross-border cost picture — tolls, vignettes, fuel, charging and ferries — for cars, motorhomes and touring motorcycles. Instant calculation with zero account required to test.",
   sections: [
     {
-      heading: "1 — Tell us about the journey",
-      body: "Enter your origin and destination, pick your vehicle type and fuel or power source, and choose route preferences such as scenic bypasses, avoiding tolls or including ferries.",
+      heading: "1 — Enter your route & vehicle specs",
+      body: "Tell us where you are going, what you are driving and how you want to get there. AutoVere handles cars, motorhomes and touring motorcycles, including EV battery sizes, weight tiers and axle classes that affect toll pricing.",
       items: [
-        "Car, motorhome/campervan or touring motorcycle profiles",
+        "Car, motorhome/campervan or touring motorcycle profiles with weight-class awareness",
         "Petrol, diesel or electric with your own tank, battery and consumption figures",
+        "Route preferences: scenic bypasses, avoid tolls, include ferries, EV-only charging networks",
         "Toll tags such as AutoPASS, Telepass, Bip&Go, SunPass or E-ZPass",
       ],
     },
     {
-      heading: "2 — We model the true cost of every kilometre",
-      body: "Each country or state on your route is costed separately, using its own toll model — electronic vignettes, distance barriers, city rings or toll-free motorways — plus local fuel and fast-charging prices.",
+      heading: "2 — Get deterministic cost calculations",
+      body: "Every country or state on your route is priced using its own toll model and official 2026 rate data — not guessed. Electronic vignettes, distance barriers, city rings, weight-class tariffs, fuel, fast-charging and ferries are all broken down line by line.",
       items: [
-        "Country-by-country toll and vignette breakdown with checkpoint detail",
-        "Motorcycle discounts applied where operators publish reduced classes",
+        "Official 2026 toll and vignette rates per country or state",
+        "Vehicle-class-aware pricing for motorhomes, heavy vehicles and motorcycles",
         "Ferry and mountain pass costs listed as separate line items",
         "Smart fuel and EV charging optimizer with a 75% range safety buffer",
       ],
     },
     {
-      heading: "3 — Take it on the road",
-      body: "Export a GPX file for your sat-nav, save the itinerary to My Garage, or share it with your travel companions. Every toll line links to the official portal so you can buy before you cross the border.",
+      heading: "3 — Export & Drive with Trip Pass",
+      body: "Unlock instant exports with a one-time 14-day Trip Pass. Send the route to Google Maps, download a GPX file for your sat-nav or in-car system, and get a printable offline trip kit with direct links to every official vignette and toll portal.",
+      items: [
+        "Google Maps, Apple Maps and Waze deep-links from your results",
+        "GPX export with toll gates, charging stops and ferry waypoints",
+        "Printable PDF itinerary and official vignette checklist",
+        "One-time Trip Pass — no subscription required",
+      ],
       links: [
         { label: "ASFINAG (Austria)", url: "https://www.asfinag.at/" },
         { label: "AutoPASS (Norway)", url: "https://www.autopass.no/" },
