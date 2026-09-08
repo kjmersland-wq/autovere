@@ -116,6 +116,14 @@ export const NO_FAQ: InfoPageContent = {
       body: "Ja. Velg Elektrisk (EV) og legg inn batteristørrelse og forbruk. Vi planlegger hurtigladestopp med 75 % rekkeviddebuffer og viser nettverkene du møter — Ionity, Fastned, Tesla Supercharger, Electrify America og FLO.",
     },
     {
+      heading: "Hvor finner jeg filteret for reisefølge og stopp?",
+      body: "To steder, og det er aldri gjemt bort. I Min Garasje åpner du fanen «Reisefølge og stopp» i menyen til venstre for å lagre hvem som reiser og hvilke av de 14 interessekategoriene dere bryr dere om. I ruteplanleggeren, rett under kostnadsoversikten, åpner du «Personalize stops for your travel party» for å velge de samme kategoriene for akkurat den turen. Begge stedene deler samme lagrede valg.",
+    },
+    {
+      heading: "Hva er unikt for Pro og Trip Pass?",
+      body: "Bare AutoVere lar deg forme ruten etter hvem som faktisk sitter i bilen. Velg blant 14 kategorier — bobilservice, camping og overnatting, naturskjønne veier, utsiktspunkter, historie og kultur, slott, natur og friluft, barn og lek, dyreliv, mat, strand og vann, byer, aktiv ferie og rolige stopp — så legger Pro eller Trip Pass matchende stopp inn i korridoren din, i kartet, i PDF-turmappen og i GPX-, Google Maps- og Apple Maps-eksporten.",
+    },
+    {
       heading: "Trenger jeg en konto?",
       body: "Nei. Umiddelbar beregning — ingen konto nødvendig for å forhåndsvise. Min Garasje lagrer kjøretøy og turer lokalt på din egen enhet; eksport (GPX, PDF-turbeskrivelse, send-til-bil) låses opp med engangskjøpet Trip Pass (14 dager) eller Pro.",
     },
