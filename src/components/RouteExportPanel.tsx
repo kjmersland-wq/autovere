@@ -213,7 +213,7 @@ export function RouteExportPanel({
   };
 
   return (
-    <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
+    <div data-tour="export-actions" className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
       <div className="flex items-center gap-2">
         <Download className="size-5 text-primary" />
         <h3 className="text-lg font-semibold tracking-tight">{t.export.title}</h3>
