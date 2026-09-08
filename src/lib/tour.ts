@@ -26,29 +26,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Close / Skip",
     steps: [
       {
-        title: "1. Language & Currency",
+        title: "1. Getting Started",
         description:
-          "Pick your preferred language and currency here. We automatically convert every toll, fuel price and vignette for you.",
+          "Enter your departure and destination, then select your vehicle type (EV, Motorhome, or Car). We automatically adjust toll classes, weight categories, and range calculations for your route.",
       },
       {
-        title: "2. Where to?",
+        title: "2. Official Tolls & Vignettes",
         description:
-          "Enter your start and destination — or tap one of the popular routes below for an instant calculation.",
+          "Calculate your full trip budget for free with official, verified toll rates and direct links to authorized government vignette portals.",
       },
       {
-        title: "3. Tailor your trip",
+        title: "3. Personalize Your Stops (Trip Pass)",
         description:
-          "Set it up for a motorhome, EV or petrol car, and choose whether to enjoy mountain passes or steer clear of toll roads.",
+          "Traveling with family or in an RV? Filter playgrounds, scenic viewpoints, RV facilities, and fast chargers along your route. Unlocked with Trip Pass to inject stops directly into your navigation.",
       },
       {
-        title: "4. Results & My Garage",
+        title: "4. Export & Navigate",
         description:
-          "Get the full cost overview in one click. Subscribers can save trips to My Garage and repeat the journey any time with fresh prices.",
-      },
-      {
-        title: "5. Send to car & navigation",
-        description:
-          "Push the route straight to the Tesla app, open it on your car screen via Apple CarPlay / Android Auto, or print the itinerary in your language.",
+          "Take your calculated journey with you. Export turn-by-turn waypoints and official pass warnings directly to Google Maps, Apple Maps, or GPX devices.",
       },
     ],
   },
