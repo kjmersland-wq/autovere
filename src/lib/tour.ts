@@ -177,7 +177,7 @@ export const TOUR_COPY: Record<string, TourCopy> = {
           "Take your calculated journey with you. Export turn-by-turn waypoints and official pass warnings directly to Google Maps, Apple Maps, or GPX devices.",
       },
     ],
-  }
+  },
   de: {
     trigger: "💡 Kurze Tour",
     next: "Weiter",
