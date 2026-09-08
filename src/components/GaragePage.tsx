@@ -380,6 +380,113 @@ export function GaragePage() {
     toast.success(tx("Dataene dine er lastet ned."));
   };
 
+  const travelPartyBlock = (
+                    <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
+                      <p className="font-semibold">{tx("Reisefølge (valgfritt)")}</p>
+                      {canUseTravelProfile ? (
+                        <>
+                          <p className="mt-1 text-sm text-foreground/70">
+                            {tx(
+                              "Fortell oss hvem som reiser og hva dere liker, så kan vi senere foreslå stopp som passer familien. Dette er valgfritt og lagres på samme måte som resten av kontoen din.",
+                            )}
+                          </p>
+
+                          <div className="mt-4 grid gap-2 sm:max-w-[10rem]">
+                            <Label htmlFor="tp-adults">{tx("Antall voksne")}</Label>
+                            <Input
+                              id="tp-adults"
+                              type="number"
+                              min={0}
+                              value={travelProfile.adults}
+                              onChange={(e) =>
+                                setTravelProfile({
+                                  ...travelProfile,
+                                  adults: Math.max(0, Number(e.target.value) || 0),
+                                })
+                              }
+                            />
+                          </div>
+
+                          <div className="mt-4">
+                            <Label>{tx("Barn (ca. alder)")}</Label>
+                            <div className="mt-2 grid gap-2">
+                              {travelProfile.children.map((child) => (
+                                <div key={child.id} className="flex items-center gap-2">
+                                  <Input
+                                    type="number"
+                                    min={0}
+                                    max={17}
+                                    className="max-w-[6rem]"
+                                    placeholder={tx("Alder")}
+                                    value={child.age}
+                                    onChange={(e) => updateTravelChildAge(child.id, e.target.value)}
+                                  />
+                                  <span className="text-sm text-foreground/70">{tx("år")}</span>
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    aria-label={tx("Fjern barn")}
+                                    onClick={() => removeTravelChild(child.id)}
+                                  >
+                                    <Trash2 className="size-4" />
+                                  </Button>
+                                </div>
+                              ))}
+                            </div>
+                            <Button variant="outline" size="sm" className="mt-2" onClick={addTravelChild}>
+                              <Plus className="size-4" /> {tx("Legg til barn")}
+                            </Button>
+                          </div>
+
+                          <div className="mt-4">
+                            <Label>{tx("Interesser og hobbyer")}</Label>
+                            <div className="mt-2 grid gap-4">
+                              {POI_GROUPS.map((group) => (
+                                <div key={group}>
+                                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                    {poiLabel(garageLocale, group)}
+                                  </p>
+                                  <div className="mt-2 flex flex-wrap gap-2">
+                                    {POI_INTERESTS.filter((i) => i.group === group).map((interest) => (
+                                      <button
+                                        key={interest.id}
+                                        type="button"
+                                        onClick={() => toggleTravelInterest(interest.id)}
+                                        aria-pressed={travelProfile.interests.includes(interest.id)}
+                                        className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                                          travelProfile.interests.includes(interest.id)
+                                            ? "border-primary bg-primary/15 text-primary"
+                                            : "border-border text-foreground/70 hover:bg-background/60"
+                                        }`}
+                                      >
+                                        {poiLabel(garageLocale, interest.id)}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <Button className="mt-4" onClick={submitTravelProfile}>
+                            {tx("Lagre reisefølge")}
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <p className="mt-1 text-sm text-foreground/70">
+                            {tx(
+                              "Dette er en AutoVere Pro-funksjon. Oppgrader for å legge inn reisefølget ditt, så kan vi snart foreslå stopp familien vil elske.",
+                            )}
+                          </p>
+                          <Button variant="outline" className="mt-3" asChild>
+                            <Link to={pricingHref as "/pricing"}>{tx("Se abonnementene")}</Link>
+                          </Button>
+                        </>
+                      )}
+                    </div>
+  );
+
   return (
     <main className="min-h-screen">
       <SiteHeader />
@@ -759,112 +866,15 @@ export function GaragePage() {
                   </div>
                 </div>
 
-                {isDefaultEnglishSite && (
-                  <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
-                    <p className="font-semibold">{tx("Reisefølge (valgfritt)")}</p>
-                    {canUseTravelProfile ? (
-                      <>
-                        <p className="mt-1 text-sm text-foreground/70">
-                          {tx(
-                            "Fortell oss hvem som reiser og hva dere liker, så kan vi senere foreslå stopp som passer familien. Dette er valgfritt og lagres på samme måte som resten av kontoen din.",
-                          )}
-                        </p>
-
-                        <div className="mt-4 grid gap-2 sm:max-w-[10rem]">
-                          <Label htmlFor="tp-adults">{tx("Antall voksne")}</Label>
-                          <Input
-                            id="tp-adults"
-                            type="number"
-                            min={0}
-                            value={travelProfile.adults}
-                            onChange={(e) =>
-                              setTravelProfile({
-                                ...travelProfile,
-                                adults: Math.max(0, Number(e.target.value) || 0),
-                              })
-                            }
-                          />
-                        </div>
-
-                        <div className="mt-4">
-                          <Label>{tx("Barn (ca. alder)")}</Label>
-                          <div className="mt-2 grid gap-2">
-                            {travelProfile.children.map((child) => (
-                              <div key={child.id} className="flex items-center gap-2">
-                                <Input
-                                  type="number"
-                                  min={0}
-                                  max={17}
-                                  className="max-w-[6rem]"
-                                  placeholder={tx("Alder")}
-                                  value={child.age}
-                                  onChange={(e) => updateTravelChildAge(child.id, e.target.value)}
-                                />
-                                <span className="text-sm text-foreground/70">{tx("år")}</span>
-                                <Button
-                                  size="icon"
-                                  variant="ghost"
-                                  aria-label={tx("Fjern barn")}
-                                  onClick={() => removeTravelChild(child.id)}
-                                >
-                                  <Trash2 className="size-4" />
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                          <Button variant="outline" size="sm" className="mt-2" onClick={addTravelChild}>
-                            <Plus className="size-4" /> {tx("Legg til barn")}
-                          </Button>
-                        </div>
-
-                        <div className="mt-4">
-                          <Label>{tx("Interesser og hobbyer")}</Label>
-                          <div className="mt-2 grid gap-4">
-                            {POI_GROUPS.map((group) => (
-                              <div key={group}>
-                                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                  {poiLabel(garageLocale, group)}
-                                </p>
-                                <div className="mt-2 flex flex-wrap gap-2">
-                                  {POI_INTERESTS.filter((i) => i.group === group).map((interest) => (
-                                    <button
-                                      key={interest.id}
-                                      type="button"
-                                      onClick={() => toggleTravelInterest(interest.id)}
-                                      aria-pressed={travelProfile.interests.includes(interest.id)}
-                                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                                        travelProfile.interests.includes(interest.id)
-                                          ? "border-primary bg-primary/15 text-primary"
-                                          : "border-border text-foreground/70 hover:bg-background/60"
-                                      }`}
-                                    >
-                                      {poiLabel(garageLocale, interest.id)}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <Button className="mt-4" onClick={submitTravelProfile}>
-                          {tx("Lagre reisefølge")}
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <p className="mt-1 text-sm text-foreground/70">
-                          {tx(
-                            "Dette er en AutoVere Pro-funksjon. Oppgrader for å legge inn reisefølget ditt, så kan vi snart foreslå stopp familien vil elske.",
-                          )}
-                        </p>
-                        <Button variant="outline" className="mt-3" asChild>
-                          <Link to={pricingHref as "/pricing"}>{tx("Se abonnementene")}</Link>
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                )}
+                <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
+                  <p className="font-semibold">{tx("Reisefølge og stopp")}</p>
+                  <p className="mt-1 text-sm text-foreground/70">
+                    {tx("Velg interessene til reisefølget så AutoVere kan foreslå stopp langs ruten din.")}
+                  </p>
+                  <Button variant="outline" className="mt-3" onClick={() => setSection("stops")}>
+                    <Users className="size-4" /> {tx("Åpne reisefølge og stopp")}
+                  </Button>
+                </div>
 
                 <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
                   <p className="font-semibold">{tx("Eksporter dataene mine")}</p>
