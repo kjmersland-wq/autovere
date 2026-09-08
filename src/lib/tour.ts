@@ -520,6 +520,67 @@ export function tourCopy(locale: string): TourCopy {
   return TOUR_COPY[locale] ?? TOUR_COPY["en"]!;
 }
 
+function tourTargets(copy: TourCopy) {
+  if (copy.steps.length === 4) {
+    return [
+      {
+        element: '[data-tour="places"]',
+        popover: { title: copy.steps[0].title, description: copy.steps[0].description, side: "bottom" },
+      },
+      {
+        element: '[data-tour="calculate"]',
+        popover: {
+          title: copy.steps[1].title,
+          description: copy.steps[1].description,
+          side: "top",
+          align: "end",
+        },
+      },
+      {
+        element: '[data-tour="personalize-stops"]',
+        popover: { title: copy.steps[2].title, description: copy.steps[2].description, side: "top" },
+      },
+      {
+        element: '[data-tour="export-actions"]',
+        popover: { title: copy.steps[3].title, description: copy.steps[3].description, side: "top" },
+      },
+    ];
+  }
+
+  return [
+    {
+      element: '[data-tour="locale"]',
+      popover: {
+        title: copy.steps[0].title,
+        description: copy.steps[0].description,
+        side: "bottom",
+        align: "end",
+      },
+    },
+    {
+      element: '[data-tour="places"]',
+      popover: { title: copy.steps[1].title, description: copy.steps[1].description, side: "bottom" },
+    },
+    {
+      element: '[data-tour="preferences"]',
+      popover: { title: copy.steps[2].title, description: copy.steps[2].description, side: "top" },
+    },
+    {
+      element: '[data-tour="calculate"]',
+      popover: {
+        title: copy.steps[3].title,
+        description: copy.steps[3].description,
+        side: "top",
+        align: "end",
+      },
+    },
+    {
+      element: "#send-to-car-hub",
+      popover: { title: copy.steps[4].title, description: copy.steps[4].description, side: "top" },
+    },
+  ];
+}
+
 /** Launches the tour. Strictly opt-in — call only from an explicit user action. */
 export function startTour(locale: string) {
   const copy = tourCopy(locale);
