@@ -123,7 +123,7 @@ export function GaragePage() {
   const faqHref = buildPath({ prefix, region, page: "faq" });
   const { tier, isActive, hasAtLeast } = useSubscription();
   const { currency, setCurrency } = useCurrency();
-  // Travel party is a Pro-only foundation feature, scoped to the default English .com site only.
+  // Travel party is a Pro feature, but the filter itself is visible on every locale.
   const isDefaultEnglishSite = !prefix && !region;
   const isEnglishSite = !prefix || prefix === "us";
   const chargingNetworkOptions = isEnglishSite ? CHARGING_NETWORKS : BASE_CHARGING_NETWORKS;
