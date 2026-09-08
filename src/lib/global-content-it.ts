@@ -117,7 +117,7 @@ export const IT_FAQ: InfoPageContent = {
     },
     {
       heading: "Devo avere un account?",
-      body: "No. Puoi pianificare ed esportare senza registrarti. Il Mio Garage salva i tuoi veicoli e viaggi sul tuo stesso dispositivo, quindi nulla lascia il tuo browser a meno che tu non scelga di condividerlo.",
+      body: "No. Calcolo immediato — nessun account necessario per l'anteprima. Il Mio Garage salva i tuoi veicoli e viaggi sul tuo stesso dispositivo; le esportazioni (GPX, itinerario PDF, invia all'auto) si sbloccano con il Trip Pass una tantum di 14 giorni o con Pro.",
     },
   ],
   note: DISCLAIMER,

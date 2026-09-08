@@ -117,7 +117,7 @@ export const SV_FAQ: InfoPageContent = {
     },
     {
       heading: "Behöver jag ett konto?",
-      body: "Nej. Du kan planera och exportera utan att registrera dig. Mitt Garage sparar dina fordon och resor lokalt på din egen enhet, så inget lämnar din webbläsare om du inte själv väljer att dela det.",
+      body: "Nej. Direktberäkning — inget konto behövs för att förhandsgranska. Mitt Garage sparar dina fordon och resor lokalt på din egen enhet; export (GPX, PDF-resebeskrivning, skicka-till-bil) låses upp med engångsköpet Trip Pass (14 dagar) eller Pro.",
     },
   ],
   note: DISCLAIMER,

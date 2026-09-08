@@ -43,24 +43,30 @@ import { useAuth } from "@/lib/auth";
 import { CURRENCIES, useCurrency } from "@/lib/currency";
 import {
   ALL_NETWORKS,
+  BASE_CHARGING_NETWORKS,
   CHARGING_NETWORKS,
+  DEFAULT_TRAVEL_PROFILE,
   FUEL_LABEL,
   TOLL_TAGS,
+  TRAVEL_INTERESTS,
   VEHICLE_META,
   duplicateTrip,
   googleMapsUrl,
   loadActiveVehicleId,
   loadTrips,
+  loadTravelProfile,
   loadVehicles,
   saveActiveVehicleId,
   newId,
   persistTrips,
   printTripSummary,
+  saveTravelProfile,
   saveVehicles,
   tripGpx,
   wazeUrl,
   type GarageVehicle,
   type SavedTrip,
+  type TravelProfile,
   type VehicleKind,
 } from "@/lib/garage";
 
@@ -111,8 +117,13 @@ export function GaragePage() {
   const { prefix, region } = splitPath(pathname);
   const pricingHref = buildPath({ prefix, region, page: "pricing" });
   const faqHref = buildPath({ prefix, region, page: "faq" });
-  const { tier, isActive } = useSubscription();
+  const { tier, isActive, hasAtLeast } = useSubscription();
   const { currency, setCurrency } = useCurrency();
+  // Travel party is a Pro-only foundation feature, scoped to the default English .com site only.
+  const isDefaultEnglishSite = !prefix && !region;
+  const isEnglishSite = !prefix || prefix === "us";
+  const chargingNetworkOptions = isEnglishSite ? CHARGING_NETWORKS : BASE_CHARGING_NETWORKS;
+  const canUseTravelProfile = isDefaultEnglishSite && (isAdmin || hasAtLeast("pro"));
 
   const [section, setSection] = useState<SectionId>("overview");
   const [vehicles, setVehicles] = useState<GarageVehicle[]>([]);
@@ -125,11 +136,13 @@ export function GaragePage() {
   const [placeDraft, setPlaceDraft] = useState<SavedPlace | null>(null);
   const [units, setUnits] = useState<"metric" | "imperial">("metric");
   const [displayName, setDisplayName] = useState("");
+  const [travelProfile, setTravelProfile] = useState<TravelProfile>(DEFAULT_TRAVEL_PROFILE);
 
   useEffect(() => {
     setVehicles(loadVehicles());
     setActiveVehicleId(loadActiveVehicleId());
     setTrips(loadTrips());
+    setTravelProfile(loadTravelProfile());
     try {
       const raw = localStorage.getItem(PLACES_KEY);
       if (raw) setPlaces(JSON.parse(raw) as SavedPlace[]);
@@ -281,6 +294,25 @@ export function GaragePage() {
     });
   };
 
+  const selectedChargingNetworks = (network?: string) =>
+    !network || network === ALL_NETWORKS
+      ? []
+      : network.split(",").map((n) => n.trim()).filter(Boolean);
+
+  const chargingNetworkLabel = (network?: string) => {
+    const selected = selectedChargingNetworks(network);
+    return selected.length > 0 ? selected.join(", ") : tx("Alle nettverk");
+  };
+
+  const toggleChargingNetwork = (network: string) => {
+    if (!draft) return;
+    const selected = selectedChargingNetworks(draft.network);
+    const next = selected.includes(network)
+      ? selected.filter((n) => n !== network)
+      : [...selected, network];
+    setDraft({ ...draft, network: next.length > 0 ? next.join(", ") : ALL_NETWORKS });
+  };
+
   const saveSettings = () => {
     try {
       localStorage.setItem(SETTINGS_KEY, JSON.stringify({ units, displayName }));
@@ -290,9 +322,48 @@ export function GaragePage() {
     toast.success(tx("Innstillingene er lagret."));
   };
 
+  const addTravelChild = () => {
+    setTravelProfile((prev) => ({
+      ...prev,
+      children: [...prev.children, { id: newId(), age: "" }],
+    }));
+  };
+
+  const removeTravelChild = (id: string) => {
+    setTravelProfile((prev) => ({ ...prev, children: prev.children.filter((c) => c.id !== id) }));
+  };
+
+  const updateTravelChildAge = (id: string, value: string) => {
+    const age = value === "" ? "" : Math.max(0, Math.min(17, Number(value) || 0));
+    setTravelProfile((prev) => ({
+      ...prev,
+      children: prev.children.map((c) => (c.id === id ? { ...c, age } : c)),
+    }));
+  };
+
+  const toggleTravelInterest = (interest: string) => {
+    setTravelProfile((prev) => ({
+      ...prev,
+      interests: prev.interests.includes(interest)
+        ? prev.interests.filter((i) => i !== interest)
+        : [...prev.interests, interest],
+    }));
+  };
+
+  const submitTravelProfile = () => {
+    saveTravelProfile(travelProfile);
+    toast.success(tx("Reisefølget er lagret."));
+  };
+
   const exportData = () => {
     const blob = new Blob(
-      [JSON.stringify({ profil: { displayName, epost: user?.email ?? null }, vehicles, trips, places }, null, 2)],
+      [
+        JSON.stringify(
+          { profil: { displayName, epost: user?.email ?? null }, vehicles, trips, places, travelProfile },
+          null,
+          2,
+        ),
+      ],
       { type: "application/json" },
     );
     const url = URL.createObjectURL(blob);
@@ -508,7 +579,7 @@ export function GaragePage() {
                           <p className="mt-1 text-xs text-muted-foreground">
                             {v.kwhPer100 ? `${v.kwhPer100} kWh/100 km` : tx("Forbruk ikke satt")}
                             {v.batteryKwh ? ` · ${v.batteryKwh} kWh ${tx("batteri")}` : ""}
-                            {` · 🔌 ${v.network && v.network !== ALL_NETWORKS ? v.network : tx("Alle nettverk")}`}
+                            {` · 🔌 ${chargingNetworkLabel(v.network)}`}
                           </p>
                         )}
                         <Button
@@ -682,6 +753,103 @@ export function GaragePage() {
                     <Button onClick={saveSettings}>{tx("Lagre navn")}</Button>
                   </div>
                 </div>
+
+                {isDefaultEnglishSite && (
+                  <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
+                    <p className="font-semibold">{tx("Reisefølge (valgfritt)")}</p>
+                    {canUseTravelProfile ? (
+                      <>
+                        <p className="mt-1 text-sm text-foreground/70">
+                          {tx(
+                            "Fortell oss hvem som reiser og hva dere liker, så kan vi senere foreslå stopp som passer familien. Dette er valgfritt og lagres på samme måte som resten av kontoen din.",
+                          )}
+                        </p>
+
+                        <div className="mt-4 grid gap-2 sm:max-w-[10rem]">
+                          <Label htmlFor="tp-adults">{tx("Antall voksne")}</Label>
+                          <Input
+                            id="tp-adults"
+                            type="number"
+                            min={0}
+                            value={travelProfile.adults}
+                            onChange={(e) =>
+                              setTravelProfile({
+                                ...travelProfile,
+                                adults: Math.max(0, Number(e.target.value) || 0),
+                              })
+                            }
+                          />
+                        </div>
+
+                        <div className="mt-4">
+                          <Label>{tx("Barn (ca. alder)")}</Label>
+                          <div className="mt-2 grid gap-2">
+                            {travelProfile.children.map((child) => (
+                              <div key={child.id} className="flex items-center gap-2">
+                                <Input
+                                  type="number"
+                                  min={0}
+                                  max={17}
+                                  className="max-w-[6rem]"
+                                  placeholder={tx("Alder")}
+                                  value={child.age}
+                                  onChange={(e) => updateTravelChildAge(child.id, e.target.value)}
+                                />
+                                <span className="text-sm text-foreground/70">{tx("år")}</span>
+                                <Button
+                                  size="icon"
+                                  variant="ghost"
+                                  aria-label={tx("Fjern barn")}
+                                  onClick={() => removeTravelChild(child.id)}
+                                >
+                                  <Trash2 className="size-4" />
+                                </Button>
+                              </div>
+                            ))}
+                          </div>
+                          <Button variant="outline" size="sm" className="mt-2" onClick={addTravelChild}>
+                            <Plus className="size-4" /> {tx("Legg til barn")}
+                          </Button>
+                        </div>
+
+                        <div className="mt-4">
+                          <Label>{tx("Interesser og hobbyer")}</Label>
+                          <div className="mt-2 flex flex-wrap gap-2">
+                            {TRAVEL_INTERESTS.map((interest) => (
+                              <button
+                                key={interest}
+                                type="button"
+                                onClick={() => toggleTravelInterest(interest)}
+                                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                                  travelProfile.interests.includes(interest)
+                                    ? "border-primary bg-primary/15 text-primary"
+                                    : "border-border text-foreground/70 hover:bg-background/60"
+                                }`}
+                              >
+                                {tx(interest)}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
+
+                        <Button className="mt-4" onClick={submitTravelProfile}>
+                          {tx("Lagre reisefølge")}
+                        </Button>
+                      </>
+                    ) : (
+                      <>
+                        <p className="mt-1 text-sm text-foreground/70">
+                          {tx(
+                            "Dette er en AutoVere Pro-funksjon. Oppgrader for å legge inn reisefølget ditt, så kan vi snart foreslå stopp familien vil elske.",
+                          )}
+                        </p>
+                        <Button variant="outline" className="mt-3" asChild>
+                          <Link to={pricingHref as "/pricing"}>{tx("Se abonnementene")}</Link>
+                        </Button>
+                      </>
+                    )}
+                  </div>
+                )}
 
                 <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
                   <p className="font-semibold">{tx("Eksporter dataene mine")}</p>
@@ -939,18 +1107,36 @@ export function GaragePage() {
                   </div>
                   <div className="grid gap-2 sm:col-span-2">
                     <Label htmlFor="v-network">{tx("Foretrukket ladenettverk")}</Label>
-                    <select
-                      id="v-network"
-                      value={draft.network ?? ALL_NETWORKS}
-                      onChange={(e) => setDraft({ ...draft, network: e.target.value })}
-                      className="h-10 rounded-md border border-border bg-background/60 px-3 text-sm"
-                    >
-                      {CHARGING_NETWORKS.map((n) => (
-                        <option key={n} value={n} className="bg-card text-foreground">
-                          {n === ALL_NETWORKS ? tx("Alle nettverk") : n}
-                        </option>
-                      ))}
-                    </select>
+                    <div id="v-network" className="flex flex-wrap gap-2">
+                      <button
+                        type="button"
+                        onClick={() => setDraft({ ...draft, network: ALL_NETWORKS })}
+                        className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                          selectedChargingNetworks(draft.network).length === 0
+                            ? "border-primary bg-primary/15 text-primary"
+                            : "border-border text-foreground/70 hover:bg-background/60"
+                        }`}
+                      >
+                        {tx("Alle nettverk")}
+                      </button>
+                      {chargingNetworkOptions.filter((n) => n !== ALL_NETWORKS).map((n) => {
+                        const selected = selectedChargingNetworks(draft.network).includes(n);
+                        return (
+                          <button
+                            key={n}
+                            type="button"
+                            onClick={() => toggleChargingNetwork(n)}
+                            className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                              selected
+                                ? "border-primary bg-primary/15 text-primary"
+                                : "border-border text-foreground/70 hover:bg-background/60"
+                            }`}
+                          >
+                            {n}
+                          </button>
+                        );
+                      })}
+                    </div>
                     <p className="text-xs text-muted-foreground">
                       {tx("Ladestopp langs ruten prioriteres for dette nettverket når det finnes i nærheten.")}
                     </p>

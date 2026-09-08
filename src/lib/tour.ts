@@ -1,8 +1,8 @@
 /**
- * Opt-in 5-step product tour (driver.js).
+ * Opt-in product tour (driver.js).
  * Never auto-starts: `startTour()` is only called from the "Quick tour" pill.
  */
-import { driver } from "driver.js";
+import { driver, type DriveStep } from "driver.js";
 import "driver.js/dist/driver.css";
 
 export const TOUR_SEEN_KEY = "autovere_tour_seen";
@@ -14,7 +14,7 @@ export type TourCopy = {
   prev: string;
   done: string;
   close: string;
-  steps: [Step, Step, Step, Step, Step];
+  steps: Step[];
 };
 
 export const TOUR_COPY: Record<string, TourCopy> = {
@@ -26,29 +26,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Close / Skip",
     steps: [
       {
-        title: "1. Language & Currency",
+        title: "1. Getting Started",
         description:
-          "Pick your preferred language and currency here. We automatically convert every toll, fuel price and vignette for you.",
+          "Enter your departure and destination, then select your vehicle type (EV, Motorhome, or Car). We automatically adjust toll classes, weight categories, and range calculations for your route.",
       },
       {
-        title: "2. Where to?",
+        title: "2. Official Tolls & Vignettes",
         description:
-          "Enter your start and destination — or tap one of the popular routes below for an instant calculation.",
+          "Calculate your full trip budget for free with official, verified toll rates and direct links to authorized government vignette portals.",
       },
       {
-        title: "3. Tailor your trip",
+        title: "3. Personalize Your Stops (Trip Pass)",
         description:
-          "Set it up for a motorhome, EV or petrol car, and choose whether to enjoy mountain passes or steer clear of toll roads.",
+          "Traveling with family or in an RV? Filter playgrounds, scenic viewpoints, RV facilities, and fast chargers along your route. Unlocked with Trip Pass to inject stops directly into your navigation.",
       },
       {
-        title: "4. Results & My Garage",
+        title: "4. Export & Navigate",
         description:
-          "Get the full cost overview in one click. Subscribers can save trips to My Garage and repeat the journey any time with fresh prices.",
-      },
-      {
-        title: "5. Send to car & navigation",
-        description:
-          "Push the route straight to the Tesla app, open it on your car screen via Apple CarPlay / Android Auto, or print the itinerary in your language.",
+          "Take your calculated journey with you. Export turn-by-turn waypoints and official pass warnings directly to Google Maps, Apple Maps, or GPX devices.",
       },
     ],
   },
@@ -162,29 +157,24 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Close / Skip",
     steps: [
       {
-        title: "1. Language & Currency",
+        title: "1. Getting Started",
         description:
-          "Choose your language and currency right here. We automatically convert every toll, gas price and pass for you.",
+          "Enter your departure and destination, then select your vehicle type (EV, RV, or Car). We automatically adjust toll classes, weight categories, and range calculations for your route.",
       },
       {
-        title: "2. Where to?",
+        title: "2. Official Tolls & Vignettes",
         description:
-          "Enter your start and destination — or tap one of the popular routes below for an instant estimate.",
+          "Calculate your full trip budget for free with official, verified toll rates and direct links to authorized government vignette portals.",
       },
       {
-        title: "3. Tailor your trip",
+        title: "3. Personalize Your Stops (Trip Pass)",
         description:
-          "Set it up for an RV, EV or gas vehicle, and decide whether to enjoy scenic passes or skip toll roads entirely.",
+          "Traveling with family or in an RV? Filter playgrounds, scenic viewpoints, RV facilities, and fast chargers along your route. Unlocked with Trip Pass to inject stops directly into your navigation.",
       },
       {
-        title: "4. Results & My Garage",
+        title: "4. Export & Navigate",
         description:
-          "Get your full cost breakdown in one click. Members can save trips to My Garage and rerun them any time with fresh prices.",
-      },
-      {
-        title: "5. Send to car & navigation",
-        description:
-          "Push the route straight to the Tesla app, open it on your dash via Apple CarPlay / Android Auto, or print the itinerary for the glovebox.",
+          "Take your calculated journey with you. Export turn-by-turn waypoints and official pass warnings directly to Google Maps, Apple Maps, or GPX devices.",
       },
     ],
   },
@@ -530,6 +520,68 @@ export function tourCopy(locale: string): TourCopy {
   return TOUR_COPY[locale] ?? TOUR_COPY["en"]!;
 }
 
+function tourTargets(copy: TourCopy): DriveStep[] {
+  const s = (i: number) => copy.steps[i]!;
+  if (copy.steps.length === 4) {
+    return [
+      {
+        element: '[data-tour="places"]',
+        popover: { title: s(0).title, description: s(0).description, side: "bottom" },
+      },
+      {
+        element: '[data-tour="calculate"]',
+        popover: {
+          title: s(1).title,
+          description: s(1).description,
+          side: "top",
+          align: "end",
+        },
+      },
+      {
+        element: '[data-tour="personalize-stops"]',
+        popover: { title: s(2).title, description: s(2).description, side: "top" },
+      },
+      {
+        element: '[data-tour="export-actions"]',
+        popover: { title: s(3).title, description: s(3).description, side: "top" },
+      },
+    ];
+  }
+
+  return [
+    {
+      element: '[data-tour="locale"]',
+      popover: {
+        title: s(0).title,
+        description: s(0).description,
+        side: "bottom",
+        align: "end",
+      },
+    },
+    {
+      element: '[data-tour="places"]',
+      popover: { title: s(1).title, description: s(1).description, side: "bottom" },
+    },
+    {
+      element: '[data-tour="preferences"]',
+      popover: { title: s(2).title, description: s(2).description, side: "top" },
+    },
+    {
+      element: '[data-tour="calculate"]',
+      popover: {
+        title: s(3).title,
+        description: s(3).description,
+        side: "top",
+        align: "end",
+      },
+    },
+    {
+      element: "#send-to-car-hub",
+      popover: { title: s(4).title, description: s(4).description, side: "top" },
+    },
+  ];
+}
+
 /** Launches the tour. Strictly opt-in — call only from an explicit user action. */
 export function startTour(locale: string) {
   const copy = tourCopy(locale);
@@ -564,42 +616,7 @@ export function startTour(locale: string) {
       btn.style.padding = "0 0.35rem";
     },
     onDestroyed: markSeen,
-    steps: [
-      {
-        element: '[data-tour="locale"]',
-        popover: {
-          title: copy.steps[0].title,
-          description: copy.steps[0].description,
-          side: "bottom",
-          align: "end",
-        },
-      },
-      {
-        element: '[data-tour="places"]',
-        popover: { title: copy.steps[1].title, description: copy.steps[1].description, side: "bottom" },
-      },
-      {
-        element: '[data-tour="preferences"]',
-        popover: { title: copy.steps[2].title, description: copy.steps[2].description, side: "top" },
-      },
-      {
-        element: '[data-tour="calculate"]',
-        popover: {
-          title: copy.steps[3].title,
-          description: copy.steps[3].description,
-          side: "top",
-          align: "end",
-        },
-      },
-      {
-        element: "#send-to-car-hub",
-        popover: {
-          title: copy.steps[4].title,
-          description: copy.steps[4].description,
-          side: "top",
-        },
-      },
-    ],
+    steps: tourTargets(copy),
   });
 
   d.drive();

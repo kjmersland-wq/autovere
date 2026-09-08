@@ -14,7 +14,9 @@ import {
   getMarketBreakdown,
   getSiteBreakdown,
   getSubscriptionBreakdown,
+  getProductEvents,
 } from "@/lib/admin-data.functions";
+import { eventLabel, funnelFindings } from "@/components/admin/productEvents";
 import { siteLabel } from "@/components/admin/siteOptions";
 import { COUNTRY_NO, cf, nf, nfOrUnavailable } from "@/components/admin/adminFormat";
 import { convertFromEur, formatAdminCurrency } from "@/components/admin/adminCurrency";
@@ -34,12 +36,14 @@ export function ReportsPanel({ site, currency }: { site: string | null; currency
   const fetchMarkets = useServerFn(getMarketBreakdown);
   const fetchFinance = useServerFn(getFinanceBreakdown);
   const fetchRates = useServerFn(getExchangeRates);
+  const fetchEvents = useServerFn(getProductEvents);
   const overview = useAdminQuery(fetchOverview);
   const sites = useAdminQuery(fetchSites);
   const subs = useAdminQuery(fetchSubs);
   const markets = useAdminQuery(fetchMarkets);
   const finance = useAdminQuery(fetchFinance);
   const rates = useAdminQuery(fetchRates);
+  const events = useAdminQuery(fetchEvents);
 
   const loading = overview.loading || sites.loading || subs.loading;
   if (loading || !overview.result || !sites.result || !subs.result) {
@@ -60,6 +64,7 @@ export function ReportsPanel({ site, currency }: { site: string | null; currency
   const sitesData = sites.result.data;
   const siteRow = site ? sitesData.sites.find((s) => s.prefix === site) : null;
   const ratesData = rates.result?.status === "ok" ? rates.result.data : null;
+  const eventsData = events.result?.status === "ok" ? events.result.data : null;
   const effectiveCurrency: AdminCurrency = ratesData ? currency : "EUR";
 
   const scopeLabel = site ? siteLabel(site) : "Alle AutoVere";
@@ -158,6 +163,44 @@ export function ReportsPanel({ site, currency }: { site: string | null; currency
             },
           ],
         },
+        ...(eventsData
+          ? [
+              {
+                title: "Produkthendelser",
+                kpis: [
+                  { label: "Hendelser (30 d)", value: nf.format(eventsData.last30) },
+                  { label: "Beregninger startet", value: nf.format(eventsData.funnel.calculateClicked) },
+                  { label: "Fullført beregning", value: `${eventsData.funnel.calcSuccessRate} %` },
+                  { label: "Resultat vist", value: `${eventsData.funnel.resultViewRate} %` },
+                ],
+                chart: {
+                  title: "Hendelser siste 30 dager",
+                  type: "bar" as const,
+                  series: eventsData.byEvent.map((e) => ({ label: eventLabel(e.event), value: e.last30 })),
+                },
+                tables: [
+                  {
+                    title: "Hendelser i detalj",
+                    columns: ["Hendelse", "7 dager", "30 dager", "90 dager", "Unike besøkende"],
+                    rows: eventsData.byEvent.length
+                      ? eventsData.byEvent.map((e) => [
+                          eventLabel(e.event),
+                          nf.format(e.last7),
+                          nf.format(e.last30),
+                          nf.format(e.total90),
+                          nf.format(e.visitors),
+                        ])
+                      : [["Ingen registrerte hendelser ennå.", "—", "—", "—", "—"]],
+                  },
+                  {
+                    title: "Konklusjoner — planleggertrakt",
+                    columns: ["Konklusjon"],
+                    rows: funnelFindings(eventsData).map((f) => [f.text]),
+                  },
+                ],
+              } satisfies FullReportSection,
+            ]
+          : []),
         {
           title: "Markeder",
           chart: {
@@ -333,6 +376,7 @@ export function ReportsPanel({ site, currency }: { site: string | null; currency
         topPaths={topPaths}
         currency={effectiveCurrency}
         rates={ratesData}
+        events={eventsData}
       />
     </div>
   );

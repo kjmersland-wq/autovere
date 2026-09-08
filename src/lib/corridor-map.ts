@@ -181,7 +181,7 @@ export function brandIcon(name: string, layer: LayerKey): string {
   if (/ionity/.test(n)) return "🟦";
   if (/fastned/.test(n)) return "🟨";
   if (/electrify america/.test(n)) return "🟩";
-  if (/evgo|chargepoint|flo|circuit électrique|recharge|allego|petro-canada ev/.test(n)) return "🔌";
+  if (/evgo|chargepoint|flo|circuit électrique|recharge|allego|petro-canada ev|orlen|greenway|enbw|aral|electra|powerdot|cez/.test(n)) return "🔌";
   if (/buc-ee/.test(n)) return "🦫";
   if (/shell/.test(n)) return "🐚";
   if (/koa|camping|campground|stellplatz|aire|bobil|halte/.test(n)) return "🏕️";
@@ -200,6 +200,8 @@ export function operatorColor(name: string, fallback: string): string {
   if (/greenway|orlen/.test(n)) return "#16a34a";
   if (/clever|spirii|recharge|mer\b/.test(n)) return "#8b5cf6";
   if (/allego/.test(n)) return "#f97316";
+  if (/electra|powerdot|bp pulse|shell recharge/.test(n)) return "#ec4899";
+  if (/cez|e\.on|vattenfall|lidl|kaufland|elocity|eleport|polenergia/.test(n)) return "#14b8a6";
   if (/evgo|chargepoint|flo|circuit|petro-canada/.test(n)) return "#06b6d4";
   return fallback;
 }

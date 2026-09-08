@@ -4,32 +4,39 @@ const DISCLAIMER = "Indicative estimates only — verify with official portals."
 
 export const GLOBAL_HOW_IT_WORKS: InfoPageContent = {
   eyebrow: "How it works",
-  title: "From a rough idea to a costed road trip in three calm steps.",
+  title: "Plan, price, and drive — in three high-impact steps.",
   intro:
-    "AutoVere turns a start and a destination into a transparent, cross-border cost picture — tolls, vignettes, fuel, charging and ferries — for cars, motorhomes and touring motorcycles.",
+    "AutoVere turns a start and a destination into a transparent, cross-border cost picture — tolls, vignettes, fuel, charging and ferries — for cars, motorhomes and touring motorcycles. Instant calculation with zero account required to test.",
   sections: [
     {
-      heading: "1 — Tell us about the journey",
-      body: "Enter your origin and destination, pick your vehicle type and fuel or power source, and choose route preferences such as scenic bypasses, avoiding tolls or including ferries.",
+      heading: "1 — Enter your route & vehicle specs",
+      body: "Tell us where you are going, what you are driving and how you want to get there. AutoVere handles cars, motorhomes and touring motorcycles, including EV battery sizes, weight tiers and axle classes that affect toll pricing.",
       items: [
-        "Car, motorhome/campervan or touring motorcycle profiles",
+        "Car, motorhome/campervan or touring motorcycle profiles with weight-class awareness",
         "Petrol, diesel or electric with your own tank, battery and consumption figures",
+        "Route preferences: scenic bypasses, avoid tolls, include ferries, EV-only charging networks",
         "Toll tags such as AutoPASS, Telepass, Bip&Go, SunPass or E-ZPass",
       ],
     },
     {
-      heading: "2 — We model the true cost of every kilometre",
-      body: "Each country or state on your route is costed separately, using its own toll model — electronic vignettes, distance barriers, city rings or toll-free motorways — plus local fuel and fast-charging prices.",
+      heading: "2 — Get deterministic cost calculations",
+      body: "Every country or state on your route is priced using its own toll model and official 2026 rate data — not guessed. Electronic vignettes, distance barriers, city rings, weight-class tariffs, fuel, fast-charging and ferries are all broken down line by line.",
       items: [
-        "Country-by-country toll and vignette breakdown with checkpoint detail",
-        "Motorcycle discounts applied where operators publish reduced classes",
+        "Official 2026 toll and vignette rates per country or state",
+        "Vehicle-class-aware pricing for motorhomes, heavy vehicles and motorcycles",
         "Ferry and mountain pass costs listed as separate line items",
         "Smart fuel and EV charging optimizer with a 75% range safety buffer",
       ],
     },
     {
-      heading: "3 — Take it on the road",
-      body: "Export a GPX file for your sat-nav, save the itinerary to My Garage, or share it with your travel companions. Every toll line links to the official portal so you can buy before you cross the border.",
+      heading: "3 — Export & Drive with Trip Pass",
+      body: "Unlock instant exports with a one-time 14-day Trip Pass. Send the route to Google Maps, download a GPX file for your sat-nav or in-car system, and get a printable offline trip kit with direct links to every official vignette and toll portal.",
+      items: [
+        "Google Maps, Apple Maps and Waze deep-links from your results",
+        "GPX export with toll gates, charging stops and ferry waypoints",
+        "Printable PDF itinerary and official vignette checklist",
+        "One-time Trip Pass — no subscription required",
+      ],
       links: [
         { label: "ASFINAG (Austria)", url: "https://www.asfinag.at/" },
         { label: "AutoPASS (Norway)", url: "https://www.autopass.no/" },
@@ -100,6 +107,22 @@ export const GLOBAL_FAQ: InfoPageContent = {
       body: "We model published toll tariffs, vignette prices and average regional fuel and charging prices. Real costs shift with fuel markets, seasonal tariffs, time-of-day pricing and vehicle class rules, so treat every figure as a well-informed indication and confirm with the official portal before you travel.",
     },
     {
+      heading: "Are the vignette and toll prices official?",
+      body: "Yes. AutoVere links directly to official government and operator portals — ASFINAG, via.admin.ch, AutoPASS, Telepass, DARS, 407 ETR, SunPass and others. We never resell vignettes or toll passes, so there is no middleman markup and you always pay the real price on the official site.",
+    },
+    {
+      heading: "Why use AutoVere instead of standard Google Maps?",
+      body: "Google Maps shows the road; AutoVere prices it. We calculate automated toll costs, flag missing vignettes, respect vehicle weight classes and motorhome clearances, and give you direct links to the official portals where you actually buy the pass — all before you reach the border.",
+    },
+    {
+      heading: "Can I export my stops directly to my phone or in-car navigation?",
+      body: "Yes. With the one-time 14-day Trip Pass you can export a GPX file for your sat-nav or in-car system, open Google Maps, Apple Maps or Waze deep-links, and print a PDF trip kit with toll gates, charging stops and ferry waypoints.",
+    },
+    {
+      heading: "Is the Trip Pass a recurring subscription?",
+      body: "No. Trip Pass is a one-time payment for 14 full days of export access. There is zero auto-renewal, no subscription trap and no cancellation needed. If you want ongoing unlimited exports you can upgrade to Pro, but Trip Pass itself is strictly one-time.",
+    },
+    {
       heading: "Do you sell vignettes or toll passes?",
       body: "No. We deliberately never resell them. Each toll line links straight to the official operator — ASFINAG, via.admin.ch, AutoPASS, Telepass, 407 ETR, SunPass and others — so you always pay the real price with no reseller markup.",
     },
@@ -117,14 +140,14 @@ export const GLOBAL_FAQ: InfoPageContent = {
     },
     {
       heading: "Do I need an account?",
-      body: "No. You can plan and export without signing up. My Garage stores your vehicles and trips on your own device so nothing leaves your browser unless you choose to share it.",
+      body: "No. Instant calculation with zero account required to test. My Garage stores your vehicles and trips on your own device; exports (GPX, PDF itinerary, send-to-car) are unlocked with the one-time 14-day Trip Pass or Pro.",
     },
   ],
   note: DISCLAIMER,
   meta: {
     title: "FAQ — Tolls, Vignettes, Fuel and EV Charging Questions | AutoVere",
     description:
-      "Answers on estimate accuracy, official toll portals, motorcycle and motorhome classes, EV charging planning and accounts.",
+      "Answers on estimate accuracy, official toll portals, motorcycle and motorhome classes, EV charging planning, exports and accounts.",
   },
 };
 
@@ -188,7 +211,7 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
       items: [
         "We do not sell or rent personal data",
         "We do not track your live location",
-        "We do not require an account to plan, export or share a trip",
+        "We do not require an account to plan or preview a trip — exports are part of Trip Pass and Pro",
       ],
     },
     {

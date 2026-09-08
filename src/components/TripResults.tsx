@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship } from "lucide-react";
+import { CalendarCheck2, ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { tripTrackPoints } from "@/lib/trip-export";
 
@@ -18,11 +18,14 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useAuth } from "@/lib/auth";
+import { trackEvent } from "@/lib/analytics";
 import { Switch } from "@/components/ui/switch";
 import { PartnerOffers } from "@/components/PartnerOffers";
 
 import { PoiLinks } from "@/components/PoiLinks";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
+import { ExportPaywallModal } from "@/components/ExportPaywallModal";
+import { TravelPartyStops } from "@/components/TravelPartyStops";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { PassBorderIntel } from "@/components/PassBorderIntel";
 import { CorridorMap } from "@/components/CorridorMap";
@@ -37,11 +40,14 @@ import {
   useMoney,
 } from "@/lib/currency";
 import { useLocale, useT, useTr } from "@/lib/i18n";
+import { useSubscription } from "@/hooks/useSubscription";
 import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
 import {
   ROUTE_VARIANTS,
   applyNetworkFilter,
+  ENGLISH_ONLY_POI_IDS,
+  EV_CHARGING_POIS,
   RV_POIS,
   SCENIC_HIGHLIGHTS,
   detectScandiBridges,
@@ -174,6 +180,12 @@ export function TripResults({
   /** Operator picked interactively from the charging network pills. */
   const [netFilter, setNetFilter] = useState<string | null>(null);
   const { user, openAuth } = useAuth();
+  const { hasAtLeast, isActive } = useSubscription();
+  // Exports stay visible for everyone but open the Trip Pass paywall until
+  // the visitor holds Trip Pass, Pro or Fleet access.
+  const [exportPaywallOpen, setExportPaywallOpen] = useState(false);
+  const [stopsPaywallOpen, setStopsPaywallOpen] = useState(false);
+  const exportsLocked = !user || !(isActive && hasAtLeast("tripPass"));
   const trip = trips[active];
   const optimizer = useMemo(
     () => applyNetworkFilter(trip.optimizer, netFilter ?? trip.optimizer.preferredNetwork ?? null),
@@ -181,8 +193,13 @@ export function TripResults({
   );
   // Everything "along the route" is filtered against the real polyline.
   const corridorCoords = trip.corridor?.coords;
-  const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25);
-  const rvPois = filterByCorridor(RV_POIS[region], corridorCoords, 25);
+  const showEnglishOnlyPois = locale === "en" || locale === "us";
+  const isVisiblePoi = (id: string) => showEnglishOnlyPois || !ENGLISH_ONLY_POI_IDS.has(id);
+  const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
+  const rvPois = filterByCorridor(RV_POIS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
+  const evChargingPois = showEnglishOnlyPois && fuel === "electric"
+    ? filterByCorridor(EV_CHARGING_POIS[region], corridorCoords, 30)
+    : [];
   const m = useMoney(trip.currency);
   const nativePrice = (value: number, symbol: string) =>
     formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
@@ -225,6 +242,7 @@ export function TripResults({
   };
 
   const saveTrip = () => {
+    void trackEvent("save_trip_clicked", { signedIn: Boolean(user), countries: trip.segments.length });
     if (!user) {
       setSavePrompt(true);
       return;
@@ -311,6 +329,54 @@ export function TripResults({
       <div className="glass-panel mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl px-5 py-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+
+      {evChargingPois.length > 0 && (
+        <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">⚡</span>
+            <h3 className="text-lg font-semibold tracking-tight">EV charging hubs along this route</h3>
+          </div>
+          <p className="mt-1 text-sm text-foreground/70">
+            Reliable high-power stops near your corridor, so the charging part of the day feels calm and easy.
+          </p>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {evChargingPois.map((p) => (
+              <article key={p.id} className="rounded-2xl border border-border bg-background/40 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">{p.network}</p>
+                <p className="mt-2 text-sm font-semibold">{p.name}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{p.where}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.connectors}
+                  </span>
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.power}
+                  </span>
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.access}
+                  </span>
+                  {p.price && (
+                    <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+                      {p.price}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-3 text-sm text-foreground/80">{p.note}</p>
+                <PoiLinks kind="ev" name={p.name} where={p.where} region={region} website={p.website} />
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="mt-3"
+                  onClick={() => onAddStop?.(p.name)}
+                >
+                  {t.results.addStop}
+                </Button>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
             {t.results.displayCurrency}
           </p>
           <p className="mt-1 text-xs text-foreground/70">
@@ -334,6 +400,22 @@ export function TripResults({
           value={m.fmt(trip.energyCost)}
           hint={t.results.energyHint(trip.energyAmount)}
         />
+      </div>
+
+      {/* Trust markers — why the numbers can be relied on. */}
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-muted-foreground">
+        <span className="inline-flex items-center gap-1.5">
+          <ShieldCheck className="size-3.5 text-primary" />
+          {tr("100% Official Rates — Zero Reseller Fees")}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <Zap className="size-3.5 text-primary" />
+          {tr("Real-world EV / Fuel Buffers")}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <CalendarCheck2 className="size-3.5 text-primary" />
+          {tr("Updated for 2026 Regulations")}
+        </span>
       </div>
 
       {/* Instant clarity trio — the three answers every driver wants first. */}
@@ -403,7 +485,23 @@ export function TripResults({
         </Button>
       </div>
 
-      <RouteExportPanel trip={trip} origin={origin} destination={destination} />
+      <RouteExportPanel
+        trip={trip}
+        origin={origin}
+        destination={destination}
+        locked={exportsLocked}
+        onLockedAction={() => setExportPaywallOpen(true)}
+      />
+      <ExportPaywallModal open={exportPaywallOpen} onOpenChange={setExportPaywallOpen} />
+      <ExportPaywallModal
+        open={stopsPaywallOpen}
+        onOpenChange={setStopsPaywallOpen}
+        title={tr("Unlock Tailored Route Stops with Trip Pass")}
+        description={tr(
+          "Automatically inject curated family stops, scenic viewpoints, and local food recommendations matching your vehicle along your specific route corridor.",
+        )}
+        primaryLabel={tr("Get 14-Day Trip Pass (€7.99)")}
+      />
 
       {showNorway && <NorwayAutoPassCard isMotorcycle={isMotorcycle} />}
       <ScandiBridgeCard bridges={bridges} isMotorcycle={isMotorcycle} />
@@ -582,6 +680,8 @@ export function TripResults({
           </div>
         </div>
       </div>
+
+      <TravelPartyStops onApply={() => setStopsPaywallOpen(true)} />
 
       {trip.vignette && (
         <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
@@ -881,7 +981,7 @@ export function TripResults({
               <p className="mt-1 text-xs text-muted-foreground">{tr(h.where)}</p>
               <p className="mt-2 text-sm text-foreground/80">{tr(h.note)}</p>
               <p className="mt-3 text-xs font-medium text-primary">{t.results.open}: {tr(h.season)}</p>
-              <PoiLinks kind="pass" name={h.name} where={h.where} region={region} />
+              <PoiLinks kind="pass" name={h.name} where={h.where} region={region} website={h.website} />
               <Button
                 size="sm"
                 variant="secondary"
@@ -917,7 +1017,7 @@ export function TripResults({
                       </span>
                     ))}
                   </div>
-                  <PoiLinks kind="camp" name={p.name} where={p.where} region={region} />
+                  <PoiLinks kind="camp" name={p.name} where={p.where} region={region} website={p.website} />
                   <Button
                     size="sm"
                     variant="secondary"

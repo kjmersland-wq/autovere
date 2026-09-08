@@ -117,7 +117,7 @@ export const ES_FAQ: InfoPageContent = {
     },
     {
       heading: "¿Necesito una cuenta?",
-      body: "No. Puedes planificar y exportar sin registrarte. Mi Garaje guarda tus vehículos y viajes en tu propio dispositivo, así que nada sale de tu navegador a menos que decidas compartirlo.",
+      body: "No. Cálculo instantáneo — no necesitas cuenta para previsualizar. Mi Garaje guarda tus vehículos y viajes en tu propio dispositivo; las exportaciones (GPX, itinerario PDF, enviar al coche) se desbloquean con el Trip Pass único de 14 días o con Pro.",
     },
   ],
   note: DISCLAIMER,

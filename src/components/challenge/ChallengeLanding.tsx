@@ -4,6 +4,7 @@ import { ArrowRight, CheckCircle2, MapPin } from "lucide-react";
 
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
+import { trackEvent } from "@/lib/analytics";
 import { CHALLENGE_CURRENCY, CHALLENGE_LANGS, challengeContent, type ChallengeLang } from "@/lib/challenge-content";
 import { convert, formatCurrency } from "@/lib/currency";
 // Served from public/ so the photo resolves on every host (custom domains don't proxy /__l5e asset URLs).
@@ -58,6 +59,7 @@ export function ChallengeLanding({ lang }: Props) {
   function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = Object.fromEntries(new FormData(event.currentTarget).entries());
+    void trackEvent("challenge_apply_clicked", { lang: lang ?? "gb", outlet: typeof data['outlet'] === "string" ? data['outlet'] : null });
     try {
       window.localStorage.setItem(
         "autovere_challenge_registration",
