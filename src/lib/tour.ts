@@ -14,7 +14,7 @@ export type TourCopy = {
   prev: string;
   done: string;
   close: string;
-  steps: [Step, Step, Step, Step, Step];
+  steps: Step[];
 };
 
 export const TOUR_COPY: Record<string, TourCopy> = {
