@@ -23,9 +23,15 @@ import { checkoutReturnUrl, PRICE_IDS } from "@/lib/stripe";
 export function ExportPaywallModal({
   open,
   onOpenChange,
+  title,
+  description,
+  primaryLabel,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  title?: string;
+  description?: string;
+  primaryLabel?: string;
 }) {
   const tr = useTr();
   const { user, openAuth } = useAuth();
@@ -51,12 +57,13 @@ export function ExportPaywallModal({
               <Route className="size-6 text-primary" />
             </div>
             <DialogTitle className="text-center text-2xl">
-              {tr("Take this route on the road")}
+              {title ?? tr("Take this route on the road")}
             </DialogTitle>
             <DialogDescription className="text-center text-base leading-relaxed">
-              {tr(
-                "Export turn-by-turn toll gates, charging stops, and direct official vignette links to your phone or navigation unit.",
-              )}
+              {description ??
+                tr(
+                  "Export turn-by-turn toll gates, charging stops, and direct official vignette links to your phone or navigation unit.",
+                )}
             </DialogDescription>
           </DialogHeader>
 
@@ -67,7 +74,7 @@ export function ExportPaywallModal({
               onClick={() => startCheckout(PRICE_IDS.tripPass)}
             >
               <Sparkles className="size-4" />
-              {tr("Get 14-Day Trip Pass")} · €7.99
+              {primaryLabel ?? `${tr("Get 14-Day Trip Pass")} · €7.99`}
             </Button>
             <Button
               size="lg"
