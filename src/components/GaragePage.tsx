@@ -101,6 +101,7 @@ type SectionId =
   | "settings"
   | "billing"
   | "places"
+  | "stops"
   | "profile"
   | "admin"
   | "support";
