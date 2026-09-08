@@ -1237,11 +1237,12 @@ const REGION_PRICES: Partial<Record<RegionKey, Partial<Record<PlanTier, { monthl
   },
 };
 
-type TripPassCopy = { name: string; tagline: string; unit: string; cta: string; badge: string; features: string[] };
+type TripPassCopy = { name: string; price: string; tagline: string; unit: string; cta: string; badge: string; features: string[] };
 
 const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   en: {
     name: "Trip Pass (14 Days)",
+    price: "£6.99",
     tagline: "One holiday. One payment. Everything unlocked for 14 days.",
     unit: "one-time",
     cta: "Get Trip Pass",
@@ -1256,6 +1257,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   no: {
     name: "Trip Pass (14 dager)",
+    price: "79 kr",
     tagline: "Én ferie. Én betaling. Alt ulåst i 14 dager.",
     unit: "engangsbeløp",
     cta: "Kjøp Trip Pass",
@@ -1270,6 +1272,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   sv: {
     name: "Trip Pass (14 dagar)",
+    price: "89 kr",
     tagline: "En semester. En betalning. Allt upplåst i 14 dagar.",
     unit: "engångsbelopp",
     cta: "Köp Trip Pass",
@@ -1284,6 +1287,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   da: {
     name: "Trip Pass (14 dage)",
+    price: "59 kr",
     tagline: "Én ferie. Én betaling. Alt låst op i 14 dage.",
     unit: "engangsbeløb",
     cta: "Køb Trip Pass",
@@ -1298,6 +1302,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   de: {
     name: "Trip Pass (14 Tage)",
+    price: "7,99 €",
     tagline: "Ein Urlaub. Eine Zahlung. 14 Tage alles freigeschaltet.",
     unit: "einmalig",
     cta: "Trip Pass holen",
@@ -1312,6 +1317,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   nl: {
     name: "Trip Pass (14 dagen)",
+    price: "7,99 €",
     tagline: "Eén vakantie. Eén betaling. 14 dagen alles ontgrendeld.",
     unit: "eenmalig",
     cta: "Trip Pass kopen",
@@ -1326,6 +1332,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   fr: {
     name: "Trip Pass (14 jours)",
+    price: "7,99 €",
     tagline: "Un voyage. Un paiement. Tout débloqué pendant 14 jours.",
     unit: "paiement unique",
     cta: "Obtenir le Trip Pass",
@@ -1340,6 +1347,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   pl: {
     name: "Trip Pass (14 dni)",
+    price: "34,99 zł",
     tagline: "Jeden urlop. Jedna płatność. Wszystko odblokowane na 14 dni.",
     unit: "płatność jednorazowa",
     cta: "Kup Trip Pass",
@@ -1354,6 +1362,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   es: {
     name: "Trip Pass (14 días)",
+    price: "7,99 €",
     tagline: "Unas vacaciones. Un pago. Todo desbloqueado 14 días.",
     unit: "pago único",
     cta: "Conseguir Trip Pass",
@@ -1368,6 +1377,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   it: {
     name: "Trip Pass (14 giorni)",
+    price: "7,99 €",
     tagline: "Una vacanza. Un pagamento. Tutto sbloccato per 14 giorni.",
     unit: "pagamento unico",
     cta: "Ottieni Trip Pass",
@@ -1382,6 +1392,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   pt: {
     name: "Trip Pass (14 dias)",
+    price: "7,99 €",
     tagline: "Umas férias. Um pagamento. Tudo desbloqueado por 14 dias.",
     unit: "pagamento único",
     cta: "Obter Trip Pass",
@@ -1396,6 +1407,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   us: {
     name: "Trip Pass (14 Days)",
+    price: "$8.99",
     tagline: "One road trip. One payment. Everything unlocked for 14 days.",
     unit: "one-time",
     cta: "Get Trip Pass",
@@ -1410,6 +1422,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   fi: {
     name: "Trip Pass (14 päivää)",
+    price: "7,99 €",
     tagline: "Yksi loma. Yksi maksu. Kaikki auki 14 päiväksi.",
     unit: "kertamaksu",
     cta: "Hanki Trip Pass",
@@ -1424,6 +1437,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   ja: {
     name: "Trip Pass（14日間）",
+    price: "¥1,290",
     tagline: "一度の旅行に、一度のお支払い。14日間すべて開放。",
     unit: "買い切り",
     cta: "Trip Passを入手",
@@ -1438,6 +1452,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   zh: {
     name: "Trip Pass（14 天）",
+    price: "¥62",
     tagline: "一次假期，一次付费，14 天全部解锁。",
     unit: "一次性",
     cta: "获取 Trip Pass",
@@ -1484,7 +1499,7 @@ export function tiersFor(locale: Locale, region?: RegionKey): Tier[] {
         name: tp.name,
         emoji: "🏕️",
         tagline: tp.tagline,
-        monthly: "€7.99",
+        monthly: tp.price,
         cta: tp.cta,
         highlight: true,
         badge: tp.badge,
