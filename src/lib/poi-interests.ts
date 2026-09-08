@@ -11,6 +11,8 @@ import type { Locale } from "@/lib/i18n";
 export type PoiGroupId = "road_essentials" | "nature_scenery" | "activities_culture";
 
 export type PoiInterestId =
+  | "fuel_stations"
+  | "ev_charging"
   | "rv_services"
   | "camping_stay"
   | "scenic_drives"
@@ -34,6 +36,8 @@ export type PoiInterest = {
 };
 
 export const POI_INTERESTS: PoiInterest[] = [
+  { id: "fuel_stations", group: "road_essentials", hint: "Petrol/diesel stations, 24/7 pumps, LPG/autogas" },
+  { id: "ev_charging", group: "road_essentials", hint: "Fast DC chargers along the corridor" },
   { id: "rv_services", group: "road_essentials", hint: "Dump stations, fresh water, LPG/autogas" },
   { id: "camping_stay", group: "road_essentials", hint: "Campgrounds, RV parks, permitted overnight zones" },
   { id: "scenic_drives", group: "nature_scenery", hint: "Mountain passes and tourist byways" },
@@ -56,6 +60,8 @@ type LabelMap = Record<PoiInterestId | PoiGroupId, string>;
 
 const EN: LabelMap = {
   road_essentials: "Road essentials",
+  fuel_stations: "Fuel & LPG stations",
+  ev_charging: "Fast chargers",
   nature_scenery: "Nature & scenery",
   activities_culture: "Activities & culture",
   rv_services: "RV services",
@@ -76,9 +82,11 @@ const EN: LabelMap = {
 
 const LABELS: Partial<Record<Locale, LabelMap>> = {
   en: EN,
-  us: { ...EN, rv_services: "RV services", camping_stay: "Campgrounds & overnight" },
+  us: { ...EN, fuel_stations: "Gas & LPG stations", rv_services: "RV services", camping_stay: "Campgrounds & overnight" },
   no: {
     road_essentials: "Veiens nødvendigheter",
+    fuel_stations: "Bensinstasjoner og LPG",
+    ev_charging: "Lynladere",
     nature_scenery: "Natur og utsikt",
     activities_culture: "Aktiviteter og kultur",
     rv_services: "Bobilservice",
@@ -98,6 +106,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   sv: {
     road_essentials: "Vägens nödvändigheter",
+    fuel_stations: "Bensinstationer och LPG",
+    ev_charging: "Snabbladdare",
     nature_scenery: "Natur och utsikt",
     activities_culture: "Aktiviteter och kultur",
     rv_services: "Husbilsservice",
@@ -117,6 +127,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   da: {
     road_essentials: "Vejens nødvendigheder",
+    fuel_stations: "Tankstationer og LPG",
+    ev_charging: "Lynladere",
     nature_scenery: "Natur og udsigt",
     activities_culture: "Aktiviteter og kultur",
     rv_services: "Autocamperservice",
@@ -136,6 +148,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   fi: {
     road_essentials: "Tien perusasiat",
+    fuel_stations: "Huoltoasemat ja LPG",
+    ev_charging: "Pikalatauspisteet",
     nature_scenery: "Luonto ja maisemat",
     activities_culture: "Aktiviteetit ja kulttuuri",
     rv_services: "Matkailuautopalvelut",
@@ -155,6 +169,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   de: {
     road_essentials: "Unterwegs-Basics",
+    fuel_stations: "Tankstellen & LPG",
+    ev_charging: "Schnellladesäulen",
     nature_scenery: "Natur & Aussicht",
     activities_culture: "Aktivitäten & Kultur",
     rv_services: "Wohnmobil-Service",
@@ -174,6 +190,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   nl: {
     road_essentials: "Onderweg essentials",
+    fuel_stations: "Tankstations & LPG",
+    ev_charging: "Snelladers",
     nature_scenery: "Natuur & uitzicht",
     activities_culture: "Activiteiten & cultuur",
     rv_services: "Camperservice",
@@ -193,6 +211,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   fr: {
     road_essentials: "Essentiels de la route",
+    fuel_stations: "Stations-service & GPL",
+    ev_charging: "Bornes de recharge rapide",
     nature_scenery: "Nature & panoramas",
     activities_culture: "Activités & culture",
     rv_services: "Services camping-car",
@@ -212,6 +232,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   pl: {
     road_essentials: "Podstawy w trasie",
+    fuel_stations: "Stacje paliw i LPG",
+    ev_charging: "Szybkie ładowarki",
     nature_scenery: "Natura i widoki",
     activities_culture: "Atrakcje i kultura",
     rv_services: "Serwis kamperowy",
@@ -231,6 +253,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   es: {
     road_essentials: "Esenciales de ruta",
+    fuel_stations: "Gasolineras y GLP",
+    ev_charging: "Cargadores rápidos",
     nature_scenery: "Naturaleza y paisajes",
     activities_culture: "Actividades y cultura",
     rv_services: "Servicios para autocaravanas",
@@ -250,6 +274,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   it: {
     road_essentials: "Essenziali di viaggio",
+    fuel_stations: "Distributori e GPL",
+    ev_charging: "Ricarica rapida",
     nature_scenery: "Natura e panorami",
     activities_culture: "Attività e cultura",
     rv_services: "Servizi camper",
@@ -269,6 +295,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   pt: {
     road_essentials: "Essenciais da estrada",
+    fuel_stations: "Postos de combustível e GPL",
+    ev_charging: "Carregadores rápidos",
     nature_scenery: "Natureza e paisagens",
     activities_culture: "Atividades e cultura",
     rv_services: "Serviços para autocaravanas",
@@ -288,6 +316,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   ja: {
     road_essentials: "ドライブの必需品",
+    fuel_stations: "ガソリンスタンド・LPG",
+    ev_charging: "急速充電スタンド",
     nature_scenery: "自然と景観",
     activities_culture: "アクティビティと文化",
     rv_services: "キャンピングカー設備",
@@ -307,6 +337,8 @@ const LABELS: Partial<Record<Locale, LabelMap>> = {
   },
   zh: {
     road_essentials: "出行必备",
+    fuel_stations: "加油站与LPG",
+    ev_charging: "快速充电桩",
     nature_scenery: "自然与风景",
     activities_culture: "活动与文化",
     rv_services: "房车服务",
