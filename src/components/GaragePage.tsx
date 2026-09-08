@@ -381,12 +381,12 @@ export function GaragePage() {
 
   const travelPartyBlock = (
                     <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
-                      <p className="font-semibold">{tx("Reisefølge (valgfritt)")}</p>
+                      <p className="font-semibold">{tx("Reisefølge og smarte stopp")}</p>
                       {canUseTravelProfile ? (
                         <>
                           <p className="mt-1 text-sm text-foreground/70">
                             {tx(
-                              "Fortell oss hvem som reiser og hva dere liker, så kan vi senere foreslå stopp som passer familien. Dette er valgfritt og lagres på samme måte som resten av kontoen din.",
+                              "Fortell oss hvem som reiser og hva dere liker, så kan vi foreslå reisetilpassede stopp langs turen — enten dere er en familie, et par eller alene på motorsykkel. Dette er valgfritt og lagres på samme måte som resten av kontoen din.",
                             )}
                           </p>
 
@@ -475,7 +475,7 @@ export function GaragePage() {
                         <>
                           <p className="mt-1 text-sm text-foreground/70">
                             {tx(
-                              "Dette er en AutoVere Pro-funksjon. Oppgrader for å legge inn reisefølget ditt, så kan vi snart foreslå stopp familien vil elske.",
+                              "Dette er en AutoVere Pro-funksjon. Oppgrader for å legge inn reisefølget ditt, så kan vi foreslå stopp som passer turen din.",
                             )}
                           </p>
                           <Button variant="outline" className="mt-3" asChild>
