@@ -814,20 +814,30 @@ export function GaragePage() {
 
                         <div className="mt-4">
                           <Label>{tx("Interesser og hobbyer")}</Label>
-                          <div className="mt-2 flex flex-wrap gap-2">
-                            {TRAVEL_INTERESTS.map((interest) => (
-                              <button
-                                key={interest}
-                                type="button"
-                                onClick={() => toggleTravelInterest(interest)}
-                                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                                  travelProfile.interests.includes(interest)
-                                    ? "border-primary bg-primary/15 text-primary"
-                                    : "border-border text-foreground/70 hover:bg-background/60"
-                                }`}
-                              >
-                                {tx(interest)}
-                              </button>
+                          <div className="mt-2 grid gap-4">
+                            {POI_GROUPS.map((group) => (
+                              <div key={group}>
+                                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                  {poiLabel(garageLocale, group)}
+                                </p>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  {POI_INTERESTS.filter((i) => i.group === group).map((interest) => (
+                                    <button
+                                      key={interest.id}
+                                      type="button"
+                                      onClick={() => toggleTravelInterest(interest.id)}
+                                      aria-pressed={travelProfile.interests.includes(interest.id)}
+                                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                                        travelProfile.interests.includes(interest.id)
+                                          ? "border-primary bg-primary/15 text-primary"
+                                          : "border-border text-foreground/70 hover:bg-background/60"
+                                      }`}
+                                    >
+                                      {poiLabel(garageLocale, interest.id)}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
                             ))}
                           </div>
                         </div>
