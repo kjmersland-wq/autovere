@@ -184,6 +184,7 @@ export function GaragePage() {
         { id: "settings" as const, label: tx("Innstillinger"), icon: SlidersHorizontal },
         { id: "billing" as const, label: tx("Abonnement og fakturering"), icon: CreditCard },
         { id: "places" as const, label: tx("Lagrede steder"), icon: Bookmark },
+        { id: "stops" as const, label: tx("Reisefølge og stopp"), icon: Users },
         { id: "profile" as const, label: tx("Profil og sikkerhet"), icon: ShieldCheck },
         // Admin panel is internal-only and restricted to the Norwegian locale, even for an admin account.
         ...(isAdmin && isNo ? [{ id: "admin" as const, label: tx("Admin"), icon: Lock }] : []),
