@@ -32,6 +32,7 @@ export function TravelPartyStops({ onApply }: { onApply: () => void }) {
 
   return (
     <Collapsible
+      data-tour="personalize-stops"
       open={open}
       onOpenChange={setOpen}
       className="glass-panel mt-6 rounded-2xl p-5 sm:p-6"
