@@ -721,6 +721,19 @@ export function GaragePage() {
                     </article>
                   ))}
                 </div>
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <Button
+                    onClick={() => {
+                      commitVehicles(vehicles);
+                      toast.success(tx("Kjøretøyene er lagret."));
+                    }}
+                  >
+                    {tx("Lagre kjøretøy")}
+                  </Button>
+                  <p className="text-xs text-muted-foreground">
+                    {tx("Endringene lagres automatisk, men trykk her hvis du vil være helt sikker.")}
+                  </p>
+                </div>
               </Panel>
             )}
 
