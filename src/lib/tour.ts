@@ -520,29 +520,30 @@ export function tourCopy(locale: string): TourCopy {
   return TOUR_COPY[locale] ?? TOUR_COPY["en"]!;
 }
 
-function tourTargets(copy: TourCopy) {
+function tourTargets(copy: TourCopy): DriveStep[] {
+  const s = (i: number) => copy.steps[i]!;
   if (copy.steps.length === 4) {
     return [
       {
         element: '[data-tour="places"]',
-        popover: { title: copy.steps[0].title, description: copy.steps[0].description, side: "bottom" },
+        popover: { title: s(0).title, description: s(0).description, side: "bottom" },
       },
       {
         element: '[data-tour="calculate"]',
         popover: {
-          title: copy.steps[1].title,
-          description: copy.steps[1].description,
+          title: s(1).title,
+          description: s(1).description,
           side: "top",
           align: "end",
         },
       },
       {
         element: '[data-tour="personalize-stops"]',
-        popover: { title: copy.steps[2].title, description: copy.steps[2].description, side: "top" },
+        popover: { title: s(2).title, description: s(2).description, side: "top" },
       },
       {
         element: '[data-tour="export-actions"]',
-        popover: { title: copy.steps[3].title, description: copy.steps[3].description, side: "top" },
+        popover: { title: s(3).title, description: s(3).description, side: "top" },
       },
     ];
   }
@@ -551,32 +552,32 @@ function tourTargets(copy: TourCopy) {
     {
       element: '[data-tour="locale"]',
       popover: {
-        title: copy.steps[0].title,
-        description: copy.steps[0].description,
+        title: s(0).title,
+        description: s(0).description,
         side: "bottom",
         align: "end",
       },
     },
     {
       element: '[data-tour="places"]',
-      popover: { title: copy.steps[1].title, description: copy.steps[1].description, side: "bottom" },
+      popover: { title: s(1).title, description: s(1).description, side: "bottom" },
     },
     {
       element: '[data-tour="preferences"]',
-      popover: { title: copy.steps[2].title, description: copy.steps[2].description, side: "top" },
+      popover: { title: s(2).title, description: s(2).description, side: "top" },
     },
     {
       element: '[data-tour="calculate"]',
       popover: {
-        title: copy.steps[3].title,
-        description: copy.steps[3].description,
+        title: s(3).title,
+        description: s(3).description,
         side: "top",
         align: "end",
       },
     },
     {
       element: "#send-to-car-hub",
-      popover: { title: copy.steps[4].title, description: copy.steps[4].description, side: "top" },
+      popover: { title: s(4).title, description: s(4).description, side: "top" },
     },
   ];
 }
