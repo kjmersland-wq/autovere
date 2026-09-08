@@ -107,6 +107,22 @@ export const GLOBAL_FAQ: InfoPageContent = {
       body: "We model published toll tariffs, vignette prices and average regional fuel and charging prices. Real costs shift with fuel markets, seasonal tariffs, time-of-day pricing and vehicle class rules, so treat every figure as a well-informed indication and confirm with the official portal before you travel.",
     },
     {
+      heading: "Are the vignette and toll prices official?",
+      body: "Yes. AutoVere links directly to official government and operator portals — ASFINAG, via.admin.ch, AutoPASS, Telepass, DARS, 407 ETR, SunPass and others. We never resell vignettes or toll passes, so there is no middleman markup and you always pay the real price on the official site.",
+    },
+    {
+      heading: "Why use AutoVere instead of standard Google Maps?",
+      body: "Google Maps shows the road; AutoVere prices it. We calculate automated toll costs, flag missing vignettes, respect vehicle weight classes and motorhome clearances, and give you direct links to the official portals where you actually buy the pass — all before you reach the border.",
+    },
+    {
+      heading: "Can I export my stops directly to my phone or in-car navigation?",
+      body: "Yes. With the one-time 14-day Trip Pass you can export a GPX file for your sat-nav or in-car system, open Google Maps, Apple Maps or Waze deep-links, and print a PDF trip kit with toll gates, charging stops and ferry waypoints.",
+    },
+    {
+      heading: "Is the Trip Pass a recurring subscription?",
+      body: "No. Trip Pass is a one-time payment for 14 full days of export access. There is zero auto-renewal, no subscription trap and no cancellation needed. If you want ongoing unlimited exports you can upgrade to Pro, but Trip Pass itself is strictly one-time.",
+    },
+    {
       heading: "Do you sell vignettes or toll passes?",
       body: "No. We deliberately never resell them. Each toll line links straight to the official operator — ASFINAG, via.admin.ch, AutoPASS, Telepass, 407 ETR, SunPass and others — so you always pay the real price with no reseller markup.",
     },
@@ -124,14 +140,14 @@ export const GLOBAL_FAQ: InfoPageContent = {
     },
     {
       heading: "Do I need an account?",
-      body: "No. Instant calculation — no account needed to preview. My Garage stores your vehicles and trips on your own device; exports (GPX, PDF itinerary, send-to-car) are unlocked with the one-time 14-day Trip Pass or Pro.",
+      body: "No. Instant calculation with zero account required to test. My Garage stores your vehicles and trips on your own device; exports (GPX, PDF itinerary, send-to-car) are unlocked with the one-time 14-day Trip Pass or Pro.",
     },
   ],
   note: DISCLAIMER,
   meta: {
     title: "FAQ — Tolls, Vignettes, Fuel and EV Charging Questions | AutoVere",
     description:
-      "Answers on estimate accuracy, official toll portals, motorcycle and motorhome classes, EV charging planning and accounts.",
+      "Answers on estimate accuracy, official toll portals, motorcycle and motorhome classes, EV charging planning, exports and accounts.",
   },
 };
 
