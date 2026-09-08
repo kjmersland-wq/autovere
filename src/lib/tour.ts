@@ -157,32 +157,27 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Close / Skip",
     steps: [
       {
-        title: "1. Language & Currency",
+        title: "1. Getting Started",
         description:
-          "Choose your language and currency right here. We automatically convert every toll, gas price and pass for you.",
+          "Enter your departure and destination, then select your vehicle type (EV, RV, or Car). We automatically adjust toll classes, weight categories, and range calculations for your route.",
       },
       {
-        title: "2. Where to?",
+        title: "2. Official Tolls & Vignettes",
         description:
-          "Enter your start and destination — or tap one of the popular routes below for an instant estimate.",
+          "Calculate your full trip budget for free with official, verified toll rates and direct links to authorized government vignette portals.",
       },
       {
-        title: "3. Tailor your trip",
+        title: "3. Personalize Your Stops (Trip Pass)",
         description:
-          "Set it up for an RV, EV or gas vehicle, and decide whether to enjoy scenic passes or skip toll roads entirely.",
+          "Traveling with family or in an RV? Filter playgrounds, scenic viewpoints, RV facilities, and fast chargers along your route. Unlocked with Trip Pass to inject stops directly into your navigation.",
       },
       {
-        title: "4. Results & My Garage",
+        title: "4. Export & Navigate",
         description:
-          "Get your full cost breakdown in one click. Members can save trips to My Garage and rerun them any time with fresh prices.",
-      },
-      {
-        title: "5. Send to car & navigation",
-        description:
-          "Push the route straight to the Tesla app, open it on your dash via Apple CarPlay / Android Auto, or print the itinerary for the glovebox.",
+          "Take your calculated journey with you. Export turn-by-turn waypoints and official pass warnings directly to Google Maps, Apple Maps, or GPX devices.",
       },
     ],
-  },
+  }
   de: {
     trigger: "💡 Kurze Tour",
     next: "Weiter",
