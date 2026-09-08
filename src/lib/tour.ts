@@ -498,7 +498,7 @@ export const TOUR_COPY: Record<string, TourCopy> = {
       },
       {
         title: "2. 官方过路费与通行证",
-        description: "免费计算完整旅行预算，采用核实过的费率，并直达官方购买portal，绝无中间加价。",
+        description: "免费计算完整旅行预算，采用核实过的费率，并提供官方购买渠道的直达链接，绝无中间加价。",
       },
       {
         title: "3. 同行者与途中停靠（Trip Pass）",
