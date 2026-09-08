@@ -119,6 +119,10 @@ export const GLOBAL_FAQ: InfoPageContent = {
       body: "Yes. With the one-time 14-day Trip Pass you can export a GPX file for your sat-nav or in-car system, open Google Maps, Apple Maps or Waze deep-links, and print a PDF trip kit with toll gates, charging stops and ferry waypoints.",
     },
     {
+      heading: "What makes AutoVere unique for Pro and Trip Pass users?",
+      body: "Only AutoVere lets you shape the route around who is actually in the car. Pick from 14 unified interest categories — RV services, camping and overnight, scenic drives, viewpoints, history and culture, castles and palaces, nature and outdoors, kids and play, wildlife, food and culinary, beach and water, towns and cities, adventure and active, peaceful and relaxing — and Pro or Trip Pass injects matching stops along your exact corridor, into the map, the offline PDF kit and the GPX, Google Maps and Apple Maps exports. Your travel party and interests are saved in My Garage, so every future trip is personalised from the first calculation.",
+    },
+    {
       heading: "Is the Trip Pass a recurring subscription?",
       body: "No. Trip Pass is a one-time payment for 14 full days of export access. There is zero auto-renewal, no subscription trap and no cancellation needed. If you want ongoing unlimited exports you can upgrade to Pro, but Trip Pass itself is strictly one-time.",
     },

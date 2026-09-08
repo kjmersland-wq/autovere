@@ -38,6 +38,8 @@ import { Label } from "@/components/ui/label";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useGarageText } from "@/lib/garage-i18n";
 import { buildPath, splitPath } from "@/lib/locales";
+import { useLocale } from "@/lib/i18n";
+import { POI_GROUPS, POI_INTERESTS, poiLabel } from "@/lib/poi-interests";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { CURRENCIES, useCurrency } from "@/lib/currency";
@@ -48,7 +50,6 @@ import {
   DEFAULT_TRAVEL_PROFILE,
   FUEL_LABEL,
   TOLL_TAGS,
-  TRAVEL_INTERESTS,
   VEHICLE_META,
   duplicateTrip,
   googleMapsUrl,
@@ -113,6 +114,7 @@ export function GaragePage() {
   const { user, openAuth, signOut } = useAuth();
   const { t: tx, isNo, isDa, isDe, isNl, isFr, isPl, isEs, isIt, isFi, isPt, isJa, isZh, meta: tmeta } = useGarageText();
   const { isAdmin } = useAdmin();
+  const garageLocale = useLocale();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { prefix, region } = splitPath(pathname);
   const pricingHref = buildPath({ prefix, region, page: "pricing" });
@@ -814,20 +816,30 @@ export function GaragePage() {
 
                         <div className="mt-4">
                           <Label>{tx("Interesser og hobbyer")}</Label>
-                          <div className="mt-2 flex flex-wrap gap-2">
-                            {TRAVEL_INTERESTS.map((interest) => (
-                              <button
-                                key={interest}
-                                type="button"
-                                onClick={() => toggleTravelInterest(interest)}
-                                className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                                  travelProfile.interests.includes(interest)
-                                    ? "border-primary bg-primary/15 text-primary"
-                                    : "border-border text-foreground/70 hover:bg-background/60"
-                                }`}
-                              >
-                                {tx(interest)}
-                              </button>
+                          <div className="mt-2 grid gap-4">
+                            {POI_GROUPS.map((group) => (
+                              <div key={group}>
+                                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                  {poiLabel(garageLocale, group)}
+                                </p>
+                                <div className="mt-2 flex flex-wrap gap-2">
+                                  {POI_INTERESTS.filter((i) => i.group === group).map((interest) => (
+                                    <button
+                                      key={interest.id}
+                                      type="button"
+                                      onClick={() => toggleTravelInterest(interest.id)}
+                                      aria-pressed={travelProfile.interests.includes(interest.id)}
+                                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                                        travelProfile.interests.includes(interest.id)
+                                          ? "border-primary bg-primary/15 text-primary"
+                                          : "border-border text-foreground/70 hover:bg-background/60"
+                                      }`}
+                                    >
+                                      {poiLabel(garageLocale, interest.id)}
+                                    </button>
+                                  ))}
+                                </div>
+                              </div>
                             ))}
                           </div>
                         </div>
