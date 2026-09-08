@@ -1,5 +1,5 @@
 /**
- * Opt-in 5-step product tour (driver.js).
+ * Opt-in product tour (driver.js).
  * Never auto-starts: `startTour()` is only called from the "Quick tour" pill.
  */
 import { driver } from "driver.js";
