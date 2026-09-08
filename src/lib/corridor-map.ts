@@ -1,6 +1,87 @@
 import { countryFuelEur, operatorKwhEur } from "@/lib/market-rates";
+import { distanceToCorridorKm, type LatLng } from "@/lib/corridor-filter";
 
 import type { FuelKey, RegionKey, TripEstimate, VehicleKey } from "@/lib/trip-data";
+
+/* ------------------------------------------------------------------ */
+/* Verified EV fast-charging hubs (src/data/ev_chargers_eu.json)       */
+/*                                                                      */
+/* Sourced from OpenStreetMap (Overpass API) on 2026-09-08: real,      */
+/* named DC fast-charging stations across Norway, Sweden, Denmark,     */
+/* Germany, Austria, Switzerland and Italy — filtered to power ≥150kW  */
+/* and ≤400kW, a recognised network operator, and a CCS or CHAdeMO     */
+/* connector, then deduplicated within 100m. Replaces the old          */
+/* seeded-random "ev" layer below, which invented plausible-sounding   */
+/* but entirely fictional stations with no real coordinates.           */
+/*                                                                      */
+/* Loaded lazily (dynamic import, ~500kB) by the caller (CorridorMap)   */
+/* rather than statically here — a top-level import inlined the whole   */
+/* dataset into the HeroPlanner bundle loaded on every visit, nearly    */
+/* doubling it, for a layer most trips don't even use. */
+/* ------------------------------------------------------------------ */
+
+export type EvCharger = {
+  id: string;
+  name: string;
+  operator: string;
+  network: string;
+  lat: number;
+  lon: number;
+  power_kw: number;
+  stalls: number;
+  connector: "CCS" | "CHAdeMO";
+};
+
+/** How close a real hub must be to the actual routed polyline to count as
+ * "along this trip" — matches the buffer used for mountain-pass/border
+ * corridor filtering elsewhere in this codebase. */
+const EV_CORRIDOR_RADIUS_KM = 15;
+
+/** Loose, bidirectional match so "Ionity" (the vehicle-settings option) and
+ * "IONITY" (the dataset's canonical name) — or a longer variant like
+ * "GreenWay Polska" vs "GreenWay" — still recognise each other regardless
+ * of exact casing/wording. */
+function networkMatches(datasetNetwork: string, preferred: string | undefined): boolean {
+  if (!preferred || preferred === "All networks") return false;
+  const a = datasetNetwork.toLowerCase().replace(/[^a-z0-9]/g, "");
+  const b = preferred.toLowerCase().replace(/[^a-z0-9]/g, "");
+  return a.includes(b) || b.includes(a);
+}
+
+/** Fraction along the routed polyline (0..1) nearest to a given point —
+ * used to place a real hub at its actual position along the trip instead
+ * of an arbitrary slot. */
+function nearestProgress(coords: LatLng[] | undefined | null, lat: number, lng: number): number {
+  if (!coords || coords.length < 2) return 0.5;
+  let bestIdx = 0;
+  let bestDist = Number.POSITIVE_INFINITY;
+  coords.forEach((c, i) => {
+    const dLat = c[0] - lat;
+    const dLng = c[1] - lng;
+    const d = dLat * dLat + dLng * dLng; // relative comparison only — no need for haversine here
+    if (d < bestDist) {
+      bestDist = d;
+      bestIdx = i;
+    }
+  });
+  return bestIdx / (coords.length - 1);
+}
+
+/** Real EV hubs within EV_CORRIDOR_RADIUS_KM of the routed polyline, with
+ * any matching the driver's preferred network (Garage vehicle settings)
+ * sorted first. Empty when there's no real routed polyline yet (coords),
+ * matching the "only ever real, verified hubs — never invented" rule. */
+function evChargersAlongCorridor(
+  allChargers: EvCharger[],
+  coords: LatLng[] | undefined | null,
+  preferredNetwork: string | undefined,
+): EvCharger[] {
+  if (!coords || coords.length === 0) return [];
+  const near = allChargers.filter((c) => distanceToCorridorKm(coords, { lat: c.lat, lng: c.lon }) <= EV_CORRIDOR_RADIUS_KM);
+  const preferred = near.filter((c) => networkMatches(c.network, preferredNetwork));
+  const rest = near.filter((c) => !preferred.includes(c));
+  return [...preferred, ...rest];
+}
 
 /* ------------------------------------------------------------------ */
 /* Deterministic pseudo-randomness so a route always renders the same  */
@@ -123,12 +204,6 @@ export function operatorColor(name: string, fallback: string): string {
   return fallback;
 }
 
-const EV_NETWORKS: Record<RegionKey, string[]> = {
-  eu: ["Ionity", "Fastned", "Tesla Supercharger", "Allego", "Recharge"],
-  us: ["Tesla Supercharger", "Electrify America", "EVgo", "ChargePoint"],
-  ca: ["Circuit électrique", "Tesla Supercharger", "Petro-Canada eV", "Flo"],
-};
-
 const FUEL_BRANDS: Record<RegionKey, string[]> = {
   eu: ["Shell", "TotalEnergies", "Eni", "Aral", "Circle K", "OMV"],
   us: ["Shell", "Chevron", "Pilot Flying J", "BP", "Buc-ee's"],
@@ -173,6 +248,8 @@ export function buildCorridorPois({
   destination,
   ferryNames,
   passes,
+  preferredNetwork,
+  evChargers = [],
 }: {
   region: RegionKey;
   trip: TripEstimate;
@@ -180,6 +257,13 @@ export function buildCorridorPois({
   destination: string;
   ferryNames: string[];
   passes: { name: string; status: "open" | "closed" | "chains"; detail: string }[];
+  /** Driver's preferred fast-charging operator from Garage vehicle settings
+   * ("All networks"/undefined = no preference) — matching real hubs sort first. */
+  preferredNetwork?: string | undefined;
+  /** The verified EV charger dataset (src/data/ev_chargers_eu.json), lazily
+   * loaded by the caller — omitted/empty simply means no "ev" pins render,
+   * never a fallback to invented ones. */
+  evChargers?: EvCharger[];
 }): CorridorPoi[] {
   const rnd = makeRandom(seedFrom(`${origin}|${destination}|${trip.variant}|${region}`));
   const total = Math.max(60, trip.distanceKm);
@@ -200,17 +284,17 @@ export function buildCorridorPois({
     });
   };
 
-  const evCount = Math.min(6, Math.max(3, Math.round(total / 220)));
-  for (let i = 0; i < evCount; i += 1) {
-    const p = (i + 1) / (evCount + 1);
-    const net = EV_NETWORKS[region][Math.floor(rnd() * EV_NETWORKS[region].length)]!;
-    push(
-      "ev",
-      p,
-      `${net} hub`,
-      `${[150, 175, 250, 350][Math.floor(rnd() * 4)]} kW · ${2 + Math.floor(rnd() * 10)} bays`,
-      { kwhEur: operatorKwhEur(net) },
-    );
+  // Real hubs only. Empty for non-EU regions/routes without a resolved
+  // polyline yet (e.g. the fallback sample-based estimate) or before the
+  // dataset has finished lazy-loading — matching the "never invented" rule
+  // rather than falling back to a guess.
+  const evStops = evChargersAlongCorridor(evChargers, trip.corridor?.coords, preferredNetwork).slice(0, 8);
+  for (const station of evStops) {
+    const p = nearestProgress(trip.corridor?.coords, station.lat, station.lon);
+    push("ev", p, station.name, `${station.power_kw} kW · ${station.stalls} bays · ${station.connector}`, {
+      kwhEur: operatorKwhEur(station.network),
+      icon: brandIcon(`${station.network} ${station.name}`, "ev"),
+    });
   }
 
   const fuelCount = Math.min(6, Math.max(3, Math.round(total / 190)));

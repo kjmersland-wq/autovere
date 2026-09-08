@@ -19,12 +19,14 @@ import {
   buildCorridorPois,
   buildFuelStops,
   operatorColor,
+  type EvCharger,
   type LayerKey,
 } from "@/lib/corridor-map";
 import { useT, useTr } from "@/lib/i18n";
 import { getRouteGeo } from "@/lib/route-geo.functions";
 import { poiMapUrl } from "@/lib/poi-links";
 import { detectMountainPasses, passStatus } from "@/lib/pass-intel";
+import { loadActiveVehicle } from "@/lib/garage";
 import {
   ROUTE_VARIANTS,
   evComparison,
@@ -111,6 +113,19 @@ export function CorridorMap({
     [trip.corridor?.coords],
   );
 
+  const preferredNetwork = useMemo(() => loadActiveVehicle()?.network, []);
+
+  // Lazily loaded (~500kB of real, verified stations) so it never inflates the
+  // initial bundle — cached for the whole session once fetched, since it's a
+  // static asset that never changes at runtime.
+  const evChargersQuery = useQuery({
+    queryKey: ["ev-chargers-eu"],
+    queryFn: async () => (await import("@/data/ev_chargers_eu.json")).default as EvCharger[],
+    staleTime: Number.POSITIVE_INFINITY,
+    retry: 0,
+  });
+  const evChargers = evChargersQuery.data ?? [];
+
   const pois = useMemo(
     () =>
       buildCorridorPois({
@@ -120,8 +135,10 @@ export function CorridorMap({
         destination: to,
         ferryNames: ferryCrossings.map((f) => `⛴️ ${f.route}`),
         passes,
+        preferredNetwork,
+        evChargers,
       }),
-    [region, trip, from, to, ferryCrossings, passes],
+    [region, trip, from, to, ferryCrossings, passes, preferredNetwork, evChargers],
   );
 
   const fuelStops = useMemo(

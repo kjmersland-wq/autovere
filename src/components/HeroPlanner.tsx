@@ -29,6 +29,7 @@ import {
   detectEmissionBadges,
   detectFerryCrossings,
   estimateAllVariants,
+  loadEvChargers,
   FUELS,
   QUICK_ROUTES,
   REGION_COPY,
@@ -212,6 +213,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       }
     }
     setGeo(resolved);
+    const evChargers = await loadEvChargers();
     setTrip(
       estimateAllVariants(
         region,
@@ -226,6 +228,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
         resolved,
         prices,
         profile,
+        evChargers,
       ),
     );
     const places = resolved
@@ -616,13 +619,14 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             fuel={fuel}
             region={region}
             emissionBadges={badges}
-            onAddStop={(name) => {
+            onAddStop={async (name) => {
               if (stops.includes(name)) {
                 toast.info(t.results.stopExists(name));
                 return;
               }
               const next = [...stops, name];
               setStops(next);
+              const evChargers = await loadEvChargers();
               setTrip(
                 estimateAllVariants(
                   region,
@@ -636,6 +640,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   effectiveDuration,
                   geo,
                   prices,
+                  undefined,
+                  evChargers,
                 ),
               );
               toast.success(t.results.stopAdded(name, next.length));

@@ -4,8 +4,9 @@ import { DEFAULT_KWH_EUR, operatorKwhEur } from "@/lib/market-rates";
 import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
-import { filterByCorridor } from "@/lib/corridor-filter";
+import { filterByCorridor, haversineKm } from "@/lib/corridor-filter";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
+import type { EvCharger } from "@/lib/corridor-map";
 
 export type { TripType };
 
@@ -319,6 +320,27 @@ const COUNTRY_EV_NETWORKS: Record<string, string[]> = {
   GB: ["Ionity", "InstaVolt", "Tesla Supercharger", "Gridserve"],
 };
 
+/** Closest verified real charger to a point, within maxKm — null (never a
+ * fabricated fallback) when nothing real is that close. */
+function nearestChargerNear(chargers: EvCharger[], lat: number, lng: number, maxKm: number): EvCharger | null {
+  let best: EvCharger | null = null;
+  let bestKm = maxKm;
+  for (const c of chargers) {
+    const km = haversineKm(lat, lng, c.lat, c.lon);
+    if (km <= bestKm) {
+      bestKm = km;
+      best = c;
+    }
+  }
+  return best;
+}
+
+/** How far from the ideal physics-based stop point a real verified hub may
+ * sit and still count as "the charger for this leg" — wider than the map's
+ * 15km corridor buffer since a stop only needs to exist somewhere reasonably
+ * near the point, not directly on the routed line. */
+const CHARGING_STOP_SEARCH_KM = 60;
+
 function buildOptimizer(
   region: RegionKey,
   vehicle: VehicleKey,
@@ -328,6 +350,7 @@ function buildOptimizer(
   geo?: RouteGeo | null,
   profile?: VehicleProfile | null,
   pricePerKwh?: number,
+  evChargers: EvCharger[] = [],
 ): EnergyOptimizer {
   const isEv = fuel === "electric";
   const tank = vehicle === "motorhome" ? 90 : vehicle === "motorcycle" ? 18 : 55;
@@ -385,8 +408,35 @@ function buildOptimizer(
     const legKm = i === 0 ? atKm : Math.round(safeRange);
     const kwhNeeded = Math.round((legKm / 100) * kwhPer100);
     const point = corridorPoint(atKm);
-    const { list: local, hit } = orderNetworks(corridorNetworks(point?.code));
     const chargeNote = `Leg of ${d(legKm)} needs about ${kwhNeeded} kWh — arrive near ${bufferPct}% state of charge and charge to 80% in roughly ${vehicle === "motorhome" ? 38 : 22} min.`;
+
+    // Prefer a real, verified hub (src/data/ev_chargers_eu.json) near this
+    // leg's point over the generic per-country network list below — same
+    // dataset the corridor map uses. Falls back to the country-level list
+    // (never a fabricated station) when nothing real is close enough.
+    const realHub = isEv && point ? nearestChargerNear(evChargers, point.lat, point.lng, CHARGING_STOP_SEARCH_KM) : null;
+
+    if (realHub) {
+      const matchesPreferred = wanted ? realHub.network.toLowerCase().includes(wanted.toLowerCase()) : false;
+      return {
+        name: realHub.name,
+        atKm,
+        atLabel: d(atKm),
+        power: `${realHub.power_kw} kW ${realHub.connector}`,
+        networks: [realHub.network],
+        note: wanted
+          ? matchesPreferred
+            ? `${wanted} hub on this leg. ${chargeNote}`
+            : `No ${wanted} site in this battery window — nearest verified hub is ${realHub.name} (${realHub.network}). ${chargeNote}`
+          : `${realHub.name} (${realHub.network}). ${chargeNote}`,
+        kwhNeeded,
+        legLabel: d(legKm),
+        pricePerKwh: operatorKwhEur(realHub.network) || pricePerKwh || DEFAULT_KWH_EUR,
+        ...(wanted ? { preferred: matchesPreferred, fallback: !matchesPreferred } : {}),
+      };
+    }
+
+    const { list: local, hit } = orderNetworks(corridorNetworks(point?.code));
     return {
       name: point ? `${point.place || point.country} (${point.country})` : `Stop at ${d(atKm)}`,
       atKm,
@@ -582,6 +632,7 @@ export function estimateTrip(
   geo: RouteGeo | null = null,
   prices: EnergyPrices | null = null,
   profile: VehicleProfile | null = null,
+  evChargers: EvCharger[] = [],
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -724,7 +775,7 @@ export function estimateTrip(
     corridor,
     safety: safetyFor(region, vehicle, geo),
     pricePerKwh,
-    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh),
+    optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh, evChargers),
     vignette:
       activeVariant === "tollfree"
         ? null
@@ -743,6 +794,19 @@ export function estimateTrip(
   };
 }
 
+/** Lazily loads and caches the verified EV charger dataset (~700kB) for the
+ * lifetime of the session — a top-level import here would inline it into
+ * every bundle that imports trip-data.ts (effectively every page), so
+ * callers (HeroPlanner) await this once before computing a trip. Same
+ * dataset/loading approach as CorridorMap.tsx uses for the map layer. */
+let evChargersPromise: Promise<EvCharger[]> | null = null;
+export function loadEvChargers(): Promise<EvCharger[]> {
+  evChargersPromise ??= import("@/data/ev_chargers_eu.json")
+    .then((m) => m.default as EvCharger[])
+    .catch(() => []);
+  return evChargersPromise;
+}
+
 export function estimateAllVariants(
   region: RegionKey,
   vehicle: VehicleKey,
@@ -756,8 +820,9 @@ export function estimateAllVariants(
   geo: RouteGeo | null = null,
   prices: EnergyPrices | null = null,
   profile: VehicleProfile | null = null,
+  evChargers: EvCharger[] = [],
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays, geo, prices, profile] as const;
+  const args = [extraStops, tripType, durationDays, geo, prices, profile, evChargers] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
