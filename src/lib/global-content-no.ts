@@ -117,7 +117,7 @@ export const NO_FAQ: InfoPageContent = {
     },
     {
       heading: "Trenger jeg en konto?",
-      body: "Nei. Du kan planlegge og eksportere uten å registrere deg. Min Garasje lagrer kjøretøy og turer lokalt på din egen enhet, så ingenting forlater nettleseren med mindre du deler det selv.",
+      body: "Nei. Umiddelbar beregning — ingen konto nødvendig for å forhåndsvise. Min Garasje lagrer kjøretøy og turer lokalt på din egen enhet; eksport (GPX, PDF-turbeskrivelse, send-til-bil) låses opp med engangskjøpet Trip Pass (14 dager) eller Pro.",
     },
   ],
   note: DISCLAIMER,

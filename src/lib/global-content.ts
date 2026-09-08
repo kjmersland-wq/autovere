@@ -117,7 +117,7 @@ export const GLOBAL_FAQ: InfoPageContent = {
     },
     {
       heading: "Do I need an account?",
-      body: "No. You can plan and export without signing up. My Garage stores your vehicles and trips on your own device so nothing leaves your browser unless you choose to share it.",
+      body: "No. Instant calculation — no account needed to preview. My Garage stores your vehicles and trips on your own device; exports (GPX, PDF itinerary, send-to-car) are unlocked with the one-time 14-day Trip Pass or Pro.",
     },
   ],
   note: DISCLAIMER,
@@ -188,7 +188,7 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
       items: [
         "We do not sell or rent personal data",
         "We do not track your live location",
-        "We do not require an account to plan, export or share a trip",
+        "We do not require an account to plan or preview a trip — exports are part of Trip Pass and Pro",
       ],
     },
     {

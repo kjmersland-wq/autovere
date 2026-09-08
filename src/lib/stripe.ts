@@ -28,15 +28,18 @@ export function getStripeEnvironment(): StripeEnv {
 
 /** Human-readable price IDs registered with the payment provider. */
 export const PRICE_IDS = {
+  tripPass: "trip_pass",
   proMonthly: "pro_monthly",
   proYearly: "pro_yearly",
   businessMonthly: "business_monthly",
 } as const;
 
-export type PlanTier = "free" | "pro" | "fleet";
+export type PlanTier = "free" | "tripPass" | "pro" | "fleet";
 
 export function tierForPriceId(priceId: string | null | undefined): PlanTier {
   switch (priceId) {
+    case PRICE_IDS.tripPass:
+      return "tripPass";
     case PRICE_IDS.proMonthly:
     case PRICE_IDS.proYearly:
       return "pro";
@@ -47,7 +50,7 @@ export function tierForPriceId(priceId: string | null | undefined): PlanTier {
   }
 }
 
-export const TIER_RANK: Record<PlanTier, number> = { free: 0, pro: 1, fleet: 2 };
+export const TIER_RANK: Record<PlanTier, number> = { free: 0, tripPass: 1, pro: 2, fleet: 3 };
 
 /** Canonical production origin — live checkout always returns to the public domain. */
 const CANONICAL_ORIGIN = "https://www.autovere.com";

@@ -117,7 +117,7 @@ export const PL_FAQ: InfoPageContent = {
     },
     {
       heading: "Czy potrzebuję konta?",
-      body: "Nie. Możesz planować i eksportować trasy bez rejestracji. Moja Garaż zapisuje pojazdy i trasy lokalnie na Twoim urządzeniu, więc nic nie opuszcza przeglądarki, chyba że sam się tym podzielisz.",
+      body: "Nie. Natychmiastowa kalkulacja — konto nie jest potrzebne do podglądu. Mój Garaż zapisuje pojazdy i trasy lokalnie na Twoim urządzeniu; eksport (GPX, plan podróży PDF, wyślij do auta) odblokujesz jednorazowym Trip Passem na 14 dni lub planem Pro.",
     },
   ],
   note: DISCLAIMER,

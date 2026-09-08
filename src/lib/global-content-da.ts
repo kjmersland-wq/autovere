@@ -117,7 +117,7 @@ export const DA_FAQ: InfoPageContent = {
     },
     {
       heading: "Skal jeg have en konto?",
-      body: "Nej. Du kan planlægge og eksportere uden at oprette dig. Min Garage gemmer dine køretøjer og rejser lokalt på din egen enhed, så intet forlader din browser, medmindre du selv vælger at dele det.",
+      body: "Nej. Øjeblikkelig beregning — ingen konto nødvendig for at forhåndsvise. Min Garage gemmer dine køretøjer og rejser lokalt på din egen enhed; eksport (GPX, PDF-rejseplan, send-til-bil) låses op med engangskøbet Trip Pass (14 dage) eller Pro.",
     },
   ],
   note: DISCLAIMER,

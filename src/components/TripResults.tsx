@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship } from "lucide-react";
+import { CalendarCheck2, ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { tripTrackPoints } from "@/lib/trip-export";
 
@@ -24,6 +24,7 @@ import { PartnerOffers } from "@/components/PartnerOffers";
 
 import { PoiLinks } from "@/components/PoiLinks";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
+import { ExportPaywallModal } from "@/components/ExportPaywallModal";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { PassBorderIntel } from "@/components/PassBorderIntel";
 import { CorridorMap } from "@/components/CorridorMap";
@@ -38,6 +39,7 @@ import {
   useMoney,
 } from "@/lib/currency";
 import { useLocale, useT, useTr } from "@/lib/i18n";
+import { useSubscription } from "@/hooks/useSubscription";
 import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
 import {
@@ -177,6 +179,11 @@ export function TripResults({
   /** Operator picked interactively from the charging network pills. */
   const [netFilter, setNetFilter] = useState<string | null>(null);
   const { user, openAuth } = useAuth();
+  const { hasAtLeast, isActive } = useSubscription();
+  // Exports stay visible for everyone but open the Trip Pass paywall until
+  // the visitor holds Trip Pass, Pro or Fleet access.
+  const [exportPaywallOpen, setExportPaywallOpen] = useState(false);
+  const exportsLocked = !user || !(isActive && hasAtLeast("tripPass"));
   const trip = trips[active];
   const optimizer = useMemo(
     () => applyNetworkFilter(trip.optimizer, netFilter ?? trip.optimizer.preferredNetwork ?? null),
@@ -393,6 +400,22 @@ export function TripResults({
         />
       </div>
 
+      {/* Trust markers — why the numbers can be relied on. */}
+      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-muted-foreground">
+        <span className="inline-flex items-center gap-1.5">
+          <ShieldCheck className="size-3.5 text-primary" />
+          {tr("100% Official Rates — Zero Reseller Fees")}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <Zap className="size-3.5 text-primary" />
+          {tr("Real-world EV / Fuel Buffers")}
+        </span>
+        <span className="inline-flex items-center gap-1.5">
+          <CalendarCheck2 className="size-3.5 text-primary" />
+          {tr("Updated for 2026 Regulations")}
+        </span>
+      </div>
+
       {/* Instant clarity trio — the three answers every driver wants first. */}
       <div data-tour="results" className="mt-6 grid gap-4 sm:grid-cols-3">
         <div className="glass-panel rounded-2xl p-6 text-center">
@@ -460,7 +483,14 @@ export function TripResults({
         </Button>
       </div>
 
-      <RouteExportPanel trip={trip} origin={origin} destination={destination} />
+      <RouteExportPanel
+        trip={trip}
+        origin={origin}
+        destination={destination}
+        locked={exportsLocked}
+        onLockedAction={() => setExportPaywallOpen(true)}
+      />
+      <ExportPaywallModal open={exportPaywallOpen} onOpenChange={setExportPaywallOpen} />
 
       {showNorway && <NorwayAutoPassCard isMotorcycle={isMotorcycle} />}
       <ScandiBridgeCard bridges={bridges} isMotorcycle={isMotorcycle} />

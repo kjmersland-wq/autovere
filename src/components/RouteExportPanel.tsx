@@ -1,4 +1,4 @@
-import { Car, Download, FileText, MapPin, Printer, Send } from "lucide-react";
+import { Car, Download, FileText, Lock, MapPin, Printer, Send } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
@@ -85,26 +85,47 @@ export function RouteExportPanel({
   trip,
   origin,
   destination,
+  locked = false,
+  onLockedAction,
 }: {
   trip: TripEstimate;
   origin: string;
   destination: string;
+  /** Free-tier visitors: exports stay visible but open the paywall instead. */
+  locked?: boolean;
+  onLockedAction?: () => void;
 }) {
   const t = useT();
   const from = origin || "Start";
   const to = destination || "Destination";
   const base = `autovere-${slug(`${origin}-${destination}`, "road-trip")}`;
 
-  const exportGpx = () => {
+  /** Wraps an export action: locked users get the paywall, not the file. */
+  const guard = (action: () => void) => () => {
+    if (locked) {
+      onLockedAction?.();
+      return;
+    }
+    action();
+  };
+
+  const guardedLinkClick = (e: { preventDefault: () => void }) => {
+    if (locked) {
+      e.preventDefault();
+      onLockedAction?.();
+    }
+  };
+
+  const exportGpx = guard(() => {
     void trackEvent("export_gpx", { source: "export-panel" });
     downloadFile(buildTripGpx(trip, origin, destination), `${base}.gpx`, "application/gpx+xml");
     toast.success(t.export.gpxToast);
-  };
+  });
 
-  const exportKml = () => {
+  const exportKml = guard(() => {
     downloadFile(buildKml(trip, origin, destination), `${base}.kml`, "application/vnd.google-earth.kml+xml");
     toast.success(t.export.kmlToast);
-  };
+  });
 
   const navLinks = [
     {
@@ -196,6 +217,11 @@ export function RouteExportPanel({
       <div className="flex items-center gap-2">
         <Download className="size-5 text-primary" />
         <h3 className="text-lg font-semibold tracking-tight">{t.export.title}</h3>
+        {locked && (
+          <span className="ml-auto inline-flex items-center gap-1 rounded-full bg-primary/15 px-2.5 py-1 text-xs font-semibold text-primary">
+            🔒 Trip Pass / Pro
+          </span>
+        )}
       </div>
       <p className="mt-1 text-sm text-foreground/70">
         {t.export.intro}
@@ -220,46 +246,54 @@ export function RouteExportPanel({
         <div className="mt-3 flex flex-wrap gap-3">
           {navLinks.map((l) => (
             <Button key={l.label} asChild size="lg" variant="outline">
-              <a href={l.href} target="_blank" rel="noopener noreferrer">
+              <a href={l.href} target="_blank" rel="noopener noreferrer" onClick={guardedLinkClick}>
                 <MapPin className="size-4" /> {l.emoji} {l.label}
+                {locked && <Lock className="size-3.5 opacity-70" />}
               </a>
             </Button>
           ))}
 
-          <Popover>
-            <PopoverTrigger asChild>
-              <Button size="lg" variant="outline">
-                <Send className="size-4" /> {t.export.sendToCar}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent align="start" className="w-80 space-y-1">
-              <p className="px-1 pb-2 text-xs text-muted-foreground">
-                {t.export.handoffHint}
-              </p>
-              {CONNECTED_VEHICLES.map((v) => (
-                <a
-                  key={v.label}
-                  href={v.url(from, to)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  onClick={() => toast.success(t.export.handoffToast(v.label))}
-                  className="flex items-start gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-primary/10"
-                >
-                  <span className="text-lg leading-none">{v.emoji}</span>
-                  <span>
-                    <span className="block text-sm font-semibold">{v.label}</span>
-                    <span className="block text-xs text-muted-foreground">{t.export.hints[v.hintKey]}</span>
-                  </span>
-                </a>
-              ))}
-            </PopoverContent>
-          </Popover>
+          {locked ? (
+            <Button size="lg" variant="outline" onClick={() => onLockedAction?.()}>
+              <Send className="size-4" /> {t.export.sendToCar} <Lock className="size-3.5 opacity-70" />
+            </Button>
+          ) : (
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button size="lg" variant="outline">
+                  <Send className="size-4" /> {t.export.sendToCar}
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent align="start" className="w-80 space-y-1">
+                <p className="px-1 pb-2 text-xs text-muted-foreground">
+                  {t.export.handoffHint}
+                </p>
+                {CONNECTED_VEHICLES.map((v) => (
+                  <a
+                    key={v.label}
+                    href={v.url(from, to)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    onClick={() => toast.success(t.export.handoffToast(v.label))}
+                    className="flex items-start gap-3 rounded-xl px-2 py-2 transition-colors hover:bg-primary/10"
+                  >
+                    <span className="text-lg leading-none">{v.emoji}</span>
+                    <span>
+                      <span className="block text-sm font-semibold">{v.label}</span>
+                      <span className="block text-xs text-muted-foreground">{t.export.hints[v.hintKey]}</span>
+                    </span>
+                  </a>
+                ))}
+              </PopoverContent>
+            </Popover>
+          )}
         </div>
       </div>
 
       <div className="mt-6 flex flex-wrap items-center gap-3 border-t border-border pt-5">
-        <Button size="lg" variant="secondary" onClick={printItinerary}>
+        <Button size="lg" variant="secondary" onClick={() => (locked ? onLockedAction?.() : printItinerary())}>
           <Printer className="size-4" /> {t.export.print}
+          {locked && <Lock className="size-3.5 opacity-70" />}
         </Button>
         <span className="inline-flex items-center gap-2 text-xs text-muted-foreground">
           <Car className="size-3.5" /> {t.export.printHint}
