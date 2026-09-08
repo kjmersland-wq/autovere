@@ -12,6 +12,10 @@ export type Tier = {
   yearly?: string;
   cta: string;
   highlight?: boolean;
+  /** Overrides the "most loved" ribbon text (e.g. holiday pass). */
+  badge?: string;
+  /** Overrides the price unit label (e.g. one-time purchase). */
+  unitLabel?: string;
   features: string[];
 };
 
@@ -1221,21 +1225,281 @@ const HERO: Record<Locale, PricingHero> = {
 const REGION_PRICES: Partial<Record<RegionKey, Partial<Record<PlanTier, { monthly: string; yearly?: string }>>>> = {
   us: {
     free: { monthly: "$0" },
+    tripPass: { monthly: "$8.99" },
     pro: { monthly: "$5.99", yearly: "$49" },
     fleet: { monthly: "$24" },
   },
   ca: {
     free: { monthly: "$0 CAD" },
+    tripPass: { monthly: "$10.99 CAD" },
     pro: { monthly: "$6.99 CAD", yearly: "$59 CAD" },
     fleet: { monthly: "$29 CAD" },
   },
 };
 
+type TripPassCopy = { name: string; tagline: string; unit: string; cta: string; badge: string; features: string[] };
+
+const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
+  en: {
+    name: "Trip Pass (14 Days)",
+    tagline: "One holiday. One payment. Everything unlocked for 14 days.",
+    unit: "one-time",
+    cta: "Get Trip Pass",
+    badge: "Most Popular for Holidays",
+    features: [
+      "Full turn-by-turn toll & vignette breakdown",
+      "One-click official direct vignette purchase checklist",
+      "Export route to Google Maps, Apple Maps & GPX files",
+      "Printable Offline Emergency & Trip Kit (PDF)",
+      "Real-time mountain pass opening status",
+    ],
+  },
+  no: {
+    name: "Trip Pass (14 dager)",
+    tagline: "Én ferie. Én betaling. Alt ulåst i 14 dager.",
+    unit: "engangsbeløp",
+    cta: "Kjøp Trip Pass",
+    badge: "Mest populær til ferien",
+    features: [
+      "Komplett bom- og vignettfordeling, sving for sving",
+      "Sjekkliste for offisielt vignettkjøp med ett klikk",
+      "Eksporter ruten til Google Maps, Apple Maps og GPX",
+      "Utskrivbar beredskaps- og turbeskrivelse (PDF)",
+      "Sanntidsstatus for åpne fjelloverganger",
+    ],
+  },
+  sv: {
+    name: "Trip Pass (14 dagar)",
+    tagline: "En semester. En betalning. Allt upplåst i 14 dagar.",
+    unit: "engångsbelopp",
+    cta: "Köp Trip Pass",
+    badge: "Mest populär för semestern",
+    features: [
+      "Fullständig tull- och vinjettspecifikation, kurva för kurva",
+      "Checklista för officiella vinjettköp med ett klick",
+      "Exportera rutten till Google Maps, Apple Maps och GPX",
+      "Utskrivbar beredskaps- och resebeskrivning (PDF)",
+      "Realtidsstatus för bergspassens öppettider",
+    ],
+  },
+  da: {
+    name: "Trip Pass (14 dage)",
+    tagline: "Én ferie. Én betaling. Alt låst op i 14 dage.",
+    unit: "engangsbeløb",
+    cta: "Køb Trip Pass",
+    badge: "Mest populær til ferien",
+    features: [
+      "Komplet oversigt over vejafgifter og vignetter, sving for sving",
+      "Tjekliste til officielt vignettkøb med ét klik",
+      "Eksportér ruten til Google Maps, Apple Maps og GPX",
+      "Printbar beredskabs- og rejseplan (PDF)",
+      "Realtidsstatus for bjergpassenes åbning",
+    ],
+  },
+  de: {
+    name: "Trip Pass (14 Tage)",
+    tagline: "Ein Urlaub. Eine Zahlung. 14 Tage alles freigeschaltet.",
+    unit: "einmalig",
+    cta: "Trip Pass holen",
+    badge: "Beliebteste Wahl für den Urlaub",
+    features: [
+      "Vollständige Maut- und Vignettenaufstellung, Kurve für Kurve",
+      "Offizielle Vignetten-Kaufcheckliste mit einem Klick",
+      "Route exportieren nach Google Maps, Apple Maps & GPX",
+      "Druckbares Notfall- & Reiseset (PDF)",
+      "Echtzeit-Öffnungsstatus der Bergpässe",
+    ],
+  },
+  nl: {
+    name: "Trip Pass (14 dagen)",
+    tagline: "Eén vakantie. Eén betaling. 14 dagen alles ontgrendeld.",
+    unit: "eenmalig",
+    cta: "Trip Pass kopen",
+    badge: "Populairst voor vakanties",
+    features: [
+      "Volledige tol- en vignetuitsplitsing, bocht voor bocht",
+      "Officiële vignet-aankoopchecklist met één klik",
+      "Route exporteren naar Google Maps, Apple Maps & GPX",
+      "Printbare nood- en reiskit (PDF)",
+      "Realtime openingsstatus van bergpassen",
+    ],
+  },
+  fr: {
+    name: "Trip Pass (14 jours)",
+    tagline: "Un voyage. Un paiement. Tout débloqué pendant 14 jours.",
+    unit: "paiement unique",
+    cta: "Obtenir le Trip Pass",
+    badge: "Le plus populaire pour les vacances",
+    features: [
+      "Détail complet des péages et vignettes, virage par virage",
+      "Check-list officielle d'achat de vignettes en un clic",
+      "Export vers Google Maps, Apple Maps et fichiers GPX",
+      "Kit voyage & urgence hors ligne imprimable (PDF)",
+      "Ouverture des cols de montagne en temps réel",
+    ],
+  },
+  pl: {
+    name: "Trip Pass (14 dni)",
+    tagline: "Jeden urlop. Jedna płatność. Wszystko odblokowane na 14 dni.",
+    unit: "płatność jednorazowa",
+    cta: "Kup Trip Pass",
+    badge: "Najpopularniejszy na wakacje",
+    features: [
+      "Pełne zestawienie opłat drogowych i winiet, zakręt po zakręcie",
+      "Oficjalna lista zakupu winiet jednym kliknięciem",
+      "Eksport trasy do Google Maps, Apple Maps i GPX",
+      "Drukowany zestaw awaryjny i podróżny (PDF)",
+      "Status otwarcia przełęczy w czasie rzeczywistym",
+    ],
+  },
+  es: {
+    name: "Trip Pass (14 días)",
+    tagline: "Unas vacaciones. Un pago. Todo desbloqueado 14 días.",
+    unit: "pago único",
+    cta: "Conseguir Trip Pass",
+    badge: "El favorito para las vacaciones",
+    features: [
+      "Desglose completo de peajes y viñetas, curva a curva",
+      "Lista oficial de compra de viñetas con un clic",
+      "Exporta la ruta a Google Maps, Apple Maps y GPX",
+      "Kit de emergencia y viaje imprimible (PDF)",
+      "Estado de apertura de puertos de montaña en tiempo real",
+    ],
+  },
+  it: {
+    name: "Trip Pass (14 giorni)",
+    tagline: "Una vacanza. Un pagamento. Tutto sbloccato per 14 giorni.",
+    unit: "pagamento unico",
+    cta: "Ottieni Trip Pass",
+    badge: "Il più scelto per le vacanze",
+    features: [
+      "Dettaglio completo di pedaggi e vignette, curva per curva",
+      "Checklist ufficiale per l'acquisto delle vignette con un clic",
+      "Esporta il percorso su Google Maps, Apple Maps e GPX",
+      "Kit viaggio ed emergenza stampabile (PDF)",
+      "Stato di apertura dei passi montani in tempo reale",
+    ],
+  },
+  pt: {
+    name: "Trip Pass (14 dias)",
+    tagline: "Umas férias. Um pagamento. Tudo desbloqueado por 14 dias.",
+    unit: "pagamento único",
+    cta: "Obter Trip Pass",
+    badge: "O favorito para férias",
+    features: [
+      "Detalhe completo de portagens e vinhetas, curva a curva",
+      "Lista oficial de compra de vinhetas com um clique",
+      "Exportar rota para Google Maps, Apple Maps e GPX",
+      "Kit de emergência e viagem para imprimir (PDF)",
+      "Estado de abertura dos portos de montanha em tempo real",
+    ],
+  },
+  us: {
+    name: "Trip Pass (14 Days)",
+    tagline: "One road trip. One payment. Everything unlocked for 14 days.",
+    unit: "one-time",
+    cta: "Get Trip Pass",
+    badge: "Most Popular for Road Trips",
+    features: [
+      "Full turn-by-turn toll & vignette breakdown",
+      "One-click official direct vignette purchase checklist",
+      "Export route to Google Maps, Apple Maps & GPX files",
+      "Printable Offline Emergency & Trip Kit (PDF)",
+      "Real-time mountain pass opening status",
+    ],
+  },
+  fi: {
+    name: "Trip Pass (14 päivää)",
+    tagline: "Yksi loma. Yksi maksu. Kaikki auki 14 päiväksi.",
+    unit: "kertamaksu",
+    cta: "Hanki Trip Pass",
+    badge: "Lomailijoiden suosikki",
+    features: [
+      "Täysi tietulli- ja vinjettiesittely, mutka mutkalta",
+      "Virallinen vinjetin ostolista yhdellä klikkauksella",
+      "Vie reitti Google Mapsiin, Apple Mapsiin ja GPX-tiedostoon",
+      "Tulostettava hätä- ja matkapaketti (PDF)",
+      "Vuoristosolien reaaliaikainen avautumistila",
+    ],
+  },
+  ja: {
+    name: "Trip Pass（14日間）",
+    tagline: "一度の旅行に、一度のお支払い。14日間すべて開放。",
+    unit: "買い切り",
+    cta: "Trip Passを入手",
+    badge: "休暇旅行に一番人気",
+    features: [
+      "料金所・ビネットの完全なターンバイターン内訳",
+      "ワンクリックの公式ビネット購入チェックリスト",
+      "Google Maps・Apple Maps・GPXへのルート出力",
+      "印刷できる緊急＆旅程キット（PDF）",
+      "山岳パスの開通状況をリアルタイム表示",
+    ],
+  },
+  zh: {
+    name: "Trip Pass（14 天）",
+    tagline: "一次假期，一次付费，14 天全部解锁。",
+    unit: "一次性",
+    cta: "获取 Trip Pass",
+    badge: "假期出行最受欢迎",
+    features: [
+      "逐段完整的通行费与高速票明细",
+      "一键官方高速票购买清单",
+      "导出路线至 Google Maps、Apple Maps 与 GPX 文件",
+      "可打印的离线应急与行程套件（PDF）",
+      "山区垭口实时开放状态",
+    ],
+  },
+};
+
+/** Repositioned Pro subtitle — campers, motorhomes and frequent drivers. */
+const PRO_TAGLINE: Record<Locale, string> = {
+  en: "Best for Campers, Motorhomes & Frequent Drivers",
+  no: "Best for campingvogner, bobiler og hyppige sjåfører",
+  sv: "Bäst för husvagnar, husbilar och frekventa förare",
+  da: "Bedst til campingvogne, autocampere og hyppige bilister",
+  de: "Ideal für Camper, Wohnmobile & Vielfahrer",
+  nl: "Ideaal voor campers, kampeerauto's & veelrijders",
+  fr: "Idéal pour camping-cars, vans & grands rouleurs",
+  pl: "Najlepszy dla kamperów i częstych kierowców",
+  es: "Ideal para campers, autocaravanas y conductores frecuentes",
+  it: "Ideale per camper, motorhome e guidatori frequenti",
+  pt: "Ideal para campers, autocaravanas e condutores frequentes",
+  us: "Best for RVs, Campers & Frequent Drivers",
+  fi: "Paras matkailuautoille ja paljon ajaville",
+  ja: "キャンピングカー・モーターホーム・よく運転する方に",
+  zh: "最适合房车、露营车与经常自驾的用户",
+};
+
 export function tiersFor(locale: Locale, region?: RegionKey): Tier[] {
   const base = TIERS_BY_LOCALE[locale] ?? EN_TIERS;
   const overrides = region ? REGION_PRICES[region] : undefined;
-  if (!overrides) return base;
-  return base.map((tier) => {
+  const tp = TRIP_PASS_COPY[locale] ?? TRIP_PASS_COPY.en;
+  const proTagline = PRO_TAGLINE[locale] ?? PRO_TAGLINE.en;
+
+  const withTripPass: Tier[] = base.flatMap((tier) => {
+    if (tier.id === "pro") {
+      const tripPass: Tier = {
+        id: "tripPass",
+        name: tp.name,
+        emoji: "🏕️",
+        tagline: tp.tagline,
+        monthly: "€7.99",
+        cta: tp.cta,
+        highlight: true,
+        badge: tp.badge,
+        unitLabel: tp.unit,
+        features: tp.features,
+      };
+      // Pro is repositioned as the annual season pass — the holiday
+      // spotlight moves to Trip Pass.
+      return [tripPass, { ...tier, tagline: proTagline, highlight: false }];
+    }
+    return [tier];
+  });
+
+  if (!overrides) return withTripPass;
+  return withTripPass.map((tier) => {
     const price = overrides[tier.id];
     if (!price) return tier;
     const { yearly: baseYearly, ...rest } = tier;

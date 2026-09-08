@@ -26,11 +26,13 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
   const [portalLoading, setPortalLoading] = useState(false);
 
   const priceIdFor = (tier: Tier) =>
-    tier.id === "fleet"
-      ? PRICE_IDS.businessMonthly
-      : cycle === "yearly"
-        ? PRICE_IDS.proYearly
-        : PRICE_IDS.proMonthly;
+    tier.id === "tripPass"
+      ? PRICE_IDS.tripPass
+      : tier.id === "fleet"
+        ? PRICE_IDS.businessMonthly
+        : cycle === "yearly"
+          ? PRICE_IDS.proYearly
+          : PRICE_IDS.proMonthly;
 
   const upgrade = (tier: Tier) => {
     void trackEvent("pro_upgrade_clicked", { tier: tier.id, cycle, signedIn: Boolean(user) });
@@ -104,10 +106,17 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
         ))}
       </div>
 
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
         {tiers.map((tier) => {
-          const price = cycle === "yearly" && tier.yearly ? tier.yearly : tier.monthly;
-          const unit = tier.id === "free" ? L.forever : cycle === "yearly" && tier.yearly ? L.perYear : L.perMonth;
+          const oneTime = tier.id === "tripPass";
+          const price = oneTime ? tier.monthly : cycle === "yearly" && tier.yearly ? tier.yearly : tier.monthly;
+          const unit = oneTime
+            ? tier.unitLabel
+            : tier.id === "free"
+              ? L.forever
+              : cycle === "yearly" && tier.yearly
+                ? L.perYear
+                : L.perMonth;
           const isCurrent = isActive ? currentTier === tier.id : tier.id === "free";
           return (
             <article
@@ -119,7 +128,7 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
             >
               {tier.highlight && (
                 <span className="absolute -top-3 left-6 inline-flex items-center gap-1 rounded-full bg-primary px-3 py-1 text-xs font-semibold text-primary-foreground">
-                  <Sparkles className="size-3" /> {L.mostLoved}
+                  <Sparkles className="size-3" /> {tier.badge ?? L.mostLoved}
                 </span>
               )}
               <h3 className="text-lg font-semibold tracking-tight">

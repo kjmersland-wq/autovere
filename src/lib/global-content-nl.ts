@@ -188,7 +188,7 @@ export const NL_PRIVACY: InfoPageContent = {
       items: [
         "We verkopen of verhuren nooit persoonsgegevens",
         "We volgen je live locatie niet",
-        "We vereisen geen account om een reis te plannen, exporteren of delen",
+        "We vereisen geen account om een reis te plannen of te bekijken — exporteren hoort bij Trip Pass en Pro",
       ],
     },
     {

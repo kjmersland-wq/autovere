@@ -188,7 +188,7 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
       items: [
         "We do not sell or rent personal data",
         "We do not track your live location",
-        "We do not require an account to plan, export or share a trip",
+        "We do not require an account to plan or preview a trip — exports are part of Trip Pass and Pro",
       ],
     },
     {
