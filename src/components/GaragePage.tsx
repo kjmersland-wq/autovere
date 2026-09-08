@@ -38,6 +38,8 @@ import { Label } from "@/components/ui/label";
 import { useAdmin } from "@/hooks/useAdmin";
 import { useGarageText } from "@/lib/garage-i18n";
 import { buildPath, splitPath } from "@/lib/locales";
+import { useLocale } from "@/lib/i18n";
+import { POI_GROUPS, POI_INTERESTS, poiLabel } from "@/lib/poi-interests";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { CURRENCIES, useCurrency } from "@/lib/currency";
@@ -48,7 +50,6 @@ import {
   DEFAULT_TRAVEL_PROFILE,
   FUEL_LABEL,
   TOLL_TAGS,
-  TRAVEL_INTERESTS,
   VEHICLE_META,
   duplicateTrip,
   googleMapsUrl,
@@ -113,6 +114,7 @@ export function GaragePage() {
   const { user, openAuth, signOut } = useAuth();
   const { t: tx, isNo, isDa, isDe, isNl, isFr, isPl, isEs, isIt, isFi, isPt, isJa, isZh, meta: tmeta } = useGarageText();
   const { isAdmin } = useAdmin();
+  const garageLocale = useLocale();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const { prefix, region } = splitPath(pathname);
   const pricingHref = buildPath({ prefix, region, page: "pricing" });
