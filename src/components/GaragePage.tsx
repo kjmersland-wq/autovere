@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   Trash2,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 
