@@ -615,42 +615,7 @@ export function startTour(locale: string) {
       btn.style.padding = "0 0.35rem";
     },
     onDestroyed: markSeen,
-    steps: [
-      {
-        element: '[data-tour="locale"]',
-        popover: {
-          title: copy.steps[0].title,
-          description: copy.steps[0].description,
-          side: "bottom",
-          align: "end",
-        },
-      },
-      {
-        element: '[data-tour="places"]',
-        popover: { title: copy.steps[1].title, description: copy.steps[1].description, side: "bottom" },
-      },
-      {
-        element: '[data-tour="preferences"]',
-        popover: { title: copy.steps[2].title, description: copy.steps[2].description, side: "top" },
-      },
-      {
-        element: '[data-tour="calculate"]',
-        popover: {
-          title: copy.steps[3].title,
-          description: copy.steps[3].description,
-          side: "top",
-          align: "end",
-        },
-      },
-      {
-        element: "#send-to-car-hub",
-        popover: {
-          title: copy.steps[4].title,
-          description: copy.steps[4].description,
-          side: "top",
-        },
-      },
-    ],
+    steps: tourTargets(copy),
   });
 
   d.drive();
