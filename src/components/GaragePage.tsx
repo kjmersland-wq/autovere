@@ -124,10 +124,9 @@ export function GaragePage() {
   const { tier, isActive, hasAtLeast } = useSubscription();
   const { currency, setCurrency } = useCurrency();
   // Travel party is a Pro feature, but the filter itself is visible on every locale.
-  const isDefaultEnglishSite = !prefix && !region;
   const isEnglishSite = !prefix || prefix === "us";
   const chargingNetworkOptions = isEnglishSite ? CHARGING_NETWORKS : BASE_CHARGING_NETWORKS;
-  const canUseTravelProfile = isDefaultEnglishSite && (isAdmin || hasAtLeast("pro"));
+  const canUseTravelProfile = isAdmin || hasAtLeast("pro");
 
   const [section, setSection] = useState<SectionId>("overview");
   const [vehicles, setVehicles] = useState<GarageVehicle[]>([]);
