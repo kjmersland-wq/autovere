@@ -1,6 +1,10 @@
 /**
  * Opt-in product tour (driver.js).
  * Never auto-starts: `startTour()` is only called from the "Quick tour" pill.
+ *
+ * Unified 5-step flow for every locale:
+ *   1 route + vehicle → 2 official tolls → 3 travel party & stops (14 categories)
+ *   → 4 export & navigate → 5 My Garage (save vehicles, saved interests, trips)
  */
 import { driver, type DriveStep } from "driver.js";
 import "driver.js/dist/driver.css";
@@ -17,6 +21,34 @@ export type TourCopy = {
   steps: Step[];
 };
 
+const EN_STEPS: Step[] = [
+  {
+    title: "1. Getting Started",
+    description:
+      "Enter your departure and destination, then select your vehicle type (EV, Motorhome, or Car). We automatically adjust toll classes, weight categories, and range calculations for your route.",
+  },
+  {
+    title: "2. Official Tolls & Vignettes",
+    description:
+      "Calculate your full trip budget for free with official, verified toll rates and direct links to authorized government vignette portals — no middleman markups.",
+  },
+  {
+    title: "3. Personalize Your Stops (Trip Pass)",
+    description:
+      "Traveling with family or in an RV? Pick from 14 interest categories — RV services, camping, scenic drives, viewpoints, castles, kids' play, wildlife, food, beaches, adventure and more. Pro and Trip Pass users get those stops injected into the route corridor, the offline PDF kit and every export.",
+  },
+  {
+    title: "4. Export & Navigate",
+    description:
+      "Take your calculated journey with you. Export turn-by-turn waypoints and official pass warnings directly to Google Maps, Apple Maps, or GPX devices.",
+  },
+  {
+    title: "5. My Garage keeps it all",
+    description:
+      "Save your vehicles with the Save vehicles button, set your travel party under the “Travel party & stops” tab so every new route reuses those interests, and keep your calculated trips ready to reopen with fresh prices.",
+  },
+];
+
 export const TOUR_COPY: Record<string, TourCopy> = {
   en: {
     trigger: "💡 Quick tour",
@@ -24,130 +56,7 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     prev: "Back",
     done: "Done",
     close: "Close / Skip",
-    steps: [
-      {
-        title: "1. Getting Started",
-        description:
-          "Enter your departure and destination, then select your vehicle type (EV, Motorhome, or Car). We automatically adjust toll classes, weight categories, and range calculations for your route.",
-      },
-      {
-        title: "2. Official Tolls & Vignettes",
-        description:
-          "Calculate your full trip budget for free with official, verified toll rates and direct links to authorized government vignette portals.",
-      },
-      {
-        title: "3. Personalize Your Stops (Trip Pass)",
-        description:
-          "Traveling with family or in an RV? Pick from 14 interest categories — RV services, camping, scenic drives, viewpoints, castles, kids, wildlife, food, beaches, adventure and more. Pro and Trip Pass users get those stops injected into the corridor, the offline PDF kit and every export.",
-      },
-      {
-        title: "4. Export & Navigate",
-        description:
-          "Take your calculated journey with you. Export turn-by-turn waypoints and official pass warnings directly to Google Maps, Apple Maps, or GPX devices.",
-      },
-    ],
-  },
-  no: {
-    trigger: "💡 Slik virker det",
-    next: "Neste",
-    prev: "Tilbake",
-    done: "Ferdig",
-    close: "Lukk / Hopp over",
-    steps: [
-      {
-        title: "1. Språk og valuta",
-        description:
-          "Velg ditt foretrukne språk og valuta her. Vi regner automatisk om alle bompenger, drivstoffpriser og oblater.",
-      },
-      {
-        title: "2. Hvor går turen?",
-        description:
-          "Skriv inn start og stopp, eller klikk på en av de populære rutene under for umiddelbar beregning.",
-      },
-      {
-        title: "3. Skreddersy reisen",
-        description:
-          "Tilpass for bobil, elbil eller bensin, og velg om du vil nyte fjelloverganger eller styre unna bomveier.",
-      },
-      {
-        title: "4. Resultat & Min Garasje",
-        description:
-          "Få full kostnadsoversikt med ett klikk. Abonnenter kan lagre turer i Min Garasje og gjenta reisen når som helst med ferske priser.",
-      },
-      {
-        title: "5. Send til bil & navigasjon",
-        description:
-          "Send ruten rett til Tesla-appen, åpne den på bilskjermen via Apple CarPlay / Android Auto, eller print ut reiseplanen på ditt språk.",
-      },
-    ],
-  },
-  sv: {
-    trigger: "💡 Snabbguide",
-    next: "Nästa",
-    prev: "Tillbaka",
-    done: "Klar",
-    close: "Stäng / Hoppa över",
-    steps: [
-      {
-        title: "1. Språk och valuta",
-        description:
-          "Välj ditt språk och din valuta här. Vi räknar automatiskt om alla vägtullar, bränslepriser och vinjetter.",
-      },
-      {
-        title: "2. Vart går resan?",
-        description:
-          "Ange start och mål — eller klicka på en av de populära rutterna nedan för en direkt beräkning.",
-      },
-      {
-        title: "3. Skräddarsy resan",
-        description:
-          "Anpassa för husbil, elbil eller bensin, och välj om du vill njuta av bergspass eller undvika vägtullar.",
-      },
-      {
-        title: "4. Resultat & Mitt Garage",
-        description:
-          "Få hela kostnadsöversikten med ett klick. Prenumeranter kan spara resor i Mitt Garage och upprepa turen när som helst med färska priser.",
-      },
-      {
-        title: "5. Skicka till bilen & navigation",
-        description:
-          "Skicka rutten direkt till Tesla-appen, öppna den på bilskärmen via Apple CarPlay / Android Auto, eller skriv ut reseplanen på ditt språk.",
-      },
-    ],
-  },
-  da: {
-    trigger: "💡 Hurtig rundvisning",
-    next: "Næste",
-    prev: "Tilbage",
-    done: "Færdig",
-    close: "Luk / Spring over",
-    steps: [
-      {
-        title: "1. Sprog og valuta",
-        description:
-          "Vælg dit foretrukne sprog og din valuta her. Vi omregner automatisk alle vejafgifter, brændstofpriser og vignetter.",
-      },
-      {
-        title: "2. Hvor går turen hen?",
-        description:
-          "Indtast start og destination — eller tryk på en af de populære ruter nedenfor for en øjeblikkelig beregning.",
-      },
-      {
-        title: "3. Tilpas turen",
-        description:
-          "Tilpas til autocamper, elbil eller benzin, og vælg om du vil nyde bjergpas eller undgå betalingsveje.",
-      },
-      {
-        title: "4. Resultat & Min Garage",
-        description:
-          "Få det fulde omkostningsoverblik med ét klik. Abonnenter kan gemme ture i Min Garage og gentage rejsen når som helst med friske priser.",
-      },
-      {
-        title: "5. Send til bilen & navigation",
-        description:
-          "Send ruten direkte til Tesla-appen, åbn den på bilskærmen via Apple CarPlay / Android Auto, eller print rejseplanen på dit sprog.",
-      },
-    ],
+    steps: EN_STEPS,
   },
   us: {
     trigger: "💡 Quick tour",
@@ -161,20 +70,111 @@ export const TOUR_COPY: Record<string, TourCopy> = {
         description:
           "Enter your departure and destination, then select your vehicle type (EV, RV, or Car). We automatically adjust toll classes, weight categories, and range calculations for your route.",
       },
+      EN_STEPS[1]!,
+      EN_STEPS[2]!,
+      EN_STEPS[3]!,
+      EN_STEPS[4]!,
+    ],
+  },
+  no: {
+    trigger: "💡 Slik virker det",
+    next: "Neste",
+    prev: "Tilbake",
+    done: "Ferdig",
+    close: "Lukk / Hopp over",
+    steps: [
       {
-        title: "2. Official Tolls & Vignettes",
+        title: "1. Hvor går turen?",
         description:
-          "Calculate your full trip budget for free with official, verified toll rates and direct links to authorized government vignette portals.",
+          "Skriv inn start og mål, og velg kjøretøy — elbil, bobil eller bil. Vi justerer automatisk bomklasse, vektgruppe og rekkeviddeberegning for ruten din.",
       },
       {
-        title: "3. Personalize Your Stops (Trip Pass)",
+        title: "2. Offisielle bompenger og oblater",
         description:
-          "Traveling with family or in an RV? Pick from 14 interest categories — RV services, camping, scenic drives, viewpoints, castles, kids, wildlife, food, beaches, adventure and more. Pro and Trip Pass users get those stops injected into the corridor, the offline PDF kit and every export.",
+          "Regn ut hele reisebudsjettet gratis, med verifiserte bomsatser og direktelenker til de offisielle portalene — ingen påslag fra mellomledd.",
       },
       {
-        title: "4. Export & Navigate",
+        title: "3. Reisefølge og stopp (Trip Pass)",
         description:
-          "Take your calculated journey with you. Export turn-by-turn waypoints and official pass warnings directly to Google Maps, Apple Maps, or GPX devices.",
+          "Reiser du med familie eller bobil? Velg blant 14 interessekategorier — bobilservice, camping, naturskjønne veier, utsiktspunkter, slott, lekeplasser, dyreliv, mat, strender, aktiv ferie og mer. Pro og Trip Pass legger stoppene rett inn i ruten, offline-PDF-en og alle eksporter.",
+      },
+      {
+        title: "4. Eksport og navigasjon",
+        description:
+          "Ta turen med deg. Send veipunkter og varsler om fjelloverganger rett til Google Maps, Apple Maps, Tesla-appen eller GPS-en din som GPX.",
+      },
+      {
+        title: "5. Min Garasje samler alt",
+        description:
+          "Lagre kjøretøyene med «Lagre kjøretøy»-knappen, velg reisefølget under fanen «Reisefølge og stopp» så interessene brukes på alle nye ruter, og hent frem lagrede turer igjen med ferske priser.",
+      },
+    ],
+  },
+  sv: {
+    trigger: "💡 Snabbguide",
+    next: "Nästa",
+    prev: "Tillbaka",
+    done: "Klar",
+    close: "Stäng / Hoppa över",
+    steps: [
+      {
+        title: "1. Vart går resan?",
+        description:
+          "Ange start och mål och välj fordon — elbil, husbil eller bil. Vi justerar automatiskt vägtullsklass, viktgrupp och räckvidd för din rutt.",
+      },
+      {
+        title: "2. Officiella vägtullar och vinjetter",
+        description:
+          "Räkna ut hela resebudgeten gratis, med verifierade tullsatser och direktlänkar till de officiella portalerna — utan mellanhänder.",
+      },
+      {
+        title: "3. Ressällskap och stopp (Trip Pass)",
+        description:
+          "Reser du med familj eller husbil? Välj bland 14 intressekategorier — husbilsservice, camping, natursköna vägar, utsiktsplatser, slott, lekplatser, djurliv, mat, stränder, äventyr och mer. Pro och Trip Pass lägger in stoppen i rutten, offline-PDF:en och alla exporter.",
+      },
+      {
+        title: "4. Export och navigation",
+        description:
+          "Ta med dig resan. Skicka waypoints och varningar om bergspass direkt till Google Maps, Apple Maps, Tesla-appen eller din GPS som GPX.",
+      },
+      {
+        title: "5. Mitt Garage samlar allt",
+        description:
+          "Spara dina fordon med Spara-knappen, välj ressällskap under fliken ”Ressällskap och stopp” så återanvänds intressena på varje ny rutt, och öppna sparade resor igen med aktuella priser.",
+      },
+    ],
+  },
+  da: {
+    trigger: "💡 Hurtig rundvisning",
+    next: "Næste",
+    prev: "Tilbage",
+    done: "Færdig",
+    close: "Luk / Spring over",
+    steps: [
+      {
+        title: "1. Hvor går turen hen?",
+        description:
+          "Indtast start og destination, og vælg køretøj — elbil, autocamper eller bil. Vi justerer automatisk afgiftsklasse, vægtgruppe og rækkevidde for din rute.",
+      },
+      {
+        title: "2. Officielle vejafgifter og vignetter",
+        description:
+          "Beregn hele rejsebudgettet gratis med verificerede takster og direkte links til de officielle portaler — uden mellemled.",
+      },
+      {
+        title: "3. Rejsefølge og stop (Trip Pass)",
+        description:
+          "Rejser du med familie eller autocamper? Vælg mellem 14 interessekategorier — autocamperservice, camping, naturskønne veje, udsigtspunkter, slotte, legepladser, dyreliv, mad, strande, aktiv ferie og mere. Pro og Trip Pass lægger stoppene ind i ruten, offline-PDF'en og alle eksporter.",
+      },
+      {
+        title: "4. Eksport og navigation",
+        description:
+          "Tag turen med dig. Send waypoints og advarsler om bjergpas direkte til Google Maps, Apple Maps, Tesla-appen eller din GPS som GPX.",
+      },
+      {
+        title: "5. Min Garage samler det hele",
+        description:
+          "Gem dine køretøjer med Gem-knappen, vælg rejsefølge under fanen “Rejsefølge og stop”, så interesserne bruges på alle nye ruter, og åbn gemte ture igen med friske priser.",
       },
     ],
   },
@@ -186,29 +186,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Schließen / Überspringen",
     steps: [
       {
-        title: "1. Sprache & Währung",
+        title: "1. Wohin geht die Reise?",
         description:
-          "Wählen Sie hier Sprache und Währung. Wir rechnen alle Mautgebühren, Kraftstoffpreise und Vignetten automatisch um.",
+          "Geben Sie Start und Ziel ein und wählen Sie Ihr Fahrzeug — E-Auto, Wohnmobil oder Pkw. Mautklasse, Gewichtsklasse und Reichweite passen wir automatisch an.",
       },
       {
-        title: "2. Wohin geht die Reise?",
+        title: "2. Offizielle Maut & Vignetten",
         description:
-          "Geben Sie Start und Ziel ein — oder tippen Sie unten auf eine beliebte Route für eine sofortige Berechnung.",
+          "Berechnen Sie das komplette Reisebudget kostenlos — mit geprüften Mautsätzen und Direktlinks zu den offiziellen Portalen, ganz ohne Aufschlag.",
       },
       {
-        title: "3. Reise anpassen",
+        title: "3. Reisegruppe & Stopps (Trip Pass)",
         description:
-          "Stellen Sie auf Wohnmobil, E-Auto oder Benziner um und entscheiden Sie, ob Sie Pässe genießen oder Mautstraßen meiden möchten.",
+          "Mit Familie oder Wohnmobil unterwegs? Wählen Sie aus 14 Interessenkategorien — Wohnmobilservice, Camping, Panoramastrecken, Aussichtspunkte, Burgen, Spielplätze, Tierwelt, Essen, Strände, Aktivurlaub und mehr. Pro und Trip Pass fügen diese Stopps in die Route, das Offline-PDF und jeden Export ein.",
       },
       {
-        title: "4. Ergebnis & Meine Garage",
+        title: "4. Export & Navigation",
         description:
-          "Volle Kostenübersicht mit einem Klick. Abonnenten speichern Reisen in Meiner Garage und wiederholen sie jederzeit mit aktuellen Preisen.",
+          "Nehmen Sie die Reise mit: Wegpunkte und Passwarnungen direkt an Google Maps, Apple Maps, die Tesla-App oder als GPX an Ihr Navi.",
       },
       {
-        title: "5. Ans Auto senden & Navigation",
+        title: "5. Meine Garage bewahrt alles",
         description:
-          "Senden Sie die Route direkt an die Tesla-App, öffnen Sie sie über Apple CarPlay / Android Auto im Fahrzeug, oder drucken Sie den Reiseplan in Ihrer Sprache.",
+          "Speichern Sie Fahrzeuge mit der Speichern-Schaltfläche, legen Sie Ihre Reisegruppe im Tab „Reisegruppe & Stopps“ fest, damit jede neue Route diese Interessen nutzt, und öffnen Sie gespeicherte Reisen jederzeit mit aktuellen Preisen.",
       },
     ],
   },
@@ -220,29 +220,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Sluiten / Overslaan",
     steps: [
       {
-        title: "1. Taal & valuta",
+        title: "1. Waar gaat de reis heen?",
         description:
-          "Kies hier je taal en valuta. We rekenen alle tol, brandstofprijzen en vignetten automatisch om.",
+          "Vul start en bestemming in en kies je voertuig — EV, camper of auto. Tolklasse, gewichtsklasse en actieradius passen we automatisch aan.",
       },
       {
-        title: "2. Waar gaat de reis heen?",
+        title: "2. Officiële tol & vignetten",
         description:
-          "Vul start en bestemming in — of tik op een populaire route hieronder voor een directe berekening.",
+          "Bereken je hele reisbudget gratis, met geverifieerde tarieven en directe links naar de officiële portalen — zonder tussenhandel.",
       },
       {
-        title: "3. Stem de reis af",
+        title: "3. Reisgezelschap & stops (Trip Pass)",
         description:
-          "Stel in op camper, EV of benzine en kies of je bergpassen wilt meepakken of tolwegen wilt vermijden.",
+          "Reis je met familie of een camper? Kies uit 14 interessecategorieën — camperservice, camping, mooie routes, uitzichtpunten, kastelen, speeltuinen, natuur, eten, stranden, avontuur en meer. Pro en Trip Pass zetten die stops in de route, de offline-PDF en elke export.",
       },
       {
-        title: "4. Resultaat & Mijn Garage",
+        title: "4. Export & navigatie",
         description:
-          "Volledig kostenoverzicht met één klik. Abonnees bewaren ritten in Mijn Garage en herhalen ze altijd met actuele prijzen.",
+          "Neem de rit mee: waypoints en waarschuwingen voor bergpassen rechtstreeks naar Google Maps, Apple Maps, de Tesla-app of als GPX naar je navigatie.",
       },
       {
-        title: "5. Naar de auto sturen & navigatie",
+        title: "5. Mijn Garage bewaart alles",
         description:
-          "Stuur de route direct naar de Tesla-app, open hem in de auto via Apple CarPlay / Android Auto, of print de reisplanning in jouw taal.",
+          "Bewaar voertuigen met de opslaan-knop, stel je reisgezelschap in op het tabblad “Reisgezelschap & stops” zodat elke nieuwe route die interesses gebruikt, en open bewaarde ritten opnieuw met actuele prijzen.",
       },
     ],
   },
@@ -254,29 +254,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Fermer / Passer",
     steps: [
       {
-        title: "1. Langue et devise",
+        title: "1. Où allez-vous ?",
         description:
-          "Choisissez ici votre langue et votre devise. Nous convertissons automatiquement péages, prix des carburants et vignettes.",
+          "Saisissez le départ et la destination, puis choisissez votre véhicule — électrique, camping-car ou voiture. Classe de péage, catégorie de poids et autonomie s'ajustent automatiquement.",
       },
       {
-        title: "2. Où allez-vous ?",
+        title: "2. Péages et vignettes officiels",
         description:
-          "Saisissez le départ et la destination — ou touchez un itinéraire populaire ci-dessous pour un calcul immédiat.",
+          "Calculez tout le budget gratuitement, avec des tarifs vérifiés et des liens directs vers les portails officiels — sans intermédiaire ni majoration.",
       },
       {
-        title: "3. Personnalisez le voyage",
+        title: "3. Compagnons de route et arrêts (Trip Pass)",
         description:
-          "Adaptez pour un camping-car, un véhicule électrique ou essence, et choisissez de savourer les cols ou d'éviter les péages.",
+          "Vous voyagez en famille ou en camping-car ? Choisissez parmi 14 catégories d'intérêts — services camping-car, camping, routes panoramiques, points de vue, châteaux, aires de jeux, faune, gastronomie, plages, aventure et plus. Pro et Trip Pass insèrent ces arrêts dans l'itinéraire, le PDF hors ligne et chaque export.",
       },
       {
-        title: "4. Résultats et Mon Garage",
+        title: "4. Export et navigation",
         description:
-          "Obtenez tout le budget en un clic. Les abonnés enregistrent leurs trajets dans Mon Garage et les relancent avec des prix actualisés.",
+          "Emportez le voyage : points de passage et alertes de cols directement vers Google Maps, Apple Maps, l'app Tesla ou votre GPS au format GPX.",
       },
       {
-        title: "5. Envoyer à la voiture et navigation",
+        title: "5. Mon Garage garde tout",
         description:
-          "Envoyez l'itinéraire directement à l'app Tesla, ouvrez-le sur l'écran du véhicule via Apple CarPlay / Android Auto, ou imprimez le carnet de route dans votre langue.",
+          "Enregistrez vos véhicules avec le bouton dédié, définissez vos compagnons de route dans l'onglet « Compagnons et arrêts » pour que chaque nouvel itinéraire reprenne ces intérêts, et rouvrez vos trajets avec des prix actualisés.",
       },
     ],
   },
@@ -288,29 +288,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Zamknij / Pomiń",
     steps: [
       {
-        title: "1. Język i waluta",
+        title: "1. Dokąd jedziesz?",
         description:
-          "Wybierz tutaj język i walutę. Automatycznie przeliczamy wszystkie opłaty drogowe, ceny paliwa i winiety.",
+          "Wpisz start i cel, a potem wybierz pojazd — elektryk, kamper lub auto. Klasę opłat, kategorię masy i zasięg dobieramy automatycznie.",
       },
       {
-        title: "2. Dokąd jedziesz?",
+        title: "2. Oficjalne opłaty i winiety",
         description:
-          "Wpisz start i cel — albo kliknij jedną z popularnych tras poniżej, aby od razu policzyć koszty.",
+          "Policz cały budżet podróży za darmo — zweryfikowane stawki i bezpośrednie linki do oficjalnych portali, bez pośredników i narzutów.",
       },
       {
-        title: "3. Dopasuj podróż",
+        title: "3. Towarzysze podróży i przystanki (Trip Pass)",
         description:
-          "Ustaw kampera, auto elektryczne lub benzynowe i zdecyduj, czy chcesz jechać przez przełęcze, czy omijać płatne drogi.",
+          "Jedziesz z rodziną albo kamperem? Wybierz spośród 14 kategorii — serwis kamperowy, kempingi, trasy widokowe, punkty widokowe, zamki, place zabaw, przyroda, jedzenie, plaże, aktywny wypoczynek i więcej. Pro i Trip Pass wstawiają te przystanki do trasy, PDF-a offline i każdego eksportu.",
       },
       {
-        title: "4. Wynik i Mój Garaż",
+        title: "4. Eksport i nawigacja",
         description:
-          "Pełny przegląd kosztów jednym kliknięciem. Subskrybenci zapisują trasy w Moim Garażu i powtarzają je z aktualnymi cenami.",
+          "Zabierz trasę ze sobą: punkty i ostrzeżenia o przełęczach prosto do Google Maps, Apple Maps, aplikacji Tesla lub jako GPX do nawigacji.",
       },
       {
-        title: "5. Wyślij do auta i nawigacja",
+        title: "5. Mój Garaż trzyma wszystko",
         description:
-          "Wyślij trasę prosto do aplikacji Tesla, otwórz ją na ekranie auta przez Apple CarPlay / Android Auto lub wydrukuj plan podróży w swoim języku.",
+          "Zapisz pojazdy przyciskiem zapisu, ustaw towarzyszy podróży w zakładce „Towarzysze i przystanki”, aby każda nowa trasa korzystała z tych zainteresowań, i otwieraj zapisane podróże z aktualnymi cenami.",
       },
     ],
   },
@@ -322,29 +322,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Cerrar / Omitir",
     steps: [
       {
-        title: "1. Idioma y moneda",
+        title: "1. ¿Adónde vas?",
         description:
-          "Elige aquí tu idioma y tu moneda. Convertimos automáticamente peajes, precios de combustible y viñetas.",
+          "Introduce origen y destino y elige tu vehículo — eléctrico, autocaravana o coche. Ajustamos automáticamente la clase de peaje, la categoría de peso y la autonomía.",
       },
       {
-        title: "2. ¿Adónde vas?",
+        title: "2. Peajes y viñetas oficiales",
         description:
-          "Introduce origen y destino — o toca una de las rutas populares de abajo para calcular al instante.",
+          "Calcula todo el presupuesto gratis, con tarifas verificadas y enlaces directos a los portales oficiales — sin intermediarios ni recargos.",
       },
       {
-        title: "3. Personaliza el viaje",
+        title: "3. Acompañantes y paradas (Trip Pass)",
         description:
-          "Configúralo para autocaravana, eléctrico o gasolina, y decide si disfrutar de los puertos de montaña o evitar peajes.",
+          "¿Viajas en familia o en autocaravana? Elige entre 14 categorías de interés — servicios para autocaravana, camping, rutas panorámicas, miradores, castillos, zonas infantiles, naturaleza, gastronomía, playas, aventura y más. Pro y Trip Pass insertan esas paradas en la ruta, el PDF sin conexión y cada exportación.",
       },
       {
-        title: "4. Resultados y Mi Garaje",
+        title: "4. Exportar y navegar",
         description:
-          "Todo el presupuesto en un clic. Los suscriptores guardan viajes en Mi Garaje y los repiten cuando quieran con precios actualizados.",
+          "Llévate el viaje: puntos de paso y avisos de puertos de montaña directamente a Google Maps, Apple Maps, la app de Tesla o tu GPS en GPX.",
       },
       {
-        title: "5. Enviar al coche y navegación",
+        title: "5. Mi Garaje lo guarda todo",
         description:
-          "Envía la ruta directamente a la app de Tesla, ábrela en la pantalla del coche con Apple CarPlay / Android Auto, o imprime el itinerario en tu idioma.",
+          "Guarda tus vehículos con el botón de guardar, define a tus acompañantes en la pestaña «Acompañantes y paradas» para que cada nueva ruta use esos intereses, y reabre tus viajes con precios actualizados.",
       },
     ],
   },
@@ -356,29 +356,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Chiudi / Salta",
     steps: [
       {
-        title: "1. Lingua e valuta",
+        title: "1. Dove vuoi andare?",
         description:
-          "Scegli qui lingua e valuta. Convertiamo automaticamente pedaggi, prezzi del carburante e vignette.",
+          "Inserisci partenza e destinazione e scegli il veicolo — elettrico, camper o auto. Classe di pedaggio, categoria di peso e autonomia si adattano da soli.",
       },
       {
-        title: "2. Dove vuoi andare?",
+        title: "2. Pedaggi e vignette ufficiali",
         description:
-          "Inserisci partenza e destinazione — oppure tocca uno degli itinerari popolari qui sotto per un calcolo immediato.",
+          "Calcola gratis l'intero budget, con tariffe verificate e link diretti ai portali ufficiali — senza intermediari né ricarichi.",
       },
       {
-        title: "3. Personalizza il viaggio",
+        title: "3. Compagni di viaggio e soste (Trip Pass)",
         description:
-          "Imposta camper, elettrico o benzina e scegli se goderti i valichi alpini o evitare del tutto i pedaggi.",
+          "Viaggi in famiglia o in camper? Scegli tra 14 categorie di interesse — servizi camper, campeggi, strade panoramiche, punti panoramici, castelli, aree giochi, natura, cibo, spiagge, avventura e altro. Pro e Trip Pass inseriscono le soste nell'itinerario, nel PDF offline e in ogni esportazione.",
       },
       {
-        title: "4. Risultati e Il Mio Garage",
+        title: "4. Esporta e naviga",
         description:
-          "Il budget completo con un clic. Gli abbonati salvano i viaggi ne Il Mio Garage e li ripetono con prezzi aggiornati.",
+          "Porta il viaggio con te: waypoint e avvisi sui valichi direttamente su Google Maps, Apple Maps, app Tesla o come GPX sul navigatore.",
       },
       {
-        title: "5. Invia all'auto e navigazione",
+        title: "5. Il Mio Garage conserva tutto",
         description:
-          "Invia il percorso direttamente all'app Tesla, aprilo sullo schermo dell'auto con Apple CarPlay / Android Auto, oppure stampa l'itinerario nella tua lingua.",
+          "Salva i veicoli con l'apposito pulsante, imposta i compagni di viaggio nella scheda «Compagni e soste» così ogni nuovo itinerario riusa quegli interessi, e riapri i viaggi salvati con prezzi aggiornati.",
       },
     ],
   },
@@ -390,29 +390,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Sulje / Ohita",
     steps: [
       {
-        title: "1. Kieli ja valuutta",
+        title: "1. Minne matka?",
         description:
-          "Valitse haluamasi kieli ja valuutta täältä. Muunnamme automaattisesti kaikki tietullit, polttoainehinnat ja vinjetit.",
+          "Syötä lähtöpaikka ja määränpää ja valitse ajoneuvo — sähköauto, matkailuauto tai auto. Tulliluokka, painoluokka ja toimintamatka säätyvät automaattisesti.",
       },
       {
-        title: "2. Minne matka suuntautuu?",
+        title: "2. Viralliset tietullit ja vinjetit",
         description:
-          "Kirjoita lähtöpaikka ja määränpää — tai napauta jotakin suosituista reiteistä alla saadaksesi arvion heti.",
+          "Laske koko matkabudjetti ilmaiseksi vahvistetuilla maksuilla ja suorilla linkeillä virallisiin portaaleihin — ilman välikäsiä.",
       },
       {
-        title: "3. Räätälöi matkasi",
+        title: "3. Matkaseurue ja pysähdykset (Trip Pass)",
         description:
-          "Aseta matkailuauto, sähköauto tai bensiiniauto, ja valitse, haluatko nauttia vuoristosolista vai välttää maksullisia teitä.",
+          "Matkustatko perheen kanssa tai matkailuautolla? Valitse 14 kiinnostuskategoriasta — matkailuautopalvelut, leirintä, maisematiet, näköalapaikat, linnat, leikkipaikat, luonto, ruoka, rannat, seikkailu ja muut. Pro ja Trip Pass lisäävät pysähdykset reitille, offline-PDF:ään ja jokaiseen vientiin.",
       },
       {
-        title: "4. Tulokset ja Oma Autotalli",
+        title: "4. Vienti ja navigointi",
         description:
-          "Saat koko kustannusyhteenvedon yhdellä klikkauksella. Tilaajat voivat tallentaa matkoja Omaan Autotalliin ja toistaa matkan milloin tahansa tuorein hinnoin.",
+          "Ota matka mukaan: reittipisteet ja solavaroitukset suoraan Google Mapsiin, Apple Mapsiin, Tesla-sovellukseen tai GPX-tiedostona navigaattoriin.",
       },
       {
-        title: "5. Lähetä autoon ja navigaattoriin",
+        title: "5. Oma Autotalli säilyttää kaiken",
         description:
-          "Lähetä reitti suoraan Tesla-sovellukseen, avaa se auton näytöllä Apple CarPlayn / Android Auton kautta, tai tulosta matkasuunnitelma omalla kielelläsi.",
+          "Tallenna ajoneuvot tallennuspainikkeella, valitse matkaseurue ”Matkaseurue ja pysähdykset” -välilehdellä, jolloin jokainen uusi reitti käyttää samoja kiinnostuksia, ja avaa tallennetut matkat uudelleen tuorein hinnoin.",
       },
     ],
   },
@@ -424,29 +424,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "Fechar / Saltar",
     steps: [
       {
-        title: "1. Idioma e moeda",
+        title: "1. Para onde vai?",
         description:
-          "Escolha aqui o seu idioma e moeda preferidos. Convertemos automaticamente todas as portagens, preços de combustível e vinhetas.",
+          "Indique partida e destino e escolha o veículo — elétrico, autocaravana ou automóvel. Classe de portagem, categoria de peso e autonomia ajustam-se automaticamente.",
       },
       {
-        title: "2. Para onde vai?",
+        title: "2. Portagens e vinhetas oficiais",
         description:
-          "Indique o ponto de partida e o destino — ou toque numa das rotas populares abaixo para um cálculo imediato.",
+          "Calcule todo o orçamento gratuitamente, com tarifas verificadas e ligações diretas aos portais oficiais — sem intermediários.",
       },
       {
-        title: "3. Personalize a sua viagem",
+        title: "3. Companheiros e paragens (Trip Pass)",
         description:
-          "Configure para autocaravana, elétrico ou a gasolina, e escolha se prefere desfrutar dos passos de montanha ou evitar as portagens.",
+          "Viaja em família ou de autocaravana? Escolha entre 14 categorias de interesse — serviços de autocaravana, campismo, estradas panorâmicas, miradouros, castelos, parques infantis, natureza, gastronomia, praias, aventura e mais. Pro e Trip Pass inserem essas paragens na rota, no PDF offline e em todas as exportações.",
       },
       {
-        title: "4. Resultados e A Minha Garagem",
+        title: "4. Exportar e navegar",
         description:
-          "Obtenha o resumo completo dos custos com um clique. Os subscritores podem guardar viagens na Minha Garagem e repeti-las quando quiserem, com preços atualizados.",
+          "Leve a viagem consigo: pontos de passagem e avisos de passagens de montanha diretamente para Google Maps, Apple Maps, app Tesla ou GPX.",
       },
       {
-        title: "5. Enviar para o carro e navegação",
+        title: "5. A Minha Garagem guarda tudo",
         description:
-          "Envie a rota diretamente para a aplicação Tesla, abra-a no ecrã do carro via Apple CarPlay / Android Auto, ou imprima o itinerário no seu idioma.",
+          "Guarde os veículos com o botão de guardar, defina os companheiros no separador “Companheiros e paragens” para que cada nova rota use esses interesses, e reabra viagens guardadas com preços atualizados.",
       },
     ],
   },
@@ -458,29 +458,29 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "閉じる／スキップ",
     steps: [
       {
-        title: "1. 言語と通貨を選ぶ",
+        title: "1. 出発地と目的地",
         description:
-          "ご希望の言語と通貨をここで選択できます。通行料金や燃料費、ビニエット代はすべて自動で換算されます。",
+          "出発地と目的地を入力し、車両（EV・キャンピングカー・乗用車）を選ぶだけです。通行料区分・重量クラス・航続距離は自動で調整されます。",
       },
       {
-        title: "2. 目的地を入力",
+        title: "2. 公式の通行料とビニエット",
         description:
-          "出発地と目的地を入力するだけです。人気のルートを選んで、すぐに費用を計算することもできます。",
+          "旅費の総額を無料で計算できます。確認済みの料金と、公式ポータルへの直接リンクをご案内します（手数料の上乗せはありません）。",
       },
       {
-        title: "3. 車両に合わせて調整",
+        title: "3. 同行者と立ち寄り先（Trip Pass）",
         description:
-          "キャンピングカー、EV、ガソリン車など、車両タイプを選択できます。山道を楽しむか、有料道路を避けるかも自由に設定可能です。",
+          "家族旅行やキャンピングカーの旅なら、14種類の興味カテゴリー（RV設備、キャンプ、絶景ルート、展望台、城、遊び場、自然、グルメ、ビーチ、アクティビティなど）から選べます。ProとTrip Passでは、選んだ立ち寄り先がルート・オフラインPDF・各種エクスポートに反映されます。",
       },
       {
-        title: "4. 結果とマイガレージ",
+        title: "4. エクスポートとナビ",
         description:
-          "ワンクリックで費用の全体像がわかります。ご登録いただくと、旅程をマイガレージに保存し、最新料金でいつでも再計算できます。",
+          "経由地や峠の注意情報を、Google マップ、Apple マップ、Teslaアプリ、GPX対応機器へそのまま送れます。",
       },
       {
-        title: "5. 車のナビへ送信",
+        title: "5. マイガレージにすべて保存",
         description:
-          "ルートをそのままTeslaアプリへ送信したり、Apple CarPlay／Android Auto経由で車の画面に表示したりできます。日本語での印刷にも対応しています。",
+          "保存ボタンで車両を登録し、「同行者と立ち寄り先」タブで好みを設定すると、次回以降のルートにも自動で反映されます。保存した旅程は最新料金でいつでも再表示できます。",
       },
     ],
   },
@@ -492,25 +492,28 @@ export const TOUR_COPY: Record<string, TourCopy> = {
     close: "关闭／跳过",
     steps: [
       {
-        title: "1. 选择语言和货币",
-        description: "在这里选择你的语言和货币偏好，过路费、油费和通行证费用会自动为你换算。",
-      },
-      {
-        title: "2. 输入行程",
-        description: "填写出发地和目的地即可，也可以直接选择下方的热门路线，立即查看费用。",
-      },
-      {
-        title: "3. 设置车辆信息",
-        description: "选择房车、电动车或燃油车，还可以设置是否走风景山路，或是否避开收费道路。",
-      },
-      {
-        title: "4. 查看结果并保存到车库",
-        description: "一键查看完整费用明细。开通会员后，可将行程保存到我的车库，随时用最新价格重新计算。",
-      },
-      {
-        title: "5. 发送到车载导航",
+        title: "1. 输入行程",
         description:
-          "可以直接将路线发送到Tesla应用，或通过Apple CarPlay／Android Auto在车机屏幕上打开，也支持导出中文版行程单。",
+          "填写出发地和目的地，并选择车辆类型（电动车、房车或普通轿车）。收费等级、重量分类和续航计算都会自动调整。",
+      },
+      {
+        title: "2. 官方过路费与通行证",
+        description: "免费计算完整旅行预算，采用核实过的费率，并直达官方购买portal，绝无中间加价。",
+      },
+      {
+        title: "3. 同行者与途中停靠（Trip Pass）",
+        description:
+          "与家人同行或开房车？可从 14 类兴趣中选择：房车服务、露营地、风景公路、观景点、城堡、儿童游乐、自然野趣、美食、海滩、户外活动等。Pro 与 Trip Pass 会把这些停靠点直接加入路线、离线 PDF 和所有导出文件。",
+      },
+      {
+        title: "4. 导出与导航",
+        description:
+          "把行程带上路：途经点和山口提醒可直接发送到 Google 地图、Apple 地图、Tesla 应用，或导出为 GPX。",
+      },
+      {
+        title: "5. 我的车库全部留存",
+        description:
+          "用保存按钮保存车辆，在“同行者与停靠”标签中设置兴趣，之后每条新路线都会沿用；保存的行程随时可用最新价格重新打开。",
       },
     ],
   },
@@ -522,62 +525,27 @@ export function tourCopy(locale: string): TourCopy {
 
 function tourTargets(copy: TourCopy): DriveStep[] {
   const s = (i: number) => copy.steps[i]!;
-  if (copy.steps.length === 4) {
-    return [
-      {
-        element: '[data-tour="places"]',
-        popover: { title: s(0).title, description: s(0).description, side: "bottom" },
-      },
-      {
-        element: '[data-tour="calculate"]',
-        popover: {
-          title: s(1).title,
-          description: s(1).description,
-          side: "top",
-          align: "end",
-        },
-      },
-      {
-        element: '[data-tour="personalize-stops"]',
-        popover: { title: s(2).title, description: s(2).description, side: "top" },
-      },
-      {
-        element: '[data-tour="export-actions"]',
-        popover: { title: s(3).title, description: s(3).description, side: "top" },
-      },
-    ];
-  }
-
   return [
     {
-      element: '[data-tour="locale"]',
-      popover: {
-        title: s(0).title,
-        description: s(0).description,
-        side: "bottom",
-        align: "end",
-      },
-    },
-    {
       element: '[data-tour="places"]',
-      popover: { title: s(1).title, description: s(1).description, side: "bottom" },
-    },
-    {
-      element: '[data-tour="preferences"]',
-      popover: { title: s(2).title, description: s(2).description, side: "top" },
+      popover: { title: s(0).title, description: s(0).description, side: "bottom" },
     },
     {
       element: '[data-tour="calculate"]',
-      popover: {
-        title: s(3).title,
-        description: s(3).description,
-        side: "top",
-        align: "end",
-      },
+      popover: { title: s(1).title, description: s(1).description, side: "top", align: "end" },
     },
     {
-      element: "#send-to-car-hub",
-      popover: { title: s(4).title, description: s(4).description, side: "top" },
+      element: '[data-tour="personalize-stops"]',
+      popover: { title: s(2).title, description: s(2).description, side: "top" },
+    },
+    {
+      element: '[data-tour="export-actions"]',
+      popover: { title: s(3).title, description: s(3).description, side: "top" },
+    },
+    // No element: driver.js centres this final summary card on screen, so it works
+    // whether or not the garage link is visible in the current header state.
+    {
+      popover: { title: s(4).title, description: s(4).description },
     },
   ];
 }
