@@ -101,9 +101,9 @@ export const GARAGE_EN: Record<string, string> = {
     "This is the name shown on your account — make it whatever you like to be called.",
   "Ditt navn": "Your name",
   "Lagre navn": "Save name",
-  "Reisefølge (valgfritt)": "Travel party (optional)",
+  "Reisefølge (valgfritt)": "Travel Party & Smart Route Stops",
   "Fortell oss hvem som reiser og hva dere liker, så kan vi senere foreslå stopp som passer familien. Dette er valgfritt og lagres på samme måte som resten av kontoen din.":
-    "Tell us who's traveling and what you enjoy, so we can later suggest stops that fit your family. This is optional and stored the same way as the rest of your account.",
+    "Customize who is traveling so AutoVere can inject tailored scenic views, kid-friendly playgrounds, and local cuisine directly into your route and offline PDF guide.",
   "Dette er en AutoVere Pro-funksjon. Oppgrader for å legge inn reisefølget ditt, så kan vi snart foreslå stopp familien vil elske.":
     "This is an AutoVere Pro feature. Upgrade to add your travel party, so we can soon suggest stops your family will love.",
   "Antall voksne": "Number of adults",

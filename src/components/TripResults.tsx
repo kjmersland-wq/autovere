@@ -25,6 +25,7 @@ import { PartnerOffers } from "@/components/PartnerOffers";
 import { PoiLinks } from "@/components/PoiLinks";
 import { RouteExportPanel } from "@/components/RouteExportPanel";
 import { ExportPaywallModal } from "@/components/ExportPaywallModal";
+import { TravelPartyStops } from "@/components/TravelPartyStops";
 import { NorwayAutoPassCard, ScandiBridgeCard } from "@/components/ScandiTolls";
 import { PassBorderIntel } from "@/components/PassBorderIntel";
 import { CorridorMap } from "@/components/CorridorMap";
@@ -183,6 +184,7 @@ export function TripResults({
   // Exports stay visible for everyone but open the Trip Pass paywall until
   // the visitor holds Trip Pass, Pro or Fleet access.
   const [exportPaywallOpen, setExportPaywallOpen] = useState(false);
+  const [stopsPaywallOpen, setStopsPaywallOpen] = useState(false);
   const exportsLocked = !user || !(isActive && hasAtLeast("tripPass"));
   const trip = trips[active];
   const optimizer = useMemo(
@@ -491,6 +493,15 @@ export function TripResults({
         onLockedAction={() => setExportPaywallOpen(true)}
       />
       <ExportPaywallModal open={exportPaywallOpen} onOpenChange={setExportPaywallOpen} />
+      <ExportPaywallModal
+        open={stopsPaywallOpen}
+        onOpenChange={setStopsPaywallOpen}
+        title={tr("Unlock Tailored Route Stops with Trip Pass")}
+        description={tr(
+          "Automatically inject curated family stops, scenic viewpoints, and local food recommendations matching your vehicle along your specific route corridor.",
+        )}
+        primaryLabel={tr("Get 14-Day Trip Pass (€7.99)")}
+      />
 
       {showNorway && <NorwayAutoPassCard isMotorcycle={isMotorcycle} />}
       <ScandiBridgeCard bridges={bridges} isMotorcycle={isMotorcycle} />
@@ -669,6 +680,8 @@ export function TripResults({
           </div>
         </div>
       </div>
+
+      <TravelPartyStops onApply={() => setStopsPaywallOpen(true)} />
 
       {trip.vignette && (
         <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
