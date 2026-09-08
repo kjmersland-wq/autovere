@@ -845,6 +845,17 @@ export function GaragePage() {
               </Panel>
             )}
 
+            {section === "stops" && (
+              <Panel title={tx("Reisefølge og stopp")}>
+                <p className="text-sm text-foreground/70">
+                  {tx(
+                    "Velg hvem som reiser og hvilke interesser dere har. AutoVere bruker disse kategoriene til å foreslå stopp langs ruten din — utsiktspunkter, lekeplasser, lokal mat, bobilservice og mer.",
+                  )}
+                </p>
+                {travelPartyBlock}
+              </Panel>
+            )}
+
             {section === "profile" && (
               <Panel title={tx("Profil og sikkerhet")}>
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{tx("E-post")}</p>
