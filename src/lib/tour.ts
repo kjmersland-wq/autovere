@@ -38,7 +38,7 @@ export const TOUR_COPY: Record<string, TourCopy> = {
       {
         title: "3. Personalize Your Stops (Trip Pass)",
         description:
-          "Traveling with family or in an RV? Filter playgrounds, scenic viewpoints, RV facilities, and fast chargers along your route. Unlocked with Trip Pass to inject stops directly into your navigation.",
+          "Traveling with family or in an RV? Pick from 14 interest categories — RV services, camping, scenic drives, viewpoints, castles, kids, wildlife, food, beaches, adventure and more. Pro and Trip Pass users get those stops injected into the corridor, the offline PDF kit and every export.",
       },
       {
         title: "4. Export & Navigate",
@@ -169,7 +169,7 @@ export const TOUR_COPY: Record<string, TourCopy> = {
       {
         title: "3. Personalize Your Stops (Trip Pass)",
         description:
-          "Traveling with family or in an RV? Filter playgrounds, scenic viewpoints, RV facilities, and fast chargers along your route. Unlocked with Trip Pass to inject stops directly into your navigation.",
+          "Traveling with family or in an RV? Pick from 14 interest categories — RV services, camping, scenic drives, viewpoints, castles, kids, wildlife, food, beaches, adventure and more. Pro and Trip Pass users get those stops injected into the corridor, the offline PDF kit and every export.",
       },
       {
         title: "4. Export & Navigate",
