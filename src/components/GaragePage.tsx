@@ -20,6 +20,7 @@ import {
   ShieldCheck,
   SlidersHorizontal,
   Trash2,
+  Users,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -101,6 +102,7 @@ type SectionId =
   | "settings"
   | "billing"
   | "places"
+  | "stops"
   | "profile"
   | "admin"
   | "support";
@@ -121,11 +123,10 @@ export function GaragePage() {
   const faqHref = buildPath({ prefix, region, page: "faq" });
   const { tier, isActive, hasAtLeast } = useSubscription();
   const { currency, setCurrency } = useCurrency();
-  // Travel party is a Pro-only foundation feature, scoped to the default English .com site only.
-  const isDefaultEnglishSite = !prefix && !region;
+  // Travel party is a Pro feature, but the filter itself is visible on every locale.
   const isEnglishSite = !prefix || prefix === "us";
   const chargingNetworkOptions = isEnglishSite ? CHARGING_NETWORKS : BASE_CHARGING_NETWORKS;
-  const canUseTravelProfile = isDefaultEnglishSite && (isAdmin || hasAtLeast("pro"));
+  const canUseTravelProfile = isAdmin || hasAtLeast("pro");
 
   const [section, setSection] = useState<SectionId>("overview");
   const [vehicles, setVehicles] = useState<GarageVehicle[]>([]);
@@ -183,6 +184,7 @@ export function GaragePage() {
         { id: "settings" as const, label: tx("Innstillinger"), icon: SlidersHorizontal },
         { id: "billing" as const, label: tx("Abonnement og fakturering"), icon: CreditCard },
         { id: "places" as const, label: tx("Lagrede steder"), icon: Bookmark },
+        { id: "stops" as const, label: tx("Reisefølge og stopp"), icon: Users },
         { id: "profile" as const, label: tx("Profil og sikkerhet"), icon: ShieldCheck },
         // Admin panel is internal-only and restricted to the Norwegian locale, even for an admin account.
         ...(isAdmin && isNo ? [{ id: "admin" as const, label: tx("Admin"), icon: Lock }] : []),
@@ -376,6 +378,113 @@ export function GaragePage() {
     URL.revokeObjectURL(url);
     toast.success(tx("Dataene dine er lastet ned."));
   };
+
+  const travelPartyBlock = (
+                    <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
+                      <p className="font-semibold">{tx("Reisefølge (valgfritt)")}</p>
+                      {canUseTravelProfile ? (
+                        <>
+                          <p className="mt-1 text-sm text-foreground/70">
+                            {tx(
+                              "Fortell oss hvem som reiser og hva dere liker, så kan vi senere foreslå stopp som passer familien. Dette er valgfritt og lagres på samme måte som resten av kontoen din.",
+                            )}
+                          </p>
+
+                          <div className="mt-4 grid gap-2 sm:max-w-[10rem]">
+                            <Label htmlFor="tp-adults">{tx("Antall voksne")}</Label>
+                            <Input
+                              id="tp-adults"
+                              type="number"
+                              min={0}
+                              value={travelProfile.adults}
+                              onChange={(e) =>
+                                setTravelProfile({
+                                  ...travelProfile,
+                                  adults: Math.max(0, Number(e.target.value) || 0),
+                                })
+                              }
+                            />
+                          </div>
+
+                          <div className="mt-4">
+                            <Label>{tx("Barn (ca. alder)")}</Label>
+                            <div className="mt-2 grid gap-2">
+                              {travelProfile.children.map((child) => (
+                                <div key={child.id} className="flex items-center gap-2">
+                                  <Input
+                                    type="number"
+                                    min={0}
+                                    max={17}
+                                    className="max-w-[6rem]"
+                                    placeholder={tx("Alder")}
+                                    value={child.age}
+                                    onChange={(e) => updateTravelChildAge(child.id, e.target.value)}
+                                  />
+                                  <span className="text-sm text-foreground/70">{tx("år")}</span>
+                                  <Button
+                                    size="icon"
+                                    variant="ghost"
+                                    aria-label={tx("Fjern barn")}
+                                    onClick={() => removeTravelChild(child.id)}
+                                  >
+                                    <Trash2 className="size-4" />
+                                  </Button>
+                                </div>
+                              ))}
+                            </div>
+                            <Button variant="outline" size="sm" className="mt-2" onClick={addTravelChild}>
+                              <Plus className="size-4" /> {tx("Legg til barn")}
+                            </Button>
+                          </div>
+
+                          <div className="mt-4">
+                            <Label>{tx("Interesser og hobbyer")}</Label>
+                            <div className="mt-2 grid gap-4">
+                              {POI_GROUPS.map((group) => (
+                                <div key={group}>
+                                  <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
+                                    {poiLabel(garageLocale, group)}
+                                  </p>
+                                  <div className="mt-2 flex flex-wrap gap-2">
+                                    {POI_INTERESTS.filter((i) => i.group === group).map((interest) => (
+                                      <button
+                                        key={interest.id}
+                                        type="button"
+                                        onClick={() => toggleTravelInterest(interest.id)}
+                                        aria-pressed={travelProfile.interests.includes(interest.id)}
+                                        className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
+                                          travelProfile.interests.includes(interest.id)
+                                            ? "border-primary bg-primary/15 text-primary"
+                                            : "border-border text-foreground/70 hover:bg-background/60"
+                                        }`}
+                                      >
+                                        {poiLabel(garageLocale, interest.id)}
+                                      </button>
+                                    ))}
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+
+                          <Button className="mt-4" onClick={submitTravelProfile}>
+                            {tx("Lagre reisefølge")}
+                          </Button>
+                        </>
+                      ) : (
+                        <>
+                          <p className="mt-1 text-sm text-foreground/70">
+                            {tx(
+                              "Dette er en AutoVere Pro-funksjon. Oppgrader for å legge inn reisefølget ditt, så kan vi snart foreslå stopp familien vil elske.",
+                            )}
+                          </p>
+                          <Button variant="outline" className="mt-3" asChild>
+                            <Link to={pricingHref as "/pricing"}>{tx("Se abonnementene")}</Link>
+                          </Button>
+                        </>
+                      )}
+                    </div>
+  );
 
   return (
     <main className="min-h-screen">
@@ -612,6 +721,19 @@ export function GaragePage() {
                     </article>
                   ))}
                 </div>
+                <div className="mt-5 flex flex-wrap items-center gap-3">
+                  <Button
+                    onClick={() => {
+                      commitVehicles(vehicles);
+                      toast.success(tx("Kjøretøyene er lagret."));
+                    }}
+                  >
+                    {tx("Lagre kjøretøy")}
+                  </Button>
+                  <p className="text-xs text-muted-foreground">
+                    {tx("Endringene lagres automatisk, men trykk her hvis du vil være helt sikker.")}
+                  </p>
+                </div>
               </Panel>
             )}
 
@@ -735,6 +857,17 @@ export function GaragePage() {
               </Panel>
             )}
 
+            {section === "stops" && (
+              <Panel title={tx("Reisefølge og stopp")}>
+                <p className="text-sm text-foreground/70">
+                  {tx(
+                    "Velg hvem som reiser og hvilke interesser dere har. AutoVere bruker disse kategoriene til å foreslå stopp langs ruten din — utsiktspunkter, lekeplasser, lokal mat, bobilservice og mer.",
+                  )}
+                </p>
+                {travelPartyBlock}
+              </Panel>
+            )}
+
             {section === "profile" && (
               <Panel title={tx("Profil og sikkerhet")}>
                 <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">{tx("E-post")}</p>
@@ -756,112 +889,15 @@ export function GaragePage() {
                   </div>
                 </div>
 
-                {isDefaultEnglishSite && (
-                  <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
-                    <p className="font-semibold">{tx("Reisefølge (valgfritt)")}</p>
-                    {canUseTravelProfile ? (
-                      <>
-                        <p className="mt-1 text-sm text-foreground/70">
-                          {tx(
-                            "Fortell oss hvem som reiser og hva dere liker, så kan vi senere foreslå stopp som passer familien. Dette er valgfritt og lagres på samme måte som resten av kontoen din.",
-                          )}
-                        </p>
-
-                        <div className="mt-4 grid gap-2 sm:max-w-[10rem]">
-                          <Label htmlFor="tp-adults">{tx("Antall voksne")}</Label>
-                          <Input
-                            id="tp-adults"
-                            type="number"
-                            min={0}
-                            value={travelProfile.adults}
-                            onChange={(e) =>
-                              setTravelProfile({
-                                ...travelProfile,
-                                adults: Math.max(0, Number(e.target.value) || 0),
-                              })
-                            }
-                          />
-                        </div>
-
-                        <div className="mt-4">
-                          <Label>{tx("Barn (ca. alder)")}</Label>
-                          <div className="mt-2 grid gap-2">
-                            {travelProfile.children.map((child) => (
-                              <div key={child.id} className="flex items-center gap-2">
-                                <Input
-                                  type="number"
-                                  min={0}
-                                  max={17}
-                                  className="max-w-[6rem]"
-                                  placeholder={tx("Alder")}
-                                  value={child.age}
-                                  onChange={(e) => updateTravelChildAge(child.id, e.target.value)}
-                                />
-                                <span className="text-sm text-foreground/70">{tx("år")}</span>
-                                <Button
-                                  size="icon"
-                                  variant="ghost"
-                                  aria-label={tx("Fjern barn")}
-                                  onClick={() => removeTravelChild(child.id)}
-                                >
-                                  <Trash2 className="size-4" />
-                                </Button>
-                              </div>
-                            ))}
-                          </div>
-                          <Button variant="outline" size="sm" className="mt-2" onClick={addTravelChild}>
-                            <Plus className="size-4" /> {tx("Legg til barn")}
-                          </Button>
-                        </div>
-
-                        <div className="mt-4">
-                          <Label>{tx("Interesser og hobbyer")}</Label>
-                          <div className="mt-2 grid gap-4">
-                            {POI_GROUPS.map((group) => (
-                              <div key={group}>
-                                <p className="text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
-                                  {poiLabel(garageLocale, group)}
-                                </p>
-                                <div className="mt-2 flex flex-wrap gap-2">
-                                  {POI_INTERESTS.filter((i) => i.group === group).map((interest) => (
-                                    <button
-                                      key={interest.id}
-                                      type="button"
-                                      onClick={() => toggleTravelInterest(interest.id)}
-                                      aria-pressed={travelProfile.interests.includes(interest.id)}
-                                      className={`rounded-full border px-3 py-1.5 text-xs font-medium transition ${
-                                        travelProfile.interests.includes(interest.id)
-                                          ? "border-primary bg-primary/15 text-primary"
-                                          : "border-border text-foreground/70 hover:bg-background/60"
-                                      }`}
-                                    >
-                                      {poiLabel(garageLocale, interest.id)}
-                                    </button>
-                                  ))}
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-
-                        <Button className="mt-4" onClick={submitTravelProfile}>
-                          {tx("Lagre reisefølge")}
-                        </Button>
-                      </>
-                    ) : (
-                      <>
-                        <p className="mt-1 text-sm text-foreground/70">
-                          {tx(
-                            "Dette er en AutoVere Pro-funksjon. Oppgrader for å legge inn reisefølget ditt, så kan vi snart foreslå stopp familien vil elske.",
-                          )}
-                        </p>
-                        <Button variant="outline" className="mt-3" asChild>
-                          <Link to={pricingHref as "/pricing"}>{tx("Se abonnementene")}</Link>
-                        </Button>
-                      </>
-                    )}
-                  </div>
-                )}
+                <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
+                  <p className="font-semibold">{tx("Reisefølge og stopp")}</p>
+                  <p className="mt-1 text-sm text-foreground/70">
+                    {tx("Velg interessene til reisefølget så AutoVere kan foreslå stopp langs ruten din.")}
+                  </p>
+                  <Button variant="outline" className="mt-3" onClick={() => setSection("stops")}>
+                    <Users className="size-4" /> {tx("Åpne reisefølge og stopp")}
+                  </Button>
+                </div>
 
                 <div className="mt-4 rounded-xl border border-border bg-background/40 p-5">
                   <p className="font-semibold">{tx("Eksporter dataene mine")}</p>

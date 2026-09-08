@@ -123,6 +123,10 @@ export const GLOBAL_FAQ: InfoPageContent = {
       body: "Only AutoVere lets you shape the route around who is actually in the car. Pick from 14 unified interest categories — RV services, camping and overnight, scenic drives, viewpoints, history and culture, castles and palaces, nature and outdoors, kids and play, wildlife, food and culinary, beach and water, towns and cities, adventure and active, peaceful and relaxing — and Pro or Trip Pass injects matching stops along your exact corridor, into the map, the offline PDF kit and the GPX, Google Maps and Apple Maps exports. Your travel party and interests are saved in My Garage, so every future trip is personalised from the first calculation.",
     },
     {
+      heading: "Where do I find the travel party and stop filter?",
+      body: "In two places, and it is never hidden away. In My Garage open the \"Travel party & stops\" tab in the left menu to save who is travelling and which of the 14 interest categories matter to you. In the planner, right under your calculated route breakdown, open \"Personalize stops for your travel party\" to toggle the same categories for that specific trip. Both places share the same saved selection, so a change in one shows up in the other.",
+    },
+    {
       heading: "Is the Trip Pass a recurring subscription?",
       body: "No. Trip Pass is a one-time payment for 14 full days of export access. There is zero auto-renewal, no subscription trap and no cancellation needed. If you want ongoing unlimited exports you can upgrade to Pro, but Trip Pass itself is strictly one-time.",
     },
