@@ -1599,9 +1599,9 @@ const CURATED_EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
 };
 
 export const EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
-  eu: [...CURATED_EV_CHARGING_POIS.eu, ...(GENERATED_EV_CHARGING_POIS.eu as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.eu as EvChargingPoi[])],
-  us: [...CURATED_EV_CHARGING_POIS.us, ...(GENERATED_EV_CHARGING_POIS.us as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.us as EvChargingPoi[])],
-  ca: [...CURATED_EV_CHARGING_POIS.ca, ...(GENERATED_EV_CHARGING_POIS.ca as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.ca as EvChargingPoi[])],
+  eu: [...CURATED_EV_CHARGING_POIS.eu, ...(GENERATED_EV_CHARGING_POIS.eu as unknown as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.eu as unknown as EvChargingPoi[])],
+  us: [...CURATED_EV_CHARGING_POIS.us, ...(GENERATED_EV_CHARGING_POIS.us as unknown as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.us as unknown as EvChargingPoi[])],
+  ca: [...CURATED_EV_CHARGING_POIS.ca, ...(GENERATED_EV_CHARGING_POIS.ca as unknown as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.ca as unknown as EvChargingPoi[])],
 };
 
 /* ------------------------------------------------------------------ *
