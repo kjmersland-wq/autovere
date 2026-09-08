@@ -2,7 +2,7 @@
  * Opt-in product tour (driver.js).
  * Never auto-starts: `startTour()` is only called from the "Quick tour" pill.
  */
-import { driver } from "driver.js";
+import { driver, type DriveStep } from "driver.js";
 import "driver.js/dist/driver.css";
 
 export const TOUR_SEEN_KEY = "autovere_tour_seen";
