@@ -82,23 +82,10 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           </span>
         </LocaleLink>
 
-        <nav className="ml-2 hidden items-center gap-1 rounded-full border border-border bg-background/40 p-1 lg:flex">
-          {REGIONS.map((r) => (
-            <Link
-              key={r.key}
-              to={pathForRegion(pathname, r.key) as "/"}
-              className={cn(
-                "rounded-full px-3 py-1.5 text-sm font-medium transition-colors",
-                activeRegion === r.key
-                  ? "bg-primary text-primary-foreground"
-                  : "text-foreground/80 hover:text-foreground",
-              )}
-            >
-              <span className="mr-1.5">{r.flag}</span>
-              {t.header.regions[r.key]}
-            </Link>
-          ))}
-        </nav>
+        <div className="ml-2 hidden lg:flex">
+          <RegionSwitcher activeRegion={activeRegion} />
+        </div>
+
 
         <nav className="ml-auto hidden items-center gap-6 lg:flex">
           {NAV_LINKS.map((l) => (
