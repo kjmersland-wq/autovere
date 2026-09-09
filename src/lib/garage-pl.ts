@@ -189,4 +189,12 @@ export const GARAGE_PL: Record<string, string> = {
   "Sport og adventure": "Sport i przygoda",
   "Camping og friluftsliv": "Camping i wypoczynek na świeżym powietrzu",
   "Festivaler og arrangementer": "Festiwale i wydarzenia",
+
+  // Garage sidebar tab & Travel Party section (short-form strings)
+  "Reisefølge og stopp": "Towarzysze podróży i postoje",
+  "Kjøretøyene er lagret.": "Twoje pojazdy zostały zapisane.",
+  "Endringene lagres automatisk, men trykk her hvis du vil være helt sikker.": "Zmiany zapisują się automatycznie, ale kliknij tutaj, aby mieć pewność.",
+  "Velg hvem som reiser og hvilke interesser dere har. AutoVere bruker disse kategoriene til å foreslå stopp langs ruten din — utsiktspunkter, lekeplasser, lokal mat, bobilservice og mer.": "Wybierz, kto podróżuje i jakie macie zainteresowania. AutoVere wykorzystuje te kategorie, by podpowiadać postoje wzdłuż trasy — punkty widokowe, place zabaw, lokalną kuchnię, serwis kamperowy i więcej.",
+  "Velg interessene til reisefølget så AutoVere kan foreslå stopp langs ruten din.": "Wybierz zainteresowania towarzyszy podróży, aby AutoVere mogło podpowiadać postoje wzdłuż trasy.",
+  "Åpne reisefølge og stopp": "Otwórz towarzyszy podróży i postoje",
 };

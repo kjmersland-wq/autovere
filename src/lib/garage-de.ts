@@ -189,6 +189,14 @@ export const GARAGE_DE: Record<string, string> = {
   "Sport og adventure": "Sport & Abenteuer",
   "Camping og friluftsliv": "Camping & Outdoor",
   "Festivaler og arrangementer": "Festivals & Veranstaltungen",
+
+  // Garage sidebar tab & Travel Party section (short-form strings)
+  "Reisefølge og stopp": "Reisegruppe & Zwischenstopps",
+  "Kjøretøyene er lagret.": "Ihre Fahrzeuge wurden gespeichert.",
+  "Endringene lagres automatisk, men trykk her hvis du vil være helt sikker.": "Änderungen werden automatisch gespeichert, aber klicken Sie hier, um ganz sicherzugehen.",
+  "Velg hvem som reiser og hvilke interesser dere har. AutoVere bruker disse kategoriene til å foreslå stopp langs ruten din — utsiktspunkter, lekeplasser, lokal mat, bobilservice og mer.": "Wählen Sie aus, wer mitreist und welche Interessen Sie teilen. AutoVere nutzt diese Kategorien, um Stopps entlang Ihrer Route vorzuschlagen — Aussichtspunkte, Spielplätze, lokale Küche, Wohnmobil-Service und mehr.",
+  "Velg interessene til reisefølget så AutoVere kan foreslå stopp langs ruten din.": "Wählen Sie die Interessen Ihrer Reisebegleitung, damit AutoVere Stopps entlang Ihrer Route vorschlagen kann.",
+  "Åpne reisefølge og stopp": "Reisegruppe & Zwischenstopps öffnen",
 };
 
 export const MONTHS_DE: Record<string, string> = {

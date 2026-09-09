@@ -190,6 +190,14 @@ export const GARAGE_JA: Record<string, string> = {
   "Sport og adventure": "スポーツ・アドベンチャー",
   "Camping og friluftsliv": "キャンプ・アウトドア",
   "Festivaler og arrangementer": "フェスティバル・イベント",
+
+  // Garage sidebar tab & Travel Party section (short-form strings)
+  "Reisefølge og stopp": "同行者と立ち寄りスポット",
+  "Kjøretøyene er lagret.": "車両を保存しました。",
+  "Endringene lagres automatisk, men trykk her hvis du vil være helt sikker.": "変更は自動的に保存されますが、確実にしたい場合はこちらをクリックしてください。",
+  "Velg hvem som reiser og hvilke interesser dere har. AutoVere bruker disse kategoriene til å foreslå stopp langs ruten din — utsiktspunkter, lekeplasser, lokal mat, bobilservice og mer.": "誰と旅するか、共通の興味を選んでください。AutoVereはこれらのカテゴリーを使って、ルート沿いの立ち寄りスポット——展望スポット、遊び場、地元料理、キャンピングカー設備など——をご提案します。",
+  "Velg interessene til reisefølget så AutoVere kan foreslå stopp langs ruten din.": "同行者の興味を選択すると、AutoVereがルート沿いの立ち寄りスポットを提案できます。",
+  "Åpne reisefølge og stopp": "同行者と立ち寄りスポットを開く",
 };
 
 export const MONTHS_JA: Record<string, string> = {

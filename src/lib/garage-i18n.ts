@@ -205,6 +205,17 @@ export const GARAGE_EN: Record<string, string> = {
   "Dataene dine er lastet ned.": "Your data is downloading.",
   "Gi stedet et navn.": "Give this place a name.",
   "Stedet er lagret.": "Place saved.",
+  // Garage sidebar tab & Travel Party section (short-form strings distinct
+  // from "Reisefølge og smarte stopp" above)
+  "Reisefølge og stopp": "Travel Party & Stops",
+  "Kjøretøyene er lagret.": "Your vehicles have been saved.",
+  "Endringene lagres automatisk, men trykk her hvis du vil være helt sikker.":
+    "Changes save automatically, but tap here if you want to be sure.",
+  "Velg hvem som reiser og hvilke interesser dere har. AutoVere bruker disse kategoriene til å foreslå stopp langs ruten din — utsiktspunkter, lekeplasser, lokal mat, bobilservice og mer.":
+    "Choose who's traveling and what interests you share. AutoVere uses these categories to suggest stops along your route — viewpoints, playgrounds, local food, RV services and more.",
+  "Velg interessene til reisefølget så AutoVere kan foreslå stopp langs ruten din.":
+    "Choose your travel party's interests so AutoVere can suggest stops along your route.",
+  "Åpne reisefølge og stopp": "Open travel party & stops",
 };
 
 

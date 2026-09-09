@@ -186,6 +186,14 @@ export const GARAGE_ZH: Record<string, string> = {
   "Sport og adventure": "运动与探险",
   "Camping og friluftsliv": "露营与户外",
   "Festivaler og arrangementer": "节庆与活动",
+
+  // Garage sidebar tab & Travel Party section (short-form strings)
+  "Reisefølge og stopp": "同行伙伴与停靠点",
+  "Kjøretøyene er lagret.": "车辆信息已保存。",
+  "Endringene lagres automatisk, men trykk her hvis du vil være helt sikker.": "更改会自动保存，如需确认可点击此处。",
+  "Velg hvem som reiser og hvilke interesser dere har. AutoVere bruker disse kategoriene til å foreslå stopp langs ruten din — utsiktspunkter, lekeplasser, lokal mat, bobilservice og mer.": "选择谁与你同行以及你们共同的兴趣。AutoVere 会根据这些类别为你推荐沿途停靠点——观景点、游乐场、当地美食、房车服务等。",
+  "Velg interessene til reisefølget så AutoVere kan foreslå stopp langs ruten din.": "选择同行伙伴的兴趣，AutoVere 即可为你推荐沿途停靠点。",
+  "Åpne reisefølge og stopp": "打开同行伙伴与停靠点",
 };
 
 export const MONTHS_ZH: Record<string, string> = {
