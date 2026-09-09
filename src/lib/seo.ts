@@ -463,6 +463,17 @@ export function challengeHreflangLinks(): AlternateLink[] {
   return links;
 }
 
+/** hreflang alternates for a pSEO corridor route across the English root and
+ * every one of the 14 language-prefixed trees (/routes/:slug, /no/routes/:slug, …) + x-default. */
+export function corridorHreflangLinks(slug: string): AlternateLink[] {
+  const links: AlternateLink[] = [{ rel: "alternate", hreflang: MARKET_LANG.en, href: absUrl(`/routes/${slug}`) }];
+  for (const l of LOCALE_ROUTES) {
+    links.push({ rel: "alternate", hreflang: MARKET_LANG[l.prefix], href: absUrl(`/${l.prefix}/routes/${slug}`) });
+  }
+  links.push({ rel: "alternate", hreflang: "x-default", href: absUrl(`/routes/${slug}`) });
+  return links;
+}
+
 /**
  * hreflang alternates for a shared app page (planner, tolls, scenic, garage,
  * faq, how-it-works, pricing, partners) that genuinely exists across every

@@ -2,7 +2,8 @@ import { createFileRoute } from "@tanstack/react-router";
 import type {} from "@tanstack/react-start";
 
 import { LOCALE_PAGES, LOCALE_ROUTES } from "@/lib/locales";
-import { BASE_URL, PRIMARY_MARKET_PREFIXES, challengeHreflangLinks, homepageHreflangLinks } from "@/lib/seo";
+import { BASE_URL, PRIMARY_MARKET_PREFIXES, challengeHreflangLinks, corridorHreflangLinks, homepageHreflangLinks } from "@/lib/seo";
+import { SEO_CORRIDORS } from "@/data/seo-corridors";
 
 interface SitemapEntry {
   path: string;
@@ -86,6 +87,20 @@ export const Route = createFileRoute("/sitemap.xml")({
           });
           for (const page of LOCALE_PAGES) {
             entries.push({ path: `/${locale.prefix}/${page}`, changefreq: "monthly", priority: "0.6" });
+          }
+        }
+
+        // pSEO corridor route pages — English root + every one of the 14
+        // language-prefixed trees (including /us) for each of the 15 corridors.
+        for (const corridor of SEO_CORRIDORS) {
+          entries.push({
+            path: `/routes/${corridor.slug}`,
+            changefreq: "monthly",
+            priority: "0.6",
+            alternates: corridorHreflangLinks(corridor.slug),
+          });
+          for (const locale of LOCALE_ROUTES) {
+            entries.push({ path: `/${locale.prefix}/routes/${corridor.slug}`, changefreq: "monthly", priority: "0.6" });
           }
         }
 

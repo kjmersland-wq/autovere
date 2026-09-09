@@ -38,7 +38,7 @@ type CountryRule = {
   freeNote?: string;
 };
 
-const EU_RULES: Record<string, CountryRule> = {
+export const EU_RULES: Record<string, CountryRule> = {
   DK: {
     freeNote:
       "No motorway toll in Denmark — only the Storebælt and Øresund bridges are charged, and only if you cross them.",

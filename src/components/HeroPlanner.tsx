@@ -88,8 +88,15 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const imperial = defaults.units === "imperial" || locale === "us";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
   const [fuel, setFuel] = useState<FuelKey>("petrol");
-  const [origin, setOrigin] = useState("");
-  const [destination, setDestination] = useState("");
+  // Pre-fill from ?origin=&destination= when arriving via a deep link (e.g.
+  // a pSEO route page's "Open in AutoVere Planner" CTA) — empty on every
+  // other visit, exactly as before.
+  const [origin, setOrigin] = useState(() =>
+    typeof window === "undefined" ? "" : (new URLSearchParams(window.location.search).get("origin") ?? ""),
+  );
+  const [destination, setDestination] = useState(() =>
+    typeof window === "undefined" ? "" : (new URLSearchParams(window.location.search).get("destination") ?? ""),
+  );
   const [scenic, setScenic] = useState(true);
   const [avoidTolls, setAvoidTolls] = useState(false);
   const [ferries, setFerries] = useState(true);
