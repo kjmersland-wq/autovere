@@ -8,7 +8,7 @@ import type { RouteGeo } from "@/lib/route-geo.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { filterByCorridor, haversineKm } from "@/lib/corridor-filter";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
-import type { EvCharger, FuelStation } from "@/lib/corridor-map";
+import type { CorridorStop, EvCharger, FuelStation } from "@/lib/corridor-map";
 
 export type { TripType };
 
@@ -890,6 +890,17 @@ export function loadFuelStations(): Promise<FuelStation[]> {
     .then((m) => m.default as FuelStation[])
     .catch(() => []);
   return fuelStationsPromise;
+}
+
+/** Lazily loads and caches the curated pan-European POI dataset (history,
+ * castles, viewpoints, camping, wildlife, ...) for the lifetime of the
+ * session — same rationale and pattern as loadEvChargers. */
+let curatedPoisPromise: Promise<CorridorStop[]> | null = null;
+export function loadCuratedPois(): Promise<CorridorStop[]> {
+  curatedPoisPromise ??= import("@/data/curated_pois_eu.json")
+    .then((m) => m.default as CorridorStop[])
+    .catch(() => []);
+  return curatedPoisPromise;
 }
 
 export function estimateAllVariants(

@@ -1,5 +1,6 @@
 import { countryFuelEur, operatorKwhEur } from "@/lib/market-rates";
 import { distanceToCorridorKm, type LatLng } from "@/lib/corridor-filter";
+import type { PoiInterestId } from "@/lib/poi-interests";
 
 import type { FuelKey, RegionKey, TripEstimate, VehicleKey } from "@/lib/trip-data";
 
@@ -150,6 +151,53 @@ function fuelStationsAlongCorridor(
   if (!coords || coords.length === 0) return [];
   const near = allStations.filter((s) => distanceToCorridorKm(coords, { lat: s.lat, lng: s.lon }) <= FUEL_CORRIDOR_RADIUS_KM);
   return [...near].sort((a, b) => fuelRelevance(b, vehicle) - fuelRelevance(a, vehicle));
+}
+
+/* ------------------------------------------------------------------ */
+/* Curated pan-European POIs (src/data/curated_pois_eu.json)            */
+/*                                                                       */
+/* Real, verified stops for the 14 "Natur og utsikt" / "Aktiviteter og  */
+/* kultur" / non-fuel-non-EV "Veiens nødvendigheter" interest categories */
+/* from src/lib/poi-interests.ts (fuel_stations and ev_charging keep    */
+/* using the dedicated real datasets above instead). Each entry passed a */
+/* quality floor at curation time — a wikidata/wikipedia tag or an       */
+/* official tourism designation. The "within 10-15km of a primary       */
+/* transit route" corridor rule is enforced here at runtime instead, via */
+/* corridorStopsAlongCorridor() against each trip's actual routed       */
+/* polyline — a static nationwide road-proximity filter reliably timed   */
+/* out Overpass at this query's complexity. Loaded lazily by the caller, */
+/* same rationale as EvCharger/FuelStation. */
+/* ------------------------------------------------------------------ */
+
+export type CorridorStop = {
+  id: string;
+  name: string;
+  category: PoiInterestId;
+  country: string;
+  lat: number;
+  lon: number;
+  wikidata?: string;
+  wikipedia?: string;
+};
+
+/** Same corridor buffer as the EV/fuel real-data layers, applied when
+ * matching curated POIs against one specific routed trip. */
+const POI_CORRIDOR_RADIUS_KM = 15;
+
+/** Real curated POIs within POI_CORRIDOR_RADIUS_KM of the routed polyline,
+ * restricted to the requested interest categories — empty when there's no
+ * real routed polyline yet, matching the "only ever real, verified stops"
+ * rule used across every other corridor layer. */
+export function corridorStopsAlongCorridor(
+  allStops: CorridorStop[],
+  coords: LatLng[] | undefined | null,
+  categories: PoiInterestId[],
+): CorridorStop[] {
+  if (!coords || coords.length === 0 || !categories.length) return [];
+  const wanted = new Set(categories);
+  return allStops
+    .filter((s) => wanted.has(s.category))
+    .filter((s) => distanceToCorridorKm(coords, { lat: s.lat, lng: s.lon }) <= POI_CORRIDOR_RADIUS_KM);
 }
 
 /* ------------------------------------------------------------------ */

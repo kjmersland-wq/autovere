@@ -43,6 +43,12 @@ import { useLocale, useT, useTr } from "@/lib/i18n";
 import { useSubscription } from "@/hooks/useSubscription";
 import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
+import { useQuery } from "@tanstack/react-query";
+import { RouteStopCard } from "@/components/RouteStopCard";
+import type { CorridorStop } from "@/lib/corridor-map";
+import { corridorStopsAlongCorridor } from "@/lib/corridor-map";
+import { getPlaceReviews, type PlaceReview } from "@/lib/place-reviews.functions";
+import { POI_GROUPS, POI_INTERESTS, poiLabel, type PoiInterestId } from "@/lib/poi-interests";
 import {
   ROUTE_VARIANTS,
   applyNetworkFilter,
@@ -186,6 +192,7 @@ export function TripResults({
   const [exportPaywallOpen, setExportPaywallOpen] = useState(false);
   const [stopsPaywallOpen, setStopsPaywallOpen] = useState(false);
   const exportsLocked = !user || !(isActive && hasAtLeast("tripPass"));
+  const stopsLocked = exportsLocked;
   const trip = trips[active];
   const optimizer = useMemo(
     () => applyNetworkFilter(trip.optimizer, netFilter ?? trip.optimizer.preferredNetwork ?? null),
@@ -193,6 +200,44 @@ export function TripResults({
   );
   // Everything "along the route" is filtered against the real polyline.
   const corridorCoords = trip.corridor?.coords;
+
+  // Curated pan-European POIs (src/data/curated_pois_eu.json), lazily
+  // loaded — same rationale as the EV charger/fuel station datasets.
+  const curatedPoisQuery = useQuery({
+    queryKey: ["curated-pois-eu"],
+    queryFn: async () => (await import("@/data/curated_pois_eu.json")).default as CorridorStop[],
+    staleTime: Number.POSITIVE_INFINITY,
+    retry: 0,
+  });
+  const curatedPois = curatedPoisQuery.data ?? [];
+  const [appliedStops, setAppliedStops] = useState<CorridorStop[]>([]);
+  const [stopReviews, setStopReviews] = useState<Record<string, PlaceReview>>({});
+  const [reviewsLoading, setReviewsLoading] = useState(false);
+
+  // Trip Pass/Pro/Fleet only — free visitors keep hitting the paywall.
+  // Google Places is called on-demand for the visible candidates only
+  // (capped below), never for the whole curated dataset.
+  const handleApplyStops = async (selected: PoiInterestId[]) => {
+    if (stopsLocked) {
+      setStopsPaywallOpen(true);
+      return;
+    }
+    const visible = corridorStopsAlongCorridor(curatedPois, corridorCoords, selected).slice(0, 8);
+    setAppliedStops(visible);
+    setStopReviews({});
+    if (!visible.length) return;
+    setReviewsLoading(true);
+    try {
+      const reviews = await getPlaceReviews({
+        data: { candidates: visible.map((s) => ({ id: s.id, name: s.name, lat: s.lat, lng: s.lon })) },
+      });
+      setStopReviews(Object.fromEntries(reviews.map((r) => [r.poiId, r])));
+    } catch {
+      // Never block the stop list on a review-fetch failure.
+    } finally {
+      setReviewsLoading(false);
+    }
+  };
   const showEnglishOnlyPois = locale === "en" || locale === "us";
   const isVisiblePoi = (id: string) => showEnglishOnlyPois || !ENGLISH_ONLY_POI_IDS.has(id);
   const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
@@ -681,7 +726,36 @@ export function TripResults({
         </div>
       </div>
 
-      <TravelPartyStops onApply={() => setStopsPaywallOpen(true)} />
+      <TravelPartyStops onApply={handleApplyStops} />
+
+      {appliedStops.length > 0 && (
+        <div className="mt-6 grid gap-5">
+          {POI_GROUPS.map((group) => {
+            const items = appliedStops.filter(
+              (s) => POI_INTERESTS.find((i) => i.id === s.category)?.group === group,
+            );
+            if (!items.length) return null;
+            return (
+              <div key={group}>
+                <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                  {poiLabel(locale, group)}
+                </p>
+                <div className="mt-2 grid gap-3 sm:grid-cols-2">
+                  {items.map((stop) => (
+                    <RouteStopCard
+                      key={stop.id}
+                      stop={stop}
+                      region={region}
+                      review={stopReviews[stop.id] ?? null}
+                      reviewLoading={reviewsLoading && !stopReviews[stop.id]}
+                    />
+                  ))}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+      )}
 
       {trip.vignette && (
         <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
