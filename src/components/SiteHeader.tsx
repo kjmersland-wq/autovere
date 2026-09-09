@@ -7,10 +7,12 @@ import { LocaleLink } from "@/components/LocaleLink";
 import { FlagIcon } from "@/components/FlagIcon";
 import { useAuth } from "@/lib/auth";
 import { useLocale, useT } from "@/lib/i18n";
-import { pathForCode, pathForRegion, prefixForCode } from "@/lib/locales";
+import { pathForCode, prefixForCode } from "@/lib/locales";
 import { isChallengeLang } from "@/lib/challenge-content";
+import { RegionSwitcher, RegionSwitcherMobile } from "@/components/RegionSwitcher";
 
-import { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/trip-data";
+import { LANGUAGES, NAV_LINKS, regionFromPath, type RegionKey } from "@/lib/trip-data";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
