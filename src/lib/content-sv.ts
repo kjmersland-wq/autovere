@@ -669,6 +669,27 @@ export const CONTENT_SV: Record<string, string> = {
   "7-Day": "7 dagar",
   "1-Month": "1 månad",
   "30-Day": "30 dagar",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Anpassa stopp för ditt resesällskap (POI och rastplatser)",
+  "Apply stops to route": "Använd stoppen på rutten",
+  "Loading rating…": "Hämtar betyg …",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Bensin-/dieselstationer, dygnet-runt-pumpar, gasol/autogas",
+  "Fast DC chargers along the corridor": "Snabbladdare längs korridoren",
+  "Dump stations, fresh water, LPG/autogas": "Tömningsstationer, färskvatten, gasol/autogas",
+  "Campgrounds, RV parks, permitted overnight zones": "Campingplatser, husbilsparkeringar, tillåtna övernattningszoner",
+  "Mountain passes and tourist byways": "Bergspass och turistvägar",
+  "Overlooks and photo pull-offs": "Utsiktsplatser och fotostopp",
+  "National parks, waterfalls, gorges, reserves": "Nationalparker, vattenfall, raviner, naturreservat",
+  "Swim spots, lakes, beaches, hot springs": "Badplatser, sjöar, stränder, varma källor",
+  "Botanical gardens, quiet parks, thermal spas": "Botaniska trädgårdar, lugna parker, termalbad",
+  "Historic sites, museums, UNESCO landmarks": "Historiska platser, museer, UNESCO-sevärdheter",
+  "Castles, palaces, châteaux, manors": "Slott, palats, borgar, herrgårdar",
+  "Theme parks, playgrounds, waterparks": "Nöjesparker, lekplatser, vattenparker",
+  "Zoos, sanctuaries, aquariums, farms": "Djurparker, reservat, akvarier, gårdar",
+  "Markets, farm shops, vineyards, food halls": "Marknader, gårdsbutiker, vingårdar, matmarknader",
+  "Old towns, pedestrian markets, architecture": "Gamla stan, gågator, arkitektur",
+  "Via ferrata, climbing, whitewater, trailheads": "Via ferrata, klättring, forsränning, vandringsleder",
 };
 
 const SV_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

@@ -776,4 +776,25 @@ export const CONTENT_NO: Record<string, string> = {
   "Bridge tolls": "Broavgifter",
   "Confederation Bridge is charged on the way off PEI only.":
     "Confederation Bridge koster kun på vei ut av Prince Edward Island.",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Tilpass stopp for reisefølget ditt (POI og rasteplasser)",
+  "Apply stops to route": "Bruk stoppene på ruten",
+  "Loading rating…": "Henter vurdering …",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Bensin-/dieselstasjoner, døgnåpne pumper, LPG/autogass",
+  "Fast DC chargers along the corridor": "Lynladere langs korridoren",
+  "Dump stations, fresh water, LPG/autogas": "Tømmestasjoner, ferskvann, LPG/autogass",
+  "Campgrounds, RV parks, permitted overnight zones": "Campingplasser, bobilparker, tillatte overnattingssoner",
+  "Mountain passes and tourist byways": "Fjelloverganger og turistveier",
+  "Overlooks and photo pull-offs": "Utsiktspunkter og fotostopp",
+  "National parks, waterfalls, gorges, reserves": "Nasjonalparker, fossefall, juv, naturreservater",
+  "Swim spots, lakes, beaches, hot springs": "Badeplasser, innsjøer, strender, varme kilder",
+  "Botanical gardens, quiet parks, thermal spas": "Botaniske hager, rolige parker, termalbad",
+  "Historic sites, museums, UNESCO landmarks": "Historiske steder, museer, UNESCO-severdigheter",
+  "Castles, palaces, châteaux, manors": "Slott, palasser, borger, herregårder",
+  "Theme parks, playgrounds, waterparks": "Fornøyelsesparker, lekeplasser, badeparker",
+  "Zoos, sanctuaries, aquariums, farms": "Dyreparker, dyrereservater, akvarier, gårder",
+  "Markets, farm shops, vineyards, food halls": "Markeder, gårdsbutikker, vingårder, mathaller",
+  "Old towns, pedestrian markets, architecture": "Gamlebyer, gågater, arkitektur",
+  "Via ferrata, climbing, whitewater, trailheads": "Via ferrata, klatring, elvepadling, turstier",
 };

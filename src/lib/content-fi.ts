@@ -835,4 +835,25 @@ export const CONTENT_FI: Record<string, string> = {
   "Bridge tolls": "Siltamaksut",
   "Confederation Bridge is charged on the way off PEI only.":
     "Confederation Bridge on maksullinen vain Prince Edward Islandilta pois ajettaessa.",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Muokkaa pysähdyksiä matkaseurallesi (POI:t ja levähdyspaikat)",
+  "Apply stops to route": "Lisää pysähdykset reitille",
+  "Loading rating…": "Ladataan arvostelua…",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Bensa-/dieselasemat, auki ympäri vuorokauden, nestekaasu",
+  "Fast DC chargers along the corridor": "Pikalatauspisteet reitin varrella",
+  "Dump stations, fresh water, LPG/autogas": "Tyhjennysasemat, raikas vesi, nestekaasu",
+  "Campgrounds, RV parks, permitted overnight zones": "Leirintäalueet, matkailuautopaikat, sallitut yöpymisalueet",
+  "Mountain passes and tourist byways": "Vuoristosolat ja matkailutiet",
+  "Overlooks and photo pull-offs": "Näköalapaikat ja valokuvauspysähdykset",
+  "National parks, waterfalls, gorges, reserves": "Kansallispuistot, vesiputoukset, rotkot, luonnonsuojelualueet",
+  "Swim spots, lakes, beaches, hot springs": "Uimapaikat, järvet, rannat, lämpimät lähteet",
+  "Botanical gardens, quiet parks, thermal spas": "Kasvitieteelliset puutarhat, rauhalliset puistot, kylpylät",
+  "Historic sites, museums, UNESCO landmarks": "Historialliset kohteet, museot, UNESCO-kohteet",
+  "Castles, palaces, châteaux, manors": "Linnat, palatsit, linnoitukset, kartanot",
+  "Theme parks, playgrounds, waterparks": "Huvipuistot, leikkipuistot, vesipuistot",
+  "Zoos, sanctuaries, aquariums, farms": "Eläintarhat, luonnonsuojelualueet, akvaariot, maatilat",
+  "Markets, farm shops, vineyards, food halls": "Torit, tilamyymälät, viinitilat, ruokahallit",
+  "Old towns, pedestrian markets, architecture": "Vanhat kaupunginosat, kävelykadut, arkkitehtuuri",
+  "Via ferrata, climbing, whitewater, trailheads": "Via ferrata -reitit, kiipeily, koskimelonta, vaellusreitit",
 };

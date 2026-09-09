@@ -550,6 +550,27 @@ export const CONTENT_JA: Record<string, string> = {
   "7-Day": "7日間",
   "1-Month": "1ヶ月間",
   "30-Day": "30日間",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "同行者向けに立ち寄りスポットを調整（POI・休憩スポット）",
+  "Apply stops to route": "ルートに立ち寄りスポットを追加",
+  "Loading rating…": "評価を読み込み中…",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "ガソリン・ディーゼルスタンド、24時間営業、LPG/オートガス",
+  "Fast DC chargers along the corridor": "ルート沿いの急速充電スタンド",
+  "Dump stations, fresh water, LPG/autogas": "汚水処理設備、真水補給、LPG/オートガス",
+  "Campgrounds, RV parks, permitted overnight zones": "キャンプ場、RVパーク、宿泊可能エリア",
+  "Mountain passes and tourist byways": "山岳峠と観光道路",
+  "Overlooks and photo pull-offs": "展望スポットと撮影ポイント",
+  "National parks, waterfalls, gorges, reserves": "国立公園、滝、渓谷、自然保護区",
+  "Swim spots, lakes, beaches, hot springs": "遊泳スポット、湖、ビーチ、温泉",
+  "Botanical gardens, quiet parks, thermal spas": "植物園、静かな公園、温泉スパ",
+  "Historic sites, museums, UNESCO landmarks": "史跡、博物館、世界遺産",
+  "Castles, palaces, châteaux, manors": "城、宮殿、シャトー、邸宅",
+  "Theme parks, playgrounds, waterparks": "テーマパーク、遊び場、ウォーターパーク",
+  "Zoos, sanctuaries, aquariums, farms": "動物園、保護区、水族館、農場",
+  "Markets, farm shops, vineyards, food halls": "市場、農家直売所、ワイナリー、フードホール",
+  "Old towns, pedestrian markets, architecture": "旧市街、歩行者天国、建築",
+  "Via ferrata, climbing, whitewater, trailheads": "ヴィアフェラータ、クライミング、急流下り、トレイル",
 };
 
 const JA_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

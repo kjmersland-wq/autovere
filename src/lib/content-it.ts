@@ -550,6 +550,27 @@ export const CONTENT_IT: Record<string, string> = {
   "7-Day": "7 giorni",
   "1-Month": "1 mese",
   "30-Day": "30 giorni",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Personalizza le soste per i tuoi compagni di viaggio (POI e aree di sosta)",
+  "Apply stops to route": "Aggiungi le soste al percorso",
+  "Loading rating…": "Caricamento valutazione…",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Distributori benzina/diesel, aperti 24 ore, GPL",
+  "Fast DC chargers along the corridor": "Colonnine di ricarica rapida lungo il percorso",
+  "Dump stations, fresh water, LPG/autogas": "Stazioni di scarico, acqua potabile, GPL",
+  "Campgrounds, RV parks, permitted overnight zones": "Campeggi, aree sosta camper, zone di sosta consentite",
+  "Mountain passes and tourist byways": "Passi di montagna e strade panoramiche",
+  "Overlooks and photo pull-offs": "Punti panoramici e soste fotografiche",
+  "National parks, waterfalls, gorges, reserves": "Parchi nazionali, cascate, gole, riserve naturali",
+  "Swim spots, lakes, beaches, hot springs": "Zone balneabili, laghi, spiagge, sorgenti termali",
+  "Botanical gardens, quiet parks, thermal spas": "Giardini botanici, parchi tranquilli, terme",
+  "Historic sites, museums, UNESCO landmarks": "Siti storici, musei, patrimonio UNESCO",
+  "Castles, palaces, châteaux, manors": "Castelli, palazzi, fortezze, ville storiche",
+  "Theme parks, playgrounds, waterparks": "Parchi divertimento, aree gioco, parchi acquatici",
+  "Zoos, sanctuaries, aquariums, farms": "Zoo, riserve naturali, acquari, fattorie",
+  "Markets, farm shops, vineyards, food halls": "Mercati, aziende agricole, vigneti, mercati gastronomici",
+  "Old towns, pedestrian markets, architecture": "Centri storici, vie pedonali, architettura",
+  "Via ferrata, climbing, whitewater, trailheads": "Vie ferrate, arrampicata, rafting, sentieri escursionistici",
 };
 
 const IT_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

@@ -550,6 +550,27 @@ export const CONTENT_PT: Record<string, string> = {
   "7-Day": "7 dias",
   "1-Month": "1 mês",
   "30-Day": "30 dias",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Personalize as paragens para os seus companheiros de viagem (POI e áreas de descanso)",
+  "Apply stops to route": "Adicionar paragens à rota",
+  "Loading rating…": "A carregar avaliação…",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Postos de gasolina/gasóleo, abertos 24 horas, GPL",
+  "Fast DC chargers along the corridor": "Carregadores rápidos ao longo do corredor",
+  "Dump stations, fresh water, LPG/autogas": "Estações de despejo, água potável, GPL",
+  "Campgrounds, RV parks, permitted overnight zones": "Parques de campismo, áreas para autocaravanas, zonas de pernoita permitidas",
+  "Mountain passes and tourist byways": "Portos de montanha e estradas turísticas",
+  "Overlooks and photo pull-offs": "Miradouros e paragens fotográficas",
+  "National parks, waterfalls, gorges, reserves": "Parques nacionais, cascatas, desfiladeiros, reservas naturais",
+  "Swim spots, lakes, beaches, hot springs": "Zonas de banho, lagos, praias, águas termais",
+  "Botanical gardens, quiet parks, thermal spas": "Jardins botânicos, parques tranquilos, termas",
+  "Historic sites, museums, UNESCO landmarks": "Locais históricos, museus, património UNESCO",
+  "Castles, palaces, châteaux, manors": "Castelos, palácios, fortalezas, solares",
+  "Theme parks, playgrounds, waterparks": "Parques temáticos, parques infantis, parques aquáticos",
+  "Zoos, sanctuaries, aquariums, farms": "Zoos, reservas naturais, aquários, quintas",
+  "Markets, farm shops, vineyards, food halls": "Mercados, lojas locais, vinhas, mercados gastronómicos",
+  "Old towns, pedestrian markets, architecture": "Centros históricos, ruas pedonais, arquitetura",
+  "Via ferrata, climbing, whitewater, trailheads": "Vias ferratas, escalada, águas bravas, trilhos",
 };
 
 const PT_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

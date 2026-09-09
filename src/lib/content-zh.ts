@@ -550,6 +550,27 @@ export const CONTENT_ZH: Record<string, string> = {
   "7-Day": "7天",
   "1-Month": "1个月",
   "30-Day": "30天",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "为同行伙伴定制停靠点（POI 与休息区）",
+  "Apply stops to route": "将停靠点添加到路线",
+  "Loading rating…": "正在加载评分…",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "加油站/柴油站，24小时营业，LPG/汽车用气",
+  "Fast DC chargers along the corridor": "沿途快速充电桩",
+  "Dump stations, fresh water, LPG/autogas": "污水排放站、淡水补给、LPG/汽车用气",
+  "Campgrounds, RV parks, permitted overnight zones": "露营地、房车营地、允许过夜区域",
+  "Mountain passes and tourist byways": "山口与观光公路",
+  "Overlooks and photo pull-offs": "观景点与拍照停靠点",
+  "National parks, waterfalls, gorges, reserves": "国家公园、瀑布、峡谷、自然保护区",
+  "Swim spots, lakes, beaches, hot springs": "戏水点、湖泊、海滩、温泉",
+  "Botanical gardens, quiet parks, thermal spas": "植物园、宁静公园、温泉水疗",
+  "Historic sites, museums, UNESCO landmarks": "历史遗迹、博物馆、联合国教科文组织遗址",
+  "Castles, palaces, châteaux, manors": "城堡、宫殿、城堞、庄园",
+  "Theme parks, playgrounds, waterparks": "主题公园、游乐场、水上乐园",
+  "Zoos, sanctuaries, aquariums, farms": "动物园、自然保护区、水族馆、农场",
+  "Markets, farm shops, vineyards, food halls": "市场、农场直销店、酒庄、美食广场",
+  "Old towns, pedestrian markets, architecture": "老城区、步行街、建筑",
+  "Via ferrata, climbing, whitewater, trailheads": "攀岩道、攀岩、激流、徒步小径",
 };
 
 const ZH_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

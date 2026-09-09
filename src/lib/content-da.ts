@@ -669,6 +669,27 @@ export const CONTENT_DA: Record<string, string> = {
   "7-Day": "7 dage",
   "1-Month": "1 måned",
   "30-Day": "30 dage",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Tilpas stop til dit rejseselskab (POI og rastepladser)",
+  "Apply stops to route": "Brug stoppene på ruten",
+  "Loading rating…": "Henter bedømmelse …",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Benzin-/dieselstationer, døgnåbne pumper, LPG/autogas",
+  "Fast DC chargers along the corridor": "Lynladere langs korridoren",
+  "Dump stations, fresh water, LPG/autogas": "Tømningsstationer, ferskvand, LPG/autogas",
+  "Campgrounds, RV parks, permitted overnight zones": "Campingpladser, autocamperpladser, tilladte overnatningszoner",
+  "Mountain passes and tourist byways": "Bjergpas og turistveje",
+  "Overlooks and photo pull-offs": "Udsigtspunkter og fotostop",
+  "National parks, waterfalls, gorges, reserves": "Nationalparker, vandfald, kløfter, naturreservater",
+  "Swim spots, lakes, beaches, hot springs": "Badesteder, søer, strande, varme kilder",
+  "Botanical gardens, quiet parks, thermal spas": "Botaniske haver, rolige parker, spa",
+  "Historic sites, museums, UNESCO landmarks": "Historiske steder, museer, UNESCO-seværdigheder",
+  "Castles, palaces, châteaux, manors": "Slotte, paladser, borge, herregårde",
+  "Theme parks, playgrounds, waterparks": "Forlystelsesparker, legepladser, vandparker",
+  "Zoos, sanctuaries, aquariums, farms": "Dyreparker, reservater, akvarier, gårde",
+  "Markets, farm shops, vineyards, food halls": "Markeder, gårdbutikker, vingårde, madhaller",
+  "Old towns, pedestrian markets, architecture": "Gamle bydele, gågader, arkitektur",
+  "Via ferrata, climbing, whitewater, trailheads": "Via ferrata, klatring, vildvandsrafting, vandreruter",
 };
 
 export const DA_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

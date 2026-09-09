@@ -669,6 +669,27 @@ export const CONTENT_DE: Record<string, string> = {
   "7-Day": "7 Tage",
   "1-Month": "1 Monat",
   "30-Day": "30 Tage",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Stopps für Ihre Reisebegleitung anpassen (POI & Raststätten)",
+  "Apply stops to route": "Stopps zur Route hinzufügen",
+  "Loading rating…": "Bewertung wird geladen …",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Tankstellen, 24/7 geöffnet, LPG/Autogas",
+  "Fast DC chargers along the corridor": "Schnelllader entlang der Strecke",
+  "Dump stations, fresh water, LPG/autogas": "Entsorgungsstationen, Frischwasser, LPG/Autogas",
+  "Campgrounds, RV parks, permitted overnight zones": "Campingplätze, Wohnmobilstellplätze, erlaubte Übernachtungszonen",
+  "Mountain passes and tourist byways": "Gebirgspässe und Panoramastraßen",
+  "Overlooks and photo pull-offs": "Aussichtspunkte und Fotostopps",
+  "National parks, waterfalls, gorges, reserves": "Nationalparks, Wasserfälle, Schluchten, Naturschutzgebiete",
+  "Swim spots, lakes, beaches, hot springs": "Badestellen, Seen, Strände, heiße Quellen",
+  "Botanical gardens, quiet parks, thermal spas": "Botanische Gärten, ruhige Parks, Thermalbäder",
+  "Historic sites, museums, UNESCO landmarks": "Historische Stätten, Museen, UNESCO-Welterbestätten",
+  "Castles, palaces, châteaux, manors": "Burgen, Schlösser, Paläste, Herrenhäuser",
+  "Theme parks, playgrounds, waterparks": "Freizeitparks, Spielplätze, Wasserparks",
+  "Zoos, sanctuaries, aquariums, farms": "Zoos, Tierreservate, Aquarien, Bauernhöfe",
+  "Markets, farm shops, vineyards, food halls": "Märkte, Hofläden, Weingüter, Markthallen",
+  "Old towns, pedestrian markets, architecture": "Altstädte, Fußgängerzonen, Architektur",
+  "Via ferrata, climbing, whitewater, trailheads": "Klettersteige, Klettern, Wildwasser, Wanderwege",
 };
 
 const DE_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

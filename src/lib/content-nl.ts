@@ -669,6 +669,27 @@ export const CONTENT_NL: Record<string, string> = {
   "7-Day": "7 dagen",
   "1-Month": "1 maand",
   "30-Day": "30 dagen",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Stops afstemmen op je reisgezelschap (POI's & pleisterplaatsen)",
+  "Apply stops to route": "Stops toevoegen aan route",
+  "Loading rating…": "Beoordeling laden …",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Benzine-/dieselstations, 24/7 open, LPG/autogas",
+  "Fast DC chargers along the corridor": "Snelladers langs de route",
+  "Dump stations, fresh water, LPG/autogas": "Stortpunten, drinkwater, LPG/autogas",
+  "Campgrounds, RV parks, permitted overnight zones": "Campings, camperplaatsen, toegestane overnachtingszones",
+  "Mountain passes and tourist byways": "Bergpassen en toeristische routes",
+  "Overlooks and photo pull-offs": "Uitzichtpunten en fotostops",
+  "National parks, waterfalls, gorges, reserves": "Nationale parken, watervallen, kloven, natuurreservaten",
+  "Swim spots, lakes, beaches, hot springs": "Zwemplekken, meren, stranden, warmwaterbronnen",
+  "Botanical gardens, quiet parks, thermal spas": "Botanische tuinen, rustige parken, thermale baden",
+  "Historic sites, museums, UNESCO landmarks": "Historische plekken, musea, UNESCO-erfgoed",
+  "Castles, palaces, châteaux, manors": "Kastelen, paleizen, burchten, landhuizen",
+  "Theme parks, playgrounds, waterparks": "Pretparken, speeltuinen, waterparken",
+  "Zoos, sanctuaries, aquariums, farms": "Dierentuinen, reservaten, aquaria, boerderijen",
+  "Markets, farm shops, vineyards, food halls": "Markten, boerderijwinkels, wijngaarden, foodhallen",
+  "Old towns, pedestrian markets, architecture": "Oude binnensteden, voetgangersgebieden, architectuur",
+  "Via ferrata, climbing, whitewater, trailheads": "Via ferrata, klimmen, wildwater, wandelpaden",
 };
 
 const NL_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [

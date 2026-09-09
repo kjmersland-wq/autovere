@@ -550,6 +550,27 @@ export const CONTENT_ES: Record<string, string> = {
   "7-Day": "7 días",
   "1-Month": "1 mes",
   "30-Day": "30 días",
+
+  // Travel Party & Route Stop Cards (POI taxonomy, universal stop card)
+  "Personalize stops for your travel party (POI & Rest Stops)": "Personaliza las paradas para tus compañeros de viaje (POI y áreas de descanso)",
+  "Apply stops to route": "Añadir paradas a la ruta",
+  "Loading rating…": "Cargando valoración…",
+  "Petrol/diesel stations, 24/7 pumps, LPG/autogas": "Gasolineras/dieselineras, abiertas 24 h, GLP/autogás",
+  "Fast DC chargers along the corridor": "Cargadores rápidos a lo largo del corredor",
+  "Dump stations, fresh water, LPG/autogas": "Puntos de vaciado, agua potable, GLP/autogás",
+  "Campgrounds, RV parks, permitted overnight zones": "Campings, áreas para autocaravanas, zonas de pernocta permitidas",
+  "Mountain passes and tourist byways": "Puertos de montaña y rutas turísticas",
+  "Overlooks and photo pull-offs": "Miradores y paradas para fotos",
+  "National parks, waterfalls, gorges, reserves": "Parques nacionales, cascadas, gargantas, reservas naturales",
+  "Swim spots, lakes, beaches, hot springs": "Zonas de baño, lagos, playas, aguas termales",
+  "Botanical gardens, quiet parks, thermal spas": "Jardines botánicos, parques tranquilos, spas termales",
+  "Historic sites, museums, UNESCO landmarks": "Lugares históricos, museos, patrimonio de la UNESCO",
+  "Castles, palaces, châteaux, manors": "Castillos, palacios, fortalezas, casonas",
+  "Theme parks, playgrounds, waterparks": "Parques temáticos, zonas infantiles, parques acuáticos",
+  "Zoos, sanctuaries, aquariums, farms": "Zoos, reservas naturales, acuarios, granjas",
+  "Markets, farm shops, vineyards, food halls": "Mercados, tiendas de granja, viñedos, mercados gastronómicos",
+  "Old towns, pedestrian markets, architecture": "Cascos antiguos, calles peatonales, arquitectura",
+  "Via ferrata, climbing, whitewater, trailheads": "Vías ferratas, escalada, aguas bravas, senderos",
 };
 
 const ES_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
