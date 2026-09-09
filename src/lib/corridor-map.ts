@@ -178,6 +178,8 @@ export type CorridorStop = {
   lon: number;
   wikidata?: string;
   wikipedia?: string;
+  /** One of the curated "Top 100" European drive & pass highlights. */
+  highlight?: boolean;
 };
 
 /** Same corridor buffer as the EV/fuel real-data layers, applied when
