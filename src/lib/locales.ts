@@ -116,7 +116,21 @@ export function pathForCode(pathname: string, code: string): string {
 
 /** Switch region while keeping the active language and page. */
 export function pathForRegion(pathname: string, region: "eu" | RegionPrefix): string {
-  const { prefix, page } = splitPath(pathname);
+  // Region prefixes ("us", "ca") double as locale prefixes ("us" = US English),
+  // so a leading region segment must be parsed as a region, not a language.
+  const parts = pathname.replace(/^\/+/, "").split("/").filter(Boolean);
+  let i = 0;
+  let prefix: LocalePrefix | null = null;
+  if (isRegionPrefix(parts[i] ?? "")) {
+    i += 1;
+  } else {
+    if (isLocalePrefix(parts[i] ?? "")) {
+      prefix = parts[i] as LocalePrefix;
+      i += 1;
+    }
+    if (isRegionPrefix(parts[i] ?? "")) i += 1;
+  }
+  const page = parts[i] ?? null;
   const keepPage = page && isLocalePage(page) ? page : null;
   return buildPath({ prefix, region: region === "eu" ? null : region, page: keepPage });
 }
