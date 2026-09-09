@@ -45,6 +45,7 @@ import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { RouteStopCard } from "@/components/RouteStopCard";
+import { BorderAdvisories } from "@/components/BorderAdvisories";
 import type { CorridorStop } from "@/lib/corridor-map";
 import { corridorStopsAlongCorridor } from "@/lib/corridor-map";
 import { getPlaceReviews, type PlaceReview } from "@/lib/place-reviews.functions";
@@ -825,6 +826,8 @@ export function TripResults({
           </p>
         </div>
       )}
+
+      <BorderAdvisories countryCodes={trip.corridor?.countries.map((c) => c.code) ?? []} />
 
 
       <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
