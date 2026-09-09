@@ -112,8 +112,7 @@ export const getPlaceReviews = createServerFn({ method: "POST" })
     const candidates = data.candidates.slice(0, MAX_CANDIDATES);
     if (!candidates.length) return [];
 
-    const { data: cachedRows } = await supabase
-      .from("cached_place_reviews")
+    const { data: cachedRows } = await reviewsTable()
       .select("*")
       .in(
         "poi_id",
@@ -154,7 +153,7 @@ export const getPlaceReviews = createServerFn({ method: "POST" })
         continue;
       }
 
-      await supabase.from("cached_place_reviews").upsert({
+      await reviewsTable().upsert({
         poi_id: c.id,
         place_id: fetched.placeId,
         rating: fetched.rating,
