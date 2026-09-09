@@ -4,6 +4,32 @@ import { z } from "zod";
 import { supabase } from "@/integrations/supabase/client";
 
 /**
+ * cached_place_reviews exists in the database (see migration
+ * 20260908151151_create_cached_place_reviews.sql) but is not present in the
+ * auto-generated types yet, so this table is accessed through a loosely typed
+ * view of the client.
+ */
+type CachedReviewRow = {
+  poi_id: string;
+  place_id: string | null;
+  rating: number | null;
+  review_count: number | null;
+  top_review: string | null;
+  photo_url: string | null;
+  fetched_at: string;
+};
+const reviewsTable = () =>
+  (supabase as unknown as {
+    from: (t: string) => {
+      select: (q: string) => {
+        in: (col: string, vals: string[]) => Promise<{ data: CachedReviewRow[] | null }>;
+      };
+      upsert: (row: CachedReviewRow) => Promise<unknown>;
+    };
+  }).from("cached_place_reviews");
+
+
+/**
  * On-demand Google Places rating/review enrichment for corridor POI cards.
  * Strictly for the small set of candidates a trip actually renders (capped
  * at MAX_CANDIDATES) — never the full curated dataset. Checks
@@ -86,8 +112,7 @@ export const getPlaceReviews = createServerFn({ method: "POST" })
     const candidates = data.candidates.slice(0, MAX_CANDIDATES);
     if (!candidates.length) return [];
 
-    const { data: cachedRows } = await supabase
-      .from("cached_place_reviews")
+    const { data: cachedRows } = await reviewsTable()
       .select("*")
       .in(
         "poi_id",
@@ -128,7 +153,7 @@ export const getPlaceReviews = createServerFn({ method: "POST" })
         continue;
       }
 
-      await supabase.from("cached_place_reviews").upsert({
+      await reviewsTable().upsert({
         poi_id: c.id,
         place_id: fetched.placeId,
         rating: fetched.rating,

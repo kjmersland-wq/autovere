@@ -14,36 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      cached_place_reviews: {
-        Row: {
-          fetched_at: string
-          photo_url: string | null
-          place_id: string | null
-          poi_id: string
-          rating: number | null
-          review_count: number | null
-          top_review: string | null
-        }
-        Insert: {
-          fetched_at?: string
-          photo_url?: string | null
-          place_id?: string | null
-          poi_id: string
-          rating?: number | null
-          review_count?: number | null
-          top_review?: string | null
-        }
-        Update: {
-          fetched_at?: string
-          photo_url?: string | null
-          place_id?: string | null
-          poi_id?: string
-          rating?: number | null
-          review_count?: number | null
-          top_review?: string | null
-        }
-        Relationships: []
-      }
       page_views: {
         Row: {
           city: string | null
