@@ -210,23 +210,9 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
 
           <div className="flex flex-col gap-6 overflow-y-auto px-5 py-5">
             <div className="flex flex-wrap gap-2">
-              {REGIONS.map((r) => (
-                <Link
-                  key={r.key}
-                  to={pathForRegion(pathname, r.key) as "/"}
-                  onClick={() => setOpen(false)}
-                  className={cn(
-                    "rounded-full border border-border px-3 py-1.5 text-sm transition-colors",
-                    activeRegion === r.key
-                      ? "bg-primary text-primary-foreground"
-                      : "text-foreground/80 hover:text-foreground",
-                  )}
-                >
-                  <span className="mr-1.5">{r.flag}</span>
-                  {t.header.regions[r.key]}
-                </Link>
-              ))}
+              <RegionSwitcherMobile activeRegion={activeRegion} onSelect={() => setOpen(false)} />
             </div>
+
 
             <nav className="grid gap-1">
               {NAV_LINKS.map((l) => (
