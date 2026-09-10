@@ -397,6 +397,12 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
             </Button>
           </div>
 
+          {lang === "en" ? (
+            <p className="mt-4 text-sm italic text-muted-foreground">
+              Let&rsquo;s make planning easier for the people you care about.
+            </p>
+          ) : null}
+
           <p className="mt-12 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
             {c.howItLooks}
           </p>
