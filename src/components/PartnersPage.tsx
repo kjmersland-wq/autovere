@@ -44,6 +44,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstrasjon — kun eksempel. Denne organisasjonen er fiktiv.",
+    demoBenefit: "25 % rabatt på AutoVere Pro",
+    demoBenefitTag: "medlemsfordel",
+    partnerSignIn: "Partnerinnlogging",
+    partnerKit: {
+      title: "Partnerpakke",
+      intro:
+        "Last ned AutoVere Partnerprogram-arket og den offisielle partnerlogoen — SVG og høyoppløselig gjennomsiktig PNG, i farger, hvitt, svart og omvendt versjon.",
+      pdfTitle: "Partnerprogram (PDF, A4)",
+      pdfDesc: "Ett ark å dele internt eller med styret.",
+      pdfCta: "Åpne PDF",
+      logoTitle: "Offisiell partnerlogo (ZIP)",
+      logoDesc: "Liggende og merke-varianter, SVG + PNG, fire fargeversjoner.",
+      logoCta: "Last ned logoer",
+      logoAlt: "AutoVere offisiell partnerlogo",
+      logoNote:
+        "Bruk den offisielle partnerlogoen når partnerskapet er bekreftet. Behold proporsjoner og luft rundt logoen.",
+    },
     heroAlt: "Reisende som ser på en AutoVere-rute og reisekostnader fra bilen",
     heroTagline: "La oss gjøre planleggingen enklere for dem dere bryr dere om.",
     dealerEyebrow: "For uavhengige forhandlere",
@@ -150,6 +167,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstration — example only. This organisation is fictional.",
+    demoBenefit: "25% off AutoVere Pro",
+    demoBenefitTag: "member benefit",
+    partnerSignIn: "Partner sign in",
+    partnerKit: {
+      title: "Partner kit",
+      intro:
+        "Download the AutoVere Partner Programme one-pager and the official partner logo set — SVG and high-resolution transparent PNG, in colour, white, black and reversed versions.",
+      pdfTitle: "Partner Programme (PDF, A4)",
+      pdfDesc: "One page to share internally or with your board.",
+      pdfCta: "Open PDF",
+      logoTitle: "Official Partner logo set (ZIP)",
+      logoDesc: "Horizontal and badge lockups, SVG + PNG, four colour versions.",
+      logoCta: "Download logos",
+      logoAlt: "AutoVere Official Partner logo",
+      logoNote:
+        "Use the Official Partner logo once your partnership is confirmed. Please keep proportions and clear space intact.",
+    },
     heroAlt: "Traveller reviewing an AutoVere route and trip costs from a parked car",
     heroTagline: "Let's make planning easier for the people you care about.",
     dealerEyebrow: "For independent dealers",
@@ -256,6 +290,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstracja — wyłącznie przykład. Ta organizacja jest fikcyjna.",
+    demoBenefit: "25% zniżki na AutoVere Pro",
+    demoBenefitTag: "korzyść dla członków",
+    partnerSignIn: "Logowanie dla partnerów",
+    partnerKit: {
+      title: "Zestaw dla partnerów",
+      intro:
+        "Pobierz jednostronicowy opis programu partnerskiego AutoVere oraz oficjalny zestaw logo — pliki SVG i wysokiej rozdzielczości przezroczyste PNG, w wersji kolorowej, białej, czarnej i odwróconej.",
+      pdfTitle: "Program partnerski (PDF, A4)",
+      pdfDesc: "Jedna strona do udostępnienia wewnętrznie lub zarządowi.",
+      pdfCta: "Otwórz PDF",
+      logoTitle: "Oficjalny zestaw logo partnera (ZIP)",
+      logoDesc: "Wersje poziome i plakietki, SVG + PNG, cztery warianty kolorystyczne.",
+      logoCta: "Pobierz logo",
+      logoAlt: "Oficjalne logo partnera AutoVere",
+      logoNote:
+        "Używaj oficjalnego logo partnera dopiero po potwierdzeniu współpracy. Zachowaj proporcje i odpowiedni margines wokół logo.",
+    },
     heroAlt: "Podróżny sprawdzający trasę i koszty podróży w AutoVere z fotela samochodu",
     heroTagline: "Ułatwmy planowanie osobom, na których Wam zależy.",
     dealerEyebrow: "Dla niezależnych dealerów",
@@ -362,6 +413,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstration — endast exempel. Organisationen är fiktiv.",
+    demoBenefit: "25 % rabatt på AutoVere Pro",
+    demoBenefitTag: "medlemsförmån",
+    partnerSignIn: "Partnerinloggning",
+    partnerKit: {
+      title: "Partnerpaket",
+      intro:
+        "Ladda ner AutoVere Partnerprogram-arket och den officiella partnerlogotypen — SVG och högupplöst transparent PNG, i färg, vitt, svart och omvänd version.",
+      pdfTitle: "Partnerprogram (PDF, A4)",
+      pdfDesc: "Ett ark att dela internt eller med styrelsen.",
+      pdfCta: "Öppna PDF",
+      logoTitle: "Officiell partnerlogotyp (ZIP)",
+      logoDesc: "Liggande version och märkesversion, SVG + PNG, fyra färgversioner.",
+      logoCta: "Ladda ner logotyper",
+      logoAlt: "AutoVere officiell partnerlogotyp",
+      logoNote:
+        "Använd den officiella partnerlogotypen när partnerskapet är bekräftat. Behåll proportionerna och det fria utrymmet runt logotypen.",
+    },
     heroAlt: "Resenär som tittar på en AutoVere-rutt och resekostnader från en parkerad bil",
     heroTagline: "Låt oss göra planeringen enklare för dem ni bryr er om.",
     dealerEyebrow: "För fristående bilhandlare",
@@ -467,6 +535,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstration — kun et eksempel. Organisationen er fiktiv.",
+    demoBenefit: "25 % rabat på AutoVere Pro",
+    demoBenefitTag: "medlemsfordel",
+    partnerSignIn: "Partnerlogin",
+    partnerKit: {
+      title: "Partnerpakke",
+      intro:
+        "Download AutoVere Partnerprogram-arket og det officielle partnerlogo — SVG og højopløselig transparent PNG, i farve, hvid, sort og omvendt version.",
+      pdfTitle: "Partnerprogram (PDF, A4)",
+      pdfDesc: "Ét ark til intern deling eller til bestyrelsen.",
+      pdfCta: "Åbn PDF",
+      logoTitle: "Officielt partnerlogo (ZIP)",
+      logoDesc: "Liggende og badge-versioner, SVG + PNG, fire farveversioner.",
+      logoCta: "Download logoer",
+      logoAlt: "AutoVere officielle partnerlogo",
+      logoNote:
+        "Brug det officielle partnerlogo, når partnerskabet er bekræftet. Behold proportioner og luft omkring logoet.",
+    },
     heroAlt: "Rejsende, der kigger på en AutoVere-rute og rejseomkostninger fra en parkeret bil",
     heroTagline: "Lad os gøre planlægningen lettere for dem, I holder af.",
     dealerEyebrow: "For uafhængige forhandlere",
@@ -572,6 +657,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Havainnollistus — vain esimerkki. Organisaatio on kuvitteellinen.",
+    demoBenefit: "25 %:n alennus AutoVere Prosta",
+    demoBenefitTag: "jäsenetu",
+    partnerSignIn: "Kumppanikirjautuminen",
+    partnerKit: {
+      title: "Kumppanipaketti",
+      intro:
+        "Lataa AutoVere-kumppaniohjelman yhden sivun esite sekä virallinen kumppanilogo — SVG ja korkearesoluutioinen läpinäkyvä PNG, väri-, valkoinen-, musta- ja käänteisversiona.",
+      pdfTitle: "Kumppaniohjelma (PDF, A4)",
+      pdfDesc: "Yksi sivu jaettavaksi organisaatiossanne tai hallitukselle.",
+      pdfCta: "Avaa PDF",
+      logoTitle: "Virallinen kumppanilogo (ZIP)",
+      logoDesc: "Vaaka- ja merkkiversiot, SVG + PNG, neljä väriversiota.",
+      logoCta: "Lataa logot",
+      logoAlt: "AutoVeren virallinen kumppanilogo",
+      logoNote:
+        "Käyttäkää virallista kumppanilogoa vasta, kun kumppanuus on vahvistettu. Säilyttäkää mittasuhteet ja logon ympärillä oleva tyhjä tila.",
+    },
     heroAlt: "Matkailija tarkastelee AutoVere-reittiä ja matkakuluja pysäköidyssä autossa",
     heroTagline: "Tehdään suunnittelusta helpompaa niille, joista välität.",
     dealerEyebrow: "Riippumattomille jälleenmyyjille",
@@ -677,6 +779,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstration — nur ein Beispiel. Diese Organisation ist fiktiv.",
+    demoBenefit: "25 % Rabatt auf AutoVere Pro",
+    demoBenefitTag: "Mitgliedervorteil",
+    partnerSignIn: "Partner-Login",
+    partnerKit: {
+      title: "Partner-Kit",
+      intro:
+        "Laden Sie das AutoVere-Partnerprogramm-Datenblatt sowie das offizielle Partner-Logo-Set herunter — SVG und hochauflösendes, transparentes PNG, in Farbe, Weiß, Schwarz und invertierter Version.",
+      pdfTitle: "Partnerprogramm (PDF, A4)",
+      pdfDesc: "Ein Blatt zum internen Teilen oder für Ihren Vorstand.",
+      pdfCta: "PDF öffnen",
+      logoTitle: "Offizielles Partner-Logo-Set (ZIP)",
+      logoDesc: "Horizontale Version und Badge, SVG + PNG, vier Farbvarianten.",
+      logoCta: "Logos herunterladen",
+      logoAlt: "Offizielles AutoVere-Partner-Logo",
+      logoNote:
+        "Verwenden Sie das offizielle Partner-Logo erst, sobald die Partnerschaft bestätigt ist. Bitte behalten Sie Proportionen und Schutzraum bei.",
+    },
     heroAlt: "Reisende betrachtet eine AutoVere-Route und die Reisekosten vom geparkten Auto aus",
     heroTagline: "Lassen Sie uns die Planung für die Menschen, die Ihnen wichtig sind, einfacher machen.",
     dealerEyebrow: "Für unabhängige Händler",
@@ -782,6 +901,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstratie — alleen een voorbeeld. Deze organisatie is fictief.",
+    demoBenefit: "25% korting op AutoVere Pro",
+    demoBenefitTag: "ledenvoordeel",
+    partnerSignIn: "Partner inloggen",
+    partnerKit: {
+      title: "Partnerpakket",
+      intro:
+        "Download het AutoVere Partnerprogramma-blad en de officiële partnerlogo-set — SVG en hoge-resolutie transparante PNG, in kleur, wit, zwart en omgekeerde versie.",
+      pdfTitle: "Partnerprogramma (PDF, A4)",
+      pdfDesc: "Eén pagina om intern of met je bestuur te delen.",
+      pdfCta: "PDF openen",
+      logoTitle: "Officiële partnerlogo-set (ZIP)",
+      logoDesc: "Liggende en badge-varianten, SVG + PNG, vier kleurversies.",
+      logoCta: "Logo's downloaden",
+      logoAlt: "Officieel AutoVere-partnerlogo",
+      logoNote:
+        "Gebruik het officiële partnerlogo pas zodra je partnerschap is bevestigd. Behoud de verhoudingen en de vrije ruimte rond het logo.",
+    },
     heroAlt: "Reiziger bekijkt een AutoVere-route en reiskosten vanuit een geparkeerde auto",
     heroTagline: "Laten we het plannen makkelijker maken voor de mensen om wie je geeft.",
     dealerEyebrow: "Voor onafhankelijke dealers",
@@ -887,6 +1023,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Démonstration — exemple uniquement. Cette organisation est fictive.",
+    demoBenefit: "25 % de réduction sur AutoVere Pro",
+    demoBenefitTag: "avantage membre",
+    partnerSignIn: "Connexion partenaire",
+    partnerKit: {
+      title: "Kit partenaire",
+      intro:
+        "Téléchargez la fiche du Programme Partenaire AutoVere ainsi que le kit officiel de logos — SVG et PNG transparent haute résolution, en couleur, blanc, noir et version inversée.",
+      pdfTitle: "Programme Partenaire (PDF, A4)",
+      pdfDesc: "Une page à partager en interne ou avec votre conseil d'administration.",
+      pdfCta: "Ouvrir le PDF",
+      logoTitle: "Kit officiel de logos partenaire (ZIP)",
+      logoDesc: "Versions horizontale et badge, SVG + PNG, quatre versions de couleur.",
+      logoCta: "Télécharger les logos",
+      logoAlt: "Logo officiel Partenaire AutoVere",
+      logoNote:
+        "Utilisez le logo officiel de partenaire une fois votre partenariat confirmé. Merci de conserver les proportions et l'espace de respiration autour du logo.",
+    },
     heroAlt: "Voyageur consultant un itinéraire AutoVere et les coûts du trajet depuis une voiture garée",
     heroTagline: "Simplifions la planification pour les personnes qui comptent pour vous.",
     dealerEyebrow: "Pour les concessionnaires indépendants",
@@ -992,6 +1145,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demostración — solo un ejemplo. Esta organización es ficticia.",
+    demoBenefit: "25 % de descuento en AutoVere Pro",
+    demoBenefitTag: "ventaja para socios",
+    partnerSignIn: "Acceso para socios",
+    partnerKit: {
+      title: "Kit para socios",
+      intro:
+        "Descarga la ficha del Programa de Socios de AutoVere y el kit oficial de logotipos — SVG y PNG transparente de alta resolución, en color, blanco, negro y versión invertida.",
+      pdfTitle: "Programa de Socios (PDF, A4)",
+      pdfDesc: "Una página para compartir internamente o con tu junta directiva.",
+      pdfCta: "Abrir PDF",
+      logoTitle: "Kit oficial de logotipos de socio (ZIP)",
+      logoDesc: "Versiones horizontal e insignia, SVG + PNG, cuatro versiones de color.",
+      logoCta: "Descargar logotipos",
+      logoAlt: "Logotipo oficial de Socio de AutoVere",
+      logoNote:
+        "Usa el logotipo oficial de socio solo una vez que tu colaboración esté confirmada. Mantén las proporciones y el espacio libre alrededor del logotipo.",
+    },
     heroAlt: "Viajero consultando una ruta de AutoVere y los costes del viaje desde un coche aparcado",
     heroTagline: "Hagamos que planificar sea más fácil para las personas que te importan.",
     dealerEyebrow: "Para concesionarios independientes",
@@ -1097,6 +1267,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Dimostrazione — solo un esempio. Questa organizzazione è fittizia.",
+    demoBenefit: "25% di sconto su AutoVere Pro",
+    demoBenefitTag: "vantaggio per i soci",
+    partnerSignIn: "Accesso partner",
+    partnerKit: {
+      title: "Kit per i partner",
+      intro:
+        "Scarica la scheda del Programma Partner AutoVere e il kit ufficiale dei loghi — SVG e PNG trasparente ad alta risoluzione, in versione a colori, bianca, nera e invertita.",
+      pdfTitle: "Programma Partner (PDF, A4)",
+      pdfDesc: "Una pagina da condividere internamente o con il tuo consiglio.",
+      pdfCta: "Apri il PDF",
+      logoTitle: "Kit ufficiale dei loghi partner (ZIP)",
+      logoDesc: "Versioni orizzontale e badge, SVG + PNG, quattro varianti di colore.",
+      logoCta: "Scarica i loghi",
+      logoAlt: "Logo ufficiale Partner AutoVere",
+      logoNote:
+        "Usa il logo ufficiale di partner solo una volta confermata la partnership. Mantieni proporzioni e spazio di rispetto attorno al logo.",
+    },
     heroAlt: "Viaggiatore che consulta un percorso AutoVere e i costi del viaggio da un'auto parcheggiata",
     heroTagline: "Rendiamo più semplice la pianificazione per le persone a cui tieni.",
     dealerEyebrow: "Per i concessionari indipendenti",
@@ -1202,6 +1389,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstração — apenas um exemplo. Esta organização é fictícia.",
+    demoBenefit: "25% de desconto no AutoVere Pro",
+    demoBenefitTag: "vantagem para membros",
+    partnerSignIn: "Acesso de parceiro",
+    partnerKit: {
+      title: "Kit de parceiro",
+      intro:
+        "Descarregue a ficha do Programa de Parceiros AutoVere e o kit oficial de logótipos — SVG e PNG transparente de alta resolução, em cor, branco, preto e versão invertida.",
+      pdfTitle: "Programa de Parceiros (PDF, A4)",
+      pdfDesc: "Uma página para partilhar internamente ou com a sua direção.",
+      pdfCta: "Abrir PDF",
+      logoTitle: "Kit oficial de logótipos de parceiro (ZIP)",
+      logoDesc: "Versões horizontal e emblema, SVG + PNG, quatro versões de cor.",
+      logoCta: "Transferir logótipos",
+      logoAlt: "Logótipo oficial de Parceiro AutoVere",
+      logoNote:
+        "Utilize o logótipo oficial de parceiro apenas depois de a parceria estar confirmada. Mantenha as proporções e o espaço livre à volta do logótipo.",
+    },
     heroAlt: "Viajante a consultar uma rota AutoVere e os custos da viagem a partir de um carro estacionado",
     heroTagline: "Vamos tornar o planeamento mais fácil para as pessoas que lhe são importantes.",
     dealerEyebrow: "Para concessionários independentes",
@@ -1307,6 +1511,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "デモンストレーション — あくまで一例です。この団体は架空のものです。",
+    demoBenefit: "AutoVere Pro 25%オフ",
+    demoBenefitTag: "会員特典",
+    partnerSignIn: "パートナーログイン",
+    partnerKit: {
+      title: "パートナーキット",
+      intro:
+        "AutoVereパートナープログラムの1枚資料と、公式パートナーロゴセットをダウンロードいただけます — SVGおよび高解像度の透過PNGで、カラー・白・黒・反転版をご用意しています。",
+      pdfTitle: "パートナープログラム（PDF、A4）",
+      pdfDesc: "社内共有や役員会でのご説明用に、1枚にまとめた資料です。",
+      pdfCta: "PDFを開く",
+      logoTitle: "公式パートナーロゴセット（ZIP）",
+      logoDesc: "横型ロゴとバッジ型ロゴ、SVG + PNG、4色バリエーションです。",
+      logoCta: "ロゴをダウンロード",
+      logoAlt: "AutoVere公式パートナーロゴ",
+      logoNote:
+        "公式パートナーロゴは、提携が正式に確定してからご使用ください。ロゴの縦横比と周囲の余白は変更しないでください。",
+    },
     heroAlt: "駐車した車の中でAutoVereのルートと旅費を確認する旅行者",
     heroTagline: "大切な方々のために、旅の計画をもっと簡単にしましょう。",
     dealerEyebrow: "独立系ディーラー様向け",
@@ -1412,6 +1633,23 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "演示效果——仅作示例，该组织为虚构。",
+    demoBenefit: "AutoVere Pro 25% 折扣",
+    demoBenefitTag: "会员福利",
+    partnerSignIn: "合作伙伴登录",
+    partnerKit: {
+      title: "合作伙伴资料包",
+      intro:
+        "下载 AutoVere 合作伙伴计划一页纸说明，以及官方合作伙伴标志包——包含 SVG 和高分辨率透明 PNG 格式，提供彩色、白色、黑色及反色版本。",
+      pdfTitle: "合作伙伴计划（PDF，A4）",
+      pdfDesc: "一页纸说明，方便在内部或向董事会分享。",
+      pdfCta: "打开 PDF",
+      logoTitle: "官方合作伙伴标志包（ZIP）",
+      logoDesc: "横版及徽章版标志，SVG + PNG 格式，共四种配色版本。",
+      logoCta: "下载标志",
+      logoAlt: "AutoVere 官方合作伙伴标志",
+      logoNote:
+        "请在合作关系正式确认后再使用官方合作伙伴标志，并请保持标志的比例和周围留白不变。",
+    },
     heroAlt: "旅行者坐在停靠的车内查看 AutoVere 路线和旅行花费",
     heroTagline: "让我们为你关心的人，把出行规划变得更简单。",
     dealerEyebrow: "面向独立经销商",
@@ -1692,7 +1930,7 @@ export function PartnersPage({
               <Mail className="size-4" /> {c.talkButton}
             </Button>
             <Button size="lg" variant="secondary" asChild>
-              <Link to="/partners/dashboard"><Lock className="size-4" /> Partner sign in</Link>
+              <Link to="/partners/dashboard"><Lock className="size-4" /> {c.partnerSignIn}</Link>
             </Button>
           </div>
 
@@ -1717,7 +1955,7 @@ export function PartnersPage({
             <div className="mt-5 flex items-center gap-3 rounded-xl border border-primary/20 bg-background/50 px-4 py-3">
               <BadgePercent className="size-5 shrink-0 text-primary" />
               <p className="text-sm font-medium text-foreground">
-                25% off AutoVere Pro <span className="font-normal text-muted-foreground">— member benefit</span>
+                {c.demoBenefit} <span className="font-normal text-muted-foreground">— {c.demoBenefitTag}</span>
               </p>
             </div>
             <p className="mt-4 text-xs text-muted-foreground">{c.demoNote}</p>
@@ -1836,11 +2074,8 @@ export function PartnersPage({
 
       {/* Partner kit downloads */}
       <section className="mx-auto w-full max-w-5xl px-6 pb-16 sm:px-8">
-        <h2 className="text-2xl font-semibold tracking-tight text-foreground">Partner kit</h2>
-        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-          Download the AutoVere Partner Programme one-pager and the official partner logo set — SVG
-          and high-resolution transparent PNG, in colour, white, black and reversed versions.
-        </p>
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground">{c.partnerKit.title}</h2>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">{c.partnerKit.intro}</p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <a
             href={partnerPdfHref}
@@ -1853,13 +2088,11 @@ export function PartnersPage({
             </span>
             <span className="min-w-0">
               <span className="block text-base font-semibold text-foreground">
-                Partner Programme (PDF, A4)
+                {c.partnerKit.pdfTitle}
               </span>
-              <span className="mt-1 block text-sm text-muted-foreground">
-                One page to share internally or with your board.
-              </span>
+              <span className="mt-1 block text-sm text-muted-foreground">{c.partnerKit.pdfDesc}</span>
               <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                <Download className="size-4" /> Open PDF
+                <Download className="size-4" /> {c.partnerKit.pdfCta}
               </span>
             </span>
           </a>
@@ -1872,13 +2105,11 @@ export function PartnersPage({
             </span>
             <span className="min-w-0">
               <span className="block text-base font-semibold text-foreground">
-                Official Partner logo set (ZIP)
+                {c.partnerKit.logoTitle}
               </span>
-              <span className="mt-1 block text-sm text-muted-foreground">
-                Horizontal and badge lockups, SVG + PNG, four colour versions.
-              </span>
+              <span className="mt-1 block text-sm text-muted-foreground">{c.partnerKit.logoDesc}</span>
               <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
-                <Download className="size-4" /> Download logos
+                <Download className="size-4" /> {c.partnerKit.logoCta}
               </span>
             </span>
           </a>
@@ -1886,16 +2117,13 @@ export function PartnersPage({
         <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card/30 px-5 py-4">
           <img
             src="/partner-kit/logo/autovere-partner-horizontal-on-navy.png"
-            alt="AutoVere Official Partner logo"
+            alt={c.partnerKit.logoAlt}
             width={220}
             height={60}
             loading="lazy"
             className="h-10 w-auto"
           />
-          <p className="text-xs text-muted-foreground">
-            Use the Official Partner logo once your partnership is confirmed. Please keep proportions
-            and clear space intact.
-          </p>
+          <p className="text-xs text-muted-foreground">{c.partnerKit.logoNote}</p>
         </div>
       </section>
 
