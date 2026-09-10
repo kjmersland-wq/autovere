@@ -40,6 +40,20 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstrasjon — kun eksempel. Denne organisasjonen er fiktiv.",
+    heroAlt: "Reisende som ser på en AutoVere-rute og reisekostnader fra bilen",
+    heroTagline: "La oss gjøre planleggingen enklere for dem dere bryr dere om.",
+    dealerEyebrow: "For uavhengige forhandlere",
+    dealerTitle: "Gjør hver biloverlevering litt mer komplett.",
+    dealerBody:
+      "Gi kundene en praktisk reisefølgesvenn sammen med den nye bilen. AutoVere hjelper dem å forstå bompenger, vignetter, drivstoff og ladekostnader før den første lange turen — og forhandleren gir dem 25 % rabatt på Pro.",
+    dealerAlt: "Bilforhandler som presenterer AutoVere for en kunde ved overlevering av bil",
+    dealerCaption: "En nyttig reisefordel, presentert på akkurat riktig tidspunkt.",
+    dealerBullets: [
+      "Et gjennomtenkt ekstra for kunder som kjøper ny eller brukt bil",
+      "Relevant for elbil-, bobil- og turkjøpere",
+      "Ingen programvare, abonnement eller fakturering for teamet deres",
+    ],
+    dealerCta: "Tilby AutoVere til kundene dine",
     whyTitle: "Hvorfor samarbeide med AutoVere?",
     why: [
       {
