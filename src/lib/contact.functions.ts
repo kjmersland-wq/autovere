@@ -10,6 +10,7 @@ const contactSchema = z.object({
   country: z.string().trim().max(120).optional(),
   website: z.string().trim().max(300).optional(),
   message: z.string().trim().max(5000).optional(),
+  locale: z.string().trim().min(2).max(12).optional(),
 });
 
 export type ContactPayload = z.infer<typeof contactSchema>;
@@ -17,6 +18,22 @@ export type ContactPayload = z.infer<typeof contactSchema>;
 export const sendContactMessage = createServerFn({ method: "POST" })
   .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
+    if (data.kind === "partner") {
+      const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+      const { error } = await supabaseAdmin.from("partner_applications").insert({
+        organisation_name: data.organisation ?? data.name,
+        country: data.country ?? "Not specified",
+        website: data.website || null,
+        contact_name: data.name,
+        contact_email: data.email.toLowerCase(),
+        description: data.message || null,
+        locale: data.locale ?? "en",
+      });
+      if (error) {
+        if (error.code === "23505") throw new Error("An application for this email is already awaiting review.");
+        throw new Error("We could not save the application.");
+      }
+    }
     const { sendMail } = await import("@/lib/smtp.server");
     const to = "kjell@autovere.com";
 

@@ -15,6 +15,7 @@ import { SubscriptionsPanel } from "@/components/admin/sections/SubscriptionsPan
 import { FinancePanel } from "@/components/admin/sections/FinancePanel";
 import { AnalysisPanel } from "@/components/admin/sections/AnalysisPanel";
 import { ReportsPanel } from "@/components/admin/reports/ReportsPanel";
+import { PartnersPanel } from "@/components/admin/sections/PartnersPanel";
 
 const ALL_SITES = "__all__";
 
@@ -44,6 +45,8 @@ function Section({
       return <FinancePanel site={site} currency={currency} onCurrencyChange={onCurrencyChange} />;
     case "analyse":
       return <AnalysisPanel currency={currency} />;
+    case "partnere":
+      return <PartnersPanel />;
     case "rapporter":
       return <ReportsPanel site={site} currency={currency} />;
     default:

@@ -59,6 +59,350 @@ export type Database = {
         }
         Relationships: []
       }
+      partner_access_codes: {
+        Row: {
+          code_hash: string
+          created_at: string
+          disabled_at: string | null
+          email: string
+          expires_at: string
+          id: string
+          partner_id: string
+          used_at: string | null
+          used_by: string | null
+        }
+        Insert: {
+          code_hash: string
+          created_at?: string
+          disabled_at?: string | null
+          email: string
+          expires_at: string
+          id?: string
+          partner_id: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Update: {
+          code_hash?: string
+          created_at?: string
+          disabled_at?: string | null
+          email?: string
+          expires_at?: string
+          id?: string
+          partner_id?: string
+          used_at?: string | null
+          used_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_access_codes_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_applications: {
+        Row: {
+          contact_email: string
+          contact_name: string
+          country: string
+          created_at: string
+          description: string | null
+          id: string
+          locale: string
+          organisation_name: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: Database["public"]["Enums"]["partner_application_status"]
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          contact_email: string
+          contact_name: string
+          country: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          locale?: string
+          organisation_name: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["partner_application_status"]
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          contact_email?: string
+          contact_name?: string
+          country?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          locale?: string
+          organisation_name?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: Database["public"]["Enums"]["partner_application_status"]
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: []
+      }
+      partner_events: {
+        Row: {
+          created_at: string
+          event_type: Database["public"]["Enums"]["partner_event_type"]
+          id: string
+          locale: string | null
+          partner_id: string
+          path: string | null
+          referral_code_id: string | null
+          session_id: string | null
+          visitor_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_type: Database["public"]["Enums"]["partner_event_type"]
+          id?: string
+          locale?: string | null
+          partner_id: string
+          path?: string | null
+          referral_code_id?: string | null
+          session_id?: string | null
+          visitor_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_type?: Database["public"]["Enums"]["partner_event_type"]
+          id?: string
+          locale?: string | null
+          partner_id?: string
+          path?: string | null
+          referral_code_id?: string | null
+          session_id?: string | null
+          visitor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_events_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "partner_events_referral_code_id_fkey"
+            columns: ["referral_code_id"]
+            isOneToOne: false
+            referencedRelation: "partner_referral_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_redemptions: {
+        Row: {
+          created_at: string
+          id: string
+          partner_id: string
+          referral_code_id: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          partner_id: string
+          referral_code_id: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          partner_id?: string
+          referral_code_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_redemptions_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "partner_redemptions_referral_code_id_fkey"
+            columns: ["referral_code_id"]
+            isOneToOne: false
+            referencedRelation: "partner_referral_codes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_referral_codes: {
+        Row: {
+          active: boolean
+          code: string
+          created_at: string
+          discount_percent: number
+          id: string
+          partner_id: string
+          redemption_count: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          code: string
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          partner_id: string
+          redemption_count?: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          code?: string
+          created_at?: string
+          discount_percent?: number
+          id?: string
+          partner_id?: string
+          redemption_count?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_referral_codes_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partner_users: {
+        Row: {
+          created_at: string
+          id: string
+          partner_id: string
+          role: Database["public"]["Enums"]["partner_user_role"]
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          partner_id: string
+          role?: Database["public"]["Enums"]["partner_user_role"]
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          partner_id?: string
+          role?: Database["public"]["Enums"]["partner_user_role"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partner_users_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "partners"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      partners: {
+        Row: {
+          application_id: string | null
+          contact_email: string
+          contact_name: string
+          country: string
+          created_at: string
+          id: string
+          logo_url: string | null
+          organisation_name: string
+          slug: string
+          status: Database["public"]["Enums"]["partner_status"]
+          updated_at: string
+          website: string | null
+        }
+        Insert: {
+          application_id?: string | null
+          contact_email: string
+          contact_name: string
+          country: string
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          organisation_name: string
+          slug: string
+          status?: Database["public"]["Enums"]["partner_status"]
+          updated_at?: string
+          website?: string | null
+        }
+        Update: {
+          application_id?: string | null
+          contact_email?: string
+          contact_name?: string
+          country?: string
+          created_at?: string
+          id?: string
+          logo_url?: string | null
+          organisation_name?: string
+          slug?: string
+          status?: Database["public"]["Enums"]["partner_status"]
+          updated_at?: string
+          website?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "partners_application_id_fkey"
+            columns: ["application_id"]
+            isOneToOne: true
+            referencedRelation: "partner_applications"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      poi_corridor_cache: {
+        Row: {
+          cache_key: string
+          categories: string[]
+          created_at: string
+          expires_at: string
+          id: string
+          payload: Json
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          cache_key: string
+          categories?: string[]
+          created_at?: string
+          expires_at: string
+          id?: string
+          payload?: Json
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          cache_key?: string
+          categories?: string[]
+          created_at?: string
+          expires_at?: string
+          id?: string
+          payload?: Json
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_events: {
         Row: {
           city: string | null
@@ -181,10 +525,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      activate_partner_access: { Args: { _code_hash: string }; Returns: string }
+      activate_partner_access_for_user: {
+        Args: { _code_hash: string; _email: string; _user_id: string }
+        Returns: string
+      }
       has_active_subscription: {
         Args: { check_env?: string; user_uuid: string }
         Returns: boolean
       }
+      has_partner_access: { Args: { _partner_id: string }; Returns: boolean }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
@@ -193,9 +543,27 @@ export type Database = {
         Returns: boolean
       }
       is_admin: { Args: never; Returns: boolean }
+      redeem_partner_referral: {
+        Args: { _code: string }
+        Returns: {
+          discount_percent: number
+          partner_id: string
+        }[]
+      }
+      redeem_partner_referral_for_user: {
+        Args: { _code: string; _user_id: string }
+        Returns: {
+          discount_percent: number
+          partner_id: string
+        }[]
+      }
     }
     Enums: {
       app_role: "admin" | "moderator" | "user"
+      partner_application_status: "pending" | "approved" | "rejected"
+      partner_event_type: "link_click" | "signup" | "conversion"
+      partner_status: "active" | "suspended"
+      partner_user_role: "owner" | "manager"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -324,6 +692,10 @@ export const Constants = {
   public: {
     Enums: {
       app_role: ["admin", "moderator", "user"],
+      partner_application_status: ["pending", "approved", "rejected"],
+      partner_event_type: ["link_click", "signup", "conversion"],
+      partner_status: ["active", "suspended"],
+      partner_user_role: ["owner", "manager"],
     },
   },
 } as const

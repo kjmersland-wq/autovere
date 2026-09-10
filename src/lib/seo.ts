@@ -378,7 +378,8 @@ export function homepageJsonLd() {
       {
         "@type": "Organization",
         "@id": `${BASE_URL}/#organization`,
-        name: "AutoVere",
+        name: "KM TECH LABS",
+        alternateName: "AutoVere",
         url: BASE_URL,
         sameAs: ["https://twitter.com/autoverehq"],
         contactPoint: [
@@ -437,6 +438,10 @@ export const MARKET_LANG: Record<LocalePrefix | "en" | "ca" | "cafr", string> = 
   ja: "ja-JP",
   zh: "zh-CN",
 };
+
+export function ogLocaleFor(prefix: LocalePrefix | "en" | "ca" | "cafr"): string {
+  return MARKET_LANG[prefix].replace("-", "_");
+}
 
 /** The 15 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
 export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it", "pt", "ja", "zh"] as const;

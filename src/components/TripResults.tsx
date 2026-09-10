@@ -44,11 +44,13 @@ import { useSubscription } from "@/hooks/useSubscription";
 import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
+import { useServerFn } from "@tanstack/react-start";
 import { RouteStopCard } from "@/components/RouteStopCard";
 import { BorderAdvisories } from "@/components/BorderAdvisories";
 import type { CorridorStop } from "@/lib/corridor-map";
 import { corridorStopsAlongCorridor } from "@/lib/corridor-map";
 import { getPlaceReviews, type PlaceReview } from "@/lib/place-reviews.functions";
+import { getLiveCorridorPois } from "@/lib/poi.functions";
 import { POI_GROUPS, POI_INTERESTS, poiLabel, type PoiInterestId } from "@/lib/poi-interests";
 import {
   ROUTE_VARIANTS,
@@ -214,6 +216,7 @@ export function TripResults({
   const [appliedStops, setAppliedStops] = useState<CorridorStop[]>([]);
   const [stopReviews, setStopReviews] = useState<Record<string, PlaceReview>>({});
   const [reviewsLoading, setReviewsLoading] = useState(false);
+  const fetchLivePois = useServerFn(getLiveCorridorPois);
 
   // Trip Pass/Pro/Fleet only — free visitors keep hitting the paywall.
   // Google Places is called on-demand for the visible candidates only
@@ -223,7 +226,20 @@ export function TripResults({
       setStopsPaywallOpen(true);
       return;
     }
-    const visible = corridorStopsAlongCorridor(curatedPois, corridorCoords, selected).slice(0, 8);
+    const curated = corridorStopsAlongCorridor(curatedPois, corridorCoords, selected);
+    let live: CorridorStop[] = [];
+    if (corridorCoords?.length) {
+      const step = Math.max(1, Math.floor(corridorCoords.length / 8));
+      const samples = corridorCoords.filter((_, index) => index % step === 0).slice(0, 10);
+      try {
+        const result = await fetchLivePois({ data: { coords: samples, categories: selected } });
+        live = corridorStopsAlongCorridor(result.stops, corridorCoords, selected);
+      } catch {
+        // Curated coverage remains available if the live source is temporarily unavailable.
+      }
+    }
+    const merged = [...curated, ...live].filter((stop, index, all) => all.findIndex((candidate) => candidate.id === stop.id || (Math.abs(candidate.lat - stop.lat) < 0.0003 && Math.abs(candidate.lon - stop.lon) < 0.0003)) === index);
+    const visible = merged.slice(0, 8);
     setAppliedStops(visible);
     setStopReviews({});
     if (!visible.length) return;

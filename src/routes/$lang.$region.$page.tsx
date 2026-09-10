@@ -3,7 +3,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 import { LocalizedRegionPage } from "@/components/LocalizedRegionPage";
 import { infoForLang } from "@/lib/info-by-lang";
 import { isLocalePage, isLocalePrefix, isRegionPrefix, type LocalePrefix } from "@/lib/locales";
-import { absUrl, ogImageMeta, ogImageUrl } from "@/lib/seo";
+import { absUrl, ogImageMeta, ogImageUrl, ogLocaleFor } from "@/lib/seo";
 import type { RegionKey } from "@/lib/trip-data";
 
 const REGION_NAME: Record<string, string> = { us: "USA", ca: "Canada" };
@@ -31,6 +31,7 @@ export const Route = createFileRoute("/$lang/$region/$page")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
+        { property: "og:locale", content: ogLocaleFor(params.lang as LocalePrefix) },
         { property: "og:url", content: url },
         ...ogImageMeta(image),
         { name: "twitter:card", content: "summary_large_image" },

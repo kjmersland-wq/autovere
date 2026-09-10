@@ -1,6 +1,6 @@
-import { BarChart3, FileText, Globe2, LayoutGrid, LineChart, Sparkles, Wallet } from "lucide-react";
+import { BarChart3, FileText, Globe2, Handshake, LayoutGrid, LineChart, Sparkles, Wallet } from "lucide-react";
 
-export type AdminSectionId = "oversikt" | "trafikk" | "markeder" | "abonnement" | "okonomi" | "analyse" | "rapporter";
+export type AdminSectionId = "oversikt" | "trafikk" | "markeder" | "abonnement" | "okonomi" | "analyse" | "partnere" | "rapporter";
 
 export const ADMIN_NAV: { id: AdminSectionId; label: string; icon: typeof LayoutGrid }[] = [
   { id: "oversikt", label: "Oversikt", icon: LayoutGrid },
@@ -9,5 +9,6 @@ export const ADMIN_NAV: { id: AdminSectionId; label: string; icon: typeof Layout
   { id: "abonnement", label: "Abonnement", icon: BarChart3 },
   { id: "okonomi", label: "Økonomi", icon: Wallet },
   { id: "analyse", label: "Analyse", icon: Sparkles },
+  { id: "partnere", label: "Partnere", icon: Handshake },
   { id: "rapporter", label: "Rapporter", icon: FileText },
 ];

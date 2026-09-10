@@ -19,6 +19,7 @@ export const Route = createFileRoute("/partners")({
           "A genuinely useful member benefit for motoring, motorhome, EV and touring organisations across Europe, the USA and Canada.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_GB" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: absUrl("/partners") }, ...appPageHreflangLinks("partners")],
