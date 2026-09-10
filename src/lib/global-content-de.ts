@@ -158,7 +158,7 @@ export const DE_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Werden Sie Teil des Netzwerks",
-      body: "Wir sitzen in Kristiansand, Norwegen, arbeiten aber gerne mit Partnern überall zusammen. Betreiben Sie eine Fahrzeugflotte, ein Reiseunternehmen oder einen Mautdienst und möchten über Integration, gemeinsames Marketing oder eine Datenpartnerschaft sprechen? Schreiben Sie uns einfach an partners@autovere.com — wir freuen uns, von Ihnen zu hören.",
+      body: "Wir sitzen in Kristiansand, Norwegen, arbeiten aber gerne mit Partnern überall zusammen. Betreiben Sie eine Fahrzeugflotte, ein Reiseunternehmen oder einen Mautdienst und möchten über Integration, gemeinsames Marketing oder eine Datenpartnerschaft sprechen? Schreiben Sie uns einfach an kjell@autovere.com — wir freuen uns, von Ihnen zu hören.",
     },
   ],
   note: DISCLAIMER,
@@ -201,7 +201,7 @@ export const DE_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Kontakt",
-      body: "Fragen zum Datenschutz: privacy@autovere.com — KM TECH LABS, Kristiansand, Norwegen. Regionale Hinweise: US-Datenschutz finden Sie unter /us/legal, und kanadische PIPEDA- sowie Québec-Gesetz-25-Rechte unter /ca/legal.",
+      body: "Fragen zum Datenschutz: kjell@autovere.com — KM TECH LABS, Kristiansand, Norwegen. Regionale Hinweise: US-Datenschutz finden Sie unter /us/legal, und kanadische PIPEDA- sowie Québec-Gesetz-25-Rechte unter /ca/legal.",
     },
   ],
   note: DISCLAIMER,

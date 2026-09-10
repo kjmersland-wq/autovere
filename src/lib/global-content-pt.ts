@@ -158,7 +158,7 @@ export const PT_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Junte-se à rede",
-      body: "Temos a nossa sede em Kristiansand, na Noruega, mas gostamos de colaborar com parceiros em qualquer parte do mundo. Gere uma frota, um negócio turístico ou um serviço de portagens e quer falar sobre integração, co-marketing ou uma parceria de dados? Escreva-nos para partners@autovere.com — teremos todo o gosto em conhecê-lo.",
+      body: "Temos a nossa sede em Kristiansand, na Noruega, mas gostamos de colaborar com parceiros em qualquer parte do mundo. Gere uma frota, um negócio turístico ou um serviço de portagens e quer falar sobre integração, co-marketing ou uma parceria de dados? Escreva-nos para kjell@autovere.com — teremos todo o gosto em conhecê-lo.",
     },
   ],
   note: DISCLAIMER,
@@ -201,7 +201,7 @@ export const PT_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contacto",
-      body: "Questões de privacidade: privacy@autovere.com — KM TECH LABS, Kristiansand, Noruega. Avisos regionais: a privacidade nos Estados Unidos está descrita em /us/legal, e os direitos ao abrigo da PIPEDA canadiana e da Lei 25 do Quebeque estão descritos em /ca/legal.",
+      body: "Questões de privacidade: kjell@autovere.com — KM TECH LABS, Kristiansand, Noruega. Avisos regionais: a privacidade nos Estados Unidos está descrita em /us/legal, e os direitos ao abrigo da PIPEDA canadiana e da Lei 25 do Quebeque estão descritos em /ca/legal.",
     },
   ],
   note: DISCLAIMER,

@@ -158,7 +158,7 @@ export const FR_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Rejoignez le réseau",
-      body: "Nous sommes basés à Kristiansand, en Norvège, mais nous aimons collaborer avec des partenaires où qu'ils se trouvent. Vous gérez une flotte, une entreprise de circuits ou un service de péage et souhaitez parler intégration, co-marketing ou partenariat de données ? Écrivez-nous à partners@autovere.com, nous avons hâte d'échanger avec vous.",
+      body: "Nous sommes basés à Kristiansand, en Norvège, mais nous aimons collaborer avec des partenaires où qu'ils se trouvent. Vous gérez une flotte, une entreprise de circuits ou un service de péage et souhaitez parler intégration, co-marketing ou partenariat de données ? Écrivez-nous à kjell@autovere.com, nous avons hâte d'échanger avec vous.",
     },
   ],
   note: DISCLAIMER,
@@ -201,7 +201,7 @@ export const FR_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contact",
-      body: "Questions sur la confidentialité : privacy@autovere.com — KM TECH LABS, Kristiansand, Norvège. Mentions régionales : la confidentialité aux États-Unis est couverte sur /us/legal, et les droits PIPEDA canadiens ainsi que la loi 25 du Québec sont couverts sur /ca/legal.",
+      body: "Questions sur la confidentialité : kjell@autovere.com — KM TECH LABS, Kristiansand, Norvège. Mentions régionales : la confidentialité aux États-Unis est couverte sur /us/legal, et les droits PIPEDA canadiens ainsi que la loi 25 du Québec sont couverts sur /ca/legal.",
     },
   ],
   note: DISCLAIMER,

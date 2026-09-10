@@ -189,7 +189,7 @@ export const GLOBAL_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Work with us",
-      body: "KM TECH LABS is based in Kristiansand, Norway. If you run a fleet, a tour business or a toll service and want to talk integration, co-marketing or data partnerships, get in touch at partners@autovere.com.",
+      body: "KM TECH LABS is based in Kristiansand, Norway. If you run a fleet, a tour business or a toll service and want to talk integration, co-marketing or data partnerships, get in touch at kjell@autovere.com.",
     },
   ],
   note: DISCLAIMER,
@@ -232,7 +232,7 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contact",
-      body: "Privacy questions: privacy@autovere.com — KM TECH LABS, Kristiansand, Norway. Regional notices: US privacy is covered on /us/legal, and Canadian PIPEDA and Québec Law 25 rights are covered on /ca/legal.",
+      body: "Privacy questions: kjell@autovere.com — KM TECH LABS, Kristiansand, Norway. Regional notices: US privacy is covered on /us/legal, and Canadian PIPEDA and Québec Law 25 rights are covered on /ca/legal.",
     },
   ],
   note: DISCLAIMER,

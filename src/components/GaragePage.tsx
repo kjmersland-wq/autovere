@@ -944,7 +944,7 @@ export function GaragePage() {
                     {tx("Send oss en melding, så svarer vi deg — dette er også riktig sted å melde fra om et problem.")}
                   </p>
                   <Button className="mt-4" asChild>
-                    <a href="mailto:support@autovere.com">{tx("Send melding")}</a>
+                    <a href="mailto:kjell@autovere.com">{tx("Send melding")}</a>
                   </Button>
                 </Panel>
               </>

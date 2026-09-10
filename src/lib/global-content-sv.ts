@@ -158,7 +158,7 @@ export const SV_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Bli en del av nätverket",
-      body: "Vi håller till i Kristiansand i Norge, men samarbetar gärna med er var ni än finns. Driver ni en bilflotta, ett researrangörsföretag eller en avgiftstjänst och vill prata om integration, gemensam marknadsföring eller datasamarbete – hör av er till partners@autovere.com, vi ser fram emot att höra från er.",
+      body: "Vi håller till i Kristiansand i Norge, men samarbetar gärna med er var ni än finns. Driver ni en bilflotta, ett researrangörsföretag eller en avgiftstjänst och vill prata om integration, gemensam marknadsföring eller datasamarbete – hör av er till kjell@autovere.com, vi ser fram emot att höra från er.",
     },
   ],
   note: DISCLAIMER,
@@ -201,7 +201,7 @@ export const SV_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Kontakt",
-      body: "Frågor om integritet: privacy@autovere.com — KM TECH LABS, Kristiansand, Norge. Regionala meddelanden: integritet i USA beskrivs på /us/legal, och kanadensiska PIPEDA- och Québec Law 25-rättigheter beskrivs på /ca/legal.",
+      body: "Frågor om integritet: kjell@autovere.com — KM TECH LABS, Kristiansand, Norge. Regionala meddelanden: integritet i USA beskrivs på /us/legal, och kanadensiska PIPEDA- och Québec Law 25-rättigheter beskrivs på /ca/legal.",
     },
   ],
   note: DISCLAIMER,
