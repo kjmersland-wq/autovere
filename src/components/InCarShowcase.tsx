@@ -708,12 +708,13 @@ function ContactSection() {
     try {
       await sendContactMessage({
         data: {
-          kind: "partner",
+          kind: "in_car",
           name,
           email,
           organisation: organization,
           subject: `In-Car Intelligence pilot — ${interest}`,
           message: `Integration interest: ${interest}\n\n${message}`,
+          locale: "en",
         },
       });
       setSent(true);

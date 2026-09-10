@@ -2,7 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 
 const contactSchema = z.object({
-  kind: z.enum(["partner", "message"]),
+  kind: z.enum(["partner", "message", "in_car"]),
   name: z.string().trim().min(1).max(120),
   email: z.string().trim().email().max(200),
   subject: z.string().trim().max(200).optional(),
@@ -20,7 +20,7 @@ export const sendContactMessage = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     if (data.kind === "partner") {
       const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-      const { error } = await supabaseAdmin.from("partner_applications").insert({
+      const { error } = await supabaseAdmin.from("partner_applications").upsert({
         organisation_name: data.organisation ?? data.name,
         country: data.country ?? "Not specified",
         website: data.website || null,
@@ -28,22 +28,23 @@ export const sendContactMessage = createServerFn({ method: "POST" })
         contact_email: data.email.toLowerCase(),
         description: data.message || null,
         locale: data.locale ?? "en",
-      });
+      }, { onConflict: "contact_email", ignoreDuplicates: false });
       if (error) {
-        if (error.code === "23505") throw new Error("An application for this email is already awaiting review.");
         throw new Error("We could not save the application.");
       }
     }
     const { sendMail } = await import("@/lib/smtp.server");
     const to = "kjell@autovere.com";
 
-    const isPartner = data.kind === "partner";
-    const subject = isPartner
-      ? `Partnersøknad — ${data.organisation ?? data.name}`
-      : `Kontaktskjema — ${data.subject ?? "AutoVere"}`;
+    const typeLabel = data.kind === "partner" ? "Partnersøknad" : data.kind === "in_car" ? "Pilotforespørsel" : "Melding";
+    const subject = data.kind === "partner"
+      ? `Ny partnersøknad — ${data.organisation ?? data.name}`
+      : data.kind === "in_car"
+        ? `Ny pilotforespørsel — ${data.organisation ?? data.name}`
+        : `Ny kontakthenvendelse — ${data.subject ?? "AutoVere"}`;
 
     const lines = [
-      `Type: ${isPartner ? "Partnersøknad" : "Melding"}`,
+      `Type: ${typeLabel}`,
       `Navn: ${data.name}`,
       `E-post: ${data.email}`,
       data.organisation ? `Organisasjon: ${data.organisation}` : null,
@@ -54,7 +55,7 @@ export const sendContactMessage = createServerFn({ method: "POST" })
       data.message ?? "",
       "",
       "—",
-      "Sendt fra autovere.com",
+      `Sendt fra kontaktskjema på autovere.com (${data.locale ?? "en"})`,
     ].filter((l) => l !== null);
 
     await sendMail({
@@ -62,7 +63,7 @@ export const sendContactMessage = createServerFn({ method: "POST" })
       subject,
       text: lines.join("\n"),
       replyTo: data.email,
-      fromName: "AutoVere",
+      fromName: `AutoVere · ${typeLabel}`,
     });
 
     return { ok: true as const };
