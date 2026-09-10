@@ -10,7 +10,7 @@ interface SitemapEntry {
   changefreq?: "daily" | "weekly" | "monthly" | "yearly";
   priority?: string;
   /** xhtml:link alternates for a genuinely proven localized-equivalent group (homepage / Challenge). */
-  alternates?: { hreflang: string; href: string }[];
+  alternates?: { hrefLang: string; href: string }[];
 }
 
 const ENGLISH_PAGES = [
@@ -111,7 +111,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             ...(e.alternates ?? []).map(
-              (a) => `    <xhtml:link rel="alternate" hreflang="${a.hreflang}" href="${a.href}"/>`,
+              (a) => `    <xhtml:link rel="alternate" hreflang="${a.hrefLang}" href="${a.href}"/>`,
             ),
             `  </url>`,
           ]
