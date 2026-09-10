@@ -114,7 +114,7 @@ import {
   type LocalePage,
   type LocalePrefix,
 } from "@/lib/locales";
-import { absUrl, appPageHreflangLinks, appPageMeta, faqScript, ogImageMeta, ogImageUrl, regionalize } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, appPageMeta, faqScript, ogImageMeta, ogImageUrl, ogLocaleFor, regionalize } from "@/lib/seo";
 
 const INFO = {
   faq: GLOBAL_FAQ,
@@ -256,6 +256,7 @@ export const Route = createFileRoute("/$lang/$page")({
           { property: "og:title", content: rTitle },
           { property: "og:description", content: rDesc },
           { property: "og:type", content: "website" },
+          { property: "og:locale", content: ogLocaleFor(prefix) },
           { property: "og:url", content: url },
           ...ogImageMeta(regionImage),
           { name: "twitter:card", content: "summary_large_image" },
@@ -290,6 +291,7 @@ export const Route = createFileRoute("/$lang/$page")({
         { property: "og:title", content: title },
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
+        { property: "og:locale", content: ogLocaleFor(prefix) },
         { property: "og:url", content: url },
         ...ogImageMeta(image),
         { name: "twitter:card", content: "summary_large_image" },

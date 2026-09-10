@@ -13,46 +13,9 @@ interface SitemapEntry {
   alternates?: { hrefLang: string; href: string }[];
 }
 
-const ENGLISH_PAGES = [
-  "/planner",
-  "/tolls",
-  "/scenic",
-  "/garage",
-  "/faq",
-  "/how-it-works",
-  "/pricing",
-  "/partners",
-  "/privacy",
-  "/terms",
-];
-
-const US_PAGES = [
-  "/us/planner",
-  "/us/tolls",
-  "/us/scenic",
-  "/us/garage",
-  "/us/pricing",
-  "/us/faq",
-  "/us/how-it-works",
-  "/us/partners",
-  "/us/legal",
-];
-const CA_PAGES = [
-  "/ca/planner",
-  "/ca/tolls",
-  "/ca/scenic",
-  "/ca/garage",
-  "/ca/pricing",
-  "/ca/faq",
-  "/ca/how-it-works",
-  "/ca/partners",
-  "/ca/legal",
-  "/ca/fr/faq",
-  "/ca/fr/how-it-works",
-  "/ca/fr/partners",
-  "/ca/fr/legal",
-
-];
+const APP_PAGES = [...LOCALE_PAGES];
+const LEGAL_PAGES = ["privacy", "terms"] as const;
+const REGIONAL_PAGES = [...APP_PAGES.filter((page) => !LEGAL_PAGES.includes(page as typeof LEGAL_PAGES[number])), "legal"];
 
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
@@ -63,9 +26,10 @@ export const Route = createFileRoute("/sitemap.xml")({
           { path: "/europe", changefreq: "weekly", priority: "0.9" },
           { path: "/us", changefreq: "weekly", priority: "0.9", alternates: homepageHreflangLinks() },
           { path: "/ca", changefreq: "weekly", priority: "0.9", alternates: homepageHreflangLinks() },
-          ...ENGLISH_PAGES.map((path) => ({ path, changefreq: "monthly" as const, priority: "0.7" })),
-          ...US_PAGES.map((path) => ({ path, changefreq: "monthly" as const, priority: "0.6" })),
-          ...CA_PAGES.map((path) => ({ path, changefreq: "monthly" as const, priority: "0.6" })),
+          ...APP_PAGES.map((page) => ({ path: `/${page}`, changefreq: "monthly" as const, priority: "0.7" })),
+          ...REGIONAL_PAGES.map((page) => ({ path: `/us/${page}`, changefreq: "monthly" as const, priority: "0.6" })),
+          ...REGIONAL_PAGES.map((page) => ({ path: `/ca/${page}`, changefreq: "monthly" as const, priority: "0.6" })),
+          ...["faq", "how-it-works", "partners", "legal"].map((page) => ({ path: `/ca/fr/${page}`, changefreq: "monthly" as const, priority: "0.6" })),
           { path: "/challenge", changefreq: "monthly", priority: "0.8", alternates: challengeHreflangLinks() },
           ...PRIMARY_MARKET_PREFIXES.map((prefix) => ({
             path: `/challenge/${prefix}`,

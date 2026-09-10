@@ -19,6 +19,7 @@ import {
   Sparkles,
   Zap,
 } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 
 import dealerHandoverImage from "@/assets/partners-dealer-handover.jpg";
 import travellerAutovereImage from "@/assets/partners-traveller-autovere.jpg";
@@ -101,7 +102,7 @@ const COPY = {
       "Alle bom- og vignettkjøp skjer direkte hos den offisielle operatøren — vi er aldri videreselger, og vi legger aldri på noe påslag.",
       "Medlemsdataene forblir private; vi deler dem aldri med tredjepart til markedsføring.",
       "Én tjeneste som dekker Europa, USA og Canada.",
-      "Laget med omhu av KM TECH LABS i Kristiansand.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Vi vil gjerne høre fra dere",
     ctaHeading: "Bli AutoVere-partner",
@@ -207,7 +208,7 @@ const COPY = {
       "Every toll and vignette purchase happens directly with the official operator — we never resell, and we never add a markup.",
       "Member data stays private; we never share it with third parties for marketing.",
       "One service covering Europe, the USA and Canada.",
-      "Made with care by KM TECH LABS in Kristiansand, Norway.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "We'd love to hear from you",
     ctaHeading: "Become an AutoVere Partner",
@@ -313,7 +314,7 @@ const COPY = {
       "Każdy zakup opłaty i winiety odbywa się bezpośrednio u oficjalnego operatora — nigdy nie jesteśmy pośrednikiem i nigdy nie doliczamy marży.",
       "Dane członków pozostają prywatne; nigdy nie udostępniamy ich stronom trzecim w celach marketingowych.",
       "Jedna usługa obejmująca Europę, USA i Kanadę.",
-      "Stworzone z dbałością przez KM TECH LABS w Kristiansand, w Norwegii.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Chętnie usłyszymy, co macie do powiedzenia",
     ctaHeading: "Zostań partnerem AutoVere",
@@ -419,7 +420,7 @@ const COPY = {
       "Alla köp av vägtullar och vinjetter sker direkt hos den officiella operatören — vi är aldrig återförsäljare, och vi lägger aldrig på ett påslag.",
       "Medlemsdata förblir privat; vi delar den aldrig med tredje part för marknadsföring.",
       "En tjänst som täcker Europa, USA och Kanada.",
-      "Skapat med omsorg av KM TECH LABS i Kristiansand, Norge.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Vi skulle gärna höra från er",
     ctaHeading: "Bli en AutoVere-partner",
@@ -524,7 +525,7 @@ const COPY = {
       "Alle køb af vejafgifter og vignetter sker direkte hos den officielle udbyder — vi er aldrig videresælger, og vi lægger aldrig noget oveni.",
       "Medlemsdata forbliver private; vi deler dem aldrig med tredjepart til markedsføring.",
       "Én tjeneste, der dækker Europa, USA og Canada.",
-      "Lavet med omhu af KM TECH LABS i Kristiansand, Norge.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Vi vil meget gerne høre fra jer",
     ctaHeading: "Bliv AutoVere-partner",
@@ -629,7 +630,7 @@ const COPY = {
       "Jokainen tietulli- ja vinjettiosto tapahtuu suoraan virallisen operaattorin kanssa — emme koskaan toimi jälleenmyyjänä emmekä koskaan lisää omaa katetta.",
       "Jäsentiedot pysyvät yksityisinä; emme koskaan jaa niitä kolmansille osapuolille markkinointitarkoituksiin.",
       "Yksi palvelu, joka kattaa Euroopan, Yhdysvallat ja Kanadan.",
-      "Huolella tehnyt KM TECH LABS, Kristiansand, Norja.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Kuulisimme mielellämme teistä",
     ctaHeading: "Ryhdy AutoVere-kumppaniksi",
@@ -734,7 +735,7 @@ const COPY = {
       "Jeder Maut- und Vignettenkauf erfolgt direkt beim offiziellen Betreiber — wir sind nie Wiederverkäufer und schlagen nie etwas auf.",
       "Mitgliederdaten bleiben privat; wir geben sie niemals zu Marketingzwecken an Dritte weiter.",
       "Ein Service, der Europa, die USA und Kanada abdeckt.",
-      "Mit Sorgfalt entwickelt von KM TECH LABS in Kristiansand, Norwegen.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Wir würden uns freuen, von Ihnen zu hören",
     ctaHeading: "Werden Sie AutoVere-Partner",
@@ -839,7 +840,7 @@ const COPY = {
       "Elke tol- en vignetaankoop verloopt rechtstreeks via de officiële exploitant — wij zijn nooit wederverkoper en rekenen nooit iets extra's aan.",
       "Ledengegevens blijven privé; we delen ze nooit met derden voor marketingdoeleinden.",
       "Eén dienst die Europa, de VS en Canada dekt.",
-      "Met zorg gemaakt door KM TECH LABS in Kristiansand, Noorwegen.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "We horen graag van je",
     ctaHeading: "Word AutoVere-partner",
@@ -944,7 +945,7 @@ const COPY = {
       "Chaque achat de péage et de vignette se fait directement auprès de l'opérateur officiel — nous ne sommes jamais revendeur, et nous n'ajoutons jamais de marge.",
       "Les données des membres restent privées ; nous ne les partageons jamais avec des tiers à des fins marketing.",
       "Un seul service couvrant l'Europe, les États-Unis et le Canada.",
-      "Conçu avec soin par KM TECH LABS à Kristiansand, en Norvège.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Nous serions ravis d'avoir de vos nouvelles",
     ctaHeading: "Devenez partenaire AutoVere",
@@ -1049,7 +1050,7 @@ const COPY = {
       "Cada compra de peaje y viñeta se realiza directamente con el operador oficial — nunca somos revendedores, y nunca añadimos ningún recargo.",
       "Los datos de los socios permanecen privados; nunca los compartimos con terceros con fines de marketing.",
       "Un solo servicio que cubre Europa, Estados Unidos y Canadá.",
-      "Creado con esmero por KM TECH LABS en Kristiansand, Noruega.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Nos encantaría saber de ti",
     ctaHeading: "Conviértete en socio de AutoVere",
@@ -1154,7 +1155,7 @@ const COPY = {
       "Ogni acquisto di pedaggio e vignetta avviene direttamente presso il gestore ufficiale — non siamo mai rivenditori, e non aggiungiamo mai alcun sovrapprezzo.",
       "I dati dei soci restano privati; non li condividiamo mai con terze parti a scopo di marketing.",
       "Un unico servizio che copre Europa, Stati Uniti e Canada.",
-      "Realizzato con cura da KM TECH LABS a Kristiansand, in Norvegia.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Ci piacerebbe sentirti",
     ctaHeading: "Diventa partner AutoVere",
@@ -1259,7 +1260,7 @@ const COPY = {
       "Cada compra de portagem e vinheta é feita diretamente com o operador oficial — nunca somos revendedores, e nunca acrescentamos qualquer margem.",
       "Os dados dos membros permanecem privados; nunca os partilhamos com terceiros para fins de marketing.",
       "Um único serviço que cobre a Europa, os Estados Unidos e o Canadá.",
-      "Feito com cuidado pela KM TECH LABS em Kristiansand, na Noruega.",
+      "KM TECH LABS.",
     ],
     ctaTitle: "Gostaríamos muito de o ouvir",
     ctaHeading: "Torne-se parceiro AutoVere",
@@ -1469,7 +1470,7 @@ const COPY = {
       "每一笔过路费和电子通行凭证的付款都直接在官方运营方完成——我们从不代为收费，也绝不加价。",
       "会员数据始终保密，我们从不会为营销目的与第三方共享。",
       "一项服务，覆盖欧洲、美国和加拿大。",
-      "由挪威克里斯蒂安桑的 KM TECH LABS 用心打造。",
+      "KM TECH LABS.",
     ],
     ctaTitle: "我们很期待收到你的消息",
     ctaHeading: "成为 AutoVere 合作伙伴",
@@ -1634,6 +1635,7 @@ export function PartnersPage({
           country: f.get("country") ? String(f.get("country")) : undefined,
           website: f.get("site") ? String(f.get("site")) : undefined,
           message: String(f.get("message") ?? f.get("members") ?? ""),
+          locale: lang,
         },
       });
       toast.success(t.ok);
@@ -1688,6 +1690,9 @@ export function PartnersPage({
             </Button>
             <Button size="lg" variant="outline" onClick={() => setTalkOpen(true)}>
               <Mail className="size-4" /> {c.talkButton}
+            </Button>
+            <Button size="lg" variant="secondary" asChild>
+              <Link to="/partners/dashboard"><Lock className="size-4" /> Partner sign in</Link>
             </Button>
           </div>
 

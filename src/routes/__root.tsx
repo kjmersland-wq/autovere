@@ -89,7 +89,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { name: "author", content: "KM TECH LABS" },
       { property: "og:site_name", content: "AutoVere" },
       { property: "og:type", content: "website" },
-      { property: "og:locale", content: "en_GB" },
       { property: "og:image", content: "https://www.autovere.com/og-image.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og-image.jpg" },
       { property: "og:image:type", content: "image/jpeg" },
