@@ -11,26 +11,37 @@ export type VignetteCountry = {
   note?: string;
 };
 
+/** NOK→EUR conversion used for the Norway toll lines (indicative — the underlying NVDB rates
+ * are always NOK; only the app's internal cross-country EUR total is converted). */
+export const NOK_PER_EUR = 11.7;
+
 export const VIGNETTES: Record<string, VignetteCountry> = {
+  // Prices verified live against the official ASFINAG toll shop on 2026-09-10.
   AT: {
     code: "AT",
     authority: "ASFINAG (official)",
     url: "https://www.asfinag.at/toll/vignette/",
     tiers: [
-      { maxDays: 1, label: "1-day vignette", price: 9.3 },
-      { maxDays: 10, label: "10-day vignette", price: 12.4 },
-      { maxDays: 60, label: "2-month vignette", price: 30.6 },
+      { maxDays: 1, label: "1-day vignette", price: 9.6 },
+      { maxDays: 10, label: "10-day vignette", price: 12.8 },
+      { maxDays: 60, label: "2-month vignette", price: 32.0 },
       { maxDays: 365, label: "Annual vignette", price: 106.8 },
     ],
     note: "Special tolls (Brenner, Tauern, Arlberg tunnels) are charged separately.",
   },
+  // CHF 40 official price, verified live against via.admin.ch on 2026-09-10. Converted to EUR
+  // at a fixed indicative rate — Switzerland only ever sells this one flat annual sticker, so
+  // the CHF figure itself is exact even though the EUR conversion drifts slightly with FX.
   CH: {
     code: "CH",
-    authority: "Swiss Federal Office for Customs (official)",
+    authority: "Swiss Federal Office for Customs and Border Security — BAZG (official)",
     url: "https://via.admin.ch/shop/dashboard",
-    tiers: [{ maxDays: 365, label: "Annual e-vignette (CHF 40)", price: 42.0 }],
+    tiers: [{ maxDays: 365, label: "Annual e-vignette (CHF 40, official)", price: 42.0 }],
     note: "Switzerland only sells an annual vignette — no short-term option exists.",
   },
+  // SI/CZ/SK/HU/RO/BG below are priority-2 countries (see src/lib/tolls/README.md) — prices
+  // as previously curated, not reverified for 2026. registry.ts marks these "medium" confidence
+  // and links the official portal rather than claiming an exact match.
   SI: {
     code: "SI",
     authority: "DARS — evinjeta (official)",

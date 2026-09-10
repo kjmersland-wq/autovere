@@ -18,7 +18,8 @@ import { NavigationSheet } from "@/components/NavigationSheet";
 import { ScenicHighlights, type ScenicFilter } from "@/components/ScenicHighlights";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogClose, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
+import { countryLegs, DEFAULT_TRIP, detectBorders, estimate, type Estimate } from "@/lib/calc";
+import { fetchNorwayStationCandidates, type NorwayStationCandidate } from "@/lib/tolls/providers/norway";
 import { fetchFastChargers, fetchMotorhomeCamping, fetchMultiStopRoute, fetchScenicHighlights, fetchSmartFuelAndCharging, MOTORHOME_CATEGORIES, type Charger, type FuelStation, type MotorhomeCategory, type MotorhomePoi, type Place, type RouteResult, type RouteVariantKey, type ScenicHighlight, type SmartCharger } from "@/lib/geo";
 import {
   appleMapsUrl,
@@ -178,6 +179,21 @@ function Index() {
       setSelectedScenicIds([]);
       setScenicFilter("all");
 
+      // Real NVDB toll-station data only exists for Norway. One fetch (union bbox of every
+      // route variant) is reused to match all three variants client-side — see
+      // src/lib/tolls/providers/norway.ts. A failed/skipped fetch leaves this null, which makes
+      // calc.ts fall back to an honestly-labelled estimate instead of a silent wrong number.
+      let norwayStations: NorwayStationCandidate[] | null = null;
+      const touchesNorway = Object.values(map).some((r) => r && countryLegs(r.coords).some((leg) => leg.code === "NO"));
+      if (touchesNorway) {
+        try {
+          const unionCoords = Object.values(map).flatMap((r) => r?.coords ?? []);
+          norwayStations = await fetchNorwayStationCandidates(unionCoords);
+        } catch {
+          norwayStations = null;
+        }
+      }
+
       const trip = {
         ...DEFAULT_TRIP,
         vehicle: input.vehicle,
@@ -186,9 +202,9 @@ function Index() {
         days: input.days,
         evRangeKm: input.evRangeKm,
       };
-      const next = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, trip, found));
+      const next = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, trip, found, norwayStations));
       const comparisonTrip = { ...trip, vehicle: input.vehicle === "ev" ? "petrol" as const : "ev" as const, fuelType: input.vehicle === "ev" ? "ICE" as const : "EV" as const };
-      const comparison = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, comparisonTrip, found));
+      const comparison = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, comparisonTrip, found, norwayStations));
       setRoutes(map);
       setEstimates(next);
       setEvComparisonEstimates(comparison);

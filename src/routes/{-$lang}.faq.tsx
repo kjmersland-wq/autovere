@@ -8,10 +8,12 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { AnchorLink } from "@/components/AnchorLink";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
-import { faqCopy, URL_LANG_TO_LOCALE, useLocale } from "@/lib/i18n";
+import { faqCopy, URL_LANG_TO_LOCALE, useLocale, useT } from "@/lib/i18n";
 import { marketingCopy } from "@/lib/marketing-i18n";
 import { shareLinkCopy } from "@/lib/share-i18n";
 import { faqSchema, faqSeoCopy } from "@/lib/seo";
+import { TOLL_COUNTRY_REGISTRY } from "@/lib/tolls/registry";
+import { FLAGS } from "@/lib/countries";
 
 export const Route = createFileRoute("/{-$lang}/faq")({
   head: (ctx) => {
@@ -30,9 +32,25 @@ export const Route = createFileRoute("/{-$lang}/faq")({
   },
   component: FaqPage,
 });
+const CONFIDENCE_ORDER = ["high", "medium", "low", "estimated"] as const;
+
 function FaqPage() {
   const { locale } = useLocale();
+  const t = useT();
   const copy = faqCopy[locale] ?? faqCopy.en;
+  const confidenceLabel = {
+    high: t.confidenceHigh,
+    medium: t.confidenceMedium,
+    low: t.confidenceLow,
+    estimated: t.confidenceEstimated,
+  } as const;
+  const sourceRows = useMemo(
+    () =>
+      Object.values(TOLL_COUNTRY_REGISTRY).sort(
+        (a, b) => CONFIDENCE_ORDER.indexOf(a.accuracy) - CONFIDENCE_ORDER.indexOf(b.accuracy) || a.countryName.localeCompare(b.countryName),
+      ),
+    [],
+  );
   const marketing = marketingCopy[locale] ?? marketingCopy.en;
   const share = shareLinkCopy[locale] ?? shareLinkCopy.en;
   const [query, setQuery] = useState("");
@@ -100,6 +118,32 @@ function FaqPage() {
           ))}
           {filteredCategories.length === 0 && <p className="py-10 text-center text-sm text-muted-foreground">{copy.empty}</p>}
         </div>
+
+        <section className="mt-10 border-t border-border pt-8">
+          <h2 className="text-xl font-bold">{t.dataSources}</h2>
+          <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">{t.dataSourcesIntro}</p>
+          <div className="mt-5 overflow-x-auto rounded-xl border border-border">
+            <table className="w-full min-w-[560px] text-left text-sm">
+              <tbody>
+                {sourceRows.map((row) => (
+                  <tr key={row.code} className="border-b border-border last:border-0">
+                    <td className="whitespace-nowrap px-4 py-3 font-medium text-foreground">
+                      <span aria-hidden>{FLAGS[row.code]}</span> {row.countryName}
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground">
+                      <a href={row.sourceUrl} target="_blank" rel="noopener noreferrer" className="underline decoration-dotted underline-offset-2 hover:text-foreground">
+                        {row.sourceName}
+                      </a>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                      {confidenceLabel[row.accuracy]}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </section>
 
         <section className="mt-10 border-t border-border pt-8">
           <h2 className="text-xl font-bold">{marketing.contactTitle}</h2>

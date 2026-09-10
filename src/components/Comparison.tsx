@@ -1,5 +1,7 @@
-import { Clock, Route as RouteIcon, Zap, BatteryCharging, TrendingDown, Check } from "lucide-react";
-import { type Estimate, type VehicleType } from "@/lib/calc";
+import { Clock, Route as RouteIcon, Zap, BatteryCharging, TrendingDown, Check, ShieldCheck, ShieldAlert, ExternalLink, ChevronDown } from "lucide-react";
+import { useState } from "react";
+import { type CostLine, type Estimate, type VehicleType } from "@/lib/calc";
+import type { TollConfidence } from "@/lib/tolls/types";
 import { formatCurrency, type CurrencyCode } from "@/lib/currency";
 import { FLAGS } from "@/lib/countries";
 import { countryName, dynamicText, useLocale, useT } from "@/lib/i18n";
@@ -116,17 +118,91 @@ export function TradeoffBanner({ estimates, currency }: { estimates: Estimate[];
   );
 }
 
-function Line({ label, detail, amount, currency }: { label: string; detail: string; amount: number; currency: CurrencyCode }) {
-  const { locale } = useLocale();
+const CONFIDENCE_TONE: Record<TollConfidence, string> = {
+  high: "bg-success/15 text-success",
+  medium: "bg-primary/15 text-primary",
+  low: "bg-muted text-muted-foreground",
+  estimated: "bg-destructive/12 text-destructive",
+};
+
+function ConfidenceBadge({ confidence }: { confidence: TollConfidence }) {
+  const t = useT();
+  const label =
+    confidence === "high" ? t.confidenceHigh : confidence === "medium" ? t.confidenceMedium : confidence === "low" ? t.confidenceLow : t.confidenceEstimated;
+  const Icon = confidence === "estimated" ? ShieldAlert : ShieldCheck;
   return (
-    <div className="flex items-start justify-between gap-3 py-1.5">
-      <div className="min-w-0">
-        <p className="truncate text-sm font-medium text-foreground">{label}</p>
-        <p className="truncate text-xs text-muted-foreground">{dynamicText(detail, locale)}</p>
+    <span className={cn("inline-flex shrink-0 items-center gap-1 rounded-full px-2 py-0.5 text-[0.65rem] font-bold uppercase tracking-wide", CONFIDENCE_TONE[confidence])}>
+      <Icon className="size-3" aria-hidden /> {label}
+    </span>
+  );
+}
+
+function Line({ label, detail, amount, currency, source }: { label: string; detail: string; amount: number; currency: CurrencyCode; source?: CostLine | undefined }) {
+  const t = useT();
+  const { locale } = useLocale();
+  const [open, setOpen] = useState(false);
+  const isNorway = source?.country === "NO";
+  const hasBreakdown = !!source?.breakdown?.length;
+  return (
+    <div className="py-1.5">
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0">
+          <div className="flex flex-wrap items-center gap-1.5">
+            <p className="truncate text-sm font-medium text-foreground">{label}</p>
+            {source && <ConfidenceBadge confidence={source.confidence} />}
+          </div>
+          <p className="truncate text-xs text-muted-foreground">{dynamicText(detail, locale)}</p>
+        </div>
+        <span className="numeric shrink-0 text-sm font-semibold text-foreground">
+          {formatCurrency(amount, currency, locale)}
+        </span>
       </div>
-      <span className="numeric shrink-0 text-sm font-semibold text-foreground">
-        {formatCurrency(amount, currency, locale)}
-      </span>
+      {source && (
+        <div className="mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs">
+          {hasBreakdown && (
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              className="inline-flex items-center gap-1 text-muted-foreground underline decoration-dotted underline-offset-2 hover:text-foreground"
+            >
+              <ChevronDown className={cn("size-3 transition-transform", open && "rotate-180")} aria-hidden />
+              {t.seeBreakdown}
+            </button>
+          )}
+          {source.sourceUrl && !isNorway && (
+            <a
+              href={source.sourceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground"
+            >
+              <ExternalLink className="size-3" aria-hidden /> {t.tollSource}: {source.source}
+            </a>
+          )}
+          {isNorway && source.externalLink && (
+            <a
+              href={source.externalLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1 rounded-full bg-primary px-2.5 py-1 font-bold text-primary-foreground hover:bg-primary/90"
+            >
+              <ExternalLink className="size-3" aria-hidden /> {t.bomkalkCta}
+            </a>
+          )}
+        </div>
+      )}
+      {/* NOK is hardcoded here because Norway is currently the only provider that populates
+          `breakdown` — revisit if a second native-currency breakdown is ever added. */}
+      {open && hasBreakdown && (
+        <ul className="mt-1.5 space-y-0.5 rounded-lg bg-muted/40 px-2.5 py-2">
+          {source!.breakdown!.map((b, i) => (
+            <li key={i} className="numeric flex items-center justify-between text-xs text-muted-foreground">
+              <span className="truncate pr-2">{b.label}</span>
+              <span className="shrink-0">{Math.round(b.amount)} NOK</span>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
@@ -260,7 +336,7 @@ export function Breakdown({ est, currency }: { est: Estimate; currency: Currency
 
       <div className="mt-4 space-y-1 border-t border-border pt-3">
         {[...est.tollLines, ...est.vignetteLines].map((l, i) => (
-          <Line key={i} label={l.label} detail={l.detail} amount={l.amount} currency={currency} />
+          <Line key={i} label={l.label} detail={l.detail} amount={l.amount} currency={currency} source={l} />
         ))}
         <Line
           label={est.ev ? t.charging : t.fuel}

@@ -7,9 +7,13 @@ import {
   ALPINE_SURCHARGES,
   NORDIC_BRIDGES,
   NORWAY_AUTOPASS,
+  NOK_PER_EUR,
   VIGNETTES,
   vignetteFor,
 } from "./tolls";
+import { tollConfigFor } from "./tolls/registry";
+import { matchNorwayToll, estimatedNorwayToll, type NorwayStationCandidate } from "./tolls/providers/norway";
+import type { TollConfidence } from "./tolls/types";
 
 export type VehicleType = "petrol" | "diesel" | "ev";
 export type FuelType = "EV" | "ICE";
@@ -40,7 +44,22 @@ const MOTORWAY_SHARE: Record<RouteVariantKey, number> = {
 
 export type CountryLeg = { code: string; name: string; km: number };
 
-export type CostLine = { label: string; detail: string; amount: number; country?: string | undefined };
+export type CostLineBreakdown = { label: string; amount: number };
+
+export type CostLine = {
+  label: string;
+  detail: string;
+  amount: number;
+  country?: string | undefined;
+  /** How much to trust this number — see src/lib/tolls/types.ts for what each level means. */
+  confidence: TollConfidence;
+  source: string;
+  sourceUrl?: string | undefined;
+  /** CTA to a better external calculator/portal for this specific route. */
+  externalLink?: string | undefined;
+  /** Native-currency line items (e.g. individual Norwegian toll stations) for a "show breakdown" UI. */
+  breakdown?: CostLineBreakdown[] | undefined;
+};
 
 export type EvPlan = {
   stops: Charger[];
@@ -127,38 +146,54 @@ function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[], key: Ro
   const denmark = legs.find((leg) => leg.code === "DK");
   if (!denmark || denmark.km < 40) return;
 
-  tollLines.push({ ...NORDIC_BRIDGES.storebaelt });
-  if (legs.some((leg) => leg.code === "SE")) tollLines.push({ ...NORDIC_BRIDGES.oresund });
+  const bridgeLine = (bridge: (typeof NORDIC_BRIDGES)[keyof typeof NORDIC_BRIDGES]): CostLine => ({
+    label: bridge.label,
+    detail: bridge.detail,
+    amount: bridge.amount,
+    country: bridge.country,
+    confidence: "medium",
+    source: `${bridge.label} operator (official fixed toll)`,
+    sourceUrl: bridge.url,
+    externalLink: bridge.url,
+  });
+
+  tollLines.push(bridgeLine(NORDIC_BRIDGES.storebaelt));
+  if (legs.some((leg) => leg.code === "SE")) tollLines.push(bridgeLine(NORDIC_BRIDGES.oresund));
 }
 
-function norwayAutoPassToll(
+/** Norway toll line: real NVDB station matching against this route variant when candidates were
+ * fetched, falling back to an honestly-labelled wide-interval estimate otherwise. `trustEmptyMatch`
+ * is true only for the "tollfree" variant, where crossing zero stations is the intended outcome
+ * rather than a matching failure (see src/lib/tolls/providers/norway.ts for the matching logic). */
+function norwayTollLine(
   coords: LatLng[],
   norwayKm: number,
   key: RouteVariantKey,
   vehicle: VehicleType,
   autoPass: boolean,
+  stations: NorwayStationCandidate[] | null,
 ): CostLine | null {
-  if (key === "tollfree" || norwayKm <= 20) return null;
-  const start = coords[0];
-  const end = coords[coords.length - 1];
-  if (!start || !end) return null;
-  const nearOslo = haversineKm(start, [59.91, 10.75]) < 75;
-  const reachesNorth = coords.some(([lat]) => lat > 62);
-  const reachesWest = coords.some(([, lon]) => lon < 8.5);
-  const reachesSweden = coords.some(([lat, lon]) => lat > 58.7 && lon > 10.8);
-  let corridor = NORWAY_AUTOPASS.city;
-  if (reachesNorth || norwayKm > 800) corridor = NORWAY_AUTOPASS.e6North;
-  else if (reachesWest) corridor = NORWAY_AUTOPASS.western;
-  else if (reachesSweden) corridor = NORWAY_AUTOPASS.e6South;
-  else if (nearOslo && norwayKm > 180) corridor = NORWAY_AUTOPASS.e18;
+  if (key === "tollfree" && stations == null) return null;
+  if (norwayKm <= 20) return null;
+  const profile = { vehicle, autoPass, days: 1 };
 
-  const discount = vehicle === "ev" ? (autoPass ? 0.56 : 0.7) : autoPass ? 0.8 : 1;
-  const amountNok = corridor.amountNok * discount;
+  const matched = stations ? matchNorwayToll(stations, coords, profile) : null;
+  const trustEmptyMatch = key === "tollfree";
+  const result = matched ?? (trustEmptyMatch ? null : estimatedNorwayToll(coords, norwayKm, profile));
+  if (!result) return null;
+
+  const discountLabel =
+    vehicle === "ev" ? (autoPass ? "44% EV + AutoPASS discount" : "30% EV discount") : autoPass ? "20% AutoPASS discount" : undefined;
   return {
-    label: `${corridor.label} AutoPASS`,
-    detail: `${Math.round(amountNok)} NOK indicative gantry total${vehicle === "ev" ? ` · ${autoPass ? "44% EV + AutoPASS discount" : "30% EV discount"}` : autoPass ? " · 20% AutoPASS discount" : ""}`,
-    amount: amountNok / 11.7,
+    label: result.confidence === "high" ? `Norway tolls — ${result.breakdown?.length ?? 0} stations crossed` : "Norway tolls — indicative estimate",
+    detail: [`${Math.round(result.amountEur * NOK_PER_EUR)} NOK`, discountLabel].filter(Boolean).join(" · "),
+    amount: result.amountEur,
     country: "NO",
+    confidence: result.confidence,
+    source: result.source,
+    sourceUrl: result.sourceUrl,
+    externalLink: result.externalLink,
+    breakdown: result.breakdown?.map((b) => ({ label: b.label, amount: b.amountNative })),
   };
 }
 
@@ -171,6 +206,8 @@ function alpineTolls(coords: LatLng[], key: RouteVariantKey): CostLine[] {
     detail: "Special mountain toll · fastest route",
     amount: surcharge.amount,
     country: surcharge.country,
+    confidence: "medium",
+    source: "AutoVere curated Alpine tunnel toll data",
   }));
 }
 
@@ -179,6 +216,7 @@ export function estimate(
   route: RouteResult,
   trip: TripInput,
   chargers: Charger[],
+  norwayStations: NorwayStationCandidate[] | null = null,
 ): Estimate {
   const legs = countryLegs(route.coords);
   const share = MOTORWAY_SHARE[key];
@@ -197,34 +235,65 @@ export function estimate(
       energyCost += (leg.km * trip.consumptionPetrol * price.petrol) / 100;
     }
 
+    if (leg.code === "NO") continue; // handled separately below via real NVDB matching
+
+    if (leg.code === "DE") {
+      // Explicit, not silent: passenger cars are toll-free in Germany — Del 1 requirement.
+      const cfg = tollConfigFor("DE")!;
+      tollLines.push({
+        label: `${leg.name} — no toll for passenger cars`,
+        detail: cfg.sourceName,
+        amount: 0,
+        country: "DE",
+        confidence: cfg.accuracy,
+        source: cfg.sourceName,
+        sourceUrl: cfg.sourceUrl,
+      });
+      continue;
+    }
+
     const dt = DISTANCE_TOLLS[leg.code];
     if (dt && share > 0) {
       const amount = dt.perKm * leg.km * share;
+      const cfg = tollConfigFor(leg.code);
       if (amount > 0.5)
         tollLines.push({
           label: `${leg.name} motorway tolls`,
           detail: `${Math.round(leg.km * share)} km tolled · ${dt.perKm.toFixed(3)} €/km`,
           amount,
           country: leg.code,
+          confidence: cfg?.accuracy ?? "low",
+          source: cfg?.sourceName ?? dt.authority,
+          sourceUrl: cfg?.sourceUrl ?? dt.url,
+          externalLink: cfg?.externalCalculatorUrl,
         });
     }
 
     if (VIGNETTES[leg.code] && key !== "tollfree") {
       const tier = vignetteFor(leg.code, trip.days);
+      const cfg = tollConfigFor(leg.code);
       if (tier)
         vignetteLines.push({
           label: `${leg.name} — ${tier.label}`,
           detail: VIGNETTES[leg.code]!.authority,
           amount: tier.price,
           country: leg.code,
+          confidence: cfg?.accuracy ?? "medium",
+          source: cfg?.sourceName ?? VIGNETTES[leg.code]!.authority,
+          sourceUrl: cfg?.sourceUrl ?? VIGNETTES[leg.code]!.url,
+          externalLink: cfg?.externalCalculatorUrl ?? VIGNETTES[leg.code]!.url,
         });
     }
   }
 
   addNordicBridgeTolls(legs, tollLines, key);
   const norwayLeg = legs.find((leg) => leg.code === "NO");
-  const norwayToll = norwayLeg ? norwayAutoPassToll(route.coords, norwayLeg.km, key, trip.vehicle, trip.autoPass) : null;
-  const standardNorwayToll = norwayLeg ? norwayAutoPassToll(route.coords, norwayLeg.km, key, "petrol", false) : null;
+  const norwayToll = norwayLeg
+    ? norwayTollLine(route.coords, norwayLeg.km, key, trip.vehicle, trip.autoPass, norwayStations)
+    : null;
+  const standardNorwayToll = norwayLeg
+    ? norwayTollLine(route.coords, norwayLeg.km, key, "petrol", false, norwayStations)
+    : null;
   if (norwayToll) tollLines.push(norwayToll);
   tollLines.push(...alpineTolls(route.coords, key));
 
