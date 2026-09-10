@@ -1,6 +1,7 @@
 import { GaragePage } from "@/components/GaragePage";
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { InfoPage } from "@/components/InfoPage";
+import { PartnersPage } from "@/components/PartnersPage";
 import { PricingPage } from "@/components/PricingPage";
 import { ScenicGuide } from "@/components/ScenicGuide";
 import { TollsGuide } from "@/components/TollsGuide";
