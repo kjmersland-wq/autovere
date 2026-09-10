@@ -1811,6 +1811,71 @@ export function PartnersPage({
         </div>
       </section>
 
+      {/* Partner kit downloads */}
+      <section className="mx-auto w-full max-w-5xl px-6 pb-16 sm:px-8">
+        <h2 className="text-2xl font-semibold tracking-tight text-foreground">Partner kit</h2>
+        <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+          Download the AutoVere Partner Programme one-pager and the official partner logo set — SVG
+          and high-resolution transparent PNG, in colour, white, black and reversed versions.
+        </p>
+        <div className="mt-6 grid gap-4 sm:grid-cols-2">
+          <a
+            href="/partner-kit/AutoVere-Partner-Programme.pdf"
+            target="_blank"
+            rel="noopener"
+            className="group flex items-start gap-4 rounded-3xl border border-border bg-card/50 p-6 backdrop-blur transition-colors hover:border-primary/40"
+          >
+            <span className="rounded-2xl bg-primary/10 p-3 text-primary">
+              <FileText className="size-5" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-base font-semibold text-foreground">
+                Partner Programme (PDF, A4)
+              </span>
+              <span className="mt-1 block text-sm text-muted-foreground">
+                One page to share internally or with your board.
+              </span>
+              <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                <Download className="size-4" /> Open PDF
+              </span>
+            </span>
+          </a>
+          <a
+            href="/partner-kit/autovere-partner-logo-kit.zip"
+            className="group flex items-start gap-4 rounded-3xl border border-border bg-card/50 p-6 backdrop-blur transition-colors hover:border-primary/40"
+          >
+            <span className="rounded-2xl bg-primary/10 p-3 text-primary">
+              <ImageIcon className="size-5" />
+            </span>
+            <span className="min-w-0">
+              <span className="block text-base font-semibold text-foreground">
+                Official Partner logo set (ZIP)
+              </span>
+              <span className="mt-1 block text-sm text-muted-foreground">
+                Horizontal and badge lockups, SVG + PNG, four colour versions.
+              </span>
+              <span className="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary">
+                <Download className="size-4" /> Download logos
+              </span>
+            </span>
+          </a>
+        </div>
+        <div className="mt-4 flex flex-wrap items-center gap-3 rounded-2xl border border-border bg-card/30 px-5 py-4">
+          <img
+            src="/partner-kit/logo/autovere-partner-horizontal-on-navy.png"
+            alt="AutoVere Official Partner logo"
+            width={220}
+            height={60}
+            loading="lazy"
+            className="h-10 w-auto"
+          />
+          <p className="text-xs text-muted-foreground">
+            Use the Official Partner logo once your partnership is confirmed. Please keep proportions
+            and clear space intact.
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <section className="mx-auto w-full max-w-5xl px-6 pb-24 sm:px-8">
         <h2 className="text-2xl font-semibold tracking-tight text-foreground">{c.ctaTitle}</h2>
