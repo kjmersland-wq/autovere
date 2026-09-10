@@ -1581,6 +1581,23 @@ const TOASTS: Record<Lang, { sending: string; ok: string; fail: string }> = {
   },
 };
 
+const PARTNER_PDF_LOCALE: Record<Lang, string> = {
+  en: "en",
+  no: "no",
+  pl: "pl",
+  se: "sv",
+  dk: "da",
+  fi: "fi",
+  de: "de",
+  nl: "nl",
+  fr: "fr",
+  es: "es",
+  it: "it",
+  pt: "pt",
+  ja: "ja",
+  zh: "zh",
+};
+
 export function PartnersPage({
   lang: langProp = "en",
   localized,
@@ -1601,6 +1618,7 @@ export function PartnersPage({
   const [sending, setSending] = useState(false);
 
   const t = TOASTS[lang];
+  const partnerPdfHref = `/partner-kit/AutoVere-Partner-Programme-${PARTNER_PDF_LOCALE[lang]}.pdf`;
 
   async function submit(form: HTMLFormElement, kind: "partner" | "message", close: () => void) {
     const f = new FormData(form);
@@ -1820,7 +1838,7 @@ export function PartnersPage({
         </p>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">
           <a
-            href="/partner-kit/AutoVere-Partner-Programme.pdf"
+            href={partnerPdfHref}
             target="_blank"
             rel="noopener"
             className="group flex items-start gap-4 rounded-3xl border border-border bg-card/50 p-6 backdrop-blur transition-colors hover:border-primary/40"
