@@ -146,6 +146,20 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstration — example only. This organisation is fictional.",
+    heroAlt: "Traveller reviewing an AutoVere route and trip costs from a parked car",
+    heroTagline: "Let's make planning easier for the people you care about.",
+    dealerEyebrow: "For independent dealers",
+    dealerTitle: "Make every vehicle handover feel more complete.",
+    dealerBody:
+      "Offer customers a practical travel companion alongside their new car. AutoVere helps them understand tolls, vignettes, fuel or charging costs before their first long journey — while your dealership gives them 25% off Pro.",
+    dealerAlt: "Independent car dealer introducing AutoVere to a customer during a vehicle handover",
+    dealerCaption: "A useful travel benefit, introduced at exactly the right moment.",
+    dealerBullets: [
+      "A thoughtful extra for new and used-car customers",
+      "Relevant for EV, motorhome and touring buyers",
+      "No software, subscriptions or customer billing for your team",
+    ],
+    dealerCta: "Offer AutoVere to your customers",
     whyTitle: "Why partner with AutoVere?",
     why: [
       {
