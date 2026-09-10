@@ -53,6 +53,7 @@ import { Route as NoTermsRouteImport } from './routes/no.terms'
 import { Route as NoTollsRouteImport } from './routes/no.tolls'
 import { Route as PartnersInCarRouteImport } from './routes/partners_.in-car'
 import { Route as PlPricingRouteImport } from './routes/pl.pricing'
+import { Route as RoutesSlugRouteImport } from './routes/routes.$slug'
 import { Route as UsIndexRouteImport } from './routes/us.index'
 import { Route as UsFaqRouteImport } from './routes/us.faq'
 import { Route as UsGarageRouteImport } from './routes/us.garage'
@@ -64,6 +65,7 @@ import { Route as UsPricingRouteImport } from './routes/us.pricing'
 import { Route as UsScenicRouteImport } from './routes/us.scenic'
 import { Route as UsTollsRouteImport } from './routes/us.tolls'
 import { Route as LangRegionPageRouteImport } from './routes/$lang.$region.$page'
+import { Route as LangRoutesSlugRouteImport } from './routes/$lang.routes.$slug'
 import { Route as CaFrFaqRouteImport } from './routes/ca.fr.faq'
 import { Route as CaFrHowItWorksRouteImport } from './routes/ca.fr.how-it-works'
 import { Route as CaFrLegalRouteImport } from './routes/ca.fr.legal'
@@ -290,6 +292,11 @@ const PlPricingRoute = PlPricingRouteImport.update({
   path: '/pl/pricing',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RoutesSlugRoute = RoutesSlugRouteImport.update({
+  id: '/routes/$slug',
+  path: '/routes/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const UsIndexRoute = UsIndexRouteImport.update({
   id: '/',
   path: '/',
@@ -343,6 +350,11 @@ const UsTollsRoute = UsTollsRouteImport.update({
 const LangRegionPageRoute = LangRegionPageRouteImport.update({
   id: '/$lang/$region/$page',
   path: '/$lang/$region/$page',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LangRoutesSlugRoute = LangRoutesSlugRouteImport.update({
+  id: '/$lang/routes/$slug',
+  path: '/$lang/routes/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CaFrFaqRoute = CaFrFaqRouteImport.update({
@@ -413,6 +425,7 @@ export interface FileRoutesByFullPath {
   '/no/tolls': typeof NoTollsRoute
   '/partners/in-car': typeof PartnersInCarRoute
   '/pl/pricing': typeof PlPricingRoute
+  '/routes/$slug': typeof RoutesSlugRoute
   '/us/faq': typeof UsFaqRoute
   '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
@@ -428,6 +441,7 @@ export interface FileRoutesByFullPath {
   '/no/': typeof NoIndexRoute
   '/us/': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
+  '/$lang/routes/$slug': typeof LangRoutesSlugRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -473,6 +487,7 @@ export interface FileRoutesByTo {
   '/no/tolls': typeof NoTollsRoute
   '/partners/in-car': typeof PartnersInCarRoute
   '/pl/pricing': typeof PlPricingRoute
+  '/routes/$slug': typeof RoutesSlugRoute
   '/us/faq': typeof UsFaqRoute
   '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
@@ -488,6 +503,7 @@ export interface FileRoutesByTo {
   '/no': typeof NoIndexRoute
   '/us': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
+  '/$lang/routes/$slug': typeof LangRoutesSlugRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -536,6 +552,7 @@ export interface FileRoutesById {
   '/no/tolls': typeof NoTollsRoute
   '/partners_/in-car': typeof PartnersInCarRoute
   '/pl/pricing': typeof PlPricingRoute
+  '/routes/$slug': typeof RoutesSlugRoute
   '/us/faq': typeof UsFaqRoute
   '/us/garage': typeof UsGarageRoute
   '/us/how-it-works': typeof UsHowItWorksRoute
@@ -551,6 +568,7 @@ export interface FileRoutesById {
   '/no/': typeof NoIndexRoute
   '/us/': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
+  '/$lang/routes/$slug': typeof LangRoutesSlugRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -600,6 +618,7 @@ export interface FileRouteTypes {
     | '/no/tolls'
     | '/partners/in-car'
     | '/pl/pricing'
+    | '/routes/$slug'
     | '/us/faq'
     | '/us/garage'
     | '/us/how-it-works'
@@ -615,6 +634,7 @@ export interface FileRouteTypes {
     | '/no/'
     | '/us/'
     | '/$lang/$region/$page'
+    | '/$lang/routes/$slug'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -660,6 +680,7 @@ export interface FileRouteTypes {
     | '/no/tolls'
     | '/partners/in-car'
     | '/pl/pricing'
+    | '/routes/$slug'
     | '/us/faq'
     | '/us/garage'
     | '/us/how-it-works'
@@ -675,6 +696,7 @@ export interface FileRouteTypes {
     | '/no'
     | '/us'
     | '/$lang/$region/$page'
+    | '/$lang/routes/$slug'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -722,6 +744,7 @@ export interface FileRouteTypes {
     | '/no/tolls'
     | '/partners_/in-car'
     | '/pl/pricing'
+    | '/routes/$slug'
     | '/us/faq'
     | '/us/garage'
     | '/us/how-it-works'
@@ -737,6 +760,7 @@ export interface FileRouteTypes {
     | '/no/'
     | '/us/'
     | '/$lang/$region/$page'
+    | '/$lang/routes/$slug'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -776,10 +800,12 @@ export interface RootRouteChildren {
   NoTollsRoute: typeof NoTollsRoute
   PartnersInCarRoute: typeof PartnersInCarRoute
   PlPricingRoute: typeof PlPricingRoute
+  RoutesSlugRoute: typeof RoutesSlugRoute
   LangIndexRoute: typeof LangIndexRoute
   ChallengeIndexRoute: typeof ChallengeIndexRoute
   NoIndexRoute: typeof NoIndexRoute
   LangRegionPageRoute: typeof LangRegionPageRoute
+  LangRoutesSlugRoute: typeof LangRoutesSlugRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -1093,6 +1119,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PlPricingRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/routes/$slug': {
+      id: '/routes/$slug'
+      path: '/routes/$slug'
+      fullPath: '/routes/$slug'
+      preLoaderRoute: typeof RoutesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/us/': {
       id: '/us/'
       path: '/'
@@ -1168,6 +1201,13 @@ declare module '@tanstack/react-router' {
       path: '/$lang/$region/$page'
       fullPath: '/$lang/$region/$page'
       preLoaderRoute: typeof LangRegionPageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/$lang/routes/$slug': {
+      id: '/$lang/routes/$slug'
+      path: '/$lang/routes/$slug'
+      fullPath: '/$lang/routes/$slug'
+      preLoaderRoute: typeof LangRoutesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/ca/fr/faq': {
@@ -1304,10 +1344,12 @@ const rootRouteChildren: RootRouteChildren = {
   NoTollsRoute: NoTollsRoute,
   PartnersInCarRoute: PartnersInCarRoute,
   PlPricingRoute: PlPricingRoute,
+  RoutesSlugRoute: RoutesSlugRoute,
   LangIndexRoute: LangIndexRoute,
   ChallengeIndexRoute: ChallengeIndexRoute,
   NoIndexRoute: NoIndexRoute,
   LangRegionPageRoute: LangRegionPageRoute,
+  LangRoutesSlugRoute: LangRoutesSlugRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport
