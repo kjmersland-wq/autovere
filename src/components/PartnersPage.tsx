@@ -355,7 +355,7 @@ export function PartnersPage({
   localized,
 }: {
   lang?: string;
-  localized?: { eyebrow?: string; title?: string; intro?: string };
+  localized?: { eyebrow?: string; title?: string; intro?: string } | undefined;
 }) {
   const lang: Lang = langProp in COPY ? (langProp as Lang) : "en";
   const base = COPY[lang];
