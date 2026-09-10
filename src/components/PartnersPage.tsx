@@ -252,6 +252,20 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstracja — wyłącznie przykład. Ta organizacja jest fikcyjna.",
+    heroAlt: "Podróżny sprawdzający trasę i koszty podróży w AutoVere z fotela samochodu",
+    heroTagline: "Ułatwmy planowanie osobom, na których Wam zależy.",
+    dealerEyebrow: "Dla niezależnych dealerów",
+    dealerTitle: "Spraw, by każde wydanie samochodu było pełniejsze.",
+    dealerBody:
+      "Zaoferuj klientom praktycznego towarzysza podróży razem z nowym autem. AutoVere pomaga zrozumieć opłaty drogowe, winiety oraz koszty paliwa i ładowania jeszcze przed pierwszą długą trasą — a Wasz salon daje 25% zniżki na Pro.",
+    dealerAlt: "Dealer samochodowy prezentujący AutoVere klientowi podczas wydania auta",
+    dealerCaption: "Przydatna korzyść podróżna, przedstawiona w idealnym momencie.",
+    dealerBullets: [
+      "Przemyślany dodatek dla kupujących auta nowe i używane",
+      "Istotne dla klientów EV, kamperów i podróżujących",
+      "Żadnego oprogramowania, subskrypcji ani rozliczeń po Waszej stronie",
+    ],
+    dealerCta: "Zaproponuj AutoVere swoim klientom",
     whyTitle: "Dlaczego warto zostać partnerem AutoVere?",
     why: [
       {
