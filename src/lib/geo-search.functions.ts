@@ -22,7 +22,7 @@ export type PlaceHit = {
   lng: number;
 };
 
-const UA = "AutoVere/1.0 (road trip cost planner; contact: kjmersland@gmail.com)";
+const UA = "AutoVere/1.0 (road trip cost planner; contact: kjell@autovere.com)";
 const GATEWAY_URL = "https://connector-gateway.lovable.dev/google_maps";
 
 /** Search bias per active region context: [lat, lng] focus point. */
