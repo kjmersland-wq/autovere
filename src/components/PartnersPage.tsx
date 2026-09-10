@@ -350,8 +350,21 @@ const COPY = {
   },
 } as const;
 
-export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
-  const c = COPY[lang];
+export function PartnersPage({
+  lang: langProp = "en",
+  localized,
+}: {
+  lang?: string;
+  localized?: { eyebrow?: string; title?: string; intro?: string } | undefined;
+}) {
+  const lang: Lang = langProp in COPY ? (langProp as Lang) : "en";
+  const base = COPY[lang];
+  const c = {
+    ...base,
+    eyebrow: localized?.eyebrow ?? base.eyebrow,
+    title: localized?.title ?? base.title,
+    intro: localized?.intro ?? base.intro,
+  };
   const [applyOpen, setApplyOpen] = useState(false);
   const [talkOpen, setTalkOpen] = useState(false);
   const [sending, setSending] = useState(false);
