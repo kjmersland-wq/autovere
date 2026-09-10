@@ -315,9 +315,19 @@ function LocalePage() {
 
   if (page === "pricing") return <PricingPage />;
 
-  if (page === "partners" && lang === "pl") return <PartnersPage lang="pl" />;
-
   const info = infoFor(lang, page);
+
+  if (page === "partners") {
+    return (
+      <PartnersPage
+        lang={lang}
+        localized={
+          info ? { eyebrow: info.eyebrow, title: info.title, intro: info.intro } : undefined
+        }
+      />
+    );
+  }
+
   if (info) {
     return (
       <InfoPage

@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { InfoPage } from "@/components/InfoPage";
+import { PartnersPage } from "@/components/PartnersPage";
 import { PARTNERS } from "@/lib/info-content";
 
 const content = PARTNERS["ca-fr"];
@@ -28,12 +28,9 @@ export const Route = createFileRoute("/ca/fr/partners")({
 
 function CaFrPartnersPage() {
   return (
-    <InfoPage
-      eyebrow={content.eyebrow}
-      title={content.title}
-      intro={content.intro}
-      sections={content.sections}
-      note={content.note}
+    <PartnersPage
+      lang="fr"
+      localized={{ eyebrow: content.eyebrow, title: content.title, intro: content.intro }}
     />
   );
 }
