@@ -406,18 +406,26 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
           <p className="mt-12 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
             {c.howItLooks}
           </p>
-          <div className="mt-3 flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-card/60 px-6 py-5 backdrop-blur">
-            <span className="text-sm font-semibold uppercase tracking-[0.24em] text-foreground">
-              Auto<span className="text-primary">Vere</span>
-            </span>
-            <span className="text-muted-foreground">×</span>
-            <span className="flex items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-1.5 text-sm text-foreground/90">
-              <Building2 className="size-4 text-primary" /> {c.demoOrg}
-            </span>
-            <span className="rounded-full bg-primary/15 px-3 py-1 text-[0.65rem] font-bold tracking-[0.16em] text-primary">
-              {c.demoBadge}
-            </span>
-            <span className="text-xs text-muted-foreground">{c.demoNote}</span>
+          <div className="mt-3 max-w-xl rounded-2xl border border-border bg-gradient-to-br from-card/80 via-card/50 to-primary/[0.06] p-6 backdrop-blur">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-sm font-semibold uppercase tracking-[0.24em] text-foreground">
+                Auto<span className="text-primary">Vere</span>
+              </span>
+              <span className="text-muted-foreground">×</span>
+              <span className="flex items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-1.5 text-sm text-foreground/90">
+                <Building2 className="size-4 text-primary" /> {c.demoOrg}
+              </span>
+              <span className="rounded-full bg-primary/15 px-3 py-1 text-[0.65rem] font-bold tracking-[0.16em] text-primary">
+                {c.demoBadge}
+              </span>
+            </div>
+            <div className="mt-5 flex items-center gap-3 rounded-xl border border-primary/20 bg-background/50 px-4 py-3">
+              <BadgePercent className="size-5 shrink-0 text-primary" />
+              <p className="text-sm font-medium text-foreground">
+                25% off AutoVere Pro <span className="font-normal text-muted-foreground">— member benefit</span>
+              </p>
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">{c.demoNote}</p>
           </div>
         </div>
       </section>
