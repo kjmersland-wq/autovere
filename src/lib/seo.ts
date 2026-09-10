@@ -441,36 +441,36 @@ export const MARKET_LANG: Record<LocalePrefix | "en" | "ca" | "cafr", string> = 
 /** The 15 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
 export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it", "pt", "ja", "zh"] as const;
 
-type AlternateLink = { rel: "alternate"; hreflang: string; href: string };
+type AlternateLink = { rel: "alternate"; hrefLang: string; href: string };
 
 /** hreflang alternates for the 13 primary-market homepages (/, /no, /se, … /it) + x-default. */
 export function homepageHreflangLinks(): AlternateLink[] {
-  const links: AlternateLink[] = [{ rel: "alternate", hreflang: MARKET_LANG.en, href: absUrl("/") }];
+  const links: AlternateLink[] = [{ rel: "alternate", hrefLang: MARKET_LANG.en, href: absUrl("/") }];
   for (const prefix of PRIMARY_MARKET_PREFIXES) {
-    links.push({ rel: "alternate", hreflang: MARKET_LANG[prefix], href: absUrl(`/${prefix}`) });
+    links.push({ rel: "alternate", hrefLang: MARKET_LANG[prefix], href: absUrl(`/${prefix}`) });
   }
-  links.push({ rel: "alternate", hreflang: "x-default", href: absUrl("/") });
+  links.push({ rel: "alternate", hrefLang: "x-default", href: absUrl("/") });
   return links;
 }
 
 /** hreflang alternates for the 13 Challenge routes (/challenge, /challenge/no, …) + x-default. */
 export function challengeHreflangLinks(): AlternateLink[] {
-  const links: AlternateLink[] = [{ rel: "alternate", hreflang: MARKET_LANG.en, href: absUrl("/challenge") }];
+  const links: AlternateLink[] = [{ rel: "alternate", hrefLang: MARKET_LANG.en, href: absUrl("/challenge") }];
   for (const prefix of PRIMARY_MARKET_PREFIXES) {
-    links.push({ rel: "alternate", hreflang: MARKET_LANG[prefix], href: absUrl(`/challenge/${prefix}`) });
+    links.push({ rel: "alternate", hrefLang: MARKET_LANG[prefix], href: absUrl(`/challenge/${prefix}`) });
   }
-  links.push({ rel: "alternate", hreflang: "x-default", href: absUrl("/challenge") });
+  links.push({ rel: "alternate", hrefLang: "x-default", href: absUrl("/challenge") });
   return links;
 }
 
 /** hreflang alternates for a pSEO corridor route across the English root and
  * every one of the 14 language-prefixed trees (/routes/:slug, /no/routes/:slug, …) + x-default. */
 export function corridorHreflangLinks(slug: string): AlternateLink[] {
-  const links: AlternateLink[] = [{ rel: "alternate", hreflang: MARKET_LANG.en, href: absUrl(`/routes/${slug}`) }];
+  const links: AlternateLink[] = [{ rel: "alternate", hrefLang: MARKET_LANG.en, href: absUrl(`/routes/${slug}`) }];
   for (const l of LOCALE_ROUTES) {
-    links.push({ rel: "alternate", hreflang: MARKET_LANG[l.prefix], href: absUrl(`/${l.prefix}/routes/${slug}`) });
+    links.push({ rel: "alternate", hrefLang: MARKET_LANG[l.prefix], href: absUrl(`/${l.prefix}/routes/${slug}`) });
   }
-  links.push({ rel: "alternate", hreflang: "x-default", href: absUrl(`/routes/${slug}`) });
+  links.push({ rel: "alternate", hrefLang: "x-default", href: absUrl(`/routes/${slug}`) });
   return links;
 }
 
@@ -483,15 +483,15 @@ export function corridorHreflangLinks(slug: string): AlternateLink[] {
  * (the US/CA markets use a single combined /legal page instead).
  */
 export function appPageHreflangLinks(page: LocalePage, includeUsCa = true): AlternateLink[] {
-  const links: AlternateLink[] = [{ rel: "alternate", hreflang: MARKET_LANG.en, href: absUrl(`/${page}`) }];
+  const links: AlternateLink[] = [{ rel: "alternate", hrefLang: MARKET_LANG.en, href: absUrl(`/${page}`) }];
   for (const l of LOCALE_ROUTES) {
     if (l.prefix === "us" && !includeUsCa) continue;
-    links.push({ rel: "alternate", hreflang: MARKET_LANG[l.prefix], href: absUrl(`/${l.prefix}/${page}`) });
+    links.push({ rel: "alternate", hrefLang: MARKET_LANG[l.prefix], href: absUrl(`/${l.prefix}/${page}`) });
   }
   if (includeUsCa) {
-    links.push({ rel: "alternate", hreflang: MARKET_LANG.ca, href: absUrl(`/ca/${page}`) });
+    links.push({ rel: "alternate", hrefLang: MARKET_LANG.ca, href: absUrl(`/ca/${page}`) });
   }
-  links.push({ rel: "alternate", hreflang: "x-default", href: absUrl(`/${page}`) });
+  links.push({ rel: "alternate", hrefLang: "x-default", href: absUrl(`/${page}`) });
   return links;
 }
 
