@@ -423,36 +423,44 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
       </section>
 
       {/* Why partner */}
-      <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:px-8">
-        <h2 className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-foreground">
-          <Sparkles className="size-5 text-primary" /> {c.whyTitle}
-        </h2>
-        <div className="mt-7 grid gap-4 md:grid-cols-3">
-          {c.why.map((item) => (
-            <article
-              key={item.heading}
-              className="group rounded-2xl border border-border bg-card/50 p-6 backdrop-blur transition-colors hover:border-primary/40 hover:bg-card/80"
-            >
-              <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
-                <item.icon className="size-5" />
-              </span>
-              <h3 className="mt-4 text-base font-semibold text-foreground">{item.heading}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      <div className="bg-gradient-to-b from-primary/[0.05] via-transparent to-transparent">
+        <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:px-8">
+          <h2 className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-foreground">
+            <Sparkles className="size-5 text-primary" /> {c.whyTitle}
+          </h2>
+          <div className="mt-7 grid gap-5 md:grid-cols-3">
+            {c.why.map((item) => (
+              <article
+                key={item.heading}
+                className="group rounded-2xl border border-border bg-card/50 p-6 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card/80"
+              >
+                <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary ring-1 ring-primary/15">
+                  <item.icon className="size-5" />
+                </span>
+                <h3 className="mt-4 text-base font-semibold leading-snug text-foreground">{item.heading}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
 
       {/* How it works */}
-      <section className="mx-auto w-full max-w-5xl px-6 pb-16 sm:px-8">
+      <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-4 sm:px-8">
         <h2 className="text-2xl font-semibold tracking-tight text-foreground">{c.howTitle}</h2>
-        <div className="mt-7 grid gap-4 md:grid-cols-3">
-          {c.how.map((item) => (
-            <article key={item.heading} className="rounded-2xl border border-border bg-card/50 p-6 backdrop-blur">
-              <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
+        <div className="mt-7 grid gap-5 md:grid-cols-3">
+          {c.how.map((item, i) => (
+            <article
+              key={item.heading}
+              className="relative rounded-2xl border border-border bg-gradient-to-b from-card/70 to-card/30 p-6 backdrop-blur"
+            >
+              <span className="absolute right-5 top-5 text-4xl font-semibold leading-none text-primary/15">
+                {i + 1}
+              </span>
+              <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary ring-1 ring-primary/15">
                 <item.icon className="size-5" />
               </span>
-              <h3 className="mt-4 text-base font-semibold text-foreground">{item.heading}</h3>
+              <h3 className="mt-4 text-base font-semibold leading-snug text-foreground">{item.heading}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
             </article>
           ))}
