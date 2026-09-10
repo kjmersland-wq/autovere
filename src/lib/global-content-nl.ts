@@ -130,9 +130,9 @@ export const NL_FAQ: InfoPageContent = {
 
 export const NL_PARTNERS: InfoPageContent = {
   eyebrow: "Partners",
-  title: "Wij werken samen met wie de weg in beweging houdt.",
+  title: "Wij werken samen met wie mensen in beweging houdt.",
   intro:
-    "AutoVere linkt naar officiële tolexploitanten en werkt samen met reis-, verhuur- en motorbedrijven in Europa, de VS en Canada.",
+    "We linken altijd rechtstreeks naar de officiële tol- en vignetexploitanten, en we werken graag samen met reis-, verhuur- en motorbedrijven in heel Europa, de VS en Canada.",
   sections: [
     {
       heading: "Officiële tol- en vignetexploitanten waarnaar we linken",
@@ -150,15 +150,15 @@ export const NL_PARTNERS: InfoPageContent = {
     {
       heading: "Wie er met ons samenwerkt",
       items: [
-        "Verhuurvloten van campers en kampeerauto's die transparante reisoffertes willen bieden",
-        "Touroperators en motorclubs die alpine en fjordroutes plannen",
-        "EV-laadnetwerken en route-planning-apps",
-        "Toerismebureaus die panoramische passen, kustwegen en veerbootoversteken promoten",
+        "Verhuurbedrijven van campers en caravans die hun klanten eerlijke, transparante reiskosten willen bieden",
+        "Motortouroperators en clubs die tochten door de Alpen of langs Noorse fjorden plannen",
+        "Laadnetwerken voor elektrische auto's en route-planningsapps",
+        "Toeristische organisaties die schilderachtige bergpassen, kustwegen en veerbootroutes onder de aandacht willen brengen",
       ],
     },
     {
-      heading: "Werk met ons samen",
-      body: "KM TECH LABS is gevestigd in Kristiansand, Noorwegen. Beheer je een vloot, een reisbedrijf of een toldienst en wil je praten over integratie, co-marketing of datapartnerschappen, neem dan contact op via partners@autovere.com.",
+      heading: "Word onderdeel van het netwerk",
+      body: "Wij zitten in Kristiansand, Noorwegen, maar werken graag samen met partners waar dan ook. Beheer je een wagenpark, een reisbedrijf of een toldienst en wil je praten over integratie, gezamenlijke marketing of een datapartnerschap? Mail ons gerust op partners@autovere.com — we horen graag van je.",
     },
   ],
   note: DISCLAIMER,

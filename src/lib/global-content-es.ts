@@ -130,9 +130,9 @@ export const ES_FAQ: InfoPageContent = {
 
 export const ES_PARTNERS: InfoPageContent = {
   eyebrow: "Socios",
-  title: "Trabajamos con quienes mantienen la carretera en movimiento.",
+  title: "Trabajamos junto a quienes hacen que la carretera cobre vida.",
   intro:
-    "AutoVere enlaza con operadores oficiales de peaje y colabora con empresas de viajes, alquiler y motociclismo en Europa, Estados Unidos y Canadá.",
+    "Siempre enlazamos directamente con los operadores oficiales de peaje y viñetas, y nos encanta colaborar con empresas de viajes, alquiler y motociclismo en toda Europa, Estados Unidos y Canadá.",
   sections: [
     {
       heading: "Operadores oficiales de peaje y viñetas con los que enlazamos",
@@ -150,15 +150,15 @@ export const ES_PARTNERS: InfoPageContent = {
     {
       heading: "Quién colabora con nosotros",
       items: [
-        "Flotas de alquiler de autocaravanas y campers que buscan presupuestos de viaje transparentes",
-        "Operadores de tours en moto y clubes de motociclistas que planifican rutas alpinas y por los fiordos",
-        "Redes de recarga eléctrica y aplicaciones de planificación de rutas",
-        "Oficinas de turismo que promocionan puertos de montaña escénicos, carreteras costeras y cruces en ferri",
+        "Empresas de alquiler de autocaravanas y caravanas que quieren ofrecer a sus clientes presupuestos de viaje claros y honestos",
+        "Operadores de rutas en moto y clubes que organizan viajes por los Alpes o los fiordos noruegos",
+        "Redes de recarga para vehículos eléctricos y aplicaciones de planificación de rutas",
+        "Oficinas de turismo que quieren dar a conocer puertos de montaña espectaculares, carreteras costeras y travesías en ferri",
       ],
     },
     {
-      heading: "Trabaja con nosotros",
-      body: "KM TECH LABS tiene su sede en Kristiansand, Noruega. Si gestionas una flota, un negocio de tours o un servicio de peaje y quieres hablar de integración, comarketing o alianzas de datos, escríbenos a partners@autovere.com.",
+      heading: "Únete a la red",
+      body: "Tenemos nuestra sede en Kristiansand, Noruega, pero nos encanta colaborar con socios de cualquier parte del mundo. Si gestionas una flota, un negocio de turismo o un servicio de peajes y quieres hablar de integración, comarketing o una alianza de datos, escríbenos a partners@autovere.com — nos hará mucha ilusión saber de ti.",
     },
   ],
   note: DISCLAIMER,

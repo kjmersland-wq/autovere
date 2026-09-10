@@ -361,7 +361,7 @@ export const PARTNERS: Record<InfoLocale, InfoPageContent> = {
     eyebrow: "Canada · Français",
     title: "Partenaires et sources officielles — Canada",
     intro:
-      "Nous ne revendons ni péages ni billets. Le paiement se fait toujours auprès de l'exploitant officiel ; voici les sources de nos estimations canadiennes.",
+      "Nous ne revendons jamais ni péages ni billets — le paiement se fait toujours directement auprès de l'exploitant officiel. Voici les sources qui alimentent nos estimations pour le Canada.",
     sections: [
       {
         heading: "Péages et traversées",
@@ -398,8 +398,8 @@ export const PARTNERS: Record<InfoLocale, InfoPageContent> = {
         ],
       },
       {
-        heading: "Travailler avec nous",
-        body: "Exploitants de péages, traversiers, réseaux de recharge, campings et voyagistes : parlons partenariats de données et intégrations. Contactez-nous via KM TECH LABS.",
+        heading: "Travaillons ensemble",
+        body: "Vous gérez un service de péage, un traversier, un réseau de recharge, un camping ou une agence de voyages ? Nous serions ravis d'échanger sur les partenariats de données et les intégrations possibles. Contactez-nous via KM TECH LABS — nous avons hâte de vous entendre.",
       },
     ],
     note: DISCLAIMER_FR,

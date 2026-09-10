@@ -130,9 +130,9 @@ export const SV_FAQ: InfoPageContent = {
 
 export const SV_PARTNERS: InfoPageContent = {
   eyebrow: "Partners",
-  title: "Vi samarbetar med dem som håller trafiken i rörelse.",
+  title: "Vi samarbetar med dem som får resan att rulla.",
   intro:
-    "AutoVere Sverige länkar till officiella avgiftsoperatörer och samarbetar med rese-, uthyrnings- och motorcykelbranschen i Europa, USA och Kanada.",
+    "Vi länkar alltid direkt till de officiella avgifts- och vinjettoperatörerna, och vi är stolta över att samarbeta med rese-, uthyrnings- och motorcykelföretag i hela Europa, USA och Kanada.",
   sections: [
     {
       heading: "Officiella avgifts- och vinjettoperatörer vi länkar till",
@@ -150,15 +150,15 @@ export const SV_PARTNERS: InfoPageContent = {
     {
       heading: "Vilka samarbetar med oss",
       items: [
-        "Uthyrningsflottor för husbilar och husvagnar som vill erbjuda transparenta reseoffert",
-        "Motorcykelresearrangörer och klubbar som planerar alp- och fjordrutter",
-        "Elbilsladdningsnätverk och ruttplaneringsappar",
-        "Turistorganisationer som marknadsför natursköna pass, kustvägar och färjeförbindelser",
+        "Uthyrare av husbilar och husvagnar som vill ge sina kunder tydliga och ärliga resepriser",
+        "Motorcykelresearrangörer och klubbar som planerar turer i Alperna och längs de norska fjordarna",
+        "Laddnätverk för elbilar och appar för ruttplanering",
+        "Turistorganisationer som vill visa upp natursköna vägar, kustvägar och färjeleder",
       ],
     },
     {
-      heading: "Samarbeta med oss",
-      body: "KM TECH LABS har sitt säte i Kristiansand, Norge. Om du driver en flotta, ett researrangörsföretag eller en avgiftstjänst och vill diskutera integration, samarbetsmarknadsföring eller datapartnerskap, kontakta oss på partners@autovere.com.",
+      heading: "Bli en del av nätverket",
+      body: "Vi håller till i Kristiansand i Norge, men samarbetar gärna med er var ni än finns. Driver ni en bilflotta, ett researrangörsföretag eller en avgiftstjänst och vill prata om integration, gemensam marknadsföring eller datasamarbete – hör av er till partners@autovere.com, vi ser fram emot att höra från er.",
     },
   ],
   note: DISCLAIMER,

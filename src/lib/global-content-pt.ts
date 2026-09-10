@@ -130,9 +130,9 @@ export const PT_FAQ: InfoPageContent = {
 
 export const PT_PARTNERS: InfoPageContent = {
   eyebrow: "Parceiros",
-  title: "Trabalhamos com quem mantém a estrada em movimento.",
+  title: "Trabalhamos ao lado de quem mantém as pessoas em movimento.",
   intro:
-    "A AutoVere liga-se a operadores oficiais de portagens e colabora com empresas de viagens, aluguer e motociclismo em toda a Europa, nos Estados Unidos e no Canadá.",
+    "Ligamos sempre diretamente aos operadores oficiais de portagens e vinhetas, e gostamos de colaborar com empresas de viagens, aluguer e motociclismo em toda a Europa, nos Estados Unidos e no Canadá.",
   sections: [
     {
       heading: "Operadores oficiais de portagens e vinhetas a que nos ligamos",
@@ -150,15 +150,15 @@ export const PT_PARTNERS: InfoPageContent = {
     {
       heading: "Quem trabalha connosco",
       items: [
-        "Frotas de aluguer de autocaravanas e campervans que procuram orçamentos de viagem transparentes",
-        "Operadores turísticos e clubes de motociclismo que planeiam rotas alpinas e pelos fiordes",
-        "Redes de carregamento elétrico e aplicações de planeamento de rotas",
-        "Entidades de turismo que promovem passagens panorâmicas, estradas costeiras e travessias de ferry",
+        "Empresas de aluguer de autocaravanas e caravanas que querem oferecer aos seus clientes orçamentos de viagem claros e honestos",
+        "Operadores de circuitos de moto e clubes que planeiam rotas pelos Alpes ou pelos fiordes noruegueses",
+        "Redes de carregamento para veículos elétricos e aplicações de planeamento de rotas",
+        "Entidades de turismo que querem dar a conhecer passagens de montanha deslumbrantes, estradas costeiras e travessias de ferry",
       ],
     },
     {
-      heading: "Trabalhe connosco",
-      body: "A KM TECH LABS tem sede em Kristiansand, na Noruega. Se gere uma frota, um negócio turístico ou um serviço de portagens e quer falar sobre integração, co-marketing ou parcerias de dados, contacte-nos através de partners@autovere.com.",
+      heading: "Junte-se à rede",
+      body: "Temos a nossa sede em Kristiansand, na Noruega, mas gostamos de colaborar com parceiros em qualquer parte do mundo. Gere uma frota, um negócio turístico ou um serviço de portagens e quer falar sobre integração, co-marketing ou uma parceria de dados? Escreva-nos para partners@autovere.com — teremos todo o gosto em conhecê-lo.",
     },
   ],
   note: DISCLAIMER,

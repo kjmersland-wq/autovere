@@ -168,9 +168,9 @@ export const FI_HOW_IT_WORKS: InfoPageContent = {
 
 export const FI_PARTNERS: InfoPageContent = {
   eyebrow: "Kumppanit",
-  title: "Viralliset tietullioperaattorit ja yhteistyökumppanit",
+  title: "Teemme yhteistyötä niiden kanssa, jotka pitävät matkan liikkeessä.",
   intro:
-    "Teemme yhteistyötä niiden toimijoiden kanssa, jotka pitävät tiet liikkeessä. AutoVere ohjaa virallisten tietullioperaattoreiden palveluihin ja tekee yhteistyötä matkailu-, vuokraus- ja motoristialan yritysten kanssa Euroopassa, Yhdysvalloissa ja Kanadassa.",
+    "Ohjaamme aina suoraan virallisten tietulli- ja tievinjettioperaattoreiden omille sivuille, ja teemme mielellämme yhteistyötä matkailu-, vuokraus- ja moottoripyöräalan yritysten kanssa ympäri Eurooppaa, Yhdysvaltoja ja Kanadaa.",
   sections: [
     {
       heading: "Viralliset tietulli- ja vinjettioperaattorit, joihin linkitämme",
@@ -188,15 +188,15 @@ export const FI_PARTNERS: InfoPageContent = {
     {
       heading: "Ketkä ovat kumppaneitamme",
       items: [
-        "Matkailuautojen ja retkeilyautojen vuokraamot, jotka haluavat tarjota asiakkailleen läpinäkyvät matkakustannusarviot.",
-        "Moottoripyörämatkojen järjestäjät ja ajokerhot, jotka suunnittelevat alppi- ja vuonoreittejä.",
+        "Matkailuautojen ja asuntovaunujen vuokraamot, jotka haluavat tarjota asiakkailleen selkeät ja rehelliset matkakustannukset.",
+        "Moottoripyörämatkojen järjestäjät ja ajokerhot, jotka suunnittelevat reittejä Alpeille ja Norjan vuonoille.",
         "Latausverkostot ja reittisuunnittelusovellukset.",
-        "Matkailuorganisaatiot ja matkailualueet (DMO), jotka edistävät maisemateitä, rannikkoreittejä ja lauttayhteyksiä.",
+        "Matkailualueet ja -organisaatiot, jotka haluavat esitellä kauniita maisemateitä, rannikkoreittejä ja lauttayhteyksiä.",
       ],
     },
     {
-      heading: "Tee yhteistyötä kanssamme",
-      body: "Oletko tietullioperaattori, lauttayhtiö, latausoperaattori, leirintäalue tai matkanjärjestäjä? Ota yhteyttä kumppanuustiimiimme ja tule osaksi verkostoa.",
+      heading: "Tule mukaan kumppaniksi",
+      body: "Toimimme Kristiansandista, Norjasta käsin, mutta teemme mielellämme yhteistyötä riippumatta siitä, missä olette. Jos pyöritätte vuokraamoa, matkailuyritystä tai tietullipalvelua ja haluatte jutella yhteistyöstä, yhteismarkkinoinnista tai datakumppanuudesta, laittakaa viestiä osoitteeseen partners@autovere.com – otamme mielellämme yhteyttä takaisin.",
     },
   ],
   note: DISCLAIMER_FI,

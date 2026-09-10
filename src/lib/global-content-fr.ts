@@ -130,9 +130,9 @@ export const FR_FAQ: InfoPageContent = {
 
 export const FR_PARTNERS: InfoPageContent = {
   eyebrow: "Partenaires",
-  title: "Nous travaillons avec ceux qui font avancer la route.",
+  title: "Nous avançons aux côtés de ceux qui font vivre la route.",
   intro:
-    "AutoVere renvoie vers les opérateurs de péage officiels et collabore avec des acteurs du tourisme, de la location et du monde moto en Europe, aux États-Unis et au Canada.",
+    "Nous renvoyons toujours vers les opérateurs officiels de péage et de vignette, et nous sommes heureux de collaborer avec des acteurs du tourisme, de la location et du monde de la moto, en Europe, aux États-Unis et au Canada.",
   sections: [
     {
       heading: "Opérateurs officiels de péage et de vignette vers lesquels nous renvoyons",
@@ -150,15 +150,15 @@ export const FR_PARTNERS: InfoPageContent = {
     {
       heading: "Qui s'associe avec nous",
       items: [
-        "Flottes de location de camping-cars et fourgons souhaitant proposer des devis de voyage transparents",
-        "Organisateurs de circuits moto et clubs planifiant des itinéraires alpins et le long des fjords",
-        "Réseaux de recharge VE et applications de planification d'itinéraires",
-        "Offices de tourisme promouvant les cols pittoresques, routes côtières et traversées en ferry",
+        "Loueurs de camping-cars et de caravanes qui veulent offrir à leurs clients des devis de voyage clairs et honnêtes",
+        "Organisateurs de circuits moto et clubs qui préparent des itinéraires dans les Alpes ou le long des fjords norvégiens",
+        "Réseaux de recharge pour véhicules électriques et applications de planification d'itinéraires",
+        "Offices de tourisme qui souhaitent mettre en avant des cols pittoresques, des routes côtières et des liaisons en ferry",
       ],
     },
     {
-      heading: "Travailler avec nous",
-      body: "KM TECH LABS est basé à Kristiansand, en Norvège. Si vous gérez une flotte, une entreprise de circuits ou un service de péage et souhaitez discuter d'intégration, de co-marketing ou de partenariat de données, écrivez-nous à partners@autovere.com.",
+      heading: "Rejoignez le réseau",
+      body: "Nous sommes basés à Kristiansand, en Norvège, mais nous aimons collaborer avec des partenaires où qu'ils se trouvent. Vous gérez une flotte, une entreprise de circuits ou un service de péage et souhaitez parler intégration, co-marketing ou partenariat de données ? Écrivez-nous à partners@autovere.com, nous avons hâte d'échanger avec vous.",
     },
   ],
   note: DISCLAIMER,

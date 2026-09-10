@@ -130,9 +130,9 @@ export const PL_FAQ: InfoPageContent = {
 
 export const PL_PARTNERS: InfoPageContent = {
   eyebrow: "Partnerzy",
-  title: "Współpracujemy z tymi, którzy utrzymują ruch na drogach.",
+  title: "Współpracujemy z tymi, którzy wprawiają podróże w ruch.",
   intro:
-    "AutoVere linkuje do oficjalnych operatorów opłat drogowych i współpracuje z branżą turystyczną, wynajmem oraz środowiskiem motocyklowym w Europie, USA i Kanadzie.",
+    "Zawsze kierujemy bezpośrednio do oficjalnych operatorów opłat drogowych i winiet, a przy okazji chętnie współpracujemy z firmami z branży turystycznej, wynajmu i motocyklowej w całej Europie, w USA i Kanadzie.",
   sections: [
     {
       heading: "Oficjalni operatorzy opłat drogowych i winiet, do których linkujemy",
@@ -150,15 +150,15 @@ export const PL_PARTNERS: InfoPageContent = {
     {
       heading: "Kto z nami współpracuje",
       items: [
-        "Flotylle wynajmu kamperów i samochodów kempingowych chcące oferować przejrzyste wyceny podróży",
-        "Organizatorzy wycieczek motocyklowych i kluby planujące trasy alpejskie i wzdłuż fiordów",
-        "Sieci ładowania EV i aplikacje do planowania tras",
-        "Organizacje turystyczne promujące malownicze przełęcze, drogi wybrzeża i przeprawy promowe",
+        "Wypożyczalnie kamperów i przyczep kempingowych, które chcą dać swoim klientom jasną i uczciwą wycenę podróży",
+        "Organizatorzy wycieczek motocyklowych i kluby planujące trasy przez Alpy lub wzdłuż norweskich fiordów",
+        "Sieci ładowania pojazdów elektrycznych i aplikacje do planowania tras",
+        "Organizacje turystyczne, które chcą pokazać światu malownicze przełęcze, drogi wybrzeża i trasy promowe",
       ],
     },
     {
-      heading: "Współpracuj z nami",
-      body: "KM TECH LABS ma siedzibę w Kristiansand w Norwegii. Jeśli prowadzisz flotę, firmę turystyczną lub usługę związaną z opłatami drogowymi i chcesz porozmawiać o integracji, współpracy marketingowej lub partnerstwie w zakresie danych, napisz do nas na partners@autovere.com.",
+      heading: "Dołącz do sieci partnerów",
+      body: "Mamy siedzibę w Kristiansand w Norwegii, ale chętnie współpracujemy z partnerami z całego świata. Prowadzisz flotę, firmę turystyczną albo usługę związaną z opłatami drogowymi i chcesz porozmawiać o integracji, wspólnym marketingu albo współpracy przy danych? Napisz do nas na partners@autovere.com — z przyjemnością się odezwiemy.",
     },
   ],
   note: DISCLAIMER,

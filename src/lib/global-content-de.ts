@@ -130,9 +130,9 @@ export const DE_FAQ: InfoPageContent = {
 
 export const DE_PARTNERS: InfoPageContent = {
   eyebrow: "Partner",
-  title: "Wir arbeiten mit denen zusammen, die den Verkehr am Laufen halten.",
+  title: "Wir arbeiten mit denen zusammen, die Menschen in Bewegung bringen.",
   intro:
-    "AutoVere verlinkt zu offiziellen Mautbetreibern und arbeitet mit Reise-, Vermietungs- und Motorradunternehmen in Europa, den USA und Kanada zusammen.",
+    "Wir verlinken grundsätzlich direkt zu den offiziellen Maut- und Vignettenbetreibern und arbeiten gerne mit Reise-, Vermietungs- und Motorradunternehmen in ganz Europa, den USA und Kanada zusammen.",
   sections: [
     {
       heading: "Offizielle Maut- und Vignettenbetreiber, zu denen wir verlinken",
@@ -150,15 +150,15 @@ export const DE_PARTNERS: InfoPageContent = {
     {
       heading: "Wer mit uns zusammenarbeitet",
       items: [
-        "Wohnmobil- und Campervan-Vermietflotten, die transparente Reisekosten anbieten möchten",
-        "Motorrad-Reiseveranstalter und Clubs, die Alpen- und Fjordrouten planen",
-        "EV-Ladenetzwerke und Routenplanungs-Apps",
-        "Tourismusverbände, die malerische Pässe, Küstenstraßen und Fährüberfahrten bewerben",
+        "Vermieter von Wohnmobilen und Wohnwagen, die ihren Kunden ehrliche, transparente Reisekosten bieten möchten",
+        "Motorrad-Reiseveranstalter und Clubs, die Touren durch die Alpen oder entlang norwegischer Fjorde planen",
+        "Ladenetzwerke für Elektrofahrzeuge und Routenplanungs-Apps",
+        "Tourismusverbände, die malerische Passstraßen, Küstenstraßen und Fährverbindungen bekannt machen möchten",
       ],
     },
     {
-      heading: "Arbeiten Sie mit uns zusammen",
-      body: "KM TECH LABS hat seinen Sitz in Kristiansand, Norwegen. Wenn Sie eine Flotte, ein Reiseunternehmen oder einen Mautdienst betreiben und über Integration, Co-Marketing oder Datenpartnerschaften sprechen möchten, kontaktieren Sie uns unter partners@autovere.com.",
+      heading: "Werden Sie Teil des Netzwerks",
+      body: "Wir sitzen in Kristiansand, Norwegen, arbeiten aber gerne mit Partnern überall zusammen. Betreiben Sie eine Fahrzeugflotte, ein Reiseunternehmen oder einen Mautdienst und möchten über Integration, gemeinsames Marketing oder eine Datenpartnerschaft sprechen? Schreiben Sie uns einfach an partners@autovere.com — wir freuen uns, von Ihnen zu hören.",
     },
   ],
   note: DISCLAIMER,

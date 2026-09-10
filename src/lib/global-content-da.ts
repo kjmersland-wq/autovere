@@ -130,9 +130,9 @@ export const DA_FAQ: InfoPageContent = {
 
 export const DA_PARTNERS: InfoPageContent = {
   eyebrow: "Partnere",
-  title: "Vi samarbejder med dem, der holder trafikken kørende.",
+  title: "Vi samarbejder med dem, der får folk ud på vejen.",
   intro:
-    "AutoVere linker til officielle vejafgiftsoperatører og samarbejder med rejse-, udlejnings- og motorcykelvirksomheder i Europa, USA og Canada.",
+    "Vi linker altid direkte til de officielle vejafgifts- og vignetudbydere, og vi er stolte af at samarbejde med rejse-, udlejnings- og motorcykelvirksomheder i hele Europa, USA og Canada.",
   sections: [
     {
       heading: "Officielle afgifts- og vignetoperatører, vi linker til",
@@ -150,15 +150,15 @@ export const DA_PARTNERS: InfoPageContent = {
     {
       heading: "Hvem samarbejder med os",
       items: [
-        "Udlejningsflåder af autocampere og campingvogne, der ønsker gennemsigtige rejsetilbud",
-        "Motorcykel-turoperatører og klubber, der planlægger alpine ruter og fjordruter",
-        "Ladenetværk til elbiler og ruteplanlægningsapps",
-        "Turistorganisationer, der fremmer naturskønne pas, kystveje og færgeoverfarter",
+        "Udlejere af autocampere og campingvogne, der vil give deres kunder ærlige og gennemskuelige rejsepriser",
+        "Motorcykel-turoperatører og klubber, der planlægger ture i Alperne og langs de norske fjorde",
+        "Ladenetværk til elbiler og apps til ruteplanlægning",
+        "Turistorganisationer, der gerne vil vise naturskønne pas, kystveje og færgeruter frem",
       ],
     },
     {
-      heading: "Samarbejd med os",
-      body: "KM TECH LABS har base i Kristiansand, Norge. Hvis du driver en flåde, en turvirksomhed eller en afgiftstjeneste og gerne vil tale om integration, co-marketing eller datapartnerskaber, så skriv til os på partners@autovere.com.",
+      heading: "Bliv en del af netværket",
+      body: "Vi holder til i Kristiansand i Norge, men samarbejder gerne med jer, uanset hvor I er. Driver I en flåde, en turvirksomhed eller en afgiftstjeneste og har lyst til at snakke om integration, fælles markedsføring eller datadeling, så skriv endelig til os på partners@autovere.com — vi glæder os til at høre fra jer.",
     },
   ],
   note: DISCLAIMER,

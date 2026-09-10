@@ -138,9 +138,9 @@ export const NO_FAQ: InfoPageContent = {
 
 export const NO_PARTNERS: InfoPageContent = {
   eyebrow: "Partnere",
-  title: "Vi samarbeider med dem som holder veien i gang.",
+  title: "Vi går sammen med dem som holder reisen i gang.",
   intro:
-    "AutoVere lenker til offisielle bomoperatører og samarbeider med reiseliv, utleie og MC-miljøet i Europa, USA og Canada.",
+    "Vi lenker alltid rett til de offisielle bomselskapene, og vi setter stor pris på å samarbeide med reiseliv, utleie og MC-miljøet i Europa, USA og Canada.",
   sections: [
     {
       heading: "Offisielle bom- og vignettoperatører vi lenker til",
@@ -158,15 +158,15 @@ export const NO_PARTNERS: InfoPageContent = {
     {
       heading: "Hvem samarbeider med oss",
       items: [
-        "Utleieflåter for bobil og campingbil som vil gi transparente turpriser",
-        "MC-turoperatører og klubber som planlegger alpe- og fjordruter",
-        "Ladenettverk og ruteplanleggings-apper",
-        "Reiselivsorganisasjoner som promoterer fjelloverganger, kystveier og ferjer",
+        "Utleieflåter for bobil og campingvogn som vil gi kundene sine ærlige og oversiktlige reisepriser",
+        "MC-turoperatører og klubber som planlegger turer i Alpene og langs norske fjorder",
+        "Ladenettverk for elbil og apper for ruteplanlegging",
+        "Reiselivsorganisasjoner som vil vise fram flotte fjelloverganger, kystveier og ferjesamband",
       ],
     },
     {
-      heading: "Samarbeid med oss",
-      body: "KM TECH LABS holder til i Kristiansand. Driver du en flåte, en turvirksomhet eller en bomtjeneste og vil snakke om integrasjon, samarbeid eller data — ta kontakt på partners@autovere.com.",
+      heading: "Bli en del av nettverket",
+      body: "Vi holder til i Kristiansand, men samarbeider gjerne med partnere uansett hvor de er. Driver du en flåte, en turvirksomhet eller en bomtjeneste og har lyst til å snakke om integrasjon, samarbeid eller datadeling? Send oss en e-post på partners@autovere.com — vi gleder oss til å høre fra deg.",
     },
   ],
   note: DISCLAIMER,
