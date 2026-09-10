@@ -202,9 +202,9 @@ function Index() {
         days: input.days,
         evRangeKm: input.evRangeKm,
       };
-      const next = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, trip, found, norwayStations));
+      const next = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, trip, found, norwayStations, t));
       const comparisonTrip = { ...trip, vehicle: input.vehicle === "ev" ? "petrol" as const : "ev" as const, fuelType: input.vehicle === "ev" ? "ICE" as const : "EV" as const };
-      const comparison = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, comparisonTrip, found, norwayStations));
+      const comparison = VARIANTS.filter((v) => map[v]).map((v) => estimate(v, map[v]!, comparisonTrip, found, norwayStations, t));
       setRoutes(map);
       setEstimates(next);
       setEvComparisonEstimates(comparison);

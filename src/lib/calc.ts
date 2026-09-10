@@ -14,6 +14,27 @@ import {
 import { tollConfigFor } from "./tolls/registry";
 import { matchNorwayToll, estimatedNorwayToll, type NorwayStationCandidate } from "./tolls/providers/norway";
 import type { TollConfidence } from "./tolls/types";
+import { en, type Dict } from "./i18n";
+
+/** The subset of the locale Dict this module needs to localize toll/vignette line copy —
+ * kept slim rather than depending on the full Dict, even though callers just pass `t` from
+ * useT(). See the *Label/*Detail/*Suffix fields added to Dict in i18n.tsx for the toll work. */
+export type TollCopy = Pick<
+  Dict,
+  | "norwayHighConfidenceLabel"
+  | "norwayEstimateLabel"
+  | "discountEvAutopass"
+  | "discountEvOnly"
+  | "discountAutopassOnly"
+  | "alpineSourceLabel"
+  | "bridgeOperatorSuffix"
+  | "germanyNoTollLabel"
+  | "germanyNoTollDetail"
+>;
+
+/** English fallback so `estimate()` stays callable without a locale (e.g. from tests/tools)
+ * — real callers pass `t` from `useT()` so labels come out in the visitor's language. */
+const defaultTollCopy: TollCopy = en;
 
 export type VehicleType = "petrol" | "diesel" | "ev";
 export type FuelType = "EV" | "ICE";
@@ -141,7 +162,7 @@ export function planEvStops(
   return { stops, stopCount, chargingMinutes: stopCount * perStop, energyKwh };
 }
 
-function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[], key: RouteVariantKey) {
+function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[], key: RouteVariantKey, t: TollCopy) {
   if (key === "tollfree") return;
   const denmark = legs.find((leg) => leg.code === "DK");
   if (!denmark || denmark.km < 40) return;
@@ -152,7 +173,7 @@ function addNordicBridgeTolls(legs: CountryLeg[], tollLines: CostLine[], key: Ro
     amount: bridge.amount,
     country: bridge.country,
     confidence: "medium",
-    source: `${bridge.label} operator (official fixed toll)`,
+    source: t.bridgeOperatorSuffix(bridge.label),
     sourceUrl: bridge.url,
     externalLink: bridge.url,
   });
@@ -172,6 +193,7 @@ function norwayTollLine(
   vehicle: VehicleType,
   autoPass: boolean,
   stations: NorwayStationCandidate[] | null,
+  t: TollCopy,
 ): CostLine | null {
   if (key === "tollfree" && stations == null) return null;
   if (norwayKm <= 20) return null;
@@ -183,9 +205,9 @@ function norwayTollLine(
   if (!result) return null;
 
   const discountLabel =
-    vehicle === "ev" ? (autoPass ? "44% EV + AutoPASS discount" : "30% EV discount") : autoPass ? "20% AutoPASS discount" : undefined;
+    vehicle === "ev" ? (autoPass ? t.discountEvAutopass : t.discountEvOnly) : autoPass ? t.discountAutopassOnly : undefined;
   return {
-    label: result.confidence === "high" ? `Norway tolls — ${result.breakdown?.length ?? 0} stations crossed` : "Norway tolls — indicative estimate",
+    label: result.confidence === "high" ? t.norwayHighConfidenceLabel : t.norwayEstimateLabel,
     detail: [`${Math.round(result.amountEur * NOK_PER_EUR)} NOK`, discountLabel].filter(Boolean).join(" · "),
     amount: result.amountEur,
     country: "NO",
@@ -197,7 +219,7 @@ function norwayTollLine(
   };
 }
 
-function alpineTolls(coords: LatLng[], key: RouteVariantKey): CostLine[] {
+function alpineTolls(coords: LatLng[], key: RouteVariantKey, t: TollCopy): CostLine[] {
   if (key !== "fastest") return [];
   return ALPINE_SURCHARGES.filter((surcharge) =>
     coords.some((point) => haversineKm(point, [surcharge.lat, surcharge.lon]) <= surcharge.radiusKm),
@@ -207,7 +229,7 @@ function alpineTolls(coords: LatLng[], key: RouteVariantKey): CostLine[] {
     amount: surcharge.amount,
     country: surcharge.country,
     confidence: "medium",
-    source: "AutoVere curated Alpine tunnel toll data",
+    source: t.alpineSourceLabel,
   }));
 }
 
@@ -217,6 +239,7 @@ export function estimate(
   trip: TripInput,
   chargers: Charger[],
   norwayStations: NorwayStationCandidate[] | null = null,
+  t: TollCopy = defaultTollCopy,
 ): Estimate {
   const legs = countryLegs(route.coords);
   const share = MOTORWAY_SHARE[key];
@@ -241,8 +264,8 @@ export function estimate(
       // Explicit, not silent: passenger cars are toll-free in Germany — Del 1 requirement.
       const cfg = tollConfigFor("DE")!;
       tollLines.push({
-        label: `${leg.name} — no toll for passenger cars`,
-        detail: cfg.sourceName,
+        label: `${leg.name} — ${t.germanyNoTollLabel}`,
+        detail: t.germanyNoTollDetail,
         amount: 0,
         country: "DE",
         confidence: cfg.accuracy,
@@ -286,16 +309,16 @@ export function estimate(
     }
   }
 
-  addNordicBridgeTolls(legs, tollLines, key);
+  addNordicBridgeTolls(legs, tollLines, key, t);
   const norwayLeg = legs.find((leg) => leg.code === "NO");
   const norwayToll = norwayLeg
-    ? norwayTollLine(route.coords, norwayLeg.km, key, trip.vehicle, trip.autoPass, norwayStations)
+    ? norwayTollLine(route.coords, norwayLeg.km, key, trip.vehicle, trip.autoPass, norwayStations, t)
     : null;
   const standardNorwayToll = norwayLeg
-    ? norwayTollLine(route.coords, norwayLeg.km, key, "petrol", false, norwayStations)
+    ? norwayTollLine(route.coords, norwayLeg.km, key, "petrol", false, norwayStations, t)
     : null;
   if (norwayToll) tollLines.push(norwayToll);
-  tollLines.push(...alpineTolls(route.coords, key));
+  tollLines.push(...alpineTolls(route.coords, key, t));
 
   const tollCost = tollLines.reduce((a, l) => a + l.amount, 0);
   const vignetteCost = vignetteLines.reduce((a, l) => a + l.amount, 0);
