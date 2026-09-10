@@ -40,6 +40,20 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstrasjon — kun eksempel. Denne organisasjonen er fiktiv.",
+    heroAlt: "Reisende som ser på en AutoVere-rute og reisekostnader fra bilen",
+    heroTagline: "La oss gjøre planleggingen enklere for dem dere bryr dere om.",
+    dealerEyebrow: "For uavhengige forhandlere",
+    dealerTitle: "Gjør hver biloverlevering litt mer komplett.",
+    dealerBody:
+      "Gi kundene en praktisk reisefølgesvenn sammen med den nye bilen. AutoVere hjelper dem å forstå bompenger, vignetter, drivstoff og ladekostnader før den første lange turen — og forhandleren gir dem 25 % rabatt på Pro.",
+    dealerAlt: "Bilforhandler som presenterer AutoVere for en kunde ved overlevering av bil",
+    dealerCaption: "En nyttig reisefordel, presentert på akkurat riktig tidspunkt.",
+    dealerBullets: [
+      "Et gjennomtenkt ekstra for kunder som kjøper ny eller brukt bil",
+      "Relevant for elbil-, bobil- og turkjøpere",
+      "Ingen programvare, abonnement eller fakturering for teamet deres",
+    ],
+    dealerCta: "Tilby AutoVere til kundene dine",
     whyTitle: "Hvorfor samarbeide med AutoVere?",
     why: [
       {
@@ -132,6 +146,20 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstration — example only. This organisation is fictional.",
+    heroAlt: "Traveller reviewing an AutoVere route and trip costs from a parked car",
+    heroTagline: "Let's make planning easier for the people you care about.",
+    dealerEyebrow: "For independent dealers",
+    dealerTitle: "Make every vehicle handover feel more complete.",
+    dealerBody:
+      "Offer customers a practical travel companion alongside their new car. AutoVere helps them understand tolls, vignettes, fuel or charging costs before their first long journey — while your dealership gives them 25% off Pro.",
+    dealerAlt: "Independent car dealer introducing AutoVere to a customer during a vehicle handover",
+    dealerCaption: "A useful travel benefit, introduced at exactly the right moment.",
+    dealerBullets: [
+      "A thoughtful extra for new and used-car customers",
+      "Relevant for EV, motorhome and touring buyers",
+      "No software, subscriptions or customer billing for your team",
+    ],
+    dealerCta: "Offer AutoVere to your customers",
     whyTitle: "Why partner with AutoVere?",
     why: [
       {
@@ -224,6 +252,20 @@ const COPY = {
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
     demoNote: "Demonstracja — wyłącznie przykład. Ta organizacja jest fikcyjna.",
+    heroAlt: "Podróżny sprawdzający trasę i koszty podróży w AutoVere z fotela samochodu",
+    heroTagline: "Ułatwmy planowanie osobom, na których Wam zależy.",
+    dealerEyebrow: "Dla niezależnych dealerów",
+    dealerTitle: "Spraw, by każde wydanie samochodu było pełniejsze.",
+    dealerBody:
+      "Zaoferuj klientom praktycznego towarzysza podróży razem z nowym autem. AutoVere pomaga zrozumieć opłaty drogowe, winiety oraz koszty paliwa i ładowania jeszcze przed pierwszą długą trasą — a Wasz salon daje 25% zniżki na Pro.",
+    dealerAlt: "Dealer samochodowy prezentujący AutoVere klientowi podczas wydania auta",
+    dealerCaption: "Przydatna korzyść podróżna, przedstawiona w idealnym momencie.",
+    dealerBullets: [
+      "Przemyślany dodatek dla kupujących auta nowe i używane",
+      "Istotne dla klientów EV, kamperów i podróżujących",
+      "Żadnego oprogramowania, subskrypcji ani rozliczeń po Waszej stronie",
+    ],
+    dealerCta: "Zaproponuj AutoVere swoim klientom",
     whyTitle: "Dlaczego warto zostać partnerem AutoVere?",
     why: [
       {
@@ -371,30 +413,18 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
       <SiteHeader />
 
       {/* Hero */}
-      <section className={`relative overflow-hidden border-b border-border ${lang === "en" ? "min-h-[780px] sm:min-h-[720px]" : ""}`}>
-        {lang === "en" ? (
-          <>
-            <img
-              src={travellerAutovereImage}
-              alt="Traveller reviewing an AutoVere route and trip costs from a parked car"
-              width={1536}
-              height={1024}
-              fetchPriority="high"
-              className="absolute inset-0 size-full object-cover object-[58%_center]"
-            />
-            <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/25" />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
-          </>
-        ) : null}
-        <div
-          aria-hidden
-          className={`pointer-events-none absolute -left-32 top-[-14rem] size-[34rem] rounded-full bg-primary/15 blur-[120px] ${lang === "en" ? "hidden" : ""}`}
+      <section className="relative min-h-[780px] overflow-hidden border-b border-border sm:min-h-[720px]">
+        <img
+          src={travellerAutovereImage}
+          alt={c.heroAlt}
+          width={1536}
+          height={1024}
+          fetchPriority="high"
+          className="absolute inset-0 size-full object-cover object-[58%_center]"
         />
-        <div
-          aria-hidden
-          className={`pointer-events-none absolute -right-24 bottom-[-18rem] size-[30rem] rounded-full bg-primary/10 blur-[130px] ${lang === "en" ? "hidden" : ""}`}
-        />
-        <div className={`relative mx-auto w-full max-w-5xl px-6 py-20 sm:px-8 ${lang === "en" ? "flex min-h-[780px] flex-col justify-center sm:min-h-[720px]" : ""}`}>
+        <div className="absolute inset-0 bg-gradient-to-r from-background via-background/95 to-background/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-transparent to-background/30" />
+        <div className="relative mx-auto flex min-h-[780px] w-full max-w-5xl flex-col justify-center px-6 py-20 sm:min-h-[720px] sm:px-8">
           <p className="text-xs font-semibold uppercase tracking-[0.28em] text-primary">{c.eyebrow}</p>
           <h1 className="mt-5 max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl md:text-6xl">
             {c.title}
@@ -413,11 +443,7 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
             </Button>
           </div>
 
-          {lang === "en" ? (
-            <p className="mt-4 text-sm italic text-muted-foreground">
-              Let&rsquo;s make planning easier for the people you care about.
-            </p>
-          ) : null}
+          <p className="mt-4 text-sm italic text-muted-foreground">{c.heroTagline}</p>
 
           <p className="mt-12 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
             {c.howItLooks}
@@ -446,50 +472,40 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
         </div>
       </section>
 
-      {lang === "en" ? (
-        <section className="border-b border-border bg-card/20">
-          <div className="mx-auto grid w-full max-w-5xl gap-8 px-6 py-16 sm:px-8 md:grid-cols-[1.08fr_0.92fr] md:items-center md:py-20">
-            <figure className="relative overflow-hidden rounded-2xl border border-border bg-card">
-              <img
-                src={dealerHandoverImage}
-                alt="Independent car dealer introducing AutoVere to a customer during a vehicle handover"
-                width={1536}
-                height={1024}
-                loading="lazy"
-                className="aspect-[4/3] w-full object-cover"
-              />
-              <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/95 to-transparent px-5 pb-5 pt-14 text-xs font-medium text-foreground/90">
-                A useful travel benefit, introduced at exactly the right moment.
-              </figcaption>
-            </figure>
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">For independent dealers</p>
-              <h2 className="mt-4 text-3xl font-semibold leading-tight text-foreground">
-                Make every vehicle handover feel more complete.
-              </h2>
-              <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                Offer customers a practical travel companion alongside their new car. AutoVere helps them understand tolls,
-                vignettes, fuel or charging costs before their first long journey — while your dealership gives them 25% off Pro.
-              </p>
-              <ul className="mt-6 space-y-3">
-                {[
-                  "A thoughtful extra for new and used-car customers",
-                  "Relevant for EV, motorhome and touring buyers",
-                  "No software, subscriptions or customer billing for your team",
-                ].map((line) => (
-                  <li key={line} className="flex gap-3 text-sm leading-relaxed text-foreground/90">
-                    <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
-                    <span>{line}</span>
-                  </li>
-                ))}
-              </ul>
-              <Button className="mt-7" onClick={() => setApplyOpen(true)}>
-                Offer AutoVere to your customers <ArrowRight className="size-4" />
-              </Button>
-            </div>
+      <section className="border-b border-border bg-card/20">
+        <div className="mx-auto grid w-full max-w-5xl gap-8 px-6 py-16 sm:px-8 md:grid-cols-[1.08fr_0.92fr] md:items-center md:py-20">
+          <figure className="relative overflow-hidden rounded-2xl border border-border bg-card">
+            <img
+              src={dealerHandoverImage}
+              alt={c.dealerAlt}
+              width={1536}
+              height={1024}
+              loading="lazy"
+              className="aspect-[4/3] w-full object-cover"
+            />
+            <figcaption className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-background/95 to-transparent px-5 pb-5 pt-14 text-xs font-medium text-foreground/90">
+              {c.dealerCaption}
+            </figcaption>
+          </figure>
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">{c.dealerEyebrow}</p>
+            <h2 className="mt-4 text-3xl font-semibold leading-tight text-foreground">{c.dealerTitle}</h2>
+            <p className="mt-5 text-base leading-relaxed text-muted-foreground">{c.dealerBody}</p>
+            <ul className="mt-6 space-y-3">
+              {c.dealerBullets.map((line) => (
+                <li key={line} className="flex gap-3 text-sm leading-relaxed text-foreground/90">
+                  <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-primary" />
+                  <span>{line}</span>
+                </li>
+              ))}
+            </ul>
+            <Button className="mt-7" onClick={() => setApplyOpen(true)}>
+              {c.dealerCta} <ArrowRight className="size-4" />
+            </Button>
           </div>
-        </section>
-      ) : null}
+        </div>
+      </section>
+
 
       {/* Why partner */}
       <div className="bg-gradient-to-b from-primary/[0.05] via-transparent to-transparent">
