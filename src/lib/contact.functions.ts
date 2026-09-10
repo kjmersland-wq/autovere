@@ -18,8 +18,7 @@ export const sendContactMessage = createServerFn({ method: "POST" })
   .validator((data: unknown) => contactSchema.parse(data))
   .handler(async ({ data }) => {
     const { sendMail } = await import("@/lib/smtp.server");
-    const to = process.env["CONTACT_TO_EMAIL"] || process.env["GMAIL_USER"] || "";
-    if (!to) throw new Error("No recipient configured");
+    const to = "kjell@autovere.com";
 
     const isPartner = data.kind === "partner";
     const subject = isPartner
