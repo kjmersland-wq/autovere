@@ -176,14 +176,15 @@ const COPY = {
       "One service covering Europe, the USA and Canada.",
       "Made with care by KM TECH LABS in Kristiansand, Norway.",
     ],
-    ctaTitle: "Interested in becoming a partner?",
+    ctaTitle: "We'd love to hear from you",
     ctaHeading: "Become an AutoVere Partner",
-    ctaBody: "Register your organisation directly with AutoVere. It only takes a few minutes.",
+    ctaBody:
+      "Register your organisation directly with AutoVere — it only takes a few minutes, and there's no commitment in asking.",
     ctaButton: "Become an AutoVere Partner",
     ctaFine:
-      "You provide your organisation details, logo, country, contact information and member benefit information. Once approved, AutoVere sends your partner code and partner link by email.",
+      "You share your organisation details, logo, country, contact information and a little about the member benefit. Once approved, we'll email your partner code and partner link — and we're happy to help you present it to your members.",
     talkBody:
-      "We'd love to hear from you and explore how AutoVere could become a useful benefit for your members.",
+      "Not quite ready to sign up? Just say hello. We're always glad to talk through how AutoVere could help the people you look after.",
     talkButton: "Let's talk",
     applyTitle: "Apply to become a partner",
     applyBody:
