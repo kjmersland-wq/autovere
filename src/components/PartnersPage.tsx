@@ -124,8 +124,8 @@ const COPY = {
     eyebrow: "AutoVere Partners",
     title: "Give your members 25% off AutoVere Pro.",
     intro:
-      "AutoVere offers motoring, EV, motorhome, caravan, touring and travel organisations a simple way to give their members something genuinely useful: real trip costs before they set off, and 25% off AutoVere Pro to make it an easy yes.",
-    lead: "We're proud to work with organisations that help their members travel further, smarter and with fewer surprises.",
+      "AutoVere gives motoring clubs, EV groups, motorhome and caravan associations, touring and travel organisations — and independent new- and used-car dealers — a simple way to offer their members and customers something they will actually use: real trip costs before they set off, plus 25% off AutoVere Pro.",
+    lead: "We're proud to work with people who help others travel further, smarter and with fewer surprises.",
     howItLooks: "HERE'S HOW IT LOOKS",
     demoOrg: "European Touring Association",
     demoBadge: "PARTNER",
@@ -134,55 +134,57 @@ const COPY = {
     why: [
       {
         icon: Gift,
-        heading: "A useful member benefit",
-        body: "Give your members something they'll actually use when planning and taking journeys — real toll, vignette, fuel and charging costs, not guesswork.",
+        heading: "A benefit people are glad to receive",
+        body: "Your members get something they'll genuinely reach for before every journey: real toll, vignette, fuel and charging costs — never guesswork.",
       },
       {
         icon: Zap,
-        heading: "Simple for your organisation",
-        body: "AutoVere handles the technology, the subscriptions and the member experience. No software to build, no billing to manage.",
+        heading: "Easy on your side",
+        body: "We look after the technology, the subscriptions and the member experience. There's nothing to build, and no billing for you to keep track of.",
       },
       {
         icon: RouteIcon,
-        heading: "Built for people who travel",
-        body: "AutoVere helps travellers understand what a journey will really cost, from tolls and vignettes to fuel and EV charging, before they leave home.",
+        heading: "Built for people who travel — and for those who help them get on the road",
+        body: "Clubs, associations and independent dealers alike can show travellers what a journey will really cost, from tolls and vignettes to fuel and EV charging, long before they leave home.",
       },
     ],
     howTitle: "How it works",
     how: [
       {
         icon: Handshake,
-        heading: "1. We set up your member benefit",
-        body: "AutoVere creates your partner arrangement and member access — no work required on your side.",
+        heading: "1. We set the benefit up for you",
+        body: "Tell us a little about your organisation and we'll take care of the partner arrangement and member access. Nothing to configure at your end.",
       },
       {
         icon: Share2,
-        heading: "2. You share it with your members",
-        body: "We give you the member link and code to share however suits your organisation best.",
+        heading: "2. You share it in your own way",
+        body: "You'll get a member link and code. Share them in a newsletter, on your site, or hand them over in person — whatever suits you best.",
       },
       {
         icon: BadgePercent,
-        heading: "3. Your members get 25% off AutoVere Pro",
-        body: "Simple, useful, and ready to use from day one.",
+        heading: "3. Your members enjoy 25% off AutoVere Pro",
+        body: "It works from day one, and we're here if anyone has a question along the way.",
       },
     ],
     partnersTitle: "Our organisation partners",
-    partnersEmpty: "Partner logos appear here as agreements are signed. Want to be among the first?",
+    partnersEmpty:
+      "Partner logos will appear here as agreements are signed. We'd love to have you among the first.",
     trustTitle: "Safe, transparent and never a reseller",
     trust: [
-      "Every toll and vignette purchase happens with the official operator — we never resell.",
-      "No member data is shared with third parties for marketing.",
-      "Europe, the USA and Canada covered in one service.",
-      "Built by KM TECH LABS, Norway.",
+      "Every toll and vignette purchase happens directly with the official operator — we never resell, and we never add a markup.",
+      "Member data stays private; we never share it with third parties for marketing.",
+      "One service covering Europe, the USA and Canada.",
+      "Made with care by KM TECH LABS in Kristiansand, Norway.",
     ],
-    ctaTitle: "Interested in becoming a partner?",
+    ctaTitle: "We'd love to hear from you",
     ctaHeading: "Become an AutoVere Partner",
-    ctaBody: "Register your organisation directly with AutoVere. It only takes a few minutes.",
+    ctaBody:
+      "Register your organisation directly with AutoVere — it only takes a few minutes, and there's no commitment in asking.",
     ctaButton: "Become an AutoVere Partner",
     ctaFine:
-      "You provide your organisation details, logo, country, contact information and member benefit information. Once approved, AutoVere sends your partner code and partner link by email.",
+      "You share your organisation details, logo, country, contact information and a little about the member benefit. Once approved, we'll email your partner code and partner link — and we're happy to help you present it to your members.",
     talkBody:
-      "We'd love to hear from you and explore how AutoVere could become a useful benefit for your members.",
+      "Not quite ready to sign up? Just say hello. We're always glad to talk through how AutoVere could help the people you look after.",
     talkButton: "Let's talk",
     applyTitle: "Apply to become a partner",
     applyBody:
@@ -395,56 +397,78 @@ export function PartnersPage({ lang = "en" }: { lang?: Lang }) {
             </Button>
           </div>
 
+          {lang === "en" ? (
+            <p className="mt-4 text-sm italic text-muted-foreground">
+              Let&rsquo;s make planning easier for the people you care about.
+            </p>
+          ) : null}
+
           <p className="mt-12 text-[0.68rem] font-semibold uppercase tracking-[0.24em] text-muted-foreground">
             {c.howItLooks}
           </p>
-          <div className="mt-3 flex flex-wrap items-center gap-4 rounded-2xl border border-border bg-card/60 px-6 py-5 backdrop-blur">
-            <span className="text-sm font-semibold uppercase tracking-[0.24em] text-foreground">
-              Auto<span className="text-primary">Vere</span>
-            </span>
-            <span className="text-muted-foreground">×</span>
-            <span className="flex items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-1.5 text-sm text-foreground/90">
-              <Building2 className="size-4 text-primary" /> {c.demoOrg}
-            </span>
-            <span className="rounded-full bg-primary/15 px-3 py-1 text-[0.65rem] font-bold tracking-[0.16em] text-primary">
-              {c.demoBadge}
-            </span>
-            <span className="text-xs text-muted-foreground">{c.demoNote}</span>
+          <div className="mt-3 max-w-xl rounded-2xl border border-border bg-gradient-to-br from-card/80 via-card/50 to-primary/[0.06] p-6 backdrop-blur">
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="text-sm font-semibold uppercase tracking-[0.24em] text-foreground">
+                Auto<span className="text-primary">Vere</span>
+              </span>
+              <span className="text-muted-foreground">×</span>
+              <span className="flex items-center gap-2 rounded-lg border border-border bg-background/60 px-3 py-1.5 text-sm text-foreground/90">
+                <Building2 className="size-4 text-primary" /> {c.demoOrg}
+              </span>
+              <span className="rounded-full bg-primary/15 px-3 py-1 text-[0.65rem] font-bold tracking-[0.16em] text-primary">
+                {c.demoBadge}
+              </span>
+            </div>
+            <div className="mt-5 flex items-center gap-3 rounded-xl border border-primary/20 bg-background/50 px-4 py-3">
+              <BadgePercent className="size-5 shrink-0 text-primary" />
+              <p className="text-sm font-medium text-foreground">
+                25% off AutoVere Pro <span className="font-normal text-muted-foreground">— member benefit</span>
+              </p>
+            </div>
+            <p className="mt-4 text-xs text-muted-foreground">{c.demoNote}</p>
           </div>
         </div>
       </section>
 
       {/* Why partner */}
-      <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:px-8">
-        <h2 className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-foreground">
-          <Sparkles className="size-5 text-primary" /> {c.whyTitle}
-        </h2>
-        <div className="mt-7 grid gap-4 md:grid-cols-3">
-          {c.why.map((item) => (
-            <article
-              key={item.heading}
-              className="group rounded-2xl border border-border bg-card/50 p-6 backdrop-blur transition-colors hover:border-primary/40 hover:bg-card/80"
-            >
-              <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
-                <item.icon className="size-5" />
-              </span>
-              <h3 className="mt-4 text-base font-semibold text-foreground">{item.heading}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
-            </article>
-          ))}
-        </div>
-      </section>
+      <div className="bg-gradient-to-b from-primary/[0.05] via-transparent to-transparent">
+        <section className="mx-auto w-full max-w-5xl px-6 py-16 sm:px-8">
+          <h2 className="flex items-center gap-3 text-2xl font-semibold tracking-tight text-foreground">
+            <Sparkles className="size-5 text-primary" /> {c.whyTitle}
+          </h2>
+          <div className="mt-7 grid gap-5 md:grid-cols-3">
+            {c.why.map((item) => (
+              <article
+                key={item.heading}
+                className="group rounded-2xl border border-border bg-card/50 p-6 backdrop-blur transition-all hover:-translate-y-0.5 hover:border-primary/40 hover:bg-card/80"
+              >
+                <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary ring-1 ring-primary/15">
+                  <item.icon className="size-5" />
+                </span>
+                <h3 className="mt-4 text-base font-semibold leading-snug text-foreground">{item.heading}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
+              </article>
+            ))}
+          </div>
+        </section>
+      </div>
 
       {/* How it works */}
-      <section className="mx-auto w-full max-w-5xl px-6 pb-16 sm:px-8">
+      <section className="mx-auto w-full max-w-5xl px-6 pb-20 pt-4 sm:px-8">
         <h2 className="text-2xl font-semibold tracking-tight text-foreground">{c.howTitle}</h2>
-        <div className="mt-7 grid gap-4 md:grid-cols-3">
-          {c.how.map((item) => (
-            <article key={item.heading} className="rounded-2xl border border-border bg-card/50 p-6 backdrop-blur">
-              <span className="inline-flex size-10 items-center justify-center rounded-xl bg-primary/12 text-primary">
+        <div className="mt-7 grid gap-5 md:grid-cols-3">
+          {c.how.map((item, i) => (
+            <article
+              key={item.heading}
+              className="relative rounded-2xl border border-border bg-gradient-to-b from-card/70 to-card/30 p-6 backdrop-blur"
+            >
+              <span className="absolute right-5 top-5 text-4xl font-semibold leading-none text-primary/15">
+                {i + 1}
+              </span>
+              <span className="inline-flex size-11 items-center justify-center rounded-xl bg-primary/12 text-primary ring-1 ring-primary/15">
                 <item.icon className="size-5" />
               </span>
-              <h3 className="mt-4 text-base font-semibold text-foreground">{item.heading}</h3>
+              <h3 className="mt-4 text-base font-semibold leading-snug text-foreground">{item.heading}</h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.body}</p>
             </article>
           ))}
