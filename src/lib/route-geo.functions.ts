@@ -42,7 +42,7 @@ export type RouteGeo = {
   samples: RouteSample[];
 };
 
-const UA = "AutoVere/1.0 (road trip cost planner; contact: kjmersland@gmail.com)";
+const UA = "AutoVere/1.0 (road trip cost planner; contact: kjell@autovere.com)";
 
 const cache = new Map<string, RouteGeo | null>();
 const inflight = new Map<string, Promise<RouteGeo | null>>();

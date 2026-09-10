@@ -158,7 +158,7 @@ export const NL_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Word onderdeel van het netwerk",
-      body: "Wij zitten in Kristiansand, Noorwegen, maar werken graag samen met partners waar dan ook. Beheer je een wagenpark, een reisbedrijf of een toldienst en wil je praten over integratie, gezamenlijke marketing of een datapartnerschap? Mail ons gerust op partners@autovere.com — we horen graag van je.",
+      body: "Wij zitten in Kristiansand, Noorwegen, maar werken graag samen met partners waar dan ook. Beheer je een wagenpark, een reisbedrijf of een toldienst en wil je praten over integratie, gezamenlijke marketing of een datapartnerschap? Mail ons gerust op kjell@autovere.com — we horen graag van je.",
     },
   ],
   note: DISCLAIMER,
@@ -201,7 +201,7 @@ export const NL_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contact",
-      body: "Privacyvragen: privacy@autovere.com — KM TECH LABS, Kristiansand, Noorwegen. Regionale kennisgevingen: Amerikaanse privacy staat beschreven op /us/legal, en Canadese PIPEDA- en Québec Wet 25-rechten staan op /ca/legal.",
+      body: "Privacyvragen: kjell@autovere.com — KM TECH LABS, Kristiansand, Noorwegen. Regionale kennisgevingen: Amerikaanse privacy staat beschreven op /us/legal, en Canadese PIPEDA- en Québec Wet 25-rechten staan op /ca/legal.",
     },
   ],
   note: DISCLAIMER,

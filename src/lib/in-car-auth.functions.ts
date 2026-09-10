@@ -31,7 +31,7 @@ import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
  */
 
 /** Owner account, plus any extra emails configured via IN_CAR_ADMIN_EMAIL (comma-separated). */
-const DEFAULT_ADMIN_EMAILS = ["kjmersland@gmail.com"];
+const DEFAULT_ADMIN_EMAILS = ["kjell@autovere.com"];
 
 function getAdminEmails(): string[] {
   const configured = (process.env["IN_CAR_ADMIN_EMAIL"] ?? "")

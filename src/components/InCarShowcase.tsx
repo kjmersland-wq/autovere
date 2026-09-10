@@ -718,7 +718,7 @@ function ContactSection() {
       });
       setSent(true);
     } catch {
-      toast.error("Couldn't send your request — please try again or email partners@autovere.com directly.");
+      toast.error("Couldn't send your request — please try again or email kjell@autovere.com directly.");
     } finally {
       setSending(false);
     }

@@ -382,7 +382,7 @@ export function homepageJsonLd() {
         url: BASE_URL,
         sameAs: ["https://twitter.com/autoverehq"],
         contactPoint: [
-          { "@type": "ContactPoint", email: "support@autovere.com", contactType: "customer support" },
+          { "@type": "ContactPoint", email: "kjell@autovere.com", contactType: "customer support" },
         ],
       },
       {
