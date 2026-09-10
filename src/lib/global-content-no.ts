@@ -143,8 +143,8 @@ export const NO_PARTNERS: InfoPageContent = {
     "Vi lenker alltid rett til de offisielle bomselskapene, og vi setter stor pris på å samarbeide med reiseliv, utleie og MC-miljøet i Europa, USA og Canada.",
   sections: [
     {
-      heading: "Offisielle bom- og vignettoperatører vi lenker til",
-      body: "Alle kjøp skjer på operatørens egen side. Vi er aldri videreselger.",
+      heading: "Offisielle bomselskaper og vignettutstedere vi lenker til",
+      body: "Alt kjøp skjer direkte hos operatøren selv — vi tar aldri et mellomlegg.",
       links: [
         { label: "ASFINAG — Østerrike", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Sveits", url: "https://via.admin.ch/" },
@@ -156,7 +156,7 @@ export const NO_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Hvem samarbeider med oss",
+      heading: "Disse samarbeider vi med",
       items: [
         "Utleieflåter for bobil og campingvogn som vil gi kundene sine ærlige og oversiktlige reisepriser",
         "MC-turoperatører og klubber som planlegger turer i Alpene og langs norske fjorder",

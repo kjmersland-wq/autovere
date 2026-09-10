@@ -173,8 +173,8 @@ export const FI_PARTNERS: InfoPageContent = {
     "Ohjaamme aina suoraan virallisten tietulli- ja tievinjettioperaattoreiden omille sivuille, ja teemme mielellämme yhteistyötä matkailu-, vuokraus- ja moottoripyöräalan yritysten kanssa ympäri Eurooppaa, Yhdysvaltoja ja Kanadaa.",
   sections: [
     {
-      heading: "Viralliset tietulli- ja vinjettioperaattorit, joihin linkitämme",
-      body: "Kaikki ostot tapahtuvat aina operaattorin omalla virallisella sivustolla. Emme koskaan toimi välikätenä emmekä peri jälleenmyyntilisiä.",
+      heading: "Viralliset tietulli- ja tievinjettioperaattorit, joihin ohjaamme",
+      body: "Kaikki maksut hoituvat suoraan operaattorin omalla virallisella sivulla — emme koskaan ota välistä.",
       links: [
         { label: "ASFINAG — Itävalta", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Sveitsi", url: "https://via.admin.ch/" },
@@ -186,7 +186,7 @@ export const FI_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Ketkä ovat kumppaneitamme",
+      heading: "Näiden kanssa teemme yhteistyötä",
       items: [
         "Matkailuautojen ja asuntovaunujen vuokraamot, jotka haluavat tarjota asiakkailleen selkeät ja rehelliset matkakustannukset.",
         "Moottoripyörämatkojen järjestäjät ja ajokerhot, jotka suunnittelevat reittejä Alpeille ja Norjan vuonoille.",

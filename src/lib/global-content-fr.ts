@@ -135,8 +135,8 @@ export const FR_PARTNERS: InfoPageContent = {
     "Nous renvoyons toujours vers les opérateurs officiels de péage et de vignette, et nous sommes heureux de collaborer avec des acteurs du tourisme, de la location et du monde de la moto, en Europe, aux États-Unis et au Canada.",
   sections: [
     {
-      heading: "Opérateurs officiels de péage et de vignette vers lesquels nous renvoyons",
-      body: "Chaque achat se fait sur le site de l'opérateur lui-même. Nous n'agissons jamais comme revendeur.",
+      heading: "Les opérateurs officiels de péage et de vignette vers qui nous vous orientons",
+      body: "Chaque paiement se fait directement sur le site de l'opérateur — nous ne prenons jamais de commission au passage.",
       links: [
         { label: "ASFINAG — Autriche", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Suisse", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const FR_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Qui s'associe avec nous",
+      heading: "Voici qui travaille avec nous",
       items: [
         "Loueurs de camping-cars et de caravanes qui veulent offrir à leurs clients des devis de voyage clairs et honnêtes",
         "Organisateurs de circuits moto et clubs qui préparent des itinéraires dans les Alpes ou le long des fjords norvégiens",

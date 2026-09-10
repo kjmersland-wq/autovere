@@ -135,8 +135,8 @@ export const DA_PARTNERS: InfoPageContent = {
     "Vi linker altid direkte til de officielle vejafgifts- og vignetudbydere, og vi er stolte af at samarbejde med rejse-, udlejnings- og motorcykelvirksomheder i hele Europa, USA og Canada.",
   sections: [
     {
-      heading: "Officielle afgifts- og vignetoperatører, vi linker til",
-      body: "Alle køb foregår på operatørens egen side. Vi optræder aldrig som forhandler.",
+      heading: "Officielle vejafgifts- og vignetudbydere, vi linker til",
+      body: "Alt køb foregår direkte hos udbyderen selv — vi lægger aldrig noget oveni.",
       links: [
         { label: "ASFINAG — Østrig", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Schweiz", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const DA_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Hvem samarbejder med os",
+      heading: "Det her er nogle af dem, vi samarbejder med",
       items: [
         "Udlejere af autocampere og campingvogne, der vil give deres kunder ærlige og gennemskuelige rejsepriser",
         "Motorcykel-turoperatører og klubber, der planlægger ture i Alperne og langs de norske fjorde",

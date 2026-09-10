@@ -135,8 +135,8 @@ export const NL_PARTNERS: InfoPageContent = {
     "We linken altijd rechtstreeks naar de officiële tol- en vignetexploitanten, en we werken graag samen met reis-, verhuur- en motorbedrijven in heel Europa, de VS en Canada.",
   sections: [
     {
-      heading: "Officiële tol- en vignetexploitanten waarnaar we linken",
-      body: "Elke aankoop vindt plaats op de eigen site van de exploitant. Wij treden nooit op als wederverkoper.",
+      heading: "Officiële tol- en vignetaanbieders waar we naar linken",
+      body: "Elke betaling verloopt rechtstreeks via de eigen site van de aanbieder — wij rekenen nooit iets extra's.",
       links: [
         { label: "ASFINAG — Oostenrijk", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Zwitserland", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const NL_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Wie er met ons samenwerkt",
+      heading: "Dit zijn onze samenwerkingspartners",
       items: [
         "Verhuurbedrijven van campers en caravans die hun klanten eerlijke, transparante reiskosten willen bieden",
         "Motortouroperators en clubs die tochten door de Alpen of langs Noorse fjorden plannen",

@@ -135,8 +135,8 @@ export const PT_PARTNERS: InfoPageContent = {
     "Ligamos sempre diretamente aos operadores oficiais de portagens e vinhetas, e gostamos de colaborar com empresas de viagens, aluguer e motociclismo em toda a Europa, nos Estados Unidos e no Canadá.",
   sections: [
     {
-      heading: "Operadores oficiais de portagens e vinhetas a que nos ligamos",
-      body: "Cada compra é feita diretamente no site do operador. Nunca atuamos como revendedores.",
+      heading: "Operadores oficiais de portagens e vinhetas para onde o encaminhamos",
+      body: "Cada pagamento é feito diretamente no site do operador — nunca acrescentamos nada à parte.",
       links: [
         { label: "ASFINAG — Áustria", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Suíça", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const PT_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Quem trabalha connosco",
+      heading: "Eis quem trabalha connosco",
       items: [
         "Empresas de aluguer de autocaravanas e caravanas que querem oferecer aos seus clientes orçamentos de viagem claros e honestos",
         "Operadores de circuitos de moto e clubes que planeiam rotas pelos Alpes ou pelos fiordes noruegueses",

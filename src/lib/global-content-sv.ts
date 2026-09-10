@@ -135,8 +135,8 @@ export const SV_PARTNERS: InfoPageContent = {
     "Vi länkar alltid direkt till de officiella avgifts- och vinjettoperatörerna, och vi är stolta över att samarbeta med rese-, uthyrnings- och motorcykelföretag i hela Europa, USA och Kanada.",
   sections: [
     {
-      heading: "Officiella avgifts- och vinjettoperatörer vi länkar till",
-      body: "Varje köp sker på operatörens egen webbplats. Vi agerar aldrig som återförsäljare.",
+      heading: "Officiella vägtulls- och vinjettoperatörer vi länkar till",
+      body: "Alla betalningar sker direkt hos operatören — vi lägger aldrig på något mellanled.",
       links: [
         { label: "ASFINAG — Österrike", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Schweiz", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const SV_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Vilka samarbetar med oss",
+      heading: "De här samarbetar vi med",
       items: [
         "Uthyrare av husbilar och husvagnar som vill ge sina kunder tydliga och ärliga resepriser",
         "Motorcykelresearrangörer och klubbar som planerar turer i Alperna och längs de norska fjordarna",

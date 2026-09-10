@@ -135,8 +135,8 @@ export const DE_PARTNERS: InfoPageContent = {
     "Wir verlinken grundsätzlich direkt zu den offiziellen Maut- und Vignettenbetreibern und arbeiten gerne mit Reise-, Vermietungs- und Motorradunternehmen in ganz Europa, den USA und Kanada zusammen.",
   sections: [
     {
-      heading: "Offizielle Maut- und Vignettenbetreiber, zu denen wir verlinken",
-      body: "Jeder Kauf erfolgt auf der eigenen Website des Betreibers. Wir treten niemals als Wiederverkäufer auf.",
+      heading: "Offizielle Maut- und Vignettenanbieter, mit denen wir verlinkt sind",
+      body: "Jeder Kauf läuft direkt über die eigene Website des Anbieters — wir schlagen nie etwas oben drauf.",
       links: [
         { label: "ASFINAG — Österreich", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Schweiz", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const DE_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Wer mit uns zusammenarbeitet",
+      heading: "Diese Partner arbeiten mit uns zusammen",
       items: [
         "Vermieter von Wohnmobilen und Wohnwagen, die ihren Kunden ehrliche, transparente Reisekosten bieten möchten",
         "Motorrad-Reiseveranstalter und Clubs, die Touren durch die Alpen oder entlang norwegischer Fjorde planen",

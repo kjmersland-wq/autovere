@@ -135,8 +135,8 @@ export const PL_PARTNERS: InfoPageContent = {
     "Zawsze kierujemy bezpośrednio do oficjalnych operatorów opłat drogowych i winiet, a przy okazji chętnie współpracujemy z firmami z branży turystycznej, wynajmu i motocyklowej w całej Europie, w USA i Kanadzie.",
   sections: [
     {
-      heading: "Oficjalni operatorzy opłat drogowych i winiet, do których linkujemy",
-      body: "Każdy zakup odbywa się na stronie samego operatora. Nigdy nie działamy jako pośrednik odsprzedaży.",
+      heading: "Oficjalni operatorzy opłat drogowych i winiet, do których kierujemy",
+      body: "Każda płatność odbywa się bezpośrednio na stronie operatora — nigdy niczego nie doliczamy od siebie.",
       links: [
         { label: "ASFINAG — Austria", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Szwajcaria", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const PL_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Kto z nami współpracuje",
+      heading: "Oto z kim współpracujemy",
       items: [
         "Wypożyczalnie kamperów i przyczep kempingowych, które chcą dać swoim klientom jasną i uczciwą wycenę podróży",
         "Organizatorzy wycieczek motocyklowych i kluby planujące trasy przez Alpy lub wzdłuż norweskich fiordów",

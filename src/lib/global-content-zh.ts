@@ -129,8 +129,8 @@ export const ZH_PARTNERS: InfoPageContent = {
   intro: "AutoVere 始终直接链接官方过路费与电子通行凭证运营方，也很乐意与欧洲、美国和加拿大各地的旅行、租车与骑行相关企业合作。",
   sections: [
     {
-      heading: "我们链接的官方过路费与电子通行凭证运营方",
-      body: "所有付款都在运营方自己的官网完成，AutoVere 从不代为收费。",
+      heading: "我们直接为你链接的官方过路费与电子通行凭证运营方",
+      body: "所有付款都直接在运营方官网完成，AutoVere 从不额外加价或代收费用。",
       links: [
         { label: "ASFINAG — 奥地利", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — 瑞士", url: "https://via.admin.ch/" },
@@ -142,7 +142,7 @@ export const ZH_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "与我们合作的伙伴",
+      heading: "目前与我们合作的伙伴",
       items: [
         "希望为客户提供清晰、透明报价的房车与拖挂式露营车租赁企业",
         "策划阿尔卑斯山或挪威峡湾路线的摩托车旅行社与骑行俱乐部",

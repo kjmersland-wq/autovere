@@ -135,8 +135,8 @@ export const IT_PARTNERS: InfoPageContent = {
     "Ci colleghiamo sempre direttamente ai gestori ufficiali dei pedaggi e delle vignette, e ci piace collaborare con aziende di viaggi, noleggio e motociclismo in tutta Europa, negli Stati Uniti e in Canada.",
   sections: [
     {
-      heading: "Gestori ufficiali di pedaggi e vignette a cui ci colleghiamo",
-      body: "Ogni acquisto avviene sul sito del gestore stesso. Non agiamo mai come rivenditori.",
+      heading: "I gestori ufficiali di pedaggi e vignette a cui ti indirizziamo",
+      body: "Ogni pagamento avviene direttamente sul sito del gestore — non aggiungiamo mai nulla di nostro.",
       links: [
         { label: "ASFINAG — Austria", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Svizzera", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const IT_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Chi collabora con noi",
+      heading: "Ecco chi collabora con noi",
       items: [
         "Noleggiatori di camper e caravan che vogliono offrire ai propri clienti preventivi di viaggio chiari e onesti",
         "Organizzatori di tour in moto e club che pianificano itinerari sulle Alpi o lungo i fiordi norvegesi",

@@ -135,8 +135,8 @@ export const ES_PARTNERS: InfoPageContent = {
     "Siempre enlazamos directamente con los operadores oficiales de peaje y viñetas, y nos encanta colaborar con empresas de viajes, alquiler y motociclismo en toda Europa, Estados Unidos y Canadá.",
   sections: [
     {
-      heading: "Operadores oficiales de peaje y viñetas con los que enlazamos",
-      body: "Cada compra se realiza en el propio sitio del operador. Nunca actuamos como revendedores.",
+      heading: "Operadores oficiales de peajes y viñetas a los que te dirigimos",
+      body: "Cada pago se hace directamente en la web del operador — nunca añadimos nada por nuestra parte.",
       links: [
         { label: "ASFINAG — Austria", url: "https://www.asfinag.at/" },
         { label: "via.admin.ch — Suiza", url: "https://via.admin.ch/" },
@@ -148,7 +148,7 @@ export const ES_PARTNERS: InfoPageContent = {
       ],
     },
     {
-      heading: "Quién colabora con nosotros",
+      heading: "Estas son las empresas que colaboran con nosotros",
       items: [
         "Empresas de alquiler de autocaravanas y caravanas que quieren ofrecer a sus clientes presupuestos de viaje claros y honestos",
         "Operadores de rutas en moto y clubes que organizan viajes por los Alpes o los fiordos noruegos",
