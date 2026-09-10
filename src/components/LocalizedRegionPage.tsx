@@ -1,6 +1,7 @@
 import { GaragePage } from "@/components/GaragePage";
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { InfoPage } from "@/components/InfoPage";
+import { PartnersPage } from "@/components/PartnersPage";
 import { PricingPage } from "@/components/PricingPage";
 import { ScenicGuide } from "@/components/ScenicGuide";
 import { TollsGuide } from "@/components/TollsGuide";
@@ -36,6 +37,18 @@ export function LocalizedRegionPage({
 
   // faq / how-it-works / partners / privacy / terms — localized info content.
   const info = page ? infoForLang(lang, page) : null;
+
+  if (page === "partners") {
+    return (
+      <PartnersPage
+        lang={lang}
+        localized={
+          info ? { eyebrow: info.eyebrow, title: info.title, intro: info.intro } : undefined
+        }
+      />
+    );
+  }
+
   if (info) {
     return (
       <InfoPage
