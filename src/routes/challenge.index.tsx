@@ -14,6 +14,7 @@ export const Route = createFileRoute("/challenge/")({
       { property: "og:title", content: CHALLENGE_EN.meta.title },
       { property: "og:description", content: CHALLENGE_EN.meta.description },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_GB" },
       { property: "og:url", content: URL },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: CHALLENGE_EN.meta.title },

@@ -52,7 +52,7 @@ const OG_IMAGE_BY_PREFIX: Record<LocalePrefix, string> = {
 
 /** Absolute URL of the share image for a language prefix (null = English root). */
 export function ogImageUrl(prefix: LocalePrefix | null | undefined): string {
-  return absUrl(prefix ? (OG_IMAGE_BY_PREFIX[prefix] ?? "/og-image.jpg") : "/og-image.jpg");
+  return absUrl(prefix ? (OG_IMAGE_BY_PREFIX[prefix] ?? "/og-image.jpg") : "/og/autovere-og-en.jpg");
 }
 
 /** Localized 1200x630 Challenge share images. `null`/unknown = English (GB) master. */
@@ -364,12 +364,82 @@ export function faqScript(sections: InfoSection[]) {
   return [{ type: "application/ld+json", children: JSON.stringify(faqJsonLd(sections)) }];
 }
 
+/** BreadcrumbList JSON-LD for a multi-level page. `items` runs Home → … → current page. */
+export function breadcrumbJsonLd(items: { name: string; url: string }[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((item, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: item.name,
+      item: item.url,
+    })),
+  };
+}
+
+export function breadcrumbScript(items: { name: string; url: string }[]) {
+  return [{ type: "application/ld+json", children: JSON.stringify(breadcrumbJsonLd(items)) }];
+}
+
+/** HowTo JSON-LD built from InfoPage sections (heading = step name, body = step text). */
+export function howToJsonLd(name: string, description: string, sections: InfoSection[]) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "HowTo",
+    name,
+    description,
+    step: sections
+      .filter((s) => s.heading && s.body)
+      .map((s) => ({
+        "@type": "HowToStep",
+        name: s.heading,
+        text: s.body,
+      })),
+  };
+}
+
+export function howToScript(name: string, description: string, sections: InfoSection[]) {
+  return [{ type: "application/ld+json", children: JSON.stringify(howToJsonLd(name, description, sections)) }];
+}
+
+/**
+ * Product + Offer JSON-LD for the pricing page, in the site's base EUR
+ * pricing (the same €0 / €4.99 / €19 figures already stated in the English
+ * pricing page's own meta description) — real, published prices, not
+ * invented ones. Locale pages show region-converted display prices without
+ * a machine-readable currency code attached, so this schema is only emitted
+ * on the EUR-baseline pricing pages to avoid asserting a currency/amount
+ * pairing that isn't the one actually charged in that market.
+ */
+export function pricingOfferJsonLd() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Product",
+    name: "AutoVere",
+    description: "Cross-border road trip cost planning: tolls, vignettes, fuel, EV charging and ferries.",
+    brand: { "@type": "Brand", name: "AutoVere" },
+    offers: [
+      { "@type": "Offer", name: "Free", price: "0", priceCurrency: "EUR", url: absUrl("/pricing") },
+      { "@type": "Offer", name: "AutoVere Pro", price: "4.99", priceCurrency: "EUR", url: absUrl("/pricing") },
+      { "@type": "Offer", name: "AutoVere Business / Fleet", price: "19", priceCurrency: "EUR", url: absUrl("/pricing") },
+    ],
+  };
+}
+
+export function pricingOfferScript() {
+  return [{ type: "application/ld+json", children: JSON.stringify(pricingOfferJsonLd()) }];
+}
+
 /**
  * Organization + WebSite + SoftwareApplication JSON-LD for the homepage only
  * (per Google's guidance, this belongs on the site's home/about context, not
  * duplicated on every page). Every property here is a real, verifiable fact
- * already used elsewhere in the app — no ratings, reviews, prices, download
- * counts or awards, since none of those are genuine.
+ * already used elsewhere in the app — no ratings, reviews, download counts
+ * or awards, since none of those are genuine. No WebSite `potentialAction`
+ * (SearchAction): AutoVere has no general keyword search box — the planner
+ * is a structured origin/destination/vehicle form, not a single query-string
+ * search, so a SearchAction markup would misrepresent how the site works.
  */
 export function homepageJsonLd() {
   return {
@@ -400,6 +470,11 @@ export function homepageJsonLd() {
         url: BASE_URL,
         applicationCategory: "TravelApplication",
         operatingSystem: "Web",
+        offers: [
+          { "@type": "Offer", name: "Free", price: "0", priceCurrency: "EUR" },
+          { "@type": "Offer", name: "AutoVere Pro", price: "4.99", priceCurrency: "EUR" },
+          { "@type": "Offer", name: "AutoVere Business / Fleet", price: "19", priceCurrency: "EUR" },
+        ],
       },
     ],
   };
@@ -442,6 +517,14 @@ export const MARKET_LANG: Record<LocalePrefix | "en" | "ca" | "cafr", string> = 
 export function ogLocaleFor(prefix: LocalePrefix | "en" | "ca" | "cafr"): string {
   return MARKET_LANG[prefix].replace("-", "_");
 }
+
+// Deliberately no `og:locale:alternate` helper: TanStack Router's head-tag
+// merger keys meta entries by `name ?? property` and keeps only the first
+// match per key (see @tanstack/react-router's headContentUtils.buildTagsFromMatches),
+// so a page can carry exactly one `og:locale` tag but never a repeated
+// `og:locale:alternate` list — only the last one added would survive,
+// which is worse than omitting it. hreflang (below) already covers
+// multilingual discovery correctly for every page.
 
 /** The 15 primary-market URL prefixes, in the same order across the site (matches CHALLENGE_LANGS). */
 export const PRIMARY_MARKET_PREFIXES = ["no", "se", "dk", "fi", "us", "ca", "de", "nl", "fr", "pl", "es", "it", "pt", "ja", "zh"] as const;

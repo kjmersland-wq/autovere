@@ -2,7 +2,8 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { ChallengeLanding } from "@/components/challenge/ChallengeLanding";
 import { challengeContent, isChallengeLang, type ChallengeLang } from "@/lib/challenge-content";
-import { challengeHreflangLinks, challengeOgImage, ogImageMeta } from "@/lib/seo";
+import { challengeHreflangLinks, challengeOgImage, ogImageMeta, ogLocaleFor } from "@/lib/seo";
+import type { LocalePrefix } from "@/lib/locales";
 
 export const Route = createFileRoute("/challenge/$lang")({
   beforeLoad: ({ params }) => {
@@ -19,6 +20,7 @@ export const Route = createFileRoute("/challenge/$lang")({
         { property: "og:title", content: c.meta.title },
         { property: "og:description", content: c.meta.description },
         { property: "og:type", content: "website" },
+        { property: "og:locale", content: ogLocaleFor(params.lang as LocalePrefix) },
         { property: "og:url", content: url },
         { name: "twitter:card", content: "summary_large_image" },
         { name: "twitter:title", content: c.meta.title },

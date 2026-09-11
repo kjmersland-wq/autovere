@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
-import { absUrl, appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/planner")({
   head: () => ({
@@ -18,6 +18,9 @@ export const Route = createFileRoute("/planner")({
         content: "One clear budget for tolls, fuel, charging and ferries — before you turn the key.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_GB" },
+      { property: "og:url", content: absUrl("/planner") },
+      ...ogImageMeta(ogImageUrl(null)),
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: absUrl("/planner") }, ...appPageHreflangLinks("planner")],

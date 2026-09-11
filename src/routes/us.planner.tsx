@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
-import { appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/us/planner")({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/us/planner")({
         content: "One honest budget for tolls, gas, charging and ferries — before you hit the on-ramp.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
+      { property: "og:url", content: absUrl("/us/planner") },
       { property: "og:image", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:type", content: "image/jpeg" },

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { GaragePage } from "@/components/GaragePage";
-import { absUrl, appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/garage")({
   head: () => ({
@@ -18,6 +18,9 @@ export const Route = createFileRoute("/garage")({
         content: "Your vehicles, toll tags and saved adventures in one calm place.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_GB" },
+      { property: "og:url", content: absUrl("/garage") },
+      ...ogImageMeta(ogImageUrl(null)),
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: absUrl("/garage") }, ...appPageHreflangLinks("garage")],

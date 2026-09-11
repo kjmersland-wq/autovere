@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
+import { absUrl, ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/europe")({
   head: () => ({
@@ -18,8 +19,12 @@ export const Route = createFileRoute("/europe")({
           "Metric distances, EUR and local currencies, vignette and motorway toll rules across 30+ European countries.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_GB" },
+      { property: "og:url", content: absUrl("/europe") },
+      ...ogImageMeta(ogImageUrl(null)),
       { name: "twitter:card", content: "summary_large_image" },
     ],
+    links: [{ rel: "canonical", href: absUrl("/europe") }],
   }),
   component: EuropePage,
 });

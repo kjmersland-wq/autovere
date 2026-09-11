@@ -13,6 +13,15 @@ interface SitemapEntry {
   alternates?: { hrefLang: string; href: string }[];
 }
 
+/**
+ * The app has no per-page content-edit timestamps to report, so every entry
+ * shares one <lastmod>: the date this sitemap response was generated. That's
+ * still an accurate, non-fabricated signal (confirms the URL was live and
+ * checked as of this date) — precise per-page dates would need an editorial
+ * "last changed" field, which doesn't exist in the CMS yet.
+ */
+const LASTMOD = new Date().toISOString().slice(0, 10);
+
 const APP_PAGES = [...LOCALE_PAGES];
 const LEGAL_PAGES = ["privacy", "terms"] as const;
 const REGIONAL_PAGES = [...APP_PAGES.filter((page) => !LEGAL_PAGES.includes(page as typeof LEGAL_PAGES[number])), "legal"];
@@ -72,6 +81,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           [
             `  <url>`,
             `    <loc>${BASE_URL}${e.path}</loc>`,
+            `    <lastmod>${LASTMOD}</lastmod>`,
             e.changefreq ? `    <changefreq>${e.changefreq}</changefreq>` : null,
             e.priority ? `    <priority>${e.priority}</priority>` : null,
             ...(e.alternates ?? []).map(

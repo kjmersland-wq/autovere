@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
+import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 const title = "Plany i cennik — Free, Pro i Flota | AutoVere";
 const description =
@@ -14,9 +15,15 @@ export const Route = createFileRoute("/pl/pricing")({
       { property: "og:title", content: title },
       { property: "og:description", content: description },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "pl_PL" },
+      { property: "og:url", content: absUrl("/pl/pricing") },
+      ...ogImageMeta(ogImageUrl("pl")),
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "canonical", href: "https://www.autovere.com/pl/pricing" }],
+    links: [
+      { rel: "canonical", href: absUrl("/pl/pricing") },
+      ...appPageHreflangLinks("pricing"),
+    ],
   }),
   component: () => <PricingPage />,
 });

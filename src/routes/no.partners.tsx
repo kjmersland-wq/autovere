@@ -19,6 +19,8 @@ export const Route = createFileRoute("/no/partners")({
           "En reell medlemsfordel for bil-, bobil-, MC- og reiseorganisasjoner i Europa, USA og Canada.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "nb_NO" },
+      { property: "og:url", content: absUrl("/no/partners") },
       { property: "og:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:type", content: "image/jpeg" },

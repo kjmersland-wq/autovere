@@ -20,6 +20,7 @@ export const Route = createFileRoute("/")({
           "Exact tolls, vignettes, fuel, charging and ferry costs across Europe for cars, motorhomes and motorcycles.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_GB" },
       { property: "og:url", content: "https://www.autovere.com/" },
       { property: "og:image", content: "https://www.autovere.com/og/autovere-og-en.jpg" },
       { property: "og:image:width", content: "1200" },

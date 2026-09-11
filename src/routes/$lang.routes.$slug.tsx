@@ -1,10 +1,10 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { SeoRoutePage } from "@/components/SeoRoutePage";
-import { corridorBySlug, corridorFaqJsonLd, corridorTripJsonLd } from "@/data/seo-corridors";
+import { SEO_CORRIDORS, corridorBySlug, corridorFaqJsonLd, corridorTripJsonLd } from "@/data/seo-corridors";
 import { seoRouteCopy } from "@/lib/seo-route-i18n";
 import { isLocalePrefix, LOCALE_ROUTES, type LocalePrefix } from "@/lib/locales";
-import { absUrl, corridorHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
+import { absUrl, breadcrumbScript, corridorHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/$lang/routes/$slug")({
   beforeLoad: ({ params }) => {
@@ -39,6 +39,10 @@ export const Route = createFileRoute("/$lang/routes/$slug")({
       scripts: [
         { type: "application/ld+json", children: JSON.stringify(corridorTripJsonLd(corridor)) },
         { type: "application/ld+json", children: JSON.stringify(corridorFaqJsonLd(faqs)) },
+        ...breadcrumbScript([
+          { name: "Home", url: absUrl(`/${params.lang}`) },
+          { name: `${corridor.origin.name} to ${corridor.destination.name}`, url },
+        ]),
       ],
     };
   },
@@ -50,5 +54,15 @@ function LangRoutePage() {
   const corridor = corridorBySlug(slug);
   if (!corridor) return null;
   const params = new URLSearchParams({ origin: corridor.origin.name, destination: corridor.destination.name });
-  return <SeoRoutePage corridor={corridor} plannerHref={`/${lang}/planner?${params.toString()}`} />;
+  const moreRoutes = SEO_CORRIDORS.filter((c) => c.slug !== slug)
+    .slice(0, 4)
+    .map((c) => ({ label: `${c.origin.name} → ${c.destination.name}`, href: `/${lang}/routes/${c.slug}` }));
+  return (
+    <SeoRoutePage
+      corridor={corridor}
+      plannerHref={`/${lang}/planner?${params.toString()}`}
+      homeHref={`/${lang}`}
+      moreRoutes={moreRoutes}
+    />
+  );
 }

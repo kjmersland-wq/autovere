@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { ScenicGuide } from "@/components/ScenicGuide";
-import { appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/us/scenic")({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/us/scenic")({
         content: "The passes and crossings worth planning your whole road trip around.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
+      { property: "og:url", content: absUrl("/us/scenic") },
       { property: "og:image", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:type", content: "image/jpeg" },

@@ -14,6 +14,8 @@ export const Route = createFileRoute("/no/terms")({
       { property: "og:title", content: content.meta.title },
       { property: "og:description", content: content.meta.description },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "nb_NO" },
+      { property: "og:url", content: absUrl("/no/terms") },
       { property: "og:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:type", content: "image/jpeg" },

@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { GaragePage } from "@/components/GaragePage";
-import { appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/us/garage")({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/us/garage")({
         content: "Your vehicles, toll tags and saved adventures in one calm place.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
+      { property: "og:url", content: absUrl("/us/garage") },
       { property: "og:image", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:type", content: "image/jpeg" },

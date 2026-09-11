@@ -20,6 +20,7 @@ export const Route = createFileRoute("/us/")({
           "Exact tolls, fuel, EV charging and ferry costs across the United States for cars, RVs and motorcycles.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
       { property: "og:url", content: "https://www.autovere.com/us" },
       { property: "og:image", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-us.jpg" },
