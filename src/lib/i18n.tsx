@@ -732,7 +732,7 @@ const NUMBER_RE = /\d+(?:[.,]\d+)*/g;
  * template (numbers swapped for `#`, e.g. "3 AutoPASS gantries" matches the
  * key "# AutoPASS gantries" and the numbers are put back in order).
  */
-function translateOne(dict: Record<string, string>, patterns: Patterns, value: string): string | undefined {
+export function translateOne(dict: Record<string, string>, patterns: Patterns, value: string): string | undefined {
   const direct = dict[value];
   if (direct) return direct;
   for (const [re, fn] of patterns) {
