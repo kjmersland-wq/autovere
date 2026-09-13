@@ -423,9 +423,11 @@ export type RouteSegments = {
  * Amounts are one-way, car-rate — the trip estimator applies vehicle and
  * route-variant factors on top.
  */
-export function buildRouteSegments(geo: RouteGeo): RouteSegments {
+export function buildRouteSegments(geo: RouteGeo, opts: RouteSegmentOptions = {}): RouteSegments {
   const perLabel = new Map<string, TollLine[]>();
   const order: string[] = [];
+  // Real gantry pricing for Norway when the NVDB dataset is available.
+  const norwayLines = geo.countries.some((c) => c.code === "NO") ? norwayGantryLines(geo, opts) : null;
 
   for (const country of geo.countries) {
     const share = geo.countries.length ? country.distanceKm : geo.distanceKm;
@@ -438,6 +440,18 @@ export function buildRouteSegments(geo: RouteGeo): RouteSegments {
         order.push(label);
       }
       const bucket = perLabel.get(label)!;
+      if (country.code === "NO" && norwayLines) {
+        if (bucket.length === 0) {
+          if (norwayLines.length) bucket.push(...norwayLines);
+          else
+            bucket.push({
+              place: "No AutoPASS gantry on this corridor",
+              detail: "Checked against Statens vegvesen's national gantry register — none of the tolled points lie on the routed road.",
+              amount: 0,
+            });
+        }
+        continue;
+      }
       if (rule.vignette && !bucket.some((l) => l.place === rule.vignette!.place)) {
         const v = rule.vignette;
         const vl: TollLine = { place: v.place, detail: v.detail, amount: v.amount, portal: v.portal, isVignette: true };
