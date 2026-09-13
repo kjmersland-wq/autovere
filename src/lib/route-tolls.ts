@@ -264,8 +264,8 @@ export const EU_RULES: Record<string, CountryRule> = {
   AT: {
     vignette: {
       place: "ASFINAG digital vignette",
-      detail: "10-day pass, valid nationwide",
-      amount: 12.4,
+      detail: "10-day digital vignette, 2026 tariff (EUR 12.80 car · EUR 5.10 motorcycle)",
+      amount: 12.8,
       badge: "Buy online",
       portal: { label: "ASFINAG", url: "https://shop.asfinag.at/" },
       motoFactor: 0.4,
@@ -293,8 +293,8 @@ export const EU_RULES: Record<string, CountryRule> = {
   CZ: {
     vignette: {
       place: "Czech e-známka",
-      detail: "10-day electronic vignette",
-      amount: 14.5,
+      detail: "10-day e-vignette, 2026 tariff (CZK 290 ≈ EUR 11.80)",
+      amount: 11.8,
       badge: "Buy online",
       portal: { label: "edalnice.cz", url: "https://edalnice.cz/en/" },
       motoFactor: 0,
