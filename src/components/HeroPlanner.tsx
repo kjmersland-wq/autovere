@@ -51,6 +51,7 @@ import {
 import { loadActiveVehicle, parseNumber } from "@/lib/garage";
 import { getRouteGeo, type RouteGeo } from "@/lib/route-geo.functions";
 import { getEnergyPrices, type EnergyPrices } from "@/lib/energy-prices.functions";
+import { getNorwayTollStations, type NoTollStation } from "@/lib/toll-data.functions";
 import { PlaceAutocomplete, type PlaceHit } from "@/components/PlaceAutocomplete";
 import { useLocale, useT, useTr } from "@/lib/i18n";
 import { startTour, tourCopy } from "@/lib/tour";
@@ -130,8 +131,42 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       bufferPct: active.bufferPct,
     });
     if (active.fuel === "ev") setFuel("electric");
+    else {
+      setFuel(active.fuel);
+      // Saved combustion vehicles carry their own L/100 km — pre-fill the fine-tune field.
+      const litres = parseNumber(active.consumption);
+      if (litres && litres > 0) setConsumption(String(imperial ? Math.round(235.215 / litres) : litres));
+      const tank = parseNumber(active.tank);
+      if (tank && tank > 0) setTankSize(String(imperial ? Math.round(tank * 0.264172) : tank));
+    }
     setVehicle(active.kind === "motorcycle" ? "motorcycle" : active.kind === "motorhome" ? "motorhome" : "car");
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  /** Norwegian AutoPASS gantries — fetched once, only when a route touches Norway. */
+  const [noTolls, setNoTolls] = useState<NoTollStation[] | null>(null);
+  const noTollsFn = useServerFn(getNorwayTollStations);
+  const ensureNorwayTolls = async (resolved: RouteGeo | null): Promise<NoTollStation[] | undefined> => {
+    if (!resolved?.countries.some((c) => c.code === "NO")) return noTolls ?? undefined;
+    if (noTolls) return noTolls;
+    try {
+      const data = await noTollsFn();
+      setNoTolls(data.stations);
+      return data.stations;
+    } catch {
+      return undefined;
+    }
+  };
+
+  /** The garage profile plus whatever the driver typed into the fine-tune fields. */
+  const effectiveProfile = (): VehicleProfile => {
+    const c = Number(consumption);
+    const valid = Number.isFinite(c) && c > 0;
+    if (fuel === "electric") {
+      return { ...(profile ?? {}), kwhPer100: valid ? (imperial ? c / 1.609344 : c) : profile?.kwhPer100 };
+    }
+    return { ...(profile ?? {}), litresPer100: valid ? (imperial ? 235.215 / c : c) : undefined };
+  };
 
   const viaCount = waypoints.filter((w) => w.value.trim()).length;
 
@@ -233,7 +268,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       }
     }
     setGeo(resolved);
-    const [evChargers, fuelStations] = await Promise.all([loadEvChargers(), loadFuelStations()]);
+    const [evChargers, fuelStations, gantries] = await Promise.all([loadEvChargers(), loadFuelStations(), ensureNorwayTolls(resolved)]);
     setTrip(
       estimateAllVariants(
         region,
@@ -247,9 +282,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
         effectiveDuration,
         resolved,
         prices,
-        profile,
+        effectiveProfile(),
         evChargers,
         fuelStations,
+        { noTolls: gantries },
       ),
     );
     const places = resolved
@@ -656,7 +692,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               }
               const next = [...stops, name];
               setStops(next);
-              const [evChargers, fuelStations] = await Promise.all([loadEvChargers(), loadFuelStations()]);
+              const [evChargers, fuelStations, gantries] = await Promise.all([loadEvChargers(), loadFuelStations(), ensureNorwayTolls(geo)]);
               setTrip(
                 estimateAllVariants(
                   region,
@@ -670,9 +706,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                   effectiveDuration,
                   geo,
                   prices,
-                  undefined,
+                  effectiveProfile(),
                   evChargers,
                   fuelStations,
+                  { noTolls: gantries },
                 ),
               );
               toast.success(t.results.stopAdded(name, next.length));
