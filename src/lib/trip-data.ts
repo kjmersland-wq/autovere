@@ -5,6 +5,7 @@ import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import { GENERATED_AFDC_EV_CHARGING_POIS } from "@/lib/ev-charging-pois-afdc.generated";
 import { GENERATED_EV_CHARGING_POIS } from "@/lib/ev-charging-pois.generated";
 import type { RouteGeo } from "@/lib/route-geo.functions";
+import type { NoTollStation } from "@/lib/toll-data.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { filterByCorridor, haversineKm } from "@/lib/corridor-filter";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
@@ -155,6 +156,7 @@ export type TripEstimate = {
   currency: string;
   units: "metric" | "imperial";
   distanceLabel: string;
+  /** Tolls + ferries + energy — nothing hidden. */
   budget: number;
   distanceKm: number;
   driveHours: number;
@@ -173,6 +175,12 @@ export type TripEstimate = {
   optimizer: EnergyOptimizer;
   /** Energy price per kWh expressed in the trip's base currency. */
   pricePerKwh?: number;
+  /** Country-by-country price sources behind `energyCost`. */
+  priceBasis?: PriceBasis | undefined;
+  /** Fuel vs EV for the same corridor and the same country prices. */
+  evWhatIf?: { fuelCost: number; evCost: number; litres: number; kwh: number } | undefined;
+  /** True when Norwegian tolls were priced from the real gantry register. */
+  gantryPriced?: boolean | undefined;
   vignette?: VignettePlan | null;
   tripType?: TripType;
   durationDays?: number;
@@ -225,10 +233,45 @@ export type VehicleProfile = {
   name?: string;
   kwhPer100?: number | undefined;
   batteryKwh?: number | undefined;
+  /** Combustion consumption in litres per 100 km (from the planner's fine-tune field or My Garage). */
+  litresPer100?: number | undefined;
   /** Preferred charging operator, or undefined / "All networks" for any. */
   network?: string | undefined;
   /** Reserve kept in the battery, in percent (e.g. 25 → plan at 75% usable). */
   bufferPct?: number | undefined;
+};
+
+/** Extra datasets the estimator can use when the caller has them. */
+export type EstimateExtras = {
+  /** Norwegian AutoPASS gantries (NVDB) for per-gantry pricing. */
+  noTolls?: NoTollStation[] | undefined;
+};
+
+/** Where every energy figure in the estimate comes from — shown next to the fuel card and in the PDF. */
+export type PriceBasis = {
+  mode: "ev" | "fuel";
+  /** Distance-weighted price per unit in the trip's base currency. */
+  perUnit: number;
+  unit: "L" | "kWh" | "gal";
+  /** Consumption used, e.g. "6.6 L/100 km" or "18 kWh/100 km". */
+  consumptionLabel: string;
+  /** True when the consumption came from the driver, not a class default. */
+  consumptionFromDriver: boolean;
+  countries: {
+    code: string;
+    flag: string;
+    country: string;
+    distanceKm: number;
+    /** Price per unit in the base currency. */
+    price: number;
+    /** Same price in the currency charged at the pump, e.g. "18.43 kr/L". */
+    local?: string | undefined;
+    source: string;
+    sourceUrl?: string | undefined;
+    asOf: string;
+    live: boolean;
+  }[];
+  fxNote?: string | undefined;
 };
 
 export function preferredNetwork(profile?: VehicleProfile | null) {
@@ -708,6 +751,7 @@ export function estimateTrip(
   profile: VehicleProfile | null = null,
   evChargers: EvCharger[] = [],
   fuelStations: FuelStation[] = [],
+  extras: EstimateExtras = {},
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -743,7 +787,16 @@ export function estimateTrip(
 
   // Real routed corridor → real countries. Only fall back to the sample
   // breakdown when no route geometry could be resolved.
-  let segments = geo ? buildRouteSegments(geo).segments : [];
+  const built = geo
+    ? buildRouteSegments(geo, {
+        noTolls: extras.noTolls,
+        nokPerEur: prices?.fx["NOK"],
+        electric: fuel === "electric",
+        baseCode: (prices?.currencyCode ?? defaults.currencyCode) as "EUR" | "USD" | "CAD",
+      })
+    : null;
+  const gantryPriced = Boolean(extras.noTolls?.length && geo?.countries.some((c) => c.code === "NO"));
+  let segments = built ? built.segments : [];
   if (!includeFerries) segments = segments.filter((s) => !s.country.includes("Ferries"));
 
   segments = segments.map((s) => {
@@ -761,28 +814,88 @@ export function estimateTrip(
     segments.filter((s) => !s.country.includes("Ferries")).reduce((sum, s) => sum + s.total, 0),
   );
 
-  const consumption =
+  const classConsumption =
     vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
-  const kwhPer100 =
-    fuel === "electric" && profile?.kwhPer100 && profile.kwhPer100 > 0
-      ? profile.kwhPer100
-      : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const driverLitres = profile?.litresPer100 && profile.litresPer100 > 0 && profile.litresPer100 < 60 ? profile.litresPer100 : null;
+  const consumption = fuel !== "electric" && driverLitres ? driverLitres : classConsumption;
+  const driverKwh = fuel === "electric" && profile?.kwhPer100 && profile.kwhPer100 > 0 ? profile.kwhPer100 : null;
+  const kwhPer100 = driverKwh ?? (vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18);
+
   // Live prices from the energy feed when available; the estimator never
-  // invents a number it cannot source.
+  // invents a number it cannot source. Region default first …
   const perLitreLive = prices
     ? prices.unit === "gallon"
-      ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.785
+      ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.78541
       : fuel === "diesel"
         ? prices.diesel
         : prices.petrol
     : null;
-  const pricePerL = perLitreLive ?? (fuel === "diesel" ? 1.72 : 1.89);
-  const pricePerKwh = prices?.kwh ?? 0.44;
+  const regionPerL = perLitreLive ?? (fuel === "diesel" ? 1.72 : 1.89);
+  const regionPerKwh = prices?.kwh ?? 0.44;
+
+  // … then country by country along the real corridor, weighted by distance.
+  const priceCountries: NonNullable<PriceBasis["countries"]> = [];
+  let weighted = 0;
+  let weightedL = 0;
+  let weightedKwh = 0;
+  let weightKm = 0;
+  for (const c of geo?.countries ?? []) {
+    const row = prices?.countries[c.code];
+    const price = row ? (fuel === "electric" ? row.kwh : fuel === "diesel" ? row.diesel : row.petrol) : fuel === "electric" ? regionPerKwh : regionPerL;
+    weighted += price * c.distanceKm;
+    weightedL += (row ? (fuel === "diesel" ? row.diesel : row.petrol) : regionPerL) * c.distanceKm;
+    weightedKwh += (row ? row.kwh : regionPerKwh) * c.distanceKm;
+    weightKm += c.distanceKm;
+    const localUnit = fuel === "electric" ? "kWh" : "L";
+    const localPrice = row && fuel !== "electric" ? (fuel === "diesel" ? row.local.diesel : row.local.petrol) : null;
+    priceCountries.push({
+      code: c.code,
+      flag: c.flag,
+      country: c.country,
+      distanceKm: Math.round(c.distanceKm * legMultiplier),
+      price,
+      local:
+        row && localPrice !== null && row.local.currency !== prices?.currencyCode
+          ? `${localPrice.toLocaleString("en-GB", { maximumFractionDigits: 2 })} ${row.local.currency}/${localUnit}`
+          : undefined,
+      source: row ? (fuel === "electric" ? "Indicative public DC fast-charging level" : row.source) : "Regional reference level",
+      sourceUrl: row && fuel !== "electric" ? row.sourceUrl : undefined,
+      asOf: row ? (fuel === "electric" ? "2026" : row.asOf) : "reference",
+      live: Boolean(row?.live) && fuel !== "electric",
+    });
+  }
+  const pricePerL = weightKm > 0 ? weightedL / weightKm : regionPerL;
+  const pricePerKwh = weightKm > 0 ? weightedKwh / weightKm : regionPerKwh;
+  void weighted;
 
   const energyCost =
     fuel === "electric"
       ? round2((distanceKm / 100) * kwhPer100 * pricePerKwh)
       : round2((distanceKm / 100) * consumption * pricePerL);
+
+  // Same corridor, same prices, other drivetrain — so the "what if" card
+  // can never disagree with the fuel card above it.
+  const evWhatIf = {
+    fuelCost: round2((distanceKm / 100) * consumption * pricePerL),
+    evCost: round2((distanceKm / 100) * kwhPer100 * pricePerKwh),
+    litres: Math.round((distanceKm / 100) * consumption),
+    kwh: Math.round((distanceKm / 100) * kwhPer100),
+  };
+
+  const priceBasis: PriceBasis = {
+    mode: fuel === "electric" ? "ev" : "fuel",
+    perUnit: fuel === "electric" ? pricePerKwh : imperial ? pricePerL * 3.78541 : pricePerL,
+    unit: fuel === "electric" ? "kWh" : imperial ? "gal" : "L",
+    consumptionLabel:
+      fuel === "electric"
+        ? `${kwhPer100} kWh/100 km`
+        : imperial
+          ? `${Math.round(235.215 / consumption)} mpg`
+          : `${consumption.toLocaleString("en-GB", { maximumFractionDigits: 1 })} L/100 km`,
+    consumptionFromDriver: fuel === "electric" ? Boolean(driverKwh) : Boolean(driverLitres),
+    countries: priceCountries,
+    fxNote: prices?.fxAsOf ? `ECB reference rates ${prices.fxAsOf}` : undefined,
+  };
 
   const litres = (distanceKm / 100) * consumption;
   const energyAmount =
@@ -837,7 +950,7 @@ export function estimateTrip(
     units: defaults.units,
     variant: activeVariant,
     distanceLabel,
-    budget: round2(tolls + ferries + energyCost + distanceKm * 0.04),
+    budget: round2(tolls + ferries + energyCost),
     distanceKm,
     driveHours: hours,
     driveTime,
@@ -850,6 +963,9 @@ export function estimateTrip(
     corridor,
     safety: safetyFor(region, vehicle, geo),
     pricePerKwh,
+    priceBasis,
+    evWhatIf,
+    gantryPriced,
     optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh, evChargers, fuelStations),
     vignette:
       activeVariant === "tollfree"
@@ -918,8 +1034,9 @@ export function estimateAllVariants(
   profile: VehicleProfile | null = null,
   evChargers: EvCharger[] = [],
   fuelStations: FuelStation[] = [],
+  extras: EstimateExtras = {},
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays, geo, prices, profile, evChargers, fuelStations] as const;
+  const args = [extraStops, tripType, durationDays, geo, prices, profile, evChargers, fuelStations, extras] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
@@ -963,6 +1080,16 @@ export function evComparison(
   isElectric: boolean;
 } {
   const round2 = (n: number) => Math.round(n * 100) / 100;
+  if (trip.evWhatIf) {
+    return {
+      fuelCost: trip.evWhatIf.fuelCost,
+      evCost: trip.evWhatIf.evCost,
+      saved: round2(trip.evWhatIf.fuelCost - trip.evWhatIf.evCost),
+      kwh: trip.evWhatIf.kwh,
+      litres: trip.evWhatIf.litres,
+      isElectric: fuel === "electric",
+    };
+  }
   const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
   const kwhPer100 =
     profile?.kwhPer100 && profile.kwhPer100 > 0

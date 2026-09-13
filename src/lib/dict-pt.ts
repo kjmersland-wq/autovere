@@ -69,7 +69,7 @@ export const PT_DICT: Record<string, unknown> = {
     displayCurrency: "Moeda de exibição",
     baseCurrencyNote: "Custos apresentados na moeda base local.",
     budget: "Orçamento total da viagem",
-    budgetHint: "Portagens, energia, ferries e custos de funcionamento",
+    budgetHint: "Portagens, ferries e energia – sem custos ocultos",
     distance: "Distância total",
     distanceHint: "Porta a porta, no percurso escolhido",
     driveTime: "Tempo de condução",

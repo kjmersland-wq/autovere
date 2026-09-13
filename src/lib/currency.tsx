@@ -1,6 +1,9 @@
 import { createContext, useCallback, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
 import { useRouterState } from "@tanstack/react-router";
 
+import { useServerFn } from "@tanstack/react-start";
+
+import { getFxRates } from "@/lib/energy-prices.functions";
 import { codeFromPath } from "@/lib/locales";
 import { regionFromPath } from "@/lib/trip-data";
 
@@ -35,22 +38,49 @@ export const CURRENCY_BY_CODE: Record<CurrencyCode, CurrencyDef> = Object.fromEn
   CURRENCIES.map((c) => [c.code, c]),
 ) as Record<CurrencyCode, CurrencyDef>;
 
-/** Indicative reference rates, expressed as units per 1 EUR. */
+/**
+ * Units per 1 EUR. Seeded with recent reference values so SSR renders sensible
+ * numbers, then overwritten with the ECB reference rates (via frankfurter.dev)
+ * as soon as the provider mounts in the browser.
+ */
 export const RATES: Record<CurrencyCode, number> = {
   EUR: 1,
-  USD: 1.08,
-  CAD: 1.47,
-  NOK: 11.6,
-  SEK: 11.3,
+  USD: 1.17,
+  CAD: 1.6,
+  NOK: 11.7,
+  SEK: 11.1,
   DKK: 7.46,
-  GBP: 0.85,
-  CHF: 0.94,
-  ISK: 150,
-  PLN: 4.31,
-  JPY: 163,
-  CNY: 7.85,
+  GBP: 0.86,
+  CHF: 0.93,
+  ISK: 143,
+  PLN: 4.27,
+  JPY: 172,
+  CNY: 8.2,
 };
 
+let liveRatesDate: string | null = null;
+
+/** Overwrite the reference table with live ECB rates. Returns true when anything changed. */
+export function applyLiveRates(rates: Record<string, number>, date: string): boolean {
+  let changed = false;
+  for (const code of Object.keys(RATES) as CurrencyCode[]) {
+    const r = rates[code];
+    if (typeof r === "number" && r > 0 && Math.abs(RATES[code] - r) > 1e-9) {
+      RATES[code] = r;
+      changed = true;
+    }
+  }
+  liveRatesDate = date;
+  return changed;
+}
+
+export function ratesUpdatedNote() {
+  return liveRatesDate
+    ? `ECB reference rates ${liveRatesDate} — for planning, not for settlement.`
+    : "Indicative reference rates — refreshed for planning, not for settlement.";
+}
+
+/** @deprecated use ratesUpdatedNote() — kept for existing imports. */
 export const RATES_UPDATED = "Indicative reference rates — refreshed for planning, not for settlement.";
 
 export function convert(value: number, from: CurrencyCode, to: CurrencyCode): number {
@@ -106,9 +136,12 @@ export function currencyFromSymbol(symbol: string): CurrencyCode {
 type Ctx = {
   currency: CurrencyCode;
   setCurrency: (c: CurrencyCode) => void;
+  /** Bumps whenever live rates arrive so memoised formatters recompute. */
+  rateVersion: number;
+  ratesDate: string | null;
 };
 
-const CurrencyContext = createContext<Ctx>({ currency: "EUR", setCurrency: () => {} });
+const CurrencyContext = createContext<Ctx>({ currency: "EUR", setCurrency: () => {}, rateVersion: 0, ratesDate: null });
 
 const STORAGE_KEY = "autovere.currency";
 
@@ -168,6 +201,25 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
   // locale routes doesn't remount this provider, so the effect below must re-run on every route
   // change or the currency stays stuck at whichever locale the session happened to start on.
   const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const [rateVersion, setRateVersion] = useState(0);
+  const [ratesDate, setRatesDate] = useState<string | null>(null);
+  const fxFn = useServerFn(getFxRates);
+
+  // Live ECB reference rates, once per session.
+  useEffect(() => {
+    let alive = true;
+    fxFn()
+      .then((fx) => {
+        if (!alive || !fx) return;
+        applyLiveRates(fx.rates, fx.date);
+        setRatesDate(fx.date);
+        setRateVersion((v) => v + 1);
+      })
+      .catch(() => undefined);
+    return () => {
+      alive = false;
+    };
+  }, [fxFn]);
 
   useEffect(() => {
     try {
@@ -211,7 +263,7 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  const value = useMemo(() => ({ currency, setCurrency }), [currency, setCurrency]);
+  const value = useMemo(() => ({ currency, setCurrency, rateVersion, ratesDate }), [currency, setCurrency, rateVersion, ratesDate]);
   return <CurrencyContext.Provider value={value}>{children}</CurrencyContext.Provider>;
 }
 
@@ -224,7 +276,7 @@ export function useCurrency() {
  * and the user's selected display currency.
  */
 export function useMoney(baseSymbol: string) {
-  const { currency } = useCurrency();
+  const { currency, rateVersion } = useCurrency();
   const base = currencyFromSymbol(baseSymbol);
 
   return useMemo(
@@ -240,8 +292,10 @@ export function useMoney(baseSymbol: string) {
         return { code: nat, text: formatCurrency(convert(value, base, nat), nat) };
       },
       rateNote: (from: CurrencyCode = base) => rateNote(from, currency),
+      ratesNote: ratesUpdatedNote(),
     }),
-    [base, currency],
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [base, currency, rateVersion],
   );
 }
 

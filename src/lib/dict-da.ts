@@ -66,7 +66,7 @@ export const DA_DICT: Record<string, unknown> = {
     displayCurrency: "Visningsvaluta",
     baseCurrencyNote: "Omkostninger vist i den lokale basisvaluta.",
     budget: "Samlet rejsebudget",
-    budgetHint: "Vejafgifter, energi, færger og driftsomkostninger",
+    budgetHint: "Vejafgifter, færger og energi – intet skjult",
     distance: "Samlet distance",
     distanceHint: "Fra dør til dør, din valgte rute",
     driveTime: "Køretid",

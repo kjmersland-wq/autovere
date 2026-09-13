@@ -66,7 +66,7 @@ export const SV_DICT: Record<string, unknown> = {
     displayCurrency: "Visningsvaluta",
     baseCurrencyNote: "Kostnaderna visas i den lokala basvalutan.",
     budget: "Total resebudget",
-    budgetHint: "Vägtullar, energi, färjor och driftskostnader",
+    budgetHint: "Vägtullar, färjor och energi – inget dolt",
     distance: "Total sträcka",
     distanceHint: "Dörr till dörr, din valda rutt",
     driveTime: "Körtid",
