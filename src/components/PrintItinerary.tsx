@@ -468,7 +468,7 @@ export function PrintItinerary({
             <h2 className="text-base font-semibold">🧾 {tr("Price basis")}</h2>
             <p className="mt-1 text-xs text-muted-foreground">
               {trip.priceBasis.consumptionLabel}
-              {trip.priceBasis.consumptionFromDriver ? ` (${tr("your vehicle")})` : ` (${tr("class average")})`} ·{" "}
+              {trip.priceBasis.consumptionFromDriver ? ` (${tr("your setting")})` : ` (${tr("class average")})`} ·{" "}
               {m.fmt(trip.priceBasis.perUnit, 2)}/{trip.priceBasis.unit} {tr("weighted along the route")}
               {trip.priceBasis.fxNote ? ` · ${trip.priceBasis.fxNote}` : ""}
             </p>

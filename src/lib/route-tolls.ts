@@ -126,7 +126,7 @@ export function norwayGantryLines(geo: RouteGeo, opts: RouteSegmentOptions): Tol
     const names = list.map((h) => `${h.station.name || "gantry"} ${rate(h.station).toLocaleString("nb-NO")} kr`).join(", ");
     lines.push({
       place: facility.replace(/^Bompengeanlegg\s+/i, ""),
-      detail: `${list.length} AutoPASS ${list.length === 1 ? "gantry" : "gantries"} · ${names} · standard rate, 20% less with an AutoPASS tag${opts.electric ? " · zero-emission rate" : ""}`,
+      detail: `${list.length} AutoPASS ${list.length === 1 ? "gantry" : "gantries"} · ${names} · standard rate, 20% less with an AutoPASS tag${opts.electric ? " · zero-emission rate (70% of standard where the scheme publishes no EV rate)" : ""}`,
       amount: round2(totalNok / perEur),
       badge: `${Math.round(totalNok).toLocaleString("nb-NO")} kr`,
       portal: { label: "AutoPASS", url: list[0]?.station.url ?? "https://www.autopass.no/en/" },

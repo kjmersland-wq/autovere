@@ -527,7 +527,7 @@ export function TripResults({
             🧾 {tr("Price basis")} ·{" "}
             <span className="font-normal text-foreground/75">
               {trip.priceBasis.consumptionLabel}
-              {trip.priceBasis.consumptionFromDriver ? ` (${tr("your vehicle")})` : ` (${tr("class average")})`} ·{" "}
+              {trip.priceBasis.consumptionFromDriver ? ` (${tr("your setting")})` : ` (${tr("class average")})`} ·{" "}
               {m.fmt(trip.priceBasis.perUnit, 2)}/{trip.priceBasis.unit} {tr("weighted along the route")}
             </span>
           </summary>
