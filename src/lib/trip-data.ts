@@ -225,10 +225,45 @@ export type VehicleProfile = {
   name?: string;
   kwhPer100?: number | undefined;
   batteryKwh?: number | undefined;
+  /** Combustion consumption in litres per 100 km (from the planner's fine-tune field or My Garage). */
+  litresPer100?: number | undefined;
   /** Preferred charging operator, or undefined / "All networks" for any. */
   network?: string | undefined;
   /** Reserve kept in the battery, in percent (e.g. 25 → plan at 75% usable). */
   bufferPct?: number | undefined;
+};
+
+/** Extra datasets the estimator can use when the caller has them. */
+export type EstimateExtras = {
+  /** Norwegian AutoPASS gantries (NVDB) for per-gantry pricing. */
+  noTolls?: NoTollStation[] | undefined;
+};
+
+/** Where every energy figure in the estimate comes from — shown next to the fuel card and in the PDF. */
+export type PriceBasis = {
+  mode: "ev" | "fuel";
+  /** Distance-weighted price per unit in the trip's base currency. */
+  perUnit: number;
+  unit: "L" | "kWh" | "gal";
+  /** Consumption used, e.g. "6.6 L/100 km" or "18 kWh/100 km". */
+  consumptionLabel: string;
+  /** True when the consumption came from the driver, not a class default. */
+  consumptionFromDriver: boolean;
+  countries: {
+    code: string;
+    flag: string;
+    country: string;
+    distanceKm: number;
+    /** Price per unit in the base currency. */
+    price: number;
+    /** Same price in the currency charged at the pump, e.g. "18.43 kr/L". */
+    local?: string | undefined;
+    source: string;
+    sourceUrl?: string | undefined;
+    asOf: string;
+    live: boolean;
+  }[];
+  fxNote?: string | undefined;
 };
 
 export function preferredNetwork(profile?: VehicleProfile | null) {
