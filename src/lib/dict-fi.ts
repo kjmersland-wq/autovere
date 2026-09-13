@@ -67,7 +67,7 @@ export const FI_DICT: Record<string, unknown> = {
     displayCurrency: "Näytettävä valuutta",
     baseCurrencyNote: "Kulut näytetään paikallisessa peruvaluutassa.",
     budget: "Matkan kokonaisbudjetti",
-    budgetHint: "Tullit, energia, lautat ja käyttökulut",
+    budgetHint: "Tullit, lautat ja energia – ei piilokuluja",
     distance: "Kokonaismatka",
     distanceHint: "Ovelta ovelle, valitsemasi reitti",
     driveTime: "Ajoaika",

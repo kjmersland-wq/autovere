@@ -66,7 +66,7 @@ export const NL_DICT: Record<string, unknown> = {
     displayCurrency: "Weergavevaluta",
     baseCurrencyNote: "Kosten weergegeven in de lokale basisvaluta.",
     budget: "Totaal reisbudget",
-    budgetHint: "Tol, energie, veerboten en gebruikskosten",
+    budgetHint: "Tol, veerboten en energie – niets verborgen",
     distance: "Totale afstand",
     distanceHint: "Van deur tot deur, gekozen route",
     driveTime: "Rijtijd",

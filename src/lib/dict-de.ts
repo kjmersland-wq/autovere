@@ -66,7 +66,7 @@ export const DE_DICT: Record<string, unknown> = {
     displayCurrency: "Anzeigewährung",
     baseCurrencyNote: "Kosten werden in der lokalen Basiswährung angezeigt.",
     budget: "Gesamtbudget der Reise",
-    budgetHint: "Maut, Energie, Fähren und Betriebskosten",
+    budgetHint: "Maut, Fähren und Energie – nichts versteckt",
     distance: "Gesamtstrecke",
     distanceHint: "Von Tür zu Tür, gewählte Route",
     driveTime: "Fahrzeit",

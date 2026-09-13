@@ -65,7 +65,7 @@ export const ZH_DICT: Record<string, unknown> = {
     displayCurrency: "显示货币",
     baseCurrencyNote: "费用以当地基准货币显示。",
     budget: "行程总预算",
-    budgetHint: "包含过路费、能源费和渡轮费等行驶成本",
+    budgetHint: "过路费、渡轮费和能源费——没有隐藏费用",
     distance: "总里程",
     distanceHint: "所选路线的点对点距离",
     driveTime: "驾驶时长",

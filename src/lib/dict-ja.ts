@@ -69,7 +69,7 @@ export const JA_DICT: Record<string, unknown> = {
     displayCurrency: "表示通貨",
     baseCurrencyNote: "現地の基準通貨で表示しています。",
     budget: "旅の総費用",
-    budgetHint: "通行料金、燃料・電気代、フェリー代を含む走行コスト",
+    budgetHint: "通行料金・フェリー代・燃料/充電費のみ。隠れた費用なし",
     distance: "総走行距離",
     distanceHint: "選択したルートでの、出発地から目的地までの距離",
     driveTime: "走行時間",
