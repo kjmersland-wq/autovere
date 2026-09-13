@@ -472,7 +472,78 @@ export function buildRouteSegments(geo: RouteGeo, opts: RouteSegmentOptions = {}
     return { country: label, total: round2(lines.reduce((s, l) => s + l.amount, 0)), lines };
   });
 
+  // Fixed links (bridges) the polyline physically crosses — priced from the
+  // operators' published 2026 tariffs. The label must contain "Ferries" so the
+  // estimator books it under ferries & passes, not tolls.
+  const links = fixedLinkLines(geo);
+  if (links.length) {
+    segments.push({ country: "⛴️ Bridges & Ferries", total: round2(links.reduce((s, l) => s + l.amount, 0)), lines: links });
+  }
+
   return { segments, codes: geo.countries.map((c) => c.code) };
+}
+
+const DKK_PER_EUR = 7.46; // ERM II central rate — DKK is pegged to the euro.
+
+type FixedLink = {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  radiusKm: number;
+  /** Standard one-way car price at the toll plaza, in local currency. */
+  car: number;
+  currency: "DKK";
+  detail: string;
+  motoFactor: number;
+  portal: { label: string; url: string };
+};
+
+const FIXED_LINKS: FixedLink[] = [
+  {
+    id: "storebaelt",
+    name: "Storebælt Bridge (Fyn ↔ Sjælland)",
+    lat: 55.3417,
+    lng: 11.0,
+    radiusKm: 1.5,
+    car: 235,
+    currency: "DKK",
+    detail: "2026 tariff, card/cash at the plaza · 205 DKK with Bizz or number-plate payment",
+    motoFactor: 0.53,
+    portal: { label: "storebaelt.dk", url: "https://storebaelt.dk/en/prices-and-discounts/private/" },
+  },
+  {
+    id: "oresund",
+    name: "Øresund Bridge (Copenhagen ↔ Malmö)",
+    lat: 55.5714,
+    lng: 12.8459,
+    radiusKm: 1.5,
+    car: 470,
+    currency: "DKK",
+    detail: "2026 standard price at the plaza · 182 DKK per crossing with ØresundGO, online tickets in between",
+    motoFactor: 0.5,
+    portal: { label: "oresundsbron.com", url: "https://www.oresundsbron.com/en/prices" },
+  },
+];
+
+function fixedLinkLines(geo: RouteGeo): TollLine[] {
+  const coords = geo.coords ?? [];
+  if (coords.length < 2) return [];
+  const lines: TollLine[] = [];
+  for (const link of FIXED_LINKS) {
+    const hit = projectOnCorridor(coords, link.lat, link.lng);
+    if (!hit || hit.distKm > link.radiusKm) continue;
+    const amount = round2(link.car / DKK_PER_EUR);
+    lines.push({
+      place: link.name,
+      detail: `${link.detail} · ${link.car} ${link.currency} · at ${Math.round(hit.atKm)} km`,
+      amount,
+      badge: "Fixed link",
+      portal: link.portal,
+      motoFactor: link.motoFactor,
+    });
+  }
+  return lines;
 }
 
 /** Human-readable border crossing list, e.g. "🇩🇰 Denmark → 🇩🇪 Germany near Flensburg". */
