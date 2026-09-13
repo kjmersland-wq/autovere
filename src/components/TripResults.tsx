@@ -33,7 +33,6 @@ import { LezMonitor, MotorhomeClearanceRadar, TransponderSelector } from "@/comp
 import { CurrencyPills } from "@/components/CurrencySelector";
 import { PrintItinerary } from "@/components/PrintItinerary";
 import {
-  RATES_UPDATED,
   convert,
   currencyFromSymbol,
   formatCurrency,
@@ -442,7 +441,7 @@ export function TripResults({
             {t.results.displayCurrency}
           </p>
           <p className="mt-1 text-xs text-foreground/70">
-            {m.rateNote() || t.results.baseCurrencyNote} · {RATES_UPDATED}
+            {m.rateNote() || t.results.baseCurrencyNote} · {m.ratesNote}
           </p>
         </div>
         <CurrencyPills />

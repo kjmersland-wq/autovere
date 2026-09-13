@@ -4,7 +4,7 @@ import { Download, MapPin, Printer, X } from "lucide-react";
 
 import autovereLogo from "@/assets/autovere-logo.png";
 import { Button } from "@/components/ui/button";
-import { CURRENCY_BY_CODE, RATES_UPDATED, rateNote, useCurrency, useMoney } from "@/lib/currency";
+import { CURRENCY_BY_CODE, rateNote, useCurrency, useMoney } from "@/lib/currency";
 import { CLEARANCE_ADVISORIES, detectLezZones, tagsForRegion } from "@/lib/compliance";
 import { corridorPolyline, pointAt } from "@/lib/corridor-map";
 import { buildTripGpx, downloadFile, tripFileBase } from "@/lib/trip-export";
@@ -456,7 +456,7 @@ export function PrintItinerary({
             </tbody>
           </table>
           <p className="mt-2 text-xs text-muted-foreground">
-            {tr("Local column shows the currency actually charged at the barrier.")} {RATES_UPDATED}
+            {tr("Local column shows the currency actually charged at the barrier.")} {m.ratesNote}
           </p>
         </section>
 
