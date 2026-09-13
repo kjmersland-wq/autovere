@@ -5,6 +5,7 @@ import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import { GENERATED_AFDC_EV_CHARGING_POIS } from "@/lib/ev-charging-pois-afdc.generated";
 import { GENERATED_EV_CHARGING_POIS } from "@/lib/ev-charging-pois.generated";
 import type { RouteGeo } from "@/lib/route-geo.functions";
+import type { NoTollStation } from "@/lib/toll-data.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { filterByCorridor, haversineKm } from "@/lib/corridor-filter";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
@@ -748,6 +749,7 @@ export function estimateTrip(
   profile: VehicleProfile | null = null,
   evChargers: EvCharger[] = [],
   fuelStations: FuelStation[] = [],
+  extras: EstimateExtras = {},
 ): TripEstimate {
   const activeVariant: RouteVariantKey = avoidTolls && variant === "fastest" ? "tollfree" : variant;
   const tuning = VARIANT_TUNING[activeVariant];
@@ -783,7 +785,16 @@ export function estimateTrip(
 
   // Real routed corridor → real countries. Only fall back to the sample
   // breakdown when no route geometry could be resolved.
-  let segments = geo ? buildRouteSegments(geo).segments : [];
+  const built = geo
+    ? buildRouteSegments(geo, {
+        noTolls: extras.noTolls,
+        nokPerEur: prices?.fx["NOK"],
+        electric: fuel === "electric",
+        baseCode: (prices?.currencyCode ?? defaults.currencyCode) as "EUR" | "USD" | "CAD",
+      })
+    : null;
+  const gantryPriced = Boolean(extras.noTolls?.length && geo?.countries.some((c) => c.code === "NO"));
+  let segments = built ? built.segments : [];
   if (!includeFerries) segments = segments.filter((s) => !s.country.includes("Ferries"));
 
   segments = segments.map((s) => {
@@ -923,7 +934,7 @@ export function estimateTrip(
     units: defaults.units,
     variant: activeVariant,
     distanceLabel,
-    budget: round2(tolls + ferries + energyCost + distanceKm * 0.04),
+    budget: round2(tolls + ferries + energyCost),
     distanceKm,
     driveHours: hours,
     driveTime,
@@ -936,6 +947,8 @@ export function estimateTrip(
     corridor,
     safety: safetyFor(region, vehicle, geo),
     pricePerKwh,
+    priceBasis,
+    gantryPriced,
     optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh, evChargers, fuelStations),
     vignette:
       activeVariant === "tollfree"
@@ -1004,8 +1017,9 @@ export function estimateAllVariants(
   profile: VehicleProfile | null = null,
   evChargers: EvCharger[] = [],
   fuelStations: FuelStation[] = [],
+  extras: EstimateExtras = {},
 ): Record<RouteVariantKey, TripEstimate> {
-  const args = [extraStops, tripType, durationDays, geo, prices, profile, evChargers, fuelStations] as const;
+  const args = [extraStops, tripType, durationDays, geo, prices, profile, evChargers, fuelStations, extras] as const;
   return {
     fastest: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "fastest", ...args),
     smart: estimateTrip(region, vehicle, fuel, false, includeFerries, scenic, "smart", ...args),
