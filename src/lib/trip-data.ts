@@ -834,11 +834,15 @@ export function estimateTrip(
   // … then country by country along the real corridor, weighted by distance.
   const priceCountries: NonNullable<PriceBasis["countries"]> = [];
   let weighted = 0;
+  let weightedL = 0;
+  let weightedKwh = 0;
   let weightKm = 0;
   for (const c of geo?.countries ?? []) {
     const row = prices?.countries[c.code];
     const price = row ? (fuel === "electric" ? row.kwh : fuel === "diesel" ? row.diesel : row.petrol) : fuel === "electric" ? regionPerKwh : regionPerL;
     weighted += price * c.distanceKm;
+    weightedL += (row ? (fuel === "diesel" ? row.diesel : row.petrol) : regionPerL) * c.distanceKm;
+    weightedKwh += (row ? row.kwh : regionPerKwh) * c.distanceKm;
     weightKm += c.distanceKm;
     const localUnit = fuel === "electric" ? "kWh" : "L";
     const localPrice = row && fuel !== "electric" ? (fuel === "diesel" ? row.local.diesel : row.local.petrol) : null;
@@ -858,13 +862,23 @@ export function estimateTrip(
       live: Boolean(row?.live) && fuel !== "electric",
     });
   }
-  const pricePerL = weightKm > 0 && fuel !== "electric" ? weighted / weightKm : regionPerL;
-  const pricePerKwh = weightKm > 0 && fuel === "electric" ? weighted / weightKm : regionPerKwh;
+  const pricePerL = weightKm > 0 ? weightedL / weightKm : regionPerL;
+  const pricePerKwh = weightKm > 0 ? weightedKwh / weightKm : regionPerKwh;
+  void weighted;
 
   const energyCost =
     fuel === "electric"
       ? round2((distanceKm / 100) * kwhPer100 * pricePerKwh)
       : round2((distanceKm / 100) * consumption * pricePerL);
+
+  // Same corridor, same prices, other drivetrain — so the "what if" card
+  // can never disagree with the fuel card above it.
+  const evWhatIf = {
+    fuelCost: round2((distanceKm / 100) * consumption * pricePerL),
+    evCost: round2((distanceKm / 100) * kwhPer100 * pricePerKwh),
+    litres: Math.round((distanceKm / 100) * consumption),
+    kwh: Math.round((distanceKm / 100) * kwhPer100),
+  };
 
   const priceBasis: PriceBasis = {
     mode: fuel === "electric" ? "ev" : "fuel",
