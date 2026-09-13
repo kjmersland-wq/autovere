@@ -1080,6 +1080,16 @@ export function evComparison(
   isElectric: boolean;
 } {
   const round2 = (n: number) => Math.round(n * 100) / 100;
+  if (trip.evWhatIf) {
+    return {
+      fuelCost: trip.evWhatIf.fuelCost,
+      evCost: trip.evWhatIf.evCost,
+      saved: round2(trip.evWhatIf.fuelCost - trip.evWhatIf.evCost),
+      kwh: trip.evWhatIf.kwh,
+      litres: trip.evWhatIf.litres,
+      isElectric: fuel === "electric",
+    };
+  }
   const consumption = vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
   const kwhPer100 =
     profile?.kwhPer100 && profile.kwhPer100 > 0
