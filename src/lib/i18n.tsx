@@ -725,16 +725,45 @@ const CONTENT_PATTERNS: Partial<Record<Locale, Patterns>> = {
   zh: ZH_PATTERNS,
 };
 
+const NUMBER_RE = /\d+(?:[.,]\d+)*/g;
+
+/**
+ * Translate a single data string: exact key → locale pattern → numeric
+ * template (numbers swapped for `#`, e.g. "3 AutoPASS gantries" matches the
+ * key "# AutoPASS gantries" and the numbers are put back in order).
+ */
+export function translateOne(dict: Record<string, string>, patterns: Patterns, value: string): string | undefined {
+  const direct = dict[value];
+  if (direct) return direct;
+  for (const [re, fn] of patterns) {
+    const m = value.match(re);
+    if (m) return fn(m);
+  }
+  const numbers = value.match(NUMBER_RE);
+  if (numbers && numbers.length > 0) {
+    const templated = dict[value.replace(NUMBER_RE, "#")];
+    if (templated) {
+      let i = 0;
+      return templated.replace(/#/g, () => numbers[i++] ?? "#");
+    }
+  }
+  return undefined;
+}
+
 export function useTr(): (value: string) => string {
   const locale = useLocale();
   return (value: string) => {
     const dict = CONTENT_DICTS[locale];
     if (!dict) return value;
-    const direct = dict[value];
-    if (direct) return direct;
-    for (const [re, fn] of CONTENT_PATTERNS[locale] ?? []) {
-      const m = value.match(re);
-      if (m) return fn(m);
+    const patterns = CONTENT_PATTERNS[locale] ?? [];
+    const whole = translateOne(dict, patterns, value);
+    if (whole !== undefined) return whole;
+    // Data lines are often composed of " · "-separated fragments; translate each part.
+    if (value.includes(" · ")) {
+      return value
+        .split(" · ")
+        .map((part) => translateOne(dict, patterns, part) ?? part)
+        .join(" · ");
     }
     return value;
   };

@@ -441,7 +441,7 @@ export function TripResults({
             {t.results.displayCurrency}
           </p>
           <p className="mt-1 text-xs text-foreground/70">
-            {m.rateNote() || t.results.baseCurrencyNote} · {m.ratesNote}
+            {m.rateNote() || t.results.baseCurrencyNote} · {tr(m.ratesNote)}
           </p>
         </div>
         <CurrencyPills />
@@ -546,10 +546,10 @@ export function TripResults({
                   <span className="block text-xs text-muted-foreground">
                     {c.sourceUrl ? (
                       <a href={c.sourceUrl} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
-                        {c.source}
+                        {tr(c.source)}
                       </a>
                     ) : (
-                      c.source
+                      tr(c.source)
                     )}{" "}
                     · {c.asOf} ·{" "}
                     <span className={c.live ? "text-primary" : ""}>{c.live ? tr("live") : tr("reference level")}</span>
@@ -560,9 +560,9 @@ export function TripResults({
           </ul>
           <p className="mt-3 text-xs text-muted-foreground">
             {trip.gantryPriced
-              ? tr("Norwegian tolls are priced gantry by gantry from Statens vegvesen's national register (standard rate, before AutoPASS tag discount). ")
+              ? `${tr("Norwegian tolls are priced gantry by gantry from Statens vegvesen's national register (standard rate, before AutoPASS tag discount).")} `
               : ""}
-            {trip.priceBasis.fxNote ? `${trip.priceBasis.fxNote}. ` : ""}
+            {trip.priceBasis.fxNote ? `${tr(trip.priceBasis.fxNote)}. ` : ""}
             {tr("Total = tolls + ferries + energy. No hidden running-cost allowance.")}
           </p>
         </details>
@@ -732,7 +732,7 @@ export function TripResults({
                         className="flex flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-background/40 px-4 py-3"
                       >
                         <span>
-                          <span className="block text-sm font-medium">{line.place}</span>
+                          <span className="block text-sm font-medium">{tr(line.place)}</span>
                           <span className="block text-xs text-muted-foreground">{tr(line.detail)}</span>
                         </span>
                         <span className="flex items-center gap-2">
