@@ -155,6 +155,7 @@ export type TripEstimate = {
   currency: string;
   units: "metric" | "imperial";
   distanceLabel: string;
+  /** Tolls + ferries + energy — nothing hidden. */
   budget: number;
   distanceKm: number;
   driveHours: number;
@@ -173,6 +174,10 @@ export type TripEstimate = {
   optimizer: EnergyOptimizer;
   /** Energy price per kWh expressed in the trip's base currency. */
   pricePerKwh?: number;
+  /** Country-by-country price sources behind `energyCost`. */
+  priceBasis?: PriceBasis | undefined;
+  /** True when Norwegian tolls were priced from the real gantry register. */
+  gantryPriced?: boolean | undefined;
   vignette?: VignettePlan | null;
   tripType?: TripType;
   durationDays?: number;
