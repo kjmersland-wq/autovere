@@ -801,28 +801,74 @@ export function estimateTrip(
     segments.filter((s) => !s.country.includes("Ferries")).reduce((sum, s) => sum + s.total, 0),
   );
 
-  const consumption =
+  const classConsumption =
     vehicle === "motorhome" ? 11.5 : vehicle === "motorcycle" ? 4.8 : 6.6;
-  const kwhPer100 =
-    fuel === "electric" && profile?.kwhPer100 && profile.kwhPer100 > 0
-      ? profile.kwhPer100
-      : vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18;
+  const driverLitres = profile?.litresPer100 && profile.litresPer100 > 0 && profile.litresPer100 < 60 ? profile.litresPer100 : null;
+  const consumption = fuel !== "electric" && driverLitres ? driverLitres : classConsumption;
+  const driverKwh = fuel === "electric" && profile?.kwhPer100 && profile.kwhPer100 > 0 ? profile.kwhPer100 : null;
+  const kwhPer100 = driverKwh ?? (vehicle === "motorhome" ? 28 : vehicle === "motorcycle" ? 12 : 18);
+
   // Live prices from the energy feed when available; the estimator never
-  // invents a number it cannot source.
+  // invents a number it cannot source. Region default first …
   const perLitreLive = prices
     ? prices.unit === "gallon"
-      ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.785
+      ? (fuel === "diesel" ? prices.diesel : prices.petrol) / 3.78541
       : fuel === "diesel"
         ? prices.diesel
         : prices.petrol
     : null;
-  const pricePerL = perLitreLive ?? (fuel === "diesel" ? 1.72 : 1.89);
-  const pricePerKwh = prices?.kwh ?? 0.44;
+  const regionPerL = perLitreLive ?? (fuel === "diesel" ? 1.72 : 1.89);
+  const regionPerKwh = prices?.kwh ?? 0.44;
+
+  // … then country by country along the real corridor, weighted by distance.
+  const priceCountries: NonNullable<PriceBasis["countries"]> = [];
+  let weighted = 0;
+  let weightKm = 0;
+  for (const c of geo?.countries ?? []) {
+    const row = prices?.countries[c.code];
+    const price = row ? (fuel === "electric" ? row.kwh : fuel === "diesel" ? row.diesel : row.petrol) : fuel === "electric" ? regionPerKwh : regionPerL;
+    weighted += price * c.distanceKm;
+    weightKm += c.distanceKm;
+    const localUnit = fuel === "electric" ? "kWh" : "L";
+    const localPrice = row && fuel !== "electric" ? (fuel === "diesel" ? row.local.diesel : row.local.petrol) : null;
+    priceCountries.push({
+      code: c.code,
+      flag: c.flag,
+      country: c.country,
+      distanceKm: Math.round(c.distanceKm * legMultiplier),
+      price,
+      local:
+        row && localPrice !== null && row.local.currency !== prices?.currencyCode
+          ? `${localPrice.toLocaleString("en-GB", { maximumFractionDigits: 2 })} ${row.local.currency}/${localUnit}`
+          : undefined,
+      source: row ? (fuel === "electric" ? "Indicative public DC fast-charging level" : row.source) : "Regional reference level",
+      sourceUrl: row && fuel !== "electric" ? row.sourceUrl : undefined,
+      asOf: row ? (fuel === "electric" ? "2026" : row.asOf) : "reference",
+      live: Boolean(row?.live) && fuel !== "electric",
+    });
+  }
+  const pricePerL = weightKm > 0 && fuel !== "electric" ? weighted / weightKm : regionPerL;
+  const pricePerKwh = weightKm > 0 && fuel === "electric" ? weighted / weightKm : regionPerKwh;
 
   const energyCost =
     fuel === "electric"
       ? round2((distanceKm / 100) * kwhPer100 * pricePerKwh)
       : round2((distanceKm / 100) * consumption * pricePerL);
+
+  const priceBasis: PriceBasis = {
+    mode: fuel === "electric" ? "ev" : "fuel",
+    perUnit: fuel === "electric" ? pricePerKwh : imperial ? pricePerL * 3.78541 : pricePerL,
+    unit: fuel === "electric" ? "kWh" : imperial ? "gal" : "L",
+    consumptionLabel:
+      fuel === "electric"
+        ? `${kwhPer100} kWh/100 km`
+        : imperial
+          ? `${Math.round(235.215 / consumption)} mpg`
+          : `${consumption.toLocaleString("en-GB", { maximumFractionDigits: 1 })} L/100 km`,
+    consumptionFromDriver: fuel === "electric" ? Boolean(driverKwh) : Boolean(driverLitres),
+    countries: priceCountries,
+    fxNote: prices?.fxAsOf ? `ECB reference rates ${prices.fxAsOf}` : undefined,
+  };
 
   const litres = (distanceKm / 100) * consumption;
   const energyAmount =
