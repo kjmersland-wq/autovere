@@ -403,6 +403,33 @@ export type Database = {
         }
         Relationships: []
       }
+      price_snapshots: {
+        Row: {
+          created_at: string
+          fetched_at: string
+          payload: Json
+          snapshot_key: string
+          source: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          fetched_at?: string
+          payload?: Json
+          snapshot_key: string
+          source?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          fetched_at?: string
+          payload?: Json
+          snapshot_key?: string
+          source?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       product_events: {
         Row: {
           city: string | null
