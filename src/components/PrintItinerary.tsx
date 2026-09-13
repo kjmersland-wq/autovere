@@ -439,7 +439,7 @@ export function PrintItinerary({
                 const nat = m.native(segment.total, segment.country);
                 return (
                   <tr key={segment.country}>
-                    <td className="font-semibold">{segment.country}</td>
+                    <td className="font-semibold">{tr(segment.country)}</td>
                     <td className="text-foreground/70">
                       {real?.distanceLabel ? `${real.distanceLabel} · ` : ""}
                       {segment.lines.map((l) => l.place).join(" · ") || tr("No barrier stops")}
