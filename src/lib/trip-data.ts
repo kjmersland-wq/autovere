@@ -177,6 +177,8 @@ export type TripEstimate = {
   pricePerKwh?: number;
   /** Country-by-country price sources behind `energyCost`. */
   priceBasis?: PriceBasis | undefined;
+  /** Fuel vs EV for the same corridor and the same country prices. */
+  evWhatIf?: { fuelCost: number; evCost: number; litres: number; kwh: number } | undefined;
   /** True when Norwegian tolls were priced from the real gantry register. */
   gantryPriced?: boolean | undefined;
   vignette?: VignettePlan | null;
