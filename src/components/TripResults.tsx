@@ -520,6 +520,54 @@ export function TripResults({
         <SubtotalBadge emoji="⛴️" label={t.results.ferriesBadge} value={m.fmt(trip.ferries)} />
       </div>
 
+      {/* Price basis — every number above traces back to a named open source. */}
+      {trip.priceBasis && trip.priceBasis.countries.length > 0 && (
+        <details className="glass-panel mt-4 rounded-2xl px-5 py-4 text-sm">
+          <summary className="cursor-pointer select-none font-semibold text-foreground">
+            🧾 {tr("Price basis")} ·{" "}
+            <span className="font-normal text-foreground/75">
+              {trip.priceBasis.consumptionLabel}
+              {trip.priceBasis.consumptionFromDriver ? ` (${tr("your vehicle")})` : ` (${tr("class average")})`} ·{" "}
+              {m.fmt(trip.priceBasis.perUnit, 2)}/{trip.priceBasis.unit} {tr("weighted along the route")}
+            </span>
+          </summary>
+          <ul className="mt-3 space-y-2">
+            {trip.priceBasis.countries.map((c) => (
+              <li key={c.code} className="flex flex-wrap items-baseline justify-between gap-x-4 gap-y-1 border-t border-border/40 pt-2 first:border-t-0 first:pt-0">
+                <span className="font-medium">
+                  {c.flag} {c.country}
+                  <span className="ml-2 text-xs text-muted-foreground">{c.distanceKm.toLocaleString("en-GB")} km</span>
+                </span>
+                <span className="text-right">
+                  <span className="font-semibold">
+                    {m.fmt(trip.priceBasis!.unit === "gal" ? c.price * 3.78541 : c.price, 2)}/{trip.priceBasis!.unit}
+                  </span>
+                  {c.local && <span className="ml-2 text-xs text-foreground/70">≈ {c.local}</span>}
+                  <span className="block text-xs text-muted-foreground">
+                    {c.sourceUrl ? (
+                      <a href={c.sourceUrl} target="_blank" rel="noreferrer" className="underline-offset-2 hover:underline">
+                        {c.source}
+                      </a>
+                    ) : (
+                      c.source
+                    )}{" "}
+                    · {c.asOf} ·{" "}
+                    <span className={c.live ? "text-primary" : ""}>{c.live ? tr("live") : tr("reference level")}</span>
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-3 text-xs text-muted-foreground">
+            {trip.gantryPriced
+              ? tr("Norwegian tolls are priced gantry by gantry from Statens vegvesen's national register (standard rate, before AutoPASS tag discount). ")
+              : ""}
+            {trip.priceBasis.fxNote ? `${trip.priceBasis.fxNote}. ` : ""}
+            {tr("Total = tolls + ferries + energy. No hidden running-cost allowance.")}
+          </p>
+        </details>
+      )}
+
       {(region === "us" || region === "ca") && (
         <EvSavingsBanner
           trip={trip}
