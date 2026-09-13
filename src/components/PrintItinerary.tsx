@@ -457,8 +457,51 @@ export function PrintItinerary({
           </table>
           <p className="mt-2 text-xs text-muted-foreground">
             {tr("Local column shows the currency actually charged at the barrier.")} {m.ratesNote}
+            {trip.gantryPriced
+              ? ` ${tr("Norwegian tolls are priced gantry by gantry from Statens vegvesen's national register (standard rate, before AutoPASS tag discount).")}`
+              : ""}
           </p>
         </section>
+
+        {trip.priceBasis && trip.priceBasis.countries.length > 0 && (
+          <section className="print-section mt-6">
+            <h2 className="text-base font-semibold">🧾 {tr("Price basis")}</h2>
+            <p className="mt-1 text-xs text-muted-foreground">
+              {trip.priceBasis.consumptionLabel}
+              {trip.priceBasis.consumptionFromDriver ? ` (${tr("your vehicle")})` : ` (${tr("class average")})`} ·{" "}
+              {m.fmt(trip.priceBasis.perUnit, 2)}/{trip.priceBasis.unit} {tr("weighted along the route")}
+              {trip.priceBasis.fxNote ? ` · ${trip.priceBasis.fxNote}` : ""}
+            </p>
+            <table className="print-table mt-2 w-full text-sm">
+              <thead>
+                <tr>
+                  <th className="text-left">{tr("Country")}</th>
+                  <th className="text-right">km</th>
+                  <th className="text-right">{tr("Price")}</th>
+                  <th className="text-left">{tr("Source")}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {trip.priceBasis.countries.map((c) => (
+                  <tr key={c.code}>
+                    <td>
+                      {c.flag} {c.country}
+                    </td>
+                    <td className="text-right">{c.distanceKm.toLocaleString("en-GB")}</td>
+                    <td className="text-right">
+                      {m.fmt(trip.priceBasis!.unit === "gal" ? c.price * 3.78541 : c.price, 2)}/{trip.priceBasis!.unit}
+                      {c.local ? ` (≈ ${c.local})` : ""}
+                    </td>
+                    <td className="text-xs">
+                      {c.source} · {c.asOf} · {c.live ? tr("live") : tr("reference level")}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="mt-2 text-xs text-muted-foreground">{tr("Total = tolls + ferries + energy. No hidden running-cost allowance.")}</p>
+          </section>
+        )}
 
         <section className="print-block mt-6">
           <h2 className="print-h2">⚠️ {tr("Vignette & toll pass checklist")}</h2>
