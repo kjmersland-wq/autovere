@@ -13,6 +13,8 @@
  * instances agree, and the last good snapshot is served when a source is down.
  */
 
+import type { NoTollStation } from "@/lib/toll-data.functions";
+
 const UA = "AutoVere/1.0 (road trip cost planner; contact: kjell@autovere.com)";
 const HOUR = 60 * 60 * 1000;
 
@@ -330,23 +332,6 @@ export function loadCanadaStatcan() {
 // ---------------------------------------------------------------------------
 // Norwegian toll gantries (NVDB object type 45)
 // ---------------------------------------------------------------------------
-
-export type NoTollStation = {
-  id: number;
-  name: string;
-  facility: string;
-  lat: number;
-  lng: number;
-  /** Standard rate, small vehicle (≤ 3.5 t), NOK, without tag discount. */
-  car: number;
-  carRush?: number;
-  /** Explicit zero-emission rate when the scheme publishes one. */
-  ev?: number;
-  heavy?: number;
-  direction: "both" | "one";
-  timeRuleMin?: number;
-  url?: string;
-};
 
 export type NoTollSnapshot = { asOf: string; source: string; stations: NoTollStation[] };
 
