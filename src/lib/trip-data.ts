@@ -964,6 +964,7 @@ export function estimateTrip(
     safety: safetyFor(region, vehicle, geo),
     pricePerKwh,
     priceBasis,
+    evWhatIf,
     gantryPriced,
     optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh, evChargers, fuelStations),
     vignette:
