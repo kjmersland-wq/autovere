@@ -456,7 +456,7 @@ export function PrintItinerary({
             </tbody>
           </table>
           <p className="mt-2 text-xs text-muted-foreground">
-            {tr("Local column shows the currency actually charged at the barrier.")} {m.ratesNote}
+            {tr("Local column shows the currency actually charged at the barrier.")} {tr(m.ratesNote)}
             {trip.gantryPriced
               ? ` ${tr("Norwegian tolls are priced gantry by gantry from Statens vegvesen's national register (standard rate, before AutoPASS tag discount).")}`
               : ""}
@@ -470,7 +470,7 @@ export function PrintItinerary({
               {trip.priceBasis.consumptionLabel}
               {trip.priceBasis.consumptionFromDriver ? ` (${tr("your setting")})` : ` (${tr("class average")})`} ·{" "}
               {m.fmt(trip.priceBasis.perUnit, 2)}/{trip.priceBasis.unit} {tr("weighted along the route")}
-              {trip.priceBasis.fxNote ? ` · ${trip.priceBasis.fxNote}` : ""}
+              {trip.priceBasis.fxNote ? ` · ${tr(trip.priceBasis.fxNote)}` : ""}
             </p>
             <table className="print-table mt-2 w-full text-sm">
               <thead>
@@ -493,7 +493,7 @@ export function PrintItinerary({
                       {c.local ? ` (≈ ${c.local})` : ""}
                     </td>
                     <td className="text-xs">
-                      {c.source} · {c.asOf} · {c.live ? tr("live") : tr("reference level")}
+                      {tr(c.source)} · {c.asOf} · {c.live ? tr("live") : tr("reference level")}
                     </td>
                   </tr>
                 ))}
@@ -519,7 +519,7 @@ export function PrintItinerary({
             ))}
             {portals.map(({ country, line }) => (
               <li key={`${country}-${line.place}`} className="print-block rounded-lg border border-border px-3 py-2">
-                <span className="font-semibold">☐ {line.place}</span> — {line.detail}
+                <span className="font-semibold">☐ {tr(line.place)}</span> — {tr(line.detail)}
                 {line.portal && (
                   <span className="block text-xs text-muted-foreground">
                     {tr("Official portal")}: {line.portal.label} —{" "}
