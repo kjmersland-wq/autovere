@@ -26,6 +26,12 @@ const APP_PAGES = [...LOCALE_PAGES];
 const LEGAL_PAGES = ["privacy", "terms"] as const;
 const REGIONAL_PAGES = [...APP_PAGES.filter((page) => !LEGAL_PAGES.includes(page as typeof LEGAL_PAGES[number])), "legal"];
 
+/**
+ * Core markets for pSEO corridor pages in the sitemap (see the loop below for
+ * why the other 10 language trees are intentionally left out for now).
+ */
+const SITEMAP_CORRIDOR_CORE_MARKETS = new Set(["no", "se", "dk", "de"]);
+
 export const Route = createFileRoute("/sitemap.xml")({
   server: {
     handlers: {
@@ -63,8 +69,14 @@ export const Route = createFileRoute("/sitemap.xml")({
           }
         }
 
-        // pSEO corridor route pages — English root + every one of the 14
-        // language-prefixed trees (including /us) for each of the 15 corridors.
+        // pSEO corridor route pages — English root + the core-market language
+        // trees for each of the 15 corridors. The other 10 language trees stay
+        // live and fully linked in-app (via /scenic and cross-links) but are
+        // deliberately left out of the sitemap for now: submitting all 15
+        // language variants of all 15 corridors at once (225 near-duplicate
+        // URLs) outruns this domain's current crawl budget/authority, which is
+        // what was driving most of the "Discovered/Crawled - not indexed"
+        // Search Console backlog. Revisit once the core markets are indexed.
         for (const corridor of SEO_CORRIDORS) {
           entries.push({
             path: `/routes/${corridor.slug}`,
@@ -73,6 +85,7 @@ export const Route = createFileRoute("/sitemap.xml")({
             alternates: corridorHreflangLinks(corridor.slug),
           });
           for (const locale of LOCALE_ROUTES) {
+            if (!SITEMAP_CORRIDOR_CORE_MARKETS.has(locale.prefix)) continue;
             entries.push({ path: `/${locale.prefix}/routes/${corridor.slug}`, changefreq: "monthly", priority: "0.6" });
           }
         }

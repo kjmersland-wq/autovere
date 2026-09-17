@@ -47,7 +47,7 @@ export const Route = createFileRoute("/routes/$slug")({
 function RoutePage() {
   const { slug } = Route.useParams();
   const corridor = corridorBySlug(slug);
-  if (!corridor) return null;
+  if (!corridor) throw notFound();
   const params = new URLSearchParams({ origin: corridor.origin.name, destination: corridor.destination.name });
   const moreRoutes = SEO_CORRIDORS.filter((c) => c.slug !== slug)
     .slice(0, 4)
