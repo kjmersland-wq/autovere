@@ -1,0 +1,39 @@
+# AutoVere
+
+> AutoVere prices a road trip before you drive it: tolls, vignettes, ferries, fuel and EV charging for a specific route, in one indicative total. Google Maps shows the road; AutoVere prices it. Covers 30+ European countries, the United States and Canada, for cars, motorhomes/RVs and motorcycles. A product by KM TECH LABS (Norway).
+
+## What it does
+
+- Routes the trip (OpenStreetMap / OSRM), finds every country and border crossed, and prices each part with that country's own rules.
+- Compares three variants: fastest, toll-optimised "Smart Bypass" and 100% toll-free.
+- Vehicle class matters: motorhome and motorcycle rates, EV vs petrol/diesel, the driver's own consumption.
+- Links to the official vignette and toll portals (e.g. ASFINAG, via.admin.ch, AutoPASS). AutoVere never resells vignettes.
+- All figures are indicative planning estimates, not quotes. Drivers should confirm with the official operator.
+
+## Data sources
+
+- Norwegian tolls: Statens vegvesen NVDB toll-station register, matched gantry by gantry to the route
+- Fuel prices: EU Weekly Oil Bulletin, Statistics Norway (SSB), US EIA, Statistics Canada
+- Currency: European Central Bank reference rates
+- EV chargers (US): AFDC / NREL station data
+- Routing and geocoding: OSRM, Photon, Nominatim (OpenStreetMap)
+
+## Key pages
+
+- [Road trip planner (Europe)](https://www.autovere.com/): enter start and destination and get the full cost breakdown
+- [Tolls & vignettes](https://www.autovere.com/tolls): country-by-country rules and prices
+- [Scenic passes & ferries](https://www.autovere.com/scenic)
+- [How it works](https://www.autovere.com/how-it-works)
+- [FAQ](https://www.autovere.com/faq): accuracy, official prices, comparison with Google Maps
+- [Pricing](https://www.autovere.com/pricing): Free, Trip Pass (14 days, one-time), Pro, Business/Fleet
+- [USA planner](https://www.autovere.com/us) · [Canada planner](https://www.autovere.com/ca)
+- [Norsk](https://www.autovere.com/no) · [Svenska](https://www.autovere.com/se) · [Dansk](https://www.autovere.com/dk) · [Deutsch](https://www.autovere.com/de)
+- [Popular routes](https://www.autovere.com/sitemap.xml): cost pages for common corridors, e.g. Oslo–Bergen and Munich–Lake Garda
+
+## Languages
+
+English, Norwegian, Swedish, Danish, Finnish, German, Dutch, French, Polish, Spanish, Italian, Portuguese, Japanese, Simplified Chinese; US English for the United States.
+
+## Contact
+
+kjell@autovere.com
