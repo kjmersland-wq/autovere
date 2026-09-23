@@ -20,6 +20,7 @@ export const Route = createFileRoute("/no/")({
           "Bompenger, vignetter, drivstoff, lading og ferjer – nøyaktig beregnet for din rute gjennom Europa.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "nb_NO" },
       { property: "og:url", content: "https://www.autovere.com/no" },
       { property: "og:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-no.jpg" },

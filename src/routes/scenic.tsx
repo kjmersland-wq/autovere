@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { ScenicGuide } from "@/components/ScenicGuide";
-import { absUrl, appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/scenic")({
   head: () => ({
@@ -18,6 +18,9 @@ export const Route = createFileRoute("/scenic")({
         content: "The passes and crossings worth planning your whole trip around.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_GB" },
+      { property: "og:url", content: absUrl("/scenic") },
+      ...ogImageMeta(ogImageUrl(null)),
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: absUrl("/scenic") }, ...appPageHreflangLinks("scenic")],

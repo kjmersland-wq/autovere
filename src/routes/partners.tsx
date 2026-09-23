@@ -20,6 +20,7 @@ export const Route = createFileRoute("/partners")({
       },
       { property: "og:type", content: "website" },
       { property: "og:locale", content: "en_GB" },
+      { property: "og:url", content: absUrl("/partners") },
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: absUrl("/partners") }, ...appPageHreflangLinks("partners")],

@@ -14,6 +14,7 @@ export const Route = createFileRoute("/ca/partners")({
       { property: "og:title", content: content.meta.title },
       { property: "og:description", content: content.meta.description },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_CA" },
       { property: "og:url", content: "https://www.autovere.com/ca/partners" },
       { name: "twitter:card", content: "summary_large_image" },
       { property: "og:image", content: "https://www.autovere.com/og/autovere-og-ca.jpg" },

@@ -18,6 +18,8 @@ export const Route = createFileRoute("/no/tolls")({
         content: "Vit hvilken vignett eller brikke du trenger — før du er ved grensen.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "nb_NO" },
+      { property: "og:url", content: absUrl("/no/tolls") },
       { property: "og:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:type", content: "image/jpeg" },

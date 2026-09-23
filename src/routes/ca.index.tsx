@@ -20,6 +20,7 @@ export const Route = createFileRoute("/ca/")({
           "Exact tolls, fuel, EV charging and ferry costs across Canada for cars, RVs and motorcycles.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_CA" },
       { property: "og:url", content: "https://www.autovere.com/ca" },
       { property: "og:image", content: "https://www.autovere.com/og/autovere-og-ca.jpg" },
       { property: "og:image:width", content: "1200" },

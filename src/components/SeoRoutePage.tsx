@@ -1,5 +1,13 @@
 import { Bike, Car, Caravan, ExternalLink, Ship, Zap } from "lucide-react";
 
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { SiteHeader } from "@/components/SiteHeader";
 import { useLocale, useT } from "@/lib/i18n";
 import { seoRouteCopy } from "@/lib/seo-route-i18n";
@@ -19,11 +27,22 @@ const VEHICLE_ICON: Record<VehicleClass, typeof Car> = {
  * organic search intent, then hands the visitor off to the real planner
  * (pre-filled via ?origin=&destination=) for an exact, routed number.
  */
-export function SeoRoutePage({ corridor, plannerHref }: { corridor: SEOCorridor; plannerHref: string }) {
+export function SeoRoutePage({
+  corridor,
+  plannerHref,
+  homeHref,
+  moreRoutes,
+}: {
+  corridor: SEOCorridor;
+  plannerHref: string;
+  homeHref: string;
+  moreRoutes: { label: string; href: string }[];
+}) {
   const locale = useLocale();
   const t = useT();
   const copy = seoRouteCopy(locale);
   const year = new Date().getFullYear();
+  const corridorTitle = `${corridor.origin.name} → ${corridor.destination.name}`;
 
   const vehicleLabel: Record<VehicleClass, string> = {
     car: t.hero.vehicles.car,
@@ -36,7 +55,18 @@ export function SeoRoutePage({ corridor, plannerHref }: { corridor: SEOCorridor;
     <main className="min-h-screen bg-[hsl(var(--background))]">
       <SiteHeader />
       <div className="mx-auto max-w-4xl px-6 pb-24 pt-12">
-        <p className="text-xs uppercase tracking-[0.22em] text-amber-300/90">{copy.eyebrow}</p>
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink href={homeHref}>{copy.homeLabel}</BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbPage>{corridorTitle}</BreadcrumbPage>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <p className="mt-4 text-xs uppercase tracking-[0.22em] text-amber-300/90">{copy.eyebrow}</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
           {copy.pageTitle(corridor.origin.name, corridor.destination.name, year)}
         </h1>
@@ -158,6 +188,23 @@ export function SeoRoutePage({ corridor, plannerHref }: { corridor: SEOCorridor;
             ))}
           </div>
         </section>
+
+        {moreRoutes.length > 0 && (
+          <section className="mt-12">
+            <h2 className="text-lg font-semibold text-foreground">{copy.moreRoutesTitle}</h2>
+            <div className="mt-4 flex flex-wrap gap-2">
+              {moreRoutes.map((r) => (
+                <a
+                  key={r.href}
+                  href={r.href}
+                  className="rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-sm text-foreground/85 transition-colors hover:bg-white/[0.08]"
+                >
+                  {r.label}
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
       </div>
     </main>
   );

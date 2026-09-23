@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
-import { appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/ca/pricing")({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/ca/pricing")({
         content: "Free Canadian toll and fuel intelligence, Pro for serious travellers, Fleet for teams.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_CA" },
+      { property: "og:url", content: absUrl("/ca/pricing") },
       { property: "og:image", content: "https://www.autovere.com/og/autovere-og-ca.jpg" },
       { property: "og:image:width", content: "1200" },
       { property: "og:image:height", content: "630" },

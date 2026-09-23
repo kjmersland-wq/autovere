@@ -3,6 +3,9 @@ import { useRouterState } from "@tanstack/react-router";
 import { PoiLinks } from "@/components/PoiLinks";
 import { SiteHeader } from "@/components/SiteHeader";
 import { useLocale } from "@/lib/i18n";
+import { prefixFromPath } from "@/lib/locales";
+import { seoRouteCopy } from "@/lib/seo-route-i18n";
+import { SEO_CORRIDORS } from "@/data/seo-corridors";
 import { regionFromPath, type RegionKey } from "@/lib/trip-data";
 import type { PoiKind } from "@/lib/poi-links";
 
@@ -108,6 +111,10 @@ export function ScenicGuide() {
   const ordered = [...SPOTS].sort(
     (a, b) => Number(b.region === region) - Number(a.region === region),
   );
+
+  const routeCopy = seoRouteCopy(locale);
+  const prefix = prefixFromPath(pathname);
+  const corridorHref = (slug: string) => (prefix ? `/${prefix}/routes/${slug}` : `/routes/${slug}`);
 
   return (
     <main className="min-h-screen">
@@ -302,6 +309,21 @@ export function ScenicGuide() {
               />
             </article>
           ))}
+        </div>
+
+        <div className="mt-14">
+          <h2 className="text-lg font-semibold text-foreground">{routeCopy.moreRoutesTitle}</h2>
+          <div className="mt-4 flex flex-wrap gap-2">
+            {SEO_CORRIDORS.map((c) => (
+              <a
+                key={c.slug}
+                href={corridorHref(c.slug)}
+                className="rounded-full border border-border bg-background/40 px-4 py-2 text-sm text-foreground/85 transition-colors hover:bg-muted"
+              >
+                {c.origin.name} → {c.destination.name}
+              </a>
+            ))}
+          </div>
         </div>
       </section>
     </main>

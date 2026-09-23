@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { TollsGuide } from "@/components/TollsGuide";
-import { appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/us/tolls")({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/us/tolls")({
         content: "Know which transponder you need — long before you reach the toll gantry.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
+      { property: "og:url", content: absUrl("/us/tolls") },
       { property: "og:image", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:type", content: "image/jpeg" },

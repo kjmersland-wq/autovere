@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { TollsGuide } from "@/components/TollsGuide";
-import { absUrl, appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
 
 export const Route = createFileRoute("/tolls")({
   head: () => ({
@@ -18,6 +18,9 @@ export const Route = createFileRoute("/tolls")({
         content: "Know which vignette, tag or transponder you need — before you reach the border.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_GB" },
+      { property: "og:url", content: absUrl("/tolls") },
+      ...ogImageMeta(ogImageUrl(null)),
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: absUrl("/tolls") }, ...appPageHreflangLinks("tolls")],

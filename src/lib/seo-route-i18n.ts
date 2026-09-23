@@ -11,6 +11,10 @@ import type { Locale } from "@/lib/i18n";
  */
 export type SeoRouteCopy = {
   eyebrow: string;
+  /** Breadcrumb label for the site root. */
+  homeLabel: string;
+  /** Heading above the cross-links to other corridor pages. */
+  moreRoutesTitle: string;
   pageTitle: (origin: string, destination: string, year: number) => string;
   metaDescription: (origin: string, destination: string) => string;
   costSummaryTitle: string;
@@ -32,6 +36,8 @@ export type SeoRouteCopy = {
 
 const en: SeoRouteCopy = {
   eyebrow: "Route Cost Guide",
+  homeLabel: "Home",
+  moreRoutesTitle: "More routes",
   pageTitle: (o, d, y) => `Toll & Vignette Costs: ${o} to ${d} (${y})`,
   metaDescription: (o, d) =>
     `Plan your ${o} to ${d} road trip with exact tolls, vignettes, fuel and ferry costs for car, RV, EV and motorcycle.`,
@@ -67,6 +73,8 @@ const en: SeoRouteCopy = {
 
 const no: SeoRouteCopy = {
   eyebrow: "Reisekostnadsguide",
+  homeLabel: "Hjem",
+  moreRoutesTitle: "Flere strekninger",
   pageTitle: (o, d, y) => `Bompenger og vignetter: ${o} til ${d} (${y})`,
   metaDescription: (o, d) =>
     `Planlegg bilturen fra ${o} til ${d} med nøyaktige bompenger, vignetter, drivstoff og fergekostnader for bil, bobil, elbil og motorsykkel.`,
@@ -102,6 +110,8 @@ const no: SeoRouteCopy = {
 
 const sv: SeoRouteCopy = {
   eyebrow: "Reskostnadsguide",
+  homeLabel: "Hem",
+  moreRoutesTitle: "Fler rutter",
   pageTitle: (o, d, y) => `Vägtullar och vinjetter: ${o} till ${d} (${y})`,
   metaDescription: (o, d) =>
     `Planera bilresan från ${o} till ${d} med exakta vägtullar, vinjetter, bränsle- och färjekostnader för bil, husbil, elbil och motorcykel.`,
@@ -137,6 +147,8 @@ const sv: SeoRouteCopy = {
 
 const da: SeoRouteCopy = {
   eyebrow: "Rejseomkostningsguide",
+  homeLabel: "Hjem",
+  moreRoutesTitle: "Flere ruter",
   pageTitle: (o, d, y) => `Vejafgifter og vignetter: ${o} til ${d} (${y})`,
   metaDescription: (o, d) =>
     `Planlæg bilturen fra ${o} til ${d} med præcise vejafgifter, vignetter, brændstof- og færgeomkostninger for bil, autocamper, elbil og motorcykel.`,
@@ -172,6 +184,8 @@ const da: SeoRouteCopy = {
 
 const de: SeoRouteCopy = {
   eyebrow: "Reisekosten-Ratgeber",
+  homeLabel: "Start",
+  moreRoutesTitle: "Weitere Strecken",
   pageTitle: (o, d, y) => `Maut & Vignette: ${o} nach ${d} (${y})`,
   metaDescription: (o, d) =>
     `Planen Sie Ihre Autoreise von ${o} nach ${d} mit exakter Maut, Vignetten, Kraftstoff- und Fährkosten für Auto, Wohnmobil, Elektroauto und Motorrad.`,
@@ -207,6 +221,8 @@ const de: SeoRouteCopy = {
 
 const nl: SeoRouteCopy = {
   eyebrow: "Reiskostengids",
+  homeLabel: "Home",
+  moreRoutesTitle: "Meer trajecten",
   pageTitle: (o, d, y) => `Tol & vignet: ${o} naar ${d} (${y})`,
   metaDescription: (o, d) =>
     `Plan je autorit van ${o} naar ${d} met precieze tol-, vignet-, brandstof- en veerbootkosten voor auto, camper, elektrische auto en motor.`,
@@ -242,6 +258,8 @@ const nl: SeoRouteCopy = {
 
 const fr: SeoRouteCopy = {
   eyebrow: "Guide des coûts de trajet",
+  homeLabel: "Accueil",
+  moreRoutesTitle: "Autres itinéraires",
   pageTitle: (o, d, y) => `Péages et vignettes : ${o} à ${d} (${y})`,
   metaDescription: (o, d) =>
     `Planifiez votre trajet de ${o} à ${d} avec des péages, vignettes, coûts de carburant et de ferry précis pour voiture, camping-car, véhicule électrique et moto.`,
@@ -277,6 +295,8 @@ const fr: SeoRouteCopy = {
 
 const pl: SeoRouteCopy = {
   eyebrow: "Przewodnik po kosztach trasy",
+  homeLabel: "Strona główna",
+  moreRoutesTitle: "Więcej tras",
   pageTitle: (o, d, y) => `Opłaty drogowe i winiety: ${o} – ${d} (${y})`,
   metaDescription: (o, d) =>
     `Zaplanuj podróż z ${o} do ${d} z dokładnymi opłatami drogowymi, winietami, kosztami paliwa i promu dla samochodu, kampera, auta elektrycznego i motocykla.`,
@@ -312,6 +332,8 @@ const pl: SeoRouteCopy = {
 
 const es: SeoRouteCopy = {
   eyebrow: "Guía de costes de ruta",
+  homeLabel: "Inicio",
+  moreRoutesTitle: "Más rutas",
   pageTitle: (o, d, y) => `Peajes y viñetas: ${o} a ${d} (${y})`,
   metaDescription: (o, d) =>
     `Planifica tu viaje de ${o} a ${d} con peajes, viñetas, combustible y costes de ferry exactos para coche, autocaravana, coche eléctrico y moto.`,
@@ -347,6 +369,8 @@ const es: SeoRouteCopy = {
 
 const it: SeoRouteCopy = {
   eyebrow: "Guida ai costi del percorso",
+  homeLabel: "Home",
+  moreRoutesTitle: "Altri percorsi",
   pageTitle: (o, d, y) => `Pedaggi e vignette: ${o} – ${d} (${y})`,
   metaDescription: (o, d) =>
     `Pianifica il viaggio da ${o} a ${d} con pedaggi, vignette, carburante e costi del traghetto precisi per auto, camper, auto elettrica e moto.`,
@@ -382,6 +406,8 @@ const it: SeoRouteCopy = {
 
 const pt: SeoRouteCopy = {
   eyebrow: "Guia de custos da rota",
+  homeLabel: "Início",
+  moreRoutesTitle: "Mais rotas",
   pageTitle: (o, d, y) => `Portagens e vinhetas: ${o} a ${d} (${y})`,
   metaDescription: (o, d) =>
     `Planeie a viagem de ${o} a ${d} com portagens, vinhetas, combustível e custos de ferry exatos para automóvel, autocaravana, automóvel elétrico e mota.`,
@@ -417,6 +443,8 @@ const pt: SeoRouteCopy = {
 
 const fi: SeoRouteCopy = {
   eyebrow: "Matkakuluopas",
+  homeLabel: "Etusivu",
+  moreRoutesTitle: "Lisää reittejä",
   pageTitle: (o, d, y) => `Tietullit ja vinjetit: ${o} – ${d} (${y})`,
   metaDescription: (o, d) =>
     `Suunnittele automatka kohteesta ${o} kohteeseen ${d} tarkoilla tietulli-, vinjetti-, polttoaine- ja lauttakuluilla autolle, matkailuautolle, sähköautolle ja moottoripyörälle.`,
@@ -452,6 +480,8 @@ const fi: SeoRouteCopy = {
 
 const ja: SeoRouteCopy = {
   eyebrow: "ルート費用ガイド",
+  homeLabel: "ホーム",
+  moreRoutesTitle: "他のルート",
   pageTitle: (o, d, y) => `通行料金・ビニエット：${o}から${d}まで（${y}年）`,
   metaDescription: (o, d) =>
     `${o}から${d}までのドライブを、車・キャンピングカー・EV・バイクそれぞれの正確な通行料金、ビニエット、燃料費、フェリー代とともに計画しましょう。`,
@@ -487,6 +517,8 @@ const ja: SeoRouteCopy = {
 
 const zh: SeoRouteCopy = {
   eyebrow: "路线费用指南",
+  homeLabel: "首页",
+  moreRoutesTitle: "更多路线",
   pageTitle: (o, d, y) => `过路费与电子通行证：${o}至${d}（${y}年）`,
   metaDescription: (o, d) =>
     `规划从${o}到${d}的自驾之旅，获取轿车、房车、电动车和摩托车的精确过路费、电子通行证、燃油及渡轮费用。`,

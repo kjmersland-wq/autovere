@@ -18,6 +18,8 @@ export const Route = createFileRoute("/no/planner")({
         content: "Ett tydelig budsjett for bom, drivstoff, lading og ferjer — før du vrir om nøkkelen.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "nb_NO" },
+      { property: "og:url", content: absUrl("/no/planner") },
       { property: "og:image", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-no.jpg" },
       { property: "og:image:type", content: "image/jpeg" },

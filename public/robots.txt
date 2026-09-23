@@ -1,3 +1,11 @@
+# AutoVere crawl policy — kept deliberately open.
+# CSS, JS, images and every content path stay crawlable for every bot; the few
+# private/app-state pages (admin, checkout return, partner dashboard, in-car)
+# are excluded from search via a per-page <meta name="robots" content="noindex">
+# tag instead of a Disallow rule here, so crawlers can actually fetch and see
+# that noindex — blocking them here would hide the tag and could leave a bare
+# URL indexed instead.
+
 User-agent: Googlebot
 Allow: /
 
@@ -13,4 +21,6 @@ Allow: /
 User-agent: *
 Allow: /
 
+# Full URL list + hreflang alternates for every indexable page, regenerated
+# on every request with a 1-hour cache (see src/routes/sitemap[.]xml.ts).
 Sitemap: https://www.autovere.com/sitemap.xml

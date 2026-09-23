@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
-import { appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/us/pricing")({
   head: () => ({
@@ -18,6 +18,8 @@ export const Route = createFileRoute("/us/pricing")({
         content: "Free road trip cost intelligence, Pro for serious travelers, Fleet for teams.",
       },
       { property: "og:type", content: "website" },
+      { property: "og:locale", content: "en_US" },
+      { property: "og:url", content: absUrl("/us/pricing") },
       { property: "og:image", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:secure_url", content: "https://www.autovere.com/og/og-us.jpg" },
       { property: "og:image:type", content: "image/jpeg" },
