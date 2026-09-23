@@ -299,17 +299,16 @@ async function buildRouteGeo(
   via: string[] = [],
 ): Promise<RouteGeo | null> {
   // Coordinates picked from the autocomplete are authoritative — never re-geocode them.
-  const from = lockedFrom ?? (await geocode(origin));
-  const to = lockedTo ?? (await geocode(destination));
+  const [from, to, ...hits] = await Promise.all([
+    lockedFrom ?? geocode(origin),
+    lockedTo ?? geocode(destination),
+    ...via.map((name) => geocode(name)),
+  ]);
   if (!from || !to) return null;
   // Via stops are routed through in order; one that can't be found fails the
   // whole route rather than silently pricing a different trip.
-  const stops: { lat: number; lng: number }[] = [];
-  for (const name of via) {
-    const hit = await geocode(name);
-    if (!hit) return null;
-    stops.push(hit);
-  }
+  if (hits.some((h) => !h)) return null;
+  const stops = hits as { lat: number; lng: number }[];
 
   const path = [from, ...stops, to].map((p) => `${p.lng},${p.lat}`).join(";");
   const osrm = `https://router.project-osrm.org/route/v1/driving/${path}?overview=full&geometries=geojson`;

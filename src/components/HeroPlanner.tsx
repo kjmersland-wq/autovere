@@ -69,7 +69,7 @@ export type { RegionKey };
 type FieldErrors = { origin?: string | undefined; destination?: string | undefined };
 
 /** Past this the route service is treated as down and the visitor told so. */
-const ROUTE_TIMEOUT_MS = 25_000;
+const ROUTE_TIMEOUT_MS = 45_000;
 
 /**
  * Mirror the calculated route into ?origin=&destination= so a refresh, the
