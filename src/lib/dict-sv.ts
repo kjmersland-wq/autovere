@@ -248,6 +248,10 @@ export const SV_DICT: Record<string, unknown> = {
     strict: "Pass och tull",
   },
   flow: {
+    saveTitle: "Spara resan i Mitt garage",
+    saveBody: "Skapa ett gratiskonto för att spara rutter, bygga egna fordonsprofiler (bil, motorcykel, husbil) och låsa upp GPX-export för offline-navigering.",
+    saveList: ["Alla beräknade resor på ett ställe", "Fordonsprofiler med tank, höjd och tullbrickor", "GPX-export för offline-navigering"],
+    createAccount: "Skapa gratiskonto",
     moreOptions: "Fler val",
     fewerOptions: "Färre val",
     optionsActive: (n: number) => `${n} valda`,

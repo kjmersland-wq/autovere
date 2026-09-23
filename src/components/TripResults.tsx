@@ -1238,19 +1238,15 @@ export function TripResults({
       <Dialog open={savePrompt} onOpenChange={setSavePrompt}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>
-              {locale === "no" ? "Lagre turen i Min Garasje" : "Save this trip to My Garage"}
-            </DialogTitle>
-            <DialogDescription>
-              {locale === "no"
-                ? "Opprett en gratis konto for å lagre ruter, egne kjøretøyprofiler (bil, MC, bobil) og låse opp GPX-eksport for offline navigasjon."
-                : "Create a free account to save routes, build custom vehicle profiles (car, motorcycle, camper) and unlock offline GPX export."}
-            </DialogDescription>
+            <DialogTitle>{t.flow.saveTitle}</DialogTitle>
+            <DialogDescription>{t.flow.saveBody}</DialogDescription>
           </DialogHeader>
           <ul className="space-y-2 text-sm text-foreground/80">
-            <li>🗺️ {locale === "no" ? "Alle beregnede turer samlet ett sted" : "Every calculated trip in one place"}</li>
-            <li>🚐 {locale === "no" ? "Kjøretøyprofiler med tank, høyde og bompengebrikke" : "Vehicle profiles with tank, height and toll tags"}</li>
-            <li>📥 {locale === "no" ? "GPX-eksport for offline navigasjon" : "GPX export for offline navigation"}</li>
+            {t.flow.saveList.map((item, i) => (
+              <li key={item}>
+                {["🗺️", "🚐", "📥"][i]} {item}
+              </li>
+            ))}
           </ul>
           <div className="flex flex-wrap gap-3">
             <Button
@@ -1259,7 +1255,7 @@ export function TripResults({
                 openAuth("signup");
               }}
             >
-              {locale === "no" ? "Opprett gratis konto" : "Create free account"}
+              {t.flow.createAccount}
             </Button>
             <Button
               variant="outline"
@@ -1268,7 +1264,7 @@ export function TripResults({
                 openAuth("signin");
               }}
             >
-              {locale === "no" ? "Logg inn" : "Sign in"}
+              {t.header.signIn}
             </Button>
           </div>
         </DialogContent>

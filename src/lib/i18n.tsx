@@ -282,6 +282,10 @@ const en = {
     strict: "Passport & customs",
   },
   flow: {
+    saveTitle: "Save this trip to My Garage",
+    saveBody: "Create a free account to save routes, build custom vehicle profiles (car, motorcycle, camper) and unlock offline GPX export.",
+    saveList: ["Every calculated trip in one place", "Vehicle profiles with tank, height and toll tags", "GPX export for offline navigation"],
+    createAccount: "Create free account",
     moreOptions: "More options",
     fewerOptions: "Fewer options",
     optionsActive: (n: number) => `${n} set`,
@@ -585,6 +589,10 @@ const no: Strings = {
     strict: "Pass og toll",
   },
   flow: {
+    saveTitle: "Lagre turen i Min garasje",
+    saveBody: "Opprett en gratis konto for å lagre ruter, egne kjøretøyprofiler (bil, MC, bobil) og låse opp GPX-eksport for offline navigasjon.",
+    saveList: ["Alle beregnede turer samlet ett sted", "Kjøretøyprofiler med tank, høyde og bombrikke", "GPX-eksport for offline navigasjon"],
+    createAccount: "Opprett gratis konto",
     moreOptions: "Flere valg",
     fewerOptions: "Færre valg",
     optionsActive: (n: number) => `${n} valgt`,

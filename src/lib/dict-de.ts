@@ -248,6 +248,10 @@ export const DE_DICT: Record<string, unknown> = {
     strict: "Reisepass und Zoll",
   },
   flow: {
+    saveTitle: "Reise in Meiner Garage speichern",
+    saveBody: "Erstelle ein kostenloses Konto, um Routen zu speichern, eigene Fahrzeugprofile (Auto, Motorrad, Wohnmobil) anzulegen und den GPX-Export für die Offline-Navigation freizuschalten.",
+    saveList: ["Alle berechneten Reisen an einem Ort", "Fahrzeugprofile mit Tank, Höhe und Mautboxen", "GPX-Export für die Offline-Navigation"],
+    createAccount: "Kostenloses Konto erstellen",
     moreOptions: "Weitere Optionen",
     fewerOptions: "Weniger Optionen",
     optionsActive: (n: number) => `${n} gewählt`,

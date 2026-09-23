@@ -249,6 +249,10 @@ export const JA_DICT: Record<string, unknown> = {
     strict: "パスポート・税関検査あり",
   },
   flow: {
+    saveTitle: "この旅をマイガレージに保存",
+    saveBody: "無料アカウントを作成すると、ルートの保存、車両プロフィール（車・バイク・キャンピングカー）の作成、オフラインナビ用GPXエクスポートが使えます。",
+    saveList: ["計算した旅をすべて1か所に", "タンク容量・車高・ETCタグ付きの車両プロフィール", "オフラインナビ用GPXエクスポート"],
+    createAccount: "無料アカウントを作成",
     moreOptions: "詳細オプション",
     fewerOptions: "オプションを閉じる",
     optionsActive: (n: number) => `${n}件設定中`,

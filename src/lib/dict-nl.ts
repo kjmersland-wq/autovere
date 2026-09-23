@@ -248,6 +248,10 @@ export const NL_DICT: Record<string, unknown> = {
     strict: "Paspoort en douane",
   },
   flow: {
+    saveTitle: "Reis opslaan in Mijn garage",
+    saveBody: "Maak een gratis account om routes op te slaan, eigen voertuigprofielen (auto, motor, camper) te maken en GPX-export voor offline navigatie te ontgrendelen.",
+    saveList: ["Al je berekende reizen op één plek", "Voertuigprofielen met tank, hoogte en tolbadges", "GPX-export voor offline navigatie"],
+    createAccount: "Gratis account aanmaken",
     moreOptions: "Meer opties",
     fewerOptions: "Minder opties",
     optionsActive: (n: number) => `${n} ingesteld`,

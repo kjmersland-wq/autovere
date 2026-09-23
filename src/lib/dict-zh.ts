@@ -234,6 +234,10 @@ export const ZH_DICT: Record<string, unknown> = {
     strict: "需查验护照与海关",
   },
   flow: {
+    saveTitle: "将行程保存到我的车库",
+    saveBody: "创建免费账户即可保存路线、建立车辆档案（汽车、摩托车、房车），并解锁用于离线导航的 GPX 导出。",
+    saveList: ["所有已计算的行程集中一处", "包含油箱、车高和收费标签的车辆档案", "用于离线导航的 GPX 导出"],
+    createAccount: "创建免费账户",
     moreOptions: "更多选项",
     fewerOptions: "收起选项",
     optionsActive: (n: number) => `已设置 ${n} 项`,

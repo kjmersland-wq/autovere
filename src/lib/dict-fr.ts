@@ -248,6 +248,10 @@ export const FR_DICT: Record<string, unknown> = {
     strict: "Passeport et douane",
   },
   flow: {
+    saveTitle: "Enregistrer ce trajet dans Mon garage",
+    saveBody: "Créez un compte gratuit pour enregistrer vos itinéraires, créer vos profils de véhicule (voiture, moto, camping-car) et débloquer l'export GPX pour la navigation hors ligne.",
+    saveList: ["Tous vos trajets calculés au même endroit", "Profils de véhicule avec réservoir, hauteur et badges de péage", "Export GPX pour la navigation hors ligne"],
+    createAccount: "Créer un compte gratuit",
     moreOptions: "Plus d'options",
     fewerOptions: "Moins d'options",
     optionsActive: (n: number) => `${n} activé${n > 1 ? "s" : ""}`,

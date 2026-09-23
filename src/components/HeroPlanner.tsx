@@ -328,9 +328,16 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
         destinationHit && destinationHit.label === to
           ? { name: destinationHit.label, lat: destinationHit.lat, lng: destinationHit.lng }
           : undefined;
+      const via = waypoints.map((w) => w.value.trim()).filter((v) => v.length > 1);
       resolved = await Promise.race([
         routeFn({
-          data: { origin: from, destination: to, ...(fromPoint && { fromPoint }), ...(toPoint && { toPoint }) },
+          data: {
+            origin: from,
+            destination: to,
+            ...(fromPoint && { fromPoint }),
+            ...(toPoint && { toPoint }),
+            ...(via.length ? { via } : {}),
+          },
         }),
         new Promise<never>((_, reject) =>
           setTimeout(() => {

@@ -248,6 +248,10 @@ export const PL_DICT: Record<string, unknown> = {
     strict: "Paszport i cło",
   },
   flow: {
+    saveTitle: "Zapisz podróż w Moim garażu",
+    saveBody: "Załóż darmowe konto, aby zapisywać trasy, tworzyć własne profile pojazdów (samochód, motocykl, kamper) i odblokować eksport GPX do nawigacji offline.",
+    saveList: ["Wszystkie obliczone podróże w jednym miejscu", "Profile pojazdów ze zbiornikiem, wysokością i transponderami", "Eksport GPX do nawigacji offline"],
+    createAccount: "Załóż darmowe konto",
     moreOptions: "Więcej opcji",
     fewerOptions: "Mniej opcji",
     optionsActive: (n: number) => `wybrane: ${n}`,

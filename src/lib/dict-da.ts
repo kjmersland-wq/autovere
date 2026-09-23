@@ -248,6 +248,10 @@ export const DA_DICT: Record<string, unknown> = {
     strict: "Pas og told",
   },
   flow: {
+    saveTitle: "Gem turen i Min garage",
+    saveBody: "Opret en gratis konto for at gemme ruter, lave dine egne køretøjsprofiler (bil, motorcykel, autocamper) og låse op for GPX-eksport til offline navigation.",
+    saveList: ["Alle beregnede ture samlet ét sted", "Køretøjsprofiler med tank, højde og betalingsbrik", "GPX-eksport til offline navigation"],
+    createAccount: "Opret gratis konto",
     moreOptions: "Flere valg",
     fewerOptions: "Færre valg",
     optionsActive: (n: number) => `${n} valgt`,

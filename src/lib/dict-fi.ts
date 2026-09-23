@@ -246,6 +246,10 @@ export const FI_DICT: Record<string, unknown> = {
     strict: "Passi ja tulli",
   },
   flow: {
+    saveTitle: "Tallenna matka Autotalliini",
+    saveBody: "Luo ilmainen tili tallentaaksesi reittejä, luodaksesi omia ajoneuvoprofiileja (auto, moottoripyörä, matkailuauto) ja avataksesi GPX-viennin offline-navigointiin.",
+    saveList: ["Kaikki lasketut matkat yhdessä paikassa", "Ajoneuvoprofiilit: tankki, korkeus ja tietullilaitteet", "GPX-vienti offline-navigointiin"],
+    createAccount: "Luo ilmainen tili",
     moreOptions: "Lisää valintoja",
     fewerOptions: "Vähemmän valintoja",
     optionsActive: (n: number) => `${n} valittu`,

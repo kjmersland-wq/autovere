@@ -252,6 +252,10 @@ export const PT_DICT: Record<string, unknown> = {
     strict: "Passaporte e alfândega",
   },
   flow: {
+    saveTitle: "Guardar a viagem na Minha garagem",
+    saveBody: "Crie uma conta gratuita para guardar rotas, criar os seus perfis de veículo (carro, mota, autocaravana) e desbloquear a exportação GPX para navegação offline.",
+    saveList: ["Todas as viagens calculadas num só lugar", "Perfis de veículo com depósito, altura e identificadores de portagem", "Exportação GPX para navegação offline"],
+    createAccount: "Criar conta gratuita",
     moreOptions: "Mais opções",
     fewerOptions: "Menos opções",
     optionsActive: (n: number) => `${n} ativas`,

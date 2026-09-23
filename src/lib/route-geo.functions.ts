@@ -296,13 +296,23 @@ async function buildRouteGeo(
   destination: string,
   lockedFrom?: Locked,
   lockedTo?: Locked,
+  via: string[] = [],
 ): Promise<RouteGeo | null> {
   // Coordinates picked from the autocomplete are authoritative — never re-geocode them.
   const from = lockedFrom ?? (await geocode(origin));
   const to = lockedTo ?? (await geocode(destination));
   if (!from || !to) return null;
+  // Via stops are routed through in order; one that can't be found fails the
+  // whole route rather than silently pricing a different trip.
+  const stops: { lat: number; lng: number }[] = [];
+  for (const name of via) {
+    const hit = await geocode(name);
+    if (!hit) return null;
+    stops.push(hit);
+  }
 
-  const osrm = `https://router.project-osrm.org/route/v1/driving/${from.lng},${from.lat};${to.lng},${to.lat}?overview=full&geometries=geojson`;
+  const path = [from, ...stops, to].map((p) => `${p.lng},${p.lat}`).join(";");
+  const osrm = `https://router.project-osrm.org/route/v1/driving/${path}?overview=full&geometries=geojson`;
   const res = await fetch(osrm, { headers: { "User-Agent": UA } });
   if (!res.ok) return null;
   const json = (await res.json()) as {
@@ -344,6 +354,8 @@ export const getRouteGeo = createServerFn({ method: "GET" })
         /** Coordinates locked in by the autocomplete selection. */
         fromPoint: point.optional(),
         toPoint: point.optional(),
+        /** Intermediate stops, routed through in this order. */
+        via: z.array(z.string().min(2).max(160)).max(3).optional(),
       })
       .parse(data),
   )
@@ -351,12 +363,13 @@ export const getRouteGeo = createServerFn({ method: "GET" })
     const coordKey = data.fromPoint && data.toPoint
       ? `${data.fromPoint.lat},${data.fromPoint.lng}|${data.toPoint.lat},${data.toPoint.lng}`
       : `${data.origin.toLowerCase().trim()}|${data.destination.toLowerCase().trim()}`;
-    const key = coordKey;
+    const via = data.via ?? [];
+    const key = via.length ? `${coordKey}|via:${via.map((v) => v.toLowerCase().trim()).join(";")}` : coordKey;
     if (cache.has(key)) return cache.get(key) ?? null;
     const running = inflight.get(key);
     if (running) return running;
 
-    const task = buildRouteGeo(data.origin, data.destination, data.fromPoint, data.toPoint)
+    const task = buildRouteGeo(data.origin, data.destination, data.fromPoint, data.toPoint, via)
       .catch(() => null)
       .then((result) => {
         // Only cache successful lookups — a throttled miss should be retried.
