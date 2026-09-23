@@ -121,6 +121,7 @@ export function GaragePage() {
   const { prefix, region } = splitPath(pathname);
   const pricingHref = buildPath({ prefix, region, page: "pricing" });
   const faqHref = buildPath({ prefix, region, page: "faq" });
+  const plannerHref = buildPath({ prefix, region, page: "planner" });
   const { tier, isActive, hasAtLeast } = useSubscription();
   const { currency, setCurrency } = useCurrency();
   // Travel party is a Pro feature, but the filter itself is visible on every locale.
@@ -637,9 +638,16 @@ export function GaragePage() {
                     </article>
                   ))}
                   {trips.length === 0 && (
-                    <p className="text-sm text-muted-foreground">
-                      {tx("Ingen lagrede reiser ennå — planlegg en tur og trykk «Lagre i Min garasje».")}
-                    </p>
+                    <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-dashed border-border p-5">
+                      <p className="text-sm text-muted-foreground">
+                        {tx("Ingen lagrede reiser ennå — planlegg en tur og trykk «Lagre i Min garasje».")}
+                      </p>
+                      <Button size="sm" asChild>
+                        <a href={plannerHref}>
+                          <RouteIcon className="size-4" /> {tx("Planlegg en tur")}
+                        </a>
+                      </Button>
+                    </div>
                   )}
                 </div>
               </Panel>
@@ -720,6 +728,11 @@ export function GaragePage() {
                       </div>
                     </article>
                   ))}
+                  {vehicles.length === 0 && (
+                    <p className="rounded-xl border border-dashed border-border p-5 text-sm text-muted-foreground lg:col-span-2">
+                      {tx("Ingen kjøretøy ennå — legg til bilen, bobilen eller motorsykkelen din, så bruker vi tallene dine i hver beregning.")}
+                    </p>
+                  )}
                 </div>
                 <div className="mt-5 flex flex-wrap items-center gap-3">
                   <Button

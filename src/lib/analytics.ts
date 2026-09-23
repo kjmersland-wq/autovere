@@ -83,7 +83,11 @@ export type ProductEventName =
   | "export_gpx"
   | "export_pdf"
   | "pro_upgrade_clicked"
-  | "challenge_apply_clicked";
+  | "challenge_apply_clicked"
+  | "calculate_blocked"
+  | "trip_failed"
+  | "trip_pass_cta_clicked"
+  | "challenge_cta_clicked";
 
 /** Records one product event. Never throws — analytics must not break the app. */
 export async function trackEvent(name: ProductEventName, metadata: Record<string, unknown> = {}) {

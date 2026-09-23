@@ -243,9 +243,11 @@ export function CurrencyProvider({ children }: { children: ReactNode }) {
     }
     const code = codeFromPath(pathname);
     if (code === "en") {
-      // Root (language-neutral) pages: honour the visitor's browser locale on a cold visit.
+      // Root (language-neutral) pages: honour the visitor's browser locale on a cold visit —
+      // except dollars. The root is the European planner, so an en-US / en-CA browser gets
+      // euros (what the barrier actually charges) instead of Oslo–Bergen priced in $.
       const detected = currencyFromBrowserLanguage();
-      setCurrencyState(detected ?? "GBP");
+      setCurrencyState(detected === "USD" || detected === "CAD" ? "EUR" : (detected ?? "GBP"));
       return;
     }
     const localeDefault = LOCALE_DEFAULT_CURRENCY[code];

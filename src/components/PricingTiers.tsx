@@ -8,8 +8,9 @@ import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
-import { useLocale } from "@/lib/i18n";
-import { pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib/pricing-i18n";
+import { convert, formatCurrency, useCurrency } from "@/lib/currency";
+import { useLocale, useT } from "@/lib/i18n";
+import { parsePrice, pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib/pricing-i18n";
 import { billingReturnUrl, checkoutReturnUrl, getStripeEnvironment, PRICE_IDS } from "@/lib/stripe";
 import type { RegionKey } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
@@ -18,6 +19,14 @@ import { createPortalSession } from "@/utils/payments.functions";
 export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
   const locale = useLocale();
   const L = pricingCopy(locale);
+  const t = useT();
+  const { currency } = useCurrency();
+  /** "≈ €8.10 at today's rate" when the header currency differs from the listed price. */
+  const approx = (price: string) => {
+    const parsed = parsePrice(price, locale, region);
+    if (!parsed || parsed.amount === 0 || parsed.code === currency) return null;
+    return t.flow.approx(formatCurrency(convert(parsed.amount, parsed.code, currency), currency));
+  };
   const tiers = tiersFor(locale, region);
   const { user, openAuth } = useAuth();
   const { tier: currentTier, isActive, cancelAtPeriodEnd, periodEnd, pastDue } = useSubscription();
@@ -139,6 +148,7 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
                 <span className="text-4xl font-semibold tracking-tight text-amber-300">{price}</span>
                 <span className="text-xs uppercase tracking-[0.16em] text-muted-foreground">{unit}</span>
               </p>
+              {approx(price) && <p className="mt-1 text-xs text-muted-foreground">{approx(price)}</p>}
               {tier.id === "pro" && (
                 <p className="mt-1 text-xs text-muted-foreground">{L.proFine}</p>
               )}

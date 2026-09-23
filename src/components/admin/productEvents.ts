@@ -10,6 +10,10 @@ export const EVENT_LABEL_NO: Record<string, string> = {
   export_pdf: "Eksport PDF",
   pro_upgrade_clicked: "Pro-oppgradering trykket",
   challenge_apply_clicked: "Challenge-søknad trykket",
+  calculate_blocked: "Beregn stoppet (tomt felt)",
+  trip_failed: "Beregning feilet",
+  trip_pass_cta_clicked: "Trip Pass-knapp på resultat trykket",
+  challenge_cta_clicked: "Challenge-lenke på resultat trykket",
 };
 
 export function eventLabel(name: string) {

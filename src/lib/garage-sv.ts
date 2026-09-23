@@ -3,6 +3,9 @@
  * Mirrors GARAGE_EN in src/lib/garage-i18n.ts key-for-key.
  */
 export const GARAGE_SV: Record<string, string> = {
+  "Ingen kjøretøy ennå — legg til bilen, bobilen eller motorsykkelen din, så bruker vi tallene dine i hver beregning.":
+    "Inga fordon ännu — lägg till din bil, husbil eller motorcykel så använder vi dina egna siffror i varje beräkning.",
+  "Planlegg en tur": "Planera en resa",
   Oversikt: "Översikt",
   "Mine reiser": "Mina resor",
   "Mine kjøretøy": "Mina fordon",

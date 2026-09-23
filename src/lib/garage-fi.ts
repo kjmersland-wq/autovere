@@ -3,6 +3,9 @@
  * Mirrors GARAGE_EN in src/lib/garage-i18n.ts key-for-key.
  */
 export const GARAGE_FI: Record<string, string> = {
+  "Ingen kjøretøy ennå — legg til bilen, bobilen eller motorsykkelen din, så bruker vi tallene dine i hver beregning.":
+    "Ei vielä ajoneuvoja — lisää autosi, matkailuautosi tai moottoripyöräsi, niin käytämme omia lukujasi jokaisessa laskelmassa.",
+  "Planlegg en tur": "Suunnittele matka",
   Oversikt: "Yleiskatsaus",
   "Mine reiser": "Omat matkat",
   "Mine kjøretøy": "Omat ajoneuvot",

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CalendarCheck2, ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship, Zap } from "lucide-react";
+import { CalendarCheck2, ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship, Sparkles, Zap } from "lucide-react";
 import { toast } from "sonner";
 import { tripTrackPoints } from "@/lib/trip-export";
 
@@ -39,6 +39,8 @@ import {
   useMoney,
 } from "@/lib/currency";
 import { useLocale, useT, useTr } from "@/lib/i18n";
+import { prefixForCode } from "@/lib/locales";
+import { tripPassPrice } from "@/lib/pricing-i18n";
 import { useSubscription } from "@/hooks/useSubscription";
 import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
@@ -195,6 +197,8 @@ export function TripResults({
   const [stopsPaywallOpen, setStopsPaywallOpen] = useState(false);
   const exportsLocked = !user || !(isActive && hasAtLeast("tripPass"));
   const stopsLocked = exportsLocked;
+  const passPrice = tripPassPrice(locale, region);
+  const challengeHref = locale === "en" ? "/challenge" : `/challenge/${prefixForCode(locale) ?? locale}`;
   const trip = trips[active];
   const optimizer = useMemo(
     () => applyNetworkFilter(trip.optimizer, netFilter ?? trip.optimizer.preferredNetwork ?? null),
@@ -333,7 +337,11 @@ export function TripResults({
       <h2 className="mt-3 text-3xl font-semibold tracking-tight sm:text-4xl">{title}</h2>
       <div className="mt-3 flex flex-wrap gap-2">
         <span className="rounded-full border border-primary/40 bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-          {isMotorhome ? "🚐 Motorhome" : isMotorcycle ? "🏍️ Motorcycle" : "🚗 Car"}
+          {isMotorhome
+            ? `🚐 ${t.hero.vehicles.motorhome}`
+            : isMotorcycle
+              ? `🏍️ ${t.hero.vehicles.motorcycle}`
+              : `🚗 ${t.hero.vehicles.car}`}
         </span>
       </div>
       <p className="mt-2 max-w-2xl text-foreground/75">
@@ -390,54 +398,6 @@ export function TripResults({
       <div className="glass-panel mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl px-5 py-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-
-      {evChargingPois.length > 0 && (
-        <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
-          <div className="flex items-center gap-2">
-            <span className="text-lg">⚡</span>
-            <h3 className="text-lg font-semibold tracking-tight">EV charging hubs along this route</h3>
-          </div>
-          <p className="mt-1 text-sm text-foreground/70">
-            Reliable high-power stops near your corridor, so the charging part of the day feels calm and easy.
-          </p>
-
-          <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {evChargingPois.map((p) => (
-              <article key={p.id} className="rounded-2xl border border-border bg-background/40 p-5">
-                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">{p.network}</p>
-                <p className="mt-2 text-sm font-semibold">{p.name}</p>
-                <p className="mt-1 text-xs text-muted-foreground">{p.where}</p>
-                <div className="mt-3 flex flex-wrap gap-1.5">
-                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
-                    {p.connectors}
-                  </span>
-                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
-                    {p.power}
-                  </span>
-                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
-                    {p.access}
-                  </span>
-                  {p.price && (
-                    <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
-                      {p.price}
-                    </span>
-                  )}
-                </div>
-                <p className="mt-3 text-sm text-foreground/80">{p.note}</p>
-                <PoiLinks kind="ev" name={p.name} where={p.where} region={region} website={p.website} />
-                <Button
-                  size="sm"
-                  variant="secondary"
-                  className="mt-3"
-                  onClick={() => onAddStop?.(p.name)}
-                >
-                  {t.results.addStop}
-                </Button>
-              </article>
-            ))}
-          </div>
-        </div>
-      )}
             {t.results.displayCurrency}
           </p>
           <p className="mt-1 text-xs text-foreground/70">
@@ -520,6 +480,30 @@ export function TripResults({
         <SubtotalBadge emoji="⛴️" label={t.results.ferriesBadge} value={m.fmt(trip.ferries)} />
       </div>
 
+      {/* Conversion moment: the visitor has just seen the number they came for. */}
+      {exportsLocked && (
+        <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-primary/40 bg-gradient-to-r from-primary/15 via-primary/5 to-transparent p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+          <div className="max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{t.flow.tripPassEyebrow}</p>
+            <h3 className="mt-1 text-lg font-semibold tracking-tight">{t.flow.tripPassTitle}</h3>
+            <p className="mt-1 text-sm text-foreground/75">{t.flow.tripPassBody}</p>
+          </div>
+          <div className="flex shrink-0 flex-col items-stretch gap-1.5 sm:items-end">
+            <Button
+              size="lg"
+              className="font-semibold"
+              onClick={() => {
+                void trackEvent("trip_pass_cta_clicked", { region, signedIn: Boolean(user) });
+                setExportPaywallOpen(true);
+              }}
+            >
+              <Sparkles className="size-4" /> {t.flow.tripPassCta(passPrice)}
+            </Button>
+            <span className="text-center text-xs text-muted-foreground sm:text-right">{t.flow.tripPassNote}</span>
+          </div>
+        </div>
+      )}
+
       {/* Price basis — every number above traces back to a named open source. */}
       {trip.priceBasis && trip.priceBasis.countries.length > 0 && (
         <details className="glass-panel mt-4 rounded-2xl px-5 py-4 text-sm">
@@ -568,6 +552,54 @@ export function TripResults({
         </details>
       )}
 
+      {evChargingPois.length > 0 && (
+        <div className="glass-panel mt-6 rounded-2xl p-5 sm:p-6">
+          <div className="flex items-center gap-2">
+            <span className="text-lg">⚡</span>
+            <h3 className="text-lg font-semibold tracking-tight">EV charging hubs along this route</h3>
+          </div>
+          <p className="mt-1 text-sm text-foreground/70">
+            Reliable high-power stops near your corridor, so the charging part of the day feels calm and easy.
+          </p>
+
+          <div className="mt-5 grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {evChargingPois.map((p) => (
+              <article key={p.id} className="rounded-2xl border border-border bg-background/40 p-5">
+                <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">{p.network}</p>
+                <p className="mt-2 text-sm font-semibold">{p.name}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{p.where}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.connectors}
+                  </span>
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.power}
+                  </span>
+                  <span className="rounded-full border border-border/70 bg-background/60 px-2.5 py-0.5 text-[11px] text-foreground/80">
+                    {p.access}
+                  </span>
+                  {p.price && (
+                    <span className="rounded-full border border-primary/40 bg-primary/10 px-2.5 py-0.5 text-[11px] font-medium text-primary">
+                      {p.price}
+                    </span>
+                  )}
+                </div>
+                <p className="mt-3 text-sm text-foreground/80">{p.note}</p>
+                <PoiLinks kind="ev" name={p.name} where={p.where} region={region} website={p.website} />
+                <Button
+                  size="sm"
+                  variant="secondary"
+                  className="mt-3"
+                  onClick={() => onAddStop?.(p.name)}
+                >
+                  {t.results.addStop}
+                </Button>
+              </article>
+            ))}
+          </div>
+        </div>
+      )}
+
       {(region === "us" || region === "ca") && (
         <EvSavingsBanner
           trip={trip}
@@ -609,7 +641,7 @@ export function TripResults({
         description={tr(
           "Automatically inject curated family stops, scenic viewpoints, and local food recommendations matching your vehicle along your specific route corridor.",
         )}
-        primaryLabel={tr("Get 14-Day Trip Pass (€7.99)")}
+        primaryLabel={t.flow.tripPassCta(passPrice)}
       />
 
       {showNorway && <NorwayAutoPassCard isMotorcycle={isMotorcycle} />}
@@ -1173,6 +1205,21 @@ export function TripResults({
         )}
       </div>
       )}
+
+      <div className="glass-panel mt-10 flex flex-col gap-4 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
+        <div>
+          <h3 className="text-lg font-semibold tracking-tight">🏁 {t.flow.challengeTitle}</h3>
+          <p className="mt-1 text-sm text-foreground/75">{t.flow.challengeBody}</p>
+        </div>
+        <Button variant="outline" asChild className="shrink-0">
+          <a
+            href={challengeHref}
+            onClick={() => void trackEvent("challenge_cta_clicked", { region, origin, destination })}
+          >
+            {t.flow.challengeCta}
+          </a>
+        </Button>
+      </div>
 
       <PartnerOffers vehicle={isMotorcycle ? "motorcycle" : isMotorhome ? "motorhome" : "car"} />
 

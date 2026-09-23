@@ -18,12 +18,20 @@ type Props = {
   icon?: React.ReactNode;
   className?: string;
   ariaLabel: string;
+  /** DOM id for the input, so the form can focus it after a validation error. */
+  inputId?: string;
+  /** Marks the field as failing validation (red ring + aria-invalid). */
+  invalid?: boolean;
 };
 
 /**
  * Live OSM place search with a 300 ms debounce. Picking a suggestion locks the
  * exact latitude, longitude and ISO country code into the caller's route state
  * so the router never has to guess what the typed text meant.
+ *
+ * Only keystrokes trigger a search. Values set from outside (a popular-route
+ * chip, a deep link, "plan this country", swapping the fields) count as already
+ * resolved, so no suggestion list pops open while a route is being analysed.
  */
 export function PlaceAutocomplete({
   value,
@@ -34,6 +42,8 @@ export function PlaceAutocomplete({
   icon,
   className,
   ariaLabel,
+  inputId,
+  invalid,
 }: Props) {
   const search = useServerFn(searchPlaces);
   const [hits, setHits] = useState<PlaceHit[]>([]);
@@ -41,14 +51,17 @@ export function PlaceAutocomplete({
   const [loading, setLoading] = useState(false);
   const [active, setActive] = useState(0);
   const listId = useId();
-  const skipNext = useRef(false);
+  const typed = useRef(false);
   const boxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (skipNext.current) {
-      skipNext.current = false;
+    if (!typed.current) {
+      setOpen(false);
+      setHits([]);
+      setLoading(false);
       return;
     }
+    typed.current = false;
     const q = value.trim();
     if (q.length < 2) {
       setHits([]);
@@ -87,7 +100,6 @@ export function PlaceAutocomplete({
   }, []);
 
   const choose = (hit: PlaceHit) => {
-    skipNext.current = true;
     onValueChange(hit.label);
     onSelect(hit);
     setOpen(false);
@@ -100,13 +112,16 @@ export function PlaceAutocomplete({
         <span className="sr-only">{ariaLabel}</span>
         {icon}
         <Input
+          id={inputId}
           value={value}
           role="combobox"
+          aria-invalid={invalid || undefined}
           aria-expanded={open}
           aria-controls={listId}
           aria-autocomplete="list"
           autoComplete="off"
           onChange={(e) => {
+            typed.current = true;
             onValueChange(e.target.value);
             onSelect(null);
           }}
@@ -127,7 +142,10 @@ export function PlaceAutocomplete({
               setOpen(false);
             }
           }}
-          className="h-12 border-border bg-background/60 pl-9 pr-9 text-base placeholder:text-muted-foreground"
+          className={cn(
+            "h-12 border-border bg-background/60 pl-9 pr-9 text-base placeholder:text-muted-foreground",
+            invalid && "border-destructive ring-1 ring-destructive/60",
+          )}
           placeholder={placeholder}
         />
         {loading && (

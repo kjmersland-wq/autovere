@@ -12,8 +12,12 @@ import {
 import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
-import { useTr } from "@/lib/i18n";
+import { useRouterState } from "@tanstack/react-router";
+
+import { useLocale, useTr } from "@/lib/i18n";
+import { tripPassPrice } from "@/lib/pricing-i18n";
 import { checkoutReturnUrl, PRICE_IDS } from "@/lib/stripe";
+import { regionFromPath } from "@/lib/trip-data";
 
 /**
  * Soft paywall for route exports. Free visitors can preview everything on
@@ -34,6 +38,10 @@ export function ExportPaywallModal({
   primaryLabel?: string;
 }) {
   const tr = useTr();
+  const locale = useLocale();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  // Same price the pricing page shows for this language/region — never a hardcoded one.
+  const price = tripPassPrice(locale, regionFromPath(pathname));
   const { user, openAuth } = useAuth();
   const { openCheckout, isOpen, checkoutElement } = useStripeCheckout();
 
@@ -74,7 +82,7 @@ export function ExportPaywallModal({
               onClick={() => startCheckout(PRICE_IDS.tripPass)}
             >
               <Sparkles className="size-4" />
-              {primaryLabel ?? `${tr("Get 14-Day Trip Pass")} · €7.99`}
+              {primaryLabel ?? `${tr("Get 14-Day Trip Pass")} · ${price}`}
             </Button>
             <Button
               size="lg"

@@ -1,3 +1,4 @@
+import type { CurrencyCode } from "@/lib/currency";
 import type { Locale } from "@/lib/i18n";
 import type { PlanTier } from "@/lib/stripe";
 import type { RegionKey } from "@/lib/trip-data";
@@ -1523,6 +1524,38 @@ export function tiersFor(locale: Locale, region?: RegionKey): Tier[] {
   });
 }
 
+
+/** The Trip Pass price exactly as the pricing page shows it for this locale/region. */
+export function tripPassPrice(locale: Locale, region?: RegionKey): string {
+  return tiersFor(locale, region).find((t) => t.id === "tripPass")?.monthly ?? TRIP_PASS_COPY.en.price;
+}
+
+/**
+ * Split a displayed price ("£6.99", "7,99 €", "79 kr", "$10.99 CAD", "¥1,290")
+ * into an amount and ISO currency so it can be shown next to the visitor's
+ * header currency. Returns null for anything it can't read confidently.
+ */
+export function parsePrice(
+  price: string,
+  locale: Locale,
+  region?: RegionKey,
+): { amount: number; code: CurrencyCode } | null {
+  const digits = price.match(/\d[\d.,\s]*/)?.[0]?.trim();
+  if (!digits) return null;
+  const amount = Number(
+    /,\d{2}$/.test(digits) ? digits.replace(/[.\s]/g, "").replace(",", ".") : digits.replace(/[,\s]/g, ""),
+  );
+  if (!Number.isFinite(amount)) return null;
+  let code: CurrencyCode | null = null;
+  if (price.includes("£")) code = "GBP";
+  else if (price.includes("€")) code = "EUR";
+  else if (price.includes("zł")) code = "PLN";
+  else if (price.includes("CAD") || region === "ca") code = price.includes("$") ? "CAD" : null;
+  if (!code && price.includes("$")) code = "USD";
+  if (!code && price.includes("¥")) code = locale === "zh" ? "CNY" : "JPY";
+  if (!code && /kr/.test(price)) code = locale === "sv" ? "SEK" : locale === "da" ? "DKK" : locale === "no" ? "NOK" : null;
+  return code ? { amount, code } : null;
+}
 
 export function pricingCopy(locale: Locale): PricingCopy {
   return COPY[locale] ?? COPY.en;

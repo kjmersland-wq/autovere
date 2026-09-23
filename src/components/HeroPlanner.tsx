@@ -1,11 +1,14 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useServerFn } from "@tanstack/react-start";
 import {
   ArrowDown,
+  ArrowLeftRight,
   ArrowUp,
   Check,
+  ChevronDown,
   Gauge,
   GripVertical,
+  Loader2,
   MapPin,
   Plus,
   Route as RouteIcon,
@@ -63,6 +66,26 @@ import { cn } from "@/lib/utils";
 
 export type { RegionKey };
 
+type FieldErrors = { origin?: string | undefined; destination?: string | undefined };
+
+/** Past this the route service is treated as down and the visitor told so. */
+const ROUTE_TIMEOUT_MS = 25_000;
+
+/**
+ * Mirror the calculated route into ?origin=&destination= so a refresh, the
+ * browser back button or the Share button reproduces the same trip.
+ */
+function rememberRouteInUrl(origin: string, destination: string) {
+  try {
+    const url = new URL(window.location.href);
+    url.searchParams.set("origin", origin.trim());
+    url.searchParams.set("destination", destination.trim());
+    window.history.replaceState(window.history.state, "", url);
+  } catch {
+    /* non-browser or locked-down history — nothing to remember */
+  }
+}
+
 type HeroPlannerProps = {
   region: RegionKey;
   title: string;
@@ -115,6 +138,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [destinationHit, setDestinationHit] = useState<PlaceHit | null>(null);
   const [prices, setPrices] = useState<EnergyPrices | null>(null);
   const [calculating, setCalculating] = useState(false);
+  /** 0–2 = which step of the analysis the button narrates; 3 = slower than expected. */
+  const [stage, setStage] = useState(0);
+  const [fieldErrors, setFieldErrors] = useState<FieldErrors>({});
+  const [showOptions, setShowOptions] = useState(false);
   const [tripType, setTripType] = useState<TripType>("oneway");
   const [durationDays, setDurationDays] = useState(7);
   /** Consumption + charging preferences from the active vehicle in My Garage. */
@@ -169,6 +196,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   };
 
   const viaCount = waypoints.filter((w) => w.value.trim()).length;
+  /** Non-default choices hidden behind "More options" — shown as a badge so nothing is secretly on. */
+  const optionsActive = viaCount + (scenic ? 0 : 1) + (avoidTolls ? 1 : 0) + (ferries ? 0 : 1) + tags.length;
 
   const addWaypoint = () => {
     if (waypoints.length >= 3) {
@@ -240,33 +269,88 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     };
   }, [region, pricesFn]);
 
+  // Narrate the analysis so a slow network never looks like a hung button.
+  useEffect(() => {
+    if (!calculating) return;
+    setStage(0);
+    const timers = [
+      setTimeout(() => setStage(1), 1400),
+      setTimeout(() => setStage(2), 2800),
+      setTimeout(() => setStage(3), 9000),
+    ];
+    return () => timers.forEach(clearTimeout);
+  }, [calculating]);
+
+  /** Empty / identical fields get an inline message and focus instead of a silent no-op. */
+  const validate = (from: string, to: string) => {
+    const errors: FieldErrors = {};
+    if (from.trim().length < 2) errors.origin = t.flow.missingOrigin;
+    if (to.trim().length < 2) errors.destination = t.flow.missingDestination;
+    if (!errors.origin && !errors.destination && from.trim().toLowerCase() === to.trim().toLowerCase()) {
+      errors.destination = t.flow.samePlace;
+    }
+    setFieldErrors(errors);
+    if (errors.origin || errors.destination) {
+      document.getElementById(errors.origin ? "planner-origin" : "planner-destination")?.focus();
+      void trackEvent("calculate_blocked", { region, missingOrigin: Boolean(errors.origin), missingDestination: Boolean(errors.destination) });
+      return false;
+    }
+    return true;
+  };
+
+  const swapPlaces = () => {
+    setOrigin(destination);
+    setDestination(origin);
+    setOriginHit(destinationHit);
+    setDestinationHit(originHit);
+    setActiveQuick(null);
+    setFieldErrors({});
+  };
+
   /**
    * Resolve the real routed corridor first (OSRM polyline + reverse-geocoded
-   * countries), then cost it. Only when geocoding fails do we fall back to the
-   * generic regional sample.
+   * countries), then cost it. If the places can't be resolved we say so rather
+   * than showing a generic sample under the visitor's own place names.
    */
   const runCalculation = async (from: string, to: string, extra: number) => {
+    if (!validate(from, to)) return;
     setCalculating(true);
     void trackEvent("calculate_clicked", { region, vehicle, fuel, hasOrigin: Boolean(from.trim()), hasDestination: Boolean(to.trim()) });
 
     let resolved: RouteGeo | null = null;
-    if (from.trim().length > 1 && to.trim().length > 1) {
-      try {
-        const fromPoint =
-          originHit && originHit.label === from
-            ? { name: originHit.label, lat: originHit.lat, lng: originHit.lng }
-            : undefined;
-        const toPoint =
-          destinationHit && destinationHit.label === to
-            ? { name: destinationHit.label, lat: destinationHit.lat, lng: destinationHit.lng }
-            : undefined;
-        resolved = await routeFn({
+    let timedOut = false;
+    try {
+      const fromPoint =
+        originHit && originHit.label === from
+          ? { name: originHit.label, lat: originHit.lat, lng: originHit.lng }
+          : undefined;
+      const toPoint =
+        destinationHit && destinationHit.label === to
+          ? { name: destinationHit.label, lat: destinationHit.lat, lng: destinationHit.lng }
+          : undefined;
+      resolved = await Promise.race([
+        routeFn({
           data: { origin: from, destination: to, ...(fromPoint && { fromPoint }), ...(toPoint && { toPoint }) },
-        });
-      } catch {
-        resolved = null;
-      }
+        }),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => {
+            timedOut = true;
+            reject(new Error("timeout"));
+          }, ROUTE_TIMEOUT_MS),
+        ),
+      ]);
+    } catch {
+      resolved = null;
     }
+
+    if (!resolved) {
+      setCalculating(false);
+      setTrip(null);
+      toast.error(timedOut ? t.flow.timeout : t.flow.unresolved);
+      void trackEvent("trip_failed", { region, reason: timedOut ? "timeout" : "unresolved" });
+      return;
+    }
+    rememberRouteInUrl(from, to);
     setGeo(resolved);
     const [evChargers, fuelStations, gantries] = await Promise.all([loadEvChargers(), loadFuelStations(), ensureNorwayTolls(resolved)]);
     setTrip(
@@ -288,12 +372,10 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
         { noTolls: gantries },
       ),
     );
-    const places = resolved
-      ? [
-          ...resolved.countries.map((c) => c.country),
-          ...resolved.samples.map((sp) => sp.place),
-        ]
-      : undefined;
+    const places = [
+      ...resolved.countries.map((c) => c.country),
+      ...resolved.samples.map((sp) => sp.place),
+    ];
     setFerryCrossings(ferries ? detectFerryCrossings(region, from, to, places) : []);
     setBadges(detectEmissionBadges(region, from, to, places));
     setCalculating(false);
@@ -302,23 +384,38 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
       vehicle,
       fuel,
       tripType,
-      resolved: Boolean(resolved),
-      countries: resolved ? resolved.countries.length : 0,
+      resolved: true,
+      countries: resolved.countries.length,
     });
-
-    if (!resolved && from.trim() && to.trim()) {
-      toast.error("Couldn't resolve those places — pick a suggestion from the dropdown and try again.");
-    }
     scrollToResults();
   };
 
   const runQuickRoute = (r: QuickRoute) => {
     setOrigin(r.origin);
     setDestination(r.destination);
+    setOriginHit(null);
+    setDestinationHit(null);
     setActiveQuick(r.key);
     setStops([]);
     void runCalculation(r.origin, r.destination, viaCount);
   };
+
+  // Deep links (?origin=&destination= from a route page, a shared link or a
+  // refresh) calculate straight away — once live prices are in, or after a
+  // short grace period so a slow price feed never blocks the first result.
+  const autoRun = useRef(Boolean(origin.trim() && destination.trim()));
+  useEffect(() => {
+    if (!autoRun.current) return;
+    const fire = () => {
+      if (!autoRun.current) return;
+      autoRun.current = false;
+      void runCalculation(origin, destination, viaCount);
+    };
+    if (prices) fire();
+    const timer = setTimeout(fire, 2500);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [prices]);
 
 
 
@@ -424,116 +521,93 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               )}
             </div>
 
-            <div data-tour="places" className="mt-4 grid gap-3 lg:grid-cols-[1fr_1fr_auto]">
-              <PlaceAutocomplete
-                value={origin}
-                onValueChange={(v) => {
-                  setOrigin(v);
-                  setActiveQuick(null);
-                }}
-                onSelect={setOriginHit}
-                region={region}
-                ariaLabel={t.hero.origin}
-                placeholder={originHint}
-                icon={
-                  <MapPin className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
-                }
-              />
-              <PlaceAutocomplete
-                value={destination}
-                onValueChange={(v) => {
-                  setDestination(v);
-                  setActiveQuick(null);
-                }}
-                onSelect={setDestinationHit}
-                region={region}
-                ariaLabel={t.hero.destination}
-                placeholder={destinationHint}
-                icon={
-                  <RouteIcon className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
-                }
-              />
+            <div data-tour="places" className="mt-4 grid items-start gap-3 lg:grid-cols-[1fr_auto_1fr_auto]">
+              <div>
+                <PlaceAutocomplete
+                  inputId="planner-origin"
+                  invalid={Boolean(fieldErrors.origin)}
+                  value={origin}
+                  onValueChange={(v) => {
+                    setOrigin(v);
+                    setActiveQuick(null);
+                    if (fieldErrors.origin) setFieldErrors((e) => ({ ...e, origin: undefined }));
+                  }}
+                  onSelect={setOriginHit}
+                  region={region}
+                  ariaLabel={t.hero.origin}
+                  placeholder={originHint}
+                  icon={
+                    <MapPin className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
+                  }
+                />
+                {fieldErrors.origin && (
+                  <p role="alert" className="mt-1.5 text-sm text-destructive">
+                    {fieldErrors.origin}
+                  </p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={swapPlaces}
+                disabled={!origin && !destination}
+                aria-label={t.flow.swap}
+                title={t.flow.swap}
+                className="mx-auto -my-1 inline-flex size-9 items-center justify-center rounded-full border border-border bg-background/60 text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground disabled:opacity-40 lg:my-1.5"
+              >
+                <ArrowLeftRight className="size-4 rotate-90 lg:rotate-0" />
+              </button>
+              <div>
+                <PlaceAutocomplete
+                  inputId="planner-destination"
+                  invalid={Boolean(fieldErrors.destination)}
+                  value={destination}
+                  onValueChange={(v) => {
+                    setDestination(v);
+                    setActiveQuick(null);
+                    if (fieldErrors.destination) setFieldErrors((e) => ({ ...e, destination: undefined }));
+                  }}
+                  onSelect={setDestinationHit}
+                  region={region}
+                  ariaLabel={t.hero.destination}
+                  placeholder={destinationHint}
+                  icon={
+                    <RouteIcon className="pointer-events-none absolute left-3 top-1/2 z-10 size-4 -translate-y-1/2 text-muted-foreground" />
+                  }
+                />
+                {fieldErrors.destination && (
+                  <p role="alert" className="mt-1.5 text-sm text-destructive">
+                    {fieldErrors.destination}
+                  </p>
+                )}
+              </div>
               <Button
                 type="submit"
                 data-tour="calculate"
                 size="lg"
                 disabled={calculating}
-                className="h-12 px-8 text-base font-semibold"
+                aria-busy={calculating}
+                className="relative h-12 overflow-hidden px-8 text-base font-semibold"
               >
-                {calculating ? "Analysing route…" : t.hero.submit}
+                {calculating ? (
+                  <>
+                    <Loader2 className="size-4 animate-spin" />
+                    <span aria-live="polite">{t.flow.stages[Math.min(stage, 2)]}</span>
+                    <span
+                      aria-hidden
+                      className="absolute inset-x-0 bottom-0 h-0.5 origin-left bg-primary-foreground/70 transition-transform duration-[1400ms] ease-out"
+                      style={{ transform: `scaleX(${[0.3, 0.6, 0.85, 0.95][stage] ?? 0.95})` }}
+                    />
+                  </>
+                ) : (
+                  t.hero.submit
+                )}
               </Button>
             </div>
-
-            <div className="mt-3 grid gap-2">
-              {waypoints.map((w, i) => (
-                <div key={w.id} className="flex items-center gap-2">
-                  <span className="flex items-center gap-0.5 rounded-lg border border-border bg-background/40 px-1.5 py-1">
-                    <GripVertical className="size-4 text-muted-foreground" aria-hidden />
-                    <button
-                      type="button"
-                      onClick={() => moveWaypoint(i, -1)}
-                      aria-label={`Move via-stop ${i + 1} up`}
-                      className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
-                      disabled={i === 0}
-                    >
-                      <ArrowUp className="size-3.5" />
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => moveWaypoint(i, 1)}
-                      aria-label={`Move via-stop ${i + 1} down`}
-                      className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
-                      disabled={i === waypoints.length - 1}
-                    >
-                      <ArrowDown className="size-3.5" />
-                    </button>
-                  </span>
-                  <Input
-                    value={w.value}
-                    onChange={(e) => updateWaypoint(w.id, e.target.value)}
-                    className="h-11 border-border bg-background/60 text-base placeholder:text-muted-foreground"
-                    placeholder={t.hero.viaPlaceholder(i + 1)}
-                  />
-                  <button
-                    type="button"
-                    onClick={() => removeWaypoint(w.id)}
-                    aria-label={`Remove via-stop ${i + 1}`}
-                    className="rounded-lg border border-border bg-background/40 p-2 text-muted-foreground hover:text-foreground"
-                  >
-                    <X className="size-4" />
-                  </button>
-                </div>
-              ))}
-
-              <div className="flex flex-wrap items-center gap-3">
-                <button
-                  type="button"
-                  onClick={addWaypoint}
-                  disabled={waypoints.length >= 3}
-                  className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/20 disabled:opacity-40"
-                >
-                  <Plus className="size-4" />
-                  {t.hero.addVia}
-                </button>
-                <span className="text-xs text-muted-foreground">
-                  {t.hero.viaHint}
-                </span>
-              </div>
-            </div>
-
-
-            <div
-              data-tour="preferences"
-              className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3"
-            >
-              <Toggle
-                label={t.hero.scenic}
-                checked={scenic}
-                onChange={setScenic}
-              />
-              <Toggle label={t.hero.avoidTolls} checked={avoidTolls} onChange={setAvoidTolls} />
-              <Toggle label={t.hero.ferries} checked={ferries} onChange={setFerries} />
-            </div>
+            {calculating && stage === 3 && (
+              <p aria-live="polite" className="mt-2 text-right text-xs text-muted-foreground">
+                {t.flow.slow}
+              </p>
+            )}
 
             <div className="mt-5 flex flex-wrap items-center gap-2">
               <span className="mr-1 text-sm text-foreground/70">{t.hero.fuelType}</span>
@@ -585,81 +659,173 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               </div>
             </div>
 
-            <div className="mt-6 grid gap-4 border-t border-border pt-5 lg:grid-cols-[1fr_auto]">
-              <div>
-                <span className="text-sm text-foreground/70">{t.hero.transponder}</span>
-                <div className="mt-3 flex flex-wrap gap-2">
-                  {transponders.map((t) => {
-                    const on = tags.includes(t.key);
-                    return (
+            <div className="mt-6 border-t border-border pt-4">
+              <button
+                type="button"
+                onClick={() => setShowOptions((v) => !v)}
+                aria-expanded={showOptions}
+                aria-controls="planner-options"
+                className="inline-flex items-center gap-2 rounded-full px-1 py-1 text-sm font-medium text-foreground/80 transition-colors hover:text-foreground"
+              >
+                <ChevronDown className={cn("size-4 transition-transform", showOptions && "rotate-180")} />
+                {showOptions ? t.flow.fewerOptions : t.flow.moreOptions}
+                {!showOptions && optionsActive > 0 && (
+                  <span className="rounded-full bg-primary/15 px-2 py-0.5 text-xs font-semibold text-primary">
+                    {t.flow.optionsActive(optionsActive)}
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {showOptions && (
+              <div id="planner-options" className="mt-4">
+                <div className="grid gap-2">
+                  {waypoints.map((w, i) => (
+                    <div key={w.id} className="flex items-center gap-2">
+                      <span className="flex items-center gap-0.5 rounded-lg border border-border bg-background/40 px-1.5 py-1">
+                        <GripVertical className="size-4 text-muted-foreground" aria-hidden />
+                        <button
+                          type="button"
+                          onClick={() => moveWaypoint(i, -1)}
+                          aria-label={`Move via-stop ${i + 1} up`}
+                          className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                          disabled={i === 0}
+                        >
+                          <ArrowUp className="size-3.5" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => moveWaypoint(i, 1)}
+                          aria-label={`Move via-stop ${i + 1} down`}
+                          className="rounded p-0.5 text-muted-foreground hover:text-foreground disabled:opacity-30"
+                          disabled={i === waypoints.length - 1}
+                        >
+                          <ArrowDown className="size-3.5" />
+                        </button>
+                      </span>
+                      <Input
+                        value={w.value}
+                        onChange={(e) => updateWaypoint(w.id, e.target.value)}
+                        className="h-11 border-border bg-background/60 text-base placeholder:text-muted-foreground"
+                        placeholder={t.hero.viaPlaceholder(i + 1)}
+                      />
                       <button
-                        key={t.key}
                         type="button"
-                        onClick={() =>
-                          setTags((prev) =>
-                            prev.includes(t.key) ? prev.filter((k) => k !== t.key) : [...prev, t.key],
-                          )
-                        }
-                        aria-pressed={on}
-                        className={cn(
-                          "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors",
-                          on
-                            ? "border-primary bg-primary/15 text-foreground"
-                            : "border-border bg-background/50 text-foreground/85 hover:bg-background/70",
-                        )}
+                        onClick={() => removeWaypoint(w.id)}
+                        aria-label={`Remove via-stop ${i + 1}`}
+                        className="rounded-lg border border-border bg-background/40 p-2 text-muted-foreground hover:text-foreground"
                       >
-                        {on ? <Check className="size-4 text-primary" /> : <Tag className="size-4 text-muted-foreground" />}
-                        <span className="font-medium">{tr(t.label)}</span>
-                        <span className="text-xs text-muted-foreground">{t.scope}</span>
+                        <X className="size-4" />
                       </button>
-                    );
-                  })}
+                    </div>
+                  ))}
+
+                  <div className="flex flex-wrap items-center gap-3">
+                    <button
+                      type="button"
+                      onClick={addWaypoint}
+                      disabled={waypoints.length >= 3}
+                      className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-4 py-2 text-sm font-medium text-primary transition-colors hover:bg-primary/20 disabled:opacity-40"
+                    >
+                      <Plus className="size-4" />
+                      {t.hero.addVia}
+                    </button>
+                    <span className="text-xs text-muted-foreground">
+                      {t.hero.viaHint}
+                    </span>
+                  </div>
+                </div>
+
+                <div
+                  data-tour="preferences"
+                  className="mt-5 grid gap-3 border-t border-border pt-5 sm:grid-cols-3"
+                >
+                  <Toggle
+                    label={t.hero.scenic}
+                    checked={scenic}
+                    onChange={setScenic}
+                  />
+                  <Toggle label={t.hero.avoidTolls} checked={avoidTolls} onChange={setAvoidTolls} />
+                  <Toggle label={t.hero.ferries} checked={ferries} onChange={setFerries} />
+                </div>
+
+                <div className="mt-6 grid gap-4 border-t border-border pt-5 lg:grid-cols-[1fr_auto]">
+                  <div>
+                    <span className="text-sm text-foreground/70">{t.hero.transponder}</span>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      {transponders.map((t) => {
+                        const on = tags.includes(t.key);
+                        return (
+                          <button
+                            key={t.key}
+                            type="button"
+                            onClick={() =>
+                              setTags((prev) =>
+                                prev.includes(t.key) ? prev.filter((k) => k !== t.key) : [...prev, t.key],
+                              )
+                            }
+                            aria-pressed={on}
+                            className={cn(
+                              "inline-flex items-center gap-2 rounded-full border px-4 py-2 text-sm transition-colors",
+                              on
+                                ? "border-primary bg-primary/15 text-foreground"
+                                : "border-border bg-background/50 text-foreground/85 hover:bg-background/70",
+                            )}
+                          >
+                            {on ? <Check className="size-4 text-primary" /> : <Tag className="size-4 text-muted-foreground" />}
+                            <span className="font-medium">{tr(t.label)}</span>
+                            <span className="text-xs text-muted-foreground">{t.scope}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        className="h-11 self-end border-border bg-background/50"
+                      >
+                        <Gauge className="size-4" />
+                        {t.hero.consumption}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent align="end" className="w-72 border-border bg-card/95 backdrop-blur">
+                      <p className="text-sm font-semibold">{t.hero.fineTune}</p>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        {t.hero.fineTuneHint}
+                      </p>
+                      <label className="mt-4 block text-xs text-foreground/75">
+                        {t.hero.tankSize} ({volumeUnit})
+                        <Input
+                          type="number"
+                          min={1}
+                          value={tankSize}
+                          onChange={(e) => setTankSize(e.target.value)}
+                          className="mt-1 h-10 border-border bg-background/60"
+                        />
+                      </label>
+                      <label className="mt-3 block text-xs text-foreground/75">
+                        {t.hero.avgConsumption} ({consumptionUnit})
+                        <Input
+                          type="number"
+                          step="0.1"
+                          min={0}
+                          value={consumption}
+                          onChange={(e) => setConsumption(e.target.value)}
+                          className="mt-1 h-10 border-border bg-background/60"
+                        />
+                      </label>
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        {t.hero.rangePerFill}: ~{range} {defaults.units === "imperial" ? "miles" : "km"}
+                      </p>
+                    </PopoverContent>
+                  </Popover>
                 </div>
               </div>
-
-              <Popover>
-                <PopoverTrigger asChild>
-                  <Button
-                    type="button"
-                    variant="outline"
-                    className="h-11 self-end border-border bg-background/50"
-                  >
-                    <Gauge className="size-4" />
-                    {t.hero.consumption}
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent align="end" className="w-72 border-border bg-card/95 backdrop-blur">
-                  <p className="text-sm font-semibold">{t.hero.fineTune}</p>
-                  <p className="mt-1 text-xs text-muted-foreground">
-                    {t.hero.fineTuneHint}
-                  </p>
-                  <label className="mt-4 block text-xs text-foreground/75">
-                    {t.hero.tankSize} ({volumeUnit})
-                    <Input
-                      type="number"
-                      min={1}
-                      value={tankSize}
-                      onChange={(e) => setTankSize(e.target.value)}
-                      className="mt-1 h-10 border-border bg-background/60"
-                    />
-                  </label>
-                  <label className="mt-3 block text-xs text-foreground/75">
-                    {t.hero.avgConsumption} ({consumptionUnit})
-                    <Input
-                      type="number"
-                      step="0.1"
-                      min={0}
-                      value={consumption}
-                      onChange={(e) => setConsumption(e.target.value)}
-                      className="mt-1 h-10 border-border bg-background/60"
-                    />
-                  </label>
-                  <p className="mt-3 text-xs text-muted-foreground">
-                    {t.hero.rangePerFill}: ~{range} {defaults.units === "imperial" ? "miles" : "km"}
-                  </p>
-                </PopoverContent>
-              </Popover>
-            </div>
+            )}
 
             <p className="mt-5 text-xs text-muted-foreground">
               {t.hero.regionalDefaults}: {defaults.units === "imperial" ? t.hero.imperial : t.hero.metric} ·{" "}

@@ -19,6 +19,9 @@ import { prefixFromPath } from "@/lib/locales";
  * The garage UI is authored in Norwegian; every non-/no route renders English.
  */
 export const GARAGE_EN: Record<string, string> = {
+  "Ingen kjøretøy ennå — legg til bilen, bobilen eller motorsykkelen din, så bruker vi tallene dine i hver beregning.":
+    "No vehicles yet — add your car, motorhome or motorcycle and we'll use your own numbers in every estimate.",
+  "Planlegg en tur": "Plan a trip",
   Oversikt: "Overview",
   "Mine reiser": "My Trips",
   "Mine kjøretøy": "My Vehicles",
