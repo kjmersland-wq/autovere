@@ -32,7 +32,16 @@ Det som mangler er å **pakke** dette tydeligere, ikke å lage det.
 ## 1. Penger først (uke 1–2)
 
 ### 1a. Stripe = skjerm [deg]
-Se [HANDLINGSPLAN.md](HANDLINGSPLAN.md) punkt 2–3. Dette er eneste punkt med høy risiko.
+Betaling er satt på pause (`PURCHASES_ENABLED = false` i `src/lib/purchases.ts`) mens selskapet etableres i Polen.
+**Det er en gyllen anledning:** den nye Stripe-kontoen kan settes opp riktig fra start, i stedet for at den gamle må ryddes.
+
+- Bestem prisene (1b) **før** produktene opprettes i den nye Stripe-kontoen.
+- Opprett hvert produkt med én grunnpris og `currency_options` for NOK, SEK, DKK, EUR, GBP, USD, CAD og PLN, med samme beløp som på skjermen.
+- Behold oppslagsnøklene (`trip_pass`, `pro_yearly` …), så trenger koden ikke å endres.
+- Test i testmodus, og sett så bryteren til `true`. Trip Pass-kortet på resultatet er skjult mens pausen varer og kommer tilbake av seg selv.
+- Betalingsvinduet viser fortsatt «€39/year» fast for Pro-året. Det rettes når prisene er bestemt.
+
+Se også [HANDLINGSPLAN.md](HANDLINGSPLAN.md) punkt 2–3.
 
 ### 1b. Prisstrategi: forslag
 Prisene er i dag satt per språk og henger ikke sammen (se STATUS). Forslag:
@@ -45,6 +54,7 @@ Prisene er i dag satt per språk og henger ikke sammen (se STATUS). Forslag:
 | Euro | 7,99 € | 13,99 € | 39 € | 19 € |
 | UK | £6.99 | £11.99 | £35 | £17 |
 | USA | $8.99 | $14.99 | $49 | $24 |
+| Polen | 34,99 zł | 59,99 zł | 169 zł | 79 zł |
 
 - **Hvorfor sesongpass:** en feriebilist trenger AutoVere i juni–august, ikke hele året. Månedsabonnement på et ferieprodukt gir mye frafall og dårlig samvittighet hos kunden. 90 dager til omtrent dobbel Trip Pass-pris er lett å si ja til.
 - **Pro-måned kan fjernes** for privatpersoner. Da blir stigen Gratis → Trip Pass → Sesong → År. Enklere tekst og færre Stripe-priser.

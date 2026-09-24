@@ -41,6 +41,7 @@ import {
 import { useLocale, useT, useTr } from "@/lib/i18n";
 import { prefixForCode } from "@/lib/locales";
 import { tripPassPrice } from "@/lib/pricing-i18n";
+import { PURCHASES_ENABLED } from "@/lib/purchases";
 import { useSubscription } from "@/hooks/useSubscription";
 import { filterByCorridor } from "@/lib/corridor-filter";
 import { cn } from "@/lib/utils";
@@ -481,7 +482,7 @@ export function TripResults({
       </div>
 
       {/* Conversion moment: the visitor has just seen the number they came for. */}
-      {exportsLocked && (
+      {exportsLocked && PURCHASES_ENABLED && (
         <div className="mt-6 flex flex-col gap-4 rounded-2xl border border-primary/40 bg-gradient-to-r from-primary/15 via-primary/5 to-transparent p-5 sm:flex-row sm:items-center sm:justify-between sm:p-6">
           <div className="max-w-2xl">
             <p className="text-xs font-semibold uppercase tracking-[0.18em] text-primary">{t.flow.tripPassEyebrow}</p>

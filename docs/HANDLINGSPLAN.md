@@ -23,6 +23,9 @@ Er noe feil: gå til Vercel → prosjektet → Deployments og trykk «Instant Ro
 
 ## 2. Bestem prisene og sjekk Stripe (30 min, viktigst for inntekt)
 
+> **Status 24.09:** betaling er satt på pause mens selskapet etableres i Polen (`src/lib/purchases.ts`).
+> Bruk pausen: bestem prisene først, og opprett dem riktig i den nye Stripe-kontoen. Se [VEKSTPLAN.md](VEKSTPLAN.md) punkt 1.
+
 Siden viser forskjellige priser per språk, men checkout bruker én Stripe-pris per produkt.
 Kunden kan derfor bli belastet et annet beløp eller i en annen valuta enn det som står på siden.
 
