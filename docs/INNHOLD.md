@@ -132,3 +132,55 @@ Price your own route: autovere.com
 > Eksempler med bensinbil på raskeste rute: Oslo–Bergen ca. 400–450 kr i bom, Oslo–Trondheim ca. 300 kr, Oslo–Kristiansand ca. 230 kr. Elbil betaler rundt 30 % mindre.
 > Vi lager gjerne en liste over de dyreste og billigste ferieveiene til en sak.
 > Kjell Mersland, AutoVere · kjell@autovere.com
+
+---
+
+## Del 2: fire uker, to innlegg i uken
+
+Ett tema per uke. Hvert innlegg er kort og har én lenke. Posten på norsk går til grupper og sider i Norge, den engelske til internasjonale grupper.
+
+### Uke 1 – Hytta
+
+**NO**
+> Hva koster hytteturen egentlig? Oslo–Hemsedal: ca. 260–290 kr i bom hver vei med bensinbil, rundt 30 % mindre med elbil. 20 turer tur-retur i året blir over 10 000 kr bare i bom.
+> Sjekk din hyttevei: autovere.com/no/routes/oslo-hemsedal
+
+**EN**
+> Driving to a Norwegian ski resort? Oslo–Hemsedal is about NOK 260–290 in tolls each way. No booths: the camera bills you later.
+> autovere.com/no/routes/oslo-hemsedal
+
+### Uke 2 – Elbil
+
+**NO**
+> Elbil eller bensin til Bergen? Samme tur: ca. 500 kr totalt med elbil, ca. 1 100 kr med bensin. Bommen alene er rundt 30 % billigere for elbil.
+> autovere.com/no?origin=Oslo&destination=Bergen
+
+**EN**
+> Same road trip, two prices: Oslo–Bergen costs about NOK 500 by EV and NOK 1,100 by petrol car, tolls and energy included.
+> autovere.com
+
+### Uke 3 – Europa med bil
+
+**NO**
+> Skal du kjøre til Italia neste sommer? Østerrike krever digital vignett (10 dager: 12,80 €), Sveits har bare årsvignett (40 CHF). AutoVere viser hvilke du trenger på din rute.
+> autovere.com/no
+
+**EN**
+> Driving through the Alps? Austria needs a digital vignette (10 days: €12.80). Switzerland only sells an annual one (CHF 40). Find out which ones your route needs.
+> autovere.com
+
+### Uke 4 – Ferje og bobil
+
+**NO**
+> Bobil på Vestlandet: E39 har flere ferjer, for eksempel Mortavika–Arsvågen (178 kr for bil under 6 m). Med AutoPASS for ferje kan du spare opptil 50 %.
+> autovere.com/no?origin=Bergen&destination=Stavanger
+
+**EN**
+> Taking a motorhome along Norway's west coast? The E39 has several fjord ferries. A prepaid AutoPASS ferry agreement can cut the fare by up to 50%.
+> autovere.com
+
+### Svar på kommentarer (kopier ved behov)
+
+- **«Er tallene riktige?»** Tallene er veiledende og bygger på Statens vegvesens bomregister og operatørenes publiserte priser. Vi har kontrollert dem mot en uavhengig kalkulator, og de ligger innenfor ±15 %.
+- **«Koster det noe?»** Å beregne turer er gratis. Trip Pass (engangskjøp) låser opp eksport og utskrift i 14 dager.
+- **«Is it accurate?»** Figures are indicative, based on official toll registers and published fares, and checked against an independent calculator (within ±15%).

@@ -360,30 +360,34 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     rememberRouteInUrl(from, to);
     setGeo(resolved);
     const [evChargers, fuelStations, gantries] = await Promise.all([loadEvChargers(), loadFuelStations(), ensureNorwayTolls(resolved)]);
-    setTrip(
-      estimateAllVariants(
-        region,
-        vehicle,
-        fuel,
-        avoidTolls,
-        ferries,
-        scenic,
-        extra,
-        tripType,
-        effectiveDuration,
-        resolved,
-        prices,
-        effectiveProfile(),
-        evChargers,
-        fuelStations,
-        { noTolls: gantries },
-      ),
+    const variants = estimateAllVariants(
+      region,
+      vehicle,
+      fuel,
+      avoidTolls,
+      ferries,
+      scenic,
+      extra,
+      tripType,
+      effectiveDuration,
+      resolved,
+      prices,
+      effectiveProfile(),
+      evChargers,
+      fuelStations,
+      { noTolls: gantries },
     );
+    setTrip(variants);
     const places = [
       ...resolved.countries.map((c) => c.country),
       ...resolved.samples.map((sp) => sp.place),
     ];
-    setFerryCrossings(ferries ? detectFerryCrossings(region, from, to, places) : []);
+    // The Norwegian fjord-ferry card matches on place names (every Oslo trip),
+    // so only show it when the routed line actually crosses a priced ferry.
+    const crossesNoFerry = variants.fastest.segments.some((sg) => sg.lines.some((l) => l.badge === "Ferry"));
+    setFerryCrossings(
+      ferries ? detectFerryCrossings(region, from, to, places).filter((f) => f.id !== "no-fjord" || crossesNoFerry) : [],
+    );
     setBadges(detectEmissionBadges(region, from, to, places));
     setCalculating(false);
     void trackEvent("trip_calculated", {
@@ -556,7 +560,6 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               <button
                 type="button"
                 onClick={swapPlaces}
-                disabled={!origin && !destination}
                 aria-label={t.flow.swap}
                 title={t.flow.swap}
                 className="mx-auto -my-1 inline-flex size-9 items-center justify-center rounded-full border border-border bg-background/60 text-muted-foreground transition-colors hover:border-primary/60 hover:text-foreground disabled:opacity-40 lg:my-1.5"

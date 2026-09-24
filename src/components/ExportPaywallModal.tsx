@@ -17,7 +17,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { useLocale, useTr } from "@/lib/i18n";
 import { proYearlyPrice, tripPassPrice } from "@/lib/pricing-i18n";
 import { checkoutReturnUrl, PRICE_IDS } from "@/lib/stripe";
-import { regionFromPath } from "@/lib/trip-data";
+import { regionFromPath } from "@/lib/site-basics";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
 
 /**

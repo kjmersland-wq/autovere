@@ -58,7 +58,7 @@ import {
   ROUTE_VARIANTS,
   applyNetworkFilter,
   ENGLISH_ONLY_POI_IDS,
-  EV_CHARGING_POIS,
+  type EvChargingPoi,
   RV_POIS,
   SCENIC_HIGHLIGHTS,
   detectScandiBridges,
@@ -263,9 +263,20 @@ export function TripResults({
   const isVisiblePoi = (id: string) => showEnglishOnlyPois || !ENGLISH_ONLY_POI_IDS.has(id);
   const highlights = filterByCorridor(SCENIC_HIGHLIGHTS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
   const rvPois = filterByCorridor(RV_POIS[region], corridorCoords, 25).filter((p) => isVisiblePoi(p.id));
-  const evChargingPois = showEnglishOnlyPois && fuel === "electric"
-    ? filterByCorridor(EV_CHARGING_POIS[region], corridorCoords, 30)
-    : [];
+  // The charger dataset is ~13 MB, so it is only fetched for EV trips.
+  const wantEvPois = showEnglishOnlyPois && fuel === "electric";
+  const [evPoiData, setEvPoiData] = useState<Record<RegionKey, EvChargingPoi[]> | null>(null);
+  useEffect(() => {
+    if (!wantEvPois || evPoiData) return;
+    let alive = true;
+    void import("@/lib/ev-charging-pois").then((mod) => {
+      if (alive) setEvPoiData(mod.EV_CHARGING_POIS);
+    });
+    return () => {
+      alive = false;
+    };
+  }, [wantEvPois, evPoiData]);
+  const evChargingPois = wantEvPois && evPoiData ? filterByCorridor(evPoiData[region], corridorCoords, 30) : [];
   const m = useMoney(trip.currency);
   const nativePrice = (value: number, symbol: string) =>
     formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
@@ -322,7 +333,7 @@ export function TripResults({
   const shareTrip = async () => {
     const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)} · AutoVere`;
     try {
-      if (navigator.share) await navigator.share({ title: "AutoVere road trip", text, url: window.location.href });
+      if (navigator.share) await navigator.share({ title: `${title} · AutoVere`, text, url: window.location.href });
       else {
         await navigator.clipboard.writeText(`${text}\n${window.location.href}`);
         toast.success(t.results.shareToast);

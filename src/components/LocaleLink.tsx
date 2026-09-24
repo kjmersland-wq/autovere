@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link, useRouterState } from "@tanstack/react-router";
 
-import { buildPath, isLocalePage, splitPath } from "@/lib/locales";
+import { buildPath, isLocalePage, isLocalePrefix, splitPath } from "@/lib/locales";
 
 type Props = {
   /** English path, e.g. "/planner" or "/" */
@@ -18,7 +18,11 @@ type Props = {
  */
 export function LocaleLink({ to, children, className, activeClassName, onClick }: Props) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
-  const { prefix, region } = splitPath(pathname);
+  const parts = splitPath(pathname);
+  const region = parts.region;
+  // /challenge/no keeps its language last; links from there stay Norwegian.
+  const challenge = /^\/challenge\/([a-z]{2})(?:\/|$)/.exec(pathname)?.[1] ?? "";
+  const prefix = parts.prefix ?? (isLocalePrefix(challenge) ? challenge : null);
   const activeProps = activeClassName ? { activeProps: { className: activeClassName } } : {};
 
   const slug = to.replace(/^\/+/, "").split("/")[0] ?? "";

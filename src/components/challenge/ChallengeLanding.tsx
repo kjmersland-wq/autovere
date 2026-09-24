@@ -447,7 +447,7 @@ export function ChallengeLanding({ lang }: Props) {
 
       {/* Press registration */}
       <section id="register" className="border-y border-white/10 bg-white/[0.02] scroll-mt-24">
-        <div className="mx-auto grid w-full max-w-7xl gap-14 px-6 py-24 sm:px-8 md:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+        <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-14 px-6 py-24 sm:px-8 md:py-28 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
           <div>
             <Eyebrow>{c.register.eyebrow}</Eyebrow>
             <h2 className="mt-4 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">

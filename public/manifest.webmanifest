@@ -1,0 +1,13 @@
+{
+  "name": "AutoVere — Road Trip Cost Planner",
+  "short_name": "AutoVere",
+  "description": "Tolls, vignettes, ferries, fuel and charging for your road trip, in one total.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0e1525",
+  "theme_color": "#0e1525",
+  "icons": [
+    { "src": "/apple-touch-icon.png", "sizes": "180x180", "type": "image/png" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" }
+  ]
+}

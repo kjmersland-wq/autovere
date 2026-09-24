@@ -19,7 +19,7 @@ Kortversjon:
 | Idé fra rapporten | Status i koden |
 |---|---|
 | Del / kopier turlenke | Finnes (Del-knapp på resultat, lenken inneholder ruten) |
-| Rute-landingssider | 19 sider under `/routes/…`, hvorav 3 norske (Oslo–Bergen, –Trondheim, –Kristiansand) |
+| Rute-landingssider | 20 sider under `/routes/…`, hvorav 4 norske (Oslo–Bergen, –Trondheim, –Kristiansand, –Hemsedal) |
 | PDF / utskrift | Finnes (Skriv ut på resultat) |
 | «Hva må jeg kjøpe før grensen» | Delvis: vignett- og grenseinfo, lavutslippssoner og bombrikker finnes som moduler |
 | Partnerkit | Finnes (`/partners`, `public/partner-kit`, partnerdashboard) |

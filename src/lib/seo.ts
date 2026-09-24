@@ -451,6 +451,7 @@ export function homepageJsonLd() {
         name: "KM TECH LABS",
         alternateName: "AutoVere",
         url: BASE_URL,
+        logo: absUrl("/icon-512.png"),
         sameAs: ["https://twitter.com/autoverehq"],
         contactPoint: [
           { "@type": "ContactPoint", email: "kjell@autovere.com", contactType: "customer support" },

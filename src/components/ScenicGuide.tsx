@@ -6,7 +6,7 @@ import { useLocale } from "@/lib/i18n";
 import { prefixFromPath } from "@/lib/locales";
 import { seoRouteCopy } from "@/lib/seo-route-i18n";
 import { SEO_CORRIDORS } from "@/data/seo-corridors";
-import { regionFromPath, type RegionKey } from "@/lib/trip-data";
+import { regionFromPath, type RegionKey } from "@/lib/site-basics";
 import type { PoiKind } from "@/lib/poi-links";
 
 type Spot = {

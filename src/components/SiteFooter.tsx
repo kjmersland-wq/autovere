@@ -2,7 +2,7 @@ import { Link, useRouterState } from "@tanstack/react-router";
 
 import { useT, useLocale } from "@/lib/i18n";
 import { LOCALE_ROUTES, prefixForCode, prefixFromPath } from "@/lib/locales";
-import { regionFromPath } from "@/lib/trip-data";
+import { regionFromPath } from "@/lib/site-basics";
 
 const YEAR = new Date().getFullYear();
 
@@ -12,7 +12,8 @@ export function SiteFooter() {
   const t = useT();
   const locale = useLocale();
   const challengeHref = locale === "en" ? "/challenge" : `/challenge/${prefixForCode(locale) ?? locale}`;
-  const langPrefix = prefixFromPath(pathname);
+  // Falls back to the locale so /challenge/no links to the Norwegian pages.
+  const langPrefix = prefixFromPath(pathname) ?? prefixForCode(locale);
   const euHome = langPrefix ? `/${langPrefix}` : "/";
   const isFrench = pathname.startsWith("/ca/fr");
 

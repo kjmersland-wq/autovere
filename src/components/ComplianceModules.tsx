@@ -162,11 +162,12 @@ export function LezMonitor({
 }) {
   const t = useT();
   const tr = useTr();
-  const { matched, all } = useMemo(
+  const { matched } = useMemo(
     () => detectLezZones(region, origin, destination),
     [region, origin, destination],
   );
-  const zones = matched.length > 0 ? matched : all;
+  // Only zones on this route — the full overview lives on the tolls page.
+  const zones = matched;
   if (zones.length === 0) return null;
 
   return (

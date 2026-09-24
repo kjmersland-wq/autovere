@@ -11,7 +11,7 @@ import { pathForCode, prefixForCode } from "@/lib/locales";
 import { isChallengeLang } from "@/lib/challenge-content";
 import { RegionSwitcher, RegionSwitcherMobile } from "@/components/RegionSwitcher";
 
-import { LANGUAGES, NAV_LINKS, regionFromPath, type RegionKey } from "@/lib/trip-data";
+import { LANGUAGES, NAV_LINKS, regionFromPath, type RegionKey } from "@/lib/site-basics";
 
 import {
   DropdownMenu,
@@ -27,7 +27,7 @@ import {
 } from "@/components/ui/sheet";
 import { regionStrings } from "@/lib/region-i18n";
 import { cn } from "@/lib/utils";
-import logoMark from "@/assets/autovere-logo.png";
+import logoMark from "@/assets/autovere-logo-64.png";
 
 function regionLabel(to: string, region: RegionKey, locale: Parameters<typeof regionStrings>[0]) {
   const nav = regionStrings(locale, region).nav;
@@ -75,8 +75,8 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
           <img
             src={logoMark}
             alt="AutoVere"
-            width={1024}
-            height={1024}
+            width={64}
+            height={64}
             className="size-8 shrink-0 rounded-[0.55rem] shadow-lg shadow-black/30 ring-1 ring-border/60"
           />
           <span className="hidden sm:inline">
@@ -202,8 +202,8 @@ export function SiteHeader({ region }: { region?: RegionKey }) {
               <img
                 src={logoMark}
                 alt="AutoVere"
-                width={1024}
-                height={1024}
+                width={64}
+                height={64}
                 className="size-7 rounded-lg ring-1 ring-border/60"
               />
               Auto<span className="text-primary">Vere</span>

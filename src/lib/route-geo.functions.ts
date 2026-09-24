@@ -115,14 +115,31 @@ function nominatim(url: string, attempt = 0): Promise<Response | null> {
 
 const geocodeCache = new Map<string, { name: string; lat: number; lng: number } | null>();
 
+/**
+ * Photon ranks a same-named village above the city now and then ("Munich" →
+ * a village in North Dakota). When the top hit is a village or hamlet and a
+ * city/town of the same query is also returned, take the larger place.
+ */
+const SMALL_PLACES = new Set(["village", "hamlet", "isolated_dwelling", "locality"]);
+const LARGE_PLACES = new Set(["city", "town", "municipality"]);
+
 async function geocode(query: string): Promise<{ name: string; lat: number; lng: number } | null> {
   const key = query.toLowerCase().trim();
   if (geocodeCache.has(key)) return geocodeCache.get(key) ?? null;
 
   let out: { name: string; lat: number; lng: number } | null = null;
 
-  const pj = await photon(`api?limit=1&q=${encodeURIComponent(query)}`);
-  const feat = pj?.features?.[0];
+  const pj = await photon(`api?limit=5&q=${encodeURIComponent(query)}`);
+  type Feature = {
+    geometry?: { coordinates?: [number, number] };
+    properties?: { osm_key?: string; osm_value?: string; name?: string; city?: string; state?: string; country?: string };
+  };
+  const features: Feature[] = pj?.features ?? [];
+  const isPlace = (ft: Feature | undefined, set: Set<string>) =>
+    ft?.properties?.osm_key === "place" && set.has(ft.properties.osm_value ?? "");
+  const feat = isPlace(features[0], SMALL_PLACES)
+    ? (features.find((ft) => isPlace(ft, LARGE_PLACES)) ?? features[0])
+    : features[0];
   if (feat?.geometry?.coordinates) {
     const [lng, lat] = feat.geometry.coordinates as [number, number];
     const p = feat.properties ?? {};
@@ -363,7 +380,8 @@ export const getRouteGeo = createServerFn({ method: "GET" })
       ? `${data.fromPoint.lat},${data.fromPoint.lng}|${data.toPoint.lat},${data.toPoint.lng}`
       : `${data.origin.toLowerCase().trim()}|${data.destination.toLowerCase().trim()}`;
     const via = data.via ?? [];
-    const key = via.length ? `${coordKey}|via:${via.map((v) => v.toLowerCase().trim()).join(";")}` : coordKey;
+    const viaKey = via.length ? `|via:${via.map((v) => v.toLowerCase().trim()).join(";")}` : "";
+    const key = `${coordKey}${viaKey}`;
     if (cache.has(key)) return cache.get(key) ?? null;
     const running = inflight.get(key);
     if (running) return running;

@@ -138,6 +138,22 @@ export const SEO_CORRIDORS: SEOCorridor[] = [
     borderAlertsSummary: "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.",
   }),
   corridor({
+    slug: "oslo-hemsedal",
+    origin: { name: "Oslo", coords: { lat: 59.9139, lng: 10.7522 } },
+    destination: { name: "Hemsedal", coords: { lat: 60.8636, lng: 8.5536 } },
+    distanceKm: 197,
+    countriesTraversed: ["NO"],
+    tollsOverview: {
+      car: { range: "NOK 145–260", note: "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag." },
+      rv: { range: "NOK 145–260", note: "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class." },
+      ev: { range: "NOK 100–185", note: "Most Norwegian gantries charge zero-emission vehicles a reduced rate." },
+      motorcycle: { range: "NOK 0", note: "Motorcycles are exempt from Norwegian road tolls." },
+    },
+    vignetteCountries: [],
+    ferryOptions: [],
+    borderAlertsSummary: "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.",
+  }),
+  corridor({
     slug: "oslo-hamburg",
     origin: { name: "Oslo, Norway", coords: { lat: 59.9139, lng: 10.7522 } },
     destination: { name: "Hamburg, Germany", coords: { lat: 53.5511, lng: 9.9937 } },

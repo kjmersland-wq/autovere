@@ -10,6 +10,15 @@
 - Links to the official vignette and toll portals (e.g. ASFINAG, via.admin.ch, AutoPASS). AutoVere never resells vignettes.
 - All figures are indicative planning estimates, not quotes. Drivers should confirm with the official operator.
 
+## Quick answers (2026, indicative, car)
+
+- Norway: no vignette. Tolls are charged automatically by AutoPASS gantries; foreign cars are invoiced via EPASS24. Motorcycles are exempt, EVs pay a reduced rate. Oslo–Bergen is about NOK 410 in tolls on the fastest route (about NOK 230 on the toll-optimised one).
+- Austria: digital vignette required on motorways, 10 days EUR 12.80 (motorcycle EUR 5.10).
+- Switzerland: annual e-vignette only, CHF 40 (about EUR 42.50); no short-term option.
+- Czechia 10-day e-vignette CZK 290 · Slovenia 7-day EUR 16 · Hungary 10-day about EUR 13 · Slovakia 10-day about EUR 12.
+- France, Italy, Spain, Portugal, Croatia: pay per kilometre at toll plazas or gantries, no vignette.
+- Germany, Netherlands, Belgium, Denmark, Sweden: no motorway tolls for cars. The Storebælt and Øresund bridges are charged separately.
+
 ## Data sources
 
 - Norwegian tolls: Statens vegvesen NVDB toll-station register, matched gantry by gantry to the route; main fjord ferries on the E39 and Rv5 from published 2026 fares
@@ -28,7 +37,7 @@
 - [Pricing](https://www.autovere.com/pricing): Free, Trip Pass (14 days, one-time), Pro, Business/Fleet
 - [USA planner](https://www.autovere.com/us) · [Canada planner](https://www.autovere.com/ca)
 - [Norsk](https://www.autovere.com/no) · [Svenska](https://www.autovere.com/se) · [Dansk](https://www.autovere.com/dk) · [Deutsch](https://www.autovere.com/de)
-- Route cost pages: [Oslo–Bergen](https://www.autovere.com/no/routes/oslo-bergen), [Oslo–Trondheim](https://www.autovere.com/no/routes/oslo-trondheim), [Oslo–Kristiansand](https://www.autovere.com/no/routes/oslo-kristiansand), [Oslo–Hamburg](https://www.autovere.com/routes/oslo-hamburg), [Munich–Lake Garda](https://www.autovere.com/routes/munich-brenner-lake-garda); all in the [sitemap](https://www.autovere.com/sitemap.xml)
+- Route cost pages: [Oslo–Bergen](https://www.autovere.com/no/routes/oslo-bergen), [Oslo–Trondheim](https://www.autovere.com/no/routes/oslo-trondheim), [Oslo–Kristiansand](https://www.autovere.com/no/routes/oslo-kristiansand), [Oslo–Hemsedal](https://www.autovere.com/no/routes/oslo-hemsedal), [Oslo–Hamburg](https://www.autovere.com/routes/oslo-hamburg), [Munich–Lake Garda](https://www.autovere.com/routes/munich-brenner-lake-garda); all in the [sitemap](https://www.autovere.com/sitemap.xml)
 
 ## Languages
 

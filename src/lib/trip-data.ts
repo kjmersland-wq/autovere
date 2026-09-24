@@ -1,9 +1,5 @@
-import type { FlagCode } from "@/components/FlagIcon";
-import { LOCALE_ROUTES } from "@/lib/locales";
 import { DEFAULT_KWH_EUR, operatorKwhEur } from "@/lib/market-rates";
 import type { EnergyPrices } from "@/lib/energy-prices.functions";
-import { GENERATED_AFDC_EV_CHARGING_POIS } from "@/lib/ev-charging-pois-afdc.generated";
-import { GENERATED_EV_CHARGING_POIS } from "@/lib/ev-charging-pois.generated";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import type { NoTollStation } from "@/lib/toll-data.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
@@ -15,38 +11,8 @@ import type { CorridorStop, EvCharger, FuelStation } from "@/lib/corridor-map";
 export type { TripType };
 
 
-export type RegionKey = "eu" | "us" | "ca";
-
-export const REGIONS: { key: RegionKey; label: string; flag: string; to: "/" | "/us" | "/ca" }[] = [
-  { key: "eu", label: "Europe", flag: "🇪🇺", to: "/" },
-  { key: "us", label: "USA", flag: "🇺🇸", to: "/us" },
-  { key: "ca", label: "Canada", flag: "🇨🇦", to: "/ca" },
-];
-
-export const LANGUAGES: { code: string; flag: FlagCode; label: string }[] = [
-  { code: "en", flag: "GB", label: "English" },
-  { code: "no", flag: "NO", label: "Norsk" },
-  { code: "sv", flag: "SE", label: "Svenska" },
-  { code: "da", flag: "DK", label: "Dansk" },
-  { code: "fi", flag: "FI", label: "Suomi" },
-  { code: "us", flag: "US", label: "US" },
-  { code: "de", flag: "DE", label: "Deutsch" },
-  { code: "nl", flag: "NL", label: "Nederlands" },
-  { code: "fr", flag: "FR", label: "Français" },
-  { code: "pl", flag: "PL", label: "Polski" },
-  { code: "es", flag: "ES", label: "Español" },
-  { code: "it", flag: "IT", label: "Italiano" },
-  { code: "pt", flag: "PT", label: "Português" },
-  { code: "ja", flag: "JP", label: "日本語" },
-  { code: "zh", flag: "CN", label: "简体中文" },
-];
-
-export const NAV_LINKS = [
-  { to: "/planner", label: "Road Trip Planner" },
-  { to: "/tolls", label: "Tolls & Vignettes" },
-  { to: "/scenic", label: "Scenic Passes & Ferries" },
-  { to: "/garage", label: "My Garage" },
-] as const;
+export { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/site-basics";
+import type { RegionKey } from "@/lib/site-basics";
 
 export type VehicleKey = "car" | "motorhome" | "motorcycle";
 export type FuelKey = "petrol" | "diesel" | "electric";
@@ -99,18 +65,7 @@ export const REGION_DEFAULTS: Record<RegionKey, RegionDefaults> = {
   },
 };
 
-/** Region is independent from language: /us, /ca, /fr/us, /no/ca all resolve here. */
-export function regionFromPath(pathname: string): RegionKey {
-  const parts = pathname.replace(/^\/+/, "").split("/").filter(Boolean);
-  const first = parts[0] ?? "";
-  if (first === "us") return "us";
-  if (first === "ca") return "ca";
-  // Matrix routes only: /<language>/<region>/<page>, e.g. /fr/us/planner.
-  const seg = LOCALE_ROUTES.some((l) => l.prefix === first) ? (parts[1] ?? "") : first;
-  if (seg === "us") return "us";
-  if (seg === "ca") return "ca";
-  return "eu";
-}
+
 
 export const REGION_COPY: Record<
   RegionKey,
@@ -1806,7 +1761,7 @@ export const RV_POIS: Record<RegionKey, RvPoi[]> = {
   ],
 };
 
-const CURATED_EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
+export const CURATED_EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
   eu: [
     { id: "ev-eu-ionity-koege", lat: 55.4705, lng: 12.1862, network: "IONITY", name: "IONITY Koge", where: "Koge, Denmark", connectors: "CCS", power: "High-power DC up to 350 kW", access: "Public motorway access", note: "A useful south-of-Copenhagen top-up before the Rodby ferry or the E47/E55 run into Germany.", website: "https://ionity.eu/" },
     { id: "ev-eu-clever-nyborg", lat: 55.312, lng: 10.803, network: "Clever", name: "Clever Nyborg", where: "Nyborg, Denmark", connectors: "CCS", power: "DC fast charging", access: "Public app/card access", note: "Handy before or after the Great Belt crossing, with food and rest stops close by.", website: "https://clever.dk/" },
@@ -1887,11 +1842,8 @@ const CURATED_EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
   ],
 };
 
-export const EV_CHARGING_POIS: Record<RegionKey, EvChargingPoi[]> = {
-  eu: [...CURATED_EV_CHARGING_POIS.eu, ...(GENERATED_EV_CHARGING_POIS.eu as unknown as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.eu as unknown as EvChargingPoi[])],
-  us: [...CURATED_EV_CHARGING_POIS.us, ...(GENERATED_EV_CHARGING_POIS.us as unknown as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.us as unknown as EvChargingPoi[])],
-  ca: [...CURATED_EV_CHARGING_POIS.ca, ...(GENERATED_EV_CHARGING_POIS.ca as unknown as EvChargingPoi[]), ...(GENERATED_AFDC_EV_CHARGING_POIS.ca as unknown as EvChargingPoi[])],
-};
+// The full charger list (curated + generated, ~13 MB) lives in ev-charging-pois.ts
+// and is loaded on demand, so pages without an EV trip never download it.
 
 /* ------------------------------------------------------------------ *
  * Scandinavian toll infrastructure — AutoPASS rings, Norwegian

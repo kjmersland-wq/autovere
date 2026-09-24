@@ -5,7 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 
 import { getFxRates } from "@/lib/energy-prices.functions";
 import { codeFromPath } from "@/lib/locales";
-import { regionFromPath } from "@/lib/trip-data";
+import { regionFromPath } from "@/lib/site-basics";
 
 export type CurrencyCode = "EUR" | "USD" | "CAD" | "NOK" | "SEK" | "DKK" | "GBP" | "CHF" | "ISK" | "PLN" | "JPY" | "CNY";
 

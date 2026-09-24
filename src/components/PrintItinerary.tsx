@@ -2,7 +2,7 @@ import { Fragment, useEffect, useMemo, useState } from "react";
 import { createPortal } from "react-dom";
 import { Download, MapPin, Printer, X } from "lucide-react";
 
-import autovereLogo from "@/assets/autovere-logo.png";
+import autovereLogo from "@/assets/autovere-logo-64.png";
 import { Button } from "@/components/ui/button";
 import { CURRENCY_BY_CODE, rateNote, useCurrency, useMoney } from "@/lib/currency";
 import { CLEARANCE_ADVISORIES, detectLezZones, tagsForRegion } from "@/lib/compliance";

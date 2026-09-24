@@ -19,11 +19,14 @@ import { CONTENT_PT, PT_PATTERNS } from "@/lib/content-pt";
 import { CONTENT_SV, SV_PATTERNS } from "@/lib/content-sv";
 import { CONTENT_US } from "@/lib/content-us";
 import { CONTENT_ZH, ZH_PATTERNS } from "@/lib/content-zh";
-import { codeFromPath } from "@/lib/locales";
+import { codeFromPath, LOCALE_ROUTES } from "@/lib/locales";
 import { PARTIAL_DICTS } from "@/lib/dictionaries";
 
 export function localeFromPath(pathname: string): Locale {
-  return codeFromPath(pathname) as Locale;
+  // Challenge pages carry the language last (/challenge/no), not as a prefix.
+  const challenge = /^\/challenge\/([a-z]{2})(?:\/|$)/.exec(pathname)?.[1];
+  const code = challenge && LOCALE_ROUTES.find((l) => l.prefix === challenge)?.code;
+  return (code || codeFromPath(pathname)) as Locale;
 }
 
 export function useLocale(): Locale {
