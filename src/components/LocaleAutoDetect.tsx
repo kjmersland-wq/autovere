@@ -16,6 +16,8 @@ export function LocaleAutoDetect() {
 
   useEffect(() => {
     if (pathname !== "/") return;
+    // A shared trip link (?origin=…&destination=…) opens exactly as sent.
+    if (new URLSearchParams(window.location.search).has("origin")) return;
     try {
       if (localStorage.getItem(FLAG_KEY)) return;
       localStorage.setItem(FLAG_KEY, "1");
