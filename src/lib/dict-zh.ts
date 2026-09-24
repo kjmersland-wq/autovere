@@ -258,6 +258,8 @@ export const ZH_DICT: Record<string, unknown> = {
     challengeBody: "记录您实际支付的金额，用真实数据帮助下一位司机规划行程。",
     challengeCta: "加入 AutoVere Challenge",
     approx: (a: string) => `≈ ${a}（按今日汇率）`,
+    splitLabel: "多人同行？分摊费用",
+    perPerson: (a: string) => `每人${a}`,
   },
   footer: {
     tagline: "跨境自驾游费用一目了然——为汽车、房车和摩托车提供过路费、通行证、燃料、充电与渡轮信息。",

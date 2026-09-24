@@ -6,6 +6,14 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_FR: Record<string, string> = {
+  "Norwegian AutoPASS breakdown": "Péages en Norvège (AutoPASS)",
+  "Motorcycles: 0 NOK in every city ring": "Motos : 0 NOK dans chaque péage urbain",
+  "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag.": "Les portiques AutoPASS sont facturés automatiquement — le montant le plus bas correspond à l’itinéraire optimisé. Environ 20 % de moins avec un badge AutoPASS.",
+  "Most Norwegian gantries charge zero-emission vehicles a reduced rate.": "La plupart des portiques norvégiens appliquent un tarif réduit aux véhicules zéro émission.",
+  "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class.": "Les camping-cars jusqu’à 3,5 t paient le tarif voiture ; les véhicules plus lourds paient une classe supérieure.",
+  "Motorcycles are exempt from Norwegian road tolls.": "Les motos sont exemptées des péages norvégiens.",
+  "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.": "Pas de frontière ni de vignette — uniquement des portiques AutoPASS. Les voitures immatriculées à l’étranger sont facturées via EPASS24.",
+  "No mountain passes or seasonal closures detected along this corridor.": "Aucun col ni fermeture saisonnière sur cet itinéraire.",
   "Enter your email and a password of at least 6 characters.": "Saisissez votre e-mail et un mot de passe d’au moins 6 caractères.",
   "Welcome aboard — check your inbox to confirm your email.": "Bienvenue à bord — confirmez votre e-mail depuis votre boîte de réception.",
   "Welcome back — the road is ready.": "Bon retour — la route vous attend.",
@@ -800,13 +808,15 @@ export const CONTENT_FR: Record<string, string> = {
 };
 
 const FR_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^Corridor analysed from the routed polyline: (.+)\.$/, (m) => `Corridor analysé à partir de l’itinéraire calculé : ${m[1]}.`],
+  [/^No border crossings — the whole route stays in one country\.$/, () => "Aucun passage de frontière — tout l’itinéraire reste dans un seul pays."],
   [
     /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
     (m) => `Arrivez avec environ 25 % de batterie et rechargez jusqu'à 80 % en environ ${m[1]} min.`,
   ],
   [
-    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
-    (m) => `Ravitaillement recommandé — vous maintient au-dessus de la réserve de 25 % pour une autonomie de ${m[1]}.`,
+    /^Recommended refuel — keeps you above the (\d+)% reserve on a (.+) tank range\.$/,
+    (m) => `Ravitaillement recommandé — vous maintient au-dessus de la réserve de ${m[1]} % pour une autonomie de ${m[2]}.`,
   ],
   [/^(.+) full battery range$/, (m) => `${m[1]} d'autonomie batterie pleine`],
   [/^(.+) full tank range$/, (m) => `${m[1]} d'autonomie réservoir plein`],
@@ -827,8 +837,8 @@ const FR_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
     (m) => `💡 AutoVere a vérifié chaque période de validité — les formules standards sont déjà l'option légale la moins chère pour ${m[1]} jours.`,
   ],
   [
-    /^Planned at 75% safety buffer — (.+) between stops$/,
-    (m) => `Planifié avec une marge de sécurité de 75 % — ${m[1]} entre les arrêts`,
+    /^Planned at an? (\d+)% safety buffer — (.+?) between stops(?: along .+)?$/,
+    (m) => `Planifié avec une marge de sécurité de ${m[1]} % — ${m[2]} entre les arrêts`,
   ],
 ];
 

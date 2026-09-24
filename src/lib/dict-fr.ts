@@ -272,6 +272,8 @@ export const FR_DICT: Record<string, unknown> = {
     challengeBody: "Indiquez ce que vous avez réellement payé et aidez le prochain conducteur avec de vrais chiffres.",
     challengeCta: "Rejoindre l'AutoVere Challenge",
     approx: (a: string) => `≈ ${a} au cours du jour`,
+    splitLabel: "Plusieurs à bord ? Partagez les frais",
+    perPerson: (a: string) => `${a} par personne`,
   },
   footer: {
     tagline:

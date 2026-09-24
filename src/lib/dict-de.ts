@@ -272,6 +272,8 @@ export const DE_DICT: Record<string, unknown> = {
     challengeBody: "Trag ein, was du wirklich bezahlt hast, und hilf anderen Fahrern mit echten Zahlen.",
     challengeCta: "Bei der AutoVere Challenge mitmachen",
     approx: (a: string) => `≈ ${a} zum Tageskurs`,
+    splitLabel: "Zu mehreren unterwegs? Kosten teilen",
+    perPerson: (a: string) => `${a} pro Person`,
   },
   footer: {
     tagline:

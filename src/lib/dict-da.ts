@@ -272,6 +272,8 @@ export const DA_DICT: Record<string, unknown> = {
     challengeBody: "Registrér, hvad du faktisk betalte, og hjælp den næste bilist med rigtige tal.",
     challengeCta: "Deltag i AutoVere Challenge",
     approx: (a: string) => `≈ ${a} efter dagens kurs`,
+    splitLabel: "Rejser I flere? Del udgiften",
+    perPerson: (a: string) => `${a} pr. person`,
   },
   footer: {
     tagline:

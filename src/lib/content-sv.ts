@@ -6,6 +6,12 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_SV: Record<string, string> = {
+  "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag.": "AutoPASS-portaler debiteras automatiskt — det lägre beloppet gäller den tulloptimerade rutten. Cirka 20 % billigare med AutoPASS-bricka.",
+  "Most Norwegian gantries charge zero-emission vehicles a reduced rate.": "De flesta norska portaler ger nollutsläppsfordon reducerad taxa.",
+  "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class.": "Husbilar upp till 3,5 ton betalar personbilstaxa; tyngre fordon betalar högre klass.",
+  "Motorcycles are exempt from Norwegian road tolls.": "Motorcyklar är undantagna från norska vägtullar.",
+  "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.": "Ingen gräns och ingen vinjett — bara AutoPASS-portaler. Utlandsregistrerade bilar faktureras via EPASS24.",
+  "No mountain passes or seasonal closures detected along this corridor.": "Inga fjällpass eller säsongsstängda vägar längs den här rutten.",
   "Norwegian AutoPASS breakdown": "Vägtullar i Norge (AutoPASS)",
   "Motorcycles: 0 NOK in every city ring": "Motorcykel: 0 NOK i alla tullringar",
   "Norway has no toll booths — every passing is read by a gantry and billed afterwards. Here is what your corridor costs, and how to pay it without an admin fee.": "Norge har inga bommar — varje passage läses av en portal och faktureras i efterhand. Här ser du vad rutten kostar och hur du betalar utan avgift.",
@@ -835,13 +841,15 @@ export const CONTENT_SV: Record<string, string> = {
 };
 
 const SV_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^Corridor analysed from the routed polyline: (.+)\.$/, (m) => `Korridoren är analyserad utifrån den beräknade rutten: ${m[1]}.`],
+  [/^No border crossings — the whole route stays in one country\.$/, () => "Inga gränspassager — hela rutten ligger i ett land."],
   [
     /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
     (m) => `Anländ med ca 25 % batteri och ladda till 80 % på ungefär ${m[1]} minuter.`,
   ],
   [
-    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
-    (m) => `Rekommenderad tankning — håller dig över 25 % reserv med en räckvidd på ${m[1]}.`,
+    /^Recommended refuel — keeps you above the (\d+)% reserve on a (.+) tank range\.$/,
+    (m) => `Rekommenderad tankning — håller dig över ${m[1]} % reserv med en räckvidd på ${m[2]}.`,
   ],
   [/^(.+) full battery range$/, (m) => `${m[1]} räckvidd på fullt batteri`],
   [/^(.+) full tank range$/, (m) => `${m[1]} räckvidd på full tank`],
@@ -862,8 +870,8 @@ const SV_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
     (m) => `💡 AutoVere kontrollerade alla giltighetsperioder — standardalternativen är redan det billigaste lagliga alternativet för ${m[1]} dagar.`,
   ],
   [
-    /^Planned at 75% safety buffer — (.+) between stops$/,
-    (m) => `Planerat med 75 % säkerhetsmarginal — ${m[1]} mellan stoppen`,
+    /^Planned at an? (\d+)% safety buffer — (.+?) between stops(?: along .+)?$/,
+    (m) => `Planerat med ${m[1]} % säkerhetsmarginal — ${m[2]} mellan stoppen`,
   ],
 ];
 

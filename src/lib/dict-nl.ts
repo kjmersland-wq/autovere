@@ -272,6 +272,8 @@ export const NL_DICT: Record<string, unknown> = {
     challengeBody: "Log wat je echt betaalde en help de volgende bestuurder met echte cijfers.",
     challengeCta: "Doe mee aan de AutoVere Challenge",
     approx: (a: string) => `≈ ${a} tegen de dagkoers`,
+    splitLabel: "Met meer mensen? Deel de kosten",
+    perPerson: (a: string) => `${a} per persoon`,
   },
   footer: {
     tagline:

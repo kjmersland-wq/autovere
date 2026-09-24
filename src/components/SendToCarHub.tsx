@@ -33,7 +33,6 @@ function Qr({ url }: { url: string }) {
   return (
     <div
       className="size-48 rounded-xl bg-white p-2 [&_svg]:size-full"
-      // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );

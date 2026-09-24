@@ -6,6 +6,7 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_NO: Record<string, string> = {
+  "No mountain passes or seasonal closures detected along this corridor.": "Ingen fjelloverganger eller sesongstengte veier langs denne ruten.",
   "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag.": "AutoPASS-bommer faktureres automatisk — det laveste tallet er den bom-optimaliserte ruten. Rundt 20 % billigere med AutoPASS-brikke.",
   "Most Norwegian gantries charge zero-emission vehicles a reduced rate.": "De fleste bomstasjoner i Norge gir nullutslippsbiler redusert takst.",
   "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class.": "Bobiler opptil 3,5 tonn betaler som personbil; tyngre kjøretøy betaler høyere takst.",

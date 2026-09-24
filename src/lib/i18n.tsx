@@ -309,6 +309,8 @@ const en = {
     challengeBody: "Log what you actually paid and help the next driver plan with real numbers.",
     challengeCta: "Join the AutoVere Challenge",
     approx: (a: string) => `≈ ${a} at today's rate`,
+    splitLabel: "Travelling together? Split the cost",
+    perPerson: (a: string) => `${a} per person`,
   },
   footer: {
     tagline:
@@ -616,6 +618,8 @@ const no: Strings = {
     challengeBody: "Registrer hva du faktisk betalte, og hjelp neste sjåfør med ekte tall.",
     challengeCta: "Bli med i AutoVere Challenge",
     approx: (a: string) => `≈ ${a} etter dagens kurs`,
+    splitLabel: "Reiser dere flere? Del kostnaden",
+    perPerson: (a: string) => `${a} per person`,
   },
   footer: {
     tagline:
@@ -681,13 +685,16 @@ export function useT(): Strings {
 
 /** Translator for copy that lives in data modules, keyed by the English source string. */
 const NO_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^(.+) — open 24\/7\.$/, (m) => `${m[1]} — døgnåpen.`],
+  [/^Corridor analysed from the routed polyline: (.+)\.$/, (m) => `Korridoren er analysert fra den beregnede ruten: ${m[1]}.`],
+  [/^No border crossings — the whole route stays in one country\.$/, () => "Ingen grensepasseringer — hele ruten går i ett land."],
   [
     /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
     (m) => `Kom fram med ca. 25 % batteri og lad til 80 % på omtrent ${m[1]} minutter.`,
   ],
   [
-    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
-    (m) => `Anbefalt fylling — holder deg over 25 % reserve med en rekkevidde på ${m[1]}.`,
+    /^Recommended refuel — keeps you above the (\d+)% reserve on a (.+) tank range\.$/,
+    (m) => `Anbefalt fylling — holder deg over ${m[1]} % reserve med en rekkevidde på ${m[2]}.`,
   ],
   [/^(.+) full battery range$/, (m) => `${m[1]} rekkevidde med fullt batteri`],
   [/^(.+) full tank range$/, (m) => `${m[1]} rekkevidde med full tank`],
@@ -708,19 +715,21 @@ const NO_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
     (m) => `💡 AutoVere sjekket alle gyldighetsperioder — standardvalgene er allerede det rimeligste lovlige alternativet for ${m[1]} dager.`,
   ],
   [
-    /^Planned at 75% safety buffer — (.+) between stops$/,
-    (m) => `Planlagt med 75 % sikkerhetsmargin — ${m[1]} mellom stoppene`,
+    /^Planned at an? (\d+)% safety buffer — (.+?) between stops(?: along .+)?$/,
+    (m) => `Planlagt med ${m[1]} % sikkerhetsmargin — ${m[2]} mellom stoppene`,
   ],
 ];
 
 const PL_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^Corridor analysed from the routed polyline: (.+).$/, (m) => `Korytarz przeanalizowany na podstawie wyznaczonej trasy: ${m[1]}.`],
+  [/^No border crossings — the whole route stays in one country.$/, () => "Brak przejść granicznych — cała trasa przebiega w jednym kraju."],
   [
     /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
     (m) => `Dojedziesz z ok. 25 % baterii i naładujesz do 80 % w jakieś ${m[1]} min.`,
   ],
   [
-    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
-    (m) => `Zalecane tankowanie — utrzyma Cię powyżej 25 % rezerwy przy zasięgu ${m[1]}.`,
+    /^Recommended refuel — keeps you above the (\d+)% reserve on a (.+) tank range\.$/,
+    (m) => `Zalecane tankowanie — utrzyma Cię powyżej ${m[1]} % rezerwy przy zasięgu ${m[2]}.`,
   ],
   [/^(.+) full battery range$/, (m) => `${m[1]} zasięgu na pełnej baterii`],
   [/^(.+) full tank range$/, (m) => `${m[1]} zasięgu na pełnym baku`],
@@ -741,8 +750,8 @@ const PL_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
     (m) => `💡 AutoVere sprawdziło każdy okres ważności — standardowe warianty są już najtańszą legalną opcją na ${m[1]} dni.`,
   ],
   [
-    /^Planned at 75% safety buffer — (.+) between stops$/,
-    (m) => `Zaplanowane z 75 % zapasem bezpieczeństwa — ${m[1]} między postojami`,
+    /^Planned at an? (\d+)% safety buffer — (.+?) between stops(?: along .+)?$/,
+    (m) => `Zaplanowane z ${m[1]} % zapasem bezpieczeństwa — ${m[2]} między postojami`,
   ],
 ];
 
@@ -819,6 +828,13 @@ export function useTr(): (value: string) => string {
         .split(" · ")
         .map((part) => translateOne(dict, patterns, part) ?? part)
         .join(" · ");
+    }
+    // Notes built from several sentences ("Station — open 24/7. Recommended refuel — …").
+    if (value.includes(". ")) {
+      return value
+        .split(/(?<=\.) /)
+        .map((part) => translateOne(dict, patterns, part) ?? part)
+        .join(" ");
     }
     return value;
   };

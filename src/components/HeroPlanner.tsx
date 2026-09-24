@@ -319,6 +319,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
     let resolved: RouteGeo | null = null;
     let timedOut = false;
+    let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       const fromPoint =
         originHit && originHit.label === from
@@ -339,15 +340,17 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
             ...(via.length ? { via } : {}),
           },
         }),
-        new Promise<never>((_, reject) =>
-          setTimeout(() => {
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(() => {
             timedOut = true;
             reject(new Error("timeout"));
-          }, ROUTE_TIMEOUT_MS),
-        ),
+          }, ROUTE_TIMEOUT_MS);
+        }),
       ]);
     } catch {
       resolved = null;
+    } finally {
+      clearTimeout(timer);
     }
 
     if (!resolved) {

@@ -19,7 +19,7 @@ Kortversjon:
 | Idé fra rapporten | Status i koden |
 |---|---|
 | Del / kopier turlenke | Finnes (Del-knapp på resultat, lenken inneholder ruten) |
-| Rute-landingssider | 20 sider under `/routes/…`, hvorav 4 norske (Oslo–Bergen, –Trondheim, –Kristiansand, –Hemsedal) |
+| Rute-landingssider | 23 sider under `/routes/…`, hvorav 7 norske (Oslo–Bergen, –Trondheim, –Kristiansand, –Hemsedal, –Geilo, –Trysil, –Hafjell) |
 | PDF / utskrift | Finnes (Skriv ut på resultat) |
 | «Hva må jeg kjøpe før grensen» | Delvis: vignett- og grenseinfo, lavutslippssoner og bombrikker finnes som moduler |
 | Partnerkit | Finnes (`/partners`, `public/partner-kit`, partnerdashboard) |
@@ -104,7 +104,7 @@ Delvis gjort (24.09): en delt turlenke viser nå ruten i tittelen («Oslo → Be
 **«Oslo → Bergen · ca. 1 127 kr · bom, ferje og drivstoff».**
 Hver deling i Messenger, WhatsApp eller Facebook blir da en annonse med ekte tall. Dette kan lages på serveren (et bilde per rute, mellomlagret).
 
-### 3b. Splitt regningen [kode]
+### 3b. Splitt regningen [kode] – første versjon laget (24.09): «Del på flere» viser pris per person
 Tenk utenfor boksen: den som kjører, vil ha pengene tilbake.
 - «Hvor mange er dere?» → «312 kr per person».
 - Knapp: «Send til de andre» gir en ferdig melding med lenke: «Bergen-turen kostet 1 127 kr, din del er 282 kr (Vipps: …)».

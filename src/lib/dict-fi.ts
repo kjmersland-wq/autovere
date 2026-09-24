@@ -270,6 +270,8 @@ export const FI_DICT: Record<string, unknown> = {
     challengeBody: "Kirjaa, mitä oikeasti maksoit, ja auta seuraavaa kuljettajaa suunnittelemaan oikeilla luvuilla.",
     challengeCta: "Liity AutoVere Challengeen",
     approx: (a: string) => `≈ ${a} päivän kurssilla`,
+    splitLabel: "Matkustatteko useampi? Jaa kulut",
+    perPerson: (a: string) => `${a} / henkilö`,
   },
   footer: {
     tagline:

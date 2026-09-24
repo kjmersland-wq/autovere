@@ -60,8 +60,37 @@ const GANTRY_RADIUS_KM = 0.12;
  * Price Norway from the real gantries the corridor passes. Returns one line per
  * toll scheme (bompengeanlegg) with the number of gantries charged.
  */
+/**
+ * A few NVDB rows have no scheme name (e.g. "Stokkaveien" in Nord-Jæren). They
+ * inherit the scheme of the nearest named station within 3 km, so that
+ * scheme's hourly rule and de-duplication apply to them too.
+ */
+const withFacility = new WeakMap<NoTollStation[], NoTollStation[]>();
+function namedSchemes(stations: NoTollStation[]): NoTollStation[] {
+  const cached = withFacility.get(stations);
+  if (cached) return cached;
+  const named = stations.filter((s) => s.facility);
+  const out = stations.map((s) => {
+    if (s.facility) return s;
+    let best: NoTollStation | null = null;
+    let bestKm = 3;
+    for (const n of named) {
+      const km = Math.hypot((n.lat - s.lat) * 111.32, (n.lng - s.lng) * 111.32 * Math.cos((s.lat * Math.PI) / 180));
+      if (km < bestKm) {
+        bestKm = km;
+        best = n;
+      }
+    }
+    if (!best) return s;
+    const timeRuleMin = s.timeRuleMin ?? best.timeRuleMin;
+    return { ...s, facility: best.facility, ...(timeRuleMin !== undefined ? { timeRuleMin } : {}) };
+  });
+  withFacility.set(stations, out);
+  return out;
+}
+
 export function norwayGantryLines(geo: RouteGeo, opts: RouteSegmentOptions): TollLine[] | null {
-  const stations = opts.noTolls;
+  const stations = opts.noTolls ? namedSchemes(opts.noTolls) : undefined;
   if (!stations?.length || geo.coords.length < 2) return null;
 
   // Bounding box prefilter around the polyline.
@@ -73,24 +102,30 @@ export function norwayGantryLines(geo: RouteGeo, opts: RouteSegmentOptions): Tol
     if (lo > maxLng) maxLng = lo;
   }
   const pad = 0.02;
-  type Hit = { station: NoTollStation; atKm: number };
+  type Hit = { station: NoTollStation; atKm: number; distKm: number };
   const hits: Hit[] = [];
   for (const s of stations) {
     if (s.lat < minLat - pad || s.lat > maxLat + pad || s.lng < minLng - pad || s.lng > maxLng + pad) continue;
     const proj = projectOnCorridor(geo.coords, s.lat, s.lng);
-    if (proj && proj.distKm <= GANTRY_RADIUS_KM) hits.push({ station: s, atKm: proj.atKm });
+    if (proj && proj.distKm <= GANTRY_RADIUS_KM) hits.push({ station: s, atKm: proj.atKm, distKm: proj.distKm });
   }
   if (!hits.length) return [];
   hits.sort((a, b) => a.atKm - b.atKm);
 
-  // One-way gantries come in pairs (one per carriageway) — charge the spot once.
+  // One charging spot can show up more than once: a gantry per carriageway,
+  // a parallel road a few hundred metres away in the same scheme (E6 Søberg /
+  // Fv 6612 Hofstad), or an unnamed duplicate row in NVDB. Charge each spot
+  // once, keeping the named station closest to the routed line.
+  const sameSpot = (p: Hit, h: Hit) =>
+    Math.abs(p.atKm - h.atKm) < 0.5 &&
+    (p.station.facility === h.station.facility || !p.station.facility || !h.station.facility);
+  const better = (a: Hit, b: Hit) =>
+    !a.station.name !== !b.station.name ? (a.station.name ? a : b) : a.distKm <= b.distKm ? a : b;
   const passages: Hit[] = [];
   for (const h of hits) {
-    const twin = passages.find(
-      (p) => p.station.facility === h.station.facility && Math.abs(p.atKm - h.atKm) < 0.4 && p.station.direction !== "both" && h.station.direction !== "both",
-    );
-    if (twin) {
-      if (h.station.car > twin.station.car) twin.station = h.station;
+    const i = passages.findIndex((p) => sameSpot(p, h));
+    if (i >= 0) {
+      passages[i] = { ...better(passages[i]!, h) };
       continue;
     }
     passages.push({ ...h });
@@ -539,6 +574,9 @@ const NORWAY_FERRIES = [
   { name: "Anda–Lote (E39)", a: [61.8463, 6.0824], b: [61.8642, 6.0802], car: 63, ev: 44, moto: 29 },
   { name: "Halsa–Kanestraum (E39)", a: [63.0684, 8.2286], b: [63.0529, 8.1247], car: 81, ev: 57, moto: 33 },
   { name: "Mannheller–Fodnes (Rv5)", a: [61.1605, 7.3365], b: [61.1487, 7.3845], car: 69, ev: 48, moto: 31 },
+  { name: "Solavågen–Festøya (E39)", a: [62.4141, 6.3275], b: [62.375, 6.3319], car: 75, ev: 53, moto: 32 },
+  { name: "Linge–Eidsdal (Rv63)", a: [62.2846, 7.1875], b: [62.2628, 7.1722], car: 81, ev: 57, moto: 33 },
+  { name: "Hella–Dragsvik (Fv13)", a: [61.2075, 6.5983], b: [61.2155, 6.5646], car: 57, ev: 40, moto: 28 },
 ] as const;
 
 function norwayFerryLines(geo: RouteGeo, opts: RouteSegmentOptions): TollLine[] {

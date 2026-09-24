@@ -6,6 +6,14 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_FI: Record<string, string> = {
+  "Norwegian AutoPASS breakdown": "Norjan tiemaksut (AutoPASS)",
+  "Motorcycles: 0 NOK in every city ring": "Moottoripyörät: 0 NOK kaikissa kaupunkien tietullirenkaissa",
+  "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag.": "AutoPASS-maksupisteet laskutetaan automaattisesti — pienempi summa koskee tiemaksuoptimoitua reittiä. AutoPASS-laitteella noin 20 % halvempi.",
+  "Most Norwegian gantries charge zero-emission vehicles a reduced rate.": "Useimmat Norjan maksupisteet veloittavat päästöttömiltä ajoneuvoilta alennetun hinnan.",
+  "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class.": "Enintään 3,5 tonnin matkailuautot maksavat henkilöauton hinnan; raskaammat ajoneuvot korkeamman luokan.",
+  "Motorcycles are exempt from Norwegian road tolls.": "Moottoripyörät on vapautettu Norjan tiemaksuista.",
+  "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.": "Ei rajaa eikä vinjettiä — vain AutoPASS-maksupisteitä. Ulkomailla rekisteröidyt autot laskutetaan EPASS24:n kautta.",
+  "No mountain passes or seasonal closures detected along this corridor.": "Reitin varrella ei ole vuoristosolia tai kausittain suljettuja teitä.",
   "Enter your email and a password of at least 6 characters.": "Anna sähköpostiosoite ja vähintään 6 merkin salasana.",
   "Welcome aboard — check your inbox to confirm your email.": "Tervetuloa mukaan — vahvista sähköpostisi saapuneista viesteistä.",
   "Welcome back — the road is ready.": "Tervetuloa takaisin — tie odottaa.",

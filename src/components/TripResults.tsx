@@ -278,6 +278,8 @@ export function TripResults({
   }, [wantEvPois, evPoiData]);
   const evChargingPois = wantEvPois && evPoiData ? filterByCorridor(evPoiData[region], corridorCoords, 30) : [];
   const m = useMoney(trip.currency);
+  const [people, setPeople] = useState(1);
+  const perPerson = people > 1 ? t.flow.perPerson(m.fmt(trip.budget / people, 0)) : null;
   const nativePrice = (value: number, symbol: string) =>
     formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
   const comparison = variantComparison(trips.fastest, trip);
@@ -331,7 +333,7 @@ export function TripResults({
 
 
   const shareTrip = async () => {
-    const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)} · AutoVere`;
+    const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)}${perPerson ? ` (${perPerson})` : ""} · AutoVere`;
     try {
       if (navigator.share) await navigator.share({ title: `${title} · AutoVere`, text, url: window.location.href });
       else {
@@ -433,6 +435,33 @@ export function TripResults({
           value={m.fmt(trip.energyCost)}
           hint={t.results.energyHint(trip.energyAmount)}
         />
+      </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-foreground/80">
+        <span>👥 {t.flow.splitLabel}</span>
+        <span className="inline-flex items-center rounded-full border border-border bg-background/50">
+          <button
+            type="button"
+            onClick={() => setPeople((n) => Math.max(1, n - 1))}
+            aria-label="−"
+            className="px-3 py-1 hover:text-foreground disabled:opacity-40"
+            disabled={people <= 1}
+          >
+            −
+          </button>
+          <span className="min-w-6 text-center font-semibold" aria-live="polite">
+            {people}
+          </span>
+          <button
+            type="button"
+            onClick={() => setPeople((n) => Math.min(9, n + 1))}
+            aria-label="+"
+            className="px-3 py-1 hover:text-foreground"
+          >
+            +
+          </button>
+        </span>
+        {perPerson && <span className="font-semibold text-primary">{perPerson}</span>}
       </div>
 
       {/* Trust markers — why the numbers can be relied on. */}

@@ -6,6 +6,14 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_ZH: Record<string, string> = {
+  "Norwegian AutoPASS breakdown": "挪威道路收费（AutoPASS）",
+  "Motorcycles: 0 NOK in every city ring": "摩托车：所有城市收费环 0 NOK",
+  "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag.": "AutoPASS 收费门架自动计费——较低的数字对应收费优化路线。使用 AutoPASS 标签约便宜 20%。",
+  "Most Norwegian gantries charge zero-emission vehicles a reduced rate.": "挪威大多数收费点对零排放车辆收取优惠费率。",
+  "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class.": "3.5 吨以下的房车按小汽车收费；更重的车辆按更高等级收费。",
+  "Motorcycles are exempt from Norwegian road tolls.": "摩托车免收挪威道路通行费。",
+  "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.": "无需过境，也无需购买电子通行证——只有 AutoPASS 收费门架。外国牌照车辆通过 EPASS24 收到账单。",
+  "No mountain passes or seasonal closures detected along this corridor.": "沿线没有山口或季节性封路。",
   "Enter your email and a password of at least 6 characters.": "请输入邮箱和至少 6 位的密码。",
   "Welcome aboard — check your inbox to confirm your email.": "欢迎加入 — 请在收件箱中确认邮箱。",
   "Welcome back — the road is ready.": "欢迎回来 — 道路已就绪。",
@@ -681,13 +689,15 @@ export const CONTENT_ZH: Record<string, string> = {
 };
 
 const ZH_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^Corridor analysed from the routed polyline: (.+)\.$/, (m) => `根据计算路线分析的走廊：${m[1]}。`],
+  [/^No border crossings — the whole route stays in one country\.$/, () => "无需过境——整条路线都在同一国家内。"],
   [
     /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
     (m) => `抵达时电量约剩25%，充至80%大约需要${m[1]}分钟。`,
   ],
   [
-    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
-    (m) => `建议在此加油——可让续航${m[1]}的车辆始终保持25%以上的余量。`,
+    /^Recommended refuel — keeps you above the (\d+)% reserve on a (.+) tank range\.$/,
+    (m) => `建议在此加油——可让续航${m[2]}的车辆始终保持${m[1]}%以上的余量。`,
   ],
   [/^(.+) full battery range$/, (m) => `满电续航${m[1]}`],
   [/^(.+) full tank range$/, (m) => `满油续航${m[1]}`],
@@ -708,8 +718,8 @@ const ZH_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
     (m) => `💡 AutoVere已核查所有有效期方案——对于${m[1]}天的行程，标准档位已是最经济合规的选择。`,
   ],
   [
-    /^Planned at 75% safety buffer — (.+) between stops$/,
-    (m) => `按75%安全余量规划——各站点间隔约为${m[1]}`,
+    /^Planned at an? (\d+)% safety buffer — (.+?) between stops(?: along .+)?$/,
+    (m) => `按${m[1]}%安全余量规划——各站点间隔约为${m[2]}`,
   ],
 ];
 

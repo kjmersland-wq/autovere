@@ -6,6 +6,14 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_NL: Record<string, string> = {
+  "Norwegian AutoPASS breakdown": "Tol in Noorwegen (AutoPASS)",
+  "Motorcycles: 0 NOK in every city ring": "Motoren: 0 NOK in elke stadsring",
+  "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag.": "AutoPASS-tolpoorten worden automatisch gefactureerd — het lagere bedrag geldt voor de tol-geoptimaliseerde route. Ongeveer 20% goedkoper met een AutoPASS-tag.",
+  "Most Norwegian gantries charge zero-emission vehicles a reduced rate.": "De meeste Noorse tolpoorten rekenen een verlaagd tarief voor emissievrije voertuigen.",
+  "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class.": "Campers tot 3,5 t betalen het autotarief; zwaardere voertuigen betalen een hogere klasse.",
+  "Motorcycles are exempt from Norwegian road tolls.": "Motoren zijn vrijgesteld van Noorse tol.",
+  "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.": "Geen grens en geen vignet — alleen AutoPASS-tolpoorten. Buitenlandse auto's krijgen de rekening via EPASS24.",
+  "No mountain passes or seasonal closures detected along this corridor.": "Geen bergpassen of seizoensafsluitingen langs deze route.",
   "Enter your email and a password of at least 6 characters.": "Vul je e-mail en een wachtwoord van minstens 6 tekens in.",
   "Welcome aboard — check your inbox to confirm your email.": "Welkom aan boord — bevestig je e-mail via je inbox.",
   "Welcome back — the road is ready.": "Welkom terug — de weg wacht.",
@@ -800,13 +808,15 @@ export const CONTENT_NL: Record<string, string> = {
 };
 
 const NL_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^Corridor analysed from the routed polyline: (.+)\.$/, (m) => `Corridor geanalyseerd op basis van de berekende route: ${m[1]}.`],
+  [/^No border crossings — the whole route stays in one country\.$/, () => "Geen grensovergangen — de hele route blijft in één land."],
   [
     /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
     (m) => `Kom aan met ~25% batterij en laad in ongeveer ${m[1]} min op tot 80%.`,
   ],
   [
-    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
-    (m) => `Aanbevolen tankstop — houdt je boven de 25% reserve bij een tankbereik van ${m[1]}.`,
+    /^Recommended refuel — keeps you above the (\d+)% reserve on a (.+) tank range\.$/,
+    (m) => `Aanbevolen tankstop — houdt je boven de ${m[1]}% reserve bij een tankbereik van ${m[2]}.`,
   ],
   [/^(.+) full battery range$/, (m) => `${m[1]} bereik op een volle batterij`],
   [/^(.+) full tank range$/, (m) => `${m[1]} bereik op een volle tank`],
@@ -827,8 +837,8 @@ const NL_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
     (m) => `💡 AutoVere heeft elke geldigheidsperiode gecontroleerd — de standaardopties zijn al de goedkoopste legale dekking voor ${m[1]} dagen.`,
   ],
   [
-    /^Planned at 75% safety buffer — (.+) between stops$/,
-    (m) => `Gepland met 75% veiligheidsbuffer — ${m[1]} tussen stops`,
+    /^Planned at an? (\d+)% safety buffer — (.+?) between stops(?: along .+)?$/,
+    (m) => `Gepland met ${m[1]}% veiligheidsbuffer — ${m[2]} tussen stops`,
   ],
 ];
 

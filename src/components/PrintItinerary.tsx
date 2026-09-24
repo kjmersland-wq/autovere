@@ -188,7 +188,6 @@ function QrPanel({ url }: { url: string }) {
     <div
       className="size-[132px] shrink-0 overflow-hidden rounded-lg border border-border bg-white p-1"
       aria-label="QR code to the live route on autovere.com"
-      // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{ __html: svg }}
     />
   );

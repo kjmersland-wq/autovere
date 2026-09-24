@@ -75,13 +75,29 @@ const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
  * the burst of corridor samples we need. Nominatim stays as a slow, serialised
  * fallback for the rare query Photon cannot resolve.
  */
-async function photon(path: string): Promise<any | null> {
+type PhotonFeature = {
+  geometry?: { coordinates?: [number, number] };
+  properties?: {
+    osm_key?: string;
+    osm_value?: string;
+    name?: string;
+    city?: string;
+    district?: string;
+    locality?: string;
+    county?: string;
+    state?: string;
+    country?: string;
+    countrycode?: string;
+  };
+};
+
+async function photon(path: string): Promise<{ features?: PhotonFeature[] } | null> {
   try {
     const res = await fetch(`https://photon.komoot.io/${path}`, {
       headers: { "User-Agent": UA, Accept: "application/json" },
     });
     if (!res.ok) return null;
-    return await res.json();
+    return (await res.json()) as { features?: PhotonFeature[] };
   } catch {
     return null;
   }
@@ -130,12 +146,8 @@ async function geocode(query: string): Promise<{ name: string; lat: number; lng:
   let out: { name: string; lat: number; lng: number } | null = null;
 
   const pj = await photon(`api?limit=5&q=${encodeURIComponent(query)}`);
-  type Feature = {
-    geometry?: { coordinates?: [number, number] };
-    properties?: { osm_key?: string; osm_value?: string; name?: string; city?: string; state?: string; country?: string };
-  };
-  const features: Feature[] = pj?.features ?? [];
-  const isPlace = (ft: Feature | undefined, set: Set<string>) =>
+  const features = pj?.features ?? [];
+  const isPlace = (ft: PhotonFeature | undefined, set: Set<string>) =>
     ft?.properties?.osm_key === "place" && set.has(ft.properties.osm_value ?? "");
   const feat = isPlace(features[0], SMALL_PLACES)
     ? (features.find((ft) => isPlace(ft, LARGE_PLACES)) ?? features[0])

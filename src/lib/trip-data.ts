@@ -2,6 +2,7 @@ import { DEFAULT_KWH_EUR, operatorKwhEur } from "@/lib/market-rates";
 import type { EnergyPrices } from "@/lib/energy-prices.functions";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import type { NoTollStation } from "@/lib/toll-data.functions";
+import { detectMountainPasses } from "@/lib/pass-intel";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
 import { RATES } from "@/lib/currency";
 import { filterByCorridor, haversineKm } from "@/lib/corridor-filter";
@@ -554,30 +555,14 @@ function buildOptimizer(
 
 
 
-/** Pass advisories keyed by the ISO code of the country they sit in. */
-const PASSES_BY_COUNTRY: Record<string, string[]> = {
-  IT: ["Stelvio Pass (2,757 m) — 48 hairpins, open, dry tarmac forecast until early evening."],
-  AT: ["Grossglockner High Alpine Road — toll road, gates close at 21:00; ride it before dusk."],
-  CH: ["Furka Pass — clear and open today, light crosswinds on the western ramp."],
-  NO: ["Trollstigen — single-lane sections with tourist traffic; take the early morning slot."],
-  FR: ["Col du Galibier (2,642 m) — open, but the north ramp cools fast after sunset."],
-  ES: ["Puerto de Navacerrada — clear; watch for cyclists on the descent."],
-  DE: ["Black Forest B500 ridge road — open, damp patches in shaded curves."],
-  PL: ["Zakopianka (S7/DK47) mountain approach — heavy weekend tourist traffic."],
-  SE: ["Vildmarksvägen — seasonal road, open June to October only."],
-  DK: ["No mountain passes on this route — expect exposed crosswinds on the bridge sections instead."],
-  NL: ["No mountain passes on this route — flat, well-lit motorway driving throughout."],
-  US: ["Tail of the Dragon (US-129) — 318 curves in 11 miles; watch for gravel on the inside lines."],
-  CA: ["Icefields Parkway — stunning but exposed; wildlife on the road at dawn and dusk."],
-};
-
-/** Only surface pass intel for countries the routed polyline actually crosses. */
-function passesForRoute(region: RegionKey, geo: RouteGeo | null): string[] {
+/**
+ * Mountain passes within reach of the routed line, with their normal season.
+ * No generic per-country "open today" copy — there is no live feed behind it.
+ */
+function passesForRoute(_region: RegionKey, geo: RouteGeo | null): string[] {
   if (geo && geo.countries.length) {
-    const items = geo.countries.flatMap((c) => PASSES_BY_COUNTRY[c.code] ?? []);
-    return items.length
-      ? items
-      : ["No mountain passes or seasonal closures detected along this corridor."];
+    const items = detectMountainPasses(geo.coords).map((p) => `${p.emoji} ${p.name} · ${p.seasonLabel}`);
+    return items.length ? items : ["No mountain passes or seasonal closures detected along this corridor."];
   }
   return ["Select a start and destination to load live pass and closure intel for the countries you actually cross."];
 }

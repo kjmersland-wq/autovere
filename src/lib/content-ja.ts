@@ -6,6 +6,14 @@
  * data-driven label with `tr(...)` from `useTr()`.
  */
 export const CONTENT_JA: Record<string, string> = {
+  "Norwegian AutoPASS breakdown": "ノルウェーの通行料（AutoPASS）",
+  "Motorcycles: 0 NOK in every city ring": "バイク：すべての都市料金リングで0 NOK",
+  "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag.": "AutoPASSゲートは自動で請求されます — 低い金額は料金を抑えたルートです。AutoPASSタグで約20%安くなります。",
+  "Most Norwegian gantries charge zero-emission vehicles a reduced rate.": "ノルウェーの多くのゲートでは、ゼロエミッション車に割引料金が適用されます。",
+  "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class.": "3.5トン以下のキャンピングカーは乗用車料金、それより重い車両は上位クラスの料金です。",
+  "Motorcycles are exempt from Norwegian road tolls.": "バイクはノルウェーの通行料が免除されます。",
+  "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.": "国境もビネットもなく、AutoPASSゲートのみ。外国登録の車はEPASS24経由で請求されます。",
+  "No mountain passes or seasonal closures detected along this corridor.": "このルート沿いに峠や季節閉鎖はありません。",
   "Enter your email and a password of at least 6 characters.": "メールアドレスと6文字以上のパスワードを入力してください。",
   "Welcome aboard — check your inbox to confirm your email.": "ようこそ — 受信トレイでメールアドレスを確認してください。",
   "Welcome back — the road is ready.": "おかえりなさい — 道が待っています。",
@@ -681,13 +689,15 @@ export const CONTENT_JA: Record<string, string> = {
 };
 
 const JA_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
+  [/^Corridor analysed from the routed polyline: (.+)\.$/, (m) => `算出ルートから分析した経路：${m[1]}。`],
+  [/^No border crossings — the whole route stays in one country\.$/, () => "国境通過なし — ルート全体が1か国内です。"],
   [
     /^Arrive at ~25% state of charge, charge to 80% in about (\d+) min\.$/,
     (m) => `残り約25%のバッテリー残量で到着し、80%まで約${m[1]}分で充電できます。`,
   ],
   [
-    /^Recommended refuel — keeps you above the 25% reserve on a (.+) tank range\.$/,
-    (m) => `給油をおすすめします——航続距離${m[1]}の車両で、残量25%以上を維持できます。`,
+    /^Recommended refuel — keeps you above the (\d+)% reserve on a (.+) tank range\.$/,
+    (m) => `給油をおすすめします——航続距離${m[2]}の車両で、残量${m[1]}%以上を維持できます。`,
   ],
   [/^(.+) full battery range$/, (m) => `満充電で航続距離${m[1]}`],
   [/^(.+) full tank range$/, (m) => `満タンで航続距離${m[1]}`],
@@ -708,8 +718,8 @@ const JA_PATTERNS: [RegExp, (m: RegExpMatchArray) => string][] = [
     (m) => `💡 AutoVereがすべての有効期間を確認しました——${m[1]}日間については、標準プランがすでに最も経済的で正規の選択肢です。`,
   ],
   [
-    /^Planned at 75% safety buffer — (.+) between stops$/,
-    (m) => `安全のため75%の余裕を見込んで計算——区間ごとの目安は${m[1]}`,
+    /^Planned at an? (\d+)% safety buffer — (.+?) between stops(?: along .+)?$/,
+    (m) => `安全のため${m[1]}%の余裕を見込んで計算——区間ごとの目安は${m[2]}`,
   ],
 ];
 

@@ -273,6 +273,8 @@ export const JA_DICT: Record<string, unknown> = {
     challengeBody: "実際に支払った金額を記録して、次のドライバーの計画に役立てましょう。",
     challengeCta: "AutoVere Challenge に参加する",
     approx: (a: string) => `≈ ${a}（本日のレート）`,
+    splitLabel: "複数人で旅行？費用を割り勘",
+    perPerson: (a: string) => `1人あたり${a}`,
   },
   footer: {
     tagline:

@@ -272,6 +272,8 @@ export const SV_DICT: Record<string, unknown> = {
     challengeBody: "Logga vad du faktiskt betalade och hjälp nästa förare att planera med riktiga siffror.",
     challengeCta: "Gå med i AutoVere Challenge",
     approx: (a: string) => `≈ ${a} enligt dagens kurs`,
+    splitLabel: "Reser ni flera? Dela kostnaden",
+    perPerson: (a: string) => `${a} per person`,
   },
   footer: {
     tagline:

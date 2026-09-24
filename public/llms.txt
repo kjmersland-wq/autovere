@@ -21,7 +21,7 @@
 
 ## Data sources
 
-- Norwegian tolls: Statens vegvesen NVDB toll-station register, matched gantry by gantry to the route; main fjord ferries on the E39 and Rv5 from published 2026 fares
+- Norwegian tolls: Statens vegvesen NVDB toll-station register, matched gantry by gantry to the route; ten main fjord ferries (E39, Rv5, Rv63, Fv13) from published 2026 fares
 - Fuel prices: EU Weekly Oil Bulletin, Statistics Norway (SSB), US EIA, Statistics Canada
 - Currency: European Central Bank reference rates
 - EV chargers (US): AFDC / NREL station data
@@ -37,7 +37,7 @@
 - [Pricing](https://www.autovere.com/pricing): Free, Trip Pass (14 days, one-time), Pro, Business/Fleet
 - [USA planner](https://www.autovere.com/us) · [Canada planner](https://www.autovere.com/ca)
 - [Norsk](https://www.autovere.com/no) · [Svenska](https://www.autovere.com/se) · [Dansk](https://www.autovere.com/dk) · [Deutsch](https://www.autovere.com/de)
-- Route cost pages: [Oslo–Bergen](https://www.autovere.com/no/routes/oslo-bergen), [Oslo–Trondheim](https://www.autovere.com/no/routes/oslo-trondheim), [Oslo–Kristiansand](https://www.autovere.com/no/routes/oslo-kristiansand), [Oslo–Hemsedal](https://www.autovere.com/no/routes/oslo-hemsedal), [Oslo–Hamburg](https://www.autovere.com/routes/oslo-hamburg), [Munich–Lake Garda](https://www.autovere.com/routes/munich-brenner-lake-garda); all in the [sitemap](https://www.autovere.com/sitemap.xml)
+- Route cost pages: [Oslo–Bergen](https://www.autovere.com/no/routes/oslo-bergen), [Oslo–Trondheim](https://www.autovere.com/no/routes/oslo-trondheim), [Oslo–Kristiansand](https://www.autovere.com/no/routes/oslo-kristiansand), [Oslo–Hemsedal](https://www.autovere.com/no/routes/oslo-hemsedal), [Oslo–Geilo](https://www.autovere.com/no/routes/oslo-geilo), [Oslo–Trysil](https://www.autovere.com/no/routes/oslo-trysil), [Oslo–Hafjell](https://www.autovere.com/no/routes/oslo-hafjell), [Oslo–Hamburg](https://www.autovere.com/routes/oslo-hamburg), [Munich–Lake Garda](https://www.autovere.com/routes/munich-brenner-lake-garda); all in the [sitemap](https://www.autovere.com/sitemap.xml)
 
 ## Languages
 

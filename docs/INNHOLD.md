@@ -129,7 +129,7 @@ Price your own route: autovere.com
 > **Emne:** Så mye koster det å kjøre til påskefjellet i bom
 >
 > Hei! AutoVere regner ut hva en biltur koster i bom, ferje og drivstoff, basert på Statens vegvesens bomregister.
-> Eksempler med bensinbil på raskeste rute: Oslo–Bergen ca. 400–450 kr i bom, Oslo–Trondheim ca. 300 kr, Oslo–Kristiansand ca. 230 kr. Elbil betaler rundt 30 % mindre.
+> Eksempler med bensinbil på raskeste rute: Oslo–Bergen ca. 400–450 kr i bom, Oslo–Trondheim ca. 250 kr, Oslo–Kristiansand ca. 230 kr. Elbil betaler rundt 30 % mindre.
 > Vi lager gjerne en liste over de dyreste og billigste ferieveiene til en sak.
 > Kjell Mersland, AutoVere · kjell@autovere.com
 
@@ -184,3 +184,19 @@ Ett tema per uke. Hvert innlegg er kort og har én lenke. Posten på norsk går 
 - **«Er tallene riktige?»** Tallene er veiledende og bygger på Statens vegvesens bomregister og operatørenes publiserte priser. Vi har kontrollert dem mot en uavhengig kalkulator, og de ligger innenfor ±15 %.
 - **«Koster det noe?»** Å beregne turer er gratis. Trip Pass (engangskjøp) låser opp eksport og utskrift i 14 dager.
 - **«Is it accurate?»** Figures are indicative, based on official toll registers and published fares, and checked against an independent calculator (within ±15%).
+
+---
+
+## Del 3: nye funksjoner å vise fram
+
+**NO – Del på flere**
+> Kjører dere flere til hytta? AutoVere deler nå kostnaden for dere: Oslo–Bergen for fire personer blir ca. 270 kr per person, bom og drivstoff inkludert. Send lenken til de andre, så ser alle sin del.
+> autovere.com/no?origin=Oslo&destination=Bergen
+
+**EN – Split the cost**
+> Road trip with friends? AutoVere now splits the total per person, tolls and fuel included. Share the link and everyone sees their part.
+> autovere.com
+
+**NO – Hytteveier**
+> Hva koster hytteveien? Nye sider for Geilo, Trysil, Hafjell og Hemsedal med bom for bil, elbil og bobil.
+> autovere.com/no/routes/oslo-trysil
