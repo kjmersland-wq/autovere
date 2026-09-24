@@ -12,7 +12,7 @@
 
 ## Data sources
 
-- Norwegian tolls: Statens vegvesen NVDB toll-station register, matched gantry by gantry to the route; main fjord ferries on the E39 from published 2026 fares
+- Norwegian tolls: Statens vegvesen NVDB toll-station register, matched gantry by gantry to the route; main fjord ferries on the E39 and Rv5 from published 2026 fares
 - Fuel prices: EU Weekly Oil Bulletin, Statistics Norway (SSB), US EIA, Statistics Canada
 - Currency: European Central Bank reference rates
 - EV chargers (US): AFDC / NREL station data

@@ -527,7 +527,7 @@ const FIXED_LINKS: FixedLink[] = [
 ];
 
 /**
- * Norwegian fjord ferries on the main trunk roads, full one-way 2026 price in
+ * Norwegian fjord ferries on the main trunk roads (fergeruter.info), full one-way 2026 price in
  * NOK (car under 6 m / EV / motorcycle). A crossing counts only when the
  * routed line passes both quays.
  */
@@ -536,6 +536,9 @@ const NORWAY_FERRIES = [
   { name: "Mortavika–Arsvågen (E39)", a: [59.1377, 5.5906], b: [59.17, 5.4522], car: 178, ev: 147, moto: 61 },
   { name: "Lavik–Oppedal (E39)", a: [61.1048, 5.5068], b: [61.0547, 5.5072], car: 81, ev: 57, moto: 33 },
   { name: "Molde–Vestnes (E39)", a: [62.737, 7.1675], b: [62.6525, 7.084], car: 116, ev: 81, moto: 43 },
+  { name: "Anda–Lote (E39)", a: [61.8463, 6.0824], b: [61.8642, 6.0802], car: 63, ev: 44, moto: 29 },
+  { name: "Halsa–Kanestraum (E39)", a: [63.0684, 8.2286], b: [63.0529, 8.1247], car: 81, ev: 57, moto: 33 },
+  { name: "Mannheller–Fodnes (Rv5)", a: [61.1605, 7.3365], b: [61.1487, 7.3845], car: 69, ev: 48, moto: 31 },
 ] as const;
 
 function norwayFerryLines(geo: RouteGeo, opts: RouteSegmentOptions): TollLine[] {

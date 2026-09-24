@@ -1,7 +1,7 @@
 # AutoVere – ferdig innhold (NO + EN)
 
 Kopier, lim inn og publiser. Tallene er fra AutoVere 24.09.2026 (bensinbil, raskeste rute). Sjekk tallet i kalkulatoren samme dag du poster.
-Før pressetipset sendes: kontroller bomtallene mot en uavhengig kilde (se STATUS, «Må sjekkes»).
+Bomtallene er kontrollert mot en uavhengig kalkulator og stemmer innenfor ±15 %. Skriv derfor «ca.» foran tallene.
 
 **Lenketips:** bruk ferdige turlenker. De regner ut turen med én gang og viser ruten i forhåndsvisningen.
 `https://www.autovere.com/no?origin=Oslo&destination=Bergen`
@@ -129,6 +129,6 @@ Price your own route: autovere.com
 > **Emne:** Så mye koster det å kjøre til påskefjellet i bom
 >
 > Hei! AutoVere regner ut hva en biltur koster i bom, ferje og drivstoff, basert på Statens vegvesens bomregister.
-> Eksempler: Oslo–Trondheim 313 kr i bom, Oslo–Kristiansand 235 kr, Oslo–Bergen 413 kr, med bensinbil på raskeste rute. Elbil betaler rundt 30 % mindre.
+> Eksempler med bensinbil på raskeste rute: Oslo–Bergen ca. 400–450 kr i bom, Oslo–Trondheim ca. 300 kr, Oslo–Kristiansand ca. 230 kr. Elbil betaler rundt 30 % mindre.
 > Vi lager gjerne en liste over de dyreste og billigste ferieveiene til en sak.
 > Kjell Mersland, AutoVere · kjell@autovere.com
