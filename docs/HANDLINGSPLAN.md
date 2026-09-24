@@ -3,7 +3,7 @@
 Dette er ting bare du kan gjøre, fordi de krever innlogging i Stripe, Google eller Vercel, eller fordi de er forretningsvalg.
 Alt i koden er ferdig og ligger live på `main`. Detaljer står i [STATUS-2026-09.md](STATUS-2026-09.md).
 
-Rekkefølgen er etter viktighet. Punkt 1–3 bør gjøres denne uken.
+Rekkefølgen er etter viktighet. Punkt 1–3 bør gjøres denne uken. Den lengre planen for vekst står i [VEKSTPLAN.md](VEKSTPLAN.md).
 
 ---
 
