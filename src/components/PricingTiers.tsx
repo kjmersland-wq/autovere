@@ -14,6 +14,7 @@ import { parsePrice, pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib
 import { billingReturnUrl, checkoutReturnUrl, getStripeEnvironment, PRICE_IDS } from "@/lib/stripe";
 import type { RegionKey } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
+import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
 import { createPortalSession } from "@/utils/payments.functions";
 
 export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
@@ -47,6 +48,10 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
     void trackEvent("pro_upgrade_clicked", { tier: tier.id, cycle, signedIn: Boolean(user) });
     if (tier.id === "free") {
       toast.success(L.freeToast);
+      return;
+    }
+    if (!PURCHASES_ENABLED) {
+      toast.info(purchasesPausedMessage(locale));
       return;
     }
     if (!user) {
@@ -163,11 +168,14 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
               <Button
                 className="mt-7 w-full"
                 variant={tier.id === "free" || isCurrent ? "outline" : "default"}
-                disabled={isCurrent && tier.id !== "free"}
+                disabled={(isCurrent && tier.id !== "free") || (!PURCHASES_ENABLED && tier.id !== "free")}
                 onClick={() => (isCurrent && tier.id !== "free" ? undefined : upgrade(tier))}
               >
                 {isCurrent && tier.id !== "free" ? L.current : tier.cta}
               </Button>
+              {!PURCHASES_ENABLED && tier.id !== "free" && !isCurrent && (
+                <p className="mt-2 text-center text-xs text-muted-foreground">{purchasesPausedMessage(locale)}</p>
+              )}
               {isActive && !isCurrent && tier.id !== "free" && (
                 <button
                   type="button"

@@ -18,6 +18,7 @@ import { useLocale, useTr } from "@/lib/i18n";
 import { tripPassPrice } from "@/lib/pricing-i18n";
 import { checkoutReturnUrl, PRICE_IDS } from "@/lib/stripe";
 import { regionFromPath } from "@/lib/trip-data";
+import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
 
 /**
  * Soft paywall for route exports. Free visitors can preview everything on
@@ -46,6 +47,10 @@ export function ExportPaywallModal({
   const { openCheckout, isOpen, checkoutElement } = useStripeCheckout();
 
   const startCheckout = (priceId: string) => {
+    if (!PURCHASES_ENABLED) {
+      toast.info(purchasesPausedMessage(locale));
+      return;
+    }
     if (!user) {
       openAuth("signup");
       toast.info(tr("Sign up or log in to unlock exports"));
@@ -79,6 +84,7 @@ export function ExportPaywallModal({
             <Button
               size="lg"
               className="w-full font-semibold"
+              disabled={!PURCHASES_ENABLED}
               onClick={() => startCheckout(PRICE_IDS.tripPass)}
             >
               <Sparkles className="size-4" />
@@ -88,10 +94,14 @@ export function ExportPaywallModal({
               size="lg"
               variant="outline"
               className="w-full font-semibold"
+              disabled={!PURCHASES_ENABLED}
               onClick={() => startCheckout(PRICE_IDS.proYearly)}
             >
               {tr("Upgrade to Annual Pro")} · €39/{tr("year")}
             </Button>
+            {!PURCHASES_ENABLED && (
+              <p className="text-center text-xs text-muted-foreground">{purchasesPausedMessage(locale)}</p>
+            )}
             <p className="flex items-center justify-center gap-1.5 text-xs text-muted-foreground">
               <Lock className="size-3" />
               {tr("One-time payment. No subscription required for Trip Pass.")}
