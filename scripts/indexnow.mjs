@@ -1,4 +1,4 @@
-// Tell Bing, Yandex, Seznam and Naver (via IndexNow) that the site changed.
+// Tell Bing (which shares with the other IndexNow engines) that the site changed.
 // Run after a deploy: `npm run indexnow` (all sitemap URLs) or
 // `npm run indexnow -- /no/routes/oslo-bergen /pricing` (just those paths).
 const HOST = "www.autovere.com";
@@ -13,7 +13,7 @@ if (!urls.length) {
 
 // IndexNow accepts up to 10,000 URLs per request.
 for (let i = 0; i < urls.length; i += 10_000) {
-  const res = await fetch("https://api.indexnow.org/indexnow", {
+  const res = await fetch("https://www.bing.com/indexnow", {
     method: "POST",
     headers: { "Content-Type": "application/json; charset=utf-8" },
     body: JSON.stringify({ host: HOST, key: KEY, keyLocation: `https://${HOST}/${KEY}.txt`, urlList: urls.slice(i, i + 10_000) }),

@@ -7,6 +7,7 @@ import { GENERATED_EV_CHARGING_POIS } from "@/lib/ev-charging-pois.generated";
 import type { RouteGeo } from "@/lib/route-geo.functions";
 import type { NoTollStation } from "@/lib/toll-data.functions";
 import { borderLabels, buildRouteSegments } from "@/lib/route-tolls";
+import { RATES } from "@/lib/currency";
 import { filterByCorridor, haversineKm } from "@/lib/corridor-filter";
 import { optimizeVignettes, type TripType, type VignettePlan } from "@/lib/vignette-optimizer";
 import type { CorridorStop, EvCharger, FuelStation } from "@/lib/corridor-map";
@@ -790,7 +791,9 @@ export function estimateTrip(
   const built = geo
     ? buildRouteSegments(geo, {
         noTolls: extras.noTolls,
-        nokPerEur: prices?.fx["NOK"],
+        // Same table the UI converts with, so NOK gantry and ferry prices round-trip exactly
+        // even when the live ECB rates fail to load and the display falls back.
+        nokPerEur: RATES.NOK,
         electric: fuel === "electric",
         baseCode: (prices?.currencyCode ?? defaults.currencyCode) as "EUR" | "USD" | "CAD",
       })
