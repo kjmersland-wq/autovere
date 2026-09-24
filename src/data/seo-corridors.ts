@@ -1,5 +1,5 @@
 /**
- * Programmatic SEO corridor dataset — 15 high-intent search corridors used
+ * Programmatic SEO corridor dataset — high-intent search corridors used
  * to generate static /routes/:slug landing pages. Real coordinates and
  * countries; vignette figures are imported directly from the same EU_RULES
  * table the live trip calculator uses (single source of truth, no
@@ -89,6 +89,54 @@ function corridor(
 }
 
 export const SEO_CORRIDORS: SEOCorridor[] = [
+  corridor({
+    slug: "oslo-bergen",
+    origin: { name: "Oslo", coords: { lat: 59.9139, lng: 10.7522 } },
+    destination: { name: "Bergen", coords: { lat: 60.3913, lng: 5.3221 } },
+    distanceKm: 460,
+    countriesTraversed: ["NO"],
+    tollsOverview: {
+      car: { range: "NOK 230–415", note: "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag." },
+      rv: { range: "NOK 230–415", note: "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class." },
+      ev: { range: "NOK 160–290", note: "Most Norwegian gantries charge zero-emission vehicles a reduced rate." },
+      motorcycle: { range: "NOK 0", note: "Motorcycles are exempt from Norwegian road tolls." },
+    },
+    vignetteCountries: [],
+    ferryOptions: [],
+    borderAlertsSummary: "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.",
+  }),
+  corridor({
+    slug: "oslo-trondheim",
+    origin: { name: "Oslo", coords: { lat: 59.9139, lng: 10.7522 } },
+    destination: { name: "Trondheim", coords: { lat: 63.4305, lng: 10.3951 } },
+    distanceKm: 489,
+    countriesTraversed: ["NO"],
+    tollsOverview: {
+      car: { range: "NOK 170–315", note: "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag." },
+      rv: { range: "NOK 170–315", note: "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class." },
+      ev: { range: "NOK 120–220", note: "Most Norwegian gantries charge zero-emission vehicles a reduced rate." },
+      motorcycle: { range: "NOK 0", note: "Motorcycles are exempt from Norwegian road tolls." },
+    },
+    vignetteCountries: [],
+    ferryOptions: [],
+    borderAlertsSummary: "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.",
+  }),
+  corridor({
+    slug: "oslo-kristiansand",
+    origin: { name: "Oslo", coords: { lat: 59.9139, lng: 10.7522 } },
+    destination: { name: "Kristiansand", coords: { lat: 58.1467, lng: 7.9956 } },
+    distanceKm: 330,
+    countriesTraversed: ["NO"],
+    tollsOverview: {
+      car: { range: "NOK 130–235", note: "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag." },
+      rv: { range: "NOK 130–235", note: "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class." },
+      ev: { range: "NOK 90–165", note: "Most Norwegian gantries charge zero-emission vehicles a reduced rate." },
+      motorcycle: { range: "NOK 0", note: "Motorcycles are exempt from Norwegian road tolls." },
+    },
+    vignetteCountries: [],
+    ferryOptions: [],
+    borderAlertsSummary: "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.",
+  }),
   corridor({
     slug: "oslo-hamburg",
     origin: { name: "Oslo, Norway", coords: { lat: 59.9139, lng: 10.7522 } },
@@ -259,7 +307,7 @@ export const SEO_CORRIDORS: SEOCorridor[] = [
   corridor({
     slug: "hamburg-flensburg-bergen",
     origin: { name: "Hamburg, Germany", coords: { lat: 53.5511, lng: 9.9937 } },
-    destination: { name: "Bergen, Norway", coords: { lat: 60.3913, lng: 5.3221 } },
+    destination: { name: "Bergen", coords: { lat: 60.3913, lng: 5.3221 } },
     distanceKm: 1050,
     countriesTraversed: ["DE", "DK", "NO"],
     tollsOverview: {

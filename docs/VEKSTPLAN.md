@@ -19,7 +19,7 @@ Kortversjon:
 | Idé fra rapporten | Status i koden |
 |---|---|
 | Del / kopier turlenke | Finnes (Del-knapp på resultat, lenken inneholder ruten) |
-| Rute-landingssider | 16 sider under `/routes/…`, men **ingen norske innenlandsruter** |
+| Rute-landingssider | 19 sider under `/routes/…`, hvorav 3 norske (Oslo–Bergen, –Trondheim, –Kristiansand) |
 | PDF / utskrift | Finnes (Skriv ut på resultat) |
 | «Hva må jeg kjøpe før grensen» | Delvis: vignett- og grenseinfo, lavutslippssoner og bombrikker finnes som moduler |
 | Partnerkit | Finnes (`/partners`, `public/partner-kit`, partnerdashboard) |
@@ -32,14 +32,13 @@ Det som mangler er å **pakke** dette tydeligere, ikke å lage det.
 ## 1. Penger først (uke 1–2)
 
 ### 1a. Stripe = skjerm [deg]
-Betaling er satt på pause (`PURCHASES_ENABLED = false` i `src/lib/purchases.ts`) mens selskapet etableres i Polen.
-**Det er en gyllen anledning:** den nye Stripe-kontoen kan settes opp riktig fra start, i stedet for at den gamle må ryddes.
+Betaling er på (`PURCHASES_ENABLED = true` i `src/lib/purchases.ts`). Checkout bruker Stripe-prisene som ligger i Lovable.
+Når prisene i 1b er bestemt, legg dem inn i Stripe med én pris per valuta, så skjermen og kvitteringen alltid viser samme beløp.
 
-- Bestem prisene (1b) **før** produktene opprettes i den nye Stripe-kontoen.
+- Bestem prisene (1b) før de legges inn i Stripe.
 - Opprett hvert produkt med én grunnpris og `currency_options` for NOK, SEK, DKK, EUR, GBP, USD, CAD og PLN, med samme beløp som på skjermen.
 - Behold oppslagsnøklene (`trip_pass`, `pro_yearly` …), så trenger koden ikke å endres.
-- Test i testmodus, og sett så bryteren til `true`. Trip Pass-kortet på resultatet er skjult mens pausen varer og kommer tilbake av seg selv.
-- Betalingsvinduet viser fortsatt «€39/year» fast for Pro-året. Det rettes når prisene er bestemt.
+- Test i testmodus før du endrer noe i live-modus.
 
 Se også [HANDLINGSPLAN.md](HANDLINGSPLAN.md) punkt 2–3.
 
@@ -71,7 +70,7 @@ Prisene er i dag satt per språk og henger ikke sammen (se STATUS). Forslag:
 Konkurrentene (TollGuru, ViaMichelin) er bygd for Frankrike og motorvei. Norge har bomringer, ferjer, elbilrabatt og hytter. Her kan AutoVere være best på kort tid.
 
 ### 2a. Norske rutesider [kode]
-Dagens 16 rutesider er europeiske og amerikanske. Legg til 20–30 norske sider, med ferdig beregnede tall og «sist oppdatert»:
+Tre norske sider er laget (24.09). Legg til flere, opp mot 20–30, med ferdig beregnede tall og «sist oppdatert»:
 
 - **Langtur:** Oslo–Bergen, Oslo–Trondheim, Oslo–Kristiansand, Bergen–Stavanger, Trondheim–Ålesund, Oslo–Tromsø, Oslo–Nordkapp.
 - **Hyttetur:** Oslo–Hemsedal, Oslo–Geilo, Oslo–Trysil, Oslo–Hafjell, Bergen–Voss, Stavanger–Sirdal.
@@ -101,7 +100,7 @@ Nå står «Bensin» først.
 ## 3. La hver tur reklamere for seg selv (uke 3–6)
 
 ### 3a. Forhåndsvisning med pris [kode]
-I dag viser en delt lenke samme generiske bilde uansett tur. Lag et bilde per tur:
+Delvis gjort (24.09): en delt turlenke viser nå ruten i tittelen («Oslo → Bergen · AutoVere»). Neste steg er et bilde per tur:
 **«Oslo → Bergen · ca. 1 127 kr · bom, ferje og drivstoff».**
 Hver deling i Messenger, WhatsApp eller Facebook blir da en annonse med ekte tall. Dette kan lages på serveren (et bilde per rute, mellomlagret).
 
@@ -135,7 +134,7 @@ Norske medier (VG, NRK, Motor, Broom) tar gjerne slike tall i juni og før påsk
 
 ### 4c. Vis at dataene er ferske [kode]
 Vis en liten linje i resultatet: «Bomsatser sist kontrollert: 12.09.2026 (NVDB).» Det er ærlig og bygger tillit.
-Et lite funn i samme gate: kjøretiden virker høy (Oslo–Bergen 9 t 13 min). Hvis den tar med pauser og ferje, bør det stå, ellers ser tallet feil ut for nordmenn som kjenner ruten.
+Kjøretiden var for høy: bryteren «naturskjønne ruter» sto på som standard og la 18 % på tiden uten å endre ruten. Den er nå av som standard (rettet 24.09).
 
 ---
 

@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { ShareButton } from "@/components/ShareButton";
-import { homepageHreflangLinks, homepageScript } from "@/lib/seo";
+import { homepageHreflangLinks, homepageScript, withSharedRoute } from "@/lib/seo";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
+  head: ({ match }) =>
+    withSharedRoute({
     meta: [
       { title: "AutoVere — European Road Trip Toll & Cost Planner" },
       {
@@ -30,7 +31,7 @@ export const Route = createFileRoute("/")({
     ],
     links: [{ rel: "canonical", href: "https://www.autovere.com/" }, ...homepageHreflangLinks()],
     scripts: homepageScript(),
-  }),
+  }, match.search),
   component: Index,
 });
 

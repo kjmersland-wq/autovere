@@ -83,9 +83,9 @@ export const IT_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "Prezzi — Pianificazione di viaggio gratuita, piano Voyager opzionale | AutoVere",
+    title: "Prezzi — Gratis, Trip Pass, Pro e Business | AutoVere",
     description:
-      "AutoVere è gratuito per la pianificazione di viaggi quotidiani. I piani Voyager e Flotta aggiungono viaggi salvati illimitati, esportazione GPX e strumenti per partner.",
+      "Pianifica il tuo viaggio in auto gratis. Trip Pass sblocca le esportazioni per 14 giorni con un solo pagamento; Pro e Business aggiungono viaggi, veicoli e strumenti per team illimitati.",
   },
 };
 

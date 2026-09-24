@@ -3,6 +3,7 @@ import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { useAuth } from "@/lib/auth";
+import { useTr } from "@/lib/i18n";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -39,13 +40,14 @@ export function AuthModal() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [busy, setBusy] = useState(false);
+  const tr = useTr();
 
   const isSignup = authMode === "signup";
 
   const submit = async (e: FormEvent) => {
     e.preventDefault();
     if (!email.trim() || password.length < 6) {
-      toast.error("Enter your email and a password of at least 6 characters.");
+      toast.error(tr("Enter your email and a password of at least 6 characters."));
       return;
     }
     setBusy(true);
@@ -58,7 +60,7 @@ export function AuthModal() {
       return;
     }
     toast.success(
-      isSignup ? "Welcome aboard — check your inbox to confirm your email." : "Welcome back — the road is ready.",
+      tr(isSignup ? "Welcome aboard — check your inbox to confirm your email." : "Welcome back — the road is ready."),
     );
     setPassword("");
   };
@@ -75,12 +77,14 @@ export function AuthModal() {
       <DialogContent className="glass-panel sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-2xl tracking-tight">
-            {isSignup ? "Start your AutoVere account" : "Welcome back to AutoVere"}
+            {tr(isSignup ? "Start your AutoVere account" : "Welcome back to AutoVere")}
           </DialogTitle>
           <DialogDescription>
-            {isSignup
-              ? "Save your vehicles, trips and toll tags across every device."
-              : "Sign in to reach your garage, saved adventures and Pro features."}
+            {tr(
+              isSignup
+                ? "Save your vehicles, trips and toll tags across every device."
+                : "Sign in to reach your garage, saved adventures and Pro features.",
+            )}
           </DialogDescription>
         </DialogHeader>
 
@@ -97,22 +101,22 @@ export function AuthModal() {
                   : "text-foreground/70 hover:text-foreground",
               )}
             >
-              {mode === "signin" ? "Sign in" : "Create account"}
+              {tr(mode === "signin" ? "Sign in" : "Create account")}
             </button>
           ))}
         </div>
 
         <Button type="button" variant="outline" onClick={google} disabled={busy} className="w-full gap-2">
-          <GoogleMark /> Continue with Google
+          <GoogleMark /> {tr("Continue with Google")}
         </Button>
 
         <div className="flex items-center gap-3 py-1 text-xs uppercase tracking-[0.18em] text-muted-foreground">
-          <span className="h-px flex-1 bg-border" /> or email <span className="h-px flex-1 bg-border" />
+          <span className="h-px flex-1 bg-border" /> {tr("or email")} <span className="h-px flex-1 bg-border" />
         </div>
 
         <form className="grid gap-4" onSubmit={submit}>
           <div className="grid gap-2">
-            <Label htmlFor="auth-email">Email</Label>
+            <Label htmlFor="auth-email">{tr("Email")}</Label>
             <Input
               id="auth-email"
               type="email"
@@ -123,24 +127,24 @@ export function AuthModal() {
             />
           </div>
           <div className="grid gap-2">
-            <Label htmlFor="auth-password">Password</Label>
+            <Label htmlFor="auth-password">{tr("Password")}</Label>
             <Input
               id="auth-password"
               type="password"
               autoComplete={isSignup ? "new-password" : "current-password"}
-              placeholder="At least 6 characters"
+              placeholder={tr("At least 6 characters")}
               value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
           <Button type="submit" disabled={busy} className="w-full">
             {busy && <Loader2 className="size-4 animate-spin" />}
-            {isSignup ? "Create my account" : "Sign in"}
+            {tr(isSignup ? "Create my account" : "Sign in")}
           </Button>
         </form>
 
         <p className="text-xs text-muted-foreground">
-          By continuing you agree to our terms and privacy notice. We never sell your route data.
+          {tr("By continuing you agree to our terms and privacy notice. We never sell your route data.")}
         </p>
       </DialogContent>
     </Dialog>

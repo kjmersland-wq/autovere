@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { ShareButton } from "@/components/ShareButton";
-import { homepageHreflangLinks } from "@/lib/seo";
+import { homepageHreflangLinks, localeHomeScript, withSharedRoute } from "@/lib/seo";
 
 export const Route = createFileRoute("/no/")({
-  head: () => ({
+  head: ({ match }) =>
+    withSharedRoute({
     meta: [
       { title: "AutoVere Norge — Bompenger, vignetter og reisekostnader" },
       {
@@ -31,7 +32,8 @@ export const Route = createFileRoute("/no/")({
       { name: "twitter:image", content: "https://www.autovere.com/og/og-no.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.autovere.com/no" }, ...homepageHreflangLinks()],
-  }),
+    scripts: localeHomeScript("/no", "nb-NO", "AutoVere Norge — Bompenger, vignetter og reisekostnader", "Planlegg bilferien med nøyaktige bompenger, vignetter, drivstoff, lading og ferjer for bil, bobil og motorsykkel."),
+  }, match.search),
   component: NorwayPage,
 });
 

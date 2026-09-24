@@ -9,7 +9,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import { SiteHeader } from "@/components/SiteHeader";
-import { useLocale, useT } from "@/lib/i18n";
+import { useLocale, useT, useTr } from "@/lib/i18n";
 import { seoRouteCopy } from "@/lib/seo-route-i18n";
 import type { SEOCorridor, VehicleClass } from "@/data/seo-corridors";
 
@@ -40,6 +40,7 @@ export function SeoRoutePage({
 }) {
   const locale = useLocale();
   const t = useT();
+  const tr = useTr();
   const copy = seoRouteCopy(locale);
   const year = new Date().getFullYear();
   const corridorTitle = `${corridor.origin.name} → ${corridor.destination.name}`;
@@ -106,7 +107,7 @@ export function SeoRoutePage({
                     <p className="text-sm font-semibold text-foreground">{vehicleLabel[vc]}</p>
                     <p className="ml-auto text-sm font-semibold text-amber-300">{est.range}</p>
                   </div>
-                  <p className="mt-2 text-xs text-muted-foreground">{est.note}</p>
+                  <p className="mt-2 text-xs text-muted-foreground">{tr(est.note)}</p>
                 </article>
               );
             })}
@@ -146,7 +147,7 @@ export function SeoRoutePage({
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 {copy.borderAlertsLabel}
               </p>
-              <p className="mt-2 text-sm text-foreground/85">{corridor.borderAlertsSummary}</p>
+              <p className="mt-2 text-sm text-foreground/85">{tr(corridor.borderAlertsSummary)}</p>
             </div>
           </div>
         </section>

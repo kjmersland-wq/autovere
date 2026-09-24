@@ -12,7 +12,7 @@
 
 ## Data sources
 
-- Norwegian tolls: Statens vegvesen NVDB toll-station register, matched gantry by gantry to the route
+- Norwegian tolls: Statens vegvesen NVDB toll-station register, matched gantry by gantry to the route; main fjord ferries on the E39 from published 2026 fares
 - Fuel prices: EU Weekly Oil Bulletin, Statistics Norway (SSB), US EIA, Statistics Canada
 - Currency: European Central Bank reference rates
 - EV chargers (US): AFDC / NREL station data
@@ -28,7 +28,7 @@
 - [Pricing](https://www.autovere.com/pricing): Free, Trip Pass (14 days, one-time), Pro, Business/Fleet
 - [USA planner](https://www.autovere.com/us) · [Canada planner](https://www.autovere.com/ca)
 - [Norsk](https://www.autovere.com/no) · [Svenska](https://www.autovere.com/se) · [Dansk](https://www.autovere.com/dk) · [Deutsch](https://www.autovere.com/de)
-- [Popular routes](https://www.autovere.com/sitemap.xml): cost pages for common corridors, e.g. Oslo–Bergen and Munich–Lake Garda
+- Route cost pages: [Oslo–Bergen](https://www.autovere.com/no/routes/oslo-bergen), [Oslo–Trondheim](https://www.autovere.com/no/routes/oslo-trondheim), [Oslo–Kristiansand](https://www.autovere.com/no/routes/oslo-kristiansand), [Oslo–Hamburg](https://www.autovere.com/routes/oslo-hamburg), [Munich–Lake Garda](https://www.autovere.com/routes/munich-brenner-lake-garda); all in the [sitemap](https://www.autovere.com/sitemap.xml)
 
 ## Languages
 

@@ -1,5 +1,6 @@
-import { ExternalLink, Landmark, Waypoints } from "lucide-react";
+import { ChevronDown, ExternalLink, Landmark, Waypoints } from "lucide-react";
 import { PoiLinks } from "@/components/PoiLinks";
+import { useTr } from "@/lib/i18n";
 
 import {
   NORWAY_CITY_RINGS,
@@ -24,24 +25,29 @@ function PortalLink({ label, url }: { label: string; url: string }) {
 }
 
 export function NorwayAutoPassCard({ isMotorcycle }: { isMotorcycle: boolean }) {
+  const tr = useTr();
+  // Collapsed by default: this is general reference, not specific to the
+  // route, and the trip total above already includes the tolls.
   return (
-    <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
-      <div className="flex flex-wrap items-center gap-2">
+    <details className="group glass-panel mt-10 rounded-2xl p-5 sm:p-6">
+      <summary className="flex cursor-pointer list-none flex-wrap items-center gap-2 [&::-webkit-details-marker]:hidden">
         <Waypoints className="size-5 text-primary" />
-        <h3 className="text-lg font-semibold tracking-tight">🇳🇴 Norwegian AutoPASS breakdown</h3>
+        <h3 className="text-lg font-semibold tracking-tight">🇳🇴 {tr("Norwegian AutoPASS breakdown")}</h3>
         {isMotorcycle && (
           <span className="rounded-full border border-primary/40 bg-primary/15 px-3 py-1 text-xs font-semibold text-primary">
-            🏍️ Motorcycles: 0 NOK in every city ring
+            🏍️ {tr("Motorcycles: 0 NOK in every city ring")}
           </span>
         )}
-      </div>
+        <ChevronDown className="ml-auto size-5 text-muted-foreground transition-transform group-open:rotate-180" />
+      </summary>
       <p className="mt-1 text-sm text-foreground/70">
-        Norway has no toll booths — every passing is read by a gantry and billed afterwards. Here is what
-        your corridor costs, and how to pay it without an admin fee.
+        {tr(
+          "Norway has no toll booths — every passing is read by a gantry and billed afterwards. Here is what your corridor costs, and how to pay it without an admin fee.",
+        )}
       </p>
 
       <p className="mt-6 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-        City toll rings
+        {tr("City toll rings")}
       </p>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
         {NORWAY_CITY_RINGS.map((ring) => (
@@ -57,8 +63,8 @@ export function NorwayAutoPassCard({ isMotorcycle }: { isMotorcycle: boolean }) 
                     : "rounded-full border border-border bg-background/60 px-3 py-1 text-foreground/70"
                 }
               >
-                🏍️ Motorcycle {nok(ring.motorcycle)}
-                {isMotorcycle ? " — exempt" : ""}
+                🏍️ {tr("Motorcycle")} {nok(ring.motorcycle)}
+                {isMotorcycle ? ` — ${tr("exempt")}` : ""}
               </span>
               <span
                 className={
@@ -67,20 +73,20 @@ export function NorwayAutoPassCard({ isMotorcycle }: { isMotorcycle: boolean }) 
                     : "rounded-full border border-primary/40 bg-primary/10 px-3 py-1 font-semibold text-primary"
                 }
               >
-                ⛽ Petrol / diesel {nok(ring.petrol)}
+                ⛽ {tr("Petrol / diesel")} {nok(ring.petrol)}
               </span>
               <span className="rounded-full border border-border bg-background/60 px-3 py-1 text-foreground/70">
                 ⚡ EV {nok(ring.ev)}
               </span>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">{ring.note}</p>
+            <p className="mt-3 text-xs text-muted-foreground">{tr(ring.note)}</p>
             <PoiLinks kind="toll" name={`${ring.city} bomring`} where="Norway" region="eu" />
           </div>
         ))}
       </div>
 
       <p className="mt-7 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-        Main highway toll segments
+        {tr("Main highway toll segments")}
       </p>
       <div className="mt-3 grid gap-2">
         {NORWAY_HIGHWAY_SEGMENTS.map((seg) => (
@@ -90,16 +96,16 @@ export function NorwayAutoPassCard({ isMotorcycle }: { isMotorcycle: boolean }) 
           >
             <div className="min-w-[220px] flex-1">
               <p className="text-sm font-semibold">
-                {seg.road} · {seg.stretch}
+                {seg.road} · {tr(seg.stretch)}
               </p>
-              <p className="mt-1 text-xs text-muted-foreground">{seg.note}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{tr(seg.note)}</p>
             </div>
             <div className="text-right text-sm">
               <p className="font-semibold">
                 {isMotorcycle ? nok(seg.motorcycle) : nok(seg.car)}
               </p>
               <p className="text-xs text-muted-foreground">
-                {isMotorcycle ? "Motorcycle rate" : "Car with AutoPASS tag"}
+                {tr(isMotorcycle ? "Motorcycle rate" : "Car with AutoPASS tag")}
               </p>
             </div>
           </div>
@@ -107,29 +113,28 @@ export function NorwayAutoPassCard({ isMotorcycle }: { isMotorcycle: boolean }) 
       </div>
       {isMotorcycle && (
         <p className="mt-3 rounded-xl border border-primary/30 bg-primary/10 px-4 py-3 text-sm text-foreground/85">
-          🏍️ Two-wheelers are exempt from Norwegian toll rings and highway gantries — budget only for
-          ferries and fuel.
+          🏍️ {tr("Two-wheelers are exempt from Norwegian toll rings and highway gantries — budget only for ferries and fuel.")}
         </p>
       )}
 
       <p className="mt-7 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-        How to pay — AutoPASS vs EPASS24
+        {tr("How to pay — AutoPASS vs EPASS24")}
       </p>
       <div className="mt-3 grid gap-3 md:grid-cols-3">
         {NORWAY_PAYMENT_OPTIONS.map((opt) => (
           <div key={opt.id} className="rounded-2xl border border-border bg-background/40 p-4">
-            <p className="text-sm font-semibold">{opt.title}</p>
+            <p className="text-sm font-semibold">{tr(opt.title)}</p>
             <span className="mt-2 inline-block rounded-full border border-amber-400/40 bg-amber-400/10 px-3 py-1 text-xs font-semibold text-amber-300">
-              {opt.badge}
+              {tr(opt.badge)}
             </span>
-            <p className="mt-2 text-xs text-muted-foreground">{opt.body}</p>
+            <p className="mt-2 text-xs text-muted-foreground">{tr(opt.body)}</p>
             <div className="mt-3">
               <PortalLink label={opt.portalLabel} url={opt.portalUrl} />
             </div>
           </div>
         ))}
       </div>
-    </div>
+    </details>
   );
 }
 
@@ -140,16 +145,18 @@ export function ScandiBridgeCard({
   bridges: ScandiBridge[];
   isMotorcycle: boolean;
 }) {
+  const tr = useTr();
   if (bridges.length === 0) return null;
   return (
     <div className="glass-panel mt-10 rounded-2xl p-5 sm:p-6">
       <div className="flex items-center gap-2">
         <Landmark className="size-5 text-primary" />
-        <h3 className="text-lg font-semibold tracking-tight">🌉 Scandinavian bridge crossings</h3>
+        <h3 className="text-lg font-semibold tracking-tight">🌉 {tr("Scandinavian bridge crossings")}</h3>
       </div>
       <p className="mt-1 text-sm text-foreground/70">
-        Fixed links between Denmark and Sweden are tolled separately from motorway charges — a transponder
-        pays for itself on the first return trip.
+        {tr(
+          "Fixed links between Denmark and Sweden are tolled separately from motorway charges — a transponder pays for itself on the first return trip.",
+        )}
       </p>
       <div className="mt-4 grid gap-3 md:grid-cols-2">
         {bridges.map((b) => (

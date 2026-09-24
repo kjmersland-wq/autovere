@@ -1564,3 +1564,7 @@ export function pricingCopy(locale: Locale): PricingCopy {
 export function pricingHero(locale: Locale): PricingHero {
   return HERO[locale] ?? HERO.en;
 }
+
+export function proYearlyPrice(locale: Locale, region?: RegionKey): string {
+  return tiersFor(locale, region).find((t) => t.id === "pro")?.yearly ?? "£39";
+}

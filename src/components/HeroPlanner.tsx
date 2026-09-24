@@ -121,7 +121,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [destination, setDestination] = useState(() =>
     typeof window === "undefined" ? "" : (new URLSearchParams(window.location.search).get("destination") ?? ""),
   );
-  const [scenic, setScenic] = useState(true);
+  const [scenic, setScenic] = useState(false);
   const [avoidTolls, setAvoidTolls] = useState(false);
   const [ferries, setFerries] = useState(true);
   const [trip, setTrip] = useState<Record<RouteVariantKey, TripEstimate> | null>(null);
@@ -197,7 +197,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
   const viaCount = waypoints.filter((w) => w.value.trim()).length;
   /** Non-default choices hidden behind "More options" — shown as a badge so nothing is secretly on. */
-  const optionsActive = viaCount + (scenic ? 0 : 1) + (avoidTolls ? 1 : 0) + (ferries ? 0 : 1) + tags.length;
+  const optionsActive = viaCount + (scenic ? 1 : 0) + (avoidTolls ? 1 : 0) + (ferries ? 0 : 1) + tags.length;
 
   const addWaypoint = () => {
     if (waypoints.length >= 3) {

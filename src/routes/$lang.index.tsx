@@ -4,7 +4,7 @@ import { HeroPlanner } from "@/components/HeroPlanner";
 import { ShareButton } from "@/components/ShareButton";
 import { LOCALE_LANDING } from "@/lib/dictionaries";
 import { isLocalePrefix, LOCALE_ROUTES, type LocalePrefix } from "@/lib/locales";
-import { homepageHreflangLinks, ogImageMeta, ogImageUrl, ogLocaleFor } from "@/lib/seo";
+import { homepageHreflangLinks, localeHomeScript, MARKET_LANG, ogImageMeta, ogImageUrl, ogLocaleFor, withSharedRoute } from "@/lib/seo";
 
 function landingFor(lang: string) {
   const entry = LOCALE_ROUTES.find((l) => l.prefix === lang);
@@ -15,7 +15,7 @@ export const Route = createFileRoute("/$lang/")({
   beforeLoad: ({ params }) => {
     if (!isLocalePrefix(params.lang)) throw notFound();
   },
-  head: ({ params }) => {
+  head: ({ params, match }) => {
     const c = landingFor(params.lang);
     if (!c) return { meta: [{ title: "AutoVere" }] };
     const url = `https://www.autovere.com/${params.lang}`;
@@ -25,7 +25,7 @@ export const Route = createFileRoute("/$lang/")({
     const ogDescription = isFi
       ? "Suunnittele unohtumaton automatka. Tarkat tietullit, polttoaineet ja EV-lataukset suoraan autosi navigaattoriin."
       : c.metaDescription;
-    return {
+    return withSharedRoute({
       meta: [
         { title: c.metaTitle },
         { name: "description", content: c.metaDescription },
@@ -38,7 +38,8 @@ export const Route = createFileRoute("/$lang/")({
         { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [{ rel: "canonical", href: url }, ...homepageHreflangLinks()],
-    };
+      scripts: localeHomeScript(`/${params.lang}`, MARKET_LANG[params.lang as LocalePrefix], c.metaTitle, c.metaDescription),
+    }, match.search);
   },
   component: LocaleHome,
 });

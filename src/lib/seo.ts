@@ -484,6 +484,66 @@ export function homepageScript() {
   return [{ type: "application/ld+json", children: JSON.stringify(homepageJsonLd()) }];
 }
 
+/**
+ * A shared trip link (`?origin=Oslo&destination=Bergen`) previews as that
+ * route in chat apps instead of the generic homepage title. The canonical URL
+ * is untouched, so search engines still see one page.
+ */
+export function withSharedRoute<T extends { meta?: Array<Record<string, string | undefined>> }>(
+  head: T,
+  search: unknown,
+): T {
+  const s = (search ?? {}) as Record<string, unknown>;
+  const clean = (v: unknown) => (typeof v === "string" ? v.trim().slice(0, 80) : "");
+  const o = clean(s["origin"]);
+  const d = clean(s["destination"]);
+  if (!o || !d || !head.meta) return head;
+  const route = `${o} → ${d}`;
+  return {
+    ...head,
+    meta: head.meta.map((m) =>
+      m["title"]
+        ? { title: `${route} | ${m["title"]}` }
+        : m["property"] === "og:title" || m["name"] === "twitter:title"
+          ? { ...m, content: `${route} · AutoVere` }
+          : m,
+    ),
+  };
+}
+
+/**
+ * Localized homepages (/no, /de, /us …) describe the same app in their own
+ * language and point back to the one Organization/WebSite on the root page.
+ */
+export function localeHomeScript(path: string, inLanguage: string, name: string, description: string) {
+  const url = absUrl(path);
+  return [
+    {
+      type: "application/ld+json",
+      children: JSON.stringify({
+        "@context": "https://schema.org",
+        "@type": "WebPage",
+        "@id": `${url}#webpage`,
+        url,
+        name,
+        description,
+        inLanguage,
+        isPartOf: { "@id": `${BASE_URL}/#website` },
+        publisher: { "@id": `${BASE_URL}/#organization` },
+        mainEntity: {
+          "@type": "SoftwareApplication",
+          name: "AutoVere",
+          url,
+          applicationCategory: "TravelApplication",
+          operatingSystem: "Web",
+          inLanguage,
+          offers: { "@type": "Offer", price: "0", priceCurrency: "EUR" },
+        },
+      }),
+    },
+  ];
+}
+
 export const ALL_LOCALE_PATHS = LOCALE_ROUTES.flatMap((l) => [
   `/${l.prefix}`,
   ...LOCALE_PAGES.map((p) => `/${l.prefix}/${p}`),

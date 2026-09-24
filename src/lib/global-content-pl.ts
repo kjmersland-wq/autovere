@@ -83,9 +83,9 @@ export const PL_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "Cennik — Darmowe planowanie podróży, opcjonalny plan Voyager | AutoVere",
+    title: "Cennik — Za darmo, Trip Pass, Pro i Business | AutoVere",
     description:
-      "AutoVere jest darmowe dla codziennego planowania podróży. Plany Voyager i Fleet dodają nieograniczoną liczbę zapisanych tras, eksport GPX i narzędzia partnerskie.",
+      "Planuj podróże autem za darmo. Trip Pass odblokowuje eksport na 14 dni za jedną opłatą; Pro i Business dają nieograniczone zapisane trasy, pojazdy i narzędzia dla zespołu.",
   },
 };
 

@@ -83,9 +83,9 @@ export const NL_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "Prijzen — Gratis reisplanning, optioneel Voyager-abonnement | AutoVere",
+    title: "Prijzen — Gratis, Trip Pass, Pro en Business | AutoVere",
     description:
-      "AutoVere is gratis voor dagelijkse reisplanning. Voyager- en Fleet-abonnementen bieden onbeperkt opgeslagen reizen, GPX-export en partnertools.",
+      "Plan je autoreis gratis. Trip Pass ontgrendelt exports voor 14 dagen met één betaling; Pro en Business geven onbeperkt opgeslagen reizen, voertuigen en teamtools.",
   },
 };
 

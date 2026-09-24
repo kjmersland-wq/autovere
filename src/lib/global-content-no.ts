@@ -83,9 +83,9 @@ export const NO_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "Priser — Gratis turplanlegging, valgfri Voyager-plan | AutoVere",
+    title: "Priser — Gratis, Trip Pass, Pro og Business | AutoVere",
     description:
-      "AutoVere er gratis for vanlig turplanlegging. Voyager og Fleet gir ubegrensede turer, GPX-eksport og partnerverktøy.",
+      "Planlegg bilturen gratis. Trip Pass låser opp eksport i 14 dager med én betaling. Pro og Business gir ubegrensede lagrede turer, kjøretøy og teamverktøy.",
   },
 };
 

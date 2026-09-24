@@ -2,10 +2,11 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
 import { ShareButton } from "@/components/ShareButton";
-import { homepageHreflangLinks } from "@/lib/seo";
+import { homepageHreflangLinks, localeHomeScript, withSharedRoute } from "@/lib/seo";
 
 export const Route = createFileRoute("/ca/")({
-  head: () => ({
+  head: ({ match }) =>
+    withSharedRoute({
     meta: [
       { title: "AutoVere Canada — Road Trip Toll & Fuel Cost Planner" },
       {
@@ -32,7 +33,8 @@ export const Route = createFileRoute("/ca/")({
       { name: "thumbnail", content: "https://www.autovere.com/og/autovere-square-ca.jpg" },
     ],
     links: [{ rel: "canonical", href: "https://www.autovere.com/ca" }, ...homepageHreflangLinks()],
-  }),
+    scripts: localeHomeScript("/ca", "en-CA", "AutoVere Canada — Road Trip Toll & Fuel Cost Planner", "Plan Canadian road trips with exact toll, fuel, EV charging and ferry costs for cars, RVs and touring motorcycles."),
+  }, match.search),
   component: CaPage,
 });
 

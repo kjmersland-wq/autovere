@@ -15,7 +15,7 @@ import { trackEvent } from "@/lib/analytics";
 import { useRouterState } from "@tanstack/react-router";
 
 import { useLocale, useTr } from "@/lib/i18n";
-import { tripPassPrice } from "@/lib/pricing-i18n";
+import { proYearlyPrice, tripPassPrice } from "@/lib/pricing-i18n";
 import { checkoutReturnUrl, PRICE_IDS } from "@/lib/stripe";
 import { regionFromPath } from "@/lib/trip-data";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
@@ -43,6 +43,7 @@ export function ExportPaywallModal({
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   // Same price the pricing page shows for this language/region — never a hardcoded one.
   const price = tripPassPrice(locale, regionFromPath(pathname));
+  const yearly = proYearlyPrice(locale, regionFromPath(pathname));
   const { user, openAuth } = useAuth();
   const { openCheckout, isOpen, checkoutElement } = useStripeCheckout();
 
@@ -97,7 +98,7 @@ export function ExportPaywallModal({
               disabled={!PURCHASES_ENABLED}
               onClick={() => startCheckout(PRICE_IDS.proYearly)}
             >
-              {tr("Upgrade to Annual Pro")} · €39/{tr("year")}
+              {tr("Upgrade to Annual Pro")} · {yearly}/{tr("year")}
             </Button>
             {!PURCHASES_ENABLED && (
               <p className="text-center text-xs text-muted-foreground">{purchasesPausedMessage(locale)}</p>

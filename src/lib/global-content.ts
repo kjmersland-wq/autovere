@@ -90,9 +90,9 @@ export const GLOBAL_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "Pricing — Free Road Trip Planning, Optional Voyager Plan | AutoVere",
+    title: "Pricing — Free, Trip Pass, Pro and Business | AutoVere",
     description:
-      "AutoVere is free for everyday trip planning. Voyager and Fleet plans add unlimited saved trips, GPX export and partner tools.",
+      "Plan road trips for free. Trip Pass unlocks exports for 14 days with one payment; Pro and Business add unlimited saved trips, vehicles and team tools.",
   },
 };
 

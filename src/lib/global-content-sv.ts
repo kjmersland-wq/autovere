@@ -83,9 +83,9 @@ export const SV_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "Priser — Gratis reseplanering, valfri Voyager-plan | AutoVere",
+    title: "Priser — Gratis, Trip Pass, Pro och Business | AutoVere",
     description:
-      "AutoVere är gratis för vardaglig reseplanering. Voyager- och Fleet-planerna ger obegränsat antal sparade resor, GPX-export och partnerverktyg.",
+      "Planera bilresan gratis. Trip Pass låser upp export i 14 dagar med en enda betalning. Pro och Business ger obegränsat med sparade resor, fordon och teamverktyg.",
   },
 };
 

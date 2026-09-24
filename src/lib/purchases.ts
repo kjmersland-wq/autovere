@@ -3,7 +3,7 @@
  * Used by both the frontend buttons and the server checkout function.
  * Set to `true` to re-enable purchases — nothing else needs to change.
  */
-export const PURCHASES_ENABLED = false;
+export const PURCHASES_ENABLED = true;
 
 const PAUSED: Record<string, string> = {
   en: "Paid plans are paused for a short while as we set up in Poland. Everything free works as normal.",

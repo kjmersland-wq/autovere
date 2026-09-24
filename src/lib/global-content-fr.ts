@@ -83,9 +83,9 @@ export const FR_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "Tarifs — Planification de voyage gratuite, forfait Voyager en option | AutoVere",
+    title: "Tarifs — Gratuit, Trip Pass, Pro et Business | AutoVere",
     description:
-      "AutoVere est gratuit pour la planification de voyage au quotidien. Les forfaits Voyager et Flotte ajoutent des voyages illimités, l'export GPX et des outils partenaires.",
+      "Planifiez votre road trip gratuitement. Le Trip Pass débloque les exports pendant 14 jours en un seul paiement ; Pro et Business ajoutent trajets, véhicules et outils d’équipe illimités.",
   },
 };
 

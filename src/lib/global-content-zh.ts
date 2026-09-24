@@ -81,8 +81,8 @@ export const ZH_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "价格方案 — 免费规划行程，Voyager 方案可选升级 | AutoVere",
-    description: "AutoVere 的日常行程规划完全免费；Voyager 与 Fleet 方案提供无限保存、GPX 导出和企业合作功能。",
+    title: "价格 — 免费、Trip Pass、Pro 和 Business | AutoVere",
+    description: "免费规划自驾行程。Trip Pass 一次付款即可解锁 14 天导出功能；Pro 和 Business 提供无限保存行程、车辆和团队工具。",
   },
 };
 

@@ -475,7 +475,7 @@ export function buildRouteSegments(geo: RouteGeo, opts: RouteSegmentOptions = {}
   // Fixed links (bridges) the polyline physically crosses — priced from the
   // operators' published 2026 tariffs. The label must contain "Ferries" so the
   // estimator books it under ferries & passes, not tolls.
-  const links = fixedLinkLines(geo);
+  const links = [...fixedLinkLines(geo), ...norwayFerryLines(geo, opts)];
   if (links.length) {
     segments.push({ country: "⛴️ Bridges & Ferries", total: round2(links.reduce((s, l) => s + l.amount, 0)), lines: links });
   }
@@ -525,6 +525,40 @@ const FIXED_LINKS: FixedLink[] = [
     portal: { label: "oresundsbron.com", url: "https://www.oresundsbron.com/en/prices" },
   },
 ];
+
+/**
+ * Norwegian fjord ferries on the main trunk roads, full one-way 2026 price in
+ * NOK (car under 6 m / EV / motorcycle). A crossing counts only when the
+ * routed line passes both quays.
+ */
+const NORWAY_FERRIES = [
+  { name: "Halhjem–Sandvikvåg (E39)", a: [60.1456, 5.4264], b: [59.9678, 5.3381], car: 176, ev: 123, moto: 59 },
+  { name: "Mortavika–Arsvågen (E39)", a: [59.1377, 5.5906], b: [59.17, 5.4522], car: 178, ev: 147, moto: 61 },
+  { name: "Lavik–Oppedal (E39)", a: [61.1048, 5.5068], b: [61.0547, 5.5072], car: 81, ev: 57, moto: 33 },
+  { name: "Molde–Vestnes (E39)", a: [62.737, 7.1675], b: [62.6525, 7.084], car: 116, ev: 81, moto: 43 },
+] as const;
+
+function norwayFerryLines(geo: RouteGeo, opts: RouteSegmentOptions): TollLine[] {
+  const coords = geo.coords ?? [];
+  if (coords.length < 2 || !geo.countries.some((c) => c.code === "NO")) return [];
+  const nokPerEur = opts.nokPerEur ?? 11.7;
+  const lines: TollLine[] = [];
+  for (const f of NORWAY_FERRIES) {
+    const a = projectOnCorridor(coords, f.a[0], f.a[1]);
+    const b = projectOnCorridor(coords, f.b[0], f.b[1]);
+    if (!a || !b || a.distKm > 1.5 || b.distKm > 1.5) continue;
+    const nok = opts.electric ? f.ev : f.car;
+    lines.push({
+      place: `⛴️ ${f.name}`,
+      detail: `Full price 2026 · ${nok} NOK · up to 50% off with an AutoPASS ferry agreement · at ${Math.round(Math.min(a.atKm, b.atKm))} km`,
+      amount: round2(nok / nokPerEur),
+      badge: "Ferry",
+      portal: { label: "autopassferje.no", url: "https://www.autopassferje.no/" },
+      motoFactor: f.moto / nok,
+    });
+  }
+  return lines;
+}
 
 function fixedLinkLines(geo: RouteGeo): TollLine[] {
   const coords = geo.coords ?? [];

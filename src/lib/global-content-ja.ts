@@ -83,9 +83,9 @@ export const JA_PRICING: InfoPageContent = {
   ],
   note: DISCLAIMER,
   meta: {
-    title: "料金プラン — 基本無料の旅行計画、Voyagerプランも選べます | AutoVere",
+    title: "料金 — 無料・Trip Pass・Pro・Business | AutoVere",
     description:
-      "AutoVereは日常の旅行計画なら無料。VoyagerプランとFleetプランでは、保存件数の上限撤廃、GPX書き出し、パートナー向け機能が加わります。",
+      "ロードトリップの計画は無料。Trip Passは1回の支払いで14日間エクスポートを解放。ProとBusinessでは保存できる旅程・車両・チーム機能が無制限になります。",
   },
 };
 
