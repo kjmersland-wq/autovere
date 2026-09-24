@@ -3,6 +3,7 @@ import type Stripe from "stripe";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { type StripeEnv, createStripeClient, getStripeErrorMessage } from "@/lib/stripe.server";
+import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
 
 type CheckoutSessionResult = { clientSecret: string } | { error: string };
 type PortalSessionResult = { url: string } | { error: string };
@@ -47,6 +48,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
     return data;
   })
   .handler(async ({ data, context }): Promise<CheckoutSessionResult> => {
+    if (!PURCHASES_ENABLED) return { error: purchasesPausedMessage() };
     try {
       const { userId, supabase } = context;
       const {
