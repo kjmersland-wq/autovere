@@ -1,5 +1,15 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
+  "rewrites": [
+    {
+      "source": "/_serverFn/:path*",
+      "destination": "https://autovere.lovable.app/_serverFn/:path*"
+    },
+    {
+      "source": "/api/:path*",
+      "destination": "https://autovere.lovable.app/api/:path*"
+    }
+  ],
   "redirects": [
     {
       "source": "/usa",
