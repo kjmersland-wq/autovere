@@ -44,9 +44,30 @@ function isH3SwallowedErrorBody(body: string): boolean {
   }
 }
 
+// The public site lives on www.autovere.com (Vercel). The Lovable host only
+// serves background calls (server functions, /api) proxied from there, so
+// regular page visits are redirected to the canonical domain.
+const HIDDEN_HOSTS = new Set(["autovere.lovable.app"]);
+
+function canonicalRedirect(request: Request): Response | null {
+  if (request.method !== "GET" && request.method !== "HEAD") return null;
+  const url = new URL(request.url);
+  if (!HIDDEN_HOSTS.has(url.hostname)) return null;
+  if (url.pathname.startsWith("/_serverFn") || url.pathname.startsWith("/api/")) return null;
+  return new Response(null, {
+    status: 301,
+    headers: {
+      location: `https://www.autovere.com${url.pathname}${url.search}`,
+      "x-robots-tag": "noindex",
+    },
+  });
+}
+
 export default {
   async fetch(request: Request, env: unknown, ctx: unknown) {
     try {
+      const redirect = canonicalRedirect(request);
+      if (redirect) return redirect;
       const handler = await getServerEntry();
       const response = await handler.fetch(request, env, ctx);
       return await normalizeCatastrophicSsrResponse(response);
