@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Bike, Car, Caravan, ExternalLink, Ship, Zap } from "lucide-react";
 
 import {
@@ -27,6 +28,56 @@ const VEHICLE_ICON: Record<VehicleClass, typeof Car> = {
  * organic search intent, then hands the visitor off to the real planner
  * (pre-filled via ?origin=&destination=) for an exact, routed number.
  */
+/** Norwegians drive the same cabin road 20–40 times a year — show what that adds up to. */
+function CabinCost({ corridor }: { corridor: SEOCorridor }) {
+  const t = useT();
+  const [trips, setTrips] = useState(20);
+  const [electric, setElectric] = useState(false);
+  const range = corridor.tollsOverview[electric ? "ev" : "car"].range;
+  const nums = range.match(/\d+/g)?.map(Number);
+  if (!range.startsWith("NOK") || !nums || nums.length < 2) return null;
+  const tollMid = ((nums[0] ?? 0) + (nums[1] ?? 0)) / 2;
+  // Rough national averages: petrol ≈ 1.45 NOK/km, electric ≈ 0.55 NOK/km.
+  const energy = corridor.distanceKm * (electric ? 0.55 : 1.45);
+  const yearly = Math.round((trips * 2 * (tollMid + energy)) / 100) * 100;
+  return (
+    <section className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
+      <h2 className="text-lg font-semibold text-foreground">{t.flow.cabinTitle}</h2>
+      <div className="mt-4 flex flex-wrap items-center gap-4 text-sm text-foreground/80">
+        <label className="flex items-center gap-3">
+          <span>{t.flow.cabinTrips}</span>
+          <input
+            type="range"
+            min={2}
+            max={60}
+            value={trips}
+            onChange={(e) => setTrips(Number(e.target.value))}
+            className="w-40 accent-amber-300"
+          />
+          <strong className="w-8 text-foreground">{trips}</strong>
+        </label>
+        <span className="inline-flex rounded-full border border-white/10">
+          {[false, true].map((ev) => (
+            <button
+              key={String(ev)}
+              type="button"
+              onClick={() => setElectric(ev)}
+              aria-pressed={electric === ev}
+              className={`px-3 py-1 text-xs ${electric === ev ? "rounded-full bg-amber-300 font-semibold text-background" : ""}`}
+            >
+              {ev ? t.flow.evLabel : t.flow.petrolLabel}
+            </button>
+          ))}
+        </span>
+      </div>
+      <p className="mt-4 text-2xl font-semibold text-amber-300">
+        {t.flow.cabinYear(`NOK ${yearly.toLocaleString("nb-NO")}`)}
+      </p>
+      <p className="mt-1 text-xs text-muted-foreground">{t.flow.cabinNote}</p>
+    </section>
+  );
+}
+
 export function SeoRoutePage({
   corridor,
   plannerHref,
@@ -114,6 +165,8 @@ export function SeoRoutePage({
           </div>
           <p className="mt-4 text-xs italic text-muted-foreground">{copy.estimateDisclaimer}</p>
         </section>
+
+        <CabinCost corridor={corridor} />
 
         <section className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
           <h2 className="text-lg font-semibold text-foreground">{copy.checklistTitle}</h2>

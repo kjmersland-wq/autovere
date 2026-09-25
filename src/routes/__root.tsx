@@ -132,6 +132,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+
+  // The embeddable cost box is shown inside partners' pages: no site chrome, no tracking.
+  if (pathname === "/embed") return <Outlet />;
 
   return (
     <QueryClientProvider client={queryClient}>

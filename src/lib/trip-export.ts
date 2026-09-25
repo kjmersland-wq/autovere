@@ -44,6 +44,60 @@ ${track}
 </gpx>`;
 }
 
+/** Google Earth / Maps file with the real routed line and the real toll points. */
+export function buildKml(trip: TripEstimate, origin: string, destination: string) {
+  const placemarks = tripWaypoints(trip)
+    .map(
+      (p) =>
+        `    <Placemark>
+      <name>${escapeXml(p.name)}</name>
+      <description>${escapeXml(p.detail)}</description>
+      <Point><coordinates>${p.lon.toFixed(5)},${p.lat.toFixed(5)},0</coordinates></Point>
+    </Placemark>`,
+    )
+    .join("\n");
+  const line = tripTrackPoints(trip)
+    .map(([lat, lon]) => `${lon.toFixed(5)},${lat.toFixed(5)},0`)
+    .join(" ");
+  return `<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>${escapeXml(origin || "Start")} → ${escapeXml(destination || "Destination")}</name>
+    <description>${escapeXml(`${trip.distanceLabel} · ${trip.driveTime} · budget ${money(trip.currency, trip.budget)}`)}</description>
+${placemarks}
+    <Placemark>
+      <name>Route</name>
+      <LineString><tessellate>1</tessellate><coordinates>${line}</coordinates></LineString>
+    </Placemark>
+  </Document>
+</kml>`;
+}
+
+const csvCell = (v: string | number) => {
+  const s = String(v);
+  return /[;"\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+};
+
+/**
+ * Expense-report attachment: one row per toll / ferry line, then the totals.
+ * Semicolon-separated with a BOM so Norwegian Excel opens it correctly.
+ */
+export function buildExpenseCsv(trip: TripEstimate, origin: string, destination: string, date = new Date()) {
+  const day = date.toISOString().slice(0, 10);
+  const trip_ = `${origin || "Start"} → ${destination || "Destination"}`;
+  const rows: (string | number)[][] = [["Date", "Trip", "Distance", "Country", "Item", "Detail", "Amount", "Currency"]];
+  for (const seg of trip.segments) {
+    for (const l of seg.lines) {
+      rows.push([day, trip_, trip.distanceLabel, seg.country, l.place, l.detail, l.amount.toFixed(2), trip.currency]);
+    }
+  }
+  rows.push([day, trip_, trip.distanceLabel, "", "Tolls", "", trip.tolls.toFixed(2), trip.currency]);
+  rows.push([day, trip_, trip.distanceLabel, "", "Ferries", "", trip.ferries.toFixed(2), trip.currency]);
+  rows.push([day, trip_, trip.distanceLabel, "", "Energy", trip.energyLabel, trip.energyCost.toFixed(2), trip.currency]);
+  rows.push([day, trip_, trip.distanceLabel, "", "Total", "", trip.budget.toFixed(2), trip.currency]);
+  return "\uFEFF" + rows.map((r) => r.map(csvCell).join(";")).join("\r\n");
+}
+
 export function downloadFile(content: string, filename: string, mime: string) {
   const blob = new Blob([content], { type: mime });
   const url = URL.createObjectURL(blob);

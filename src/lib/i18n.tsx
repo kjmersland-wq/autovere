@@ -311,6 +311,24 @@ const en = {
     approx: (a: string) => `≈ ${a} at today's rate`,
     splitLabel: "Travelling together? Split the cost",
     perPerson: (a: string) => `${a} per person`,
+    typical: "Typically",
+    trustOfficial: "Official rates, no markup",
+    trustChecked: "toll data checked",
+    verified: "Verified",
+    estimated: "Estimated",
+    embedTitle: (a: string) => `What does it cost to drive to ${a}?`,
+    embedFrom: "Where are you starting from?",
+    embedCta: "Calculate cost",
+    expenseCsv: "🧾 Expense report (CSV)",
+    actualTitle: "Already driven this route? Tell us what you paid in tolls",
+    actualCta: "Send",
+    actualThanks: "Thanks — this makes the numbers better.",
+    cabinTitle: "Drive here often? See the yearly cost",
+    cabinTrips: "Return trips per year",
+    cabinYear: (a: string) => `About ${a} a year`,
+    cabinNote: "Tolls (mid estimate) plus energy at average consumption, both ways.",
+    petrolLabel: "Petrol",
+    evLabel: "Electric",
   },
   footer: {
     tagline:
@@ -620,6 +638,24 @@ const no: Strings = {
     approx: (a: string) => `≈ ${a} etter dagens kurs`,
     splitLabel: "Reiser dere flere? Del kostnaden",
     perPerson: (a: string) => `${a} per person`,
+    typical: "Typisk",
+    trustOfficial: "Offisielle satser, ingen påslag",
+    trustChecked: "bomdata kontrollert",
+    verified: "Verifisert",
+    estimated: "Estimert",
+    embedTitle: (a: string) => `Hva koster det å kjøre til ${a}?`,
+    embedFrom: "Hvor starter du?",
+    embedCta: "Beregn kostnad",
+    expenseCsv: "🧾 Reiseregning (CSV)",
+    actualTitle: "Kjørt denne turen? Fortell hva du betalte i bom",
+    actualCta: "Send",
+    actualThanks: "Takk — dette gjør tallene bedre.",
+    cabinTitle: "Kjører du hit ofte? Se årskostnaden",
+    cabinTrips: "Turer tur/retur i året",
+    cabinYear: (a: string) => `Omtrent ${a} i året`,
+    cabinNote: "Bom (midtestimat) pluss drivstoff/strøm ved gjennomsnittlig forbruk, begge veier.",
+    petrolLabel: "Bensin",
+    evLabel: "Elbil",
   },
   footer: {
     tagline:
@@ -678,6 +714,11 @@ export const STRINGS: Record<Locale, Strings> = {
   ja: withFallback("ja"),
   zh: withFallback("zh"),
 };
+
+/** Strings for an explicit locale — for pages (like the embeddable box) whose language comes from a query parameter. */
+export function stringsFor(locale: string): Strings {
+  return STRINGS[locale as Locale] ?? STRINGS.en;
+}
 
 export function useT(): Strings {
   return STRINGS[useLocale()] ?? STRINGS.en;

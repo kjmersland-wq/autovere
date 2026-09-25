@@ -91,14 +91,20 @@ type PhotonFeature = {
   };
 };
 
+/** After a Photon timeout, skip it for a minute so every lookup goes straight to the fallback. */
+let photonPausedUntil = 0;
+
 async function photon(path: string): Promise<{ features?: PhotonFeature[] } | null> {
+  if (Date.now() < photonPausedUntil) return null;
   try {
     const res = await fetch(`https://photon.komoot.io/${path}`, {
       headers: { "User-Agent": UA, Accept: "application/json" },
+      signal: AbortSignal.timeout(6_000),
     });
     if (!res.ok) return null;
     return (await res.json()) as { features?: PhotonFeature[] };
   } catch {
+    photonPausedUntil = Date.now() + 60_000;
     return null;
   }
 }

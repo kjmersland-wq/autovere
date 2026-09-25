@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { CalendarCheck2, ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship, Sparkles, Zap } from "lucide-react";
+import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { tripTrackPoints } from "@/lib/trip-export";
 
@@ -279,6 +279,20 @@ export function TripResults({
   const evChargingPois = wantEvPois && evPoiData ? filterByCorridor(evPoiData[region], corridorCoords, 30) : [];
   const m = useMoney(trip.currency);
   const [people, setPeople] = useState(1);
+  const [actualTolls, setActualTolls] = useState("");
+  const [actualSent, setActualSent] = useState(false);
+  const distUnit = trip.units === "imperial" ? "mi" : "km";
+  const distValue = trip.units === "imperial" ? trip.distanceKm * 0.621371 : trip.distanceKm;
+  const perUnit = distValue > 0 ? `${m.fmt(trip.budget / distValue, 2)}/${distUnit}` : "";
+  // Honest spread: fuel prices move a few percent, and an AutoPASS tag takes about 20% off Norwegian gantries.
+  const tollLow = trip.gantryPriced ? 0.8 : 0.9;
+  const tollHigh = trip.gantryPriced ? 1 : 1.1;
+  const budgetLow = trip.ferries + trip.tolls * tollLow + trip.energyCost * 0.93;
+  const budgetHigh = trip.ferries + trip.tolls * tollHigh + trip.energyCost * 1.07;
+  const budgetHint = `${t.flow.typical} ${m.fmt(budgetLow, 0)}–${m.fmt(budgetHigh, 0)} · ${perUnit}`;
+  const tollsCheckedOn = trip.tollsAsOf
+    ? new Date(trip.tollsAsOf).toLocaleDateString(locale === "no" ? "nb-NO" : "en-GB", { day: "numeric", month: "short", year: "numeric" })
+    : null;
   const perPerson = people > 1 ? t.flow.perPerson(m.fmt(trip.budget / people, 0)) : null;
   const nativePrice = (value: number, symbol: string) =>
     formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
@@ -332,8 +346,16 @@ export function TripResults({
 
 
 
+  const shareText = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)}${perPerson ? ` (${perPerson})` : ""} · AutoVere`;
+  const shareVia = (channel: "whatsapp" | "sms") => {
+    void trackEvent("share_trip_clicked", { channel, split: people > 1 });
+    const body = encodeURIComponent(`${shareText}
+${window.location.href}`);
+    window.open(channel === "whatsapp" ? `https://wa.me/?text=${body}` : `sms:?&body=${body}`, "_blank", "noopener");
+  };
+
   const shareTrip = async () => {
-    const text = `${title} — ${trip.distanceLabel}, ${trip.driveTime}, ${m.fmt(trip.budget, 0)}${perPerson ? ` (${perPerson})` : ""} · AutoVere`;
+    const text = shareText;
     try {
       if (navigator.share) await navigator.share({ title: `${title} · AutoVere`, text, url: window.location.href });
       else {
@@ -426,7 +448,7 @@ export function TripResults({
           accent
           label={t.results.budget}
           value={m.fmt(trip.budget, 0)}
-          hint={t.results.budgetHint}
+          hint={budgetHint}
         />
         <MetricCard label={t.results.distance} value={trip.distanceLabel} hint={t.results.distanceHint} />
         <MetricCard label={t.results.driveTime} value={trip.driveTime} hint={t.results.driveTimeHint} />
@@ -464,21 +486,12 @@ export function TripResults({
         {perPerson && <span className="font-semibold text-primary">{perPerson}</span>}
       </div>
 
-      {/* Trust markers — why the numbers can be relied on. */}
-      <div className="mt-4 flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-xs font-medium text-muted-foreground">
-        <span className="inline-flex items-center gap-1.5">
-          <ShieldCheck className="size-3.5 text-primary" />
-          {tr("100% Official Rates — Zero Reseller Fees")}
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <Zap className="size-3.5 text-primary" />
-          {tr("Real-world EV / Fuel Buffers")}
-        </span>
-        <span className="inline-flex items-center gap-1.5">
-          <CalendarCheck2 className="size-3.5 text-primary" />
-          {tr("Updated for 2026 Regulations")}
-        </span>
-      </div>
+      {/* One trust line — the source and date behind the toll figures. */}
+      <p className="mt-4 flex flex-wrap items-center justify-center gap-x-2 text-xs font-medium text-muted-foreground">
+        <ShieldCheck className="size-3.5 text-primary" />
+        {t.flow.trustOfficial}
+        {tollsCheckedOn ? ` · ${t.flow.trustChecked} ${tollsCheckedOn}` : ""}
+      </p>
 
       {/* Instant clarity trio — the three answers every driver wants first. */}
       <div data-tour="results" className="mt-6 grid gap-4 sm:grid-cols-3">
@@ -662,10 +675,52 @@ export function TripResults({
         <Button size="lg" variant="outline" onClick={shareTrip}>
           <Share2 className="size-4" /> {t.results.share}
         </Button>
+        <Button size="lg" variant="outline" onClick={() => shareVia("whatsapp")}>
+          WhatsApp
+        </Button>
+        <Button size="lg" variant="outline" onClick={() => shareVia("sms")}>
+          SMS
+        </Button>
         <Button size="lg" variant="outline" onClick={() => setPrinting(true)}>
           <Printer className="size-4" /> {tr("Export to PDF / Print itinerary")}
         </Button>
       </div>
+
+      <details className="glass-panel mt-4 rounded-2xl px-5 py-4 text-sm">
+        <summary className="cursor-pointer select-none font-medium text-foreground/80">🧾 {t.flow.actualTitle}</summary>
+        {actualSent ? (
+          <p className="mt-3 text-primary">{t.flow.actualThanks}</p>
+        ) : (
+          <form
+            className="mt-3 flex items-center gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              const actual = Number(actualTolls.replace(",", "."));
+              if (!Number.isFinite(actual) || actual < 0) return;
+              void trackEvent("actual_cost_submitted", {
+                route: title,
+                actualTolls: actual,
+                estimatedTolls: Math.round(trip.tolls),
+                currency: trip.currency,
+                gantryPriced: Boolean(trip.gantryPriced),
+              });
+              setActualSent(true);
+            }}
+          >
+            <input
+              inputMode="decimal"
+              value={actualTolls}
+              onChange={(e) => setActualTolls(e.target.value)}
+              aria-label={t.flow.actualTitle}
+              className="w-28 rounded-lg border border-border bg-background/60 px-3 py-2"
+            />
+            <span className="text-muted-foreground">{trip.currency}</span>
+            <Button type="submit" size="sm" variant="secondary">
+              {t.flow.actualCta}
+            </Button>
+          </form>
+        )}
+      </details>
 
       <RouteExportPanel
         trip={trip}
@@ -793,7 +848,12 @@ export function TripResults({
               <AccordionItem key={segment.country} value={segment.country}>
                 <AccordionTrigger className="text-left">
                   <span className="flex w-full items-center justify-between gap-4 pr-3">
-                    <span className="font-medium">{tr(segment.country)}</span>
+                    <span className="font-medium">
+                      {tr(segment.country)}
+                      <span className="ml-2 text-xs font-normal text-muted-foreground">
+                        {trip.gantryPriced && segment.country.startsWith("🇳🇴") ? t.flow.verified : t.flow.estimated}
+                      </span>
+                    </span>
                     <span className="text-primary">{m.fmt(segment.total)}</span>
                   </span>
                 </AccordionTrigger>

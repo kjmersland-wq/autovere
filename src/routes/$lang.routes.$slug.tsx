@@ -1,10 +1,10 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { SeoRoutePage } from "@/components/SeoRoutePage";
-import { SEO_CORRIDORS, corridorBySlug, corridorFaqJsonLd, corridorTripJsonLd } from "@/data/seo-corridors";
+import { relatedCorridors, corridorBySlug, corridorFaqJsonLd, corridorTripJsonLd } from "@/data/seo-corridors";
 import { seoRouteCopy } from "@/lib/seo-route-i18n";
 import { isLocalePrefix, LOCALE_ROUTES, type LocalePrefix } from "@/lib/locales";
-import { absUrl, breadcrumbScript, corridorHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
+import { absUrl, breadcrumbScript, corridorHreflangLinks, ogImageMeta } from "@/lib/seo";
 
 export const Route = createFileRoute("/$lang/routes/$slug")({
   beforeLoad: ({ params }) => {
@@ -32,7 +32,7 @@ export const Route = createFileRoute("/$lang/routes/$slug")({
         { property: "og:description", content: description },
         { property: "og:type", content: "website" },
         { property: "og:url", content: url },
-        ...ogImageMeta(ogImageUrl(prefix)),
+        ...ogImageMeta(absUrl(`/og/routes/${params.slug}.jpg`)),
         { name: "twitter:card", content: "summary_large_image" },
       ],
       links: [{ rel: "canonical", href: url }, ...corridorHreflangLinks(params.slug)],
@@ -54,9 +54,7 @@ function LangRoutePage() {
   const corridor = corridorBySlug(slug);
   if (!corridor) throw notFound();
   const params = new URLSearchParams({ origin: corridor.origin.name, destination: corridor.destination.name });
-  const moreRoutes = SEO_CORRIDORS.filter((c) => c.slug !== slug)
-    .slice(0, 4)
-    .map((c) => ({ label: `${c.origin.name} → ${c.destination.name}`, href: `/${lang}/routes/${c.slug}` }));
+  const moreRoutes = relatedCorridors(slug).map((c) => ({ label: `${c.origin.name} → ${c.destination.name}`, href: `/${lang}/routes/${c.slug}` }));
   return (
     <SeoRoutePage
       corridor={corridor}

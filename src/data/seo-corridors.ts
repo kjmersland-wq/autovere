@@ -88,6 +88,29 @@ function corridor(
   };
 }
 
+type NoPlace = [name: string, lat: number, lng: number];
+
+/** A domestic Norwegian corridor. Ranges come from the live planner: fastest route (high) to toll-smart route (low). */
+function norway(slug: string, from: NoPlace, to: NoPlace, km: number, car: [number, number], ev: [number, number]): SEOCorridor {
+  const range = (r: [number, number]) => `NOK ${r[0]}–${r[1]}`;
+  return corridor({
+    slug,
+    origin: { name: from[0], coords: { lat: from[1], lng: from[2] } },
+    destination: { name: to[0], coords: { lat: to[1], lng: to[2] } },
+    distanceKm: km,
+    countriesTraversed: ["NO"],
+    tollsOverview: {
+      car: { range: range(car), note: "AutoPASS gantries are billed automatically — the lower figure is the toll-optimised route. About 20% less with an AutoPASS tag." },
+      rv: { range: range(car), note: "Motorhomes up to 3.5 t pay the car rate; heavier vehicles pay the higher class." },
+      ev: { range: range(ev), note: "Most Norwegian gantries charge zero-emission vehicles a reduced rate." },
+      motorcycle: { range: "NOK 0", note: "Motorcycles are exempt from Norwegian road tolls." },
+    },
+    vignetteCountries: [],
+    ferryOptions: [],
+    borderAlertsSummary: "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.",
+  });
+}
+
 export const SEO_CORRIDORS: SEOCorridor[] = [
   corridor({
     slug: "oslo-bergen",
@@ -201,6 +224,13 @@ export const SEO_CORRIDORS: SEOCorridor[] = [
     ferryOptions: [],
     borderAlertsSummary: "No border and no vignette — only AutoPASS gantries. Foreign-registered cars are invoiced through EPASS24.",
   }),
+  norway("bergen-stavanger", ["Bergen", 60.3913, 5.3221], ["Stavanger", 58.97, 5.7331], 284, [35, 70], [25, 50]),
+  norway("bergen-voss", ["Bergen", 60.3913, 5.3221], ["Voss", 60.628, 6.415], 105, [20, 40], [15, 25]),
+  norway("stavanger-sirdal", ["Stavanger", 58.97, 5.7331], ["Sirdal", 58.66, 6.72], 112, [15, 30], [10, 20]),
+  norway("trondheim-alesund", ["Trondheim", 63.4305, 10.3951], ["Ålesund", 62.4722, 6.1549], 387, [60, 115], [45, 80]),
+  norway("oslo-lillehammer", ["Oslo", 59.9139, 10.7522], ["Lillehammer", 61.1153, 10.4662], 190, [110, 200], [75, 140]),
+  norway("oslo-roros", ["Oslo", 59.9139, 10.7522], ["Røros", 62.5744, 11.3846], 395, [70, 130], [50, 90]),
+  norway("oslo-alesund", ["Oslo", 59.9139, 10.7522], ["Ålesund", 62.4722, 6.1549], 527, [180, 330], [125, 230]),
   corridor({
     slug: "oslo-hamburg",
     origin: { name: "Oslo, Norway", coords: { lat: 59.9139, lng: 10.7522 } },
@@ -508,4 +538,13 @@ export function corridorFaqJsonLd(faqs: { q: string; a: string }[]) {
       acceptedAnswer: { "@type": "Answer", text: f.a },
     })),
   };
+}
+
+/** Other corridors worth a visitor's next click: same country first, then the rest. */
+export function relatedCorridors(slug: string, limit = 6): SEOCorridor[] {
+  const self = SEO_CORRIDORS.find((c) => c.slug === slug);
+  const home = self?.countriesTraversed[0];
+  const others = SEO_CORRIDORS.filter((c) => c.slug !== slug);
+  const near = others.filter((c) => c.countriesTraversed[0] === home);
+  return [...near, ...others.filter((c) => !near.includes(c))].slice(0, limit);
 }

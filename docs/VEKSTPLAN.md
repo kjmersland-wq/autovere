@@ -14,6 +14,37 @@ Kortversjon:
 
 ---
 
+## Status 25.09 – hva som er bygd
+
+| Punkt | Status |
+|---|---|
+| 2a Norske rutesider | **Gjort:** 14 norske sider (7 nye: Bergen–Stavanger, Bergen–Voss, Stavanger–Sirdal, Trondheim–Ålesund, Oslo–Lillehammer, Oslo–Røros, Oslo–Ålesund). Utland (Göteborg, Hirtshals, Alpene) ikke gjort, se under. |
+| 2b Hyttekalkulator | **Gjort** på alle norske rutesider: turer i året × bom + drivstoff/strøm, bensin eller elbil |
+| 2c AutoPASS-sparing på ferje | **Ikke gjort:** rabatten varierer per ferjeselskap, og jeg fant ingen kilde jeg kan stå inne for |
+| 2d Elbil som standard på /no | **Gjort** (med feilretting: elbil brukte tidligere bensinforbruket 7,4 som kWh, og undervurderte lading med ca. 60 %) |
+| 3a Delebilde med pris | **Delvis:** hver rute har eget bilde med prisspenn (`public/og/routes`). Bilde med den *enkelte* turens pris kan ikke lages uten at hele beregningsmotoren kjører på serveren |
+| 3b Splitt regningen | **Gjort** (pris per person følger med delingen) |
+| 3c WhatsApp og SMS | **Gjort** (egne knapper, teksten inneholder pris per person) |
+| 4a «Hva kostet det egentlig?» | **Første versjon:** feltet «Kjørt denne turen?» på resultatet sender faktisk bom og beregnet bom som hendelse `actual_cost_submitted` |
+| 4b Kostnadsindeks | **Ikke gjort:** krever at du velger 20 ruter og utgivelsestidspunkt |
+| 4c Ferske data | **Gjort:** «bomdata kontrollert 13. sep. 2026» under totalen, og «Verifisert / Estimert» per land |
+| 5 Partnerboks | **Gjort:** `/embed`, se [PARTNERBOKS.md](PARTNERBOKS.md) |
+| 6 Reiseregning | **Gjort:** CSV med én linje per bomstasjon/ferje og totaler (eksportpanelet) |
+| 7 Åpent pris-API | **Gjort:** `/api/public/costs`, nevnt i llms.txt |
+| 11b Kr per km, prisspenn, kilde/dato, landsmerke | **Gjort** |
+| 11c Tur/retur | Fantes allerede («Tur-retur / ferie») |
+| 11c Sammenligning av tre ruter | Fantes allerede (tre rader øverst på resultatet) |
+| 11c Dagsplan | **Ikke gjort:** uten navn på overnattingssteder blir det bare «kjør halvparten hver dag» |
+| 11c Offline (PWA) | **Ikke gjort:** manifest og ikon finnes, men servicearbeider kan gi gamle bomsatser i cache. Bør vurderes sammen med endringslogg |
+| 1a–1c Stripe, sesongpass, gavekort | **Ikke gjort:** krever produkter og priser i Stripe (din beslutning) |
+| 11d Hvitmerket dossier | **Ikke gjort:** vent til en utleier har sagt ja |
+
+Andre feil rettet underveis: KML-eksporten lagde falske koordinater i Sveits (nå ekte rute), engelsk tekst på norsk resultatside (tre linjer, nå én linje på riktig språk), og ruteberegning som hang i 45 sekunder når stedsoppslaget (Photon) var nede (nå pause i 6 sekunder og reserve).
+
+SoMe-innhold på engelsk: [SOME-EN.md](SOME-EN.md).
+
+---
+
 ## Det som allerede finnes (ikke bygg på nytt)
 
 | Idé fra rapporten | Status i koden |

@@ -314,7 +314,7 @@ export function ScenicGuide() {
         <div className="mt-14">
           <h2 className="text-lg font-semibold text-foreground">{routeCopy.moreRoutesTitle}</h2>
           <div className="mt-4 flex flex-wrap gap-2">
-            {SEO_CORRIDORS.map((c) => (
+            {SEO_CORRIDORS.slice(0, 12).map((c) => (
               <a
                 key={c.slug}
                 href={corridorHref(c.slug)}

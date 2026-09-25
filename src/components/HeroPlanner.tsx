@@ -55,6 +55,7 @@ import { loadActiveVehicle, parseNumber } from "@/lib/garage";
 import { getRouteGeo, type RouteGeo } from "@/lib/route-geo.functions";
 import { getEnergyPrices, type EnergyPrices } from "@/lib/energy-prices.functions";
 import { getNorwayTollStations, type NoTollStation } from "@/lib/toll-data.functions";
+import { rememberTollAsOf } from "@/lib/toll-meta";
 import { PlaceAutocomplete, type PlaceHit } from "@/components/PlaceAutocomplete";
 import { useLocale, useT, useTr } from "@/lib/i18n";
 import { startTour, tourCopy } from "@/lib/tour";
@@ -111,7 +112,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   // a European trip still thinks in miles, even though the region itself is metric.
   const imperial = defaults.units === "imperial" || locale === "us";
   const [vehicle, setVehicle] = useState<VehicleKey>("car");
-  const [fuel, setFuel] = useState<FuelKey>("petrol");
+  // Over 90% of new Norwegian cars are electric, so /no starts on electric; a saved garage profile still wins.
+  const [fuel, setFuel] = useState<FuelKey>(locale === "no" ? "electric" : "petrol");
   // Pre-fill from ?origin=&destination= when arriving via a deep link (e.g.
   // a pSEO route page's "Open in AutoVere Planner" CTA) — empty on every
   // other visit, exactly as before.
@@ -132,6 +134,8 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   const [tags, setTags] = useState<TransponderKey[]>([]);
   const [tankSize, setTankSize] = useState(imperial ? "16" : "60");
   const [consumption, setConsumption] = useState(imperial ? "28" : "7.4");
+  // The default above is litres per 100 km — it must never be read as kWh when the car is electric.
+  const [consumptionFor, setConsumptionFor] = useState<"ev" | "fuel" | null>(null);
   const [waypoints, setWaypoints] = useState<{ id: string; value: string }[]>([]);
   const [geo, setGeo] = useState<RouteGeo | null>(null);
   const [originHit, setOriginHit] = useState<PlaceHit | null>(null);
@@ -178,6 +182,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
     if (noTolls) return noTolls;
     try {
       const data = await noTollsFn();
+      rememberTollAsOf(data.stations, data.asOf);
       setNoTolls(data.stations);
       return data.stations;
     } catch {
@@ -188,7 +193,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
   /** The garage profile plus whatever the driver typed into the fine-tune fields. */
   const effectiveProfile = (): VehicleProfile => {
     const c = Number(consumption);
-    const valid = Number.isFinite(c) && c > 0;
+    const valid = Number.isFinite(c) && c > 0 && (fuel === "electric" ? consumptionFor === "ev" : true);
     if (fuel === "electric") {
       return { ...(profile ?? {}), kwhPer100: valid ? (imperial ? c / 1.609344 : c) : profile?.kwhPer100 };
     }
@@ -826,8 +831,12 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
                           type="number"
                           step="0.1"
                           min={0}
-                          value={consumption}
-                          onChange={(e) => setConsumption(e.target.value)}
+                          value={fuel === "electric" && consumptionFor !== "ev" ? "" : consumption}
+                          placeholder={fuel === "electric" ? (imperial ? "kWh/100 mi" : "kWh/100 km") : undefined}
+                          onChange={(e) => {
+                            setConsumption(e.target.value);
+                            setConsumptionFor(fuel === "electric" ? "ev" : "fuel");
+                          }}
                           className="mt-1 h-10 border-border bg-background/60"
                         />
                       </label>

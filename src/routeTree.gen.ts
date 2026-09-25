@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CaRouteImport } from './routes/ca'
+import { Route as EmbedRouteImport } from './routes/embed'
 import { Route as EuropeRouteImport } from './routes/europe'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as GarageRouteImport } from './routes/garage'
@@ -67,6 +68,7 @@ import { Route as UsScenicRouteImport } from './routes/us.scenic'
 import { Route as UsTollsRouteImport } from './routes/us.tolls'
 import { Route as LangRegionPageRouteImport } from './routes/$lang.$region.$page'
 import { Route as LangRoutesSlugRouteImport } from './routes/$lang.routes.$slug'
+import { Route as ApiPublicCostsRouteImport } from './routes/api/public/costs'
 import { Route as CaFrFaqRouteImport } from './routes/ca.fr.faq'
 import { Route as CaFrHowItWorksRouteImport } from './routes/ca.fr.how-it-works'
 import { Route as CaFrLegalRouteImport } from './routes/ca.fr.legal'
@@ -86,6 +88,11 @@ const AdminRoute = AdminRouteImport.update({
 const CaRoute = CaRouteImport.update({
   id: '/ca',
   path: '/ca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmbedRoute = EmbedRouteImport.update({
+  id: '/embed',
+  path: '/embed',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EuropeRoute = EuropeRouteImport.update({
@@ -363,6 +370,11 @@ const LangRoutesSlugRoute = LangRoutesSlugRouteImport.update({
   path: '/$lang/routes/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ApiPublicCostsRoute = ApiPublicCostsRouteImport.update({
+  id: '/api/public/costs',
+  path: '/api/public/costs',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const CaFrFaqRoute = CaFrFaqRouteImport.update({
   id: '/fr/faq',
   path: '/fr/faq',
@@ -394,6 +406,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/ca': typeof CaRouteWithChildren
+  '/embed': typeof EmbedRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
@@ -449,6 +462,7 @@ export interface FileRoutesByFullPath {
   '/us/': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
   '/$lang/routes/$slug': typeof LangRoutesSlugRoute
+  '/api/public/costs': typeof ApiPublicCostsRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -458,6 +472,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/embed': typeof EmbedRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
@@ -512,6 +527,7 @@ export interface FileRoutesByTo {
   '/us': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
   '/$lang/routes/$slug': typeof LangRoutesSlugRoute
+  '/api/public/costs': typeof ApiPublicCostsRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -523,6 +539,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/ca': typeof CaRouteWithChildren
+  '/embed': typeof EmbedRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
   '/garage': typeof GarageRoute
@@ -578,6 +595,7 @@ export interface FileRoutesById {
   '/us/': typeof UsIndexRoute
   '/$lang/$region/$page': typeof LangRegionPageRoute
   '/$lang/routes/$slug': typeof LangRoutesSlugRoute
+  '/api/public/costs': typeof ApiPublicCostsRoute
   '/ca/fr/faq': typeof CaFrFaqRoute
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
@@ -590,6 +608,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ca'
+    | '/embed'
     | '/europe'
     | '/faq'
     | '/garage'
@@ -645,6 +664,7 @@ export interface FileRouteTypes {
     | '/us/'
     | '/$lang/$region/$page'
     | '/$lang/routes/$slug'
+    | '/api/public/costs'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -654,6 +674,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/embed'
     | '/europe'
     | '/faq'
     | '/garage'
@@ -708,6 +729,7 @@ export interface FileRouteTypes {
     | '/us'
     | '/$lang/$region/$page'
     | '/$lang/routes/$slug'
+    | '/api/public/costs'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -718,6 +740,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ca'
+    | '/embed'
     | '/europe'
     | '/faq'
     | '/garage'
@@ -773,6 +796,7 @@ export interface FileRouteTypes {
     | '/us/'
     | '/$lang/$region/$page'
     | '/$lang/routes/$slug'
+    | '/api/public/costs'
     | '/ca/fr/faq'
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
@@ -784,6 +808,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   CaRoute: typeof CaRouteWithChildren
+  EmbedRoute: typeof EmbedRoute
   EuropeRoute: typeof EuropeRoute
   FaqRoute: typeof FaqRoute
   GarageRoute: typeof GarageRoute
@@ -819,6 +844,7 @@ export interface RootRouteChildren {
   NoIndexRoute: typeof NoIndexRoute
   LangRegionPageRoute: typeof LangRegionPageRoute
   LangRoutesSlugRoute: typeof LangRoutesSlugRoute
+  ApiPublicCostsRoute: typeof ApiPublicCostsRoute
   ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
 }
 
@@ -843,6 +869,13 @@ declare module '@tanstack/react-router' {
       path: '/ca'
       fullPath: '/ca'
       preLoaderRoute: typeof CaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/embed': {
+      id: '/embed'
+      path: '/embed'
+      fullPath: '/embed'
+      preLoaderRoute: typeof EmbedRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/europe': {
@@ -1230,6 +1263,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LangRoutesSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/api/public/costs': {
+      id: '/api/public/costs'
+      path: '/api/public/costs'
+      fullPath: '/api/public/costs'
+      preLoaderRoute: typeof ApiPublicCostsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/ca/fr/faq': {
       id: '/ca/fr/faq'
       path: '/fr/faq'
@@ -1336,6 +1376,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   CaRoute: CaRouteWithChildren,
+  EmbedRoute: EmbedRoute,
   EuropeRoute: EuropeRoute,
   FaqRoute: FaqRoute,
   GarageRoute: GarageRoute,
@@ -1371,6 +1412,7 @@ const rootRouteChildren: RootRouteChildren = {
   NoIndexRoute: NoIndexRoute,
   LangRegionPageRoute: LangRegionPageRoute,
   LangRoutesSlugRoute: LangRoutesSlugRoute,
+  ApiPublicCostsRoute: ApiPublicCostsRoute,
   ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
 }
 export const routeTree = rootRouteImport

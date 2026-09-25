@@ -14,6 +14,7 @@ export type { TripType };
 
 export { LANGUAGES, NAV_LINKS, REGIONS, regionFromPath, type RegionKey } from "@/lib/site-basics";
 import type { RegionKey } from "@/lib/site-basics";
+import { tollAsOf } from "@/lib/toll-meta";
 
 export type VehicleKey = "car" | "motorhome" | "motorcycle";
 export type FuelKey = "petrol" | "diesel" | "electric";
@@ -138,6 +139,8 @@ export type TripEstimate = {
   evWhatIf?: { fuelCost: number; evCost: number; litres: number; kwh: number } | undefined;
   /** True when Norwegian tolls were priced from the real gantry register. */
   gantryPriced?: boolean | undefined;
+  /** Date the Norwegian toll register was last checked (YYYY-MM-DD). */
+  tollsAsOf?: string | undefined;
   vignette?: VignettePlan | null;
   tripType?: TripType;
   durationDays?: number;
@@ -909,6 +912,7 @@ export function estimateTrip(
     priceBasis,
     evWhatIf,
     gantryPriced,
+    tollsAsOf: gantryPriced ? tollAsOf(extras.noTolls) : undefined,
     optimizer: buildOptimizer(region, vehicle, fuel, distanceKm, imperial, geo, profile, pricePerKwh, evChargers, fuelStations),
     vignette:
       activeVariant === "tollfree"

@@ -6,44 +6,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { useT } from "@/lib/i18n";
 import { trackEvent } from "@/lib/analytics";
 import { money, type TripEstimate } from "@/lib/trip-data";
-import { buildTripGpx, downloadFile, escapeXml } from "@/lib/trip-export";
-
-/** Indicative waypoints so exported files load cleanly in GPS units. */
-function waypoints(trip: TripEstimate) {
-  return trip.segments
-    .flatMap((s) => s.lines)
-    .map((l, i) => ({
-      name: l.place,
-      detail: l.detail,
-      lat: 46 + i * 0.35,
-      lon: 9 + i * 0.4,
-    }));
-}
-
-
-function buildKml(trip: TripEstimate, origin: string, destination: string) {
-  const pts = waypoints(trip);
-  const placemarks = pts
-    .map(
-      (p) =>
-        `    <Placemark>\n      <name>${escapeXml(p.name)}</name>\n      <description>${escapeXml(p.detail)}</description>\n      <Point><coordinates>${p.lon.toFixed(4)},${p.lat.toFixed(4)},0</coordinates></Point>\n    </Placemark>`,
-    )
-    .join("\n");
-  const line = pts.map((p) => `${p.lon.toFixed(4)},${p.lat.toFixed(4)},0`).join(" ");
-  return `<?xml version="1.0" encoding="UTF-8"?>
-<kml xmlns="http://www.opengis.net/kml/2.2">
-  <Document>
-    <name>${escapeXml(origin || "Start")} → ${escapeXml(destination || "Destination")}</name>
-    <description>${escapeXml(`${trip.distanceLabel} · ${trip.driveTime} · budget ${money(trip.currency, trip.budget)}`)}</description>
-${placemarks}
-    <Placemark>
-      <name>Route corridor</name>
-      <LineString><tessellate>1</tessellate><coordinates>${line}</coordinates></LineString>
-    </Placemark>
-  </Document>
-</kml>`;
-}
-
+import { buildExpenseCsv, buildKml, buildTripGpx, downloadFile, escapeXml } from "@/lib/trip-export";
 
 function slug(value: string, fallback: string) {
   const s = value.toLowerCase().replace(/\W+/g, "-").replace(/^-|-$/g, "");
@@ -125,6 +88,11 @@ export function RouteExportPanel({
   const exportKml = guard(() => {
     downloadFile(buildKml(trip, origin, destination), `${base}.kml`, "application/vnd.google-earth.kml+xml");
     toast.success(t.export.kmlToast);
+  });
+
+  const exportCsv = guard(() => {
+    void trackEvent("export_csv", { source: "export-panel" });
+    downloadFile(buildExpenseCsv(trip, origin, destination), `${base}.csv`, "text/csv;charset=utf-8");
   });
 
   const navLinks = [
@@ -233,6 +201,9 @@ export function RouteExportPanel({
         </Button>
         <Button size="lg" variant="secondary" onClick={exportKml}>
           <FileText className="size-4" /> {t.export.kml}
+        </Button>
+        <Button size="lg" variant="secondary" onClick={exportCsv}>
+          <FileText className="size-4" /> {t.flow.expenseCsv}
         </Button>
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
