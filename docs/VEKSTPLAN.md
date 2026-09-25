@@ -210,3 +210,66 @@ Følg med i Admin → Produkthendelser. Sett tallene fra første uke som utgangs
 | **Senere** | Bedriftssalg via regnskapsbyrå | Reiseregning-eksport (6), pris-API (7) |
 
 Si fra hvilke kodepunkter du vil ha først, så bygges de i den rekkefølgen.
+
+---
+
+## 11. Fra presentasjonen (03.09) og benchmarken (02.09)
+
+Begge filene er lest i sin helhet og sammenlignet med koden. Her er det som ikke var i planen, og det som må rettes før noen andre får se dem.
+
+### 11a. Rett dette før filene deles [deg]
+
+- **Benchmarken rangerer AutoVere som nr. 1 (8.8), men den er skrevet av oss, og AutoVere er selv en av de vurderte.** Rapporten sier selv at poengene er «provisional». Ikke bruk «nr. 1» utad før en uavhengig test er gjort. Bruk heller tallene under.
+- **Den reelle konkurrenten er Trip Cost Calculator**: gratis, uten konto, 30+ land og 30+ språk. Vi kan ikke selge «finnes ikke noe annet». Vi må vinne på det den ikke har: norske bomstasjoner, ferjer, elbilrabatt og bobil.
+- **Rovee** (bobil, Europa) lanserte 10.09.2026. Det er direkte konkurranse på bobilsegmentet i planen (punkt 2).
+- **Presentasjonen har utdaterte påstander:** «11 språk» (nå 14), «75 % rekkeviddebuffer» (Grok fant både 25 % og 75 %, sjekk hva motoren faktisk bruker), «Google Places» (vi bruker Photon), «Fleet fra 29 €», «€49/år» (benchmarken) mot 39 € i dag. Rett tallene i begge dokumentene.
+- **Prisnivå mot markedet:** Furkot 14 $/år, Rovee 18–30 €/år, Roadtrippers 36–60 $/år, TollGuru 199 $/år, Trip Cost Calculator gratis. Vår Pro på 490 kr/år ligger midt i feltet og Trip Pass på 79 kr er billig. Konklusjon: ikke øk prisene. Sesongpass (1b) er riktig grep.
+
+### 11b. Hoppet i tillit (lite kode, stor effekt) [kode]
+
+Presentasjonen peker på dette som viktigste punkt, og det er ikke bygd:
+
+1. **Kilde og dato per kostnadslinje:** «Bom: Fjellinjen/NVDB, kontrollert 12.09.2026». Bruk `updatedAt` som allerede ligger i bomdataene, ellers en felles konstant. En liten grå linje, ikke en tabell.
+2. **Konfidensnivå per land:** Verifisert / Estimert / Snitt som ett lite merke ved landet. Norge = Verifisert (NVDB). Land uten live-data = Estimert.
+3. **Prisspenn i stedet for ett tall** (f.eks. «1 240–1 380 kr»). Behold ett stort tall øverst, og vis spennet som liten tekst under. Grunnlag: drivstoffpris ±, bom med og uten AutoPASS-rabatt.
+4. **Kroner per kilometer** («2,45 kr/km») ved siden av totalen. Presentasjonen vil at AutoVere skal eie «reell kostnad per km». Tallet finnes allerede (total ÷ distanse), så dette er én linje.
+5. **Offentlig endringslogg** («Bomsatser endret 01.10: E18 Vestfold …»). Kilde til pressesaker og lenker. Start manuelt, automatiser senere.
+
+### 11c. Bruk det som allerede er bygd [kode]
+
+- **Tre ruter side om side** finnes som rutevalg. Gjør dem til én sammenligning på tre linjer (tid, bom, total) øverst på resultatet. Det er «aha»-øyeblikket presentasjonen ber om.
+- **Dagsplan for lange turer:** «Dag 1: Oslo → Hemsedal (3 t 20 min). Dag 2: …» kun når turen er over ca. 6 timer. Skal ikke vises for korte turer (less is more).
+- **Retur/rundtur** med ett valg («Tur/retur»), spesielt viktig for hytteturer og vignettperioder utenfor Norge.
+- **Innebygd kostnadsboks (widget)** for bloggere, campingplasser og foreninger: én `<iframe>`-linje. Dette er samme boks som i partnerplanen (punkt 5). Bygg den én gang.
+- **Offline (PWA):** manifest og ikon er på plass. Mangler servicearbeider som mellomlagrer siste beregnede tur, slik at den virker på fjellet uten dekning.
+
+### 11d. Forretning: B2B foran B2C [deg + kode]
+
+Presentasjonen mener flåte/utleie er den mest lønnsomme inntekten, og at dagens Business-pris er for lav. Jeg er enig i retningen, men ikke i tallene før noen har betalt:
+
+- **Ikke sett opp prisen på Business før første kunde har sagt ja.** Ring 5 bobil- og bilutleiere i stedet, og spør hva de ville betalt for kostnadsestimat i bookingen og hvitmerket A4-ark med eget logo.
+- **Hvitmerket dossier** er nesten ferdig (PDF finnes). Mangler bare logo-felt per partner.
+- **Offisielt samarbeid med bomselskapene** (Fjellinjen, AutoPASS, ASFINAG): en henvisning fra én av dem er verdt mer enn all SEO. Send én kort e-post per selskap med lenken til rutesiden og datakilden.
+- **Affiliate bare på det ærlige:** ferje, forsikring, bobilutleie. Aldri bom. Dette står allerede i planen (punkt 5), og presentasjonen støtter det.
+
+### 11e. Det jeg ikke anbefaler fra filene
+
+- **«Topp 2 000 ruter per språk»** (programmatisk SEO): for tidlig og risikabelt. Tynne, like sider straffes av Google. Hold deg til 20–30 norske ruter med ekte tall (punkt 2a), og utvid først når disse får trafikk.
+- **Flere land (Australia, Øst-Europa), infotainment, forsikring/leasing, «referansekilde for bomdata»:** samme svar som i punkt 8. Norge først.
+- **Sanntids drivstoff for flere land:** bra på sikt, men Norge har ingen åpen pris-API. Bruk i stedet SSB/snitt med tydelig merking (11b-2).
+
+### 11f. Prioritert rekkefølge for kode
+
+| # | Hva | Størrelse | Effekt |
+|---|---|---|---|
+| 1 | Kr/km og «sist kontrollert»-linje (11b-1, 11b-4) | liten | tillit, deling |
+| 2 | Konfidensmerke per land (11b-2) | liten | tillit |
+| 3 | Sammenligning av tre ruter på tre linjer (11c) | liten–middels | «aha» |
+| 4 | Tur/retur (11c) | middels | hytteturer, vignett |
+| 5 | Innebygd boks (11c) | middels | distribusjon, lenker |
+| 6 | Prisspenn (11b-3) | middels | ærlighet |
+| 7 | Dagsplan på lange turer (11c) | middels | verdi for bobil |
+| 8 | Servicearbeider, offline (11c) | middels | fjellturer |
+| 9 | Hvitmerket dossier (11d) | middels | B2B |
+
+Punkt 1–3 kan gjøres i én runde uten å legge til noe nytt på skjermen. Det er én linje og ett merke, resten er tydeligere pakking av det som finnes.
