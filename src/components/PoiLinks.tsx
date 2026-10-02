@@ -32,6 +32,8 @@ export function PoiLinks({
   region = "eu",
   website,
   booking,
+  coords,
+  noWeb,
   className,
 }: {
   kind: PoiKind;
@@ -40,20 +42,25 @@ export function PoiLinks({
   region?: RegionKey | undefined;
   website?: string | undefined;
   booking?: string | undefined;
+  coords?: [number, number] | undefined;
+  /** Hide the website/photos search for places with no unique name (a viewpoint is not searchable). */
+  noWeb?: boolean | undefined;
   className?: string | undefined;
 }) {
   const locale = useLocale();
   const l = LABELS[locale] ?? LABELS['en']!;
-  const links = poiLinks({ kind, name, where, region, website, booking });
+  const links = poiLinks({ kind, name, where, region, website, booking, coords });
 
   return (
     <div className={cn("mt-3 flex flex-wrap gap-1.5", className)}>
       <a href={links.map} target="_blank" rel="noopener noreferrer" className={linkClass}>
         <MapPin className="size-3" /> {l.map}
       </a>
-      <a href={links.web} target="_blank" rel="noopener noreferrer" className={linkClass}>
-        <Images className="size-3" /> {l.web}
-      </a>
+      {!noWeb && (
+        <a href={links.web} target="_blank" rel="noopener noreferrer" className={linkClass}>
+          <Images className="size-3" /> {l.web}
+        </a>
+      )}
       {links.booking && (
         <a
           href={links.booking}

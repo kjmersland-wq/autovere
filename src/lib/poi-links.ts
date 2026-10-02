@@ -67,6 +67,7 @@ export function poiLinks({
   region = "eu",
   website,
   booking,
+  coords,
 }: {
   kind: PoiKind;
   name: string;
@@ -74,9 +75,13 @@ export function poiLinks({
   region?: RegionKey | undefined;
   website?: string | undefined;
   booking?: string | undefined;
+  /** Exact spot [lat, lng]; used for the map pin when the name alone is too generic to search for. */
+  coords?: [number, number] | undefined;
 }) {
   return {
-    map: poiMapUrl(name, where),
+    map: coords
+      ? `https://www.google.com/maps/search/?api=1&query=${coords[0].toFixed(5)},${coords[1].toFixed(5)}`
+      : poiMapUrl(name, where),
     web: poiWebUrl(name, where, website),
     booking: poiBookingUrl(kind, name, region, booking),
   };

@@ -216,6 +216,11 @@ export function CorridorMap({
   }, [mapCoords, pois, layers, tr, from, to, t, m.display, isElectric]);
 
   const visible = pois.filter((p) => layers[p.layer]);
+  /** Point on the routed line at a 0..1 progress value. */
+  const positionAt = (progress: number): [number, number] | undefined => {
+    if (mapCoords.length < 2) return undefined;
+    return mapCoords[Math.min(mapCoords.length - 1, Math.max(0, Math.round(progress * (mapCoords.length - 1))))];
+  };
 
   /** Deep links for CarPlay / phone handoff, with routed waypoints where available. */
   const waypointParam = useMemo(() => {
@@ -361,6 +366,8 @@ export function CorridorMap({
               name={p.name}
               where={`${origin} ${destination}`}
               region={region}
+              coords={p.layer === "view" ? positionAt(p.progress) : undefined}
+              noWeb={p.layer === "view"}
               className="mt-2"
             />
           </div>
