@@ -507,6 +507,19 @@ ${window.location.href}`);
         {t.flow.trustOfficial}
         {tollsCheckedOn ? ` · ${t.flow.trustChecked} ${tollsCheckedOn}` : ""}
       </p>
+      {trip.gantryPriced && trip.ferries > 0 && (
+        <p className="mt-2 text-center text-xs text-foreground/75">
+          ⛴️ {t.flow.ferrySave(m.fmt(trip.ferries * 0.5, 0))}{" "}
+          <a
+            href="https://www.autopassferje.no"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-medium text-primary underline-offset-2 hover:underline"
+          >
+            {t.flow.ferrySaveCta}
+          </a>
+        </p>
+      )}
 
       {/* Instant clarity trio — the three answers every driver wants first. */}
       <div

@@ -20,7 +20,7 @@ Kortversjon:
 |---|---|
 | 2a Norske rutesider | **Gjort:** 14 norske sider (7 nye: Bergen–Stavanger, Bergen–Voss, Stavanger–Sirdal, Trondheim–Ålesund, Oslo–Lillehammer, Oslo–Røros, Oslo–Ålesund). Utland (Göteborg, Hirtshals, Alpene) ikke gjort, se under. |
 | 2b Hyttekalkulator | **Gjort** på alle norske rutesider: turer i året × bom + drivstoff/strøm, bensin eller elbil |
-| 2c AutoPASS-sparing på ferje | **Ikke gjort:** rabatten varierer per ferjeselskap, og jeg fant ingen kilde jeg kan stå inne for |
+| 2c AutoPASS-sparing på ferje | **Gjort:** linje på turer med norsk ferje: «Med AutoPASS ferjeavtale (privat) kan du spare opptil X kr», med lenke til autopassferje.no. Kilde: [Regjeringen](https://www.regjeringen.no/no/aktuelt/na-blir-forskuddsbelopet-for-autopass-ferjekonto-redusert/id3020313/): 50 % for privat, 40 % for bedrift. Beløpet er 50 % av ferjeprisen i turen, så det gjelder bare ferjer som følger AutoPASS-regulativet |
 | 2d Elbil som standard på /no | **Gjort** (med feilretting: elbil brukte tidligere bensinforbruket 7,4 som kWh, og undervurderte lading med ca. 60 %) |
 | 3a Delebilde med pris | **Delvis:** hver rute har eget bilde med prisspenn (`public/og/routes`). Bilde med den *enkelte* turens pris kan ikke lages uten at hele beregningsmotoren kjører på serveren |
 | 3b Splitt regningen | **Gjort** (pris per person følger med delingen) |

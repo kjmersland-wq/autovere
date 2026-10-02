@@ -279,6 +279,8 @@ export const NL_DICT: Record<string, unknown> = {
     trustChecked: "tolgegevens gecontroleerd",
     verified: "Geverifieerd",
     estimated: "Geschat",
+    ferrySave: (a: string) => `Met een AutoPASS-veerbootovereenkomst (particulier) bespaar je tot ${a} op de veerboten van deze reis.`,
+    ferrySaveCta: "Overeenkomst afsluiten",
     dayTitle: "Lange rit? Voorstel voor dagetappes",
     dayLine: (n: number, h: string, p: string) => `Dag ${n}: ca. ${h} u, eindigt bij ${p}`,
     embedTitle: (a: string) => `Wat kost het om naar ${a} te rijden?`,

@@ -279,6 +279,8 @@ export const DA_DICT: Record<string, unknown> = {
     trustChecked: "betalingsdata kontrolleret",
     verified: "Verificeret",
     estimated: "Anslået",
+    ferrySave: (a: string) => `Med en AutoPASS-færgeaftale (privat) kan du spare op til ${a} på færgerne på denne tur.`,
+    ferrySaveCta: "Opret aftale",
     dayTitle: "Lang tur? Forslag til dagsetaper",
     dayLine: (n: number, h: string, p: string) => `Dag ${n}: ca. ${h} t, ender nær ${p}`,
     embedTitle: (a: string) => `Hvad koster det at køre til ${a}?`,

@@ -279,6 +279,8 @@ export const FR_DICT: Record<string, unknown> = {
     trustChecked: "données de péage vérifiées",
     verified: "Vérifié",
     estimated: "Estimé",
+    ferrySave: (a: string) => `Avec un accord AutoPASS pour les ferries (particulier), vous pouvez économiser jusqu'à ${a} sur les ferries de ce trajet.`,
+    ferrySaveCta: "Souscrire",
     dayTitle: "Long trajet ? Proposition d'étapes",
     dayLine: (n: number, h: string, p: string) => `Jour ${n} : environ ${h} h, fin près de ${p}`,
     embedTitle: (a: string) => `Combien coûte le trajet jusqu'à ${a} ?`,

@@ -265,6 +265,8 @@ export const ZH_DICT: Record<string, unknown> = {
     trustChecked: "收费数据核对于",
     verified: "已核实",
     estimated: "估算",
+    ferrySave: (a: string) => `签订 AutoPASS 渡轮协议（个人），本次行程的渡轮费用最多可省 ${a}。`,
+    ferrySaveCta: "办理协议",
     dayTitle: "路程较长？建议分段",
     dayLine: (n: number, h: string, p: string) => `第${n}天：约${h}小时，到${p}附近`,
     embedTitle: (a: string) => `开车去${a}要花多少钱？`,

@@ -280,6 +280,8 @@ export const JA_DICT: Record<string, unknown> = {
     trustChecked: "料金データ確認日",
     verified: "確認済み",
     estimated: "概算",
+    ferrySave: (a: string) => `AutoPASSフェリー契約（個人）なら、この旅のフェリー代を最大${a}節約できます。`,
+    ferrySaveCta: "契約する",
     dayTitle: "長距離ドライブ？日程の目安",
     dayLine: (n: number, h: string, p: string) => `${n}日目：約${h}時間、${p}付近まで`,
     embedTitle: (a: string) => `${a}までのドライブ費用は？`,

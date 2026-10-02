@@ -283,6 +283,8 @@ export const PT_DICT: Record<string, unknown> = {
     trustChecked: "dados de portagens verificados",
     verified: "Verificado",
     estimated: "Estimado",
+    ferrySave: (a: string) => `Com um acordo AutoPASS para ferries (particular) pode poupar até ${a} nos ferries desta viagem.`,
+    ferrySaveCta: "Contratar",
     dayTitle: "Viagem longa? Sugestão de etapas",
     dayLine: (n: number, h: string, p: string) => `Dia ${n}: cerca de ${h} h, termina perto de ${p}`,
     embedTitle: (a: string) => `Quanto custa conduzir até ${a}?`,

@@ -279,6 +279,8 @@ export const SV_DICT: Record<string, unknown> = {
     trustChecked: "vägtullsdata kontrollerad",
     verified: "Verifierad",
     estimated: "Uppskattad",
+    ferrySave: (a: string) => `Med ett AutoPASS-färjeavtal (privat) kan du spara upp till ${a} på färjorna på den här resan.`,
+    ferrySaveCta: "Teckna avtal",
     dayTitle: "Lång resa? Förslag på dagsetapper",
     dayLine: (n: number, h: string, p: string) => `Dag ${n}: ca ${h} h, slutar nära ${p}`,
     embedTitle: (a: string) => `Vad kostar det att köra till ${a}?`,
