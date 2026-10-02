@@ -33,12 +33,6 @@ const FERRY_PORTALS: Record<RegionKey, string> = {
   ca: "https://www.bcferries.com/",
 };
 
-const CAMP_PORTALS: Record<RegionKey, string> = {
-  eu: "https://www.campercontact.com/en/search",
-  us: "https://www.recreation.gov/search",
-  ca: "https://www.recreation.gov/search",
-};
-
 /** Online ticket / pitch booking. Returns null when nothing is bookable. */
 export function poiBookingUrl(
   kind: PoiKind,
@@ -52,13 +46,13 @@ export function poiBookingUrl(
     case "ferry":
       return `${FERRY_PORTALS[region]}?q=${q}`;
     case "camp":
-      return `${CAMP_PORTALS[region]}?q=${q}`;
+      // Portals ignore a ?q= parameter and open the same page for every site, so search for this exact place.
+      return `https://duckduckgo.com/?q=${encodeURIComponent(`${clean(name)} book pitch online`)}&ia=web`;
     case "pass":
       return `https://duckduckgo.com/?q=${encodeURIComponent(`${clean(name)} toll ticket buy online`)}&ia=web`;
     case "toll":
       return `https://duckduckgo.com/?q=${encodeURIComponent(`${clean(name)} buy vignette online`)}&ia=web`;
-    case "ev":
-      return `https://www.plugshare.com/?q=${q}`;
+    case "ev": // a charger can't be booked, and a generic portal link would be identical for every stop
     case "fuel":
     case "place":
     default:
