@@ -36,9 +36,12 @@ export function useSubscription() {
       .eq("user_id", user.id)
       .eq("environment", environment)
       .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-    setSubscription((data as SubscriptionRow | null) ?? null);
+      .limit(10);
+    // A bought pass must never hide a running Pro plan: use the highest active tier, newest first.
+    const rows = (data as SubscriptionRow[] | null) ?? [];
+    const live = (r: SubscriptionRow) => !r.current_period_end || new Date(r.current_period_end).getTime() > Date.now();
+    const best = rows.filter(live).sort((a, b) => TIER_RANK[tierForPriceId(b.price_id)] - TIER_RANK[tierForPriceId(a.price_id)])[0];
+    setSubscription(best ?? rows[0] ?? null);
     setLoading(false);
   }, [user]);
 

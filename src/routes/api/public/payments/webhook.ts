@@ -4,7 +4,8 @@ import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
 
-import { type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
+import { passDays } from "@/lib/pass-durations";
+import { createStripeClient, type StripeEnv, verifyWebhook } from "@/lib/stripe.server";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
 function getSupabase() {
@@ -82,6 +83,54 @@ async function handleSubscriptionDeleted(subscription: any, env: StripeEnv) {
     .eq("environment", env);
 }
 
+/**
+ * One-time passes (Trip Pass, season pass) are paid with mode "payment", so no subscription event
+ * ever fires. Record the purchase as a time-limited row so the buyer actually gets access.
+ * Safe to receive twice: the session id is the unique key.
+ */
+async function handleOneTimePurchase(session: any, env: StripeEnv) {
+  if (session.mode !== "payment" || session.payment_status !== "paid") return;
+  const userId = session.metadata?.userId;
+  if (!userId) {
+    console.error("One-time purchase without userId in metadata:", session.id);
+    return;
+  }
+  const stripe = createStripeClient(env);
+  const items = await stripe.checkout.sessions.listLineItems(session.id, { limit: 1 });
+  const price: any = items.data[0]?.price;
+  if (!price) {
+    console.error("One-time purchase without a line item:", session.id);
+    return;
+  }
+  const priceKey = resolvePriceId({ price });
+  const days = passDays(priceKey);
+  if (!days) {
+    console.error("One-time purchase for a price with no pass duration:", priceKey);
+    return;
+  }
+  const now = new Date();
+  const end = new Date(now.getTime() + days * 24 * 60 * 60 * 1000);
+  const { error } = await getSupabase()
+    .from("subscriptions")
+    .upsert(
+      {
+        user_id: userId,
+        stripe_subscription_id: session.id,
+        stripe_customer_id: typeof session.customer === "string" ? session.customer : (session.customer?.id ?? ""),
+        product_id: typeof price.product === "string" ? price.product : (price.product?.id ?? "unknown"),
+        price_id: priceKey,
+        status: "active",
+        current_period_start: now.toISOString(),
+        current_period_end: end.toISOString(),
+        cancel_at_period_end: true,
+        environment: env,
+        updated_at: now.toISOString(),
+      },
+      { onConflict: "stripe_subscription_id" },
+    );
+  if (error) throw error;
+}
+
 async function handleWebhook(req: Request, env: StripeEnv) {
   const event = await verifyWebhook(req, env);
 
@@ -100,9 +149,12 @@ async function handleWebhook(req: Request, env: StripeEnv) {
       if (session.payment_status !== "unpaid") {
         console.log("Checkout completed for user:", session.metadata?.userId);
       }
+      await handleOneTimePurchase(session, env);
       break;
     }
     case "checkout.session.async_payment_succeeded":
+      await handleOneTimePurchase(event.data.object, env);
+      break;
     case "checkout.session.async_payment_failed":
     case "invoice.paid":
       console.log("Payment event:", event.type);

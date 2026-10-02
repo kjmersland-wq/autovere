@@ -29,6 +29,8 @@ export function getStripeEnvironment(): StripeEnv {
 /** Human-readable price IDs registered with the payment provider. */
 export const PRICE_IDS = {
   tripPass: "trip_pass",
+  /** One-time 90-day pass; entitlement is ready, the product still has to be created in Stripe. */
+  seasonPass: "season_pass",
   proMonthly: "pro_monthly",
   proYearly: "pro_yearly",
   businessMonthly: "business_monthly",
@@ -39,6 +41,7 @@ export type PlanTier = "free" | "tripPass" | "pro" | "fleet";
 export function tierForPriceId(priceId: string | null | undefined): PlanTier {
   switch (priceId) {
     case PRICE_IDS.tripPass:
+    case PRICE_IDS.seasonPass:
       return "tripPass";
     case PRICE_IDS.proMonthly:
     case PRICE_IDS.proYearly:
