@@ -21,7 +21,7 @@ export const FR_DICT: Record<string, unknown> = {
     duration: "Durée du voyage",
     origin: "Départ",
     destination: "Destination",
-    originHint: "Où récupérez-vous la voiture ?",
+    originHint: "D'où partez-vous ?",
     destinationHint: "Où la route vous mène-t-elle ?",
     submit: "Calculer le coût de mon voyage →",
     addVia: "Ajouter une étape intermédiaire",

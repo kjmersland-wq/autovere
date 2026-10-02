@@ -453,19 +453,19 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
 
         <SiteHeader region={region} />
 
-        <div className="mx-auto flex w-full max-w-6xl flex-col px-5 py-16 sm:px-8">
+        <div className="mx-auto flex w-full max-w-6xl flex-col px-5 py-8 sm:px-8 sm:py-16">
           <p className="text-xs font-semibold uppercase tracking-[0.22em] text-primary">
             {eyebrow ?? copy.eyebrow}
           </p>
-          <h1 className="mt-4 max-w-3xl text-4xl font-semibold leading-[1.05] tracking-tight sm:text-6xl">
+          <h1 className="mt-3 max-w-3xl text-3xl font-semibold leading-[1.08] tracking-tight sm:mt-4 sm:text-6xl">
             {title}
           </h1>
-          <p className="mt-4 max-w-2xl text-base text-foreground/80 sm:text-lg">{subtitle}</p>
+          <p className="mt-3 max-w-2xl text-sm text-foreground/80 sm:mt-4 sm:text-lg">{subtitle}</p>
 
           <button
             type="button"
             onClick={() => startTour(locale)}
-            className="mt-5 inline-flex w-fit items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/10 px-4 py-2 text-sm font-semibold text-amber-300 transition-colors hover:bg-amber-500/20 hover:text-amber-200"
+            className="mt-3 inline-flex w-fit items-center gap-2 rounded-full border border-amber-500/40 bg-amber-500/10 px-3 py-1.5 text-xs sm:mt-5 sm:px-4 sm:py-2 sm:text-sm font-semibold text-amber-300 transition-colors hover:bg-amber-500/20 hover:text-amber-200"
           >
             {tourCopy(locale).trigger}
           </button>
@@ -478,7 +478,7 @@ export function HeroPlanner({ region, title, subtitle, eyebrow }: HeroPlannerPro
               setStops([]);
               void runCalculation(origin, destination, viaCount);
             }}
-            className="glass-panel mt-9 rounded-2xl p-4 shadow-2xl sm:p-6"
+            className="glass-panel mt-5 rounded-2xl p-4 shadow-2xl sm:mt-9 sm:p-6"
           >
             <div className="flex flex-wrap items-center gap-2">
               {VEHICLES.map((v) => (

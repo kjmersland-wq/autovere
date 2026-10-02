@@ -58,7 +58,7 @@ const en = {
     duration: "Trip duration",
     origin: "Origin",
     destination: "Destination",
-    originHint: "Where are you picking up the car?",
+    originHint: "Where are you starting from?",
     destinationHint: "Where is the road taking you?",
     submit: "Calculate My Trip Cost →",
     addVia: "Add Via / Stop",
@@ -378,7 +378,7 @@ const no: Strings = {
     duration: "Reisens lengde",
     origin: "Fra",
     destination: "Til",
-    originHint: "Hvor henter du bilen?",
+    originHint: "Hvor starter du?",
     destinationHint: "Hvor tar veien deg?",
     submit: "Beregn reisekostnad →",
     addVia: "Legg til stopp underveis",
@@ -859,6 +859,20 @@ export function translateOne(dict: Record<string, string>, patterns: Patterns, v
   return undefined;
 }
 
+/** "🇸🇪 Sweden" → "🇸🇪 Sverige": the flag gives the country code, the browser knows the name in every language. */
+const FLAG_COUNTRY = /^([🇦-🇿]{2}) .+$/u;
+function localiseFlagCountry(value: string, locale: Locale): string | undefined {
+  const m = FLAG_COUNTRY.exec(value);
+  if (!m) return undefined;
+  const code = [...m[1]!].map((c) => String.fromCharCode(c.codePointAt(0)! - 127397)).join("");
+  try {
+    const name = new Intl.DisplayNames([locale === "us" ? "en-US" : locale === "no" ? "nb" : locale], { type: "region" }).of(code);
+    return name && name !== code ? `${m[1]} ${name}` : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 export function useTr(): (value: string) => string {
   const locale = useLocale();
   return (value: string) => {
@@ -867,6 +881,8 @@ export function useTr(): (value: string) => string {
     const patterns = CONTENT_PATTERNS[locale] ?? [];
     const whole = translateOne(dict, patterns, value);
     if (whole !== undefined) return whole;
+    const country = localiseFlagCountry(value, locale);
+    if (country) return country;
     // Data lines are often composed of " · "-separated fragments; translate each part.
     if (value.includes(" · ")) {
       return value

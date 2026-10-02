@@ -21,7 +21,7 @@ export const FI_DICT: Record<string, unknown> = {
     duration: "Matkan kesto",
     origin: "Mistä lähdetään?",
     destination: "Minne matka?",
-    originHint: "Mistä haet auton?",
+    originHint: "Mistä lähdet?",
     destinationHint: "Minne tie sinut vie?",
     submit: "Laske matkan kustannukset →",
     addVia: "Lisää välipysähdys",

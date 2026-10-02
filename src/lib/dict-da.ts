@@ -21,7 +21,7 @@ export const DA_DICT: Record<string, unknown> = {
     duration: "Rejsens varighed",
     origin: "Start",
     destination: "Rejsemål",
-    originHint: "Hvor henter du bilen?",
+    originHint: "Hvor starter du?",
     destinationHint: "Hvor bringer vejen dig?",
     submit: "Beregn min rejsepris →",
     addVia: "Tilføj mellemstop",

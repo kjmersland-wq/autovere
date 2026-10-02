@@ -76,19 +76,19 @@ export const REGION_COPY: Record<
   eu: {
     eyebrow: "Europe · 30+ countries",
     currency: "€",
-    originHint: "Where are you picking up the car?",
+    originHint: "Where are you starting from?",
     destinationHint: "Where is the road taking you?",
   },
   us: {
     eyebrow: "United States · 50 states",
     currency: "$",
-    originHint: "Where are you picking up the car?",
+    originHint: "Where are you starting from?",
     destinationHint: "Where is the road taking you?",
   },
   ca: {
     eyebrow: "Canada · coast to coast",
     currency: "C$",
-    originHint: "Where are you picking up the car?",
+    originHint: "Where are you starting from?",
     destinationHint: "Where is the road taking you?",
   },
 };

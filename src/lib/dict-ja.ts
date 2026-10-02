@@ -22,7 +22,7 @@ export const JA_DICT: Record<string, unknown> = {
     duration: "旅行日数",
     origin: "出発地",
     destination: "目的地",
-    originHint: "レンタカーの受け取り場所は？",
+    originHint: "出発地は？",
     destinationHint: "どこまでドライブしますか？",
     submit: "旅の費用を計算する →",
     addVia: "経由地を追加",

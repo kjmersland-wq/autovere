@@ -21,7 +21,7 @@ export const NL_DICT: Record<string, unknown> = {
     duration: "Reisduur",
     origin: "Vertrekpunt",
     destination: "Bestemming",
-    originHint: "Waar haal je de auto op?",
+    originHint: "Waar begin je?",
     destinationHint: "Waar brengt de weg je?",
     submit: "Bereken mijn reiskosten →",
     addVia: "Tussenstop toevoegen",

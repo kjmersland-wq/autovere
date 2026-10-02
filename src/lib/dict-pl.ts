@@ -21,7 +21,7 @@ export const PL_DICT: Record<string, unknown> = {
     duration: "Czas trwania podróży",
     origin: "Start",
     destination: "Cel podróży",
-    originHint: "Gdzie odbierasz auto?",
+    originHint: "Skąd wyruszasz?",
     destinationHint: "Dokąd prowadzi Cię droga?",
     submit: "Oblicz koszt mojej podróży →",
     addVia: "Dodaj przystanek pośredni",

@@ -135,7 +135,11 @@ function nominatim(url: string, attempt = 0): Promise<Response | null> {
   return next;
 }
 
-const geocodeCache = new Map<string, { name: string; lat: number; lng: number } | null>();
+type GeoPoint = { name: string; lat: number; lng: number };
+/** A resolved place plus other same-query places, for picking the pair that makes one sensible trip. */
+type GeoHit = GeoPoint & { alts?: GeoPoint[] };
+
+const geocodeCache = new Map<string, GeoHit | null>();
 
 /**
  * Photon ranks a same-named village above the city now and then ("Munich" →
@@ -145,27 +149,52 @@ const geocodeCache = new Map<string, { name: string; lat: number; lng: number } 
 const SMALL_PLACES = new Set(["village", "hamlet", "isolated_dwelling", "locality"]);
 const LARGE_PLACES = new Set(["city", "town", "municipality"]);
 
-async function geocode(query: string): Promise<{ name: string; lat: number; lng: number } | null> {
+/** English names Photon doesn't know; it otherwise finds a same-named pond in the USA. */
+const LOCAL_NAMES: Record<string, string> = {
+  "lake garda": "Lago di Garda, Italy",
+  "lake como": "Lago di Como, Italy",
+  "lake maggiore": "Lago Maggiore, Italy",
+  "lake constance": "Bodensee",
+  "lake geneva": "Lac Léman",
+  "lake lucerne": "Vierwaldstättersee",
+  "lake balaton": "Balaton, Hungary",
+};
+
+/** A hit that is a lake, stream or street rather than a place — worth a second opinion. */
+const NOT_A_PLACE = new Set(["water", "waterway", "highway", "natural"]);
+
+async function geocode(query: string): Promise<GeoHit | null> {
   const key = query.toLowerCase().trim();
   if (geocodeCache.has(key)) return geocodeCache.get(key) ?? null;
 
-  let out: { name: string; lat: number; lng: number } | null = null;
+  let out: GeoHit | null = null;
 
-  const pj = await photon(`api?limit=5&q=${encodeURIComponent(query)}`);
+  const pj = await photon(`api?limit=5&q=${encodeURIComponent(LOCAL_NAMES[key] ?? query)}`);
   const features = pj?.features ?? [];
   const isPlace = (ft: PhotonFeature | undefined, set: Set<string>) =>
     ft?.properties?.osm_key === "place" && set.has(ft.properties.osm_value ?? "");
   const feat = isPlace(features[0], SMALL_PLACES)
     ? (features.find((ft) => isPlace(ft, LARGE_PLACES)) ?? features[0])
     : features[0];
+  let weak: GeoHit | null = null;
+  const alts: GeoPoint[] = features
+    .filter((ft) => ft !== feat && ft.properties?.osm_key === "place" && ft.geometry?.coordinates)
+    .slice(0, 4)
+    .map((ft) => {
+      const [lng, lat] = ft.geometry!.coordinates as [number, number];
+      const p = ft.properties ?? {};
+      return { name: [p.name, p.city, p.state, p.country].filter(Boolean).join(", ") || query, lat, lng };
+    });
   if (feat?.geometry?.coordinates) {
     const [lng, lat] = feat.geometry.coordinates as [number, number];
     const p = feat.properties ?? {};
-    out = {
+    const hit = {
       name: [p.name, p.city, p.state, p.country].filter(Boolean).join(", ") || query,
       lat,
       lng,
     };
+    if (NOT_A_PLACE.has(p.osm_key ?? "")) weak = hit;
+    else out = alts.length ? { ...hit, alts } : hit;
   }
 
   if (!out) {
@@ -179,6 +208,7 @@ async function geocode(query: string): Promise<{ name: string; lat: number; lng:
     }
   }
 
+  out ??= weak;
   if (out) geocodeCache.set(key, out);
   return out;
 }
@@ -194,7 +224,7 @@ async function reverse(lat: number, lng: number): Promise<ReverseHit | null> {
 
   let hit: ReverseHit | null = null;
 
-  const pj = await photon(`reverse?lat=${lat}&lon=${lng}`);
+  const pj = await photon(`reverse?lat=${lat}&lon=${lng}&lang=en`);
   const p = pj?.features?.[0]?.properties;
   if (p?.countrycode) {
     hit = {
@@ -207,7 +237,7 @@ async function reverse(lat: number, lng: number): Promise<ReverseHit | null> {
 
   if (!hit) {
     const res = await nominatim(
-      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&lat=${lat}&lon=${lng}`,
+      `https://nominatim.openstreetmap.org/reverse?format=jsonv2&zoom=10&accept-language=en&lat=${lat}&lon=${lng}`,
     );
     if (res) {
       const json = (await res.json()) as { address?: Record<string, string> };
@@ -326,6 +356,27 @@ function summarise(samples: RouteSample[], totalKm: number) {
 
 type Locked = { name: string; lat: number; lng: number } | undefined;
 
+/**
+ * A name like "Gothenburg" also exists in Nebraska. A road trip is rarely over 1,500 km, so when the
+ * two best guesses are further apart than that, use the pair of same-named places that are closest.
+ */
+function nearestPair(a: GeoHit, b: GeoHit): [GeoPoint, GeoPoint] {
+  const dist = (p: GeoPoint, q: GeoPoint) => haversine([p.lat, p.lng], [q.lat, q.lng]);
+  if (dist(a, b) <= 1500 || (!a.alts?.length && !b.alts?.length)) return [a, b];
+  let best: [GeoPoint, GeoPoint] = [a, b];
+  let bestKm = dist(a, b);
+  for (const p of [a, ...(a.alts ?? [])]) {
+    for (const q of [b, ...(b.alts ?? [])]) {
+      const km = dist(p, q);
+      if (km < bestKm) {
+        bestKm = km;
+        best = [p, q];
+      }
+    }
+  }
+  return best;
+}
+
 async function buildRouteGeo(
   origin: string,
   destination: string,
@@ -340,12 +391,13 @@ async function buildRouteGeo(
     ...via.map((name) => geocode(name)),
   ]);
   if (!from || !to) return null;
+  const [start, end] = nearestPair(from, to);
   // Via stops are routed through in order; one that can't be found fails the
   // whole route rather than silently pricing a different trip.
   if (hits.some((h) => !h)) return null;
   const stops = hits as { lat: number; lng: number }[];
 
-  const path = [from, ...stops, to].map((p) => `${p.lng},${p.lat}`).join(";");
+  const path = [start, ...stops, end].map((p) => `${p.lng},${p.lat}`).join(";");
   const osrm = `https://router.project-osrm.org/route/v1/driving/${path}?overview=full&geometries=geojson`;
   const res = await fetch(osrm, { headers: { "User-Agent": UA } });
   if (!res.ok) return null;
@@ -369,8 +421,8 @@ async function buildRouteGeo(
     coords,
     distanceKm,
     durationMin: Math.round(route.duration / 60),
-    from,
-    to,
+    from: start,
+    to: end,
     countries,
     borders,
     samples,

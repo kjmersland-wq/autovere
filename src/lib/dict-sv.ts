@@ -21,7 +21,7 @@ export const SV_DICT: Record<string, unknown> = {
     duration: "Resans längd",
     origin: "Start",
     destination: "Resmål",
-    originHint: "Var hämtar du bilen?",
+    originHint: "Var startar du?",
     destinationHint: "Vart tar vägen dig?",
     submit: "Beräkna min resekostnad →",
     addVia: "Lägg till ett mellanstopp",

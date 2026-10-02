@@ -103,16 +103,6 @@ function MetricCard({
   );
 }
 
-function SubtotalBadge({ emoji, label, value }: { emoji: string; label: string; value: string }) {
-  return (
-    <span className="inline-flex items-center gap-2 rounded-full border border-border bg-background/50 px-4 py-2 text-sm">
-      <span>{emoji}</span>
-      <span className="text-foreground/75">{label}</span>
-      <span className="font-semibold text-foreground">{value}</span>
-    </span>
-  );
-}
-
 function EvSavingsBanner({
   trip,
   vehicle,
@@ -282,6 +272,7 @@ export function TripResults({
   const [people, setPeople] = useState(1);
   const [actualTolls, setActualTolls] = useState("");
   const [actualSent, setActualSent] = useState(false);
+  const crossingCount = trip.corridor ? Math.max(trip.corridor.countries.length - 1, 0) : 0;
   const distUnit = trip.units === "imperial" ? "mi" : "km";
   const distValue = trip.units === "imperial" ? trip.distanceKm * 0.621371 : trip.distanceKm;
   const perUnit = distValue > 0 ? `${m.fmt(trip.budget / distValue, 2)}/${distUnit}` : "";
@@ -463,32 +454,24 @@ ${window.location.href}`);
 
 
 
-      <div className="glass-panel mt-8 flex flex-wrap items-center justify-between gap-4 rounded-2xl px-5 py-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
-            {t.results.displayCurrency}
-          </p>
-          <p className="mt-1 text-xs text-foreground/70">
-            {m.rateNote() || t.results.baseCurrencyNote} · {tr(m.ratesNote)}
-          </p>
+      <details className="glass-panel mt-6 rounded-2xl px-5 py-3">
+        <summary className="cursor-pointer select-none text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground">
+          {t.results.displayCurrency} · {m.display}
+        </summary>
+        <p className="mt-3 text-xs text-foreground/70">
+          {m.rateNote() || t.results.baseCurrencyNote} · {tr(m.ratesNote)}
+        </p>
+        <div className="mt-3">
+          <CurrencyPills />
         </div>
-        <CurrencyPills />
-      </div>
+      </details>
 
-      <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <MetricCard
-          accent
-          label={t.results.budget}
-          value={m.fmt(trip.budget, 0)}
-          hint={budgetHint}
-        />
+      <div className="mt-6 grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-3">
+        <div className="col-span-2 lg:col-span-1">
+          <MetricCard accent label={t.results.budget} value={m.fmt(trip.budget, 0)} hint={budgetHint} />
+        </div>
         <MetricCard label={t.results.distance} value={trip.distanceLabel} hint={t.results.distanceHint} />
         <MetricCard label={t.results.driveTime} value={trip.driveTime} hint={t.results.driveTimeHint} />
-        <MetricCard
-          label={tr(trip.energyLabel)}
-          value={m.fmt(trip.energyCost)}
-          hint={t.results.energyHint(trip.energyAmount)}
-        />
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-foreground/80">
@@ -526,44 +509,39 @@ ${window.location.href}`);
       </p>
 
       {/* Instant clarity trio — the three answers every driver wants first. */}
-      <div data-tour="results" className="mt-6 grid gap-4 sm:grid-cols-3">
-        <div className="glass-panel rounded-2xl p-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+      <div
+        data-tour="results"
+        className={`mt-6 grid grid-cols-2 gap-3 sm:gap-4 ${crossingCount > 0 ? "sm:grid-cols-3" : ""}`}
+      >
+        <div className="glass-panel rounded-2xl p-4 text-center sm:p-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:text-xs sm:tracking-[0.18em]">
             🛣️ {t.results.tollsBadge}
           </p>
-          <p className="mt-3 text-5xl font-semibold tracking-tight text-primary sm:text-6xl">
+          <p className="mt-2 text-3xl font-semibold tracking-tight text-primary sm:mt-3 sm:text-5xl lg:text-6xl">
             {m.fmt(trip.tolls, 0)}
           </p>
-          <p className="mt-2 text-sm text-foreground/70">{t.results.tollsShort}</p>
+          <p className="mt-1 text-xs text-foreground/70 sm:mt-2 sm:text-sm">{t.results.tollsShort}</p>
         </div>
-        <div className="glass-panel rounded-2xl p-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+        <div className="glass-panel rounded-2xl p-4 text-center sm:p-6">
+          <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:text-xs sm:tracking-[0.18em]">
             ⛽ {tr(trip.energyLabel)}
           </p>
-          <p className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
+          <p className="mt-2 text-3xl font-semibold tracking-tight sm:mt-3 sm:text-5xl lg:text-6xl">
             {m.fmt(trip.energyCost, 0)}
           </p>
-          <p className="mt-2 text-sm text-foreground/70">{t.results.energyHint(trip.energyAmount)}</p>
+          <p className="mt-1 text-xs text-foreground/70 sm:mt-2 sm:text-sm">{t.results.energyHint(trip.energyAmount)}</p>
         </div>
-        <div className="glass-panel rounded-2xl p-6 text-center">
-          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-            {t.intel.crossTitle}
-          </p>
-          <p className="mt-3 text-5xl font-semibold tracking-tight sm:text-6xl">
-            {trip.corridor ? Math.max(trip.corridor.countries.length - 1, 0) : 0}
-          </p>
-          <p className="mt-2 text-sm text-foreground/70">
-            {trip.corridor && trip.corridor.countries.length > 0
-              ? trip.corridor.countries.map((c) => `${c.flag} ${c.country}`).join(" · ")
-              : t.results.exempt}
-          </p>
-        </div>
-      </div>
-
-      <div className="mt-5 flex flex-wrap gap-2">
-        <SubtotalBadge emoji="🛣️" label={t.results.tollsBadge} value={m.fmt(trip.tolls)} />
-        <SubtotalBadge emoji="⛽" label={tr(trip.energyLabel)} value={m.fmt(trip.energyCost)} />
-        <SubtotalBadge emoji="⛴️" label={t.results.ferriesBadge} value={m.fmt(trip.ferries)} />
+        {crossingCount > 0 && (
+          <div className="glass-panel col-span-2 rounded-2xl p-4 text-center sm:col-span-1 sm:p-6">
+            <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-muted-foreground sm:text-xs sm:tracking-[0.18em]">
+              {t.intel.crossTitle}
+            </p>
+            <p className="mt-2 text-3xl font-semibold tracking-tight sm:mt-3 sm:text-5xl lg:text-6xl">{crossingCount}</p>
+            <p className="mt-1 text-xs text-foreground/70 sm:mt-2 sm:text-sm">
+              {trip.corridor?.countries.map((c) => tr(`${c.flag} ${c.country}`)).join(" · ")}
+            </p>
+          </div>
+        )}
       </div>
 
       {/* Conversion moment: the visitor has just seen the number they came for. */}
@@ -709,9 +687,6 @@ ${window.location.href}`);
         </Button>
         <Button size="lg" variant="outline" onClick={() => shareVia("whatsapp")}>
           WhatsApp
-        </Button>
-        <Button size="lg" variant="outline" onClick={() => shareVia("sms")}>
-          SMS
         </Button>
         <Button size="lg" variant="outline" onClick={() => setPrinting(true)}>
           <Printer className="size-4" /> {tr("Export to PDF / Print itinerary")}

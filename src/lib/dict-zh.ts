@@ -22,7 +22,7 @@ export const ZH_DICT: Record<string, unknown> = {
     duration: "行程天数",
     origin: "出发地",
     destination: "目的地",
-    originHint: "您在哪里取车？",
+    originHint: "从哪里出发？",
     destinationHint: "您想开车去哪里？",
     submit: "计算行程费用 →",
     addVia: "添加途经点",
