@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { ExternalLink, Mountain, Printer, Save, Share2, ShieldCheck, Ship, Sparkles } from "lucide-react";
 import { toast } from "sonner";
+import { renderShareCard } from "@/lib/share-image";
 import { tripTrackPoints } from "@/lib/trip-export";
 
 import {
@@ -373,8 +374,23 @@ ${window.location.href}`);
   const shareTrip = async () => {
     const text = shareText;
     try {
-      if (navigator.share) await navigator.share({ title: `${title} · AutoVere`, text, url: window.location.href });
-      else {
+      if (navigator.share) {
+        // Phones: attach a picture with this trip's own price, so the chat message advertises the number.
+        const image = await renderShareCard({
+          title,
+          total: m.fmt(trip.budget, 0),
+          detail: `${trip.distanceLabel} · ${trip.driveTime}`,
+          perPerson,
+        });
+        const files = image ? [new File([image], "autovere-trip.jpg", { type: "image/jpeg" })] : [];
+        const withFile = files.length > 0 && navigator.canShare?.({ files });
+        await navigator.share({
+          title: `${title} · AutoVere`,
+          text,
+          url: window.location.href,
+          ...(withFile ? { files } : {}),
+        });
+      } else {
         await navigator.clipboard.writeText(`${text}\n${window.location.href}`);
         toast.success(t.results.shareToast);
       }

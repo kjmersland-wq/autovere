@@ -186,3 +186,59 @@ Free at autovere.com (link in bio)
 **Where:** cabin and hytte groups on Facebook, motorhome clubs, EV owner groups, r/norway and r/EVs on Reddit (read each group's rules on self-promotion first, and answer with numbers before linking).
 
 **Measure:** in Admin → Product events, look at `share_trip_clicked` (WhatsApp / SMS), `trip_calculated`, and `trip_pass_cta_clicked` per week.
+
+---
+
+## 7. Pack 2 – new features (added 2 Oct 2026)
+
+All figures are from the `/cost-index` page (gantry tolls only, car, one way, mid of the range, per 100 km). Re-check the page before posting.
+
+**11. The index**
+Which Norwegian road has the most expensive tolls per kilometre?
+1. Oslo → Hemsedal and Oslo → Geilo: about NOK 102 per 100 km
+2. Oslo → Lillehammer: about NOK 82
+3. Oslo → Hafjell: about NOK 75
+…and at the cheap end, Bergen → Stavanger: about NOK 18.
+The full list: autovere.com/cost-index
+
+**12. Surprise**
+The most expensive toll road per kilometre isn't the one to Bergen.
+It's the road to the ski resorts: Hemsedal and Geilo, about NOK 102 in tolls per 100 km, against about NOK 70 for Oslo → Bergen.
+autovere.com/cost-index
+
+**13. The picture that shows your own price**
+Plan a trip, tap Share on your phone, and the message goes out with a picture of that trip's total.
+Four people in the car? The picture shows the cost per person too.
+Try it: autovere.com
+
+**14. Long drive**
+Anything over six hours of driving gets a suggested split into days.
+Oslo → Trondheim: two days of about 3.8 hours each, the first ending near Rendalen.
+We don't pretend to know your hotel, only where the road is when the day is half done.
+
+**15. For cabin owners and campsites (B2B)**
+Put "What does it cost to drive here?" on your directions page with one line of code:
+`<iframe src="https://autovere.com/embed?to=Hemsedal&lang=en" width="100%" height="190" style="border:0"></iframe>`
+Visitors type where they start and land in the full planner with both places filled in. Free.
+
+**16. Offline**
+No signal in the mountains? Pages you opened before the trip open again without a connection. When you're online you always get the latest toll rates, never an old copy.
+
+**17. Honest fix (builds trust)**
+We found our own mistake this week: the fuel-price cards for some countries were out of date and a few showed euro prices labelled as kroner. They now use the same reference prices (EU Weekly Oil Bulletin, 7 Sep 2026) as the calculator, so a country card and a calculated trip can't disagree.
+If you spot a number that looks wrong, tell us.
+
+### LinkedIn – "What we got wrong"
+Last week a user sent us one screenshot and four words: "the prices here are wrong".
+They were right. Our country cards used fixed numbers from a spreadsheet, the trip calculator used a weekly public data source, and nothing forced the two to match. Some Nordic cards even labelled euro prices as kroner.
+The fix wasn't to correct the numbers. It was to make the cards read from the same table as the calculator, so they can't drift apart again.
+Lesson: when two screens show the same fact, give them one source.
+autovere.com
+
+### Updated four-week add-on
+| Week | Post |
+|---|---|
+| 1 | Post 11 (index) with the cost-index page as the link |
+| 2 | Post 12 (surprise) + Video: scroll the table, highlight Hemsedal |
+| 3 | Post 13 (share picture) as a screen recording on a phone |
+| 4 | LinkedIn "What we got wrong" + Post 15 to campsite and cabin-rental owners |

@@ -134,6 +134,13 @@ function RootComponent() {
   const { queryClient } = Route.useRouteContext();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
 
+  // Offline copy of the last visited pages (production only, never while developing).
+  useEffect(() => {
+    if (import.meta.env.PROD && "serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js").catch(() => undefined);
+    }
+  }, []);
+
   // The embeddable cost box is shown inside partners' pages: no site chrome, no tracking.
   if (pathname === "/embed") return <Outlet />;
 

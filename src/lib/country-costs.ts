@@ -1,3 +1,5 @@
+import { CHARGING_EUR, REFERENCE_EUR } from "@/lib/fuel-reference";
+
 export type TollSystemType =
   | "Electronic Vignette"
   | "Sticker Vignette"
@@ -475,4 +477,23 @@ export const COUNTRY_COUNT = Object.values(COUNTRY_COSTS).reduce(
 );
 
 /** When the indicative fuel/toll reference set was last reviewed. */
-export const COSTS_UPDATED = "2026-08";
+export const COSTS_UPDATED = "2026-09-07";
+
+/**
+ * European fuel and charging prices come from the same reference table the trip calculator uses
+ * (EU Weekly Oil Bulletin, EUR/L), so a country card and a calculated trip can never disagree.
+ * Every European value is stored in euro and converted to the visitor's currency on display.
+ */
+for (const group of ["western", "alps", "southern", "nordics"] as const) {
+  for (const c of COUNTRY_COSTS[group]) {
+    const code = c.key.toUpperCase();
+    const ref = REFERENCE_EUR[code];
+    c.currency = "€";
+    if (ref) {
+      c.petrol = ref.petrol;
+      c.diesel = ref.diesel;
+    }
+    const charging = CHARGING_EUR[code];
+    if (charging) c.charging = charging;
+  }
+}

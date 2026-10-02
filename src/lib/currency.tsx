@@ -45,17 +45,17 @@ export const CURRENCY_BY_CODE: Record<CurrencyCode, CurrencyDef> = Object.fromEn
  */
 export const RATES: Record<CurrencyCode, number> = {
   EUR: 1,
-  USD: 1.17,
-  CAD: 1.6,
-  NOK: 11.7,
-  SEK: 11.1,
-  DKK: 7.46,
-  GBP: 0.86,
-  CHF: 0.93,
-  ISK: 143,
-  PLN: 4.27,
-  JPY: 172,
-  CNY: 8.2,
+  USD: 1.13,
+  CAD: 1.61,
+  NOK: 10.88,
+  SEK: 11.33,
+  DKK: 7.48,
+  GBP: 0.85,
+  CHF: 0.94,
+  ISK: 137,
+  PLN: 4.37,
+  JPY: 178,
+  CNY: 7.57,
 };
 
 let liveRatesDate: string | null = null;

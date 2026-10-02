@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { CHARGING_EUR, REFERENCE_EUR } from "@/lib/fuel-reference";
 
 /**
  * Live energy pricing feed — country by country, from open official sources.
@@ -48,52 +49,6 @@ export type EnergyPrices = {
   /** Units per 1 EUR (ECB reference rates). */
   fx: Record<string, number>;
   fxAsOf: string;
-};
-
-/** Reference levels (EUR/L, with taxes) used only when a live source is unreachable. */
-const REFERENCE_EUR: Record<string, { petrol: number; diesel: number; asOf: string; source: string; sourceUrl: string }> = {
-  AT: { petrol: 1.91, diesel: 2.13, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  BE: { petrol: 1.94, diesel: 2.25, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  BG: { petrol: 1.57, diesel: 1.81, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  HR: { petrol: 1.73, diesel: 1.91, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  CZ: { petrol: 1.81, diesel: 1.96, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  DK: { petrol: 2.63, diesel: 2.43, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  EE: { petrol: 1.81, diesel: 1.92, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  FI: { petrol: 2.32, diesel: 2.48, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  FR: { petrol: 2.11, diesel: 2.26, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  DE: { petrol: 2.33, diesel: 2.33, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  GR: { petrol: 2.09, diesel: 2.05, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  HU: { petrol: 1.64, diesel: 1.86, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  IE: { petrol: 1.85, diesel: 1.95, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  IT: { petrol: 2.03, diesel: 2.14, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  LV: { petrol: 1.94, diesel: 2.05, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  LT: { petrol: 1.88, diesel: 2.13, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  LU: { petrol: 1.87, diesel: 2.02, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  NL: { petrol: 2.47, diesel: 2.44, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  PL: { petrol: 1.81, diesel: 1.98, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  PT: { petrol: 2.09, diesel: 2.1, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  RO: { petrol: 1.85, diesel: 1.94, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  SK: { petrol: 1.77, diesel: 1.91, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  SI: { petrol: 1.63, diesel: 1.88, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  ES: { petrol: 1.82, diesel: 1.8, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  SE: { petrol: 1.59, diesel: 1.9, asOf: "2026-09-07", source: "EU Weekly Oil Bulletin (reference)", sourceUrl: "https://energy.ec.europa.eu/data-and-analysis/weekly-oil-bulletin_en" },
-  NO: { petrol: 1.68, diesel: 1.74, asOf: "2026-07", source: "Statistics Norway (reference)", sourceUrl: "https://www.ssb.no/statbank/table/09654" },
-  GB: { petrol: 1.7, diesel: 1.79, asOf: "2026-09", source: "UK weekly road fuel prices (reference)", sourceUrl: "https://www.gov.uk/government/statistics/weekly-road-fuel-prices" },
-  CH: { petrol: 1.95, diesel: 2.05, asOf: "2026-09", source: "TCS / BFS reference", sourceUrl: "https://www.tcs.ch/" },
-  IS: { petrol: 2.2, diesel: 2.25, asOf: "2026-09", source: "Reference level", sourceUrl: "https://www.fib.is/" },
-  US: { petrol: 0.94, diesel: 1.35, asOf: "2026-09-07", source: "U.S. EIA (reference)", sourceUrl: "https://www.eia.gov/petroleum/gasdiesel/" },
-  CA: { petrol: 1.09, diesel: 1.34, asOf: "2026-07", source: "Statistics Canada (reference)", sourceUrl: "https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=1810000101" },
-  MX: { petrol: 1.15, diesel: 1.2, asOf: "2026-09", source: "Reference level", sourceUrl: "https://www.gob.mx/cre" },
-};
-
-/** Indicative public DC fast-charging price, EUR/kWh (no open feed exists for this). */
-const CHARGING_EUR: Record<string, number> = {
-  NO: 0.55, SE: 0.5, DK: 0.55, FI: 0.45, IS: 0.4,
-  DE: 0.58, NL: 0.62, BE: 0.55, LU: 0.49, FR: 0.59, GB: 0.72, IE: 0.55,
-  AT: 0.57, CH: 0.65, IT: 0.69, ES: 0.52, PT: 0.5,
-  PL: 0.45, CZ: 0.45, SK: 0.45, HU: 0.5, SI: 0.5, HR: 0.5, RO: 0.45, BG: 0.45, GR: 0.5,
-  EE: 0.45, LV: 0.45, LT: 0.42,
-  US: 0.38, CA: 0.27, MX: 0.3,
 };
 
 const LOCAL_CURRENCY: Record<string, string> = {
