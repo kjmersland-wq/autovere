@@ -211,6 +211,11 @@ export function PrintItinerary({
   onClose: () => void;
 }) {
   const tr = useTr();
+  // White-label dossier for partners: ?logo=https://…&brand=Name on the page URL (https logos only).
+  const wl = typeof window === "undefined" ? null : new URLSearchParams(window.location.search);
+  const rawLogo = wl?.get("logo") ?? "";
+  const partnerLogo = rawLogo.startsWith("https://") ? rawLogo : null;
+  const partnerBrand = wl?.get("brand")?.slice(0, 40) || null;
   const m = useMoney(trip.currency);
   const { currency } = useCurrency();
   const display = CURRENCY_BY_CODE[currency];
@@ -328,9 +333,13 @@ export function PrintItinerary({
         <header className="print-block border-b border-border pb-5">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="flex items-center gap-2">
-              <img src={autovereLogo} alt="AutoVere" width={28} height={28} className="size-7 rounded-md" />
+              <img src={partnerLogo ?? autovereLogo} alt={partnerBrand ?? "AutoVere"} height={28} className="h-7 w-auto max-w-32 rounded-md" />
               <p className="text-lg font-semibold tracking-tight">
-                Auto<span className="text-primary">Vere</span>{" "}
+                {partnerBrand ?? (
+                  <>
+                    Auto<span className="text-primary">Vere</span>
+                  </>
+                )}{" "}
                 <span className="font-normal text-foreground/70">{tr("Road Trip Dossier")}</span>
               </p>
             </div>

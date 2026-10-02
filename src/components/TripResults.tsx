@@ -293,6 +293,22 @@ export function TripResults({
   const tollsCheckedOn = trip.tollsAsOf
     ? new Date(trip.tollsAsOf).toLocaleDateString(locale === "no" ? "nb-NO" : "en-GB", { day: "numeric", month: "short", year: "numeric" })
     : null;
+  // Trips over ~6 h of driving get an even split into days, each ending near a real point on the route.
+  const dayStops = (() => {
+    const coords = trip.corridor?.coords ?? [];
+    const points = trip.corridor?.points ?? [];
+    if (trip.driveHours <= 6 || coords.length < 2 || points.length === 0) return [];
+    const days = Math.ceil(trip.driveHours / 5.5);
+    const near = (p: [number, number]) =>
+      points.reduce((best, q) => {
+        const d = (q.lat - p[0]) ** 2 + (q.lon - p[1]) ** 2;
+        return d < best.d ? { d, name: q.name } : best;
+      }, { d: Infinity, name: "" }).name;
+    return Array.from({ length: days }, (_, i) => {
+      const end = coords[Math.min(coords.length - 1, Math.round(((i + 1) / days) * (coords.length - 1)))]!;
+      return { n: i + 1, hours: (trip.driveHours / days).toFixed(1), place: i + 1 === days ? destination : near(end) };
+    });
+  })();
   const perPerson = people > 1 ? t.flow.perPerson(m.fmt(trip.budget / people, 0)) : null;
   const nativePrice = (value: number, symbol: string) =>
     formatCurrency(convert(value, currencyFromSymbol(symbol), m.display), m.display, { decimals: 2 });
@@ -685,6 +701,17 @@ ${window.location.href}`);
           <Printer className="size-4" /> {tr("Export to PDF / Print itinerary")}
         </Button>
       </div>
+
+      {dayStops.length > 1 && (
+        <details className="glass-panel mt-4 rounded-2xl px-5 py-4 text-sm">
+          <summary className="cursor-pointer select-none font-medium text-foreground/80">🛏️ {t.flow.dayTitle}</summary>
+          <ul className="mt-3 space-y-1 text-foreground/80">
+            {dayStops.map((d) => (
+              <li key={d.n}>{t.flow.dayLine(d.n, d.hours, d.place)}</li>
+            ))}
+          </ul>
+        </details>
+      )}
 
       <details className="glass-panel mt-4 rounded-2xl px-5 py-4 text-sm">
         <summary className="cursor-pointer select-none font-medium text-foreground/80">🧾 {t.flow.actualTitle}</summary>

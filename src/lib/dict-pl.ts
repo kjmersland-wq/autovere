@@ -279,6 +279,8 @@ export const PL_DICT: Record<string, unknown> = {
     trustChecked: "dane o opłatach sprawdzone",
     verified: "Zweryfikowane",
     estimated: "Szacunek",
+    dayTitle: "Długa trasa? Propozycja podziału na dni",
+    dayLine: (n: number, h: string, p: string) => `Dzień ${n}: ok. ${h} godz., koniec w pobliżu ${p}`,
     embedTitle: (a: string) => `Ile kosztuje dojazd do ${a}?`,
     embedFrom: "Skąd wyruszasz?",
     embedCta: "Oblicz koszt",

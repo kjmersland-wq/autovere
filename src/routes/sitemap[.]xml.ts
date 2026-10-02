@@ -39,6 +39,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const entries: SitemapEntry[] = [
           { path: "/", changefreq: "weekly", priority: "1.0", alternates: homepageHreflangLinks() },
           { path: "/europe", changefreq: "weekly", priority: "0.9" },
+          { path: "/cost-index", changefreq: "monthly", priority: "0.7" },
           { path: "/us", changefreq: "weekly", priority: "0.9", alternates: homepageHreflangLinks() },
           { path: "/ca", changefreq: "weekly", priority: "0.9", alternates: homepageHreflangLinks() },
           ...APP_PAGES.map((page) => ({ path: `/${page}`, changefreq: "monthly" as const, priority: "0.7" })),

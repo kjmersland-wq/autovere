@@ -279,6 +279,8 @@ export const DE_DICT: Record<string, unknown> = {
     trustChecked: "Mautdaten geprüft",
     verified: "Geprüft",
     estimated: "Geschätzt",
+    dayTitle: "Lange Fahrt? Vorschlag für Tagesetappen",
+    dayLine: (n: number, h: string, p: string) => `Tag ${n}: ca. ${h} Std., endet bei ${p}`,
     embedTitle: (a: string) => `Was kostet die Fahrt nach ${a}?`,
     embedFrom: "Wo startest du?",
     embedCta: "Kosten berechnen",

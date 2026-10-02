@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AdminRouteImport } from './routes/admin'
 import { Route as CaRouteImport } from './routes/ca'
+import { Route as CostIndexRouteImport } from './routes/cost-index'
 import { Route as EmbedRouteImport } from './routes/embed'
 import { Route as EuropeRouteImport } from './routes/europe'
 import { Route as FaqRouteImport } from './routes/faq'
@@ -88,6 +89,11 @@ const AdminRoute = AdminRouteImport.update({
 const CaRoute = CaRouteImport.update({
   id: '/ca',
   path: '/ca',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CostIndexRoute = CostIndexRouteImport.update({
+  id: '/cost-index',
+  path: '/cost-index',
   getParentRoute: () => rootRouteImport,
 } as any)
 const EmbedRoute = EmbedRouteImport.update({
@@ -406,6 +412,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/ca': typeof CaRouteWithChildren
+  '/cost-index': typeof CostIndexRoute
   '/embed': typeof EmbedRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
@@ -472,6 +479,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
+  '/cost-index': typeof CostIndexRoute
   '/embed': typeof EmbedRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
@@ -539,6 +547,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/admin': typeof AdminRoute
   '/ca': typeof CaRouteWithChildren
+  '/cost-index': typeof CostIndexRoute
   '/embed': typeof EmbedRoute
   '/europe': typeof EuropeRoute
   '/faq': typeof FaqRoute
@@ -608,6 +617,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ca'
+    | '/cost-index'
     | '/embed'
     | '/europe'
     | '/faq'
@@ -674,6 +684,7 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/cost-index'
     | '/embed'
     | '/europe'
     | '/faq'
@@ -740,6 +751,7 @@ export interface FileRouteTypes {
     | '/'
     | '/admin'
     | '/ca'
+    | '/cost-index'
     | '/embed'
     | '/europe'
     | '/faq'
@@ -808,6 +820,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRoute: typeof AdminRoute
   CaRoute: typeof CaRouteWithChildren
+  CostIndexRoute: typeof CostIndexRoute
   EmbedRoute: typeof EmbedRoute
   EuropeRoute: typeof EuropeRoute
   FaqRoute: typeof FaqRoute
@@ -869,6 +882,13 @@ declare module '@tanstack/react-router' {
       path: '/ca'
       fullPath: '/ca'
       preLoaderRoute: typeof CaRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cost-index': {
+      id: '/cost-index'
+      path: '/cost-index'
+      fullPath: '/cost-index'
+      preLoaderRoute: typeof CostIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/embed': {
@@ -1376,6 +1396,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRoute: AdminRoute,
   CaRoute: CaRouteWithChildren,
+  CostIndexRoute: CostIndexRoute,
   EmbedRoute: EmbedRoute,
   EuropeRoute: EuropeRoute,
   FaqRoute: FaqRoute,

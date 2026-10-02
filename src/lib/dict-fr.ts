@@ -279,6 +279,8 @@ export const FR_DICT: Record<string, unknown> = {
     trustChecked: "données de péage vérifiées",
     verified: "Vérifié",
     estimated: "Estimé",
+    dayTitle: "Long trajet ? Proposition d'étapes",
+    dayLine: (n: number, h: string, p: string) => `Jour ${n} : environ ${h} h, fin près de ${p}`,
     embedTitle: (a: string) => `Combien coûte le trajet jusqu'à ${a} ?`,
     embedFrom: "D'où partez-vous ?",
     embedCta: "Calculer le coût",

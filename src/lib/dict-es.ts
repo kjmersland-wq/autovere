@@ -284,6 +284,8 @@ export const ES_DICT: Record<string, unknown> = {
     trustChecked: "datos de peajes comprobados",
     verified: "Verificado",
     estimated: "Estimado",
+    dayTitle: "¿Viaje largo? Propuesta de etapas",
+    dayLine: (n: number, h: string, p: string) => `Día ${n}: unas ${h} h, termina cerca de ${p}`,
     embedTitle: (a: string) => `¿Cuánto cuesta conducir hasta ${a}?`,
     embedFrom: "¿Desde dónde sales?",
     embedCta: "Calcular coste",

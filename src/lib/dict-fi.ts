@@ -277,6 +277,8 @@ export const FI_DICT: Record<string, unknown> = {
     trustChecked: "tiemaksutiedot tarkistettu",
     verified: "Vahvistettu",
     estimated: "Arvio",
+    dayTitle: "Pitkä matka? Ehdotus päivämatkoiksi",
+    dayLine: (n: number, h: string, p: string) => `Päivä ${n}: noin ${h} t, päättyy lähelle ${p}`,
     embedTitle: (a: string) => `Mitä maksaa ajaa kohteeseen ${a}?`,
     embedFrom: "Mistä lähdet?",
     embedCta: "Laske kustannus",

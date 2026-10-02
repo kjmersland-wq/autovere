@@ -26,7 +26,7 @@ Kortversjon:
 | 3b Splitt regningen | **Gjort** (pris per person følger med delingen) |
 | 3c WhatsApp og SMS | **Gjort** (egne knapper, teksten inneholder pris per person) |
 | 4a «Hva kostet det egentlig?» | **Første versjon:** feltet «Kjørt denne turen?» på resultatet sender faktisk bom og beregnet bom som hendelse `actual_cost_submitted` |
-| 4b Kostnadsindeks | **Ikke gjort:** krever at du velger 20 ruter og utgivelsestidspunkt |
+| 4b Kostnadsindeks | **Første versjon:** side `/cost-index` med de 14 norske rutene rangert etter bom per 100 km. Pressemelding og utvalg av ruter bestemmer dere |
 | 4c Ferske data | **Gjort:** «bomdata kontrollert 13. sep. 2026» under totalen, og «Verifisert / Estimert» per land |
 | 5 Partnerboks | **Gjort:** `/embed`, se [PARTNERBOKS.md](PARTNERBOKS.md) |
 | 6 Reiseregning | **Gjort:** CSV med én linje per bomstasjon/ferje og totaler (eksportpanelet) |
@@ -34,10 +34,10 @@ Kortversjon:
 | 11b Kr per km, prisspenn, kilde/dato, landsmerke | **Gjort** |
 | 11c Tur/retur | Fantes allerede («Tur-retur / ferie») |
 | 11c Sammenligning av tre ruter | Fantes allerede (tre rader øverst på resultatet) |
-| 11c Dagsplan | **Ikke gjort:** uten navn på overnattingssteder blir det bare «kjør halvparten hver dag» |
+| 11c Dagsplan | **Gjort** for turer over 6 timer: jevn deling i dager, hver dag ender nær et ekte punkt på ruten (ikke overnattingssteder) |
 | 11c Offline (PWA) | **Ikke gjort:** manifest og ikon finnes, men servicearbeider kan gi gamle bomsatser i cache. Bør vurderes sammen med endringslogg |
 | 1a–1c Stripe, sesongpass, gavekort | **Ikke gjort:** krever produkter og priser i Stripe (din beslutning) |
-| 11d Hvitmerket dossier | **Ikke gjort:** vent til en utleier har sagt ja |
+| 11d Hvitmerket dossier | **Gjort:** legg `?logo=https://…&brand=Navn` på adressen, så får utskriften partnerens logo og navn |
 
 Andre feil rettet underveis: KML-eksporten lagde falske koordinater i Sveits (nå ekte rute), engelsk tekst på norsk resultatside (tre linjer, nå én linje på riktig språk), og ruteberegning som hang i 45 sekunder når stedsoppslaget (Photon) var nede (nå pause i 6 sekunder og reserve).
 

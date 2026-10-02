@@ -279,6 +279,8 @@ export const SV_DICT: Record<string, unknown> = {
     trustChecked: "vägtullsdata kontrollerad",
     verified: "Verifierad",
     estimated: "Uppskattad",
+    dayTitle: "Lång resa? Förslag på dagsetapper",
+    dayLine: (n: number, h: string, p: string) => `Dag ${n}: ca ${h} h, slutar nära ${p}`,
     embedTitle: (a: string) => `Vad kostar det att köra till ${a}?`,
     embedFrom: "Var startar du?",
     embedCta: "Beräkna kostnad",

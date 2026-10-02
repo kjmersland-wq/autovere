@@ -279,6 +279,8 @@ export const DA_DICT: Record<string, unknown> = {
     trustChecked: "betalingsdata kontrolleret",
     verified: "Verificeret",
     estimated: "Anslået",
+    dayTitle: "Lang tur? Forslag til dagsetaper",
+    dayLine: (n: number, h: string, p: string) => `Dag ${n}: ca. ${h} t, ender nær ${p}`,
     embedTitle: (a: string) => `Hvad koster det at køre til ${a}?`,
     embedFrom: "Hvor starter du?",
     embedCta: "Beregn pris",

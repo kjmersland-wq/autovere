@@ -280,6 +280,8 @@ export const JA_DICT: Record<string, unknown> = {
     trustChecked: "料金データ確認日",
     verified: "確認済み",
     estimated: "概算",
+    dayTitle: "長距離ドライブ？日程の目安",
+    dayLine: (n: number, h: string, p: string) => `${n}日目：約${h}時間、${p}付近まで`,
     embedTitle: (a: string) => `${a}までのドライブ費用は？`,
     embedFrom: "出発地は？",
     embedCta: "費用を計算",

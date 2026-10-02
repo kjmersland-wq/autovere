@@ -279,6 +279,8 @@ export const NL_DICT: Record<string, unknown> = {
     trustChecked: "tolgegevens gecontroleerd",
     verified: "Geverifieerd",
     estimated: "Geschat",
+    dayTitle: "Lange rit? Voorstel voor dagetappes",
+    dayLine: (n: number, h: string, p: string) => `Dag ${n}: ca. ${h} u, eindigt bij ${p}`,
     embedTitle: (a: string) => `Wat kost het om naar ${a} te rijden?`,
     embedFrom: "Waar begin je?",
     embedCta: "Kosten berekenen",
