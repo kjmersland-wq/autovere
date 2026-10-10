@@ -108,6 +108,13 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
     ],
+    scripts: [
+      {
+        src: "https://km-techlabs.com/t.js",
+        defer: true,
+        "data-site": "autovere.com",
+      },
+    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
