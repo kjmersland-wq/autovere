@@ -13,6 +13,7 @@ import { formatCurrency } from "@/lib/currency";
 import { useAdminQuery, statusMessage } from "@/components/admin/useAdminQuery";
 import { getExchangeRates, getFinanceBreakdown } from "@/lib/admin-data.functions";
 import { siteLabel } from "@/components/admin/siteOptions";
+import { PaymentsLedger } from "@/components/admin/sections/PaymentsLedger";
 
 export function FinancePanel({
   site,
@@ -107,6 +108,12 @@ export function FinancePanel({
         </p>
       )}
 
+      <PaymentsLedger />
+
+      <div className="mt-8 border-t border-border pt-6">
+        <h2 className="text-xl font-semibold tracking-tight">Løpende abonnementer (MRR)</h2>
+      </div>
+
       <div className="glass-panel flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4">
         <span className="text-sm font-medium text-foreground/70">Visningsvaluta</span>
         <AdminCurrencySelector value={currency} onChange={onCurrencyChange} />
@@ -148,10 +155,10 @@ export function FinancePanel({
       </Panel>
 
       <p className="text-xs text-muted-foreground print:text-neutral-600">
-        Beløp er beregnet fra aktive abonnement i EUR eks. Stripe-gebyr, vist i {effectiveCurrency}
+        Beløp er beregnet fra aktive abonnement i EUR, vist i {effectiveCurrency}
         {ratesData ? ` (kurs fra ${ratesData.asOf || "i dag"}, Den europeiske sentralbanken via frankfurter.dev)` : ""}.
-        Selve abonnements- og Stripe-beløpene er alltid lagret i EUR og endres ikke av valutavalget. Utbetalinger og
-        avgifter håndteres av Stripe.
+        Selve abonnementsbeløpene er alltid lagret i EUR og endres ikke av valutavalget. Paddle er Merchant of
+        Record og håndterer mva, utbetalinger og avgifter.
       </p>
     </div>
   );

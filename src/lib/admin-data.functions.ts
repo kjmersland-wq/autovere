@@ -625,3 +625,140 @@ export const getExchangeRates = createServerFn({ method: "GET" }).handler(
     }
   },
 );
+
+/* ------------------------------------------------------------------ */
+/* Innbetalinger — every real payment, pulled live from Paddle (both   */
+/* environments). Admin-gated like the other Admin data functions.     */
+/* ------------------------------------------------------------------ */
+
+import { gatewayFetch, type PaddleEnv } from "@/lib/paddle.server";
+
+const PRICE_LABEL: Record<string, string> = {
+  trip_pass: "Trip Pass – 14 dager",
+  season_pass: "Sesongkort",
+  pro_monthly: "Pro – månedlig",
+  pro_yearly: "Pro – årlig",
+  business_monthly: "Fleet – månedlig",
+};
+
+export type PaymentRow = {
+  id: string;
+  environment: "sandbox" | "live";
+  status: string;
+  billedAt: string | null;
+  amount: number;
+  currency: string;
+  planLabel: string;
+  customerEmail: string | null;
+  subscriptionId: string | null;
+};
+
+export type PaymentLedger = {
+  rows: PaymentRow[];
+  /** ECB reference rates per currency (units per EUR) — display-only conversion. */
+  rates: Record<string, number> | null;
+  ratesAsOf: string;
+  unavailable: PaddleEnv[];
+  generatedAt: string;
+};
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Paddle API payloads stay loosely typed
+type PaddleJson = { data?: any[]; included?: any[]; meta?: { pagination?: { has_more?: boolean } } };
+
+async function fetchPaymentsForEnv(env: PaddleEnv): Promise<PaymentRow[]> {
+  // Map Paddle's raw price ids to our human-readable external ids so plan
+  // labels survive both environments (same mapping the webhook handler uses).
+  const priceMap = new Map<string, string>();
+  try {
+    const res = await gatewayFetch(env, "/prices?per_page=200");
+    const json = (await res.json().catch(() => null)) as PaddleJson | null;
+    for (const price of json?.data ?? []) {
+      const ext = price?.import_meta?.external_id ?? price?.importMeta?.external_id;
+      if (typeof ext === "string") priceMap.set(price.id, ext);
+    }
+  } catch {
+    // Labels fall back to the price name when prices can't be listed.
+  }
+
+  const customerEmail = new Map<string, string>();
+  const rows: PaymentRow[] = [];
+  let page = 1;
+  for (;;) {
+    const res = await gatewayFetch(
+      env,
+      `/transactions?per_page=50&page=${page}&order_by=billed_at[desc]&include=customer`,
+    );
+    const json = (await res.json().catch(() => null)) as PaddleJson | null;
+    if (!res.ok || !json?.data) break;
+
+    for (const inc of json.included ?? []) {
+      if (inc?.type === "customer" && inc?.attributes?.email) {
+        customerEmail.set(inc.id, inc.attributes.email as string);
+      }
+    }
+
+    for (const txn of json.data) {
+      const items = txn?.details?.line_items ?? [];
+      const priceId: string | undefined = items[0]?.price?.id;
+      const externalId = priceId ? priceMap.get(priceId) : undefined;
+      const planLabel =
+        (externalId && PRICE_LABEL[externalId]) || items[0]?.price?.name || priceId || "Ukjent";
+      const total = Number(txn?.details?.totals?.total);
+      rows.push({
+        id: String(txn.id ?? ""),
+        environment: env,
+        status: String(txn.status ?? "unknown"),
+        billedAt: txn.billed_at ?? txn.created_at ?? null,
+        amount: Number.isFinite(total) ? total / 100 : 0,
+        currency: String(txn.currency_code ?? "EUR").toUpperCase(),
+        planLabel,
+        customerEmail: customerEmail.get(txn.customer_id) ?? null,
+        subscriptionId: txn.subscription_id ?? null,
+      });
+    }
+
+    if (!json.meta?.pagination?.has_more || page >= 6) break;
+    page += 1;
+  }
+  return rows;
+}
+
+export const getPaymentLedger = createServerFn({ method: "GET" }).handler(
+  async (): Promise<AdminDataResult<PaymentLedger>> => {
+    const ctx = await getAdminSupabaseContext();
+    if (!ctx.ok) return ctx.result;
+
+    // Display-only conversion rates (ECB via frankfurter.dev) — identical
+    // approach to getExchangeRates, but for every currency Paddle may bill in.
+    let rates: Record<string, number> | null = null;
+    let ratesAsOf = "";
+    try {
+      const res = await fetch("https://api.frankfurter.dev/v1/latest?base=EUR");
+      const json = (await res.json()) as { date?: string; rates?: Record<string, number> };
+      if (json.rates) {
+        rates = { EUR: 1, ...json.rates };
+        ratesAsOf = json.date ?? "";
+      }
+    } catch {
+      // Sums fall back to EUR-only payments; the UI notes this.
+    }
+
+    const envs: PaddleEnv[] = ["live", "sandbox"];
+    const results = await Promise.allSettled(envs.map((env) => fetchPaymentsForEnv(env)));
+    const rows: PaymentRow[] = [];
+    const unavailable: PaddleEnv[] = [];
+    results.forEach((r, i) => {
+      if (r.status === "fulfilled") rows.push(...r.value);
+      else unavailable.push(envs[i]);
+    });
+
+    if (rows.length === 0 && unavailable.length === envs.length) {
+      return { status: "error", message: "Kunne ikke hente innbetalinger fra betalingssystemet." };
+    }
+
+    return {
+      status: "ok",
+      data: { rows, rates, ratesAsOf, unavailable, generatedAt: new Date().toISOString() },
+    };
+  },
+);
