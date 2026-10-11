@@ -243,6 +243,10 @@ export const NO_TERMS: InfoPageContent = {
       body: "Lenker til bomoperatører, ferjeselskaper og ladenettverk er kun for enkelhets skyld. Disse tjenestene har egne vilkår og priser, og KM TECH LABS er ikke ansvarlig for innholdet eller transaksjonene deres.",
     },
     {
+      heading: "Betaling og abonnement",
+      body: "Bestillingen gjennomføres av vår nettforhandler Paddle.com. Paddle.com er Merchant of Record for alle bestillinger, besvarer alle kundehenvendelser og håndterer returer. Betaling, fakturering, avgifter, oppsigelse og refusjon følger Paddles kjøpsvilkår (paddle.com/legal/checkout-buyer-terms). Abonnementer fornyes automatisk til du sier opp, og du kan når som helst administrere eller si opp via Paddles kundeportal. Se også refusjonsreglene våre på /refund.",
+    },
+    {
       heading: "Ansvar",
       body: "AutoVere leveres «som det er». Så langt loven tillater er KM TECH LABS ikke ansvarlig for kostnader, gebyrer, tapte avganger eller tap som følge av at man har stolt på et estimat.",
     },
