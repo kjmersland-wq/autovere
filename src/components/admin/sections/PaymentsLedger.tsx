@@ -33,17 +33,9 @@ export function PaymentsLedger() {
   const ledger = useAdminQuery(fetchLedger);
   const [envOverride, setEnvOverride] = useState<"live" | "sandbox" | null>(null);
 
-  if (ledger.loading || !ledger.result) return <p className="text-sm text-muted-foreground">Henter innbetalinger …</p>;
-  if (ledger.result.status !== "ok") {
-    return (
-      <p className="text-sm text-destructive">
-        {statusMessage(ledger.result.status, "message" in ledger.result ? ledger.result.message : undefined)}
-      </p>
-    );
-  }
-  const data = ledger.result.data;
-  const rows = data.rows;
-
+  // All hooks run unconditionally; guards below only change what renders.
+  const data = ledger.result?.status === "ok" ? ledger.result.data : null;
+  const rows = data?.rows ?? [];
   const envAvailable = useMemo(() => {
     const set = new Set(rows.map((r) => r.environment));
     return (["live", "sandbox"] as const).filter((e) => set.has(e));
@@ -56,6 +48,7 @@ export function PaymentsLedger() {
   );
 
   const totals = useMemo(() => {
+    if (!data) return { allTime: 0, last30: 0, prev30: 0, unconvertible: 0, count: 0 };
     const now = Date.now();
     let allTime = 0;
     let last30 = 0;
@@ -79,7 +72,7 @@ export function PaymentsLedger() {
       unconvertible,
       count: completed.length,
     };
-  }, [completed, data.rates]);
+  }, [completed, data]);
 
   const monthly = useMemo(() => {
     const buckets = new Map<string, number>();
@@ -88,14 +81,16 @@ export function PaymentsLedger() {
       const d = new Date(Date.UTC(now.getFullYear(), now.getMonth() - i, 1));
       buckets.set(d.toISOString().slice(0, 7), 0);
     }
-    for (const row of completed) {
-      const eur = toEur(row, data.rates);
-      if (eur === null || !row.billedAt) continue;
-      const key = row.billedAt.slice(0, 7);
-      if (buckets.has(key)) buckets.set(key, (buckets.get(key) ?? 0) + eur);
+    if (data) {
+      for (const row of completed) {
+        const eur = toEur(row, data.rates);
+        if (eur === null || !row.billedAt) continue;
+        const key = row.billedAt.slice(0, 7);
+        if (buckets.has(key)) buckets.set(key, (buckets.get(key) ?? 0) + eur);
+      }
     }
     return [...buckets.entries()].map(([month, eur]) => ({ month, eur: Math.round(eur * 100) / 100 }));
-  }, [completed, data.rates]);
+  }, [completed, data]);
 
   const recent = useMemo(
     () =>
@@ -104,6 +99,15 @@ export function PaymentsLedger() {
         .slice(0, 30),
     [envRows],
   );
+
+  if (ledger.loading || !ledger.result) return <p className="text-sm text-muted-foreground">Henter innbetalinger …</p>;
+  if (!data) {
+    return (
+      <p className="text-sm text-destructive">
+        {statusMessage(ledger.result.status, "message" in ledger.result ? ledger.result.message : undefined)}
+      </p>
+    );
+  }
 
   const avg = totals.count ? Math.round((totals.allTime / totals.count) * 100) / 100 : 0;
   const trend =
@@ -199,7 +203,7 @@ export function PaymentsLedger() {
                     <td className="py-2.5 pr-3 font-semibold">{currencyFmt(row.currency).format(row.amount)}</td>
                     <td className="py-2.5 pr-3 text-muted-foreground">{eur !== null ? eurFmt.format(eur) : "—"}</td>
                     <td className="py-2.5 pr-3">{STATUS_LABEL[row.status] ?? row.status}</td>
-                    <td className="py-2.5 truncate max-w-52">{row.customerEmail ?? "—"}</td>
+                    <td className="py-2.5 max-w-52 truncate">{row.customerEmail ?? "—"}</td>
                   </tr>
                 );
               })}
