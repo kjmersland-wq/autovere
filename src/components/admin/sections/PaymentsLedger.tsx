@@ -104,7 +104,10 @@ export function PaymentsLedger() {
   if (!data) {
     return (
       <p className="text-sm text-destructive">
-        {statusMessage(ledger.result.status, "message" in ledger.result ? ledger.result.message : undefined)}
+        {statusMessage(
+          ledger.result.status === "ok" ? "error" : ledger.result.status,
+          "message" in ledger.result ? ledger.result.message : undefined,
+        )}
       </p>
     );
   }
