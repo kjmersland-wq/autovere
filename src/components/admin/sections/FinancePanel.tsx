@@ -13,6 +13,7 @@ import { formatCurrency } from "@/lib/currency";
 import { useAdminQuery, statusMessage } from "@/components/admin/useAdminQuery";
 import { getExchangeRates, getFinanceBreakdown } from "@/lib/admin-data.functions";
 import { siteLabel } from "@/components/admin/siteOptions";
+import { PaymentsLedger } from "@/components/admin/sections/PaymentsLedger";
 
 export function FinancePanel({
   site,
@@ -106,6 +107,12 @@ export function FinancePanel({
           nettsted i dataene. Tallene under er globale for hele AutoVere.
         </p>
       )}
+
+      <PaymentsLedger />
+
+      <div className="mt-8 border-t border-border pt-6">
+        <h2 className="text-xl font-semibold tracking-tight">Løpende abonnementer (MRR)</h2>
+      </div>
 
       <div className="glass-panel flex flex-wrap items-center justify-between gap-3 rounded-2xl p-4">
         <span className="text-sm font-medium text-foreground/70">Visningsvaluta</span>
