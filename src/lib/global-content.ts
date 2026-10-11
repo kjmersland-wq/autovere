@@ -302,3 +302,30 @@ export const GLOBAL_TERMS: InfoPageContent = {
       "AutoVere's terms of service from KM TECH LABS: indicative estimates, safe use, third-party links, liability and governing law.",
   },
 };
+
+export const GLOBAL_REFUND: InfoPageContent = {
+  eyebrow: "Refund policy",
+  title: "30-day money-back guarantee.",
+  intro:
+    "We want you to feel safe trying AutoVere. If a paid plan is not what you expected, you can get your money back.",
+  sections: [
+    {
+      heading: "Our guarantee",
+      body: "We offer a 30-day money-back guarantee. If you are not satisfied with your purchase, you can request a full refund within 30 days of your order date — no questions asked.",
+    },
+    {
+      heading: "How to request a refund",
+      body: "Refunds are processed by our payment provider and Merchant of Record, Paddle. To request a refund, visit paddle.net and look up your purchase, or email us at kjell@autovere.com and we will help you. Refunds are returned to the original payment method.",
+    },
+    {
+      heading: "Subscriptions",
+      body: "You can cancel a subscription at any time via the Paddle customer portal. Cancellation stops future renewals; the 30-day guarantee above applies to the most recent payment.",
+    },
+  ],
+  note: DISCLAIMER,
+  meta: {
+    title: "Refund Policy — 30-Day Money-Back Guarantee | AutoVere",
+    description:
+      "AutoVere offers a 30-day money-back guarantee on all paid plans, processed by Paddle. How to request a refund.",
+  },
+};
