@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
 import { passDays } from "@/lib/pass-durations";
-import { verifyPaddleWebhook, type PaddleEnv } from "@/lib/paddle.server";
+import { gatewayFetch, verifyPaddleWebhook, type PaddleEnv } from "@/lib/paddle.server";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
 function getSupabase() {
@@ -37,6 +37,25 @@ function priceExternalId(entity: any): string | undefined {
   return entity?.items?.[0]?.price?.import_meta?.external_id ?? undefined;
 }
 
+/** Fallback when the event omits import_meta: look the price up, then parse "Price for <key>". */
+async function resolvePriceKey(entity: any, env: PaddleEnv): Promise<string | undefined> {
+  const direct = priceExternalId(entity);
+  if (direct) return direct;
+  const price = entity?.items?.[0]?.price;
+  if (price?.id) {
+    try {
+      const res = await gatewayFetch(env, `/prices/${price.id}`);
+      const json: any = await res.json();
+      const key = json?.data?.import_meta?.external_id;
+      if (key) return key;
+    } catch (e) {
+      console.warn("Price lookup failed", e);
+    }
+  }
+  const m = /^Price for ([a-z0-9_]+)$/.exec(price?.description ?? "");
+  return m?.[1];
+}
+
 function productExternalId(entity: any): string | undefined {
   return (
     entity?.items?.[0]?.product?.import_meta?.external_id ??
@@ -51,8 +70,8 @@ async function handleSubscription(subscription: any, env: PaddleEnv) {
     console.error("Paddle subscription without userId in custom_data:", subscription.id);
     return;
   }
-  const priceId = priceExternalId(subscription);
-  const productId = productExternalId(subscription);
+  const priceId = await resolvePriceKey(subscription, env);
+  const productId = productExternalId(subscription) ?? (priceId ? priceId.replace(/_(monthly|yearly)$/, "") : undefined);
   if (!priceId || !productId) {
     console.warn("Skipping subscription: missing importMeta.externalId", {
       rawPriceId: subscription.items?.[0]?.price?.id,
@@ -104,7 +123,7 @@ async function handleTransactionCompleted(transaction: any, env: PaddleEnv) {
     console.error("Paddle transaction without userId in custom_data:", transaction.id);
     return;
   }
-  const priceKey = priceExternalId(transaction);
+  const priceKey = await resolvePriceKey(transaction, env);
   if (!priceKey) {
     console.warn("Skipping transaction: missing importMeta.externalId", {
       rawPriceId: transaction.items?.[0]?.price?.id,
@@ -128,7 +147,7 @@ async function handleTransactionCompleted(transaction: any, env: PaddleEnv) {
         stripe_customer_id: "",
         paddle_subscription_id: transaction.id,
         paddle_customer_id: transaction.customer_id ?? "",
-        product_id: productExternalId(transaction) ?? "unknown",
+        product_id: productExternalId(transaction) ?? priceKey,
         price_id: priceKey,
         status: "active",
         current_period_start: now.toISOString(),
