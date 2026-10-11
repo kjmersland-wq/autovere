@@ -147,7 +147,7 @@ async function handleTransactionCompleted(transaction: any, env: PaddleEnv) {
         stripe_customer_id: "",
         paddle_subscription_id: transaction.id,
         paddle_customer_id: transaction.customer_id ?? "",
-        product_id: productExternalId(transaction) ?? "unknown",
+        product_id: productExternalId(transaction) ?? priceKey,
         price_id: priceKey,
         status: "active",
         current_period_start: now.toISOString(),
