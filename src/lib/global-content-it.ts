@@ -158,7 +158,7 @@ export const IT_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Entra a far parte della rete",
-      body: "Abbiamo sede a Kristiansand, in Norvegia, ma collaboriamo volentieri con partner di qualsiasi parte del mondo. Gestisci una flotta, un'attività turistica o un servizio di pedaggio e vuoi parlare di integrazione, co-marketing o partnership sui dati? Scrivici a kjell@autovere.com: non vediamo l'ora di sentirti.",
+      body: "Collaboriamo volentieri con partner di qualsiasi parte del mondo. Gestisci una flotta, un'attività turistica o un servizio di pedaggio e vuoi parlare di integrazione, co-marketing o partnership sui dati? Scrivici a kjell@autovere.com: non vediamo l'ora di sentirti.",
     },
   ],
   note: DISCLAIMER,
@@ -173,7 +173,7 @@ export const IT_PRIVACY: InfoPageContent = {
   eyebrow: "Informativa sulla privacy",
   title: "Il tuo percorso è affar tuo.",
   intro:
-    "AutoVere è gestito da KM TECH LABS, Kristiansand, Norvegia. Limitiamo la raccolta dei dati al minimo necessario per fornirti una stima dei costi accurata.",
+    "AutoVere è gestito da KM TECH LABS. Limitiamo la raccolta dei dati al minimo necessario per fornirti una stima dei costi accurata.",
   sections: [
     {
       heading: "Cosa memorizziamo",
@@ -201,7 +201,7 @@ export const IT_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contatti",
-      body: "Domande sulla privacy: kjell@autovere.com — KM TECH LABS, Kristiansand, Norvegia. Avvisi regionali: la privacy negli Stati Uniti è trattata su /us/legal, mentre i diritti previsti dal PIPEDA canadese e dalla Legge 25 del Québec sono trattati su /ca/legal.",
+      body: "Domande sulla privacy: kjell@autovere.com — KM TECH LABS. Avvisi regionali: la privacy negli Stati Uniti è trattata su /us/legal, mentre i diritti previsti dal PIPEDA canadese e dalla Legge 25 del Québec sono trattati su /ca/legal.",
     },
   ],
   note: DISCLAIMER,
@@ -240,7 +240,7 @@ export const IT_TERMS: InfoPageContent = {
     },
     {
       heading: "Legge applicabile",
-      body: "Questi termini sono regolati dalla legge norvegese, con Kristiansand come foro competente concordato, fatte salve le tutele obbligatorie del consumatore previste dal tuo paese di residenza.",
+      body: "Questi termini sono regolati dalla legge norvegese, fatte salve le tutele obbligatorie del consumatore previste dal tuo paese di residenza.",
     },
   ],
   note: DISCLAIMER,

@@ -158,7 +158,7 @@ export const DA_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Bliv en del af netværket",
-      body: "Vi holder til i Kristiansand i Norge, men samarbejder gerne med jer, uanset hvor I er. Driver I en flåde, en turvirksomhed eller en afgiftstjeneste og har lyst til at snakke om integration, fælles markedsføring eller datadeling, så skriv endelig til os på kjell@autovere.com — vi glæder os til at høre fra jer.",
+      body: "Vi samarbejder gerne med jer, uanset hvor I er. Driver I en flåde, en turvirksomhed eller en afgiftstjeneste og har lyst til at snakke om integration, fælles markedsføring eller datadeling, så skriv endelig til os på kjell@autovere.com — vi glæder os til at høre fra jer.",
     },
   ],
   note: DISCLAIMER,
@@ -173,7 +173,7 @@ export const DA_PRIVACY: InfoPageContent = {
   eyebrow: "Privatlivspolitik",
   title: "Din rute er din sag.",
   intro:
-    "AutoVere drives af KM TECH LABS, Kristiansand, Norge. Vi begrænser dataindsamlingen til det minimum, der er nødvendigt for at give dig et præcist omkostningsoverslag.",
+    "AutoVere drives af KM TECH LABS. Vi begrænser dataindsamlingen til det minimum, der er nødvendigt for at give dig et præcist omkostningsoverslag.",
   sections: [
     {
       heading: "Hvad vi gemmer",
@@ -201,7 +201,7 @@ export const DA_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Kontakt",
-      body: "Spørgsmål om privatliv: kjell@autovere.com — KM TECH LABS, Kristiansand, Norge. Regionale meddelelser: amerikanske privatlivsforhold er beskrevet på /us/legal, og canadiske PIPEDA- og Québec Lov 25-rettigheder er beskrevet på /ca/legal.",
+      body: "Spørgsmål om privatliv: kjell@autovere.com — KM TECH LABS. Regionale meddelelser: amerikanske privatlivsforhold er beskrevet på /us/legal, og canadiske PIPEDA- og Québec Lov 25-rettigheder er beskrevet på /ca/legal.",
     },
   ],
   note: DISCLAIMER,
@@ -240,7 +240,7 @@ export const DA_TERMS: InfoPageContent = {
     },
     {
       heading: "Lovvalg",
-      body: "Disse vilkår er underlagt norsk lov, med Kristiansand som aftalt værneting, uden at det berører ufravigelige forbrugerbeskyttelsesregler i dit bopælsland.",
+      body: "Disse vilkår er underlagt norsk lov, uden at det berører ufravigelige forbrugerbeskyttelsesregler i dit bopælsland.",
     },
   ],
   note: DISCLAIMER,

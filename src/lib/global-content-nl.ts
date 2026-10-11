@@ -158,7 +158,7 @@ export const NL_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Word onderdeel van het netwerk",
-      body: "Wij zitten in Kristiansand, Noorwegen, maar werken graag samen met partners waar dan ook. Beheer je een wagenpark, een reisbedrijf of een toldienst en wil je praten over integratie, gezamenlijke marketing of een datapartnerschap? Mail ons gerust op kjell@autovere.com — we horen graag van je.",
+      body: "We werken graag samen met partners waar dan ook. Beheer je een wagenpark, een reisbedrijf of een toldienst en wil je praten over integratie, gezamenlijke marketing of een datapartnerschap? Mail ons gerust op kjell@autovere.com — we horen graag van je.",
     },
   ],
   note: DISCLAIMER,
@@ -173,7 +173,7 @@ export const NL_PRIVACY: InfoPageContent = {
   eyebrow: "Privacybeleid",
   title: "Jouw route is jouw zaak.",
   intro:
-    "AutoVere wordt beheerd door KM TECH LABS, Kristiansand, Noorwegen. We beperken gegevensverzameling tot het minimum dat nodig is om je een nauwkeurige kostenschatting te geven.",
+    "AutoVere wordt beheerd door KM TECH LABS. We beperken gegevensverzameling tot het minimum dat nodig is om je een nauwkeurige kostenschatting te geven.",
   sections: [
     {
       heading: "Wat we bewaren",
@@ -201,7 +201,7 @@ export const NL_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contact",
-      body: "Privacyvragen: kjell@autovere.com — KM TECH LABS, Kristiansand, Noorwegen. Regionale kennisgevingen: Amerikaanse privacy staat beschreven op /us/legal, en Canadese PIPEDA- en Québec Wet 25-rechten staan op /ca/legal.",
+      body: "Privacyvragen: kjell@autovere.com — KM TECH LABS. Regionale kennisgevingen: Amerikaanse privacy staat beschreven op /us/legal, en Canadese PIPEDA- en Québec Wet 25-rechten staan op /ca/legal.",
     },
   ],
   note: DISCLAIMER,
@@ -240,7 +240,7 @@ export const NL_TERMS: InfoPageContent = {
     },
     {
       heading: "Toepasselijk recht",
-      body: "Deze voorwaarden worden beheerst door Noors recht, met Kristiansand als overeengekomen locatie, onverminderd dwingende consumentenbescherming in jouw woonland.",
+      body: "Deze voorwaarden worden beheerst door Noors recht, onverminderd dwingende consumentenbescherming in jouw woonland.",
     },
   ],
   note: DISCLAIMER,

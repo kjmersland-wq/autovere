@@ -158,7 +158,7 @@ export const FR_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Rejoignez le réseau",
-      body: "Nous sommes basés à Kristiansand, en Norvège, mais nous aimons collaborer avec des partenaires où qu'ils se trouvent. Vous gérez une flotte, une entreprise de circuits ou un service de péage et souhaitez parler intégration, co-marketing ou partenariat de données ? Écrivez-nous à kjell@autovere.com, nous avons hâte d'échanger avec vous.",
+      body: "Nous aimons collaborer avec des partenaires où qu'ils se trouvent. Vous gérez une flotte, une entreprise de circuits ou un service de péage et souhaitez parler intégration, co-marketing ou partenariat de données ? Écrivez-nous à kjell@autovere.com, nous avons hâte d'échanger avec vous.",
     },
   ],
   note: DISCLAIMER,
@@ -173,7 +173,7 @@ export const FR_PRIVACY: InfoPageContent = {
   eyebrow: "Politique de confidentialité",
   title: "Votre itinéraire vous appartient.",
   intro:
-    "AutoVere est exploité par KM TECH LABS, à Kristiansand, en Norvège. Nous limitons la collecte de données au strict nécessaire pour vous fournir une estimation de coût précise.",
+    "AutoVere est exploité par KM TECH LABS. Nous limitons la collecte de données au strict nécessaire pour vous fournir une estimation de coût précise.",
   sections: [
     {
       heading: "Ce que nous conservons",
@@ -201,7 +201,7 @@ export const FR_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contact",
-      body: "Questions sur la confidentialité : kjell@autovere.com — KM TECH LABS, Kristiansand, Norvège. Mentions régionales : la confidentialité aux États-Unis est couverte sur /us/legal, et les droits PIPEDA canadiens ainsi que la loi 25 du Québec sont couverts sur /ca/legal.",
+      body: "Questions sur la confidentialité : kjell@autovere.com — KM TECH LABS. Mentions régionales : la confidentialité aux États-Unis est couverte sur /us/legal, et les droits PIPEDA canadiens ainsi que la loi 25 du Québec sont couverts sur /ca/legal.",
     },
   ],
   note: DISCLAIMER,
@@ -240,7 +240,7 @@ export const FR_TERMS: InfoPageContent = {
     },
     {
       heading: "Droit applicable",
-      body: "Ces conditions sont régies par le droit norvégien, avec Kristiansand comme lieu de règlement convenu, sans préjudice des protections consommateurs impératives de votre pays de résidence.",
+      body: "Ces conditions sont régies par le droit norvégien, sans préjudice des protections consommateurs impératives de votre pays de résidence.",
     },
   ],
   note: DISCLAIMER,

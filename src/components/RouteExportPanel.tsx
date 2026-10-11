@@ -166,7 +166,7 @@ export function RouteExportPanel({
 <table><thead><tr><th>Checkpoint</th><th>Detail</th><th class="num">Cost</th></tr></thead><tbody>${rows}</tbody></table>
 <h2>Estimated ${trip.optimizer.mode === "ev" ? "charging" : "fuel"} stops</h2>
 <ul>${stops || "<li>No mandatory stops on this leg — top up before departure.</li>"}</ul>
-<footer>Indicative estimates only — verify with official portals before you travel. AutoVere by KM TECH LABS, Kristiansand, Norway.</footer>
+<footer>Indicative estimates only — verify with official portals before you travel. AutoVere by KM TECH LABS.</footer>
 </body></html>`;
 
     const w = window.open("", "_blank", "width=900,height=1000");

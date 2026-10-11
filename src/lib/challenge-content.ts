@@ -153,7 +153,7 @@ const EN: ChallengeContent = {
       "We would rather hand you the keys: pick a real journey, pick the car sitting on your driveway, use AutoVere as a Pro user, drive the route, and hold our calculation up against your receipts.",
       "If we are close, that is a story worth telling. If we are off, we want to know — and we would rather hear it from you than never hear it at all.",
     ],
-    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs, Kristiansand, Norway",
+    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs\",
   },
 
   steps: {
@@ -305,7 +305,7 @@ const EN: ChallengeContent = {
       "That means using real data, official sources, algorithms and mathematics to calculate the journey.",
       "Not guesses. Not a black box.",
       "The goal is simple: give people a clearer picture of what a journey is likely to cost before they leave home — and help them make better decisions about routes, cars and travel.",
-      "What started in Kristiansand has now grown beyond Norway and beyond Europe.",
+      "What started as one idea has now grown beyond Norway and beyond Europe.",
       "AutoVere is already launched in the USA and Canada as well as Europe, with the ambition of becoming a global automotive intelligence platform for people who travel by road.",
     ],
     closing: [
@@ -415,7 +415,7 @@ const NO: ChallengeContent = {
       "Vi gir deg heller nøklene selv: velg en ekte reise, velg bilen som står i oppkjørselen din, bruk AutoVere som Pro-bruker, kjør ruten — og hold beregningen vår opp mot kvitteringene dine.",
       "Treffer vi, er det en historie verdt å fortelle. Bommer vi, vil vi vite det — vi hører det heller fra deg enn at det aldri kommer fram.",
     ],
-    signature: "Kjell Mersland — grunnlegger av AutoVere · KM Tech Labs, Kristiansand",
+    signature: "Kjell Mersland — grunnlegger av AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Slik fungerer Challenge",
@@ -569,7 +569,7 @@ const NO: ChallengeContent = {
       "Det betyr at vi bruker ekte data, offisielle kilder, algoritmer og matematikk for å beregne reisen.",
       "Ikke gjetning. Ikke en svart boks.",
       "Målet er enkelt: gi folk et klarere bilde av hva en reise sannsynligvis kommer til å koste før de kjører hjemmefra — og hjelpe dem å ta bedre valg om rute, bil og reise.",
-      "Det som startet i Kristiansand, har vokst langt utover Norge og Europa.",
+      "Det som startet som én idé, har vokst langt utover Norge og Europa.",
       "AutoVere er allerede lansert i USA og Canada, i tillegg til Europa — med en klar ambisjon om å bli en global reiseintelligens-plattform for alle som ferdes på vei.",
     ],
     closing: [
@@ -678,7 +678,7 @@ const SE: ChallengeContent = {
       "Vi ger dig hellre nycklarna själv: välj en riktig resa, välj bilen som står i din uppfart, använd AutoVere som Pro-användare, kör rutten — och håll vår beräkning mot dina kvitton.",
       "Har vi rätt är det en historia värd att berätta. Har vi fel vill vi veta det — vi hör det hellre av dig än att det aldrig kommer fram.",
     ],
-    signature: "Kjell Mersland — grundare av AutoVere · KM Tech Labs, Kristiansand, Norge",
+    signature: "Kjell Mersland — grundare av AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Så fungerar Challenge",
@@ -832,7 +832,7 @@ const SE: ChallengeContent = {
       "Det betyder att vi använder riktig data, officiella källor, algoritmer och matematik för att beräkna resan.",
       "Inga gissningar. Ingen svart låda.",
       "Målet är enkelt: ge folk en tydligare bild av vad en resa sannolikt kommer att kosta innan de kör hemifrån — och hjälpa dem fatta bättre beslut om rutt, bil och resa.",
-      "Det som startade i Kristiansand, Norge, har vuxit långt utanför både Norge och Europa.",
+      "Det som startade som en idé har vuxit långt utanför både Norge och Europa.",
       "AutoVere är redan lanserat i USA och Kanada, utöver Europa — med en tydlig ambition: att bli en global reseintelligensplattform för alla som färdas på väg.",
     ],
     closing: [
@@ -941,7 +941,7 @@ const DK: ChallengeContent = {
       "Vi giver dig hellere nøglerne selv: vælg en rigtig rejse, vælg bilen der står i din indkørsel, brug AutoVere som Pro-bruger, kør ruten — og hold vores beregning op mod dine kvitteringer.",
       "Rammer vi rigtigt, er det en historie værd at fortælle. Rammer vi forkert, vil vi gerne vide det — vi hører det hellere fra dig, end at det aldrig kommer frem.",
     ],
-    signature: "Kjell Mersland — grundlægger af AutoVere · KM Tech Labs, Kristiansand, Norge",
+    signature: "Kjell Mersland — grundlægger af AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Sådan fungerer Challenge",
@@ -1095,7 +1095,7 @@ const DK: ChallengeContent = {
       "Det betyder, at vi bruger rigtige data, officielle kilder, algoritmer og matematik til at beregne rejsen.",
       "Ikke gætværk. Ikke en sort boks.",
       "Målet er enkelt: give folk et klarere billede af, hvad en rejse sandsynligvis kommer til at koste, før de kører hjemmefra — og hjælpe dem med at træffe bedre valg om rute, bil og rejse.",
-      "Det, der startede i Kristiansand, Norge, er vokset langt ud over både Norge og Europa.",
+      "Det, der startede som én idé, er vokset langt ud over både Norge og Europa.",
       "AutoVere er allerede lanceret i USA og Canada, ud over Europa — med en klar ambition: at blive en global rejseintelligensplatform for alle, der færdes på vejen.",
     ],
     closing: [
@@ -1204,7 +1204,7 @@ const FI: ChallengeContent = {
       "Annamme sinulle mieluummin avaimet: valitse oikea matka, valitse auto, joka on omalla pihallasi, käytä AutoVerea Pro-käyttäjänä, aja reitti — ja vertaa laskelmaamme kuitteihisi.",
       "Jos osumme oikeaan, siitä kannattaa kertoa. Jos osumme väärään, haluamme tietää sen — kuulemme sen mieluummin sinulta kuin että se ei tulisi koskaan ilmi.",
     ],
-    signature: "Kjell Mersland — AutoVeren perustaja · KM Tech Labs, Kristiansand, Norja",
+    signature: "Kjell Mersland — AutoVeren perustaja · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Näin Challenge toimii",
@@ -1358,7 +1358,7 @@ const FI: ChallengeContent = {
       "Se tarkoittaa, että käytämme aitoa dataa, virallisia lähteitä, algoritmeja ja matematiikkaa matkan laskemiseen.",
       "Ei arvailua. Ei mustaa laatikkoa.",
       "Tavoite on yksinkertainen: antaa ihmisille selkeämpi kuva siitä, mitä matka todennäköisesti tulee maksamaan ennen kotoa lähtöä — ja auttaa heitä tekemään parempia valintoja reitin, auton ja matkustustavan suhteen.",
-      "Se, mikä alkoi Kristiansandista, Norjasta, on kasvanut kauas Norjan ja Euroopan ulkopuolelle.",
+      "Se, mikä alkoi yhtenä pienenä ideana, on kasvanut kauas Norjan ja Euroopan ulkopuolelle.",
       "AutoVere on jo lanseerattu Yhdysvalloissa ja Kanadassa Euroopan lisäksi, ja kunnianhimomme on tulla globaaliksi automatkailun tietoalustaksi kaikille, jotka liikkuvat teillä.",
     ],
     closing: [
@@ -1467,7 +1467,7 @@ const US: ChallengeContent = {
       "We'd rather hand you the keys: pick a real trip, pick the car sitting in your driveway, use AutoVere as a Pro user, drive the route, and hold our numbers up against your receipts.",
       "If we're right, that's a story worth telling. If we're off, we want to know about it — we'd rather hear it from you than never hear it at all.",
     ],
-    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs, Kristiansand, Norway",
+    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "How the Challenge Works",
@@ -1621,7 +1621,7 @@ const US: ChallengeContent = {
       "That means using real data, official sources, algorithms, and math to figure out the cost of your trip.",
       "Not guesswork. Not a black box.",
       "The goal is simple: give people a clearer picture of what a trip is probably going to cost before they leave the driveway — and help them make smarter calls on routes, cars, and travel.",
-      "What started in Kristiansand has grown way beyond Norway — and way beyond Europe.",
+      "What started as one idea has grown way beyond Norway — and way beyond Europe.",
       "AutoVere's already up and running in the US and Canada, not just Europe — with the goal of becoming a global automotive intelligence platform for anyone who travels by road.",
     ],
     closing: [
@@ -1730,7 +1730,7 @@ const DE: ChallengeContent = {
       "Wir geben Ihnen lieber die Schlüssel: Wählen Sie eine echte Reise, wählen Sie das Auto, das in Ihrer Einfahrt steht, nutzen Sie AutoVere als Pro-Nutzer, fahren Sie die Route — und halten Sie unsere Berechnung gegen Ihre Quittungen.",
       "Liegen wir richtig, ist das eine Geschichte wert, erzählt zu werden. Liegen wir falsch, wollen wir es wissen — und hören es lieber von Ihnen, als es nie zu erfahren.",
     ],
-    signature: "Kjell Mersland — Gründer von AutoVere · KM Tech Labs, Kristiansand, Norwegen",
+    signature: "Kjell Mersland — Gründer von AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "So funktioniert die Challenge",
@@ -1884,7 +1884,7 @@ const DE: ChallengeContent = {
       "Das bedeutet, dass wir echte Daten, offizielle Quellen, Algorithmen und Mathematik verwenden, um die Reise zu berechnen.",
       "Keine Vermutungen. Keine Black Box.",
       "Das Ziel ist einfach: Menschen ein klareres Bild davon geben, was eine Reise voraussichtlich kosten wird, bevor sie von zu Hause losfahren — und ihnen helfen, bessere Entscheidungen über Route, Auto und Reiseweise zu treffen.",
-      "Was in Kristiansand begann, ist inzwischen weit über Norwegen und Europa hinausgewachsen.",
+      "Was als eine Idee begann, ist inzwischen weit über Norwegen und Europa hinausgewachsen.",
       "AutoVere ist neben Europa bereits in den USA und Kanada gestartet, mit dem Ziel, eine globale Reiseintelligenzplattform für alle zu werden, die auf der Straße unterwegs sind.",
     ],
     closing: [
@@ -1993,7 +1993,7 @@ const NL: ChallengeContent = {
       "We geven je liever de sleutels: kies een echte reis, kies de auto die op je oprit staat, gebruik AutoVere als Pro-gebruiker, rijd de route — en leg onze berekening naast je bonnetjes.",
       "Hebben we gelijk, dan is dat een verhaal waard om te vertellen. Zitten we ernaast, dan willen we het weten — we horen het liever van jou dan dat het nooit aan het licht komt.",
     ],
-    signature: "Kjell Mersland — oprichter van AutoVere · KM Tech Labs, Kristiansand, Noorwegen",
+    signature: "Kjell Mersland — oprichter van AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Zo werkt de Challenge",
@@ -2147,7 +2147,7 @@ const NL: ChallengeContent = {
       "Dat betekent dat we echte data, officiële bronnen, algoritmes en wiskunde gebruiken om de reis te berekenen.",
       "Geen giswerk. Geen zwarte doos.",
       "Het doel is simpel: mensen een duidelijker beeld geven van wat een reis waarschijnlijk gaat kosten voordat ze van huis vertrekken — en hen helpen betere keuzes te maken over route, auto en manier van reizen.",
-      "Wat in Kristiansand begon, is inmiddels ver voorbij Noorwegen en Europa gegroeid.",
+      "Wat als één idee begon, is inmiddels ver voorbij Noorwegen en Europa gegroeid.",
       "AutoVere is naast Europa inmiddels ook gelanceerd in de VS en Canada, met de ambitie om een wereldwijd platform voor reisintelligentie te worden voor iedereen die de weg op gaat.",
     ],
     closing: [
@@ -2256,7 +2256,7 @@ const FR: ChallengeContent = {
       "Nous préférons vous donner les clés : choisissez un vrai trajet, choisissez la voiture garée devant chez vous, utilisez AutoVere en tant qu'utilisateur Pro, roulez l'itinéraire — et confrontez notre calcul à vos reçus.",
       "Si nous avons raison, c'est une histoire qui mérite d'être racontée. Si nous avons tort, nous voulons le savoir — et nous préférons l'apprendre de vous plutôt que de ne jamais l'apprendre.",
     ],
-    signature: "Kjell Mersland — fondateur d'AutoVere · KM Tech Labs, Kristiansand, Norvège",
+    signature: "Kjell Mersland — fondateur d'AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Comment fonctionne le Challenge",
@@ -2410,7 +2410,7 @@ const FR: ChallengeContent = {
       "Cela signifie que nous utilisons des données réelles, des sources officielles, des algorithmes et des mathématiques pour calculer le trajet.",
       "Pas de suppositions. Pas de boîte noire.",
       "L'objectif est simple : donner aux gens une image plus claire de ce qu'un trajet va probablement coûter avant même de quitter la maison — et les aider à faire de meilleurs choix concernant l'itinéraire, la voiture et la façon de voyager.",
-      "Ce qui a commencé à Kristiansand a aujourd'hui largement dépassé la Norvège et l'Europe.",
+      "Ce qui a commencé comme une simple idée a aujourd'hui largement dépassé la Norvège et l'Europe.",
       "AutoVere est déjà lancé aux États-Unis et au Canada, en plus de l'Europe, avec l'ambition de devenir une plateforme mondiale d'intelligence de voyage pour tous ceux qui prennent la route.",
     ],
     closing: [
@@ -2519,7 +2519,7 @@ const PL: ChallengeContent = {
       "Wolimy dać Ci klucze: wybierz prawdziwą podróż, wybierz samochód, który stoi na Twoim podjeździe, korzystaj z AutoVere jako użytkownik Pro, przejedź trasę — i zestaw nasze wyliczenie ze swoimi paragonami.",
       "Jeśli mamy rację, to historia, którą warto opowiedzieć. Jeśli się mylimy, chcemy o tym wiedzieć — wolimy usłyszeć to od Ciebie, niż nigdy się o tym nie dowiedzieć.",
     ],
-    signature: "Kjell Mersland — założyciel AutoVere · KM Tech Labs, Kristiansand, Norwegia",
+    signature: "Kjell Mersland — założyciel AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Jak działa Challenge",
@@ -2673,7 +2673,7 @@ const PL: ChallengeContent = {
       "To znaczy, że korzystamy z prawdziwych danych, oficjalnych źródeł, algorytmów i matematyki, żeby obliczyć podróż.",
       "Żadnych domysłów. Żadnej czarnej skrzynki.",
       "Cel jest prosty: dać ludziom jaśniejszy obraz tego, ile podróż prawdopodobnie będzie kosztować, zanim wyjadą z domu — i pomóc im podejmować lepsze decyzje dotyczące trasy, samochodu i sposobu podróżowania.",
-      "To, co zaczęło się w Kristiansand, dziś wykroczyło daleko poza Norwegię i Europę.",
+      "To, co zaczęło się od jednego pomysłu, dziś wykroczyło daleko poza Norwegię i Europę.",
       "AutoVere jest już uruchomione w USA i Kanadzie, oprócz Europy, z ambicją stania się globalną platformą inteligencji podróżniczej dla wszystkich, którzy wyruszają w drogę.",
     ],
     closing: [
@@ -2782,7 +2782,7 @@ const ES: ChallengeContent = {
       "Preferimos darte las llaves: elige un viaje real, elige el coche que tienes aparcado en la puerta de tu casa, usa AutoVere como usuario Pro, conduce la ruta — y contrasta nuestro cálculo con tus recibos.",
       "Si acertamos, es una historia que merece la pena contar. Si nos equivocamos, queremos saberlo — preferimos que nos lo digas tú a no enterarnos nunca.",
     ],
-    signature: "Kjell Mersland — fundador de AutoVere · KM Tech Labs, Kristiansand, Noruega",
+    signature: "Kjell Mersland — fundador de AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Cómo funciona el Challenge",
@@ -2936,7 +2936,7 @@ const ES: ChallengeContent = {
       "Eso significa usar datos reales, fuentes oficiales, algoritmos y matemáticas para calcular el viaje.",
       "Nada de suposiciones. Nada de cajas negras.",
       "El objetivo es sencillo: dar a la gente una imagen más clara de lo que probablemente va a costar un viaje antes de salir de casa — y ayudarles a tomar mejores decisiones sobre la ruta, el coche y la forma de viajar.",
-      "Lo que empezó en Kristiansand hoy ha crecido mucho más allá de Noruega y de Europa.",
+      "Lo que empezó como una idea hoy ha crecido mucho más allá de Noruega y de Europa.",
       "AutoVere ya se ha lanzado en Estados Unidos y Canadá, además de en Europa, con la ambición de convertirse en una plataforma global de inteligencia de viaje para todos los que se echan a la carretera.",
     ],
     closing: [
@@ -3045,7 +3045,7 @@ const IT: ChallengeContent = {
       "Preferiamo darti le chiavi: scegli un viaggio vero, scegli l'auto parcheggiata nel tuo vialetto, usa AutoVere come utente Pro, guida il percorso — e confronta il nostro calcolo con le tue ricevute.",
       "Se abbiamo ragione, è una storia che vale la pena raccontare. Se sbagliamo, vogliamo saperlo — preferiamo saperlo da te piuttosto che non scoprirlo mai.",
     ],
-    signature: "Kjell Mersland — fondatore di AutoVere · KM Tech Labs, Kristiansand, Norvegia",
+    signature: "Kjell Mersland — fondatore di AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Come funziona il Challenge",
@@ -3199,7 +3199,7 @@ const IT: ChallengeContent = {
       "Questo significa usare dati reali, fonti ufficiali, algoritmi e matematica per calcolare il viaggio.",
       "Niente supposizioni. Nessuna scatola nera.",
       "L'obiettivo è semplice: dare alle persone un'idea più chiara di quanto probabilmente costerà un viaggio prima ancora di partire da casa — e aiutarle a prendere decisioni migliori su percorso, auto e modo di viaggiare.",
-      "Quello che è iniziato a Kristiansand oggi è cresciuto ben oltre la Norvegia e l'Europa.",
+      "Quello che è iniziato come una semplice idea oggi è cresciuto ben oltre la Norvegia e l'Europa.",
       "AutoVere è già stato lanciato negli Stati Uniti e in Canada, oltre che in Europa, con l'ambizione di diventare una piattaforma globale di intelligenza di viaggio per chiunque si metta in viaggio su strada.",
     ],
     closing: [
@@ -3309,7 +3309,7 @@ const JA: ChallengeContent = {
       "むしろ、鍵をお渡ししたいのです。実際の旅程を選び、いつも運転している車を選び、Proユーザーとして AutoVereを使い、実際にその道を走ってみてください。そして、私たちの計算結果をご自身の領収書と照らし合わせてみてください。",
       "もし数字が近ければ、それは記事にする価値のある話になるはずです。もしずれていたら、私たちはそれを知りたいのです。黙って見過ごされるより、あなたから教えていただくほうが、ずっとありがたいのです。",
     ],
-    signature: "Kjell Mersland — AutoVere創業者・KM Tech Labs、クリスチャンサン、ノルウェー",
+    signature: "Kjell Mersland — AutoVere創業者・KM Tech Labs\",
   },
   steps: {
     eyebrow: "Challengeの流れ",
@@ -3455,7 +3455,7 @@ const JA: ChallengeContent = {
       "そのために、実際のデータ、公式の情報源、アルゴリズムと数学を使って、旅の費用を計算しています。",
       "当て推量ではありません。ブラックボックスでもありません。",
       "目指していることはシンプルです。出発する前に、旅にかかる費用をより明確に知っていただくこと。そして、ルートや車、旅の計画について、より良い選択をする手助けをすることです。",
-      "クリスチャンサンから始まったこの取り組みは、今ではノルウェーやヨーロッパの枠を超えて広がっています。",
+      "ひとつのアイデアから始まったこの取り組みは、今ではノルウェーやヨーロッパの枠を超えて広がっています。",
       "AutoVereはすでにヨーロッパに加え、アメリカとカナダでも展開しています。目指しているのは、車で旅するすべての人のための、世界規模の情報基盤になることです。",
     ],
     closing: [
@@ -3563,7 +3563,7 @@ const PT: ChallengeContent = {
       "Preferimos dar-te as chaves: escolhe uma viagem verdadeira, escolhe o carro que tens na garagem, usa o AutoVere como utilizador Pro, conduz o percurso — e compara o nosso cálculo com os teus recibos.",
       "Se tivermos razão, é uma história que vale a pena contar. Se estivermos errados, queremos sabê-lo — preferimos saber por ti do que nunca vir a descobrir.",
     ],
-    signature: "Kjell Mersland — fundador do AutoVere · KM Tech Labs, Kristiansand, Noruega",
+    signature: "Kjell Mersland — fundador do AutoVere · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Como funciona o Challenge",
@@ -3717,7 +3717,7 @@ const PT: ChallengeContent = {
       "Isto significa usar dados reais, fontes oficiais, algoritmos e matemática para calcular a viagem.",
       "Sem suposições. Sem caixa negra.",
       "O objetivo é simples: dar às pessoas uma ideia mais clara de quanto uma viagem provavelmente vai custar, ainda antes de saírem de casa — e ajudá-las a tomar melhores decisões sobre o percurso, o carro e a forma de viajar.",
-      "O que começou em Kristiansand cresceu hoje muito além da Noruega e da Europa.",
+      "O que começou como uma simples ideia cresceu hoje muito além da Noruega e da Europa.",
       "O AutoVere já foi lançado nos Estados Unidos e no Canadá, além da Europa, com a ambição de se tornar uma plataforma global de inteligência de viagem para quem quer que se ponha a caminho.",
     ],
     closing: [
@@ -3826,7 +3826,7 @@ const ZH: ChallengeContent = {
       "我们更愿意把钥匙交到您手上：选一段真实的行程，开您车库里那辆真正的车，以Pro用户身份使用AutoVere，把这段路实际开完，再将我们的计算结果与您的真实收据对照。",
       "如果数字相近，这会是一个值得报道的故事。如果有出入，我们同样想知道——比起被悄悄略过，我们更希望这份反馈来自您。",
     ],
-    signature: "Kjell Mersland — AutoVere创始人 · KM Tech Labs，克里斯蒂安桑，挪威",
+    signature: "Kjell Mersland — AutoVere创始人 · KM Tech Labs\",
   },
   steps: {
     eyebrow: "Challenge如何进行",
@@ -3970,7 +3970,7 @@ const ZH: ChallengeContent = {
       "这意味着，我们使用真实数据、官方信息来源、算法与数学模型来计算旅途费用。",
       "不是凭猜测，也不是一个黑箱。",
       "我们的目标很简单：让人们在出发前，就能更清楚地知道这趟旅途大概要花多少钱，并帮助他们在路线、车辆和行程安排上做出更好的选择。",
-      "从克里斯蒂安桑起步的这个项目，如今已经走出了挪威，走出了欧洲。",
+      "从一个简单的想法起步的这个项目，如今已经走出了挪威，走出了欧洲。",
       "AutoVere目前已经在欧洲、美国和加拿大同步上线，我们的目标，是成为服务全球自驾出行人群的汽车信息平台。",
     ],
     closing: [
