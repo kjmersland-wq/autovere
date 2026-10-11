@@ -85,8 +85,8 @@ async function handleSubscription(subscription: any, env: PaddleEnv) {
       {
         user_id: userId,
         provider: "paddle",
-        stripe_subscription_id: "",
-        stripe_customer_id: "",
+        stripe_subscription_id: null,
+        stripe_customer_id: null,
         paddle_subscription_id: subscription.id,
         paddle_customer_id: subscription.customer_id ?? "",
         product_id: productId,
@@ -143,8 +143,8 @@ async function handleTransactionCompleted(transaction: any, env: PaddleEnv) {
       {
         user_id: userId,
         provider: "paddle",
-        stripe_subscription_id: "",
-        stripe_customer_id: "",
+        stripe_subscription_id: null,
+        stripe_customer_id: null,
         paddle_subscription_id: transaction.id,
         paddle_customer_id: transaction.customer_id ?? "",
         product_id: productExternalId(transaction) ?? priceKey,
