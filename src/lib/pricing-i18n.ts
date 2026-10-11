@@ -1227,14 +1227,14 @@ const REGION_PRICES: Partial<Record<RegionKey, Partial<Record<PlanTier, { monthl
   us: {
     free: { monthly: "$0" },
     tripPass: { monthly: "$9.19" },
-    pro: { monthly: "$5.99", yearly: "$49" },
-    fleet: { monthly: "$24" },
+    pro: { monthly: "$6.09", yearly: "$50" },
+    fleet: { monthly: "$24.49" },
   },
   ca: {
     free: { monthly: "$0 CAD" },
     tripPass: { monthly: "$11.29 CAD" },
-    pro: { monthly: "$6.99 CAD", yearly: "$59 CAD" },
-    fleet: { monthly: "$29 CAD" },
+    pro: { monthly: "$7.19 CAD", yearly: "$60 CAD" },
+    fleet: { monthly: "$30 CAD" },
   },
 };
 
