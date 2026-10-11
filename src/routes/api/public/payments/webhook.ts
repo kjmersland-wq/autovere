@@ -6,6 +6,7 @@ import type { Database } from "@/integrations/supabase/types";
 
 import { passDays } from "@/lib/pass-durations";
 import { gatewayFetch, verifyPaddleWebhook, type PaddleEnv } from "@/lib/paddle.server";
+import { forwardToKmTechlabs } from "@/lib/km-techlabs.server";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
 function getSupabase() {
@@ -186,6 +187,9 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
             default:
               console.log("Unhandled Paddle event:", event.event_type);
           }
+          // Mirror every verified event to the KM TECH LABS accounting site.
+          // Never throws, so a failed forward cannot trigger Paddle retries.
+          await forwardToKmTechlabs(event as any, env);
           return Response.json({ received: true });
         } catch (e) {
           console.error("Paddle webhook error:", e);
