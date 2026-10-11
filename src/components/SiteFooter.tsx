@@ -53,6 +53,10 @@ export function SiteFooter() {
       to: region === "eu" ? `${noPrefix}/terms` : `${infoBase}/legal`,
       label: isFrench ? "Conditions d'utilisation" : t.footer.terms,
     },
+    {
+      to: `${noPrefix}/refund`,
+      label: isFrench ? "Remboursements" : "Refunds",
+    },
   ];
 
   return (

@@ -22,6 +22,7 @@ import { Route as PartnersRouteImport } from './routes/partners'
 import { Route as PlannerRouteImport } from './routes/planner'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as RefundRouteImport } from './routes/refund'
 import { Route as ScenicRouteImport } from './routes/scenic'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as TermsRouteImport } from './routes/terms'
@@ -139,6 +140,11 @@ const PricingRoute = PricingRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RefundRoute = RefundRouteImport.update({
+  id: '/refund',
+  path: '/refund',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ScenicRoute = ScenicRouteImport.update({
@@ -422,6 +428,7 @@ export interface FileRoutesByFullPath {
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/refund': typeof RefundRoute
   '/scenic': typeof ScenicRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -489,6 +496,7 @@ export interface FileRoutesByTo {
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/refund': typeof RefundRoute
   '/scenic': typeof ScenicRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -557,6 +565,7 @@ export interface FileRoutesById {
   '/planner': typeof PlannerRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/refund': typeof RefundRoute
   '/scenic': typeof ScenicRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/terms': typeof TermsRoute
@@ -627,6 +636,7 @@ export interface FileRouteTypes {
     | '/planner'
     | '/pricing'
     | '/privacy'
+    | '/refund'
     | '/scenic'
     | '/sitemap.xml'
     | '/terms'
@@ -694,6 +704,7 @@ export interface FileRouteTypes {
     | '/planner'
     | '/pricing'
     | '/privacy'
+    | '/refund'
     | '/scenic'
     | '/sitemap.xml'
     | '/terms'
@@ -761,6 +772,7 @@ export interface FileRouteTypes {
     | '/planner'
     | '/pricing'
     | '/privacy'
+    | '/refund'
     | '/scenic'
     | '/sitemap.xml'
     | '/terms'
@@ -830,6 +842,7 @@ export interface RootRouteChildren {
   PlannerRoute: typeof PlannerRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  RefundRoute: typeof RefundRoute
   ScenicRoute: typeof ScenicRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   TermsRoute: typeof TermsRoute
@@ -952,6 +965,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/refund': {
+      id: '/refund'
+      path: '/refund'
+      fullPath: '/refund'
+      preLoaderRoute: typeof RefundRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/scenic': {
@@ -1406,6 +1426,7 @@ const rootRouteChildren: RootRouteChildren = {
   PlannerRoute: PlannerRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  RefundRoute: RefundRoute,
   ScenicRoute: ScenicRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   TermsRoute: TermsRoute,

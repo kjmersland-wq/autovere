@@ -231,6 +231,19 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
       body: "We use essential storage to remember your region, language and garage. Any analytics we run is aggregated and cannot identify you individually.",
     },
     {
+      heading: "Who we share data with",
+      items: [
+        "Paddle.com, our Merchant of Record, processes payments, subscriptions, tax and invoicing when you buy a plan — Paddle acts as an independent controller for that data",
+        "Hosting and infrastructure providers that keep the site running",
+        "Professional advisers (legal, accounting) where needed",
+        "Authorities, only where required by law",
+      ],
+    },
+    {
+      heading: "Legal basis and retention",
+      body: "We process trip inputs to perform the service you asked for (contract), use aggregated statistics under our legitimate interest in improving the planner, and meet legal obligations where required. Data is kept only as long as needed for these purposes, then deleted or anonymised.",
+    },
+    {
       heading: "Contact",
       body: "Privacy questions: kjell@autovere.com — KM TECH LABS, Kristiansand, Norway. Regional notices: US privacy is covered on /us/legal, and Canadian PIPEDA and Québec Law 25 rights are covered on /ca/legal.",
     },
@@ -266,6 +279,14 @@ export const GLOBAL_TERMS: InfoPageContent = {
       body: "Links to toll operators, ferry companies and charging networks are provided for convenience. Those services have their own terms and pricing, and KM TECH LABS is not responsible for their content or transactions.",
     },
     {
+      heading: "Payments and subscriptions",
+      body: "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns. Payment, billing, tax, cancellation and refund mechanics are governed by Paddle's Buyer Terms (paddle.com/legal/checkout-buyer-terms). Subscriptions renew automatically until cancelled, and you can manage or cancel your plan at any time via the Paddle customer portal.",
+    },
+    {
+      heading: "Intellectual property and acceptable use",
+      body: "AutoVere, its software, design and branding are owned by KM TECH LABS. We grant you a limited, non-exclusive, non-transferable right to use the service within your plan. You must not misuse the service: no unlawful use, fraud or spam, no infringement of others' rights, and no interference with the service (malware, probing, scraping or circumvention of technical limits). We may suspend or terminate access for material breach, non-payment, security or fraud risk, or repeated violations.",
+    },
+    {
       heading: "Liability",
       body: "AutoVere is provided \u201cas is\u201d. To the extent permitted by law, KM TECH LABS is not liable for costs, fines, missed crossings or losses arising from reliance on an estimate.",
     },
@@ -279,5 +300,32 @@ export const GLOBAL_TERMS: InfoPageContent = {
     title: "Terms of Service — Estimate Disclaimer and Fair Use | AutoVere",
     description:
       "AutoVere's terms of service from KM TECH LABS: indicative estimates, safe use, third-party links, liability and governing law.",
+  },
+};
+
+export const GLOBAL_REFUND: InfoPageContent = {
+  eyebrow: "Refund policy",
+  title: "30-day money-back guarantee.",
+  intro:
+    "We want you to feel safe trying AutoVere. If a paid plan is not what you expected, you can get your money back.",
+  sections: [
+    {
+      heading: "Our guarantee",
+      body: "We offer a 30-day money-back guarantee. If you are not satisfied with your purchase, you can request a full refund within 30 days of your order date — no questions asked.",
+    },
+    {
+      heading: "How to request a refund",
+      body: "Refunds are processed by our payment provider and Merchant of Record, Paddle. To request a refund, visit paddle.net and look up your purchase, or email us at kjell@autovere.com and we will help you. Refunds are returned to the original payment method.",
+    },
+    {
+      heading: "Subscriptions",
+      body: "You can cancel a subscription at any time via the Paddle customer portal. Cancellation stops future renewals; the 30-day guarantee above applies to the most recent payment.",
+    },
+  ],
+  note: DISCLAIMER,
+  meta: {
+    title: "Refund Policy — 30-Day Money-Back Guarantee | AutoVere",
+    description:
+      "AutoVere offers a 30-day money-back guarantee on all paid plans, processed by Paddle. How to request a refund.",
   },
 };
