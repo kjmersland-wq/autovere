@@ -1,15 +1,20 @@
 /**
  * Paddle Billing — client-side helpers.
  *
- * Prices are created in the Paddle dashboard (paddle.com) by the site owner.
+ * Uses Lovable's built-in payments connection. Products and prices are created
+ * with human-readable IDs (external_id) that are stable across test and live;
+ * the Paddle internal ID (pri_...) is resolved server-side at checkout time.
+ *
  * New price = old Stripe price × (1 + PRICE_MARKUP), rounded to a pretty price.
  * Change PRICE_MARKUP in one place to adjust the markup rule.
  */
 
+import { resolvePaddlePrice } from "@/utils/payments.functions";
+
 /** Markup applied on top of the old Stripe prices when creating Paddle prices. */
 export const PRICE_MARKUP = 0.02;
 
-/** Internal lookup keys for each plan — stable across payment providers. */
+/** Internal lookup keys (= Paddle external_id) for each plan — stable across environments. */
 export const PRICE_IDS = {
   tripPass: "trip_pass",
   /** One-time 90-day pass; entitlement is ready, the product still has to be created in Paddle. */
@@ -19,64 +24,27 @@ export const PRICE_IDS = {
   businessMonthly: "business_monthly",
 } as const;
 
-/**
- * Maps each internal lookup key to the Paddle price ID (pri_...) created in the
- * Paddle dashboard. Fill these in after creating the products/prices in Paddle.
- * Sandbox price IDs go in PADDLE_PRICE_IDS_SANDBOX.
- */
-export const PADDLE_PRICE_IDS: Record<string, string> = {
-  trip_pass: "",
-  season_pass: "",
-  pro_monthly: "",
-  pro_yearly: "",
-  business_monthly: "",
-};
-
-export const PADDLE_PRICE_IDS_SANDBOX: Record<string, string> = {
-  trip_pass: "",
-  season_pass: "",
-  pro_monthly: "",
-  pro_yearly: "",
-  business_monthly: "",
-};
-
 export type PaddleEnv = "sandbox" | "live";
 
-const clientToken = import.meta.env["VITE_PADDLE_CLIENT_TOKEN"] as string | undefined;
+const clientToken = import.meta.env["VITE_PAYMENTS_CLIENT_TOKEN"] as string | undefined;
 
 export function getPaddleEnvironment(): PaddleEnv {
   if (!clientToken) {
-    throw new Error(
-      "Payments are not configured for this build. Set VITE_PADDLE_CLIENT_TOKEN to enable checkout.",
-    );
+    throw new Error("Payments are not configured for this build.");
   }
   return clientToken.startsWith("test_") ? "sandbox" : "live";
 }
 
-/** Resolve an internal lookup key to the Paddle price ID for the active environment. */
-export function paddlePriceId(lookupKey: string): string {
-  const map = getPaddleEnvironment() === "sandbox" ? PADDLE_PRICE_IDS_SANDBOX : PADDLE_PRICE_IDS;
-  const id = map[lookupKey];
-  if (!id) throw new Error(`No Paddle price configured for "${lookupKey}" yet.`);
-  return id;
-}
-
-/** Reverse lookup: Paddle price ID → internal lookup key (used by the webhook). */
-export function lookupKeyForPaddlePrice(paddlePriceIdValue: string): string | undefined {
-  for (const map of [PADDLE_PRICE_IDS, PADDLE_PRICE_IDS_SANDBOX]) {
-    for (const [key, id] of Object.entries(map)) {
-      if (id && id === paddlePriceIdValue) return key;
-    }
-  }
-  return undefined;
+/** Resolve an internal lookup key to the Paddle internal price ID (pri_...). */
+export async function paddlePriceId(lookupKey: string): Promise<string> {
+  return resolvePaddlePrice({ data: { priceId: lookupKey, environment: getPaddleEnvironment() } });
 }
 
 export type PlanTier = "free" | "tripPass" | "pro" | "fleet";
 
 export function tierForPriceId(priceId: string | null | undefined): PlanTier {
   if (!priceId) return "free";
-  const key = priceId.startsWith("pri_") ? lookupKeyForPaddlePrice(priceId) : priceId;
-  switch (key) {
+  switch (priceId) {
     case PRICE_IDS.tripPass:
     case PRICE_IDS.seasonPass:
       return "tripPass";
@@ -175,8 +143,9 @@ export async function openPaddleCheckout(options: {
   locale?: string | undefined;
 }): Promise<void> {
   const paddle = await loadPaddle();
+  const priceId = await paddlePriceId(options.lookupKey);
   paddle.Checkout.open({
-    items: [{ priceId: paddlePriceId(options.lookupKey), quantity: 1 }],
+    items: [{ priceId, quantity: 1 }],
     ...(options.email ? { customer: { email: options.email } } : {}),
     customData: { userId: options.userId, site: "autovere.com" },
     settings: {
