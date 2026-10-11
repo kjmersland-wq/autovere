@@ -1,27 +1,12 @@
-const clientToken = import.meta.env['VITE_PAYMENTS_CLIENT_TOKEN'] as string | undefined;
+import { getPaddleEnvironment } from "@/lib/paddle";
 
+/** Shown only while the preview runs against the test payments environment. */
 export function PaymentTestModeBanner() {
-  if (!clientToken) {
-    return (
-      <div className="w-full border-b border-red-500/40 bg-red-500/15 px-4 py-2 text-center text-sm text-red-200">
-        Production checkout is not configured yet. Complete payment go-live to accept real payments.
-      </div>
-    );
-  }
-  if (clientToken.startsWith("pk_test_")) {
-    return (
-      <div className="w-full border-b border-amber-400/40 bg-amber-400/15 px-4 py-2 text-center text-sm text-amber-200">
-        All payments made in the preview are in test mode.{" "}
-        <a
-          href="https://docs.lovable.dev/features/payments#test-and-live-environments"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="font-medium underline"
-        >
-          Read more
-        </a>
-      </div>
-    );
-  }
-  return null;
+  if (getPaddleEnvironment() !== "sandbox") return null;
+
+  return (
+    <div className="w-full border-b border-orange-300 bg-orange-100 px-4 py-2 text-center text-sm text-orange-800">
+      All payments made in the preview are in test mode.
+    </div>
+  );
 }

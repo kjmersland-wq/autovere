@@ -15,6 +15,7 @@ import { AuthModal } from "@/components/AuthModal";
 import { AuthProvider } from "@/lib/auth";
 import { LocaleAutoDetect } from "@/components/LocaleAutoDetect";
 import { PageViewTracker } from "@/components/PageViewTracker";
+import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { CurrencyProvider } from "@/lib/currency";
 import { htmlLangFor } from "@/lib/seo";
 import { SiteFooter } from "@/components/SiteFooter";
@@ -158,6 +159,7 @@ function RootComponent() {
         <CurrencyProvider>
         <LocaleAutoDetect />
         <PageViewTracker />
+        <PaymentTestModeBanner />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
         <SiteFooter />

@@ -5,8 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
 import { passDays } from "@/lib/pass-durations";
-import { lookupKeyForPaddlePrice } from "@/lib/paddle";
-import { paddleEnv, verifyPaddleWebhook } from "@/lib/paddle.server";
+import { verifyPaddleWebhook, type PaddleEnv } from "@/lib/paddle.server";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
 function getSupabase() {
@@ -33,18 +32,34 @@ function mapStatus(status: string | undefined): string {
   }
 }
 
-function firstPriceId(entity: any): string {
-  return entity?.items?.[0]?.price?.id ?? entity?.items?.[0]?.price_id ?? "unknown";
+/** Human-readable price id (external_id) set when the price was created. */
+function priceExternalId(entity: any): string | undefined {
+  return entity?.items?.[0]?.price?.import_meta?.external_id ?? undefined;
 }
 
-async function handleSubscription(subscription: any, env: string) {
+function productExternalId(entity: any): string | undefined {
+  return (
+    entity?.items?.[0]?.product?.import_meta?.external_id ??
+    entity?.items?.[0]?.price?.product?.import_meta?.external_id ??
+    undefined
+  );
+}
+
+async function handleSubscription(subscription: any, env: PaddleEnv) {
   const userId = subscription.custom_data?.userId;
   if (!userId) {
     console.error("Paddle subscription without userId in custom_data:", subscription.id);
     return;
   }
+  const priceId = priceExternalId(subscription);
+  const productId = productExternalId(subscription);
+  if (!priceId || !productId) {
+    console.warn("Skipping subscription: missing importMeta.externalId", {
+      rawPriceId: subscription.items?.[0]?.price?.id,
+    });
+    return;
+  }
   const period = subscription.current_billing_period;
-  const priceId = firstPriceId(subscription);
   await getSupabase()
     .from("subscriptions")
     .upsert(
@@ -55,8 +70,8 @@ async function handleSubscription(subscription: any, env: string) {
         stripe_customer_id: "",
         paddle_subscription_id: subscription.id,
         paddle_customer_id: subscription.customer_id ?? "",
-        product_id: subscription.items?.[0]?.product?.id ?? "unknown",
-        price_id: lookupKeyForPaddlePrice(priceId) ?? priceId,
+        product_id: productId,
+        price_id: priceId,
         status: mapStatus(subscription.status),
         current_period_start: period?.starts_at ?? null,
         current_period_end: period?.ends_at ?? null,
@@ -68,7 +83,7 @@ async function handleSubscription(subscription: any, env: string) {
     );
 }
 
-async function handleSubscriptionCanceled(subscription: any, env: string) {
+async function handleSubscriptionCanceled(subscription: any, env: PaddleEnv) {
   await getSupabase()
     .from("subscriptions")
     .update({ status: "canceled", updated_at: new Date().toISOString() })
@@ -77,11 +92,11 @@ async function handleSubscriptionCanceled(subscription: any, env: string) {
 }
 
 /**
- * One-time passes (Trip Pass, season pass) arrive as completed transactions
- * without a subscription. Record a time-limited row so the buyer gets access.
+ * One-time passes (Trip Pass) arrive as completed transactions without a
+ * subscription. Record a time-limited row so the buyer gets access.
  * Safe to receive twice: the transaction id is the unique key.
  */
-async function handleTransactionCompleted(transaction: any, env: string) {
+async function handleTransactionCompleted(transaction: any, env: PaddleEnv) {
   if (transaction.subscription_id) return; // recurring — handled by subscription events
   if (transaction.status !== "completed" && transaction.status !== "paid") return;
   const userId = transaction.custom_data?.userId;
@@ -89,8 +104,13 @@ async function handleTransactionCompleted(transaction: any, env: string) {
     console.error("Paddle transaction without userId in custom_data:", transaction.id);
     return;
   }
-  const priceId = firstPriceId(transaction);
-  const priceKey = lookupKeyForPaddlePrice(priceId) ?? priceId;
+  const priceKey = priceExternalId(transaction);
+  if (!priceKey) {
+    console.warn("Skipping transaction: missing importMeta.externalId", {
+      rawPriceId: transaction.items?.[0]?.price?.id,
+    });
+    return;
+  }
   const days = passDays(priceKey);
   if (!days) {
     console.error("Paddle one-time purchase for a price with no pass duration:", priceKey);
@@ -108,7 +128,7 @@ async function handleTransactionCompleted(transaction: any, env: string) {
         stripe_customer_id: "",
         paddle_subscription_id: transaction.id,
         paddle_customer_id: transaction.customer_id ?? "",
-        product_id: transaction.items?.[0]?.product?.id ?? "unknown",
+        product_id: productExternalId(transaction) ?? "unknown",
         price_id: priceKey,
         status: "active",
         current_period_start: now.toISOString(),
@@ -122,13 +142,14 @@ async function handleTransactionCompleted(transaction: any, env: string) {
   if (error) throw error;
 }
 
-export const Route = createFileRoute("/api/public/payments/paddle-webhook")({
+export const Route = createFileRoute("/api/public/payments/webhook")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const env = paddleEnv();
+        const url = new URL(request.url);
+        const env: PaddleEnv = url.searchParams.get("env") === "live" ? "live" : "sandbox";
         try {
-          const event = await verifyPaddleWebhook(request);
+          const event = await verifyPaddleWebhook(request, env);
           switch (event.event_type) {
             case "subscription.created":
             case "subscription.updated":

@@ -1,10 +1,26 @@
 import { createServerFn } from "@tanstack/react-start";
 
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { getPaddleErrorMessage, paddleApi } from "@/lib/paddle.server";
+import { gatewayFetch, getPaddleErrorMessage, paddleApi, type PaddleEnv } from "@/lib/paddle.server";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
 
 type PortalSessionResult = { url: string } | { error: string };
+
+/**
+ * Resolve a human-readable price ID (external_id, e.g. "pro_monthly") to the
+ * Paddle internal price ID (pri_...) required by Paddle.js checkout.
+ */
+export const resolvePaddlePrice = createServerFn({ method: "GET" })
+  .validator((data: { priceId: string; environment: PaddleEnv }) => data)
+  .handler(async ({ data }) => {
+    const response = await gatewayFetch(
+      data.environment,
+      `/prices?external_id=${encodeURIComponent(data.priceId)}`,
+    );
+    const result = (await response.json()) as { data?: { id: string }[] };
+    if (!result.data?.length) throw new Error(`Price not found: ${data.priceId}`);
+    return result.data[0]!.id;
+  });
 
 /**
  * Checkout itself runs entirely client-side: the Paddle.js overlay opens with the
@@ -20,7 +36,7 @@ export const createPortalSession = createServerFn({ method: "POST" })
 
     const { data: sub } = await supabase
       .from("subscriptions")
-      .select("paddle_customer_id")
+      .select("paddle_customer_id, environment")
       .eq("user_id", userId)
       .eq("provider", "paddle")
       .order("created_at", { ascending: false })
@@ -34,7 +50,10 @@ export const createPortalSession = createServerFn({ method: "POST" })
     try {
       const portal = await paddleApi<{
         urls: { general: { overview: string } };
-      }>(`/customers/${sub.paddle_customer_id}/portal-sessions`, { method: "POST", body: {} });
+      }>(sub.environment as PaddleEnv, `/customers/${sub.paddle_customer_id}/portal-sessions`, {
+        method: "POST",
+        body: {},
+      });
       return { url: portal.urls.general.overview };
     } catch (error) {
       return { error: getPaddleErrorMessage(error) };
