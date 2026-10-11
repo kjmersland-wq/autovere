@@ -45,7 +45,7 @@ export const FI_PRIVACY: InfoPageContent = {
   eyebrow: "Tietosuojaseloste",
   title: "Reittisi on sinun asiasi.",
   intro:
-    "AutoVerea ylläpitää KM TECH LABS, Kristiansand, Norja. Keräämme vain sen tiedon, joka tarvitaan tarkan kuluarvion antamiseen.",
+    "AutoVerea ylläpitää KM TECH LABS. Keräämme vain sen tiedon, joka tarvitaan tarkan kuluarvion antamiseen.",
   sections: [
     {
       heading: "Mitä tallennamme",
@@ -73,7 +73,7 @@ export const FI_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Yhteystiedot",
-      body: "Tietosuojakysymykset: kjell@autovere.com – KM TECH LABS, Kristiansand, Norja. Alueelliset huomautukset: Yhdysvaltain tietosuoja käsitellään sivulla /us/legal ja Kanadan PIPEDA- sekä Québecin Law 25 -oikeudet sivulla /ca/legal.",
+      body: "Tietosuojakysymykset: kjell@autovere.com – KM TECH LABS. Alueelliset huomautukset: Yhdysvaltain tietosuoja käsitellään sivulla /us/legal ja Kanadan PIPEDA- sekä Québecin Law 25 -oikeudet sivulla /ca/legal.",
     },
   ],
   note: DISCLAIMER_FI,
@@ -112,7 +112,7 @@ export const FI_TERMS: InfoPageContent = {
     },
     {
       heading: "Sovellettava laki",
-      body: "Näihin ehtoihin sovelletaan Norjan lakia, ja sovittuna oikeuspaikkana on Kristiansand, rajoittamatta asuinmaasi pakottavaa kuluttajansuojaa.",
+      body: "Näihin ehtoihin sovelletaan Norjan lakia, rajoittamatta asuinmaasi pakottavaa kuluttajansuojaa.",
     },
   ],
   note: DISCLAIMER_FI,
@@ -196,7 +196,7 @@ export const FI_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Tule mukaan kumppaniksi",
-      body: "Toimimme Kristiansandista, Norjasta käsin, mutta teemme mielellämme yhteistyötä riippumatta siitä, missä olette. Jos pyöritätte vuokraamoa, matkailuyritystä tai tietullipalvelua ja haluatte jutella yhteistyöstä, yhteismarkkinoinnista tai datakumppanuudesta, laittakaa viestiä osoitteeseen kjell@autovere.com – otamme mielellämme yhteyttä takaisin.",
+      body: "Teemme mielellämme yhteistyötä riippumatta siitä, missä olette. Jos pyöritätte vuokraamoa, matkailuyritystä tai tietullipalvelua ja haluatte jutella yhteistyöstä, yhteismarkkinoinnista tai datakumppanuudesta, laittakaa viestiä osoitteeseen kjell@autovere.com – otamme mielellämme yhteyttä takaisin.",
     },
   ],
   note: DISCLAIMER_FI,

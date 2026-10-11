@@ -166,7 +166,7 @@ export const NO_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Bli en del av nettverket",
-      body: "Vi holder til i Kristiansand, men samarbeider gjerne med partnere uansett hvor de er. Driver du en flåte, en turvirksomhet eller en bomtjeneste og har lyst til å snakke om integrasjon, samarbeid eller datadeling? Send oss en e-post på kjell@autovere.com — vi gleder oss til å høre fra deg.",
+      body: "Vi samarbeider gjerne med partnere uansett hvor de er. Driver du en flåte, en turvirksomhet eller en bomtjeneste og har lyst til å snakke om integrasjon, samarbeid eller datadeling? Send oss en e-post på kjell@autovere.com — vi gleder oss til å høre fra deg.",
     },
   ],
   note: DISCLAIMER,
@@ -181,7 +181,7 @@ export const NO_PRIVACY: InfoPageContent = {
   eyebrow: "Personvernerklæring",
   title: "Ruten din er din sak.",
   intro:
-    "AutoVere drives av KM TECH LABS i Kristiansand. Vi samler inn minst mulig data — kun det som trengs for et presist kostnadsestimat.",
+    "AutoVere drives av KM TECH LABS. Vi samler inn minst mulig data — kun det som trengs for et presist kostnadsestimat.",
   sections: [
     {
       heading: "Hva vi lagrer",
@@ -209,7 +209,7 @@ export const NO_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Kontakt",
-      body: "Personvernspørsmål: kjell@autovere.com — KM TECH LABS, Kristiansand. Regionale vilkår: amerikansk personvern dekkes på /us/legal, og kanadiske PIPEDA- og Québec Lov 25-rettigheter på /ca/legal.",
+      body: "Personvernspørsmål: kjell@autovere.com — KM TECH LABS. Regionale vilkår: amerikansk personvern dekkes på /us/legal, og kanadiske PIPEDA- og Québec Lov 25-rettigheter på /ca/legal.",
     },
   ],
   note: DISCLAIMER,
@@ -248,7 +248,7 @@ export const NO_TERMS: InfoPageContent = {
     },
     {
       heading: "Lovvalg",
-      body: "Vilkårene er underlagt norsk rett med Kristiansand som avtalt verneting, uten at det berører ufravikelige forbrukerrettigheter i landet du bor i.",
+      body: "Vilkårene er underlagt norsk rett, uten at det berører ufravikelige forbrukerrettigheter i landet du bor i.",
     },
   ],
   note: DISCLAIMER,

@@ -73,7 +73,7 @@ autovere.com
 We built AutoVere because nobody could tell us what a road trip would actually cost.
 Not the route. The cost.
 It runs on published toll rates and open data, not on guesses from a language model. Same route, same car, same answer.
-Free to use, no account needed. From Kristiansand, Norway.
+Free to use, no account needed.
 
 ---
 
@@ -137,7 +137,7 @@ Free to use, no account needed. From Kristiansand, Norway.
 ### LinkedIn – the product story
 **Tolls, ferries and fuel are the invisible half of every road trip.**
 Maps apps tell you the distance and the time. Very few tell you the cost, and none of them tell you what it will be for your car.
-We built AutoVere in Kristiansand to fix that: pick two places, and get one number for tolls, ferries and fuel or charging. It is calculated from the real route and published rates, so the same trip always gives the same answer.
+We built AutoVere to fix that: pick two places, and get one number for tolls, ferries and fuel or charging. It is calculated from the real route and published rates, so the same trip always gives the same answer.
 What we learned building it:
 1. In Norway, the route matters more than the distance. Oslo → Bergen ranges from NOK 230 to NOK 415 in tolls.
 2. Ferries are the hidden cost. They are often larger than the gantry tolls.

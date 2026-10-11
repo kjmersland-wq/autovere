@@ -152,7 +152,7 @@ export const ZH_PARTNERS: InfoPageContent = {
     },
     {
       heading: "加入我们的合作网络",
-      body: "我们的团队常驻挪威克里斯蒂安桑，但很乐意与世界各地的伙伴展开合作。如果你所在的企业从事租车、旅行社或过路费相关业务，想聊聊系统对接、联合推广或数据合作，欢迎发邮件到 kjell@autovere.com，期待你的消息。",
+      body: "我们很乐意与世界各地的伙伴展开合作。如果你所在的企业从事租车、旅行社或过路费相关业务，想聊聊系统对接、联合推广或数据合作，欢迎发邮件到 kjell@autovere.com，期待你的消息。",
     },
   ],
   note: DISCLAIMER,
@@ -165,7 +165,7 @@ export const ZH_PARTNERS: InfoPageContent = {
 export const ZH_PRIVACY: InfoPageContent = {
   eyebrow: "隐私政策",
   title: "你的行程，只属于你自己。",
-  intro: "AutoVere 由挪威克里斯蒂安桑的 KM TECH LABS 运营。我们只收集为你提供准确费用估算所必需的最少信息。",
+  intro: "AutoVere 由 KM TECH LABS 运营。我们只收集为你提供准确费用估算所必需的最少信息。",
   sections: [
     {
       heading: "我们会存储的信息",
@@ -189,7 +189,7 @@ export const ZH_PRIVACY: InfoPageContent = {
     },
     {
       heading: "联系方式",
-      body: "隐私相关问题请联系 kjell@autovere.com（KM TECH LABS，挪威克里斯蒂安桑）。分地区说明：美国地区的隐私条款见 /us/legal，加拿大 PIPEDA 及魁北克省 25 号法案相关权利见 /ca/legal。",
+      body: "隐私相关问题请联系 kjell@autovere.com（KM TECH LABS）。分地区说明：美国地区的隐私条款见 /us/legal，加拿大 PIPEDA 及魁北克省 25 号法案相关权利见 /ca/legal。",
     },
   ],
   note: DISCLAIMER,
@@ -226,7 +226,7 @@ export const ZH_TERMS: InfoPageContent = {
     },
     {
       heading: "适用法律",
-      body: "本条款适用挪威法律，并以克里斯蒂安桑为约定管辖地，但不影响你所在国家/地区法律规定的强制性消费者保护权利。",
+      body: "本条款适用挪威法律，但不影响你所在国家/地区法律规定的强制性消费者保护权利。",
     },
   ],
   note: DISCLAIMER,

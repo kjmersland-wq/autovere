@@ -158,7 +158,7 @@ export const ES_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Únete a la red",
-      body: "Tenemos nuestra sede en Kristiansand, Noruega, pero nos encanta colaborar con socios de cualquier parte del mundo. Si gestionas una flota, un negocio de turismo o un servicio de peajes y quieres hablar de integración, comarketing o una alianza de datos, escríbenos a kjell@autovere.com — nos hará mucha ilusión saber de ti.",
+      body: "Nos encanta colaborar con socios de cualquier parte del mundo. Si gestionas una flota, un negocio de turismo o un servicio de peajes y quieres hablar de integración, comarketing o una alianza de datos, escríbenos a kjell@autovere.com — nos hará mucha ilusión saber de ti.",
     },
   ],
   note: DISCLAIMER,
@@ -173,7 +173,7 @@ export const ES_PRIVACY: InfoPageContent = {
   eyebrow: "Política de privacidad",
   title: "Tu ruta es asunto tuyo.",
   intro:
-    "AutoVere está operado por KM TECH LABS, Kristiansand, Noruega. Reducimos la recopilación de datos al mínimo necesario para ofrecerte una estimación de costes precisa.",
+    "AutoVere está operado por KM TECH LABS. Reducimos la recopilación de datos al mínimo necesario para ofrecerte una estimación de costes precisa.",
   sections: [
     {
       heading: "Qué almacenamos",
@@ -201,7 +201,7 @@ export const ES_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contacto",
-      body: "Preguntas sobre privacidad: kjell@autovere.com — KM TECH LABS, Kristiansand, Noruega. Avisos regionales: la privacidad en Estados Unidos se recoge en /us/legal, y los derechos de la PIPEDA canadiense y la Ley 25 de Quebec se recogen en /ca/legal.",
+      body: "Preguntas sobre privacidad: kjell@autovere.com — KM TECH LABS. Avisos regionales: la privacidad en Estados Unidos se recoge en /us/legal, y los derechos de la PIPEDA canadiense y la Ley 25 de Quebec se recogen en /ca/legal.",
     },
   ],
   note: DISCLAIMER,
@@ -240,7 +240,7 @@ export const ES_TERMS: InfoPageContent = {
     },
     {
       heading: "Ley aplicable",
-      body: "Estos términos se rigen por la legislación noruega, con Kristiansand como sede acordada, sin perjuicio de las protecciones obligatorias al consumidor de tu país de residencia.",
+      body: "Estos términos se rigen por la legislación noruega, sin perjuicio de las protecciones obligatorias al consumidor de tu país de residencia.",
     },
   ],
   note: DISCLAIMER,

@@ -189,7 +189,7 @@ export const GLOBAL_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Work with us",
-      body: "KM TECH LABS is based in Kristiansand, Norway. If you run a fleet, a tour business or a toll service and want to talk integration, co-marketing or data partnerships, get in touch at kjell@autovere.com.",
+      body: "We work with partners wherever they are. If you run a fleet, a tour business or a toll service and want to talk integration, co-marketing or data partnerships, get in touch at kjell@autovere.com.",
     },
   ],
   note: DISCLAIMER,
@@ -204,7 +204,7 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
   eyebrow: "Privacy policy",
   title: "Your route is your business.",
   intro:
-    "AutoVere is operated by KM TECH LABS, Kristiansand, Norway. We keep data collection to the minimum needed to give you an accurate cost estimate.",
+    "AutoVere is operated by KM TECH LABS. We keep data collection to the minimum needed to give you an accurate cost estimate.",
   sections: [
     {
       heading: "What we store",
@@ -245,7 +245,7 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Contact",
-      body: "Privacy questions: kjell@autovere.com — KM TECH LABS, Kristiansand, Norway. Regional notices: US privacy is covered on /us/legal, and Canadian PIPEDA and Québec Law 25 rights are covered on /ca/legal.",
+      body: "Privacy questions: kjell@autovere.com — KM TECH LABS. Regional notices: US privacy is covered on /us/legal, and Canadian PIPEDA and Québec Law 25 rights are covered on /ca/legal.",
     },
   ],
   note: DISCLAIMER,
@@ -292,7 +292,7 @@ export const GLOBAL_TERMS: InfoPageContent = {
     },
     {
       heading: "Governing law",
-      body: "These terms are governed by Norwegian law, with Kristiansand as the agreed venue, without prejudice to mandatory consumer protections in your country of residence.",
+      body: "These terms are governed by Norwegian law, without prejudice to mandatory consumer protections in your country of residence.",
     },
   ],
   note: DISCLAIMER,

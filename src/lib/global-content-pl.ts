@@ -158,7 +158,7 @@ export const PL_PARTNERS: InfoPageContent = {
     },
     {
       heading: "Dołącz do sieci partnerów",
-      body: "Mamy siedzibę w Kristiansand w Norwegii, ale chętnie współpracujemy z partnerami z całego świata. Prowadzisz flotę, firmę turystyczną albo usługę związaną z opłatami drogowymi i chcesz porozmawiać o integracji, wspólnym marketingu albo współpracy przy danych? Napisz do nas na kjell@autovere.com — z przyjemnością się odezwiemy.",
+      body: "Chętnie współpracujemy z partnerami z całego świata. Prowadzisz flotę, firmę turystyczną albo usługę związaną z opłatami drogowymi i chcesz porozmawiać o integracji, wspólnym marketingu albo współpracy przy danych? Napisz do nas na kjell@autovere.com — z przyjemnością się odezwiemy.",
     },
   ],
   note: DISCLAIMER,
@@ -173,7 +173,7 @@ export const PL_PRIVACY: InfoPageContent = {
   eyebrow: "Polityka prywatności",
   title: "Twoja trasa to Twoja sprawa.",
   intro:
-    "AutoVere jest prowadzone przez KM TECH LABS z siedzibą w Kristiansand w Norwegii. Ograniczamy zbieranie danych do minimum potrzebnego do stworzenia dokładnego szacunku kosztów.",
+    "AutoVere jest prowadzone przez KM TECH LABS. Ograniczamy zbieranie danych do minimum potrzebnego do stworzenia dokładnego szacunku kosztów.",
   sections: [
     {
       heading: "Co przechowujemy",
@@ -201,7 +201,7 @@ export const PL_PRIVACY: InfoPageContent = {
     },
     {
       heading: "Kontakt",
-      body: "Pytania dotyczące prywatności: kjell@autovere.com — KM TECH LABS, Kristiansand, Norwegia. Informacje regionalne: prywatność w USA jest opisana na /us/legal, a prawa wynikające z kanadyjskiej ustawy PIPEDA oraz quebeckiej Ustawy 25 na /ca/legal.",
+      body: "Pytania dotyczące prywatności: kjell@autovere.com — KM TECH LABS. Informacje regionalne: prywatność w USA jest opisana na /us/legal, a prawa wynikające z kanadyjskiej ustawy PIPEDA oraz quebeckiej Ustawy 25 na /ca/legal.",
     },
   ],
   note: DISCLAIMER,
@@ -240,7 +240,7 @@ export const PL_TERMS: InfoPageContent = {
     },
     {
       heading: "Prawo właściwe",
-      body: "Niniejsze warunki podlegają prawu norweskiemu, z Kristiansand jako uzgodnionym miejscem rozstrzygania sporów, bez uszczerbku dla bezwzględnie obowiązujących praw konsumenta w kraju Twojego zamieszkania.",
+      body: "Niniejsze warunki podlegają prawu norweskiemu, bez uszczerbku dla bezwzględnie obowiązujących praw konsumenta w kraju Twojego zamieszkania.",
     },
   ],
   note: DISCLAIMER,
