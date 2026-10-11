@@ -749,7 +749,7 @@ export const getPaymentLedger = createServerFn({ method: "GET" }).handler(
     const unavailable: PaddleEnv[] = [];
     results.forEach((r, i) => {
       if (r.status === "fulfilled") rows.push(...r.value);
-      else unavailable.push(envs[i]);
+      else unavailable.push(envs[i] ?? "sandbox");
     });
 
     if (rows.length === 0 && unavailable.length === envs.length) {
