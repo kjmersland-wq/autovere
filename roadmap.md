@@ -1,20 +1,14 @@
-# Roadmap
+# Migrering Stripe → Paddle (eksisterende Paddle-konto)
 
-- [x] Standardisere KM TECH LABS og globale flerspråklige SEO-signaler
-- [x] Gjøre sitemap og programmatisk SEO datadrevet
-- [x] Utvide europeisk POI-dekning med kuratert + live fallback
-- [x] Bygge lagret partnersøknad og admin-godkjenning
-- [x] Bygge tilgangskoder, kundekoder og sikker aktivering
-- [x] Bygge partnerprofil, koder/bruk og aggregert resultatdashboard
-- [x] Verifisere databasepolicies, språk, SEO, partnerflyt og responsive visninger
-
-## Kostnadsmotor (kontroll etter feilrapport)
-- [x] Fjerne skjult driftskostnad (0,04 €/km) fra totalen så kortene summerer
-- [x] Landspesifikke drivstoffpriser fra åpne offisielle kilder (EU Weekly Oil Bulletin, SSB, EIA, StatCan, FR instant) med delt cache
-- [x] Norske bompenger fra Statens vegvesen (NVDB bomstasjoner) matchet mot ruten
-- [x] Bruke brukerens eget forbruk (fine-tune/garasje) også for bensin/diesel
-- [x] Live ECB-valutakurser i visningen
-- [x] Vise prisgrunnlag (kilde + dato per land) i resultater og PDF
-- [x] Kontrollere vignettsatser 2026 og hint-tekster på alle språk
-- [x] Storebælt/Øresund-broavgifter (2026-tariff) når ruten faktisk krysser dem
-- [ ] USA/Canada bompenger per betalingsplass (i dag flat sats per delstat — mangler åpen kilde)
+- [ ] 1. `src/lib/paddle.server.ts` — Paddle API-klient (fetch, workerd-safe) + webhook-signaturverifisering (HMAC-SHA256, Paddle-Signature-header)
+- [ ] 2. `src/lib/paddle.ts` — klient: Paddle.js-lasting, PRICE_IDS-konfig, PRICE_MARKUP = 0.02, tier-mapping (erstatter src/lib/stripe.ts)
+- [ ] 3. `src/utils/payments.functions.ts` — createCheckoutSession via Paddle Transactions API, createPortalSession via Paddle customer portal API
+- [ ] 4. Ny webhook-route `/api/public/payments/paddle-webhook` — transaction.completed (engangs), subscription.created/updated/canceled
+- [ ] 5. Migrasjon: `paddle_customer_id`, `paddle_subscription_id`, `provider` på subscriptions; stripe-kolonner beholdes som legacy
+- [ ] 6. Erstatt StripeEmbeddedCheckout med Paddle overlay-checkout; oppdater useStripeCheckout → usePaddleCheckout
+- [ ] 7. Oppdater PricingTiers.tsx, ExportPaywallModal.tsx, useSubscription.ts til Paddle
+- [ ] 8. Priser × 1,02 i pricing-i18n.ts (penrunding) + foot-tekster Stripe → Paddle (14 språk)
+- [ ] 9. Personvern/vilkår: Stripe → Paddle (Merchant of Record)
+- [ ] 10. Secrets: PADDLE_API_KEY, PADDLE_WEBHOOK_SECRET, PADDLE_CLIENT_TOKEN (via add_secret)
+- [ ] 11. Typecheck + bygg
+- [ ] 12. Liste til bruker: filer endret + Paddle-oppgaver (produkter/priser, webhook-URL, domenegodkjenning)
