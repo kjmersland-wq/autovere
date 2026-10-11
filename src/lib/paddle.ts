@@ -81,7 +81,7 @@ function activePrefix(): string {
 
 /** Absolute return URL after Paddle checkout completes. */
 export function checkoutReturnUrl(): string {
-  return `${siteOrigin()}/checkout/return?back=${encodeURIComponent(`${activePrefix()}/pricing`)}`;
+  return `${siteOrigin()}/checkout/return?session_id=paddle&back=${encodeURIComponent(`${activePrefix()}/pricing`)}`;
 }
 
 /** Absolute return URL for the billing portal — keeps the active language/region. */
