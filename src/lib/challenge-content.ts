@@ -153,7 +153,7 @@ const EN: ChallengeContent = {
       "We would rather hand you the keys: pick a real journey, pick the car sitting on your driveway, use AutoVere as a Pro user, drive the route, and hold our calculation up against your receipts.",
       "If we are close, that is a story worth telling. If we are off, we want to know — and we would rather hear it from you than never hear it at all.",
     ],
-    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs",
   },
 
   steps: {
@@ -415,7 +415,7 @@ const NO: ChallengeContent = {
       "Vi gir deg heller nøklene selv: velg en ekte reise, velg bilen som står i oppkjørselen din, bruk AutoVere som Pro-bruker, kjør ruten — og hold beregningen vår opp mot kvitteringene dine.",
       "Treffer vi, er det en historie verdt å fortelle. Bommer vi, vil vi vite det — vi hører det heller fra deg enn at det aldri kommer fram.",
     ],
-    signature: "Kjell Mersland — grunnlegger av AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — grunnlegger av AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Slik fungerer Challenge",
@@ -678,7 +678,7 @@ const SE: ChallengeContent = {
       "Vi ger dig hellre nycklarna själv: välj en riktig resa, välj bilen som står i din uppfart, använd AutoVere som Pro-användare, kör rutten — och håll vår beräkning mot dina kvitton.",
       "Har vi rätt är det en historia värd att berätta. Har vi fel vill vi veta det — vi hör det hellre av dig än att det aldrig kommer fram.",
     ],
-    signature: "Kjell Mersland — grundare av AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — grundare av AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Så fungerar Challenge",
@@ -941,7 +941,7 @@ const DK: ChallengeContent = {
       "Vi giver dig hellere nøglerne selv: vælg en rigtig rejse, vælg bilen der står i din indkørsel, brug AutoVere som Pro-bruger, kør ruten — og hold vores beregning op mod dine kvitteringer.",
       "Rammer vi rigtigt, er det en historie værd at fortælle. Rammer vi forkert, vil vi gerne vide det — vi hører det hellere fra dig, end at det aldrig kommer frem.",
     ],
-    signature: "Kjell Mersland — grundlægger af AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — grundlægger af AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Sådan fungerer Challenge",
@@ -1204,7 +1204,7 @@ const FI: ChallengeContent = {
       "Annamme sinulle mieluummin avaimet: valitse oikea matka, valitse auto, joka on omalla pihallasi, käytä AutoVerea Pro-käyttäjänä, aja reitti — ja vertaa laskelmaamme kuitteihisi.",
       "Jos osumme oikeaan, siitä kannattaa kertoa. Jos osumme väärään, haluamme tietää sen — kuulemme sen mieluummin sinulta kuin että se ei tulisi koskaan ilmi.",
     ],
-    signature: "Kjell Mersland — AutoVeren perustaja · KM Tech Labs\",
+    signature: "Kjell Mersland — AutoVeren perustaja · KM Tech Labs",
   },
   steps: {
     eyebrow: "Näin Challenge toimii",
@@ -1467,7 +1467,7 @@ const US: ChallengeContent = {
       "We'd rather hand you the keys: pick a real trip, pick the car sitting in your driveway, use AutoVere as a Pro user, drive the route, and hold our numbers up against your receipts.",
       "If we're right, that's a story worth telling. If we're off, we want to know about it — we'd rather hear it from you than never hear it at all.",
     ],
-    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — Founder, AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "How the Challenge Works",
@@ -1730,7 +1730,7 @@ const DE: ChallengeContent = {
       "Wir geben Ihnen lieber die Schlüssel: Wählen Sie eine echte Reise, wählen Sie das Auto, das in Ihrer Einfahrt steht, nutzen Sie AutoVere als Pro-Nutzer, fahren Sie die Route — und halten Sie unsere Berechnung gegen Ihre Quittungen.",
       "Liegen wir richtig, ist das eine Geschichte wert, erzählt zu werden. Liegen wir falsch, wollen wir es wissen — und hören es lieber von Ihnen, als es nie zu erfahren.",
     ],
-    signature: "Kjell Mersland — Gründer von AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — Gründer von AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "So funktioniert die Challenge",
@@ -1993,7 +1993,7 @@ const NL: ChallengeContent = {
       "We geven je liever de sleutels: kies een echte reis, kies de auto die op je oprit staat, gebruik AutoVere als Pro-gebruiker, rijd de route — en leg onze berekening naast je bonnetjes.",
       "Hebben we gelijk, dan is dat een verhaal waard om te vertellen. Zitten we ernaast, dan willen we het weten — we horen het liever van jou dan dat het nooit aan het licht komt.",
     ],
-    signature: "Kjell Mersland — oprichter van AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — oprichter van AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Zo werkt de Challenge",
@@ -2256,7 +2256,7 @@ const FR: ChallengeContent = {
       "Nous préférons vous donner les clés : choisissez un vrai trajet, choisissez la voiture garée devant chez vous, utilisez AutoVere en tant qu'utilisateur Pro, roulez l'itinéraire — et confrontez notre calcul à vos reçus.",
       "Si nous avons raison, c'est une histoire qui mérite d'être racontée. Si nous avons tort, nous voulons le savoir — et nous préférons l'apprendre de vous plutôt que de ne jamais l'apprendre.",
     ],
-    signature: "Kjell Mersland — fondateur d'AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — fondateur d'AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Comment fonctionne le Challenge",
@@ -2519,7 +2519,7 @@ const PL: ChallengeContent = {
       "Wolimy dać Ci klucze: wybierz prawdziwą podróż, wybierz samochód, który stoi na Twoim podjeździe, korzystaj z AutoVere jako użytkownik Pro, przejedź trasę — i zestaw nasze wyliczenie ze swoimi paragonami.",
       "Jeśli mamy rację, to historia, którą warto opowiedzieć. Jeśli się mylimy, chcemy o tym wiedzieć — wolimy usłyszeć to od Ciebie, niż nigdy się o tym nie dowiedzieć.",
     ],
-    signature: "Kjell Mersland — założyciel AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — założyciel AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Jak działa Challenge",
@@ -2782,7 +2782,7 @@ const ES: ChallengeContent = {
       "Preferimos darte las llaves: elige un viaje real, elige el coche que tienes aparcado en la puerta de tu casa, usa AutoVere como usuario Pro, conduce la ruta — y contrasta nuestro cálculo con tus recibos.",
       "Si acertamos, es una historia que merece la pena contar. Si nos equivocamos, queremos saberlo — preferimos que nos lo digas tú a no enterarnos nunca.",
     ],
-    signature: "Kjell Mersland — fundador de AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — fundador de AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Cómo funciona el Challenge",
@@ -3045,7 +3045,7 @@ const IT: ChallengeContent = {
       "Preferiamo darti le chiavi: scegli un viaggio vero, scegli l'auto parcheggiata nel tuo vialetto, usa AutoVere come utente Pro, guida il percorso — e confronta il nostro calcolo con le tue ricevute.",
       "Se abbiamo ragione, è una storia che vale la pena raccontare. Se sbagliamo, vogliamo saperlo — preferiamo saperlo da te piuttosto che non scoprirlo mai.",
     ],
-    signature: "Kjell Mersland — fondatore di AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — fondatore di AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Come funziona il Challenge",
@@ -3309,7 +3309,7 @@ const JA: ChallengeContent = {
       "むしろ、鍵をお渡ししたいのです。実際の旅程を選び、いつも運転している車を選び、Proユーザーとして AutoVereを使い、実際にその道を走ってみてください。そして、私たちの計算結果をご自身の領収書と照らし合わせてみてください。",
       "もし数字が近ければ、それは記事にする価値のある話になるはずです。もしずれていたら、私たちはそれを知りたいのです。黙って見過ごされるより、あなたから教えていただくほうが、ずっとありがたいのです。",
     ],
-    signature: "Kjell Mersland — AutoVere創業者・KM Tech Labs\",
+    signature: "Kjell Mersland — AutoVere創業者・KM Tech Labs",
   },
   steps: {
     eyebrow: "Challengeの流れ",
@@ -3563,7 +3563,7 @@ const PT: ChallengeContent = {
       "Preferimos dar-te as chaves: escolhe uma viagem verdadeira, escolhe o carro que tens na garagem, usa o AutoVere como utilizador Pro, conduz o percurso — e compara o nosso cálculo com os teus recibos.",
       "Se tivermos razão, é uma história que vale a pena contar. Se estivermos errados, queremos sabê-lo — preferimos saber por ti do que nunca vir a descobrir.",
     ],
-    signature: "Kjell Mersland — fundador do AutoVere · KM Tech Labs\",
+    signature: "Kjell Mersland — fundador do AutoVere · KM Tech Labs",
   },
   steps: {
     eyebrow: "Como funciona o Challenge",
@@ -3826,7 +3826,7 @@ const ZH: ChallengeContent = {
       "我们更愿意把钥匙交到您手上：选一段真实的行程，开您车库里那辆真正的车，以Pro用户身份使用AutoVere，把这段路实际开完，再将我们的计算结果与您的真实收据对照。",
       "如果数字相近，这会是一个值得报道的故事。如果有出入，我们同样想知道——比起被悄悄略过，我们更希望这份反馈来自您。",
     ],
-    signature: "Kjell Mersland — AutoVere创始人 · KM Tech Labs\",
+    signature: "Kjell Mersland — AutoVere创始人 · KM Tech Labs",
   },
   steps: {
     eyebrow: "Challenge如何进行",
