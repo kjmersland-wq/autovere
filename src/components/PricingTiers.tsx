@@ -3,15 +3,14 @@ import { Check, ExternalLink, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { useStripeCheckout } from "@/hooks/useStripeCheckout";
+import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { convert, formatCurrency, useCurrency } from "@/lib/currency";
 import { useLocale, useT } from "@/lib/i18n";
 import { parsePrice, pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib/pricing-i18n";
-import { billingReturnUrl, checkoutReturnUrl, getStripeEnvironment, PRICE_IDS } from "@/lib/stripe";
+import { checkoutReturnUrl, PRICE_IDS } from "@/lib/paddle";
 import type { RegionKey } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
@@ -31,7 +30,7 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
   const tiers = tiersFor(locale, region);
   const { user, openAuth } = useAuth();
   const { tier: currentTier, isActive, cancelAtPeriodEnd, periodEnd, pastDue } = useSubscription();
-  const { openCheckout, closeCheckout, isOpen, checkoutElement } = useStripeCheckout();
+  const { openCheckout } = usePaddleCheckout();
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
   const [portalLoading, setPortalLoading] = useState(false);
 
@@ -69,7 +68,7 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
     setPortalLoading(true);
     try {
       const result = await createPortalSession({
-        data: { returnUrl: billingReturnUrl(), environment: getStripeEnvironment() },
+        data: { returnUrl: billingReturnUrl() },
       });
       if ("error" in result) throw new Error(result.error);
       window.open(result.url, "_blank", "noopener");
@@ -193,15 +192,6 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
       <p className="mt-8 text-center text-xs text-muted-foreground">
         {L.foot}
       </p>
-
-      <Dialog open={isOpen} onOpenChange={(open) => !open && closeCheckout()}>
-        <DialogContent className="max-h-[90vh] max-w-3xl overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle>{L.checkout}</DialogTitle>
-          </DialogHeader>
-          {checkoutElement}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 }
