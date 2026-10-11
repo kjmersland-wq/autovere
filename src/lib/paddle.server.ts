@@ -1,13 +1,16 @@
 /**
  * Paddle Billing — server-side helpers (workerd-safe: fetch + Web Crypto only).
  *
- * Required secrets (set via Lovable project secrets):
- *   PADDLE_API_KEY          — Paddle API key (server-side, never exposed to the browser)
- *   PADDLE_WEBHOOK_SECRET   — webhook signing secret from Paddle → Notifications
- *   PADDLE_ENV              — "sandbox" or "live"
+ * Uses Lovable's built-in payments connection: API calls are routed through
+ * the connector gateway, and secrets are provisioned automatically:
+ *   PADDLE_SANDBOX_API_KEY / PADDLE_LIVE_API_KEY       — gateway connection keys
+ *   PAYMENTS_SANDBOX_WEBHOOK_SECRET / PAYMENTS_LIVE_WEBHOOK_SECRET
+ *   LOVABLE_API_KEY                                    — project gateway auth
  */
 
 export type PaddleEnv = "sandbox" | "live";
+
+const GATEWAY_BASE_URL = "https://connector-gateway.lovable.dev/paddle";
 
 const getEnv = (key: string): string => {
   const value = process.env[key];
@@ -15,24 +18,33 @@ const getEnv = (key: string): string => {
   return value;
 };
 
-export function paddleEnv(): PaddleEnv {
-  return process.env["PADDLE_ENV"] === "live" ? "live" : "sandbox";
+export function getConnectionApiKey(env: PaddleEnv): string {
+  return env === "sandbox" ? getEnv("PADDLE_SANDBOX_API_KEY") : getEnv("PADDLE_LIVE_API_KEY");
 }
 
-function apiBase(): string {
-  return paddleEnv() === "live" ? "https://api.paddle.com" : "https://sandbox-api.paddle.com";
+/** Authenticated Paddle REST call through the connector gateway. */
+export async function gatewayFetch(env: PaddleEnv, path: string, init?: RequestInit): Promise<Response> {
+  const connectionApiKey = getConnectionApiKey(env);
+  const lovableApiKey = getEnv("LOVABLE_API_KEY");
+  return fetch(`${GATEWAY_BASE_URL}${path}`, {
+    ...init,
+    headers: {
+      "Content-Type": "application/json",
+      "X-Connection-Api-Key": connectionApiKey,
+      "Lovable-API-Key": lovableApiKey,
+      ...init?.headers,
+    },
+  });
 }
 
+/** Typed Paddle API call; throws with Paddle's error detail on failure. */
 export async function paddleApi<T = unknown>(
+  env: PaddleEnv,
   path: string,
   init?: { method?: string; body?: unknown },
 ): Promise<T> {
-  const res = await fetch(`${apiBase()}${path}`, {
+  const res = await gatewayFetch(env, path, {
     method: init?.method ?? "GET",
-    headers: {
-      Authorization: `Bearer ${getEnv("PADDLE_API_KEY")}`,
-      "Content-Type": "application/json",
-    },
     ...(init?.body !== undefined ? { body: JSON.stringify(init.body) } : {}),
   });
   const json = (await res.json().catch(() => null)) as {
@@ -51,12 +63,17 @@ export function getPaddleErrorMessage(error: unknown): string {
   return "Paddle request failed";
 }
 
+export function getWebhookSecret(env: PaddleEnv): string {
+  return env === "sandbox" ? getEnv("PAYMENTS_SANDBOX_WEBHOOK_SECRET") : getEnv("PAYMENTS_LIVE_WEBHOOK_SECRET");
+}
+
 /**
  * Verify a Paddle webhook signature.
  * Header: `Paddle-Signature: ts=<unix>;h1=<hex hmac-sha256 of "<ts>:<raw body>">`
  */
 export async function verifyPaddleWebhook(
   req: Request,
+  env: PaddleEnv,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any -- Paddle event payloads stay loosely typed
 ): Promise<{ event_type: string; data: any }> {
   const signature = req.headers.get("paddle-signature");
@@ -77,7 +94,7 @@ export async function verifyPaddleWebhook(
 
   const key = await crypto.subtle.importKey(
     "raw",
-    new TextEncoder().encode(getEnv("PADDLE_WEBHOOK_SECRET")),
+    new TextEncoder().encode(getWebhookSecret(env)),
     { name: "HMAC", hash: "SHA-256" },
     false,
     ["sign"],
