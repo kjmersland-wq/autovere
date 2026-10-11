@@ -51,6 +51,8 @@ async function handleSubscription(subscription: any, env: string) {
       {
         user_id: userId,
         provider: "paddle",
+        stripe_subscription_id: "",
+        stripe_customer_id: "",
         paddle_subscription_id: subscription.id,
         paddle_customer_id: subscription.customer_id ?? "",
         product_id: subscription.items?.[0]?.product?.id ?? "unknown",
@@ -102,6 +104,8 @@ async function handleTransactionCompleted(transaction: any, env: string) {
       {
         user_id: userId,
         provider: "paddle",
+        stripe_subscription_id: "",
+        stripe_customer_id: "",
         paddle_subscription_id: transaction.id,
         paddle_customer_id: transaction.customer_id ?? "",
         product_id: transaction.items?.[0]?.product?.id ?? "unknown",
