@@ -231,6 +231,19 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
       body: "We use essential storage to remember your region, language and garage. Any analytics we run is aggregated and cannot identify you individually.",
     },
     {
+      heading: "Who we share data with",
+      items: [
+        "Paddle.com, our Merchant of Record, processes payments, subscriptions, tax and invoicing when you buy a plan — Paddle acts as an independent controller for that data",
+        "Hosting and infrastructure providers that keep the site running",
+        "Professional advisers (legal, accounting) where needed",
+        "Authorities, only where required by law",
+      ],
+    },
+    {
+      heading: "Legal basis and retention",
+      body: "We process trip inputs to perform the service you asked for (contract), use aggregated statistics under our legitimate interest in improving the planner, and meet legal obligations where required. Data is kept only as long as needed for these purposes, then deleted or anonymised.",
+    },
+    {
       heading: "Contact",
       body: "Privacy questions: kjell@autovere.com — KM TECH LABS, Kristiansand, Norway. Regional notices: US privacy is covered on /us/legal, and Canadian PIPEDA and Québec Law 25 rights are covered on /ca/legal.",
     },
@@ -264,6 +277,14 @@ export const GLOBAL_TERMS: InfoPageContent = {
     {
       heading: "Third-party links and services",
       body: "Links to toll operators, ferry companies and charging networks are provided for convenience. Those services have their own terms and pricing, and KM TECH LABS is not responsible for their content or transactions.",
+    },
+    {
+      heading: "Payments and subscriptions",
+      body: "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns. Payment, billing, tax, cancellation and refund mechanics are governed by Paddle's Buyer Terms (paddle.com/legal/checkout-buyer-terms). Subscriptions renew automatically until cancelled, and you can manage or cancel your plan at any time via the Paddle customer portal.",
+    },
+    {
+      heading: "Intellectual property and acceptable use",
+      body: "AutoVere, its software, design and branding are owned by KM TECH LABS. We grant you a limited, non-exclusive, non-transferable right to use the service within your plan. You must not misuse the service: no unlawful use, fraud or spam, no infringement of others' rights, and no interference with the service (malware, probing, scraping or circumvention of technical limits). We may suspend or terminate access for material breach, non-payment, security or fraud risk, or repeated violations.",
     },
     {
       heading: "Liability",
