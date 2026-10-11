@@ -9,14 +9,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useStripeCheckout } from "@/hooks/useStripeCheckout";
+import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { useRouterState } from "@tanstack/react-router";
 
 import { useLocale, useTr } from "@/lib/i18n";
 import { proYearlyPrice, tripPassPrice } from "@/lib/pricing-i18n";
-import { checkoutReturnUrl, PRICE_IDS } from "@/lib/stripe";
+import { PRICE_IDS } from "@/lib/paddle";
 import { regionFromPath } from "@/lib/site-basics";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
 
@@ -45,7 +45,7 @@ export function ExportPaywallModal({
   const price = tripPassPrice(locale, regionFromPath(pathname));
   const yearly = proYearlyPrice(locale, regionFromPath(pathname));
   const { user, openAuth } = useAuth();
-  const { openCheckout, isOpen, checkoutElement } = useStripeCheckout();
+  const { openCheckout } = usePaddleCheckout();
 
   const startCheckout = (priceId: string) => {
     if (!PURCHASES_ENABLED) {
@@ -59,7 +59,7 @@ export function ExportPaywallModal({
     }
     void trackEvent("pro_upgrade_clicked", { source: "export-paywall", priceId });
     onOpenChange(false);
-    openCheckout({ priceId, returnUrl: checkoutReturnUrl() });
+    openCheckout({ priceId });
   };
 
   return (
@@ -110,8 +110,6 @@ export function ExportPaywallModal({
           </div>
         </DialogContent>
       </Dialog>
-
-      {isOpen && checkoutElement}
     </>
   );
 }
