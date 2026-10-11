@@ -6,8 +6,10 @@ import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/checkout/return")({
-  validateSearch: (search: Record<string, unknown>): { session_id?: string } =>
-    typeof search["session_id"] === "string" ? { session_id: search["session_id"] } : {},
+  validateSearch: (search: Record<string, unknown>): { session_id?: string } => {
+    const id = search["session_id"] ?? search["transaction_id"] ?? search["_ptxn"];
+    return typeof id === "string" ? { session_id: id } : {};
+  },
   head: () => ({
     meta: [
       { title: "Checkout complete — AutoVere" },

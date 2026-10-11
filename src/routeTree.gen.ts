@@ -74,7 +74,7 @@ import { Route as CaFrFaqRouteImport } from './routes/ca.fr.faq'
 import { Route as CaFrHowItWorksRouteImport } from './routes/ca.fr.how-it-works'
 import { Route as CaFrLegalRouteImport } from './routes/ca.fr.legal'
 import { Route as CaFrPartnersRouteImport } from './routes/ca.fr.partners'
-import { Route as ApiPublicPaymentsWebhookRouteImport } from './routes/api/public/payments/webhook'
+import { Route as ApiPublicPaymentsPaddleWebhookRouteImport } from './routes/api/public/payments/paddle-webhook'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -401,10 +401,10 @@ const CaFrPartnersRoute = CaFrPartnersRouteImport.update({
   path: '/fr/partners',
   getParentRoute: () => CaRoute,
 } as any)
-const ApiPublicPaymentsWebhookRoute =
-  ApiPublicPaymentsWebhookRouteImport.update({
-    id: '/api/public/payments/webhook',
-    path: '/api/public/payments/webhook',
+const ApiPublicPaymentsPaddleWebhookRoute =
+  ApiPublicPaymentsPaddleWebhookRouteImport.update({
+    id: '/api/public/payments/paddle-webhook',
+    path: '/api/public/payments/paddle-webhook',
     getParentRoute: () => rootRouteImport,
   } as any)
 
@@ -474,7 +474,7 @@ export interface FileRoutesByFullPath {
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
   '/ca/fr/partners': typeof CaFrPartnersRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/payments/paddle-webhook': typeof ApiPublicPaymentsPaddleWebhookRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -540,7 +540,7 @@ export interface FileRoutesByTo {
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
   '/ca/fr/partners': typeof CaFrPartnersRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/payments/paddle-webhook': typeof ApiPublicPaymentsPaddleWebhookRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -609,7 +609,7 @@ export interface FileRoutesById {
   '/ca/fr/how-it-works': typeof CaFrHowItWorksRoute
   '/ca/fr/legal': typeof CaFrLegalRoute
   '/ca/fr/partners': typeof CaFrPartnersRoute
-  '/api/public/payments/webhook': typeof ApiPublicPaymentsWebhookRoute
+  '/api/public/payments/paddle-webhook': typeof ApiPublicPaymentsPaddleWebhookRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -679,7 +679,7 @@ export interface FileRouteTypes {
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
     | '/ca/fr/partners'
-    | '/api/public/payments/webhook'
+    | '/api/public/payments/paddle-webhook'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -745,7 +745,7 @@ export interface FileRouteTypes {
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
     | '/ca/fr/partners'
-    | '/api/public/payments/webhook'
+    | '/api/public/payments/paddle-webhook'
   id:
     | '__root__'
     | '/'
@@ -813,7 +813,7 @@ export interface FileRouteTypes {
     | '/ca/fr/how-it-works'
     | '/ca/fr/legal'
     | '/ca/fr/partners'
-    | '/api/public/payments/webhook'
+    | '/api/public/payments/paddle-webhook'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -858,7 +858,7 @@ export interface RootRouteChildren {
   LangRegionPageRoute: typeof LangRegionPageRoute
   LangRoutesSlugRoute: typeof LangRoutesSlugRoute
   ApiPublicCostsRoute: typeof ApiPublicCostsRoute
-  ApiPublicPaymentsWebhookRoute: typeof ApiPublicPaymentsWebhookRoute
+  ApiPublicPaymentsPaddleWebhookRoute: typeof ApiPublicPaymentsPaddleWebhookRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -1318,11 +1318,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CaFrPartnersRouteImport
       parentRoute: typeof CaRoute
     }
-    '/api/public/payments/webhook': {
-      id: '/api/public/payments/webhook'
-      path: '/api/public/payments/webhook'
-      fullPath: '/api/public/payments/webhook'
-      preLoaderRoute: typeof ApiPublicPaymentsWebhookRouteImport
+    '/api/public/payments/paddle-webhook': {
+      id: '/api/public/payments/paddle-webhook'
+      path: '/api/public/payments/paddle-webhook'
+      fullPath: '/api/public/payments/paddle-webhook'
+      preLoaderRoute: typeof ApiPublicPaymentsPaddleWebhookRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -1434,7 +1434,7 @@ const rootRouteChildren: RootRouteChildren = {
   LangRegionPageRoute: LangRegionPageRoute,
   LangRoutesSlugRoute: LangRoutesSlugRoute,
   ApiPublicCostsRoute: ApiPublicCostsRoute,
-  ApiPublicPaymentsWebhookRoute: ApiPublicPaymentsWebhookRoute,
+  ApiPublicPaymentsPaddleWebhookRoute: ApiPublicPaymentsPaddleWebhookRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
