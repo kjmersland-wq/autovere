@@ -1,10 +1,14 @@
 # Roadmap
 
-## Paddle-migrering (Stripe → Paddle, innebygd kobling)
-- [x] Koblet til Paddle med egen konto (alias kjmersland+autovere2@gmail.com)
-- [x] Slettet Stripe-filer og -pakker
-- [x] Omskrevet til gateway-basert Paddle (paddle.server.ts, webhook.ts på kanonisk sti)
-- [x] Priser ×1,02 i pricing-i18n.ts, produkter opprettet (trip_pass, pro_monthly/yearly, business_monthly)
-- [x] PaymentTestModeBanner i root, typesjekk grønn
-- [ ] Bruker: verifiser identitet i Payments-panelet for å gå live
-- [ ] Bruker: test kjøp i preview med testkort 4242 4242 4242 4242
+## Creem-migrering (Paddle → Creem)
+- [x] Slettet Paddle-filer (paddle.ts, paddle.server.ts, usePaddleCheckout)
+- [x] Creem server-klient + webhook-verifisering (creem.server.ts, HMAC-SHA256)
+- [x] Checkout via Creem hosted side (payments.functions.ts, useCreemCheckout)
+- [x] Webhook: checkout.completed, subscription.*, refund.created → subscriptions-tabellen
+- [x] Priser oppdatert alle språk (Pro €8.15/mnd, €47/år, Fleet €18.39, Trip Pass €7.33)
+- [x] Juridiske tekster + admin + KM TECH LABS-videresending → Creem
+- [x] Typesjekk og bygg grønne
+- [ ] Bruker: lim inn CREEM_API_KEY + CREEM_WEBHOOK_SECRET (sikkert skjema sendt)
+- [ ] Bruker: oppgi de 4 Creem produkt-ID-ene (prod_...) → legges i src/lib/creem.ts
+- [ ] Bruker: pek Creem-webhook til https://www.autovere.com/api/public/payments/webhook
+- [ ] Test kjøp i testmodus, deretter sett CREEM_TEST_MODE=false

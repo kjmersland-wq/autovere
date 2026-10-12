@@ -1,11 +1,12 @@
-/* eslint-disable @typescript-eslint/no-explicit-any -- Paddle event payloads stay loosely typed on purpose. */
+/* eslint-disable @typescript-eslint/no-explicit-any -- Creem event payloads stay loosely typed on purpose. */
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 
 import type { Database } from "@/integrations/supabase/types";
 
+import { planKeyForProductId } from "@/lib/creem";
+import { verifyCreemWebhook } from "@/lib/creem.server";
 import { passDays } from "@/lib/pass-durations";
-import { gatewayFetch, verifyPaddleWebhook, type PaddleEnv } from "@/lib/paddle.server";
 import { forwardToKmTechlabs } from "@/lib/km-techlabs.server";
 
 let _supabase: ReturnType<typeof createClient<Database>> | null = null;
@@ -19,6 +20,27 @@ function getSupabase() {
   return _supabase;
 }
 
+const environment = () => (process.env["CREEM_TEST_MODE"] === "true" ? "sandbox" : "live");
+
+/** Internal plan key ("pro_monthly") from a Creem product id, or null. */
+function planKeyFrom(entity: any): string | null {
+  const productId =
+    typeof entity?.product === "string" ? entity.product : (entity?.product?.id ?? entity?.product_id);
+  const key = planKeyForProductId(productId);
+  if (!key) return null;
+  // Map client-side keys to the historical price keys stored in the database.
+  return { tripPass: "trip_pass", proMonthly: "pro_monthly", proYearly: "pro_yearly", businessMonthly: "business_monthly" }[key] ?? null;
+}
+
+function userIdFrom(entity: any): string | undefined {
+  return entity?.metadata?.userId ?? entity?.checkout?.metadata?.userId ?? undefined;
+}
+
+function customerIdFrom(entity: any): string {
+  const c = entity?.customer;
+  return (typeof c === "string" ? c : c?.id) ?? entity?.customer_id ?? "";
+}
+
 function mapStatus(status: string | undefined): string {
   switch (status) {
     case "active":
@@ -27,113 +49,83 @@ function mapStatus(status: string | undefined): string {
     case "paused":
       return status;
     case "canceled":
+    case "scheduled_cancel":
       return "canceled";
+    case "expired":
+    case "unpaid":
+      return "expired";
     default:
       return "active";
   }
 }
 
-/** Human-readable price id (external_id) set when the price was created. */
-function priceExternalId(entity: any): string | undefined {
-  return entity?.items?.[0]?.price?.import_meta?.external_id ?? undefined;
-}
-
-/** Fallback when the event omits import_meta: look the price up, then parse "Price for <key>". */
-async function resolvePriceKey(entity: any, env: PaddleEnv): Promise<string | undefined> {
-  const direct = priceExternalId(entity);
-  if (direct) return direct;
-  const price = entity?.items?.[0]?.price;
-  if (price?.id) {
-    try {
-      const res = await gatewayFetch(env, `/prices/${price.id}`);
-      const json: any = await res.json();
-      const key = json?.data?.import_meta?.external_id;
-      if (key) return key;
-    } catch (e) {
-      console.warn("Price lookup failed", e);
-    }
-  }
-  const m = /^Price for ([a-z0-9_]+)$/.exec(price?.description ?? "");
-  return m?.[1];
-}
-
-function productExternalId(entity: any): string | undefined {
-  return (
-    entity?.items?.[0]?.product?.import_meta?.external_id ??
-    entity?.items?.[0]?.price?.product?.import_meta?.external_id ??
-    undefined
-  );
-}
-
-async function handleSubscription(subscription: any, env: PaddleEnv) {
-  const userId = subscription.custom_data?.userId;
+/** subscription.active / paid / update / trialing / paused — upsert the row. */
+async function handleSubscription(sub: any) {
+  const userId = userIdFrom(sub);
   if (!userId) {
-    console.error("Paddle subscription without userId in custom_data:", subscription.id);
+    console.error("Creem subscription without userId in metadata:", sub.id);
     return;
   }
-  const priceId = await resolvePriceKey(subscription, env);
-  const productId = productExternalId(subscription) ?? (priceId ? priceId.replace(/_(monthly|yearly)$/, "") : undefined);
-  if (!priceId || !productId) {
-    console.warn("Skipping subscription: missing importMeta.externalId", {
-      rawPriceId: subscription.items?.[0]?.price?.id,
-    });
+  const priceKey = planKeyFrom(sub);
+  if (!priceKey) {
+    console.warn("Skipping subscription: unknown product", { product: sub.product });
     return;
   }
-  const period = subscription.current_billing_period;
   await getSupabase()
     .from("subscriptions")
     .upsert(
       {
         user_id: userId,
-        provider: "paddle",
+        provider: "creem",
         stripe_subscription_id: null,
         stripe_customer_id: null,
-        paddle_subscription_id: subscription.id,
-        paddle_customer_id: subscription.customer_id ?? "",
-        product_id: productId,
-        price_id: priceId,
-        status: mapStatus(subscription.status),
-        current_period_start: period?.starts_at ?? null,
-        current_period_end: period?.ends_at ?? null,
-        cancel_at_period_end: subscription.scheduled_change?.action === "cancel",
-        environment: env,
+        paddle_subscription_id: sub.id,
+        paddle_customer_id: customerIdFrom(sub),
+        product_id: priceKey.replace(/_(monthly|yearly)$/, ""),
+        price_id: priceKey,
+        status: mapStatus(sub.status),
+        current_period_start: sub.current_period_start_date ?? sub.current_period_start ?? null,
+        current_period_end: sub.current_period_end_date ?? sub.current_period_end ?? null,
+        cancel_at_period_end: sub.status === "scheduled_cancel" || sub.canceled_at != null,
+        environment: environment(),
         updated_at: new Date().toISOString(),
       },
       { onConflict: "paddle_subscription_id" },
     );
 }
 
-async function handleSubscriptionCanceled(subscription: any, env: PaddleEnv) {
+/** subscription.canceled / expired / unpaid — mark the existing row. */
+async function handleSubscriptionEnded(sub: any) {
   await getSupabase()
     .from("subscriptions")
-    .update({ status: "canceled", updated_at: new Date().toISOString() })
-    .eq("paddle_subscription_id", subscription.id)
-    .eq("environment", env);
+    .update({ status: mapStatus(sub.status), updated_at: new Date().toISOString() })
+    .eq("paddle_subscription_id", sub.id)
+    .eq("environment", environment());
 }
 
 /**
- * One-time passes (Trip Pass) arrive as completed transactions without a
- * subscription. Record a time-limited row so the buyer gets access.
- * Safe to receive twice: the transaction id is the unique key.
+ * checkout.completed for a one-time product (Trip Pass): record a
+ * time-limited row. Idempotent — the checkout id is the unique key, so a
+ * duplicate delivery cannot extend the pass.
  */
-async function handleTransactionCompleted(transaction: any, env: PaddleEnv) {
-  if (transaction.subscription_id) return; // recurring — handled by subscription events
-  if (transaction.status !== "completed" && transaction.status !== "paid") return;
-  const userId = transaction.custom_data?.userId;
+async function handleCheckoutCompleted(checkout: any) {
+  const order = checkout?.order;
+  if (!order || order.type === "recurring") return; // subscriptions handled by subscription.* events
+  if (order.status !== "paid" && order.status !== "completed") return;
+
+  const userId = userIdFrom(checkout) ?? userIdFrom(order);
   if (!userId) {
-    console.error("Paddle transaction without userId in custom_data:", transaction.id);
+    console.error("Creem checkout without userId in metadata:", checkout.id);
     return;
   }
-  const priceKey = await resolvePriceKey(transaction, env);
+  const priceKey = planKeyFrom(order) ?? planKeyFrom(checkout);
   if (!priceKey) {
-    console.warn("Skipping transaction: missing importMeta.externalId", {
-      rawPriceId: transaction.items?.[0]?.price?.id,
-    });
+    console.warn("Skipping checkout: unknown product", { product: order.product });
     return;
   }
   const days = passDays(priceKey);
   if (!days) {
-    console.error("Paddle one-time purchase for a price with no pass duration:", priceKey);
+    console.error("Creem one-time purchase for a plan with no pass duration:", priceKey);
     return;
   }
   const now = new Date();
@@ -143,18 +135,18 @@ async function handleTransactionCompleted(transaction: any, env: PaddleEnv) {
     .upsert(
       {
         user_id: userId,
-        provider: "paddle",
+        provider: "creem",
         stripe_subscription_id: null,
         stripe_customer_id: null,
-        paddle_subscription_id: transaction.id,
-        paddle_customer_id: transaction.customer_id ?? "",
-        product_id: productExternalId(transaction) ?? priceKey,
+        paddle_subscription_id: checkout.id,
+        paddle_customer_id: customerIdFrom(order) || customerIdFrom(checkout),
+        product_id: priceKey,
         price_id: priceKey,
         status: "active",
         current_period_start: now.toISOString(),
         current_period_end: end.toISOString(),
         cancel_at_period_end: true,
-        environment: env,
+        environment: environment(),
         updated_at: now.toISOString(),
       },
       { onConflict: "paddle_subscription_id" },
@@ -162,37 +154,53 @@ async function handleTransactionCompleted(transaction: any, env: PaddleEnv) {
   if (error) throw error;
 }
 
+/** refund.created — revoke access for the refunded order/subscription. */
+async function handleRefund(refund: any) {
+  const ref = refund?.subscription ?? refund?.order ?? refund?.transaction;
+  if (!ref) return;
+  await getSupabase()
+    .from("subscriptions")
+    .update({ status: "canceled", updated_at: new Date().toISOString() })
+    .eq("paddle_subscription_id", typeof ref === "string" ? ref : ref.id)
+    .eq("environment", environment());
+}
+
 export const Route = createFileRoute("/api/public/payments/webhook")({
   server: {
     handlers: {
       POST: async ({ request }) => {
-        const url = new URL(request.url);
-        const env: PaddleEnv = url.searchParams.get("env") === "live" ? "live" : "sandbox";
         try {
-          const event = await verifyPaddleWebhook(request, env);
-          switch (event.event_type) {
-            case "subscription.created":
-            case "subscription.updated":
-            case "subscription.activated":
-            case "subscription.resumed":
-              await handleSubscription(event.data, env);
+          const event = await verifyCreemWebhook(request);
+          switch (event.eventType) {
+            case "checkout.completed":
+              await handleCheckoutCompleted(event.object);
+              break;
+            case "subscription.active":
+            case "subscription.paid":
+            case "subscription.update":
+            case "subscription.trialing":
+            case "subscription.paused":
+            case "subscription.past_due":
+            case "subscription.scheduled_cancel":
+              await handleSubscription(event.object);
               break;
             case "subscription.canceled":
-              await handleSubscriptionCanceled(event.data, env);
+            case "subscription.expired":
+            case "subscription.unpaid":
+              await handleSubscriptionEnded(event.object);
               break;
-            case "transaction.completed":
-            case "transaction.paid":
-              await handleTransactionCompleted(event.data, env);
+            case "refund.created":
+              await handleRefund(event.object);
               break;
             default:
-              console.log("Unhandled Paddle event:", event.event_type);
+              console.log("Unhandled Creem event:", event.eventType);
           }
           // Mirror every verified event to the KM TECH LABS accounting site.
-          // Never throws, so a failed forward cannot trigger Paddle retries.
-          await forwardToKmTechlabs(event as any, env);
+          // Never throws, so a failed forward cannot trigger Creem retries.
+          await forwardToKmTechlabs(event as any, environment());
           return Response.json({ received: true });
         } catch (e) {
-          console.error("Paddle webhook error:", e);
+          console.error("Creem webhook error:", e);
           return new Response("Webhook error", { status: 400 });
         }
       },

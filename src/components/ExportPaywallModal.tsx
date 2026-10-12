@@ -9,14 +9,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { useCreemCheckout } from "@/hooks/useCreemCheckout";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { useRouterState } from "@tanstack/react-router";
 
 import { useLocale, useTr } from "@/lib/i18n";
 import { proYearlyPrice, tripPassPrice } from "@/lib/pricing-i18n";
-import { PRICE_IDS } from "@/lib/paddle";
+import type { CreemProductKey } from "@/lib/creem";
 import { regionFromPath } from "@/lib/site-basics";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
 
@@ -45,9 +45,9 @@ export function ExportPaywallModal({
   const price = tripPassPrice(locale, regionFromPath(pathname));
   const yearly = proYearlyPrice(locale, regionFromPath(pathname));
   const { user, openAuth } = useAuth();
-  const { openCheckout } = usePaddleCheckout();
+  const { openCheckout } = useCreemCheckout();
 
-  const startCheckout = (priceId: string) => {
+  const startCheckout = (productKey: CreemProductKey) => {
     if (!PURCHASES_ENABLED) {
       toast.info(purchasesPausedMessage(locale));
       return;
@@ -57,9 +57,9 @@ export function ExportPaywallModal({
       toast.info(tr("Sign up or log in to unlock exports"));
       return;
     }
-    void trackEvent("pro_upgrade_clicked", { source: "export-paywall", priceId });
+    void trackEvent("pro_upgrade_clicked", { source: "export-paywall", productKey });
     onOpenChange(false);
-    openCheckout({ priceId });
+    openCheckout({ productKey });
   };
 
   return (
@@ -86,7 +86,7 @@ export function ExportPaywallModal({
               size="lg"
               className="w-full font-semibold"
               disabled={!PURCHASES_ENABLED}
-              onClick={() => startCheckout(PRICE_IDS.tripPass)}
+              onClick={() => startCheckout("tripPass")}
             >
               <Sparkles className="size-4" />
               {primaryLabel ?? `${tr("Get 14-Day Trip Pass")} · ${price}`}
@@ -96,7 +96,7 @@ export function ExportPaywallModal({
               variant="outline"
               className="w-full font-semibold"
               disabled={!PURCHASES_ENABLED}
-              onClick={() => startCheckout(PRICE_IDS.proYearly)}
+              onClick={() => startCheckout("proYearly")}
             >
               {tr("Upgrade to Annual Pro")} · {yearly}/{tr("year")}
             </Button>

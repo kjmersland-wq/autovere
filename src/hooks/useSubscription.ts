@@ -2,7 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { getPaddleEnvironment, tierForPriceId, TIER_RANK, type PlanTier } from "@/lib/paddle";
+import { tierForPriceId, TIER_RANK, type PlanTier } from "@/lib/creem";
 
 export type SubscriptionRow = {
   price_id: string;
@@ -22,19 +22,10 @@ export function useSubscription() {
       setLoading(false);
       return;
     }
-    let environment: "sandbox" | "live";
-    try {
-      environment = getPaddleEnvironment();
-    } catch {
-      setSubscription(null);
-      setLoading(false);
-      return;
-    }
     const { data } = await supabase
       .from("subscriptions")
       .select("price_id, status, current_period_end, cancel_at_period_end")
       .eq("user_id", user.id)
-      .eq("environment", environment)
       .order("created_at", { ascending: false })
       .limit(10);
     // A bought pass must never hide a running Pro plan: use the highest active tier, newest first.

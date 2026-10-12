@@ -1,19 +1,19 @@
-// Forwards verified Paddle events to KM TECH LABS (km-techlabs.com).
+// Forwards verified Creem events to KM TECH LABS (km-techlabs.com).
 // Matches the receiver at /api/public/ingest/payments: Bearer auth with the
 // shared secret AUTOVERE_INGEST_SECRET, one event per POST.
-// Never throws: a failed forward must not make Paddle retry the webhook.
+// Never throws: a failed forward must not make Creem retry the webhook.
 
 const DEFAULT_URL = "https://www.km-techlabs.com/api/public/ingest/payments";
 
 type IngestType = "payment" | "discount" | "subscription_created" | "subscription_canceled";
 
 function mapType(eventType: string): IngestType {
-  if (eventType.startsWith("subscription.canceled")) return "subscription_canceled";
-  if (eventType.startsWith("subscription.created")) return "subscription_created";
-  return "payment"; // transaction.completed, transaction.payment_failed, subscription.updated, ...
+  if (eventType.startsWith("subscription.canceled") || eventType.startsWith("subscription.expired")) return "subscription_canceled";
+  if (eventType.startsWith("subscription.active")) return "subscription_created";
+  return "payment"; // checkout.completed, subscription.paid, refund.created, ...
 }
 
-// Paddle totals are in minor units (cents); the receiver stores major units.
+// Creem amounts are in minor units (cents); the receiver stores major units.
 function toMajor(minor: unknown): number {
   const n = Number(minor);
   return Number.isFinite(n) ? n / 100 : 0;
@@ -25,27 +25,27 @@ function planLabel(data: any): string | undefined {
 }
 
 export async function forwardToKmTechlabs(
-  event: { event_id?: string; event_type: string; occurred_at?: string; data: any },
+  event: { id?: string; eventType: string; created_at?: number; object: any },
   env: string,
 ) {
   try {
-    const data = event.data ?? {};
-    const totals = data?.details?.totals;
+    const data = event.object ?? {};
+    const totals = data?.order ?? data?.details?.totals;
     const discountTotal = toMajor(totals?.discount);
-    const type = mapType(event.event_type);
+    const type = mapType(event.eventType);
 
     const payload = {
       site: "autovere.com",
-      id: event.event_id ?? data?.id ?? `${event.event_type}-${Date.now()}`,
+      id: event.id ?? data?.id ?? `${event.eventType}-${Date.now()}`,
       type,
       status: String(data?.status ?? ""),
       amount: toMajor(totals?.total),
       discount: discountTotal,
-      currency: String(data?.currency_code ?? "EUR").toUpperCase(),
+      currency: String(data?.order?.currency ?? data?.currency_code ?? "EUR").toUpperCase(),
       customer: data?.customer_id ? String(data.customer_id) : undefined,
       plan: planLabel(data),
       environment: env,
-      occurred_at: event.occurred_at ?? new Date().toISOString(),
+      occurred_at: event.created_at ? new Date(event.created_at * 1000).toISOString() : new Date().toISOString(),
     };
 
     const url = process.env["KM_TECHLABS_WEBHOOK_URL"] || DEFAULT_URL;
