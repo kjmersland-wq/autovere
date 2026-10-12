@@ -3,14 +3,14 @@ import { Check, ExternalLink, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { useCreemCheckout } from "@/hooks/useCreemCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { convert, formatCurrency, useCurrency } from "@/lib/currency";
 import { useLocale, useT } from "@/lib/i18n";
 import { parsePrice, pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib/pricing-i18n";
-import { billingReturnUrl, checkoutReturnUrl, PRICE_IDS } from "@/lib/paddle";
+import { billingReturnUrl, checkoutReturnUrl, type CreemProductKey } from "@/lib/creem";
 import type { RegionKey } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
@@ -30,18 +30,18 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
   const tiers = tiersFor(locale, region);
   const { user, openAuth } = useAuth();
   const { tier: currentTier, isActive, cancelAtPeriodEnd, periodEnd, pastDue } = useSubscription();
-  const { openCheckout } = usePaddleCheckout();
+  const { openCheckout } = useCreemCheckout();
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
   const [portalLoading, setPortalLoading] = useState(false);
 
-  const priceIdFor = (tier: Tier) =>
+  const productKeyFor = (tier: Tier): CreemProductKey =>
     tier.id === "tripPass"
-      ? PRICE_IDS.tripPass
+      ? "tripPass"
       : tier.id === "fleet"
-        ? PRICE_IDS.businessMonthly
+        ? "businessMonthly"
         : cycle === "yearly"
-          ? PRICE_IDS.proYearly
-          : PRICE_IDS.proMonthly;
+          ? "proYearly"
+          : "proMonthly";
 
   const upgrade = (tier: Tier) => {
     void trackEvent("pro_upgrade_clicked", { tier: tier.id, cycle, signedIn: Boolean(user) });
@@ -58,10 +58,8 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
       toast.info(L.signupToast);
       return;
     }
-    openCheckout({
-      priceId: priceIdFor(tier),
-      returnUrl: checkoutReturnUrl(),
-    });
+    void checkoutReturnUrl();
+    openCheckout({ productKey: productKeyFor(tier) });
   };
 
   const manageBilling = async () => {
