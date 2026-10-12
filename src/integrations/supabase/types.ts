@@ -488,12 +488,12 @@ export type Database = {
           current_period_start: string | null
           environment: string
           id: string
+          legacy_customer_id: string | null
+          legacy_subscription_id: string | null
           price_id: string
           product_id: string
           provider: string
           status: string
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
           updated_at: string | null
           user_id: string
         }
@@ -506,12 +506,12 @@ export type Database = {
           current_period_start?: string | null
           environment?: string
           id?: string
+          legacy_customer_id?: string | null
+          legacy_subscription_id?: string | null
           price_id: string
           product_id: string
           provider?: string
           status?: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
           updated_at?: string | null
           user_id: string
         }
@@ -524,12 +524,12 @@ export type Database = {
           current_period_start?: string | null
           environment?: string
           id?: string
+          legacy_customer_id?: string | null
+          legacy_subscription_id?: string | null
           price_id?: string
           product_id?: string
           provider?: string
           status?: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
           updated_at?: string | null
           user_id?: string
         }
