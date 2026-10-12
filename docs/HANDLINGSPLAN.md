@@ -1,6 +1,6 @@
 # Handlingsplan for AutoVere
 
-Dette er ting bare du kan gjøre, fordi de krever innlogging i Stripe, Google eller Vercel, eller fordi de er forretningsvalg.
+Dette er ting bare du kan gjøre, fordi de krever innlogging i Creem, Google eller Vercel, eller fordi de er forretningsvalg.
 Alt i koden er ferdig og ligger live på `main`. Detaljer står i [STATUS-2026-09.md](STATUS-2026-09.md).
 
 Rekkefølgen er etter viktighet. Punkt 1–3 bør gjøres denne uken. Den lengre planen for vekst står i [VEKSTPLAN.md](VEKSTPLAN.md).
@@ -21,21 +21,21 @@ Rekkefølgen er etter viktighet. Punkt 1–3 bør gjøres denne uken. Den lengre
 
 Er noe feil: gå til Vercel → prosjektet → Deployments og trykk «Instant Rollback» på forrige versjon.
 
-## 2. Bestem prisene og sjekk Stripe (30 min, viktigst for inntekt)
+## 2. Bestem prisene og sjekk Creem (30 min, viktigst for inntekt)
 
 > **Status 24.09:** betaling er slått på igjen (`PURCHASES_ENABLED = true` i `src/lib/purchases.ts`).
-> Kjøp går gjennom Stripe-prisene som ligger i Lovable i dag. Gjør testkjøpet i punkt 3 snart.
+> Kjøp går gjennom Creem-prisene som ligger i Lovable i dag. Gjør testkjøpet i punkt 3 snart.
 
-Siden viser forskjellige priser per språk, men checkout bruker én Stripe-pris per produkt.
+Siden viser forskjellige priser per språk, men checkout bruker én Creem-pris per produkt.
 Kunden kan derfor bli belastet et annet beløp eller i en annen valuta enn det som står på siden.
 
-1. Åpne Stripe (via Lovable → Payments, eller dashboard.stripe.com).
+1. Åpne Creem (via Lovable → Payments, eller dashboard.creem.io).
 2. Se på disse fire prisene (oppslagsnøkkel / lookup key):
    `trip_pass`, `pro_monthly`, `pro_yearly`, `business_monthly`.
 3. Noter valutaen og om det finnes flere valutaer («currency options»).
 4. Velg ett av to:
-   - **A (anbefalt):** Legg inn valutavalg i Stripe som matcher prisene på siden (NOK, SEK, DKK, EUR, GBP, USD, CAD, PLN, JPY, CNY). Stripe velger da riktig valuta automatisk.
-   - **B:** Si hvilke priser som skal gjelde, så endres tallene på siden til å matche Stripe.
+   - **A (anbefalt):** Legg inn valutavalg i Creem som matcher prisene på siden (NOK, SEK, DKK, EUR, GBP, USD, CAD, PLN, JPY, CNY). Creem velger da riktig valuta automatisk.
+   - **B:** Si hvilke priser som skal gjelde, så endres tallene på siden til å matche Creem.
 5. Bestem samtidig:
    - [ ] Norsk Pro er 99 kr/mnd (ca. €8,50) mot ca. €5,20 i Sverige og Danmark. Skal det være slik?
    - [ ] Polsk, japansk og kinesisk viser Trip Pass i egen valuta, men Pro i euro. Skal alt være i én valuta?
@@ -44,7 +44,7 @@ Full pristabell står i STATUS-dokumentet.
 
 ## 3. Gjør ett testkjøp (15 min)
 
-- [ ] Lag en testbruker, kjøp Trip Pass i **sandbox/testmodus** (Stripe testkort `4242 4242 4242 4242`).
+- [ ] Lag en testbruker, kjøp Trip Pass i **sandbox/testmodus** (Creem testkort `4242 4242 4242 4242`).
 - [ ] Sjekk at GPX-eksport låses opp etter kjøpet, og at beløpet på kvitteringen er riktig.
 
 ## 4. Google og Bing (20 min)
