@@ -4,7 +4,7 @@
  * Secrets (Lovable Cloud secrets, never in frontend code):
  *   CREEM_API_KEY         — API key from the Creem dashboard (Developers section)
  *   CREEM_WEBHOOK_SECRET  — webhook signing secret (Developers → Webhooks)
- *   CREEM_TEST_MODE       — "true" to use the Creem sandbox (test-api.creem.io)
+ *   test mode is derived from the API key prefix (creem_test_)
  *
  * Creem is the Merchant of Record: checkout is a hosted page, and Creem
  * confirms purchases via signed webhooks (HMAC-SHA256, `creem-signature` header).
@@ -20,7 +20,8 @@ const getEnv = (key: string): string => {
 };
 
 export function creemTestMode(): boolean {
-  return (process.env["CREEM_TEST_MODE"] ?? "").toLowerCase() === "true";
+  // Follows the API key: Creem test keys start with "creem_test_".
+  return (process.env["CREEM_API_KEY"] ?? "").startsWith("creem_test_");
 }
 
 export function creemBaseUrl(): string {

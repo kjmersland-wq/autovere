@@ -1,3 +1,4 @@
+import { creemTestMode } from "@/lib/creem.server";
 /* eslint-disable @typescript-eslint/no-explicit-any -- Creem event payloads stay loosely typed on purpose. */
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
@@ -20,7 +21,7 @@ function getSupabase() {
   return _supabase;
 }
 
-const environment = () => (process.env["CREEM_TEST_MODE"] === "true" ? "sandbox" : "live");
+const environment = () => (creemTestMode() ? "sandbox" : "live");
 
 /** Internal plan key ("pro_monthly") from a Creem product id, or null. */
 function planKeyFrom(entity: any): string | null {
