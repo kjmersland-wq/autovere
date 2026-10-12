@@ -482,12 +482,12 @@ export type Database = {
         Row: {
           cancel_at_period_end: boolean | null
           created_at: string | null
+          creem_customer_id: string | null
+          creem_subscription_id: string | null
           current_period_end: string | null
           current_period_start: string | null
           environment: string
           id: string
-          paddle_customer_id: string | null
-          paddle_subscription_id: string | null
           price_id: string
           product_id: string
           provider: string
@@ -500,12 +500,12 @@ export type Database = {
         Insert: {
           cancel_at_period_end?: boolean | null
           created_at?: string | null
+          creem_customer_id?: string | null
+          creem_subscription_id?: string | null
           current_period_end?: string | null
           current_period_start?: string | null
           environment?: string
           id?: string
-          paddle_customer_id?: string | null
-          paddle_subscription_id?: string | null
           price_id: string
           product_id: string
           provider?: string
@@ -518,12 +518,12 @@ export type Database = {
         Update: {
           cancel_at_period_end?: boolean | null
           created_at?: string | null
+          creem_customer_id?: string | null
+          creem_subscription_id?: string | null
           current_period_end?: string | null
           current_period_start?: string | null
           environment?: string
           id?: string
-          paddle_customer_id?: string | null
-          paddle_subscription_id?: string | null
           price_id?: string
           product_id?: string
           provider?: string
