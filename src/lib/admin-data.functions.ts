@@ -102,7 +102,7 @@ export const getGlobalOverview = createServerFn({ method: "GET" }).handler(
       const since = new Date(Date.now() - WINDOW_DAYS * DAY_MS).toISOString();
       const [{ data: views, error: viewsError }, { data: subs, error: subsError }, totalUsers] = await Promise.all([
         ctx.supabase.from("page_views").select("path, created_at").gte("created_at", since).limit(50000),
-        ctx.supabase.from("subscriptions").select("price_id, status").not("stripe_subscription_id", "like", "admin_comp_%"),
+        ctx.supabase.from("subscriptions").select("price_id, status").not("legacy_subscription_id", "like", "admin_comp_%"),
         countTotalUsers(),
       ]);
       if (viewsError || subsError) {
@@ -474,7 +474,7 @@ export const getSubscriptionBreakdown = createServerFn({ method: "GET" }).handle
       const { data: subs, error } = await ctx.supabase
         .from("subscriptions")
         .select("price_id, status, created_at")
-        .not("stripe_subscription_id", "like", "admin_comp_%");
+        .not("legacy_subscription_id", "like", "admin_comp_%");
       if (error) return { status: "error", message: "Kunne ikke hente abonnementsdata." };
 
       const rows = subs ?? [];
@@ -546,7 +546,7 @@ export const getFinanceBreakdown = createServerFn({ method: "GET" }).handler(
       const { data: subs, error } = await ctx.supabase
         .from("subscriptions")
         .select("price_id, status")
-        .not("stripe_subscription_id", "like", "admin_comp_%");
+        .not("legacy_subscription_id", "like", "admin_comp_%");
       if (error) return { status: "error", message: "Kunne ikke hente økonomidata." };
 
       const rows = subs ?? [];
@@ -682,13 +682,13 @@ export const getPaymentLedger = createServerFn({ method: "GET" }).handler(
 
     const { data, error } = await ctx.supabase
       .from("subscriptions")
-      .select("paddle_subscription_id, price_id, status, current_period_start, environment, provider, created_at")
+      .select("creem_subscription_id, price_id, status, current_period_start, environment, provider, created_at")
       .order("created_at", { ascending: false })
       .limit(300);
     if (error) return { status: "error", message: "Kunne ikke hente innbetalinger fra databasen." };
 
     const rows: PaymentRow[] = (data ?? []).map((row) => ({
-      id: String(row.paddle_subscription_id ?? ""),
+      id: String(row.creem_subscription_id ?? ""),
       environment: (row.environment === "live" ? "live" : "sandbox") as "sandbox" | "live",
       status: String(row.status ?? "unknown"),
       billedAt: row.current_period_start ?? row.created_at ?? null,
@@ -696,7 +696,7 @@ export const getPaymentLedger = createServerFn({ method: "GET" }).handler(
       currency: "EUR",
       planLabel: PRICE_LABEL[row.price_id ?? ""] ?? row.price_id ?? "Ukjent",
       customerEmail: null,
-      subscriptionId: row.paddle_subscription_id ?? null,
+      subscriptionId: row.creem_subscription_id ?? null,
     }));
 
     return {

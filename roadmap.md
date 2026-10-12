@@ -1,7 +1,7 @@
 # Roadmap
 
-## Creem-migrering (Paddle → Creem)
-- [x] Slettet Paddle-filer (paddle.ts, paddle.server.ts, usePaddleCheckout)
+## Creem-migrering (Creem → Creem)
+- [x] Slettet Creem-filer (creem.ts, creem.server.ts, useCreemCheckout)
 - [x] Creem server-klient + webhook-verifisering (creem.server.ts, HMAC-SHA256)
 - [x] Checkout via Creem hosted side (payments.functions.ts, useCreemCheckout)
 - [x] Webhook: checkout.completed, subscription.*, refund.created → subscriptions-tabellen
