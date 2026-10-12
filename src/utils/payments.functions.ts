@@ -20,10 +20,7 @@ export const createCreemCheckout = createServerFn({ method: "POST" })
     if (!PURCHASES_ENABLED) return { error: purchasesPausedMessage() };
 
     const productId = CREEM_PRODUCT_IDS[data.productKey];
-    if (!productId || /^prod_[A-Z_]+$/.test(productId)) {
-      // Placeholder IDs (prod_TRIP_PASS etc.) until the real ones are configured.
-      return { error: "This plan is not configured for checkout yet." };
-    }
+    if (!productId) return { error: "This plan is not configured for checkout yet." };
 
     try {
       const checkout = await creemApi<{ checkout_url?: string; checkoutUrl?: string }>(
