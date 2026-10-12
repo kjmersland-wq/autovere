@@ -1,19 +1,19 @@
-// Forwards verified Paddle events to KM TECH LABS (km-techlabs.com).
+// Forwards verified Creem events to KM TECH LABS (km-techlabs.com).
 // Matches the receiver at /api/public/ingest/payments: Bearer auth with the
 // shared secret AUTOVERE_INGEST_SECRET, one event per POST.
-// Never throws: a failed forward must not make Paddle retry the webhook.
+// Never throws: a failed forward must not make Creem retry the webhook.
 
 const DEFAULT_URL = "https://www.km-techlabs.com/api/public/ingest/payments";
 
 type IngestType = "payment" | "discount" | "subscription_created" | "subscription_canceled";
 
 function mapType(eventType: string): IngestType {
-  if (eventType.startsWith("subscription.canceled")) return "subscription_canceled";
-  if (eventType.startsWith("subscription.created")) return "subscription_created";
-  return "payment"; // transaction.completed, transaction.payment_failed, subscription.updated, ...
+  if (eventType.startsWith("subscription.canceled") || eventType.startsWith("subscription.expired")) return "subscription_canceled";
+  if (eventType.startsWith("subscription.active")) return "subscription_created";
+  return "payment"; // checkout.completed, subscription.paid, refund.created, ...
 }
 
-// Paddle totals are in minor units (cents); the receiver stores major units.
+// Creem amounts are in minor units (cents); the receiver stores major units.
 function toMajor(minor: unknown): number {
   const n = Number(minor);
   return Number.isFinite(n) ? n / 100 : 0;

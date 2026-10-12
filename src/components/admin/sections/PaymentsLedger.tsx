@@ -122,7 +122,7 @@ export function PaymentsLedger() {
         <div>
           <h2 className="text-xl font-semibold tracking-tight">Innbetalinger fra kundene</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Alle faktiske betalinger, hentet direkte fra betalingssystemet (Paddle).
+            Alle registrerte kjøp og abonnement, hentet fra databasen (skrevet inn av Creem-webhooken).
           </p>
         </div>
         <div className="flex gap-2">
@@ -223,9 +223,9 @@ export function PaymentsLedger() {
       </Panel>
 
       <p className="text-xs text-muted-foreground print:text-neutral-600">
-        Beløp hentes direkte fra Paddle per betaling i kundens valuta. EUR-summene er veiledende og omregnet med
+        EUR-summene er veiledende og omregnet med
         dagens kurs fra Den europeiske sentralbanken (via frankfurter.dev{data.ratesAsOf ? `, ${data.ratesAsOf}` : ""}).
-        Paddle er Merchant of Record og håndterer mva, utbetalinger og kvitteringer.
+        Creem er Merchant of Record og håndterer mva, utbetalinger og kvitteringer.
       </p>
     </div>
   );

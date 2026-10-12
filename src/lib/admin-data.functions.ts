@@ -627,11 +627,10 @@ export const getExchangeRates = createServerFn({ method: "GET" }).handler(
 );
 
 /* ------------------------------------------------------------------ */
-/* Innbetalinger — every real payment, pulled live from Paddle (both   */
-/* environments). Admin-gated like the other Admin data functions.     */
+/* Innbetalinger — every recorded purchase/subscription, read from the */
+/* database (the Creem webhook writes each verified payment here).     */
+/* Admin-gated like the other Admin data functions.                    */
 /* ------------------------------------------------------------------ */
-
-import { gatewayFetch, type PaddleEnv } from "@/lib/paddle.server";
 
 const PRICE_LABEL: Record<string, string> = {
   trip_pass: "Trip Pass – 14 dager",
@@ -658,78 +657,16 @@ export type PaymentLedger = {
   /** ECB reference rates per currency (units per EUR) — display-only conversion. */
   rates: Record<string, number> | null;
   ratesAsOf: string;
-  unavailable: PaddleEnv[];
+  unavailable: string[];
   generatedAt: string;
 };
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any -- Paddle API payloads stay loosely typed
-type PaddleJson = { data?: any[]; included?: any[]; meta?: { pagination?: { has_more?: boolean } } };
-
-async function fetchPaymentsForEnv(env: PaddleEnv): Promise<PaymentRow[]> {
-  // Map Paddle's raw price ids to our human-readable external ids so plan
-  // labels survive both environments (same mapping the webhook handler uses).
-  const priceMap = new Map<string, string>();
-  try {
-    const res = await gatewayFetch(env, "/prices?per_page=200");
-    const json = (await res.json().catch(() => null)) as PaddleJson | null;
-    for (const price of json?.data ?? []) {
-      const ext = price?.import_meta?.external_id ?? price?.importMeta?.external_id;
-      if (typeof ext === "string") priceMap.set(price.id, ext);
-    }
-  } catch {
-    // Labels fall back to the price name when prices can't be listed.
-  }
-
-  const customerEmail = new Map<string, string>();
-  const rows: PaymentRow[] = [];
-  let page = 1;
-  for (;;) {
-    const res = await gatewayFetch(
-      env,
-      `/transactions?per_page=50&page=${page}&order_by=billed_at[desc]&include=customer`,
-    );
-    const json = (await res.json().catch(() => null)) as PaddleJson | null;
-    if (!res.ok || !json?.data) break;
-
-    for (const inc of json.included ?? []) {
-      if (inc?.type === "customer" && inc?.attributes?.email) {
-        customerEmail.set(inc.id, inc.attributes.email as string);
-      }
-    }
-
-    for (const txn of json.data) {
-      const items = txn?.details?.line_items ?? [];
-      const priceId: string | undefined = items[0]?.price?.id;
-      const externalId = priceId ? priceMap.get(priceId) : undefined;
-      const planLabel =
-        (externalId && PRICE_LABEL[externalId]) || items[0]?.price?.name || priceId || "Ukjent";
-      const total = Number(txn?.details?.totals?.total);
-      rows.push({
-        id: String(txn.id ?? ""),
-        environment: env,
-        status: String(txn.status ?? "unknown"),
-        billedAt: txn.billed_at ?? txn.created_at ?? null,
-        amount: Number.isFinite(total) ? total / 100 : 0,
-        currency: String(txn.currency_code ?? "EUR").toUpperCase(),
-        planLabel,
-        customerEmail: customerEmail.get(txn.customer_id) ?? null,
-        subscriptionId: txn.subscription_id ?? null,
-      });
-    }
-
-    if (!json.meta?.pagination?.has_more || page >= 6) break;
-    page += 1;
-  }
-  return rows;
-}
 
 export const getPaymentLedger = createServerFn({ method: "GET" }).handler(
   async (): Promise<AdminDataResult<PaymentLedger>> => {
     const ctx = await getAdminSupabaseContext();
     if (!ctx.ok) return ctx.result;
 
-    // Display-only conversion rates (ECB via frankfurter.dev) — identical
-    // approach to getExchangeRates, but for every currency Paddle may bill in.
+    // Display-only conversion rates (ECB via frankfurter.dev).
     let rates: Record<string, number> | null = null;
     let ratesAsOf = "";
     try {
@@ -743,22 +680,28 @@ export const getPaymentLedger = createServerFn({ method: "GET" }).handler(
       // Sums fall back to EUR-only payments; the UI notes this.
     }
 
-    const envs: PaddleEnv[] = ["live", "sandbox"];
-    const results = await Promise.allSettled(envs.map((env) => fetchPaymentsForEnv(env)));
-    const rows: PaymentRow[] = [];
-    const unavailable: PaddleEnv[] = [];
-    results.forEach((r, i) => {
-      if (r.status === "fulfilled") rows.push(...r.value);
-      else unavailable.push(envs[i] ?? "sandbox");
-    });
+    const { data, error } = await ctx.supabase
+      .from("subscriptions")
+      .select("paddle_subscription_id, price_id, status, current_period_start, environment, provider, created_at")
+      .order("created_at", { ascending: false })
+      .limit(300);
+    if (error) return { status: "error", message: "Kunne ikke hente innbetalinger fra databasen." };
 
-    if (rows.length === 0 && unavailable.length === envs.length) {
-      return { status: "error", message: "Kunne ikke hente innbetalinger fra betalingssystemet." };
-    }
+    const rows: PaymentRow[] = (data ?? []).map((row) => ({
+      id: String(row.paddle_subscription_id ?? ""),
+      environment: (row.environment === "live" ? "live" : "sandbox") as "sandbox" | "live",
+      status: String(row.status ?? "unknown"),
+      billedAt: row.current_period_start ?? row.created_at ?? null,
+      amount: 0,
+      currency: "EUR",
+      planLabel: PRICE_LABEL[row.price_id ?? ""] ?? row.price_id ?? "Ukjent",
+      customerEmail: null,
+      subscriptionId: row.paddle_subscription_id ?? null,
+    }));
 
     return {
       status: "ok",
-      data: { rows, rates, ratesAsOf, unavailable, generatedAt: new Date().toISOString() },
+      data: { rows, rates, ratesAsOf, unavailable: [], generatedAt: new Date().toISOString() },
     };
   },
 );
