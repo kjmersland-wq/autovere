@@ -25,27 +25,27 @@ function planLabel(data: any): string | undefined {
 }
 
 export async function forwardToKmTechlabs(
-  event: { event_id?: string; event_type: string; occurred_at?: string; data: any },
+  event: { id?: string; eventType: string; created_at?: number; object: any },
   env: string,
 ) {
   try {
-    const data = event.data ?? {};
-    const totals = data?.details?.totals;
+    const data = event.object ?? {};
+    const totals = data?.order ?? data?.details?.totals;
     const discountTotal = toMajor(totals?.discount);
-    const type = mapType(event.event_type);
+    const type = mapType(event.eventType);
 
     const payload = {
       site: "autovere.com",
-      id: event.event_id ?? data?.id ?? `${event.event_type}-${Date.now()}`,
+      id: event.id ?? data?.id ?? `${event.eventType}-${Date.now()}`,
       type,
       status: String(data?.status ?? ""),
       amount: toMajor(totals?.total),
       discount: discountTotal,
-      currency: String(data?.currency_code ?? "EUR").toUpperCase(),
+      currency: String(data?.order?.currency ?? data?.currency_code ?? "EUR").toUpperCase(),
       customer: data?.customer_id ? String(data.customer_id) : undefined,
       plan: planLabel(data),
       environment: env,
-      occurred_at: event.occurred_at ?? new Date().toISOString(),
+      occurred_at: event.created_at ? new Date(event.created_at * 1000).toISOString() : new Date().toISOString(),
     };
 
     const url = process.env["KM_TECHLABS_WEBHOOK_URL"] || DEFAULT_URL;
