@@ -5,7 +5,7 @@ import { createClient } from "@supabase/supabase-js";
 import type { Database } from "@/integrations/supabase/types";
 
 import { planKeyForProductId } from "@/lib/creem";
-import { verifyCreemWebhook } from "@/lib/creem.server";
+import { verifyCreemWebhook, creemTestMode } from "@/lib/creem.server";
 import { passDays } from "@/lib/pass-durations";
 import { forwardToKmTechlabs } from "@/lib/km-techlabs.server";
 
@@ -20,7 +20,7 @@ function getSupabase() {
   return _supabase;
 }
 
-const environment = () => (process.env["CREEM_TEST_MODE"] === "true" ? "sandbox" : "live");
+const environment = () => (creemTestMode() ? "sandbox" : "live");
 
 /** Internal plan key ("pro_monthly") from a Creem product id, or null. */
 function planKeyFrom(entity: any): string | null {
