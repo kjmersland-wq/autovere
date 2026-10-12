@@ -13,10 +13,10 @@ import { createCreemCheckout } from "@/utils/payments.functions";
 
 /** Internal plan keys → Creem product IDs (from the Creem dashboard). */
 export const CREEM_PRODUCT_IDS = {
-  tripPass: "prod_TRIP_PASS",
-  proMonthly: "prod_PRO_MONTHLY",
-  proYearly: "prod_PRO_YEARLY",
-  businessMonthly: "prod_BUSINESS_MONTHLY",
+  tripPass: "prod_5oIdIcxA00n5E79gffx0IE",
+  proMonthly: "prod_1vbuuUav24ivm7TpW9LYlN",
+  proYearly: "prod_3PMg4d9p2dFbMFAkr50WIQ",
+  businessMonthly: "prod_7CWrWV0MC3fBRNTnhDDLwo",
 } as const;
 
 export type CreemProductKey = keyof typeof CREEM_PRODUCT_IDS;
