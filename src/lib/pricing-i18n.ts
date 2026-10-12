@@ -1,6 +1,6 @@
 import type { CurrencyCode } from "@/lib/currency";
 import type { Locale } from "@/lib/i18n";
-import type { PlanTier } from "@/lib/paddle";
+import type { PlanTier } from "@/lib/creem";
 import type { RegionKey } from "@/lib/trip-data";
 
 
@@ -85,8 +85,8 @@ const EN_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "For the traveller who lives for the next pass.",
-    monthly: "£4.59",
-    yearly: "£40",
+    monthly: "€8.15",
+    yearly: "€47",
     cta: "Upgrade to Pro",
     highlight: true,
     features: [
@@ -103,7 +103,7 @@ const EN_TIERS: Tier[] = [
     name: "AutoVere Business / Fleet",
     emoji: "🚛",
     tagline: "Cross-border operations, consolidated.",
-    monthly: "£18",
+    monthly: "€18.39",
     cta: "Upgrade to Business",
     features: [
       "Multi-country toll invoice consolidation",
@@ -136,8 +136,8 @@ const PL_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Dla podróżnika, który żyje kolejną przełęczą.",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "Przejdź na Pro",
     highlight: true,
     features: [
@@ -154,7 +154,7 @@ const PL_TIERS: Tier[] = [
     name: "AutoVere Business / Flota",
     emoji: "🚛",
     tagline: "Operacje transgraniczne w jednym miejscu.",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "Przejdź na Business",
     features: [
       "Konsolidacja faktur za opłaty drogowe z wielu krajów",
@@ -187,8 +187,8 @@ const NO_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "For deg som lever for neste fjellovergang.",
-    monthly: "101 kr",
-    yearly: "806 kr",
+    monthly: "95 kr",
+    yearly: "550 kr",
     cta: "Oppgrader til Pro",
     highlight: true,
     features: [
@@ -205,7 +205,7 @@ const NO_TIERS: Tier[] = [
     name: "AutoVere Business / Flåte",
     emoji: "🚛",
     tagline: "Grensekryssende drift, samlet på ett sted.",
-    monthly: "203 kr",
+    monthly: "215 kr",
     cta: "Oppgrader til Business",
     features: [
       "Samling av bomfakturaer fra flere land",
@@ -238,8 +238,8 @@ const SV_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "För resenären som lever för nästa bergspass.",
-    monthly: "61 kr",
-    yearly: "500 kr",
+    monthly: "90 kr",
+    yearly: "520 kr",
     cta: "Uppgradera till Pro",
     highlight: true,
     features: [
@@ -256,7 +256,7 @@ const SV_TIERS: Tier[] = [
     name: "AutoVere Business / Flotta",
     emoji: "🚛",
     tagline: "Gränsöverskridande verksamhet, samlad.",
-    monthly: "122 kr",
+    monthly: "200 kr",
     cta: "Uppgradera till Business",
     features: [
       "Konsolidering av vägtullsfakturor från flera länder",
@@ -289,8 +289,8 @@ const DA_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Til rejsende, der lever for det næste bjergpas.",
-    monthly: "40 kr",
-    yearly: "336 kr",
+    monthly: "61 kr",
+    yearly: "351 kr",
     cta: "Opgrader til Pro",
     highlight: true,
     features: [
@@ -307,7 +307,7 @@ const DA_TIERS: Tier[] = [
     name: "AutoVere Business / Flåde",
     emoji: "🚛",
     tagline: "Grænseoverskridende drift, samlet ét sted.",
-    monthly: "142 kr",
+    monthly: "137 kr",
     cta: "Opgrader til Business",
     features: [
       "Samling af vejafgiftsfakturaer fra flere lande",
@@ -340,8 +340,8 @@ const DE_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Für alle, die für den nächsten Pass leben.",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "Auf Pro upgraden",
     highlight: true,
     features: [
@@ -358,7 +358,7 @@ const DE_TIERS: Tier[] = [
     name: "AutoVere Business / Flotte",
     emoji: "🚛",
     tagline: "Grenzüberschreitender Betrieb, gebündelt.",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "Auf Business upgraden",
     features: [
       "Konsolidierung von Mautrechnungen aus mehreren Ländern",
@@ -391,8 +391,8 @@ const NL_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Voor de reiziger die leeft voor de volgende bergpas.",
-    monthly: "€ 5,09",
-    yearly: "€ 40",
+    monthly: "€ 8,15",
+    yearly: "€ 47",
     cta: "Upgraden naar Pro",
     highlight: true,
     features: [
@@ -409,7 +409,7 @@ const NL_TIERS: Tier[] = [
     name: "AutoVere Business / Wagenpark",
     emoji: "🚛",
     tagline: "Grensoverschrijdende operaties, gebundeld.",
-    monthly: "€ 20",
+    monthly: "€ 18,39",
     cta: "Upgraden naar Business",
     features: [
       "Consolidatie van tolfacturen uit meerdere landen",
@@ -442,8 +442,8 @@ const FR_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Pour le voyageur qui vit pour le prochain col.",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "Passer à Pro",
     highlight: true,
     features: [
@@ -460,7 +460,7 @@ const FR_TIERS: Tier[] = [
     name: "AutoVere Business / Flotte",
     emoji: "🚛",
     tagline: "Opérations transfrontalières, centralisées.",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "Passer à Business",
     features: [
       "Consolidation des factures de péage multi-pays",
@@ -493,8 +493,8 @@ const ES_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Para quien vive para el próximo puerto de montaña.",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "Pasar a Pro",
     highlight: true,
     features: [
@@ -511,7 +511,7 @@ const ES_TIERS: Tier[] = [
     name: "AutoVere Business / Flota",
     emoji: "🚛",
     tagline: "Operaciones transfronterizas, centralizadas.",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "Pasar a Business",
     features: [
       "Consolidación de facturas de peaje multipaís",
@@ -544,8 +544,8 @@ const IT_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Per chi vive per il prossimo passo di montagna.",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "Passa a Pro",
     highlight: true,
     features: [
@@ -562,7 +562,7 @@ const IT_TIERS: Tier[] = [
     name: "AutoVere Business / Flotta",
     emoji: "🚛",
     tagline: "Operazioni transfrontaliere, centralizzate.",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "Passa a Business",
     features: [
       "Consolidamento delle fatture di pedaggio multi-paese",
@@ -595,8 +595,8 @@ const FI_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Matkailijalle, joka elää seuraavaa vuoristosolaa varten.",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "Päivitä Prohon",
     highlight: true,
     features: [
@@ -613,7 +613,7 @@ const FI_TIERS: Tier[] = [
     name: "AutoVere Business / Kalusto",
     emoji: "🚛",
     tagline: "Rajat ylittävä toiminta, koottuna yhteen.",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "Päivitä Businekseen",
     features: [
       "Monen maan tietullilaskujen yhdistäminen",
@@ -646,8 +646,8 @@ const PT_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "Para quem vive para a próxima passagem de montanha.",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "Passar a Pro",
     highlight: true,
     features: [
@@ -664,7 +664,7 @@ const PT_TIERS: Tier[] = [
     name: "AutoVere Business / Frota",
     emoji: "🚛",
     tagline: "Operações transfronteiriças, tudo num só lugar.",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "Passar a Business",
     features: [
       "Consolidação de faturas de portagem multi-país",
@@ -697,8 +697,8 @@ const JA_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "次の峠道を待ちわびる旅人のために。",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "Proにアップグレード",
     highlight: true,
     features: [
@@ -715,7 +715,7 @@ const JA_TIERS: Tier[] = [
     name: "AutoVere Business / フリート",
     emoji: "🚛",
     tagline: "国境をまたぐ運行管理を、ひとつにまとめて。",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "Businessにアップグレード",
     features: [
       "複数国にまたがる通行料金請求の一元管理",
@@ -748,8 +748,8 @@ const ZH_TIERS: Tier[] = [
     name: "AutoVere Pro",
     emoji: "✨",
     tagline: "献给总是惦记着下一个山口的旅行者。",
-    monthly: "5,09 €",
-    yearly: "40 €",
+    monthly: "8,15 €",
+    yearly: "47 €",
     cta: "升级至 Pro",
     highlight: true,
     features: [
@@ -766,7 +766,7 @@ const ZH_TIERS: Tier[] = [
     name: "AutoVere Business / 车队版",
     emoji: "🚛",
     tagline: "跨国运营，账单统一管理。",
-    monthly: "20 €",
+    monthly: "18,39 €",
     cta: "升级至 Business",
     features: [
       "多国过路费账单一站整合",
@@ -816,7 +816,7 @@ const COPY_BASE = {
     proFine: "£4.49/mo or £39/yr — cancel anytime.",
     current: "Your current plan",
     switch: "Switch plan in billing portal",
-    foot: "Prices in EUR incl. applicable VAT. Payments and tax handled securely by Paddle. Cost estimates remain indicative — always verify with official toll portals.",
+    foot: "Prices in EUR incl. applicable VAT. Payments and tax handled securely by Creem. Cost estimates remain indicative — always verify with official toll portals.",
     checkout: "Secure checkout",
     freeToast: "You're on the Free plan — plan away!",
     signupToast: "Create your account first, then we'll take you straight to secure checkout.",
@@ -838,7 +838,7 @@ const COPY_BASE = {
     proFine: "99 kr/mnd eller 790 kr/år — avbryt når du vil.",
     current: "Din nåværende plan",
     switch: "Bytt plan i betalingsportalen",
-    foot: "Priser i EUR inkl. gjeldende mva. Betaling og skatt håndteres sikkert av Paddle. Kostnadsanslag er veiledende — sjekk alltid offisielle bomportaler.",
+    foot: "Priser i EUR inkl. gjeldende mva. Betaling og skatt håndteres sikkert av Creem. Kostnadsanslag er veiledende — sjekk alltid offisielle bomportaler.",
     checkout: "Sikker betaling",
     freeToast: "Du bruker Free-planen — god tur!",
     signupToast: "Opprett konto først, så tar vi deg rett til sikker betaling.",
@@ -860,7 +860,7 @@ const COPY_BASE = {
     proFine: "59 kr/mån eller 490 kr/år — avsluta när du vill.",
     current: "Din nuvarande plan",
     switch: "Byt plan i betalportalen",
-    foot: "Priser i EUR inkl. tillämplig moms. Betalningar och skatt hanteras säkert av Paddle. Kostnadsberäkningar är vägledande — kontrollera alltid officiella tullportaler.",
+    foot: "Priser i EUR inkl. tillämplig moms. Betalningar och skatt hanteras säkert av Creem. Kostnadsberäkningar är vägledande — kontrollera alltid officiella tullportaler.",
     checkout: "Säker betalning",
     freeToast: "Du använder Free-planen — planera loss!",
     signupToast: "Skapa ditt konto först, sedan tar vi dig direkt till säker betalning.",
@@ -882,7 +882,7 @@ const COPY_BASE = {
     proFine: "39 kr/md. eller 329 kr/år — opsig når som helst.",
     current: "Din nuværende plan",
     switch: "Skift plan i betalingsportalen",
-    foot: "Priser i EUR inkl. gældende moms. Betaling og skat håndteres sikkert af Paddle. Estimater er vejledende — tjek altid officielle vejafgiftsportaler.",
+    foot: "Priser i EUR inkl. gældende moms. Betaling og skat håndteres sikkert af Creem. Estimater er vejledende — tjek altid officielle vejafgiftsportaler.",
     checkout: "Sikker betaling",
     freeToast: "Du bruger Free-planen — god tur!",
     signupToast: "Opret din konto først, så sender vi dig direkte til sikker betaling.",
@@ -904,7 +904,7 @@ const COPY_BASE = {
     proFine: "4,99 €/Monat oder 39 €/Jahr — jederzeit kündbar.",
     current: "Ihr aktueller Tarif",
     switch: "Tarif im Zahlungsportal wechseln",
-    foot: "Preise in EUR inkl. gesetzlicher MwSt. Zahlungen und Steuern werden sicher von Paddle abgewickelt. Kostenschätzungen sind Richtwerte — prüfen Sie stets die offiziellen Mautportale.",
+    foot: "Preise in EUR inkl. gesetzlicher MwSt. Zahlungen und Steuern werden sicher von Creem abgewickelt. Kostenschätzungen sind Richtwerte — prüfen Sie stets die offiziellen Mautportale.",
     checkout: "Sichere Bezahlung",
     freeToast: "Sie nutzen den Free-Tarif — gute Fahrt!",
     signupToast: "Erstellen Sie zuerst Ihr Konto, danach geht es direkt zur sicheren Bezahlung.",
@@ -926,7 +926,7 @@ const COPY_BASE = {
     proFine: "€ 4,99/mnd of € 39/jaar — altijd opzegbaar.",
     current: "Je huidige abonnement",
     switch: "Wissel van abonnement in het betaalportaal",
-    foot: "Prijzen in EUR incl. btw waar van toepassing. Betalingen en belasting worden veilig afgehandeld door Paddle. Kostenramingen zijn indicatief — controleer altijd de officiële tolportalen.",
+    foot: "Prijzen in EUR incl. btw waar van toepassing. Betalingen en belasting worden veilig afgehandeld door Creem. Kostenramingen zijn indicatief — controleer altijd de officiële tolportalen.",
     checkout: "Veilig afrekenen",
     freeToast: "Je gebruikt het Free-abonnement — plan er op los!",
     signupToast: "Maak eerst je account aan, daarna gaan we direct naar veilig afrekenen.",
@@ -948,7 +948,7 @@ const COPY_BASE = {
     proFine: "4,99 €/mois ou 39 €/an — annulable à tout moment.",
     current: "Votre offre actuelle",
     switch: "Changer d'offre dans le portail de facturation",
-    foot: "Prix en EUR TVA applicable incluse. Paiements et taxes gérés en toute sécurité par Paddle. Les estimations restent indicatives — vérifiez toujours auprès des portails de péage officiels.",
+    foot: "Prix en EUR TVA applicable incluse. Paiements et taxes gérés en toute sécurité par Creem. Les estimations restent indicatives — vérifiez toujours auprès des portails de péage officiels.",
     checkout: "Paiement sécurisé",
     freeToast: "Vous êtes sur l'offre Free — bonne route !",
     signupToast: "Créez d'abord votre compte, puis nous vous emmenons directement au paiement sécurisé.",
@@ -970,7 +970,7 @@ const COPY_BASE = {
     proFine: "4,99 €/mies. lub 39 €/rok — anulujesz, kiedy chcesz.",
     current: "Twój obecny plan",
     switch: "Zmień plan w panelu płatności",
-    foot: "Ceny w EUR z odpowiednim VAT. Płatności i podatki bezpiecznie obsługuje Paddle. Szacunki kosztów są orientacyjne — zawsze sprawdź je na oficjalnych portalach opłat drogowych.",
+    foot: "Ceny w EUR z odpowiednim VAT. Płatności i podatki bezpiecznie obsługuje Creem. Szacunki kosztów są orientacyjne — zawsze sprawdź je na oficjalnych portalach opłat drogowych.",
     checkout: "Bezpieczna płatność",
     freeToast: "Korzystasz z planu Free — planuj do woli!",
     signupToast: "Najpierw załóż konto, a potem przeniesiemy Cię prosto do bezpiecznej płatności.",
@@ -992,7 +992,7 @@ const COPY_BASE = {
     proFine: "4,99 €/mes o 39 €/año — cancela cuando quieras.",
     current: "Tu plan actual",
     switch: "Cambia de plan en el portal de facturación",
-    foot: "Precios en EUR con el IVA aplicable incluido. Los pagos y los impuestos los gestiona Paddle de forma segura. Las estimaciones de coste son orientativas — verifica siempre en los portales oficiales de peaje.",
+    foot: "Precios en EUR con el IVA aplicable incluido. Los pagos y los impuestos los gestiona Creem de forma segura. Las estimaciones de coste son orientativas — verifica siempre en los portales oficiales de peaje.",
     checkout: "Pago seguro",
     freeToast: "Estás en el plan Free — ¡a planificar!",
     signupToast: "Crea primero tu cuenta y te llevaremos directo al pago seguro.",
@@ -1014,7 +1014,7 @@ const COPY_BASE = {
     proFine: "4,99 €/mese o 39 €/anno — annulla quando vuoi.",
     current: "Il tuo piano attuale",
     switch: "Cambia piano nel portale di fatturazione",
-    foot: "Prezzi in EUR, IVA applicabile inclusa. Pagamenti e imposte gestiti in sicurezza da Paddle. Le stime di costo restano indicative — verifica sempre sui portali ufficiali dei pedaggi.",
+    foot: "Prezzi in EUR, IVA applicabile inclusa. Pagamenti e imposte gestiti in sicurezza da Creem. Le stime di costo restano indicative — verifica sempre sui portali ufficiali dei pedaggi.",
     checkout: "Pagamento sicuro",
     freeToast: "Sei sul piano Free — buona pianificazione!",
     signupToast: "Crea prima il tuo account: ti porteremo direttamente al pagamento sicuro.",
@@ -1036,7 +1036,7 @@ const COPY_BASE = {
     proFine: "4,99 €/mês ou 39 €/ano — cancele quando quiser.",
     current: "O seu plano atual",
     switch: "Mudar de plano no portal de faturação",
-    foot: "Preços em EUR com o IVA aplicável incluído. Pagamentos e impostos geridos com segurança pela Paddle. As estimativas de custo são indicativas — confirme sempre nos portais oficiais de portagens.",
+    foot: "Preços em EUR com o IVA aplicável incluído. Pagamentos e impostos geridos com segurança pela Creem. As estimativas de custo são indicativas — confirme sempre nos portais oficiais de portagens.",
     checkout: "Pagamento seguro",
     freeToast: "Está no plano Free — boas viagens a planear!",
     signupToast: "Crie primeiro a sua conta e depois levamo-lo diretamente ao pagamento seguro.",
@@ -1058,7 +1058,7 @@ const COPY_BASE = {
     proFine: "4,99 €/kk tai 39 €/vuosi — peru milloin tahansa.",
     current: "Nykyinen tilauksesi",
     switch: "Vaihda tilausta laskutusportaalissa",
-    foot: "Hinnat euroissa sis. soveltuva ALV. Maksut ja verot käsittelee turvallisesti Paddle. Kustannusarviot ovat suuntaa-antavia — tarkista aina viralliset tietullipalvelut.",
+    foot: "Hinnat euroissa sis. soveltuva ALV. Maksut ja verot käsittelee turvallisesti Creem. Kustannusarviot ovat suuntaa-antavia — tarkista aina viralliset tietullipalvelut.",
     checkout: "Turvallinen maksu",
     freeToast: "Käytät Free-tilausta — suunnittele vapaasti!",
     signupToast: "Luo tili ensin, niin viemme sinut suoraan turvalliseen maksuun.",
@@ -1080,7 +1080,7 @@ const COPY_BASE = {
     proFine: "月額4.99€、または年額39€——いつでも解約できます。",
     current: "現在のプラン",
     switch: "請求ポータルでプランを変更",
-    foot: "価格は該当するVATを含むEUR表示です。お支払いと税務処理はPaddleが安全に行います。費用の見積もりはあくまで目安ですので、必ず公式の通行料金ポータルでご確認ください。",
+    foot: "価格は該当するVATを含むEUR表示です。お支払いと税務処理はCreemが安全に行います。費用の見積もりはあくまで目安ですので、必ず公式の通行料金ポータルでご確認ください。",
     checkout: "安全なお支払い",
     freeToast: "Freeプランをご利用中です。さっそく計画を立てましょう。",
     signupToast: "まずはアカウントを作成してください。そのあと、安全なお支払い画面にご案内します。",
@@ -1102,7 +1102,7 @@ const COPY_BASE = {
     proFine: "每月4.99欧元或每年39欧元——随时可以取消。",
     current: "您当前的套餐",
     switch: "在账单管理页面更换套餐",
-    foot: "价格以欧元计价，已含适用增值税。付款与税务处理由Paddle安全完成。费用预估仅供参考——请以官方过路费平台的信息为准。",
+    foot: "价格以欧元计价，已含适用增值税。付款与税务处理由Creem安全完成。费用预估仅供参考——请以官方过路费平台的信息为准。",
     checkout: "安全支付",
     freeToast: "您正在使用免费套餐——尽情规划旅程吧。",
     signupToast: "请先创建账户，随后我们会立即为您跳转至安全支付页面。",
@@ -1226,15 +1226,15 @@ const HERO: Record<Locale, PricingHero> = {
 const REGION_PRICES: Partial<Record<RegionKey, Partial<Record<PlanTier, { monthly: string; yearly?: string }>>>> = {
   us: {
     free: { monthly: "$0" },
-    tripPass: { monthly: "$9.19" },
-    pro: { monthly: "$6.09", yearly: "$50" },
-    fleet: { monthly: "$24.49" },
+    tripPass: { monthly: "$7.90" },
+    pro: { monthly: "$8.75", yearly: "$50" },
+    fleet: { monthly: "$19.75" },
   },
   ca: {
     free: { monthly: "$0 CAD" },
-    tripPass: { monthly: "$11.29 CAD" },
-    pro: { monthly: "$7.19 CAD", yearly: "$60 CAD" },
-    fleet: { monthly: "$30 CAD" },
+    tripPass: { monthly: "$10.75 CAD" },
+    pro: { monthly: "$12 CAD", yearly: "$69 CAD" },
+    fleet: { monthly: "$27 CAD" },
   },
 };
 
@@ -1243,7 +1243,7 @@ type TripPassCopy = { name: string; price: string; tagline: string; unit: string
 const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   en: {
     name: "Trip Pass (14 Days)",
-    price: "£7.19",
+    price: "€7.33",
     tagline: "One holiday. One payment. Everything unlocked for 14 days.",
     unit: "one-time",
     cta: "Get Trip Pass",
@@ -1258,7 +1258,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   no: {
     name: "Trip Pass (14 dager)",
-    price: "81 kr",
+    price: "85 kr",
     tagline: "Én ferie. Én betaling. Alt ulåst i 14 dager.",
     unit: "engangsbeløp",
     cta: "Kjøp Trip Pass",
@@ -1273,7 +1273,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   sv: {
     name: "Trip Pass (14 dagar)",
-    price: "91 kr",
+    price: "80 kr",
     tagline: "En semester. En betalning. Allt upplåst i 14 dagar.",
     unit: "engångsbelopp",
     cta: "Köp Trip Pass",
@@ -1288,7 +1288,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   da: {
     name: "Trip Pass (14 dage)",
-    price: "61 kr",
+    price: "55 kr",
     tagline: "Én ferie. Én betaling. Alt låst op i 14 dage.",
     unit: "engangsbeløb",
     cta: "Køb Trip Pass",
@@ -1303,7 +1303,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   de: {
     name: "Trip Pass (14 Tage)",
-    price: "8,19 €",
+    price: "7,33 €",
     tagline: "Ein Urlaub. Eine Zahlung. 14 Tage alles freigeschaltet.",
     unit: "einmalig",
     cta: "Trip Pass holen",
@@ -1318,7 +1318,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   nl: {
     name: "Trip Pass (14 dagen)",
-    price: "8,19 €",
+    price: "7,33 €",
     tagline: "Eén vakantie. Eén betaling. 14 dagen alles ontgrendeld.",
     unit: "eenmalig",
     cta: "Trip Pass kopen",
@@ -1333,7 +1333,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   fr: {
     name: "Trip Pass (14 jours)",
-    price: "8,19 €",
+    price: "7,33 €",
     tagline: "Un voyage. Un paiement. Tout débloqué pendant 14 jours.",
     unit: "paiement unique",
     cta: "Obtenir le Trip Pass",
@@ -1348,7 +1348,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   pl: {
     name: "Trip Pass (14 dni)",
-    price: "35,69 zł",
+    price: "31,49 zł",
     tagline: "Jeden urlop. Jedna płatność. Wszystko odblokowane na 14 dni.",
     unit: "płatność jednorazowa",
     cta: "Kup Trip Pass",
@@ -1363,7 +1363,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   es: {
     name: "Trip Pass (14 días)",
-    price: "8,19 €",
+    price: "7,33 €",
     tagline: "Unas vacaciones. Un pago. Todo desbloqueado 14 días.",
     unit: "pago único",
     cta: "Conseguir Trip Pass",
@@ -1378,7 +1378,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   it: {
     name: "Trip Pass (14 giorni)",
-    price: "8,19 €",
+    price: "7,33 €",
     tagline: "Una vacanza. Un pagamento. Tutto sbloccato per 14 giorni.",
     unit: "pagamento unico",
     cta: "Ottieni Trip Pass",
@@ -1393,7 +1393,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   pt: {
     name: "Trip Pass (14 dias)",
-    price: "8,19 €",
+    price: "7,33 €",
     tagline: "Umas férias. Um pagamento. Tudo desbloqueado por 14 dias.",
     unit: "pagamento único",
     cta: "Obter Trip Pass",
@@ -1408,7 +1408,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   us: {
     name: "Trip Pass (14 Days)",
-    price: "$9.19",
+    price: "$7.90",
     tagline: "One road trip. One payment. Everything unlocked for 14 days.",
     unit: "one-time",
     cta: "Get Trip Pass",
@@ -1423,7 +1423,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   fi: {
     name: "Trip Pass (14 päivää)",
-    price: "8,19 €",
+    price: "7,33 €",
     tagline: "Yksi loma. Yksi maksu. Kaikki auki 14 päiväksi.",
     unit: "kertamaksu",
     cta: "Hanki Trip Pass",
@@ -1438,7 +1438,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   ja: {
     name: "Trip Pass（14日間）",
-    price: "¥1,320",
+    price: "¥1,150",
     tagline: "一度の旅行に、一度のお支払い。14日間すべて開放。",
     unit: "買い切り",
     cta: "Trip Passを入手",
@@ -1453,7 +1453,7 @@ const TRIP_PASS_COPY: Record<Locale, TripPassCopy> = {
   },
   zh: {
     name: "Trip Pass（14 天）",
-    price: "¥63",
+    price: "¥59",
     tagline: "一次假期，一次付费，14 天全部解锁。",
     unit: "一次性",
     cta: "获取 Trip Pass",
