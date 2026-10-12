@@ -77,10 +77,10 @@ async function handleSubscription(sub: any) {
       {
         user_id: userId,
         provider: "creem",
-        stripe_subscription_id: null,
-        stripe_customer_id: null,
-        paddle_subscription_id: sub.id,
-        paddle_customer_id: customerIdFrom(sub),
+        legacy_subscription_id: null,
+        legacy_customer_id: null,
+        creem_subscription_id: sub.id,
+        creem_customer_id: customerIdFrom(sub),
         product_id: priceKey.replace(/_(monthly|yearly)$/, ""),
         price_id: priceKey,
         status: mapStatus(sub.status),
@@ -90,7 +90,7 @@ async function handleSubscription(sub: any) {
         environment: environment(),
         updated_at: new Date().toISOString(),
       },
-      { onConflict: "paddle_subscription_id" },
+      { onConflict: "creem_subscription_id" },
     );
 }
 
@@ -99,7 +99,7 @@ async function handleSubscriptionEnded(sub: any) {
   await getSupabase()
     .from("subscriptions")
     .update({ status: mapStatus(sub.status), updated_at: new Date().toISOString() })
-    .eq("paddle_subscription_id", sub.id)
+    .eq("creem_subscription_id", sub.id)
     .eq("environment", environment());
 }
 
@@ -136,10 +136,10 @@ async function handleCheckoutCompleted(checkout: any) {
       {
         user_id: userId,
         provider: "creem",
-        stripe_subscription_id: null,
-        stripe_customer_id: null,
-        paddle_subscription_id: checkout.id,
-        paddle_customer_id: customerIdFrom(order) || customerIdFrom(checkout),
+        legacy_subscription_id: null,
+        legacy_customer_id: null,
+        creem_subscription_id: checkout.id,
+        creem_customer_id: customerIdFrom(order) || customerIdFrom(checkout),
         product_id: priceKey,
         price_id: priceKey,
         status: "active",
@@ -149,7 +149,7 @@ async function handleCheckoutCompleted(checkout: any) {
         environment: environment(),
         updated_at: now.toISOString(),
       },
-      { onConflict: "paddle_subscription_id" },
+      { onConflict: "creem_subscription_id" },
     );
   if (error) throw error;
 }
@@ -161,7 +161,7 @@ async function handleRefund(refund: any) {
   await getSupabase()
     .from("subscriptions")
     .update({ status: "canceled", updated_at: new Date().toISOString() })
-    .eq("paddle_subscription_id", typeof ref === "string" ? ref : ref.id)
+    .eq("creem_subscription_id", typeof ref === "string" ? ref : ref.id)
     .eq("environment", environment());
 }
 

@@ -56,21 +56,21 @@ export const createPortalSession = createServerFn({ method: "POST" })
 
     const { data: sub } = await supabase
       .from("subscriptions")
-      .select("paddle_customer_id")
+      .select("creem_customer_id")
       .eq("user_id", userId)
       .eq("provider", "creem")
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
 
-    if (!sub?.paddle_customer_id) {
+    if (!sub?.creem_customer_id) {
       return { error: "No Creem subscription found for this account." };
     }
 
     try {
       const portal = await creemApi<{ customer_portal_link?: string; customerPortalLink?: string }>(
         "/customers/billing",
-        { method: "POST", body: { customer_id: sub.paddle_customer_id } },
+        { method: "POST", body: { customer_id: sub.creem_customer_id } },
       );
       const url = portal.customer_portal_link ?? portal.customerPortalLink;
       if (!url) return { error: "Creem did not return a portal link." };
