@@ -2,12 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
 import { NO_PRICING } from "@/lib/global-content-no";
-import { absUrl, appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, breadcrumbScript } from "@/lib/seo";
 
 const content = NO_PRICING;
 
 export const Route = createFileRoute("/no/pricing")({
   head: () => ({
+    scripts: breadcrumbScript([{ name: "Hjem", url: absUrl("/no") }, { name: "Priser", url: absUrl("/no/pricing") }]),
     meta: [
       { title: content.meta.title },
       { name: "description", content: content.meta.description },

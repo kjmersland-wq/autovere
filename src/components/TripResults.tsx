@@ -40,6 +40,7 @@ import {
   useMoney,
 } from "@/lib/currency";
 import { useLocale, useT, useTr } from "@/lib/i18n";
+import { LocaleLink } from "@/components/LocaleLink";
 import { prefixForCode } from "@/lib/locales";
 import { tripPassPrice } from "@/lib/pricing-i18n";
 import { PURCHASES_ENABLED } from "@/lib/purchases";
@@ -578,6 +579,18 @@ ${window.location.href}`);
             </Button>
             <span className="text-center text-xs text-muted-foreground sm:text-right">{t.flow.tripPassNote}</span>
           </div>
+        </div>
+      )}
+
+      {/* Calm, price-free nudge after the result; sits above the "next step" links. */}
+      {exportsLocked && (
+        <div className="glass-panel mt-4 flex flex-col gap-3 rounded-2xl p-5 sm:flex-row sm:items-center sm:justify-between">
+          <p className="text-sm text-foreground/75">
+            {tr("Want the full breakdown and offline kit for this trip?")}
+          </p>
+          <Button variant="outline" size="sm" asChild className="shrink-0">
+            <LocaleLink to="/pricing">{tr("See Trip Pass & Pro")}</LocaleLink>
+          </Button>
         </div>
       )}
 

@@ -1,10 +1,11 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
-import { absUrl, appPageHreflangLinks } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, breadcrumbScript } from "@/lib/seo";
 
 export const Route = createFileRoute("/ca/pricing")({
   head: () => ({
+    scripts: breadcrumbScript([{ name: "Home", url: absUrl("/ca") }, { name: "Pricing", url: absUrl("/ca/pricing") }]),
     meta: [
       { title: "Plans & Pricing in CAD — Free, Pro and Fleet | AutoVere Canada" },
       {

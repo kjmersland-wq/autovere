@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
-import { absUrl, appPageHreflangLinks, faqScript } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, faqScript, breadcrumbScript } from "@/lib/seo";
 import { FAQ } from "@/lib/info-content";
 
 const content = FAQ["ca"];
@@ -23,7 +23,7 @@ export const Route = createFileRoute("/ca/faq")({
       { property: "og:url", content: absUrl("/ca/faq") },
     ],
     links: [{ rel: "canonical", href: absUrl("/ca/faq") }, ...appPageHreflangLinks("faq")],
-    scripts: faqScript(content.sections),
+    scripts: [...faqScript(content.sections), ...breadcrumbScript([{ name: "Home", url: absUrl("/ca") }, { name: "FAQ", url: absUrl("/ca/faq") }])],
   }),
   component: CaFaqPage,
 });

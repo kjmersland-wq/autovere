@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
-import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl, breadcrumbScript } from "@/lib/seo";
 
 const title = "Plany i cennik — Free, Pro i Flota | AutoVere";
 const description =
@@ -9,6 +9,7 @@ const description =
 
 export const Route = createFileRoute("/pl/pricing")({
   head: () => ({
+    scripts: breadcrumbScript([{ name: "Strona główna", url: absUrl("/pl") }, { name: "Cennik", url: absUrl("/pl/pricing") }]),
     meta: [
       { title },
       { name: "description", content: description },

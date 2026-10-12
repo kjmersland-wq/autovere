@@ -2,12 +2,13 @@ import { createFileRoute } from "@tanstack/react-router";
 
 import { InfoPage } from "@/components/InfoPage";
 import { HOW_IT_WORKS } from "@/lib/info-content";
-import { appPageHreflangLinks } from "@/lib/seo";
+import { appPageHreflangLinks, absUrl, breadcrumbScript } from "@/lib/seo";
 
 const content = HOW_IT_WORKS["us"];
 
 export const Route = createFileRoute("/us/how-it-works")({
   head: () => ({
+    scripts: breadcrumbScript([{ name: "Home", url: absUrl("/us") }, { name: "How it works", url: absUrl("/us/how-it-works") }]),
     meta: [
       { title: content.meta.title },
       { name: "description", content: content.meta.description },

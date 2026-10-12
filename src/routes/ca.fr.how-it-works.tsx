@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { absUrl, breadcrumbScript } from "@/lib/seo";
 import { InfoPage } from "@/components/InfoPage";
 import { HOW_IT_WORKS } from "@/lib/info-content";
 
@@ -7,6 +8,7 @@ const content = HOW_IT_WORKS["ca-fr"];
 
 export const Route = createFileRoute("/ca/fr/how-it-works")({
   head: () => ({
+    scripts: breadcrumbScript([{ name: "Accueil", url: absUrl("/ca/fr") }, { name: "Comment ça marche", url: absUrl("/ca/fr/how-it-works") }]),
     meta: [
       { title: content.meta.title },
       { name: "description", content: content.meta.description },

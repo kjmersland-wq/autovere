@@ -1,7 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { PricingPage } from "@/components/PricingPage";
-import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl, pricingOfferScript } from "@/lib/seo";
+import { absUrl, appPageHreflangLinks, ogImageMeta, ogImageUrl, pricingOfferScript, breadcrumbScript } from "@/lib/seo";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
@@ -24,7 +24,7 @@ export const Route = createFileRoute("/pricing")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
     links: [{ rel: "canonical", href: absUrl("/pricing") }, ...appPageHreflangLinks("pricing")],
-    scripts: pricingOfferScript(),
+    scripts: [...pricingOfferScript(), ...breadcrumbScript([{ name: "Home", url: absUrl("/") }, { name: "Pricing", url: absUrl("/pricing") }])],
   }),
   component: () => <PricingPage />,
 });
