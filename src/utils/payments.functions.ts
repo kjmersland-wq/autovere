@@ -15,16 +15,14 @@ type PortalSessionResult = { url: string } | { error: string };
  */
 export const createCreemCheckout = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((data: { productKey: CreemProductKey; successUrl?: string }) => data)
+  .validator((data: { productKey: CreemProductKey; successUrl?: string; email?: string }) => data)
   .handler(async ({ data, context }): Promise<CheckoutResult> => {
     if (!PURCHASES_ENABLED) return { error: purchasesPausedMessage() };
 
     const productId = CREEM_PRODUCT_IDS[data.productKey];
-    if (!productId || productId.startsWith("prod_") === false || productId.includes("_")) {
+    if (!productId || /^prod_[A-Z_]+$/.test(productId)) {
       // Placeholder IDs (prod_TRIP_PASS etc.) until the real ones are configured.
-      if (/^[A-Z_]+$/.test(productId.replace(/^prod_/, ""))) {
-        return { error: "This plan is not configured for checkout yet." };
-      }
+      return { error: "This plan is not configured for checkout yet." };
     }
 
     try {
@@ -36,7 +34,7 @@ export const createCreemCheckout = createServerFn({ method: "POST" })
             product_id: productId,
             request_id: `${context.userId}-${Date.now()}`,
             ...(data.successUrl ? { success_url: data.successUrl } : {}),
-            ...(context.userEmail ? { customer: { email: context.userEmail } } : {}),
+            ...(data.email ? { customer: { email: data.email } } : {}),
             metadata: { userId: context.userId, site: "autovere.com", plan: data.productKey },
           },
         },
@@ -61,21 +59,21 @@ export const createPortalSession = createServerFn({ method: "POST" })
 
     const { data: sub } = await supabase
       .from("subscriptions")
-      .select("creem_customer_id")
+      .select("paddle_customer_id")
       .eq("user_id", userId)
       .eq("provider", "creem")
       .order("created_at", { ascending: false })
       .limit(1)
       .maybeSingle();
 
-    if (!sub?.creem_customer_id) {
+    if (!sub?.paddle_customer_id) {
       return { error: "No Creem subscription found for this account." };
     }
 
     try {
       const portal = await creemApi<{ customer_portal_link?: string; customerPortalLink?: string }>(
         "/customers/billing",
-        { method: "POST", body: { customer_id: sub.creem_customer_id } },
+        { method: "POST", body: { customer_id: sub.paddle_customer_id } },
       );
       const url = portal.customer_portal_link ?? portal.customerPortalLink;
       if (!url) return { error: "Creem did not return a portal link." };
