@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import { SiteHeader } from "@/components/SiteHeader";
 import { useLocale, useT, useTr } from "@/lib/i18n";
-import { seoRouteCopy } from "@/lib/seo-route-i18n";
+import { corridorSeo, seoRouteCopy } from "@/lib/seo-route-i18n";
 import type { SEOCorridor, VehicleClass } from "@/data/seo-corridors";
 
 const VEHICLE_ICON: Record<VehicleClass, typeof Car> = {
@@ -93,7 +93,7 @@ export function SeoRoutePage({
   const t = useT();
   const tr = useTr();
   const copy = seoRouteCopy(locale);
-  const year = new Date().getFullYear();
+  const seo = corridorSeo(locale, corridor, new Date().getFullYear());
   const corridorTitle = `${corridor.origin.name} → ${corridor.destination.name}`;
 
   const vehicleLabel: Record<VehicleClass, string> = {
@@ -120,10 +120,10 @@ export function SeoRoutePage({
         </Breadcrumb>
         <p className="mt-4 text-xs uppercase tracking-[0.22em] text-amber-300/90">{copy.eyebrow}</p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground md:text-4xl">
-          {copy.pageTitle(corridor.origin.name, corridor.destination.name, year)}
+          {seo.title}
         </h1>
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground">
-          {copy.metaDescription(corridor.origin.name, corridor.destination.name)}
+          {seo.lead}
         </p>
 
         <div className="mt-6 flex flex-wrap gap-4 text-sm text-muted-foreground">
@@ -167,6 +167,26 @@ export function SeoRoutePage({
         </section>
 
         <CabinCost corridor={corridor} />
+
+        {seo.tips.length > 0 && (
+          <section className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
+            <h2 className="text-lg font-semibold text-foreground">{seo.tipsTitle}</h2>
+            <ul className="mt-4 grid gap-2 text-sm text-foreground/80">
+              {seo.tips.map((tip) => (
+                <li key={tip} className="flex gap-3">
+                  <span aria-hidden="true" className="mt-2 size-1.5 shrink-0 rounded-full bg-amber-300/90" />
+                  {tip}
+                </li>
+              ))}
+            </ul>
+            <a
+              href={`${homeHref === "/" ? "" : homeHref}/tolls`}
+              className="mt-5 inline-block text-sm font-medium text-foreground underline underline-offset-4 decoration-white/30 hover:decoration-foreground"
+            >
+              {seo.tollsLink}
+            </a>
+          </section>
+        )}
 
         <section className="mt-6 rounded-2xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur">
           <h2 className="text-lg font-semibold text-foreground">{copy.checklistTitle}</h2>
@@ -234,7 +254,7 @@ export function SeoRoutePage({
         <section className="mt-12">
           <h2 className="text-lg font-semibold text-foreground">{copy.faqTitle}</h2>
           <div className="mt-4 space-y-4">
-            {copy.faqQuestions(corridor.origin.name, corridor.destination.name).map((f) => (
+            {seo.faqs.map((f) => (
               <div key={f.q} className="rounded-xl border border-white/10 bg-white/[0.04] p-5">
                 <p className="text-sm font-semibold text-foreground">{f.q}</p>
                 <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{f.a}</p>

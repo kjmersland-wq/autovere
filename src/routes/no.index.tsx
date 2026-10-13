@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 
 import { HeroPlanner } from "@/components/HeroPlanner";
+import { NorwayRouteLinks } from "@/components/NorwayRouteLinks";
 import { ShareButton } from "@/components/ShareButton";
 import { homepageHreflangLinks, localeHomeScript, withSharedRoute } from "@/lib/seo";
 
@@ -47,6 +48,7 @@ function NorwayPage() {
         subtitle="Fortell oss hvor du starter og hvor du drømmer deg bort – vi ordner bompenger, vignetter, drivstoff, lading og ferjer, så du kan nyte turen."
       />
       <div className="mx-auto w-full max-w-6xl px-4 pb-14">
+        <NorwayRouteLinks limit={8} />
         <ShareButton variant="bar" lang="no" url="https://www.autovere.com/no" />
       </div>
     </main>

@@ -1,3 +1,4 @@
+import { RouteLinks } from "@/components/RouteLinks";
 import { SiteHeader } from "@/components/SiteHeader";
 import { useTr } from "@/lib/i18n";
 
@@ -62,6 +63,8 @@ export function TollsGuide() {
             </div>
           ))}
         </div>
+
+        <RouteLinks />
       </section>
     </main>
   );

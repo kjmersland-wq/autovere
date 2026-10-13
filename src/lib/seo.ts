@@ -98,12 +98,12 @@ const APP_PAGE_META_BASE = {
   },
   se: {
     planner: {
-      title: "Ruttplanerare — vägtullar, bränsle och färjor | AutoVere Sverige",
-      description: "Planera resan och se vägtullar, vinjetter, bränsle, laddning och färjor i en budget.",
+      title: "Vägtullskalkylator: se kostnaden innan du kör | AutoVere",
+      description: "Räkna ut vägtullar, bränsle, laddning och färjor för din resa. Gratis kostnadsberäkning för bil, husbil, elbil och MC.",
     },
     tolls: {
-      title: "Vägtullar och vinjetter — guide | AutoVere Sverige",
-      description: "Vägtullar, vinjetter och transpondrar i Europa, USA och Kanada för bil, husbil och MC.",
+      title: "Vägtullar och vinjetter i Europa: vad du betalar | AutoVere",
+      description: "Så fungerar vägtullar och vinjetter i Europa. Se vad du behöver i varje land för bil, husbil och MC – och räkna ut priset för din rutt gratis.",
     },
     scenic: {
       title: "Fjällpass och färjor | AutoVere Sverige",
@@ -116,12 +116,12 @@ const APP_PAGE_META_BASE = {
   },
   dk: {
     planner: {
-      title: "Ruteplanlægger — vejafgifter, brændstof og færger | AutoVere Danmark",
-      description: "Planlæg ruten og se vejafgifter, vignetter, brændstof, opladning og færger i ét samlet budget.",
+      title: "Beregn vejafgifter: se prisen, før du kører | AutoVere",
+      description: "Beregn vejafgifter, brændstof, opladning og færger for din tur. Gratis prisoverslag til bil, autocamper, elbil og MC.",
     },
     tolls: {
-      title: "Vejafgifter og vignetter — guide | AutoVere Danmark",
-      description: "Vejafgifter, vignetter og vejafgiftsbrikker i Europa, USA og Canada for bil, autocamper og MC.",
+      title: "Vejafgifter og vignetter i Europa: hvad koster det? | AutoVere",
+      description: "Sådan fungerer vejafgifter og vignetter i Europa. Se, hvad du skal bruge i hvert land til bil, autocamper og MC – og beregn prisen for din rute gratis.",
     },
     scenic: {
       title: "Bjergpas og færger | AutoVere Danmark",
@@ -134,12 +134,12 @@ const APP_PAGE_META_BASE = {
   },
   de: {
     planner: {
-      title: "Routenplaner — Maut, Kraftstoff und Fähren | AutoVere Deutschland",
-      description: "Planen Sie die Route und sehen Sie Maut, Vignetten, Kraftstoff, Laden und Fähren.",
+      title: "Mautrechner: Kosten vor der Fahrt berechnen | AutoVere",
+      description: "Berechnen Sie Maut, Kraftstoff, Laden und Fähren für Ihre Reise. Kostenlose Kostenschätzung für Auto, Wohnmobil, E-Auto und Motorrad.",
     },
     tolls: {
-      title: "Maut und Vignetten — Ratgeber | AutoVere Deutschland",
-      description: "Maut, Vignetten und Transponder in Europa, den USA und Kanada für Auto, Wohnmobil und Motorrad.",
+      title: "Maut und Vignetten in Europa: Kosten und Regeln | AutoVere",
+      description: "So funktionieren Maut und Vignetten in Europa: Was Sie in welchem Land brauchen, für Auto, Wohnmobil und Motorrad – mit Preisrechner für Ihre Route.",
     },
     scenic: {
       title: "Bergpässe und Fähren | AutoVere Deutschland",
@@ -152,12 +152,12 @@ const APP_PAGE_META_BASE = {
   },
   nl: {
     planner: {
-      title: "Routeplanner — tol, brandstof en veerboten | AutoVere Nederland",
-      description: "Plan je route en zie tol, vignetten, brandstof, laden en veerboten in één budget.",
+      title: "Tolcalculator: bereken je kosten vóór vertrek | AutoVere",
+      description: "Bereken tol, brandstof, laden en veerboten voor jouw reis. Gratis kostenraming voor auto, camper, elektrische auto en motor.",
     },
     tolls: {
-      title: "Tol en vignetten — gids | AutoVere Nederland",
-      description: "Tol, vignetten en tolkastjes in Europa, de VS en Canada voor auto, camper en motor.",
+      title: "Tol en vignetten in Europa: wat betaal je? | AutoVere",
+      description: "Zo werken tol en vignetten in Europa. Zie wat je per land nodig hebt voor auto, camper en motor, en bereken gratis de kosten van jouw route.",
     },
     scenic: {
       title: "Bergpassen en veerboten | AutoVere Nederland",
@@ -170,12 +170,12 @@ const APP_PAGE_META_BASE = {
   },
   fr: {
     planner: {
-      title: "Planificateur d'itinéraire — péages, carburant et ferries | AutoVere France",
-      description: "Planifiez la route et visualisez péages, vignettes, carburant, recharge et ferries dans un budget clair.",
+      title: "Calculateur de péages : le coût avant de partir | AutoVere",
+      description: "Calculez péages, carburant, recharge et ferries pour votre voyage. Estimation gratuite pour voiture, camping-car, électrique et moto.",
     },
     tolls: {
-      title: "Péages et vignettes — le guide | AutoVere France",
-      description: "Péages, vignettes et badges de télépéage en Europe, aux États-Unis et au Canada pour voiture, camping-car et moto.",
+      title: "Péages et vignettes en Europe : tarifs et règles | AutoVere",
+      description: "Comment fonctionnent péages et vignettes en Europe : ce qu'il faut dans chaque pays pour voiture, camping-car et moto, avec calcul gratuit de votre trajet.",
     },
     scenic: {
       title: "Cols de montagne et ferries | AutoVere France",
@@ -188,13 +188,13 @@ const APP_PAGE_META_BASE = {
   },
   pl: {
     planner: {
-      title: "Planer trasy — opłaty drogowe, paliwo i promy | AutoVere Polska",
+      title: "Kalkulator opłat drogowych: koszt przed wyjazdem | AutoVere",
       description:
-        "Zaplanuj trasę i zobacz opłaty drogowe, winiety, paliwo, ładowanie i promy w jednym przejrzystym budżecie.",
+        "Policz opłaty drogowe, paliwo, ładowanie i promy dla swojej podróży. Bezpłatna wycena dla auta, kampera, elektryka i motocykla.",
     },
     tolls: {
-      title: "Opłaty drogowe i winiety — przewodnik | AutoVere Polska",
-      description: "Opłaty drogowe, winiety i transpondery w Europie, USA i Kanadzie dla auta, kampera i motocykla.",
+      title: "Opłaty drogowe i winiety w Europie: ile zapłacisz? | AutoVere",
+      description: "Jak działają opłaty drogowe i winiety w Europie. Sprawdź, co jest potrzebne w każdym kraju dla auta, kampera i motocykla, i policz koszt trasy.",
     },
     scenic: {
       title: "Przełęcze górskie i promy | AutoVere Polska",

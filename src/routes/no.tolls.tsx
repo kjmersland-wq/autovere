@@ -1,16 +1,17 @@
 import { createFileRoute } from "@tanstack/react-router";
 
+import { NorwayRouteLinks } from "@/components/NorwayRouteLinks";
 import { SiteHeader } from "@/components/SiteHeader";
 import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 
 export const Route = createFileRoute("/no/tolls")({
   head: () => ({
     meta: [
-      { title: "Bompenger og vignetter forklart — Europa, USA og Canada | AutoVere" },
+      { title: "Bompenger i Norge og Europa: AutoPASS, vignett og priser | AutoVere" },
       {
         name: "description",
         content:
-          "Oppdatert og vennlig veiledning om bompenger, vignetter og bombrikker i Europa, USA og Canada for bil, bobil og motorsykkel.",
+          "Slik fungerer bompenger, AutoPASS og vignett i Norge og Europa. Se hva du må betale, og regn ut prisen for din rute gratis.",
       },
       { property: "og:title", content: "Bompenger og vignetter forklart | AutoVere" },
       {
@@ -93,6 +94,8 @@ function NoTollsPage() {
             </div>
           ))}
         </div>
+
+        <NorwayRouteLinks />
       </section>
     </main>
   );

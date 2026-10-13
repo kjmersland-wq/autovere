@@ -6,11 +6,11 @@ import { absUrl, appPageHreflangLinks } from "@/lib/seo";
 export const Route = createFileRoute("/no/planner")({
   head: () => ({
     meta: [
-      { title: "Ruteplanlegger — Se kostnaden før du kjører | AutoVere" },
+      { title: "Bompengekalkulator: se kostnaden før du kjører | AutoVere" },
       {
         name: "description",
         content:
-          "Planlegg ruten og se bompenger, vignetter, drivstoff, lading og ferjer i ett tydelig budsjett for bil, bobil og motorsykkel.",
+          "Regn ut bompenger, drivstoff, lading og ferjer for turen din. Gratis kostnadsoverslag for bil, bobil, elbil og motorsykkel.",
       },
       { property: "og:title", content: "AutoVere Ruteplanlegger" },
       {

@@ -2,7 +2,7 @@ import { createFileRoute, notFound } from "@tanstack/react-router";
 
 import { SeoRoutePage } from "@/components/SeoRoutePage";
 import { relatedCorridors, corridorBySlug, corridorFaqJsonLd, corridorTripJsonLd } from "@/data/seo-corridors";
-import { seoRouteCopy } from "@/lib/seo-route-i18n";
+import { corridorSeo } from "@/lib/seo-route-i18n";
 import { isLocalePrefix, LOCALE_ROUTES, type LocalePrefix } from "@/lib/locales";
 import { absUrl, breadcrumbScript, corridorHreflangLinks, ogImageMeta } from "@/lib/seo";
 
@@ -17,12 +17,8 @@ export const Route = createFileRoute("/$lang/routes/$slug")({
     const prefix = params.lang as LocalePrefix;
     const entry = LOCALE_ROUTES.find((l) => l.prefix === prefix);
     const locale = entry?.code ?? "en";
-    const copy = seoRouteCopy(locale);
-    const year = new Date().getFullYear();
-    const title = copy.pageTitle(corridor.origin.name, corridor.destination.name, year);
-    const description = copy.metaDescription(corridor.origin.name, corridor.destination.name);
+    const { title, description, faqs } = corridorSeo(locale, corridor, new Date().getFullYear());
     const url = absUrl(`/${params.lang}/routes/${params.slug}`);
-    const faqs = copy.faqQuestions(corridor.origin.name, corridor.destination.name);
 
     return {
       meta: [
