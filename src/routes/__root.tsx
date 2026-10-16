@@ -14,7 +14,6 @@ import { useRouterState } from "@tanstack/react-router";
 import { AuthModal } from "@/components/AuthModal";
 import { AuthProvider } from "@/lib/auth";
 import { LocaleAutoDetect } from "@/components/LocaleAutoDetect";
-import { PageViewTracker } from "@/components/PageViewTracker";
 import { PaymentTestModeBanner } from "@/components/PaymentTestModeBanner";
 import { CurrencyProvider } from "@/lib/currency";
 import { htmlLangFor } from "@/lib/seo";
@@ -111,18 +110,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { rel: "apple-touch-icon", href: "/apple-touch-icon.png" },
       { rel: "manifest", href: "/manifest.webmanifest" },
     ],
-    scripts: [
-      { src: "https://www.googletagmanager.com/gtag/js?id=G-EVNGSZWG4B", async: true },
-      {
-        children:
-          "window.dataLayer = window.dataLayer || [];function gtag(){dataLayer.push(arguments);}gtag('js', new Date());gtag('config', 'G-EVNGSZWG4B');",
-      },
-      {
-        src: "https://km-techlabs.com/t.js",
-        defer: true,
-        "data-site": "autovere.com",
-      },
-    ],
   }),
   shellComponent: RootShell,
   component: RootComponent,
@@ -164,7 +151,6 @@ function RootComponent() {
       <AuthProvider>
         <CurrencyProvider>
         <LocaleAutoDetect />
-        <PageViewTracker />
         <PaymentTestModeBanner />
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />
