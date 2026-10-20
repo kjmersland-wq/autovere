@@ -1,86 +1,95 @@
 import { createServerFn } from "@tanstack/react-start";
-
+import type Stripe from "stripe";
+import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { CREEM_PRODUCT_IDS, type CreemProductKey } from "@/lib/creem";
-import { creemApi, getCreemErrorMessage } from "@/lib/creem.server";
+import { createStripeClient, getStripeErrorMessage } from "@/lib/stripe.server";
+import { PAYMENT_PLANS, subscriptionIsActive } from "@/lib/payment-plans";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
-
-type CheckoutResult = { url: string } | { error: string };
-type PortalSessionResult = { url: string } | { error: string };
-
-/**
- * Create a Creem checkout session for the signed-in user and return the
- * hosted checkout URL. The user id is bound server-side via metadata so the
- * webhook can credit the right account — the client never supplies it.
- */
-export const createCreemCheckout = createServerFn({ method: "POST" })
-  .middleware([requireSupabaseAuth])
-  .validator((data: { productKey: CreemProductKey; successUrl?: string; email?: string }) => data)
-  .handler(async ({ data, context }): Promise<CheckoutResult> => {
-    if (!PURCHASES_ENABLED) return { error: purchasesPausedMessage() };
-
-    const productId = CREEM_PRODUCT_IDS[data.productKey];
-    if (!productId) return { error: "This plan is not configured for checkout yet." };
-
-    try {
-      const checkout = await creemApi<{ checkout_url?: string; checkoutUrl?: string }>(
-        "/checkouts",
-        {
-          method: "POST",
-          body: {
-            product_id: productId,
-            request_id: `${context.userId}-${Date.now()}`,
-            ...(data.successUrl ? { success_url: data.successUrl } : {}),
-            ...(data.email ? { customer: { email: data.email } } : {}),
-            metadata: { userId: context.userId, site: "autovere.com", plan: data.productKey },
-          },
-        },
-      );
-      const url = checkout.checkout_url ?? checkout.checkoutUrl;
-      if (!url) return { error: "Creem did not return a checkout URL." };
-      return { url };
-    } catch (error) {
-      return { error: getCreemErrorMessage(error) };
+const environment = z.enum(["sandbox", "live"]);
+const productKey = z.enum(["tripPass", "proMonthly", "proYearly", "businessMonthly"]);
+function safeReturnUrl(value: string) {
+  const url = new URL(value);
+  const host = url.hostname;
+  if (!(host === "localhost" || host === "127.0.0.1" || host === "autovere.com" || host === "www.autovere.com" || host.endsWith(".lovable.app")) || !["https:", "http:"].includes(url.protocol)) throw new Error("Invalid return URL");
+  return value;
+}
+async function resolveOrCreateCustomer(
+  stripe: ReturnType<typeof createStripeClient>,
+  options: { email?: string; userId?: string },
+): Promise<string> {
+  if (options.userId && !/^[a-zA-Z0-9_-]+$/.test(options.userId)) throw new Error("Invalid userId");
+  if (options.userId) {
+    const found = await stripe.customers.search({ query: `metadata['userId']:'${options.userId}'`, limit: 1 });
+    if (found.data.length) return found.data[0].id;
+  }
+  if (options.email) {
+    const existing = await stripe.customers.list({ email: options.email, limit: 1 });
+    if (existing.data.length) {
+      const customer = existing.data[0];
+      if (options.userId && customer.metadata?.userId !== options.userId) {
+        await stripe.customers.update(customer.id, { metadata: { ...customer.metadata, userId: options.userId } });
+      }
+      return customer.id;
     }
+  }
+  const created = await stripe.customers.create({ ...(options.email && { email: options.email }), ...(options.userId && { metadata: { userId: options.userId } }) });
+  return created.id;
+}
+export const createCheckoutSession = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(input => z.object({ productKey, environment, returnUrl: z.string().url() }).parse(input))
+  .handler(async ({ data, context }): Promise<{ clientSecret: string } | { error: string }> => {
+    if (!PURCHASES_ENABLED) return { error: purchasesPausedMessage() };
+    try {
+      const plan = PAYMENT_PLANS[data.productKey];
+      const returnUrl = safeReturnUrl(data.returnUrl);
+      const { data: existing, error } = await context.supabase.from("subscriptions").select("status,current_period_end,price_id").eq("user_id", context.userId).eq("environment", data.environment).in("price_id", data.productKey.startsWith("pro") ? ["pro_monthly", "pro_yearly"] : [plan.priceId]);
+      if (error) throw error;
+      if (plan.interval && existing?.some(subscriptionIsActive)) return { error: "You already have this subscription. Use Manage subscription to change your plan." };
+      const stripe = createStripeClient(data.environment);
+      const prices = await stripe.prices.list({ lookup_keys: [plan.priceId], active: true, limit: 1 });
+      const price = prices.data[0];
+      if (!price) throw new Error("This plan is not configured for checkout yet.");
+      if (price.unit_amount !== plan.amount || price.currency !== plan.currency || (price.recurring?.interval ?? null) !== plan.interval) throw new Error("The configured price does not match this plan.");
+      const { data: auth } = await context.supabase.auth.getUser();
+      const customer = await resolveOrCreateCustomer(stripe, { userId: context.userId, email: auth.user?.email });
+      const product = await stripe.products.retrieve(typeof price.product === "string" ? price.product : price.product.id);
+      const metadata = { userId: context.userId, site: "autovere.com", plan: plan.priceId };
+      const session = await stripe.checkout.sessions.create({
+        line_items: [{ price: price.id, quantity: 1 }],
+        mode: plan.interval ? "subscription" : "payment",
+        ui_mode: "embedded_page",
+        return_url: returnUrl,
+        customer,
+        metadata,
+        managed_payments: { enabled: true },
+        ...(plan.interval ? { subscription_data: { metadata } } : { payment_intent_data: { description: product.name, metadata } }),
+      } as Stripe.Checkout.SessionCreateParams);
+      if (!session.client_secret) throw new Error("Payment form could not be started.");
+      return { clientSecret: session.client_secret };
+    } catch (error) { return { error: getStripeErrorMessage(error) }; }
   });
-
-/**
- * Creem customer portal: generate a billing-portal link for the customer's
- * Creem customer id (stored on their subscription row by the webhook).
- */
 export const createPortalSession = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
-  .validator((data: { returnUrl?: string }) => data)
-  .handler(async ({ context }): Promise<PortalSessionResult> => {
-    const { supabase, userId } = context;
-
-    const { data: sub } = await supabase
-      .from("subscriptions")
-      .select("creem_customer_id")
-      .eq("user_id", userId)
-      .eq("provider", "creem")
-      .order("created_at", { ascending: false })
-      .limit(1)
-      .maybeSingle();
-
-    if (!sub?.creem_customer_id) {
-      return { error: "No Creem subscription found for this account." };
-    }
-
+  .inputValidator(input => z.object({ environment, returnUrl: z.string().url() }).parse(input))
+  .handler(async ({ data, context }): Promise<{ url: string } | { error: string }> => {
     try {
-      const portal = await creemApi<{ customer_portal_link?: string; customerPortalLink?: string }>(
-        "/customers/billing",
-        { method: "POST", body: { customer_id: sub.creem_customer_id } },
-      );
-      const url = portal.customer_portal_link ?? portal.customerPortalLink;
-      if (!url) return { error: "Creem did not return a portal link." };
-      return { url };
-    } catch (error) {
-      return { error: getCreemErrorMessage(error) };
-    }
+      const stripe = createStripeClient(data.environment);
+      const customers = await stripe.customers.search({ query: `metadata['userId']:'${context.userId}'`, limit: 1 });
+      const customer = customers.data[0];
+      if (!customer) return { error: "No subscription found for this account in this payment environment." };
+      const portal = await stripe.billingPortal.sessions.create({ customer: customer.id, return_url: safeReturnUrl(data.returnUrl) });
+      return { url: portal.url };
+    } catch (error) { return { error: getStripeErrorMessage(error) }; }
   });
-
-/** Guard used by client code before starting a checkout. */
-export const purchasesStatus = createServerFn({ method: "GET" }).handler(async () => {
-  return { enabled: PURCHASES_ENABLED, message: PURCHASES_ENABLED ? null : purchasesPausedMessage() };
-});
+export const getCheckoutStatus = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator(input => z.object({ environment, sessionId: z.string().regex(/^cs_[a-zA-Z0-9_]+$/) }).parse(input))
+  .handler(async ({ data, context }): Promise<{ paid: boolean; status: string | null } | { error: string }> => {
+    try {
+      const session = await createStripeClient(data.environment).checkout.sessions.retrieve(data.sessionId);
+      if (session.metadata?.userId !== context.userId) return { error: "This checkout belongs to another account." };
+      return { paid: session.payment_status === "paid" || session.payment_status === "no_payment_required", status: session.status };
+    } catch (error) { return { error: getStripeErrorMessage(error) }; }
+  });
+export const purchasesStatus = createServerFn({ method: "GET" }).handler(async () => ({ enabled: PURCHASES_ENABLED, message: PURCHASES_ENABLED ? null : purchasesPausedMessage() }));
