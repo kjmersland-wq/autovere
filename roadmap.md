@@ -1,5 +1,11 @@
 # Roadmap
 
+## Bytte til innebygd Stripe
+- [ ] Fjern eksisterende betalingsintegrasjon og tilhørende secrets/referanser, behold kundehistorikk.
+- [ ] Aktiver innebygd Lovable Payments med Stripe via kontoformular.
+- [ ] Gjenskap samme produkter/priser og koble checkout, tilgang, kundeportal og økonomioversikt.
+- [ ] Test abonnementer og 14-dagers engangspass i preview før live.
+
 ## Creem-migrering (Creem → Creem)
 - [x] Slettet Creem-filer (creem.ts, creem.server.ts, useCreemCheckout)
 - [x] Creem server-klient + webhook-verifisering (creem.server.ts, HMAC-SHA256)
