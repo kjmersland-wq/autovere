@@ -1,5 +1,5 @@
 export function PaymentTestModeBanner() {
-  const token = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN;
+  const token = import.meta.env["VITE_PAYMENTS_CLIENT_TOKEN"];
   if (token?.startsWith("pk_live_")) return null;
 
   return (

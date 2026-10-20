@@ -15,18 +15,19 @@ function safeReturnUrl(value: string) {
 }
 async function resolveOrCreateCustomer(
   stripe: ReturnType<typeof createStripeClient>,
-  options: { email?: string; userId?: string },
+  options: { email?: string | undefined; userId?: string | undefined },
 ): Promise<string> {
   if (options.userId && !/^[a-zA-Z0-9_-]+$/.test(options.userId)) throw new Error("Invalid userId");
   if (options.userId) {
     const found = await stripe.customers.search({ query: `metadata['userId']:'${options.userId}'`, limit: 1 });
-    if (found.data.length) return found.data[0].id;
+    const matched = found.data[0];
+    if (matched) return matched.id;
   }
   if (options.email) {
     const existing = await stripe.customers.list({ email: options.email, limit: 1 });
-    if (existing.data.length) {
-      const customer = existing.data[0];
-      if (options.userId && customer.metadata?.userId !== options.userId) {
+    const customer = existing.data[0];
+    if (customer) {
+      if (options.userId && customer.metadata?.["userId"] !== options.userId) {
         await stripe.customers.update(customer.id, { metadata: { ...customer.metadata, userId: options.userId } });
       }
       return customer.id;
@@ -45,7 +46,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       const returnUrl = safeReturnUrl(data.returnUrl);
       const { data: existing, error } = await context.supabase.from("subscriptions").select("status,current_period_end,price_id").eq("user_id", context.userId).eq("environment", data.environment).in("price_id", data.productKey.startsWith("pro") ? ["pro_monthly", "pro_yearly"] : [plan.priceId]);
       if (error) throw error;
-      if (plan.interval && existing?.some(subscriptionIsActive)) return { error: "You already have this subscription. Use Manage subscription to change your plan." };
+      if (plan.interval && existing?.some(row => subscriptionIsActive(row))) return { error: "You already have this subscription. Use Manage subscription to change your plan." };
       const stripe = createStripeClient(data.environment);
       const prices = await stripe.prices.list({ lookup_keys: [plan.priceId], active: true, limit: 1 });
       const price = prices.data[0];
@@ -88,7 +89,7 @@ export const getCheckoutStatus = createServerFn({ method: "POST" })
   .handler(async ({ data, context }): Promise<{ paid: boolean; status: string | null } | { error: string }> => {
     try {
       const session = await createStripeClient(data.environment).checkout.sessions.retrieve(data.sessionId);
-      if (session.metadata?.userId !== context.userId) return { error: "This checkout belongs to another account." };
+      if (session.metadata?.["userId"] !== context.userId) return { error: "This checkout belongs to another account." };
       return { paid: session.payment_status === "paid" || session.payment_status === "no_payment_required", status: session.status };
     } catch (error) { return { error: getStripeErrorMessage(error) }; }
   });

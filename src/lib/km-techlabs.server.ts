@@ -11,7 +11,7 @@ export async function forwardToKmTechlabs(event: Stripe.Event, env: string) {
   const currency = "currency" in data && typeof data.currency === "string" ? data.currency : "eur";
   const divisor = ["jpy", "krw", "vnd", "clp", "xof", "xaf"].includes(currency) ? 1 : ["bhd", "jod", "kwd", "omr", "tnd"].includes(currency) ? 1000 : 100;
   const customer = "customer" in data ? data.customer : null;
-  const plan = "metadata" in data ? data.metadata?.plan : undefined;
+  const plan = "metadata" in data ? data.metadata?.["plan"] : undefined;
   const payload = {
     site: "autovere.com", id: data.object === "checkout.session" ? `${data.id}-payment` : event.id,
     type, status: event.type === "charge.refunded" ? "refunded" : "status" in data ? String(data.status) : "paid",
