@@ -1,0 +1,13 @@
+{
+  "version": "7",
+  "dialect": "postgresql",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "7",
+      "when": 1792497340286,
+      "tag": "0000_builtin_payments_identifiers_and_ledger",
+      "breakpoints": true
+    }
+  ]
+}
