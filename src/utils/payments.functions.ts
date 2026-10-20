@@ -56,7 +56,7 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
       const customer = await resolveOrCreateCustomer(stripe, { userId: context.userId, email: auth.user?.email });
       const product = await stripe.products.retrieve(typeof price.product === "string" ? price.product : price.product.id);
       const metadata = { userId: context.userId, site: "autovere.com", plan: plan.priceId };
-      const session = await stripe.checkout.sessions.create({
+      const params: Stripe.Checkout.SessionCreateParams & { managed_payments: { enabled: boolean } } = {
         line_items: [{ price: price.id, quantity: 1 }],
         mode: plan.interval ? "subscription" : "payment",
         ui_mode: "embedded_page",
@@ -65,7 +65,8 @@ export const createCheckoutSession = createServerFn({ method: "POST" })
         metadata,
         managed_payments: { enabled: true },
         ...(plan.interval ? { subscription_data: { metadata } } : { payment_intent_data: { description: product.name, metadata } }),
-      } as Stripe.Checkout.SessionCreateParams);
+      };
+      const session = await stripe.checkout.sessions.create(params);
       if (!session.client_secret) throw new Error("Payment form could not be started.");
       return { clientSecret: session.client_secret };
     } catch (error) { return { error: getStripeErrorMessage(error) }; }
