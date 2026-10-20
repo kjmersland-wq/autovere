@@ -370,6 +370,69 @@ export type Database = {
           },
         ]
       }
+      payment_transactions: {
+        Row: {
+          amount: number
+          billed_at: string
+          currency: string
+          customer_email: string | null
+          customer_id: string | null
+          environment: string
+          id: string
+          price_id: string | null
+          status: string
+          subscription_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          amount?: number
+          billed_at: string
+          currency?: string
+          customer_email?: string | null
+          customer_id?: string | null
+          environment: string
+          id: string
+          price_id?: string | null
+          status: string
+          subscription_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          amount?: number
+          billed_at?: string
+          currency?: string
+          customer_email?: string | null
+          customer_id?: string | null
+          environment?: string
+          id?: string
+          price_id?: string | null
+          status?: string
+          subscription_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      payment_webhook_events: {
+        Row: {
+          completed_at: string
+          environment: string
+          event_created: number
+          id: string
+        }
+        Insert: {
+          completed_at?: string
+          environment: string
+          event_created: number
+          id: string
+        }
+        Update: {
+          completed_at?: string
+          environment?: string
+          event_created?: number
+          id?: string
+        }
+        Relationships: []
+      }
       poi_corridor_cache: {
         Row: {
           cache_key: string
@@ -490,6 +553,8 @@ export type Database = {
           id: string
           legacy_customer_id: string | null
           legacy_subscription_id: string | null
+          payment_customer_id: string | null
+          payment_subscription_id: string | null
           price_id: string
           product_id: string
           provider: string
@@ -508,6 +573,8 @@ export type Database = {
           id?: string
           legacy_customer_id?: string | null
           legacy_subscription_id?: string | null
+          payment_customer_id?: string | null
+          payment_subscription_id?: string | null
           price_id: string
           product_id: string
           provider?: string
@@ -526,6 +593,8 @@ export type Database = {
           id?: string
           legacy_customer_id?: string | null
           legacy_subscription_id?: string | null
+          payment_customer_id?: string | null
+          payment_subscription_id?: string | null
           price_id?: string
           product_id?: string
           provider?: string

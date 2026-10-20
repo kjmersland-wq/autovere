@@ -628,7 +628,7 @@ export const getExchangeRates = createServerFn({ method: "GET" }).handler(
 
 /* ------------------------------------------------------------------ */
 /* Innbetalinger — every recorded purchase/subscription, read from the */
-/* database (the Creem webhook writes each verified payment here).     */
+/* database (the payment webhook writes each verified payment here).     */
 /* Admin-gated like the other Admin data functions.                    */
 /* ------------------------------------------------------------------ */
 
@@ -681,22 +681,22 @@ export const getPaymentLedger = createServerFn({ method: "GET" }).handler(
     }
 
     const { data, error } = await ctx.supabase
-      .from("subscriptions")
-      .select("creem_subscription_id, price_id, status, current_period_start, environment, provider, created_at")
-      .order("created_at", { ascending: false })
+      .from("payment_transactions")
+      .select("id, subscription_id, price_id, status, billed_at, environment, amount, currency, customer_email")
+      .order("billed_at", { ascending: false })
       .limit(300);
     if (error) return { status: "error", message: "Kunne ikke hente innbetalinger fra databasen." };
 
     const rows: PaymentRow[] = (data ?? []).map((row) => ({
-      id: String(row.creem_subscription_id ?? ""),
+      id: row.id,
       environment: (row.environment === "live" ? "live" : "sandbox") as "sandbox" | "live",
       status: String(row.status ?? "unknown"),
-      billedAt: row.current_period_start ?? row.created_at ?? null,
-      amount: 0,
-      currency: "EUR",
+      billedAt: row.billed_at,
+      amount: Number(row.amount),
+      currency: row.currency,
       planLabel: PRICE_LABEL[row.price_id ?? ""] ?? row.price_id ?? "Ukjent",
-      customerEmail: null,
-      subscriptionId: row.creem_subscription_id ?? null,
+      customerEmail: row.customer_email,
+      subscriptionId: row.subscription_id,
     }));
 
     return {

@@ -122,7 +122,7 @@ export function PaymentsLedger() {
         <div>
           <h2 className="text-xl font-semibold tracking-tight">Innbetalinger fra kundene</h2>
           <p className="mt-1 text-sm text-muted-foreground">
-            Alle registrerte kjøp og abonnement, hentet fra databasen (skrevet inn av Creem-webhooken).
+            Alle registrerte kjøp og abonnement, hentet fra databasen (skrevet inn av Stripe-webhooken).
           </p>
         </div>
         <div className="flex gap-2">
@@ -225,7 +225,7 @@ export function PaymentsLedger() {
       <p className="text-xs text-muted-foreground print:text-neutral-600">
         EUR-summene er veiledende og omregnet med
         dagens kurs fra Den europeiske sentralbanken (via frankfurter.dev{data.ratesAsOf ? `, ${data.ratesAsOf}` : ""}).
-        Creem er Merchant of Record og håndterer mva, utbetalinger og kvitteringer.
+        Stripe er Merchant of Record og håndterer mva, utbetalinger og kvitteringer.
       </p>
     </div>
   );

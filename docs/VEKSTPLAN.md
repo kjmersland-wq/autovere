@@ -6,7 +6,7 @@ Punkt merket **[kode]** kan bygges uten deg. **[deg]** betyr at du må gjøre de
 
 Kortversjon:
 
-1. **Rydd betalingen først** (Creem og pris). Uten det lekker alt annet.
+1. **Rydd betalingen først** (Stripe og pris). Uten det lekker alt annet.
 2. **Eie Norge** før Europa: hyttetur, ferje, elbil og bobil. Her har konkurrentene lite.
 3. **La hver tur reklamere for seg selv**: delelenke med pris i forhåndsvisningen, og «splitt regningen».
 4. **Selg sesong, ikke abonnement**. Folk kjører på ferie noen uker i året, ikke hver måned.
@@ -36,7 +36,7 @@ Kortversjon:
 | 11c Sammenligning av tre ruter | Fantes allerede (tre rader øverst på resultatet) |
 | 11c Dagsplan | **Gjort** for turer over 6 timer: jevn deling i dager, hver dag ender nær et ekte punkt på ruten (ikke overnattingssteder) |
 | 11c Offline (PWA) | **Ikke gjort:** manifest og ikon finnes, men servicearbeider kan gi gamle bomsatser i cache. Bør vurderes sammen med endringslogg |
-| 1a–1c Creem, sesongpass, gavekort | **Ikke gjort:** krever produkter og priser i Creem (din beslutning) |
+| 1a–1c Stripe, sesongpass, gavekort | **Ikke gjort:** krever produkter og priser i Stripe (din beslutning) |
 | 11d Hvitmerket dossier | **Gjort:** legg `?logo=https://…&brand=Navn` på adressen, så får utskriften partnerens logo og navn |
 
 Andre feil rettet underveis: KML-eksporten lagde falske koordinater i Sveits (nå ekte rute), engelsk tekst på norsk resultatside (tre linjer, nå én linje på riktig språk), og ruteberegning som hang i 45 sekunder når stedsoppslaget (Photon) var nede (nå pause i 6 sekunder og reserve).
@@ -62,11 +62,11 @@ Det som mangler er å **pakke** dette tydeligere, ikke å lage det.
 
 ## 1. Penger først (uke 1–2)
 
-### 1a. Creem = skjerm [deg]
-Betaling er på (`PURCHASES_ENABLED = true` i `src/lib/purchases.ts`). Checkout bruker Creem-prisene som ligger i Lovable.
-Når prisene i 1b er bestemt, legg dem inn i Creem med én pris per valuta, så skjermen og kvitteringen alltid viser samme beløp.
+### 1a. Stripe = skjerm [deg]
+Betaling er på (`PURCHASES_ENABLED = true` i `src/lib/purchases.ts`). Checkout bruker Stripe-prisene som ligger i Lovable.
+Når prisene i 1b er bestemt, legg dem inn i Stripe med én pris per valuta, så skjermen og kvitteringen alltid viser samme beløp.
 
-- Bestem prisene (1b) før de legges inn i Creem.
+- Bestem prisene (1b) før de legges inn i Stripe.
 - Opprett hvert produkt med én grunnpris og `currency_options` for NOK, SEK, DKK, EUR, GBP, USD, CAD og PLN, med samme beløp som på skjermen.
 - Behold oppslagsnøklene (`trip_pass`, `pro_yearly` …), så trenger koden ikke å endres.
 - Test i testmodus før du endrer noe i live-modus.
@@ -87,12 +87,12 @@ Prisene er i dag satt per språk og henger ikke sammen (se STATUS). Forslag:
 | Polen | 34,99 zł | 59,99 zł | 169 zł | 79 zł |
 
 - **Hvorfor sesongpass:** en feriebilist trenger AutoVere i juni–august, ikke hele året. Månedsabonnement på et ferieprodukt gir mye frafall og dårlig samvittighet hos kunden. 90 dager til omtrent dobbel Trip Pass-pris er lett å si ja til.
-- **Pro-måned kan fjernes** for privatpersoner. Da blir stigen Gratis → Trip Pass → Sesong → År. Enklere tekst og færre Creem-priser.
+- **Pro-måned kan fjernes** for privatpersoner. Da blir stigen Gratis → Trip Pass → Sesong → År. Enklere tekst og færre Stripe-priser.
 - **Norsk Pro 99 kr/mnd** forsvinner da naturlig, i stedet for å forklares.
-- Uansett valg: én pris per valuta i Creem (`currency_options`), samme tall som på skjermen.
+- Uansett valg: én pris per valuta i Stripe (`currency_options`), samme tall som på skjermen.
 
 ### 1c. Gavekort [kode + deg]
-«Gi bort en Trip Pass / et sesongpass»: en kode som løses inn i Garage. Passer til farsdag (november), jul og bursdag til bobil-foreldre. Det er lite kode (Creem-betaling og en innløsningskode).
+«Gi bort en Trip Pass / et sesongpass»: en kode som løses inn i Garage. Passer til farsdag (november), jul og bursdag til bobil-foreldre. Det er lite kode (Stripe-betaling og en innløsningskode).
 
 ---
 
@@ -233,7 +233,7 @@ Følg med i Admin → Produkthendelser. Sett tallene fra første uke som utgangs
 
 | Når | Du | Kode |
 |---|---|---|
-| **Uke 1–2** | Creem-sjekk, testkjøp, prisbeslutning (1a–1b), sitemap | Sesongpass og prisjustering når du har bestemt |
+| **Uke 1–2** | Stripe-sjekk, testkjøp, prisbeslutning (1a–1b), sitemap | Sesongpass og prisjustering når du har bestemt |
 | **Uke 3–4** | Kontakt 5 partnere (bobil, camping, elbilforening) | Norske rutesider (2a), elbil-standard (2d), bilde per tur (3a) |
 | **Uke 5–8** | Del hytte- og rutelenker i grupper og fora | Hyttekalkulator (2b), splitt regningen (3b), partnerboks (5) |
 | **Uke 9–12** | Pressemelding om kostnadsindeks (4b) | «Hva kostet det?» (4a), AutoPASS-sparing (2c) |

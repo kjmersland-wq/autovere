@@ -233,7 +233,7 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
     {
       heading: "Who we share data with",
       items: [
-        "Creem, our Merchant of Record, processes payments, subscriptions, tax and invoicing when you buy a plan — Creem acts as an independent controller for that data",
+        "Stripe, our Merchant of Record, processes payments, subscriptions, tax and invoicing when you buy a plan — Stripe acts as an independent controller for that data",
         "Hosting and infrastructure providers that keep the site running",
         "Professional advisers (legal, accounting) where needed",
         "Authorities, only where required by law",
@@ -280,7 +280,7 @@ export const GLOBAL_TERMS: InfoPageContent = {
     },
     {
       heading: "Payments and subscriptions",
-      body: "Our order process is conducted by our online reseller Creem. Creem is the Merchant of Record for all our orders. Creem provides all customer service inquiries and handles returns. Payment, billing, tax, cancellation and refund mechanics are governed by Creem's Buyer Terms. Subscriptions renew automatically until cancelled, and you can manage or cancel your plan at any time via the Creem customer portal.",
+      body: "Our order process is conducted by our online reseller Stripe. Stripe is the Merchant of Record for all our orders. Stripe provides all customer service inquiries and handles returns. Payment, billing, tax, cancellation and refund mechanics are governed by Stripe's Buyer Terms. Subscriptions renew automatically until cancelled, and you can manage or cancel your plan at any time via the Stripe customer portal.",
     },
     {
       heading: "Intellectual property and acceptable use",
@@ -315,17 +315,17 @@ export const GLOBAL_REFUND: InfoPageContent = {
     },
     {
       heading: "How to request a refund",
-      body: "Refunds are processed by our payment provider and Merchant of Record, Creem. To request a refund, email us at kjell@autovere.com and we will help you. Refunds are returned to the original payment method.",
+      body: "Refunds are processed by our payment provider and Merchant of Record, Stripe. To request a refund, email us at kjell@autovere.com and we will help you. Refunds are returned to the original payment method.",
     },
     {
       heading: "Subscriptions",
-      body: "You can cancel a subscription at any time via the Creem customer portal. Cancellation stops future renewals; the 30-day guarantee above applies to the most recent payment.",
+      body: "You can cancel a subscription at any time via the Stripe customer portal. Cancellation stops future renewals; the 30-day guarantee above applies to the most recent payment.",
     },
   ],
   note: DISCLAIMER,
   meta: {
     title: "Refund Policy — 30-Day Money-Back Guarantee | AutoVere",
     description:
-      "AutoVere offers a 30-day money-back guarantee on all paid plans, processed by Creem. How to request a refund.",
+      "AutoVere offers a 30-day money-back guarantee on all paid plans, processed by Stripe. How to request a refund.",
   },
 };
