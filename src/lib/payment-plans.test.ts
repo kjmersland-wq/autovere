@@ -1,4 +1,4 @@
-import { describe, expect, it } from "bun:test";
+import { describe, expect, it } from "vitest";
 import { PAYMENT_PLANS, tierForPriceId, subscriptionIsActive } from "./payment-plans";
 import { passDays } from "./pass-durations";
 describe("Unchanged AutoVere plans", () => {
