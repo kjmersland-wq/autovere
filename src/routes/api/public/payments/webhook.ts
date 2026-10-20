@@ -23,10 +23,10 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
       const writeSubscription = async (id: string) => {
         // Read current provider state rather than trust out-of-order event snapshots.
         const sub = await stripe.subscriptions.retrieve(id);
-        const userId = sub.metadata.userId;
+        const userId = sub.metadata["userId"];
         const item = sub.items.data[0];
         if (!userId || !item) return;
-        const priceId = item.price.lookup_key ?? item.price.metadata.lovable_external_id;
+        const priceId = item.price.lookup_key ?? item.price.metadata["lovable_external_id"];
         if (!priceId) throw new Error("Missing plan lookup key");
         const { error } = await db.from("subscriptions").upsert({
           user_id: userId, provider: "stripe", payment_subscription_id: sub.id,
@@ -44,8 +44,8 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           if (subId) await writeSubscription(subId);
           return;
         }
-        const userId = session.metadata?.userId;
-        const priceId = session.metadata?.plan;
+        const userId = session.metadata?.["userId"];
+        const priceId = session.metadata?.["plan"];
         const days = priceId ? passDays(priceId) : undefined;
         if (!userId || !priceId || !days) throw new Error("Missing pass metadata");
         // Use immutable payment/session timestamps and ignore duplicates: retries never extend access.
@@ -60,7 +60,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
         if (error) throw error;
         const { error: ledgerError } = await db.from("payment_transactions").upsert({
           id: session.id, environment: env, user_id: userId, subscription_id: null,
-          customer_id: idOf(session.customer), customer_email: session.customer_details?.email,
+          customer_id: idOf(session.customer), customer_email: session.customer_details?.email ?? null,
           price_id: priceId, amount: (session.amount_total ?? 0) / 100, currency: session.currency?.toUpperCase() ?? "EUR",
           status: "paid", billed_at: iso(session.created) ?? new Date().toISOString(),
         }, { onConflict: "id,environment" });
@@ -84,7 +84,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
           if (event.type === "invoice.paid") {
             const sub = subId ? await stripe.subscriptions.retrieve(subId) : null;
             const { error } = await db.from("payment_transactions").upsert({
-              id: invoice.id, environment: env, user_id: sub?.metadata.userId,
+              id: invoice.id, environment: env, user_id: sub?.metadata["userId"] ?? null,
               subscription_id: subId, customer_id: idOf(invoice.customer), customer_email: invoice.customer_email,
               price_id: sub?.items.data[0]?.price.lookup_key ?? null,
               amount: invoice.amount_paid / 100, currency: invoice.currency.toUpperCase(), status: "paid",
