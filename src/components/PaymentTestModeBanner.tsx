@@ -1,11 +1,10 @@
-/** Shown only while the preview runs against the Creem test environment. */
 export function PaymentTestModeBanner() {
-  const testMode = (import.meta.env["VITE_CREEM_TEST_MODE"] as string | undefined) === "true";
-  if (!testMode) return null;
+  const token = import.meta.env.VITE_PAYMENTS_CLIENT_TOKEN;
+  if (token?.startsWith("pk_live_")) return null;
 
   return (
-    <div className="w-full border-b border-orange-300 bg-orange-100 px-4 py-2 text-center text-sm text-orange-800">
-      All payments made in the preview are in test mode.
+    <div className="w-full border-b border-border bg-muted px-4 py-2 text-center text-sm text-muted-foreground">
+      {token?.startsWith("pk_test_") ? "All payments made in the preview are in test mode." : "Production checkout is not configured. Complete go-live in the Payments tab to accept real payments."}
     </div>
   );
 }

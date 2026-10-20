@@ -2,7 +2,8 @@ import { useCallback, useEffect, useState } from "react";
 
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
-import { tierForPriceId, TIER_RANK, type PlanTier } from "@/lib/creem";
+import { tierForPriceId, TIER_RANK, subscriptionIsActive, type PlanTier } from "@/lib/payment-plans";
+import { getStripeEnvironment } from "@/lib/stripe";
 
 export type SubscriptionRow = {
   price_id: string;
@@ -22,16 +23,22 @@ export function useSubscription() {
       setLoading(false);
       return;
     }
+    let environment: "sandbox" | "live";
+    try { environment = getStripeEnvironment(); } catch {
+      setSubscription(null);
+      setLoading(false);
+      return;
+    }
     const { data } = await supabase
       .from("subscriptions")
       .select("price_id, status, current_period_end, cancel_at_period_end")
       .eq("user_id", user.id)
+      .eq("environment", environment)
       .order("created_at", { ascending: false })
       .limit(10);
     // A bought pass must never hide a running Pro plan: use the highest active tier, newest first.
     const rows = (data as SubscriptionRow[] | null) ?? [];
-    const live = (r: SubscriptionRow) => !r.current_period_end || new Date(r.current_period_end).getTime() > Date.now();
-    const best = rows.filter(live).sort((a, b) => TIER_RANK[tierForPriceId(b.price_id)] - TIER_RANK[tierForPriceId(a.price_id)])[0];
+    const best = rows.filter(r => subscriptionIsActive(r)).sort((a, b) => TIER_RANK[tierForPriceId(b.price_id)] - TIER_RANK[tierForPriceId(a.price_id)])[0];
     setSubscription(best ?? rows[0] ?? null);
     setLoading(false);
   }, [user]);

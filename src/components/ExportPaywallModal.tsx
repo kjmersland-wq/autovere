@@ -9,14 +9,14 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useCreemCheckout } from "@/hooks/useCreemCheckout";
+import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { useRouterState } from "@tanstack/react-router";
 
 import { useLocale, useTr } from "@/lib/i18n";
 import { proYearlyPrice, tripPassPrice } from "@/lib/pricing-i18n";
-import type { CreemProductKey } from "@/lib/creem";
+import type { PaymentProductKey } from "@/lib/payment-plans";
 import { regionFromPath } from "@/lib/site-basics";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
 
@@ -45,9 +45,9 @@ export function ExportPaywallModal({
   const price = tripPassPrice(locale, regionFromPath(pathname));
   const yearly = proYearlyPrice(locale, regionFromPath(pathname));
   const { user, openAuth } = useAuth();
-  const { openCheckout } = useCreemCheckout();
+  const { openCheckout, checkoutElement } = useStripeCheckout();
 
-  const startCheckout = (productKey: CreemProductKey) => {
+  const startCheckout = (productKey: PaymentProductKey) => {
     if (!PURCHASES_ENABLED) {
       toast.info(purchasesPausedMessage(locale));
       return;
@@ -64,6 +64,7 @@ export function ExportPaywallModal({
 
   return (
     <>
+      {checkoutElement}
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-md">
           <DialogHeader>
