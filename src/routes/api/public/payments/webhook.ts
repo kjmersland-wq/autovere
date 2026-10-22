@@ -133,7 +133,7 @@ export const Route = createFileRoute("/api/public/payments/webhook")({
       }
 
       const { error } = await db.from("payment_webhook_events").upsert(
-        { id: eventId, environment: env, event_created: occurredAt },
+        { id: eventId, environment: env, event_created: Math.floor(Date.parse(occurredAt) / 1000) },
         { onConflict: "id,environment", ignoreDuplicates: true },
       );
       if (error) throw error;
