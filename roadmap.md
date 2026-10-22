@@ -1,9 +1,10 @@
 # Roadmap
 
 ## Tilbake til innebygd Stripe
-- [ ] Brukeren bekrefter byttet og kobler fra Paddle i betalingspanelet (må gjøres av brukeren).
+- [x] Brukeren bekrefter byttet og at eksisterende abonnementer ikke flyttes automatisk.
+- [ ] Brukeren kobler fra Paddle i betalingspanelet (må gjøres av brukeren).
 - [ ] Koble til innebygd Stripe, gjenopprett produkter og bytt betalingskode uten å slette kundehistorikk.
-- [ ] Avklar nye abonnementspriser før priser endres; nåværende priser beholdes inntil beløp er oppgitt.
+- [x] Brukeren bekrefter at nåværende AutoVere-priser skal beholdes uendret.
 - [ ] Test kjøpsflyt i forhåndsvisningen og kontroller live-status før publisering.
 
 ## Bytte til innebygd Paddle-betaling
