@@ -27,7 +27,7 @@ function activePrefix() {
 export function billingReturnUrl() {
   return `${typeof window === "undefined" ? "https://www.autovere.com" : window.location.origin}${activePrefix()}/pricing`;
 }
-export function checkoutReturnUrl() {
+export function checkoutSuccessUrl() {
   const origin = typeof window === "undefined" ? "https://www.autovere.com" : window.location.origin;
-  return `${origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}&back=${encodeURIComponent(`${activePrefix()}/pricing`)}`;
+  return `${origin}/checkout/return`;
 }
