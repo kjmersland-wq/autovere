@@ -1,5 +1,11 @@
 # Roadmap
 
+## Tilbake til innebygd Stripe
+- [ ] Brukeren bekrefter byttet og kobler fra Paddle i betalingspanelet (må gjøres av brukeren).
+- [ ] Koble til innebygd Stripe, gjenopprett produkter og bytt betalingskode uten å slette kundehistorikk.
+- [ ] Avklar nye abonnementspriser før priser endres; nåværende priser beholdes inntil beløp er oppgitt.
+- [ ] Test kjøpsflyt i forhåndsvisningen og kontroller live-status før publisering.
+
 ## Bytte til innebygd Paddle-betaling
 - [x] Stripe frakoblet og all Stripe-kode/-pakker fjernet; historiske migrasjoner og kundehistorikk beholdt.
 - [x] Paddle aktivert (alias-e-post godkjent); fire planer opprettet med uendrede priser: Trip Pass €7.33/14 dager, Pro €8.15/mnd, Pro €47/år, Business €18.39/mnd.
