@@ -244,7 +244,7 @@ export const NO_TERMS: InfoPageContent = {
     },
     {
       heading: "Betaling og abonnement",
-      body: "Bestillingen gjennomføres av vår nettforhandler Stripe. Stripe er Merchant of Record for alle bestillinger, besvarer alle kundehenvendelser og håndterer returer. Betaling, fakturering, avgifter, oppsigelse og refusjon følger Stripes kjøpsvilkår. Abonnementer fornyes automatisk til du sier opp, og du kan når som helst administrere eller si opp via Stripes kundeportal. Se også refusjonsreglene våre på /refund.",
+      body: "Bestillingen gjennomføres av vår nettforhandler Paddle.com. Paddle.com er Merchant of Record for alle bestillinger, besvarer alle kundehenvendelser og håndterer returer. Betaling, fakturering, avgifter, oppsigelse og refusjon følger Paddles kjøpsvilkår. Abonnementer fornyes automatisk til du sier opp, og du kan når som helst administrere eller si opp via Paddles kundeportal. Se også refusjonsreglene våre på /refund.",
     },
     {
       heading: "Ansvar",
