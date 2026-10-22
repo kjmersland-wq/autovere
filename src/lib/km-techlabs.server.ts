@@ -1,5 +1,5 @@
 // Forward verified financial events; failures never block provider delivery.
-// Provider-neutral: the payments webhook normalizes Paddle events into this shape.
+// Provider-neutral: the payments webhook normalizes verified payment events into this shape.
 const DEFAULT_URL = "https://www.km-techlabs.com/api/public/ingest/payments";
 
 export type AccountingPayload = {

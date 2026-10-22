@@ -225,7 +225,7 @@ export function PaymentsLedger() {
       <p className="text-xs text-muted-foreground print:text-neutral-600">
         EUR-summene er veiledende og omregnet med
         dagens kurs fra Den europeiske sentralbanken (via frankfurter.dev{data.ratesAsOf ? `, ${data.ratesAsOf}` : ""}).
-        Paddle er Merchant of Record og håndterer mva, utbetalinger og kvitteringer.
+        Nye betalinger og abonnementsfakturering behandles av Stripe. Historiske betalinger er beholdt.
       </p>
     </div>
   );

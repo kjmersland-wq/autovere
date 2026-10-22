@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth";
 import { tierForPriceId, TIER_RANK, subscriptionIsActive, type PlanTier } from "@/lib/payment-plans";
-import { getPaddleEnvironment } from "@/lib/paddle";
+import { getStripeEnvironment } from "@/lib/stripe";
 
 export type SubscriptionRow = {
   price_id: string;
@@ -24,7 +24,7 @@ export function useSubscription() {
       return;
     }
     let environment: "sandbox" | "live";
-    try { environment = getPaddleEnvironment(); } catch {
+    try { environment = getStripeEnvironment(); } catch {
       setSubscription(null);
       setLoading(false);
       return;

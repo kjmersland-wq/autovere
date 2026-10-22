@@ -244,7 +244,7 @@ export const NO_TERMS: InfoPageContent = {
     },
     {
       heading: "Betaling og abonnement",
-      body: "Bestillingen gjennomføres av vår nettforhandler Paddle.com. Paddle.com er Merchant of Record for alle bestillinger, besvarer alle kundehenvendelser og håndterer returer. Betaling, fakturering, avgifter, oppsigelse og refusjon følger Paddles kjøpsvilkår. Abonnementer fornyes automatisk til du sier opp, og du kan når som helst administrere eller si opp via Paddles kundeportal. Se også refusjonsreglene våre på /refund.",
+      body: "Betaling og abonnementsfakturering behandles av Stripe. Gjeldende betalings- og avgiftsvilkår vises ved kjøp. Kontoutskriften kan vise LINK.COM* AutoVere. Abonnementer fornyes automatisk til du sier opp, og kan administreres via kontoen din. Eksisterende Paddle-abonnementer blir hos Paddle og administreres via lenken i kvitteringen. Se også refusjonsreglene våre på /refund.",
     },
     {
       heading: "Ansvar",
