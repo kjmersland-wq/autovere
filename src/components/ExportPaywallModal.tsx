@@ -59,12 +59,11 @@ export function ExportPaywallModal({
     }
     void trackEvent("pro_upgrade_clicked", { source: "export-paywall", productKey });
     onOpenChange(false);
-    openCheckout({ productKey });
+    void openCheckout({ productKey });
   };
 
   return (
     <>
-      {checkoutElement}
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-md">
           <DialogHeader>

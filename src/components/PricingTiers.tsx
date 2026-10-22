@@ -59,7 +59,7 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
       toast.info(L.signupToast);
       return;
     }
-    openCheckout({ productKey: productKeyFor(tier) });
+    void openCheckout({ productKey: productKeyFor(tier) });
   };
 
   const manageBilling = async () => {
