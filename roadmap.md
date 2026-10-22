@@ -1,13 +1,11 @@
 # Roadmap
 
-## Bytte til innebygd Stripe
-- [x] Fjern gammel aktiv betalingskode og secrets; behold kun historiske migrasjoner og kundehistorikk.
-- [x] Innebygd Stripe-testkonto og fire uendrede priser bekreftet.
-- [x] Koble checkout, tilgang, kundeportal og økonomioversikt.
-- [x] Test 14-dagers engangspass: testkort, bekreftelsesside, signert webhook to ganger, én betalingsrad på €7.33, aktivt pass i 14 dager.
-- [x] Åtte pris-/tilgangstester og personlig kundeportal bestått; bygg OK.
-- [ ] Fullfør live nå: Stripe-status 20. oktober viser at testkontoen fortsatt må knyttes til brukerens konto; deretter må brukeren fullføre Stripe-skjema og installere Lovable-appen før live-nøkler opprettes automatisk.
-- [ ] Verifiser fullt abonnementsløp, fornyelse og oppsigelse før live; ennå ikke gjennomført.
-- [ ] Publiser etter fullført kontooppsett og godkjente tester (brukeren har godkjent live-publisering; venter på live-konto og tester).
-
-- [x] Fjern utdatert oppgaveliste for tidligere betalingsleverandør.
+## Bytte til innebygd Paddle-betaling
+- [x] Stripe frakoblet og all Stripe-kode/-pakker fjernet; historiske migrasjoner og kundehistorikk beholdt.
+- [x] Paddle aktivert (alias-e-post godkjent); fire planer opprettet med uendrede priser: Trip Pass €7.33/14 dager, Pro €8.15/mnd, Pro €47/år, Business €18.39/mnd.
+- [x] Checkout (Paddle-overlay), kundeportal, webhook med idempotens, ledger og regnskapsvideresending til KM TECH LABS skrevet om til Paddle.
+- [x] Footer-/pris-/juridiske tekster (15 språk + norsk) oppdatert til Paddle som Merchant of Record; admin-paneler oppdatert.
+- [x] Åtte pris-/tilgangstester bestått; typesjekk og bygg OK.
+- [ ] Test kjøpsflyt i preview (testkort 4242…): Trip Pass-kjøp, webhook, 14-dagers tilgang, kundeportal.
+- [ ] Fullfør Paddle-verifisering (identitet/firma) i Payments-panelet før live-kjøp virker.
+- [ ] Publiser og gjør ett lite ekte testkjøp etter godkjenning.
