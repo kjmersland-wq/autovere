@@ -11,4 +11,5 @@
 
 Payment access uses provider-neutral plan lookup keys and environment-scoped subscription rows; this keeps tiers stable across test/live catalogs.
 All payment-provider requests use the built-in gateway transport and authenticated server functions; credentials never enter browser code.
+Stripe checkout uses a stable embedded checkout element and authenticated server-side price/customer resolution; this prevents remount errors and forged plan purchases.
 Verified payment events persist idempotent access and payment ledger records before acknowledging delivery; historical provider columns remain deprecated until older deployments no longer use them.

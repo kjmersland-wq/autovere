@@ -9,7 +9,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
+import { useStripeCheckout } from "@/hooks/useStripeCheckout";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
 import { useRouterState } from "@tanstack/react-router";
@@ -45,7 +45,7 @@ export function ExportPaywallModal({
   const price = tripPassPrice(locale, regionFromPath(pathname));
   const yearly = proYearlyPrice(locale, regionFromPath(pathname));
   const { user, openAuth } = useAuth();
-  const { openCheckout } = usePaddleCheckout();
+  const { openCheckout, checkoutElement } = useStripeCheckout();
 
   const startCheckout = (productKey: PaymentProductKey) => {
     if (!PURCHASES_ENABLED) {
@@ -64,6 +64,7 @@ export function ExportPaywallModal({
 
   return (
     <>
+      {checkoutElement}
       <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-w-md">
           <DialogHeader>

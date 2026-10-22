@@ -233,7 +233,7 @@ export const GLOBAL_PRIVACY: InfoPageContent = {
     {
       heading: "Who we share data with",
       items: [
-        "Paddle, our Merchant of Record, processes payments, subscriptions, tax and invoicing when you buy a plan — Paddle acts as an independent controller for that data",
+        "Stripe processes payments, subscriptions and invoicing when you buy a plan, including applicable tax and compliance handling as described at checkout",
         "Hosting and infrastructure providers that keep the site running",
         "Professional advisers (legal, accounting) where needed",
         "Authorities, only where required by law",
@@ -280,7 +280,7 @@ export const GLOBAL_TERMS: InfoPageContent = {
     },
     {
       heading: "Payments and subscriptions",
-      body: "Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns. Payment, billing, tax, cancellation and refund mechanics are governed by Paddle's Buyer Terms (https://www.paddle.com/legal/checkout-buyer-terms). Subscriptions renew automatically until cancelled, and you can manage or cancel your plan at any time via the Paddle customer portal.",
+      body: "Payments and subscription billing are processed by Stripe. Applicable payment, tax and compliance terms are shown at checkout. Your bank statement may show LINK.COM* AutoVere. Subscriptions renew automatically until cancelled, and you can manage or cancel your plan through your account. Existing Paddle subscriptions remain with Paddle and can be managed using the link in their receipt.",
     },
     {
       heading: "Intellectual property and acceptable use",
@@ -315,17 +315,17 @@ export const GLOBAL_REFUND: InfoPageContent = {
     },
     {
       heading: "How to request a refund",
-      body: "Refunds are processed by our payment provider and Merchant of Record, Paddle. To request a refund, visit paddle.net or email us at kjell@autovere.com and we will help you. Refunds are returned to the original payment method.",
+      body: "For Stripe purchases, email kjell@autovere.com to request a refund and we will help you. Refunds are returned to the original payment method.",
     },
     {
       heading: "Subscriptions",
-      body: "You can cancel a subscription at any time via the Paddle customer portal. Cancellation stops future renewals; the 30-day guarantee above applies to the most recent payment.",
+      body: "You can cancel a subscription at any time through your account. Cancellation stops future renewals; the 30-day guarantee above applies to the most recent payment.",
     },
   ],
   note: DISCLAIMER,
   meta: {
     title: "Refund Policy — 30-Day Money-Back Guarantee | AutoVere",
     description:
-      "AutoVere offers a 30-day money-back guarantee on all paid plans, processed by Paddle. How to request a refund.",
+      "AutoVere offers a 30-day money-back guarantee on all paid plans, processed through Stripe. How to request a refund.",
   },
 };

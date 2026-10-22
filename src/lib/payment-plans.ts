@@ -29,5 +29,5 @@ export function billingReturnUrl() {
 }
 export function checkoutSuccessUrl() {
   const origin = typeof window === "undefined" ? "https://www.autovere.com" : window.location.origin;
-  return `${origin}/checkout/return`;
+  return `${origin}/checkout/return?session_id={CHECKOUT_SESSION_ID}`;
 }

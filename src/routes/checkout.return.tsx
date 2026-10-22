@@ -2,20 +2,19 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { CheckCircle2, Compass } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getCheckoutStatus } from "@/utils/payments.functions";
-import { getPaddleEnvironment } from "@/lib/paddle";
+import { getStripeEnvironment } from "@/lib/stripe";
 import { useAuth } from "@/lib/auth";
 
 import { SiteFooter } from "@/components/SiteFooter";
 import { SiteHeader } from "@/components/SiteHeader";
 import { Button } from "@/components/ui/button";
 
-const TXN_ID = /^txn_[a-zA-Z0-9]+$/;
+const SESSION_ID = /^cs_(test_|live_)?[a-zA-Z0-9]+$/;
 
 export const Route = createFileRoute("/checkout/return")({
-  validateSearch: (search: Record<string, unknown>): { txn?: string } => {
-    // Paddle appends ?_ptxn=txn_... to the success URL after a completed checkout.
-    const id = search["_ptxn"] ?? search["ptxn"] ?? search["transaction_id"];
-    return typeof id === "string" && TXN_ID.test(id) ? { txn: id } : {};
+  validateSearch: (search: Record<string, unknown>): { session_id?: string } => {
+    const id = search["session_id"];
+    return typeof id === "string" && SESSION_ID.test(id) ? { session_id: id } : {};
   },
   head: () => ({
     meta: [
@@ -38,28 +37,28 @@ export const Route = createFileRoute("/checkout/return")({
 });
 
 function CheckoutReturn() {
-  const { txn: transactionId } = Route.useSearch();
+  const { session_id: sessionId } = Route.useSearch();
   const { user } = useAuth();
   const [paid, setPaid] = useState(false);
   const [message, setMessage] = useState("Checking your payment…");
   useEffect(() => {
-    if (!transactionId || !user) return;
+    if (!sessionId || !user) return;
     let active = true;
     void (async () => {
       try {
-        const result = await getCheckoutStatus({ data: { transactionId, environment: getPaddleEnvironment() } });
+        const result = await getCheckoutStatus({ data: { sessionId, environment: getStripeEnvironment() } });
         if ("error" in result) throw new Error(result.error);
         if (active) { setPaid(result.paid); setMessage(result.paid ? "Your payment is confirmed. Your plan will appear in My Garage as soon as payment processing finishes." : "Your payment is still processing. Access activates when payment is confirmed."); }
       } catch (error) { if (active) setMessage(error instanceof Error ? error.message : "Payment could not be confirmed."); }
     })();
     return () => { active = false; };
-  }, [transactionId, user]);
+  }, [sessionId, user]);
 
   return (
     <div className="flex min-h-screen flex-col bg-background">
       <SiteHeader />
       <main className="mx-auto w-full max-w-2xl flex-1 px-4 py-20 text-center">
-        {transactionId && paid ? (
+        {sessionId && paid ? (
           <>
             <CheckCircle2 className="mx-auto size-14 text-primary" />
             <h1 className="mt-6 text-3xl font-semibold tracking-tight">You're all set — welcome aboard!</h1>
@@ -70,9 +69,9 @@ function CheckoutReturn() {
         ) : (
           <>
             <Compass className="mx-auto size-14 text-muted-foreground" />
-            <h1 className="mt-6 text-3xl font-semibold tracking-tight">{transactionId ? "Payment confirmation" : "Nothing to confirm here"}</h1>
+            <h1 className="mt-6 text-3xl font-semibold tracking-tight">{sessionId ? "Payment confirmation" : "Nothing to confirm here"}</h1>
             <p className="mt-3 text-foreground/70">
-              {transactionId ? user ? message : "Sign in to check your payment and access in My Garage." : "We couldn't find a checkout session. If you just paid, give it a moment and check your garage."}
+              {sessionId ? user ? message : "Sign in to check your payment and access in My Garage." : "We couldn't find a checkout session. If you just paid, give it a moment and check your garage."}
             </p>
           </>
         )}
