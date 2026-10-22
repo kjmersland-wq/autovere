@@ -3,7 +3,7 @@ import { Check, ExternalLink, Loader2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/components/ui/button";
-import { useStripeCheckout } from "@/hooks/useStripeCheckout";
+import { usePaddleCheckout } from "@/hooks/usePaddleCheckout";
 import { useSubscription } from "@/hooks/useSubscription";
 import { useAuth } from "@/lib/auth";
 import { trackEvent } from "@/lib/analytics";
@@ -11,7 +11,7 @@ import { convert, formatCurrency, useCurrency } from "@/lib/currency";
 import { useLocale, useT } from "@/lib/i18n";
 import { parsePrice, pricingCopy, tiersFor, DATE_LOCALE, type Tier } from "@/lib/pricing-i18n";
 import { billingReturnUrl, type PaymentProductKey } from "@/lib/payment-plans";
-import { getStripeEnvironment } from "@/lib/stripe";
+import { getPaddleEnvironment } from "@/lib/paddle";
 import type { RegionKey } from "@/lib/trip-data";
 import { cn } from "@/lib/utils";
 import { PURCHASES_ENABLED, purchasesPausedMessage } from "@/lib/purchases";
@@ -31,7 +31,7 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
   const tiers = tiersFor(locale, region);
   const { user, openAuth } = useAuth();
   const { tier: currentTier, isActive, cancelAtPeriodEnd, periodEnd, pastDue } = useSubscription();
-  const { openCheckout, checkoutElement } = useStripeCheckout();
+  const { openCheckout } = usePaddleCheckout();
   const [cycle, setCycle] = useState<"monthly" | "yearly">("monthly");
   const [portalLoading, setPortalLoading] = useState(false);
 
@@ -59,14 +59,14 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
       toast.info(L.signupToast);
       return;
     }
-    openCheckout({ productKey: productKeyFor(tier) });
+    void openCheckout({ productKey: productKeyFor(tier) });
   };
 
   const manageBilling = async () => {
     setPortalLoading(true);
     try {
       const result = await createPortalSession({
-        data: { returnUrl: billingReturnUrl(), environment: getStripeEnvironment() },
+        data: { returnUrl: billingReturnUrl(), environment: getPaddleEnvironment() },
       });
       if ("error" in result) throw new Error(result.error);
       window.open(result.url, "_blank", "noopener");
@@ -79,7 +79,6 @@ export function PricingTiers({ region }: { region?: RegionKey | undefined }) {
 
   return (
     <div>
-      {checkoutElement}
       {isActive && (
         <div className="glass-panel mx-auto mb-8 mt-6 flex max-w-2xl flex-col items-center gap-3 rounded-2xl p-5 text-center sm:flex-row sm:justify-between sm:text-left">
           <div>

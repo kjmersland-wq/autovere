@@ -157,7 +157,7 @@ export function FinancePanel({
       <p className="text-xs text-muted-foreground print:text-neutral-600">
         Beløp er beregnet fra aktive abonnement i EUR, vist i {effectiveCurrency}
         {ratesData ? ` (kurs fra ${ratesData.asOf || "i dag"}, Den europeiske sentralbanken via frankfurter.dev)` : ""}.
-        Selve abonnementsbeløpene er alltid lagret i EUR og endres ikke av valutavalget. Stripe er Merchant of
+        Selve abonnementsbeløpene er alltid lagret i EUR og endres ikke av valutavalget. Paddle er Merchant of
         Record og håndterer mva, utbetalinger og avgifter.
       </p>
     </div>

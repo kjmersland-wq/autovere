@@ -1,121 +1,145 @@
 import { createFileRoute } from "@tanstack/react-router";
-import type Stripe from "stripe";
-import { createStripeClient, verifyWebhook, type StripeEnv } from "@/lib/stripe.server";
+import { verifyWebhook, getPaddleClient, EventName, type PaddleEnv } from "@/lib/paddle.server";
 import { passDays } from "@/lib/pass-durations";
 import { forwardToKmTechlabs } from "@/lib/km-techlabs.server";
 
-const iso = (seconds: number | null | undefined) => seconds ? new Date(seconds * 1000).toISOString() : null;
-const idOf = (value: string | { id: string } | null | undefined) => typeof value === "string" ? value : value?.id ?? null;
+const ZERO_DECIMAL = new Set(["JPY", "KRW", "VND"]);
+const toMajor = (amount: string | number | null | undefined, currency: string) => {
+  const value = Number(amount ?? 0);
+  return ZERO_DECIMAL.has(currency.toUpperCase()) ? value : value / 100;
+};
+
 export const Route = createFileRoute("/api/public/payments/webhook")({
   server: { handlers: { POST: async ({ request }) => {
     const environment = new URL(request.url).searchParams.get("env");
     if (environment !== "sandbox" && environment !== "live") return new Response("Invalid environment", { status: 400 });
-    const env: StripeEnv = environment;
-    let event: Stripe.Event;
+    const env: PaddleEnv = environment;
+    let event: any;
     try { event = await verifyWebhook(request, env); }
     catch { return new Response("Invalid signature", { status: 400 }); }
     try {
       const { supabaseAdmin: db } = await import("@/integrations/supabase/client.server");
-      const { data: processed, error: readError } = await db.from("payment_webhook_events").select("id").eq("id", event.id).eq("environment", env).maybeSingle();
+      const eventId: string = event.eventId;
+      const { data: processed, error: readError } = await db.from("payment_webhook_events").select("id").eq("id", eventId).eq("environment", env).maybeSingle();
       if (readError) throw readError;
       if (processed) return Response.json({ received: true });
-      const stripe = createStripeClient(env);
-      const writeSubscription = async (id: string) => {
-        // Read current provider state rather than trust out-of-order event snapshots.
-        const sub = await stripe.subscriptions.retrieve(id);
-        const userId = sub.metadata["userId"];
-        const item = sub.items.data[0];
+
+      const writeSubscription = async (sub: any) => {
+        const userId = sub.customData?.userId;
+        const item = sub.items?.[0];
         if (!userId || !item) return;
-        const priceId = item.price.lookup_key ?? item.price.metadata["lovable_external_id"];
-        if (!priceId) throw new Error("Missing plan lookup key");
+        const priceId = item.price?.importMeta?.externalId;
+        const productId = item.product?.importMeta?.externalId ?? item.price?.productId ?? "";
+        if (!priceId) {
+          console.warn("Skipping subscription: missing importMeta.externalId", { rawPriceId: item.price?.id });
+          return;
+        }
         const { error } = await db.from("subscriptions").upsert({
-          user_id: userId, provider: "stripe", payment_subscription_id: sub.id,
-          payment_customer_id: idOf(sub.customer), product_id: idOf(item.price.product) ?? "",
+          user_id: userId, provider: "paddle", payment_subscription_id: sub.id,
+          payment_customer_id: sub.customerId, product_id: productId,
           price_id: priceId, status: sub.status,
-          current_period_start: iso(item.current_period_start), current_period_end: iso(item.current_period_end),
-          cancel_at_period_end: sub.cancel_at_period_end, environment: env, updated_at: new Date().toISOString(),
+          current_period_start: sub.currentBillingPeriod?.startsAt ?? null,
+          current_period_end: sub.currentBillingPeriod?.endsAt ?? null,
+          cancel_at_period_end: sub.scheduledChange?.action === "cancel",
+          environment: env, updated_at: new Date().toISOString(),
         }, { onConflict: "payment_subscription_id,environment" });
         if (error) throw error;
       };
-      const fulfill = async (session: Stripe.Checkout.Session) => {
-        if (!["paid", "no_payment_required"].includes(session.payment_status)) return;
-        if (session.mode === "subscription") {
-          const subId = idOf(session.subscription);
-          if (subId) await writeSubscription(subId);
-          return;
-        }
-        const userId = session.metadata?.["userId"];
-        const priceId = session.metadata?.["plan"];
+
+      const fulfillOneTime = async (txn: any) => {
+        const userId = txn.customData?.userId;
+        const item = txn.items?.[0];
+        const priceId = item?.price?.importMeta?.externalId;
         const days = priceId ? passDays(priceId) : undefined;
         if (!userId || !priceId || !days) throw new Error("Missing pass metadata");
-        // Use immutable payment/session timestamps and ignore duplicates: retries never extend access.
-        const start = session.created * 1000;
+        // Use immutable transaction timestamps and ignore duplicates: retries never extend access.
+        const start = Date.parse(txn.createdAt ?? new Date().toISOString());
         const { error } = await db.from("subscriptions").upsert({
-          user_id: userId, provider: "stripe", payment_subscription_id: session.id,
-          payment_customer_id: idOf(session.customer), product_id: priceId, price_id: priceId,
+          user_id: userId, provider: "paddle", payment_subscription_id: txn.id,
+          payment_customer_id: txn.customerId, product_id: priceId, price_id: priceId,
           status: "active", current_period_start: new Date(start).toISOString(),
           current_period_end: new Date(start + days * 86400000).toISOString(), cancel_at_period_end: true,
           environment: env, updated_at: new Date().toISOString(),
         }, { onConflict: "payment_subscription_id,environment", ignoreDuplicates: true });
         if (error) throw error;
-        const { error: ledgerError } = await db.from("payment_transactions").upsert({
-          id: session.id, environment: env, user_id: userId, subscription_id: null,
-          customer_id: idOf(session.customer), customer_email: session.customer_details?.email ?? null,
-          price_id: priceId, amount: (session.amount_total ?? 0) / 100, currency: session.currency?.toUpperCase() ?? "EUR",
-          status: "paid", billed_at: iso(session.created) ?? new Date().toISOString(),
-        }, { onConflict: "id,environment" });
-        if (ledgerError) throw ledgerError;
       };
-      switch (event.type) {
-        case "customer.subscription.created":
-        case "customer.subscription.updated":
-        case "customer.subscription.deleted":
-          await writeSubscription((event.data.object as Stripe.Subscription).id);
-          break;
-        case "checkout.session.completed":
-        case "checkout.session.async_payment_succeeded":
-          await fulfill(event.data.object as Stripe.Checkout.Session);
-          break;
-        case "invoice.paid":
-        case "invoice.payment_failed": {
-          const invoice = event.data.object as Stripe.Invoice;
-          const subId = idOf(invoice.parent?.subscription_details?.subscription);
-          if (subId) await writeSubscription(subId);
-          if (event.type === "invoice.paid") {
-            const sub = subId ? await stripe.subscriptions.retrieve(subId) : null;
-            const { error } = await db.from("payment_transactions").upsert({
-              id: invoice.id, environment: env, user_id: sub?.metadata["userId"] ?? null,
-              subscription_id: subId, customer_id: idOf(invoice.customer), customer_email: invoice.customer_email,
-              price_id: sub?.items.data[0]?.price.lookup_key ?? null,
-              amount: invoice.amount_paid / 100, currency: invoice.currency.toUpperCase(), status: "paid",
-              billed_at: iso(invoice.status_transitions.paid_at ?? invoice.created) ?? new Date().toISOString(),
-            }, { onConflict: "id,environment" });
-            if (error) throw error;
-          }
-          break;
-        }
-        case "charge.refunded": {
-          const charge = event.data.object as Stripe.Charge;
-          const intentId = idOf(charge.payment_intent);
-          if (intentId && charge.refunded) {
-            const sessions = await stripe.checkout.sessions.list({ payment_intent: intentId, limit: 10 });
-            for (const session of sessions.data) {
-              const { error } = await db.from("subscriptions").update({ status: "expired", updated_at: new Date().toISOString() }).eq("payment_subscription_id", session.id).eq("environment", env);
-              if (error) throw error;
-              const { error: ledgerError } = await db.from("payment_transactions").update({ status: "refunded" }).eq("id", session.id).eq("environment", env);
-              if (ledgerError) throw ledgerError;
-            }
-          }
+
+      const writeLedger = async (txn: any, status: string) => {
+        const currency: string = txn.currencyCode ?? "EUR";
+        const { error } = await db.from("payment_transactions").upsert({
+          id: txn.id, environment: env, user_id: txn.customData?.userId ?? null,
+          subscription_id: txn.subscriptionId ?? null,
+          customer_id: txn.customerId ?? null, customer_email: null,
+          price_id: txn.items?.[0]?.price?.importMeta?.externalId ?? null,
+          amount: toMajor(txn.details?.totals?.total, currency), currency: currency.toUpperCase(),
+          status, billed_at: txn.billedAt ?? txn.createdAt ?? new Date().toISOString(),
+        }, { onConflict: "id,environment" });
+        if (error) throw error;
+      };
+
+      const occurredAt = event.occurredAt ? new Date(event.occurredAt).toISOString() : new Date().toISOString();
+
+      switch (event.eventType) {
+        case EventName.SubscriptionCreated: {
+          await writeSubscription(event.data);
+          const currency: string = event.data.currencyCode ?? "EUR";
+          await forwardToKmTechlabs({
+            site: "autovere.com", id: eventId, type: "subscription_created", status: event.data.status ?? "active",
+            amount: toMajor(event.data.items?.[0]?.price?.unitPrice?.amount, currency), discount: 0,
+            currency: currency.toUpperCase(), customer: event.data.customerId ?? null,
+            plan: event.data.items?.[0]?.price?.importMeta?.externalId ?? null, environment: env, occurred_at: occurredAt,
+          });
           break;
         }
-        default: break;
+        case EventName.SubscriptionUpdated:
+          await writeSubscription(event.data);
+          break;
+        case EventName.SubscriptionCanceled: {
+          await db.from("subscriptions").update({ status: "canceled", updated_at: new Date().toISOString() })
+            .eq("payment_subscription_id", event.data.id).eq("environment", env);
+          await forwardToKmTechlabs({
+            site: "autovere.com", id: eventId, type: "subscription_canceled", status: "canceled",
+            amount: 0, discount: 0, currency: (event.data.currencyCode ?? "EUR").toUpperCase(),
+            customer: event.data.customerId ?? null, plan: event.data.items?.[0]?.price?.importMeta?.externalId ?? null,
+            environment: env, occurred_at: occurredAt,
+          });
+          break;
+        }
+        case EventName.TransactionCompleted: {
+          const txn = event.data;
+          if (txn.subscriptionId) {
+            // Refresh the subscription from the provider rather than trust the snapshot.
+            const sub = await getPaddleClient(env).subscriptions.get(txn.subscriptionId);
+            await writeSubscription(sub);
+          } else {
+            await fulfillOneTime(txn);
+          }
+          await writeLedger(txn, "paid");
+          const currency: string = txn.currencyCode ?? "EUR";
+          await forwardToKmTechlabs({
+            site: "autovere.com", id: `${txn.id}-payment`, type: "payment", status: "paid",
+            amount: toMajor(txn.details?.totals?.total, currency),
+            discount: toMajor(txn.details?.totals?.discount, currency),
+            currency: currency.toUpperCase(), customer: txn.customerId ?? null,
+            plan: txn.items?.[0]?.price?.importMeta?.externalId ?? null, environment: env, occurred_at: occurredAt,
+          });
+          break;
+        }
+        case EventName.TransactionPaymentFailed:
+          console.warn("Payment failed", event.data?.id);
+          break;
+        default:
+          console.log("Unhandled event:", event.eventType);
       }
-      await forwardToKmTechlabs(event, env);
-      const { error } = await db.from("payment_webhook_events").upsert({ id: event.id, environment: env, event_created: event.created }, { onConflict: "id,environment", ignoreDuplicates: true });
+
+      const { error } = await db.from("payment_webhook_events").upsert(
+        { id: eventId, environment: env, event_created: Math.floor(Date.parse(occurredAt) / 1000) },
+        { onConflict: "id,environment", ignoreDuplicates: true },
+      );
       if (error) throw error;
       return Response.json({ received: true });
     } catch (error) {
-      console.error("Payment event processing failed", event.id, error);
+      console.error("Payment event processing failed", event?.eventId, error);
       return new Response("Payment event processing failed", { status: 500 });
     }
   } } },
